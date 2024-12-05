@@ -359,11 +359,38 @@ export class LayerRenderer {
             return;
         }
 
-        const drawCall = renderingAttributes.makeDrawCall(program);
-
-        const getUniformSetter = (function() {
-            const activeUniforms = { };
+        const getInputSetter = (function() {
+            const activeInputs = { };
             const handle = program.handle;
+
+            const numAttributes = gl.getProgramParameter(handle, gl.ACTIVE_ATTRIBUTES);
+            for (let i = 0; i < numAttributes; ++i) {
+                const attribute = gl.getActiveAttrib(handle, i);
+                const location = gl.getAttribLocation(handle, attribute.name);
+                activeInputs[attribute.name] = function(arrayBuf, divisor) {
+                    arrayBuf.bind();
+                    gl.enableVertexAttribArray(location);
+                    gl.vertexAttribPointer(location, arrayBuf.itemSize, arrayBuf.itemType, arrayBuf.normalized, arrayBuf.stride, arrayBuf.offset);
+                    if (divisor) {
+                        gl.vertexAttribDivisor(location, divisor);
+                    }
+                };
+            }
+
+            const numBlocks = gl.getProgramParameter(handle, gl.ACTIVE_UNIFORM_BLOCKS);
+            for (let i = 0; i < numBlocks; ++i) {
+                const blockName = gl.getActiveUniformBlockName(handle, i);
+                const uniformBlockIndex = gl.getUniformBlockIndex(handle, blockName);
+                const uniformBlockBinding = i;
+                gl.uniformBlockBinding(handle, uniformBlockIndex, uniformBlockBinding);
+                const buffer = gl.createBuffer();
+                activeInputs[blockName] = function(data) {
+                    gl.bindBuffer(gl.UNIFORM_BUFFER, buffer);
+                    gl.bufferData(gl.UNIFORM_BUFFER, data, gl.DYNAMIC_DRAW);
+                    gl.bindBufferBase(gl.UNIFORM_BUFFER, uniformBlockBinding, buffer);
+                };
+            }
+
             const numUniforms = gl.getProgramParameter(handle, gl.ACTIVE_UNIFORMS);
             for (let i = 0; i < numUniforms; ++i) {
                 const u = gl.getActiveUniform(handle, i);
@@ -391,7 +418,7 @@ export class LayerRenderer {
                      ((u.type === gl.UNSIGNED_INT_SAMPLER_2D)
                       ||
                       (u.type === gl.INT_SAMPLER_2D)))) {
-                    activeUniforms[uName] = function(texture, unit) {
+                    activeInputs[uName] = function(texture, unit) {
                         const bound = texture.bind(unit);
                         if (bound) {
                             gl.uniform1i(location, unit);
@@ -399,7 +426,7 @@ export class LayerRenderer {
                         return bound;
                     };
                 } else {
-                    activeUniforms[uName] = (function() {
+                    activeInputs[uName] = (function() {
                         if (u.size === 1) {
                             switch (u.type) {
                             case gl.BOOL:       return value => gl.uniform1i(location, value);
@@ -418,28 +445,30 @@ export class LayerRenderer {
             }
 
             return function(name) {
-                const u = activeUniforms[name];
+                const u = activeInputs[name];
                 if (! u) {
-                    throw `Missing uniform "${name}"`;
+                    throw `Missing input "${name}"`;
                 }
                 return u;
             };
         })();
 
-        const uRenderPass = (! isShadowProgram) && getUniformSetter("renderPass");
-        const uLogDepthBufFC = getLogDepth && getUniformSetter("logDepthBufFC");
-        const setClippingState = clipping && clipping.setupInputs(getUniformSetter);
+        const drawCall = renderingAttributes.makeDrawCall(getInputSetter);
+
+        const uRenderPass = (! isShadowProgram) && getInputSetter("renderPass");
+        const uLogDepthBufFC = getLogDepth && getInputSetter("logDepthBufFC");
+        const setClippingState = clipping && clipping.setupInputs(getInputSetter);
         const uSlice = sliceColorOr.needed && {
-            thickness: getUniformSetter("sliceThickness"),
-            color:     getUniformSetter("sliceColor")
+            thickness: getInputSetter("sliceThickness"),
+            color:     getInputSetter("sliceColor")
         };
         const uPoint = setupPoints && {
-            pointSize:       getUniformSetter("pointSize"),
-            nearPlaneHeight: pointsMaterial.perspectivePoints && getUniformSetter("nearPlaneHeight")
+            pointSize:       getInputSetter("pointSize"),
+            nearPlaneHeight: pointsMaterial.perspectivePoints && getInputSetter("nearPlaneHeight")
         };
-        const uIntensityRange = filterIntensityRange && getUniformSetter("intensityRange");
+        const uIntensityRange = filterIntensityRange && getInputSetter("intensityRange");
 
-        const setInputsState = setupInputs && setupInputs(getUniformSetter);
+        const setInputsState = setupInputs && setupInputs(getInputSetter);
 
         this.destroy = () => program.destroy();
         this.drawLayer = (frameCtx, layer, renderPass) => {
