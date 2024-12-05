@@ -213,17 +213,17 @@ export class DTXTrianglesLayer extends Layer {
                     const edgeIndicesTexture = (lenEdgeIndices > 0) && createTextureForSingleItems(edgeIndicesBuffer, lenEdgeIndices, 2, indicesType, "sizeDataTextureEdgeIndices");
 
                     return {
-                        indices: function(program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode) {
+                        indices: function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
                             if (numIndices > 0) {
-                                program.bindTexture(uTexturePerPrimitiveIdPortionIds, portionIdsTexture, 5); // webgl texture unit
-                                program.bindTexture(uTexturePerPrimitiveIdIndices, indicesTexture, 6); // webgl texture unit
+                                uTexPerPrimitiveIdPortionIds.bindTexture(portionIdsTexture, 5); // webgl texture unit
+                                uTexPerPrimitiveIdIndices.bindTexture(   indicesTexture,    6); // webgl texture unit
                                 gl.drawArrays(glMode, 0, numIndices);
                             }
                         },
-                        edges: function(program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode) {
+                        edges: function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
                             if (numEdgeIndices > 0) {
-                                program.bindTexture(uTexturePerPrimitiveIdPortionIds, portionEdgeIdsTexture, 5); // webgl texture unit
-                                program.bindTexture(uTexturePerPrimitiveIdIndices,    edgeIndicesTexture,    6); // webgl texture unit
+                                uTexPerPrimitiveIdPortionIds.bindTexture(portionEdgeIdsTexture, 5); // webgl texture unit
+                                uTexPerPrimitiveIdIndices.bindTexture(   edgeIndicesTexture,    6); // webgl texture unit
                                 gl.drawArrays(glMode, 0, numEdgeIndices);
                             }
                         }
@@ -545,42 +545,30 @@ export class DTXTrianglesLayer extends Layer {
 
 
         this.bindCommonTextures = function(
-            program,
-            objectDecodeMatricesShaderName,
-            vertexTextureShaderName,
-            objectAttributesTextureShaderName,
-            objectMatricesShaderName
-        ) {
-            program.bindTexture(objectDecodeMatricesShaderName, texturePerObjectPositionsDecodeMatrix, 1);
-            program.bindTexture(vertexTextureShaderName, texturePerVertexIdCoordinates, 2);
-            program.bindTexture(objectAttributesTextureShaderName, texturePerObjectColorsAndFlags, 3);
-            program.bindTexture(objectMatricesShaderName, texturePerObjectInstanceMatrices, 4);
+            uTexPerObjectPositionsDecodeMatrix,
+            uTexPerVertexIdCoordinates,
+            uTexPerObjectColorsAndFlags,
+            uTexPerObjectMatrix) {
+            uTexPerObjectPositionsDecodeMatrix.bindTexture(texturePerObjectPositionsDecodeMatrix, 1);
+            uTexPerVertexIdCoordinates.bindTexture(texturePerVertexIdCoordinates,                 2);
+            uTexPerObjectColorsAndFlags.bindTexture(texturePerObjectColorsAndFlags,               3);
+            uTexPerObjectMatrix.bindTexture(texturePerObjectInstanceMatrices,                     4);
         };
 
         const draw8  = buffer.geometry8Bits.createDrawers( createTextureForSingleItems, gl.UNSIGNED_BYTE);
         const draw16 = buffer.geometry16Bits.createDrawers(createTextureForSingleItems, gl.UNSIGNED_SHORT);
         const draw32 = buffer.geometry32Bits.createDrawers(createTextureForSingleItems, gl.UNSIGNED_INT);
 
-        this.drawTriangles = function(
-            program,
-            uTexturePerPrimitiveIdPortionIds,
-            uTexturePerPrimitiveIdIndices,
-            glMode)
-        {
-            draw8.indices( program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode);
-            draw16.indices(program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode);
-            draw32.indices(program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode);
+        this.drawTriangles = function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
+            draw8.indices( uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+            draw16.indices(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+            draw32.indices(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
         };
 
-        this.drawEdges = function(
-            program,
-            uTexturePerPrimitiveIdPortionIds,
-            uTexturePerPrimitiveIdIndices,
-            glMode)
-        {
-            draw8.edges( program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode);
-            draw16.edges(program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode);
-            draw32.edges(program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode);
+        this.drawEdges = function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
+            draw8.edges( uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+            draw16.edges(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+            draw32.edges(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
         };
 
         // Free up memory
