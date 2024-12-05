@@ -112,9 +112,7 @@ export class DTXTrianglesLayer extends Layer {
 
         dataTextureRamStats.numberOfLayers++;
 
-        this._layerNumber = numLayers++;
-        this.sortId = `TriDTX-${this._layerNumber}`; // State sorting key.
-        this.layerIndex = cfg.layerIndex; // Index of this TrianglesDataTextureLayer in {@link SceneModel#_layerList}.
+        this.sortId = `TriDTX-${++numLayers}`; // State sorting key.
 
         this._renderers = getRenderers(model.scene, "dtx", cfg.primitive, false,
                                        subGeometry => makeDTXRenderingAttributes(model.scene.canvas.gl, subGeometry));
@@ -187,16 +185,6 @@ export class DTXTrianglesLayer extends Layer {
             numEdgeIndices32Bits: 0,
             numVertices: 0,
         });
-
-        this._numVisibleLayerPortions = 0;
-        this._numTransparentLayerPortions = 0;
-        this._numXRayedLayerPortions = 0;
-        this._numSelectedLayerPortions = 0;
-        this._numHighlightedLayerPortions = 0;
-        this._numClippableLayerPortions = 0;
-        this._numEdgesLayerPortions = 0;
-        this._numPickableLayerPortions = 0;
-        this._numCulledLayerPortions = 0;
 
         this._portions = []; // These counts are used to avoid unnecessary render passes
 
