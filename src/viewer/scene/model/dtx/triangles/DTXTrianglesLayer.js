@@ -355,6 +355,7 @@ export class DTXTrianglesLayer extends Layer {
         if (this._finalized) {
             throw "Already finalized";
         }
+        const buffer = this._buffer;
         //   const portionAABB = portionCfg.worldAABB;
         const subPortionIds = portionCfg.buckets.map((bucket, bucketIndex) => {
             const bucketGeometryId = (portionCfg.geometryId ?? portionCfg.id) + "#" + bucketIndex;
@@ -382,7 +383,6 @@ export class DTXTrianglesLayer extends Layer {
                 bucket.edgeIndices = aligned(bucket.edgeIndices, 2, "overheadSizeAlignementEdgeIndices");
 
                 const positionsCompressed = bucket.positionsCompressed;
-                const buffer = this._buffer;
                 buffer.positionsCompressed.push(positionsCompressed);
                 const numVertices = positionsCompressed.length / 3;
                 this._state.numVertices += numVertices;
@@ -404,49 +404,44 @@ export class DTXTrianglesLayer extends Layer {
                     })()
                 };
             }
+
             //math.expandAABB3(portionAABB, subPortionAABB);
-            return this._createSubPortion(portionCfg, this._bucketGeometries[bucketGeometryId], bucket);
+            const bucketGeometry = this._bucketGeometries[bucketGeometryId];
+            buffer.perObjectPositionsDecodeMatrices.push(portionCfg.positionsDecodeMatrix);
+            buffer.perObjectInstancePositioningMatrices.push(portionCfg.meshMatrix || DEFAULT_MATRIX);
+            buffer.perObjectSolid.push(!!portionCfg.solid);
+            buffer.perObjectPickColors.push(portionCfg.pickColor);
+            buffer.perObjectVertexBases.push(bucketGeometry.vertexBase);
+
+            const colors = portionCfg.colors;
+            const color  = portionCfg.color;
+            if (colors) {
+                buffer.perObjectColors.push([colors[0] * 255, colors[1] * 255, colors[2] * 255, 255]);
+            } else if (color) { // Color is pre-quantized by SceneModel
+                buffer.perObjectColors.push([color[0], color[1], color[2], portionCfg.opacity]);
+            }
+
+            const subPortionId = this._portions.length;
+            this._portions.push({ });
+            bucketGeometry.geometryData.accumulateSubPortionId(subPortionId);
+
+            if (this._subPortionReadableGeometries) {
+                this._subPortionReadableGeometries[subPortionId] = {
+                    indices: bucket.indices,
+                    positionsCompressed: bucket.positionsCompressed,
+                    positionsDecodeMatrix: portionCfg.positionsDecodeMatrix
+                };
+            }
+
+            dataTextureRamStats.numberOfPortions++;
+
+            return subPortionId;
         });
         const portionId = this._portionToSubPortionsMap.length;
         this._portionToSubPortionsMap.push(subPortionIds);
         this.model.numPortions++;
         this._meshes.push(mesh);
         return portionId;
-    }
-
-    _createSubPortion(portionCfg, bucketGeometry, bucket, subPortionAABB) {
-
-        const buffer = this._buffer;
-        buffer.perObjectPositionsDecodeMatrices.push(portionCfg.positionsDecodeMatrix);
-        buffer.perObjectInstancePositioningMatrices.push(portionCfg.meshMatrix || DEFAULT_MATRIX);
-        buffer.perObjectSolid.push(!!portionCfg.solid);
-        buffer.perObjectPickColors.push(portionCfg.pickColor);
-        buffer.perObjectVertexBases.push(bucketGeometry.vertexBase);
-
-        const colors = portionCfg.colors;
-        const color  = portionCfg.color;
-        if (colors) {
-            buffer.perObjectColors.push([colors[0] * 255, colors[1] * 255, colors[2] * 255, 255]);
-        } else if (color) { // Color is pre-quantized by SceneModel
-            buffer.perObjectColors.push([color[0], color[1], color[2], portionCfg.opacity]);
-        }
-
-        const subPortionId = this._portions.length;
-        this._portions.push({ });
-
-        bucketGeometry.geometryData.accumulateSubPortionId(subPortionId);
-
-        if (this._subPortionReadableGeometries) {
-            this._subPortionReadableGeometries[subPortionId] = {
-                indices: bucket.indices,
-                positionsCompressed: bucket.positionsCompressed,
-                positionsDecodeMatrix: portionCfg.positionsDecodeMatrix
-            };
-        }
-
-        dataTextureRamStats.numberOfPortions++;
-
-        return subPortionId;
     }
 
     /**
