@@ -132,6 +132,51 @@ export class DTXTrianglesLayer extends Layer {
         this._instancing = false;
 
         const gl = model.scene.canvas.gl;
+
+        const edgesData = (statsProp) => {
+            const edgeIndices = [ ];
+            let lenEdgeIndices = 0;
+            const perEdgeNumberPortionId = [ ];
+            let numEdgeIndices = 0;
+
+            return {
+                accumulateIndices: indices => {
+                    const edgeIndicesBase = lenEdgeIndices / 2;
+                    lenEdgeIndices += indices.length;
+                    edgeIndices.push(indices);
+                    const numEdges = indices.length / 2;
+                    return {
+                        accumulateSubPortionId: subPortionId => {
+                            const buffer = this._buffer;
+                            const currentNumEdgeIndices = numEdgeIndices;
+                            numEdgeIndices += numEdges * 2;
+                            buffer.perObjectEdgeIndexBaseOffsets.push(currentNumEdgeIndices / 2 - edgeIndicesBase);
+                            for (let i = 0; i < numEdges; i += INDICES_EDGE_INDICES_ALIGNEMENT_SIZE) {
+                                perEdgeNumberPortionId.push(subPortionId);
+                            }
+                            dataTextureRamStats[statsProp] += numEdges;
+                            dataTextureRamStats.totalEdges += numEdges;
+                        }
+                    };
+                },
+                createDrawer: (createTextureForPackedPortionIds, createTextureForSingleItems, indicesType) => {
+                    // Texture that holds the PortionId that corresponds to a given edge-id.
+                    const portionIdsTexture = createTextureForPackedPortionIds(perEdgeNumberPortionId);
+
+                    // Texture that holds the unique-vertex-indices for 8-bit based edge indices.
+                    const indicesTexture = (lenEdgeIndices > 0) && createTextureForSingleItems(edgeIndices, lenEdgeIndices, 2, indicesType, "sizeDataTextureEdgeIndices");
+
+                    return function(program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode) {
+                        if (numEdgeIndices > 0) {
+                            program.bindTexture(uTexturePerPrimitiveIdPortionIds, portionIdsTexture, 5); // webgl texture unit
+                            program.bindTexture(uTexturePerPrimitiveIdIndices,    indicesTexture,    6); // webgl texture unit
+                            gl.drawArrays(glMode, 0, numEdgeIndices);
+                        }
+                    };
+                }
+             };
+        };
+
         this._buffer = {
             positionsCompressed: [],
             lenPositionsCompressed: 0,
@@ -147,9 +192,9 @@ export class DTXTrianglesLayer extends Layer {
             indices32Bits: [],
             lenIndices32Bits: 0,
 
-            edges8Bits:  { indicesData: { buf: [], len: 0 }, perNumberPortionIds: { buf: [], num: 0 } },
-            edges16Bits: { indicesData: { buf: [], len: 0 }, perNumberPortionIds: { buf: [], num: 0 } },
-            edges32Bits: { indicesData: { buf: [], len: 0 }, perNumberPortionIds: { buf: [], num: 0 } },
+            edges8Bits:  edgesData("totalEdges8Bits"),
+            edges16Bits: edgesData("totalEdges16Bits"),
+            edges32Bits: edgesData("totalEdges32Bits"),
 
             perObjectColors: [],
             perObjectPickColors: [],
@@ -368,24 +413,12 @@ export class DTXTrianglesLayer extends Layer {
             numTriangles,
             indicesBase,
             edgesData: edgeIndices && (function() {
-                const accumulate = edges => {
-                    const indicesData = edges.indicesData;
-                    const edgeIndicesBuffer = indicesData.buf;
-                    const edgeIndicesBase = indicesData.len / 2;
-                    indicesData.len += edgeIndices.length;
-                    edgeIndicesBuffer.push(edgeIndices);
-                    return {
-                        numEdges: edgeIndices.length / 2,
-                        edgeIndicesBase: edgeIndicesBase
-                    };
-                };
-
                 if (numVertices <= (1 << 8)) {
-                    return accumulate(buffer.edges8Bits);
+                    return buffer.edges8Bits.accumulateIndices(edgeIndices);
                 } else if (numVertices <= (1 << 16)) {
-                    return accumulate(buffer.edges16Bits);
+                    return buffer.edges16Bits.accumulateIndices(edgeIndices);
                 } else {
-                    return accumulate(buffer.edges32Bits);
+                    return buffer.edges32Bits.accumulateIndices(edgeIndices);
                 }
             })()
         };
@@ -447,29 +480,7 @@ export class DTXTrianglesLayer extends Layer {
         }
         buffer.perObjectIndexBaseOffsets.push(currentNumIndices / 3 - bucketGeometry.indicesBase);
 
-        let currentNumEdgeIndices = 0;
-        if (bucketGeometry.edgesData.numEdges > 0) {
-            const accumulateEdges = (edges, statsProp) => {
-                const edgeIndicesPortionIdBuffer = edges.perNumberPortionIds;
-                const numEdges = bucketGeometry.edgesData.numEdges;
-                currentNumEdgeIndices = edgeIndicesPortionIdBuffer.num;
-                edgeIndicesPortionIdBuffer.num += numEdges * 2;
-                for (let i = 0; i < numEdges; i += INDICES_EDGE_INDICES_ALIGNEMENT_SIZE) {
-                    edgeIndicesPortionIdBuffer.buf.push(subPortionId);
-                }
-                dataTextureRamStats[statsProp] += numEdges;
-                dataTextureRamStats.totalEdges += numEdges;
-            };
-
-            if (bucketGeometry.numVertices <= (1 << 8)) {
-                accumulateEdges(buffer.edges8Bits,  "totalEdges8Bits");
-            } else if (bucketGeometry.numVertices <= (1 << 16)) {
-                accumulateEdges(buffer.edges16Bits, "totalEdges16Bits");
-            } else {
-                accumulateEdges(buffer.edges32Bits, "totalEdges32Bits");
-            }
-        }
-        buffer.perObjectEdgeIndexBaseOffsets.push(currentNumEdgeIndices / 2 - bucketGeometry.edgesData.edgeIndicesBase);
+        bucketGeometry.edgesData.accumulateSubPortionId(subPortionId);
 
         //   buffer.perObjectOffsets.push([0, 0, 0]);
 
@@ -761,30 +772,9 @@ export class DTXTrianglesLayer extends Layer {
             draw(state.numIndices32Bits, polygonPortionIds32, polygonIndices32);
         };
 
-        const edgeDrawer = function(edges, type) {
-            const portionIds = edges.perNumberPortionIds;
-            const cnt = portionIds.num;
-            const indices = edges.indicesData;
-
-            // Texture that holds the PortionId that corresponds to a given edge-id.
-            const portionIdsTexture = createTextureForPackedPortionIds(portionIds.buf);
-
-            // Texture that holds the unique-vertex-indices for 8-bit based edge indices.
-            const lenIndices = indices.len;
-            const indicesTexture = (lenIndices > 0) && createTextureForSingleItems(indices.buf, lenIndices, 2, type, "sizeDataTextureEdgeIndices");
-
-            return function(program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode) {
-                if (cnt > 0) {
-                    program.bindTexture(uTexturePerPrimitiveIdPortionIds, portionIdsTexture, 5); // webgl texture unit
-                    program.bindTexture(uTexturePerPrimitiveIdIndices,    indicesTexture,    6); // webgl texture unit
-                    gl.drawArrays(glMode, 0, cnt);
-                }
-            };
-        };
-
-        const drawEdges8  = edgeDrawer(buffer.edges8Bits,  gl.UNSIGNED_BYTE);
-        const drawEdges16 = edgeDrawer(buffer.edges16Bits, gl.UNSIGNED_SHORT);
-        const drawEdges32 = edgeDrawer(buffer.edges32Bits, gl.UNSIGNED_INT);
+        const drawEdges8  = buffer.edges8Bits.createDrawer( createTextureForPackedPortionIds, createTextureForSingleItems, gl.UNSIGNED_BYTE);
+        const drawEdges16 = buffer.edges16Bits.createDrawer(createTextureForPackedPortionIds, createTextureForSingleItems, gl.UNSIGNED_SHORT);
+        const drawEdges32 = buffer.edges32Bits.createDrawer(createTextureForPackedPortionIds, createTextureForSingleItems, gl.UNSIGNED_INT);
 
         this.drawEdges = function(
             program,
