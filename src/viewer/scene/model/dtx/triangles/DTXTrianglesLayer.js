@@ -236,8 +236,6 @@ export class DTXTrianglesLayer extends Layer {
             positionsCompressed: [],
             lenPositionsCompressed: 0,
 
-            metallicRoughness: [],
-
             geometry8Bits:  geometryData("totalPolygons8Bits",  "totalEdges8Bits"),
             geometry16Bits: geometryData("totalPolygons16Bits", "totalEdges16Bits"),
             geometry32Bits: geometryData("totalPolygons32Bits", "totalEdges32Bits"),
@@ -255,7 +253,6 @@ export class DTXTrianglesLayer extends Layer {
 
         this._state = new RenderState({
             origin: math.vec3(cfg.origin),
-            metallicRoughnessBuf: null,
             textureState: { },
             numVertices: 0,
         });
@@ -887,13 +884,8 @@ export class DTXTrianglesLayer extends Layer {
         if (this._destroyed) {
             return;
         }
-        const state = this._state;
-        if (state.metallicRoughnessBuf) {
-            state.metallicRoughnessBuf.destroy();
-            state.metallicRoughnessBuf = null;
-        }
         this.model.scene.off(this._onSceneRendering);
-        state.destroy();
+        this._state.destroy();
         this._destroyed = true;
     }
 }
