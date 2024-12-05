@@ -34,8 +34,6 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
      *  - worldNormalMatrix
      *  - viewNormalMatrix
      */
-    const matricesUniformBlockBufferBindingPoint = 0;
-    const matricesUniformBlockBuffer = gl.createBuffer();
     const matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
 
     /**
@@ -151,29 +149,25 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
             }
         },
 
-        makeDrawCall: function(program) {
-            gl.uniformBlockBinding(
-                program.handle,
-                gl.getUniformBlockIndex(program.handle, "Matrices"),
-                matricesUniformBlockBufferBindingPoint);
+        makeDrawCall: function(getInputSetter) {
+            const uMatricesBlock  = getInputSetter("Matrices");
+            const uUVDecodeMatrix = params.uvA.needed && getInputSetter("uvDecodeMatrix");
 
-            const aPosition = program.getAttribute("position");
-            const aOffset = program.getAttribute("offset");
-            const aNormal = program.getAttribute("normal");
-            const aUV = program.getAttribute("uv");
-            const aColor = params.colorA.needed && program.getAttribute("colorA255");
-            const aMetallicRoughness = program.getAttribute("metallicRoughness");
-            const aFlags = program.getAttribute("flags");
-            const aPickColor = program.getAttribute("pickColor");
+            const aPosition          = getInputSetter("position");
+            const aOffset            = scene.entityOffsetsEnabled && getInputSetter("offset");
+            const aNormal            = needNormal() && getInputSetter("normal");
+            const aUV                = params.uvA.needed && getInputSetter("uv");
+            const aColor             = params.colorA.needed && getInputSetter("colorA255");
+            const aMetallicRoughness = params.metallicRoughnessA.needed && getInputSetter("metallicRoughness");
+            const aFlags             = getInputSetter("flags");
+            const aPickColor         = params.pickColorA.needed && getInputSetter("pickColor");
 
-            const aModelMatrixCol0 = instancing && program.getAttribute("modelMatrixCol0");
-            const aModelMatrixCol1 = instancing && program.getAttribute("modelMatrixCol1");
-            const aModelMatrixCol2 = instancing && program.getAttribute("modelMatrixCol2");
-            const aModelNormalMatrixCol0 = instancing && program.getAttribute("modelNormalMatrixCol0");
-            const aModelNormalMatrixCol1 = instancing && program.getAttribute("modelNormalMatrixCol1");
-            const aModelNormalMatrixCol2 = instancing && program.getAttribute("modelNormalMatrixCol2");
-
-            const uUVDecodeMatrix = params.uvA.needed && program.getLocation("uvDecodeMatrix");
+            const aModelMatrixCol0 = instancing && getInputSetter("modelMatrixCol0");
+            const aModelMatrixCol1 = instancing && getInputSetter("modelMatrixCol1");
+            const aModelMatrixCol2 = instancing && getInputSetter("modelMatrixCol2");
+            const aModelNormalMatrixCol0 = instancing && needNormal() && getInputSetter("modelNormalMatrixCol0");
+            const aModelNormalMatrixCol1 = instancing && needNormal() && getInputSetter("modelNormalMatrixCol1");
+            const aModelNormalMatrixCol2 = instancing && needNormal() && getInputSetter("modelNormalMatrixCol2");
 
             return function(frameCtx, layer, sceneModelMat, viewMatrix, projMatrix, rtcOrigin, eye) {
                 const state = layer._state;
@@ -187,30 +181,15 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
                     matricesUniformBlockBufferData.set(layer.model.worldNormalMatrix, offset += mat4Size);
                     matricesUniformBlockBufferData.set(scene.camera.viewNormalMatrix, offset += mat4Size);
                 }
+                uMatricesBlock(matricesUniformBlockBufferData);
 
-                gl.bindBuffer(gl.UNIFORM_BUFFER, matricesUniformBlockBuffer);
-                gl.bufferData(gl.UNIFORM_BUFFER, matricesUniformBlockBufferData, gl.DYNAMIC_DRAW);
-
-                gl.bindBufferBase(
-                    gl.UNIFORM_BUFFER,
-                    matricesUniformBlockBufferBindingPoint,
-                    matricesUniformBlockBuffer);
-
-
-                if (uUVDecodeMatrix) {
-                    gl.uniformMatrix3fv(uUVDecodeMatrix, false, state.uvDecodeMatrix);
-                }
+                uUVDecodeMatrix && uUVDecodeMatrix(state.uvDecodeMatrix);
 
                 if (! drawCallCache.has(layer)) {
                     const vao = gl.createVertexArray();
                     gl.bindVertexArray(vao);
 
-                    const bindAttribute = (a, b, setDivisor) => {
-                        a.bindArrayBuffer(b);
-                        if (setDivisor) {
-                            gl.vertexAttribDivisor(a.location, 1);
-                        }
-                    };
+                    const bindAttribute = (a, b, setDivisor) => b && a(b, setDivisor && 1);
 
                     if (instancing) {
                         bindAttribute(aModelMatrixCol0, state.modelMatrixCol0Buf, true);
