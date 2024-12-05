@@ -357,84 +357,63 @@ export class DTXTrianglesLayer extends Layer {
         if (this._finalized) {
             throw "Already finalized";
         }
-        const subPortionIds = [];
         //   const portionAABB = portionCfg.worldAABB;
-        portionCfg.buckets.forEach((bucket, bucketIndex) => {
-            const bucketGeometryId = portionCfg.geometryId !== undefined && portionCfg.geometryId !== null
-                ? `${portionCfg.geometryId}#${bucketIndex}`
-                : `${portionCfg.id}#${bucketIndex}`;
-            let bucketGeometry = this._bucketGeometries[bucketGeometryId];
-            if (!bucketGeometry) {
-                bucketGeometry = this._createBucketGeometry(portionCfg, bucket);
-                this._bucketGeometries[bucketGeometryId] = bucketGeometry;
-            }
+        const subPortionIds = portionCfg.buckets.map((bucket, bucketIndex) => {
+            const bucketGeometryId = (portionCfg.geometryId ?? portionCfg.id) + "#" + bucketIndex;
             //  const subPortionAABB = math.collapseAABB3(tempAABB3b);
-            const subPortionId = this._createSubPortion(portionCfg, bucketGeometry, bucket);
+            if (! (bucketGeometryId in this._bucketGeometries)) {
+                const aligned = (indices, elementSize, statsProp) => {
+                    // Indices and EdgeIndices alignement
+                    // This will make every mesh consume a multiple of INDICES_EDGE_INDICES_ALIGNEMENT_SIZE
+                    // array items for storing the triangles and edges of the mesh, and it supports:
+                    // - a memory optimization of factor INDICES_EDGE_INDICES_ALIGNEMENT_SIZE
+                    // - in exchange for a small RAM overhead
+                    //   (by adding some padding until a size that is multiple of INDICES_EDGE_INDICES_ALIGNEMENT_SIZE)
+                    if (indices) {
+                        const alignedLen = Math.ceil((indices.length / elementSize) / INDICES_EDGE_INDICES_ALIGNEMENT_SIZE) * INDICES_EDGE_INDICES_ALIGNEMENT_SIZE * elementSize;
+                        const alignedArray = new Uint32Array(alignedLen);
+                        alignedArray.set(indices);
+                        dataTextureRamStats[statsProp] += 2 * (alignedArray.length - indices.length);
+                        return alignedArray;
+                    } else {
+                        return indices;
+                    }
+                };
+
+                bucket.indices     = aligned(bucket.indices,     3, "overheadSizeAlignementIndices");
+                bucket.edgeIndices = aligned(bucket.edgeIndices, 2, "overheadSizeAlignementEdgeIndices");
+
+                const positionsCompressed = bucket.positionsCompressed;
+                const buffer = this._buffer;
+                buffer.positionsCompressed.push(positionsCompressed);
+                const numVertices = positionsCompressed.length / 3;
+                this._state.numVertices += numVertices;
+                const vertexBase = buffer.lenPositionsCompressed / 3;
+                buffer.lenPositionsCompressed += positionsCompressed.length;
+
+                this._bucketGeometries[bucketGeometryId] = {
+                    vertexBase: vertexBase,
+                    geometryData: (function() {
+                        const indices = bucket.indices;
+                        const edgeIndices = bucket.edgeIndices;
+                        if (numVertices <= (1 << 8)) {
+                            return buffer.geometry8Bits.accumulateIndices( indices, edgeIndices);
+                        } else if (numVertices <= (1 << 16)) {
+                            return buffer.geometry16Bits.accumulateIndices(indices, edgeIndices);
+                        } else {
+                            return buffer.geometry32Bits.accumulateIndices(indices, edgeIndices);
+                        }
+                    })()
+                };
+            }
             //math.expandAABB3(portionAABB, subPortionAABB);
-            subPortionIds.push(subPortionId);
+            return this._createSubPortion(portionCfg, this._bucketGeometries[bucketGeometryId], bucket);
         });
         const portionId = this._portionToSubPortionsMap.length;
         this._portionToSubPortionsMap.push(subPortionIds);
         this.model.numPortions++;
         this._meshes.push(mesh);
         return portionId;
-    }
-
-    _createBucketGeometry(portionCfg, bucket) {
-
-        // Indices alignement
-        // This will make every mesh consume a multiple of INDICES_EDGE_INDICES_ALIGNEMENT_SIZE
-        // array items for storing the triangles of the mesh, and it supports:
-        // - a memory optimization of factor INDICES_EDGE_INDICES_ALIGNEMENT_SIZE
-        // - in exchange for a small RAM overhead
-        //   (by adding some padding until a size that is multiple of INDICES_EDGE_INDICES_ALIGNEMENT_SIZE)
-
-        if (bucket.indices) {
-            const alignedIndicesLen = Math.ceil((bucket.indices.length / 3) / INDICES_EDGE_INDICES_ALIGNEMENT_SIZE) * INDICES_EDGE_INDICES_ALIGNEMENT_SIZE * 3;
-            dataTextureRamStats.overheadSizeAlignementIndices += 2 * (alignedIndicesLen - bucket.indices.length);
-            const alignedIndices = new Uint32Array(alignedIndicesLen);
-            alignedIndices.fill(0);
-            alignedIndices.set(bucket.indices);
-            bucket.indices = alignedIndices;
-        }
-
-        // EdgeIndices alignement
-        // This will make every mesh consume a multiple of INDICES_EDGE_INDICES_ALIGNEMENT_SIZE
-        // array items for storing the edges of the mesh, and it supports:
-        // - a memory optimization of factor INDICES_EDGE_INDICES_ALIGNEMENT_SIZE
-        // - in exchange for a small RAM overhead
-        //   (by adding some padding until a size that is multiple of INDICES_EDGE_INDICES_ALIGNEMENT_SIZE)
-
-        if (bucket.edgeIndices) {
-            const alignedEdgeIndicesLen = Math.ceil((bucket.edgeIndices.length / 2) / INDICES_EDGE_INDICES_ALIGNEMENT_SIZE) * INDICES_EDGE_INDICES_ALIGNEMENT_SIZE * 2;
-            dataTextureRamStats.overheadSizeAlignementEdgeIndices += 2 * (alignedEdgeIndicesLen - bucket.edgeIndices.length);
-            const alignedEdgeIndices = new Uint32Array(alignedEdgeIndicesLen);
-            alignedEdgeIndices.set(bucket.edgeIndices);
-            bucket.edgeIndices = alignedEdgeIndices;
-        }
-
-        const positionsCompressed = bucket.positionsCompressed;
-        const buffer = this._buffer;
-        buffer.positionsCompressed.push(positionsCompressed);
-        const numVertices = positionsCompressed.length / 3;
-        this._state.numVertices += numVertices;
-        const vertexBase = buffer.lenPositionsCompressed / 3;
-        buffer.lenPositionsCompressed += positionsCompressed.length;
-
-        return {
-            vertexBase: vertexBase,
-            geometryData: (function() {
-                const indices = bucket.indices;
-                const edgeIndices = bucket.edgeIndices;
-                if (numVertices <= (1 << 8)) {
-                    return buffer.geometry8Bits.accumulateIndices( indices, edgeIndices);
-                } else if (numVertices <= (1 << 16)) {
-                    return buffer.geometry16Bits.accumulateIndices(indices, edgeIndices);
-                } else {
-                    return buffer.geometry32Bits.accumulateIndices(indices, edgeIndices);
-                }
-            })()
-        };
     }
 
     _createSubPortion(portionCfg, bucketGeometry, bucket, subPortionAABB) {
