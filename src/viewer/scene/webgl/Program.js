@@ -150,10 +150,6 @@ class Program {
         return this.attributes[name];
     }
 
-    getSampler(name) {
-        return this.allocated && this.samplers[name];
-    }
-
     bindTexture(name, texture, unit) {
         if (!this.allocated) {
             return false;
