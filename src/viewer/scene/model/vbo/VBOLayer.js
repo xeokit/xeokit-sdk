@@ -506,14 +506,15 @@ export class VBOLayer extends Layer {
 
         scratchMemory.acquire();
 
-        this._drawCallCache = new Map();
+        this._drawCallCache = { };
         this.layerDrawState = {
             getWorldNormalMatrix: () => this.model.worldNormalMatrix,
             drawCall: (inputs, subGeometry) => {
-                if (! this._drawCallCache.has(inputs)) {
-                    this._drawCallCache.set(inputs, [ null, null, null ]);
+                const hash = inputs.attributesHash;
+                if (! (hash in this._drawCallCache)) {
+                    this._drawCallCache[hash] = [ null, null, null ];
                 }
-                const inputsCache = this._drawCallCache.get(inputs);
+                const inputsCache = this._drawCallCache[hash];
                 const cacheKey = subGeometry ? (subGeometry.vertices ? 0 : 1) : 2;
                 if (! inputsCache[cacheKey]) {
                     const vao = gl.createVertexArray();
@@ -977,7 +978,7 @@ export class VBOLayer extends Layer {
             state.modelNormalMatrixCol2Buf = null;
         }
         state.destroy();
-        this._drawCallCache.forEach(inputsCache => inputsCache.forEach(v => v.destroy()));
+        Object.values(this._drawCallCache).forEach(inputsCache => inputsCache.forEach(v => v.destroy()));
         this._state = null;
     }
 }
