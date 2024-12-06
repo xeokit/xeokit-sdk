@@ -375,6 +375,7 @@ export class LayerRenderer {
                         gl.vertexAttribDivisor(location, divisor);
                     }
                 };
+                activeInputs[attribute.name].attributeHash = `${attribute.name}:${location}`;
             }
 
             const numBlocks = gl.getProgramParameter(handle, gl.ACTIVE_UNIFORM_BLOCKS);
