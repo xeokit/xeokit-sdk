@@ -181,22 +181,21 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
                 return attributeHashes;
             })());
 
-            return function(frameCtx, layer, sceneModelMat, viewMatrix, projMatrix, rtcOrigin, eye) {
-                const state = layer._state;
+            return function(frameCtx, layerDrawState, sceneModelMat, viewMatrix, projMatrix, rtcOrigin, eye) {
                 let offset = 0;
                 const mat4Size = 4 * 4;
                 matricesUniformBlockBufferData.set(sceneModelMat, 0);
                 matricesUniformBlockBufferData.set(viewMatrix, offset += mat4Size);
                 matricesUniformBlockBufferData.set(projMatrix, offset += mat4Size);
-                matricesUniformBlockBufferData.set(state.positionsDecodeMatrix, offset += mat4Size);
+                matricesUniformBlockBufferData.set(layerDrawState.positionsDecodeMatrix, offset += mat4Size);
                 if (needNormal()) {
-                    matricesUniformBlockBufferData.set(layer.layerDrawState.getWorldNormalMatrix(), offset += mat4Size);
+                    matricesUniformBlockBufferData.set(layerDrawState.getWorldNormalMatrix(), offset += mat4Size);
                     matricesUniformBlockBufferData.set(scene.camera.viewNormalMatrix, offset += mat4Size);
                 }
                 uMatricesBlock(matricesUniformBlockBufferData);
-                uUVDecodeMatrix && uUVDecodeMatrix(state.uvDecodeMatrix);
+                uUVDecodeMatrix && uUVDecodeMatrix(layerDrawState.uvDecodeMatrix);
 
-                layer.layerDrawState.drawCall(inputs, subGeometry);
+                layerDrawState.drawCall(inputs, subGeometry);
             };
         }
     };
