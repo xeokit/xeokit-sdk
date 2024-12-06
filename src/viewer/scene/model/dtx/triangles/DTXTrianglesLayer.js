@@ -3,7 +3,6 @@ import {makeDTXRenderingAttributes} from "./DTXTrianglesDrawable.js";
 import {getRenderers, Layer} from "../../layer/Layer.js";
 
 import {math} from "../../../math/math.js";
-import {RenderState} from "../../../webgl/RenderState.js";
 import {Configs} from "../../../../Configs.js";
 
 const dataTextureRamStats = {
@@ -231,7 +230,6 @@ export class DTXTrianglesLayer extends Layer {
             perObjectEdgeIndexBaseOffsets: []
         };
 
-        this._state = new RenderState({}); // needed ATM as setInputsState call argument inside LayerRenderer
         this._numVertices = 0;
 
         this._portions = []; // These counts are used to avoid unnecessary render passes
@@ -521,32 +519,33 @@ export class DTXTrianglesLayer extends Layer {
         const texturePerVertexIdCoordinates = createTextureForSingleItems(
             buffer.positionsCompressed, buffer.lenPositionsCompressed, 3, gl.UNSIGNED_SHORT, "sizeDataTexturePositions");
 
-
-        this.bindCommonTextures = function(
-            uTexPerObjectPositionsDecodeMatrix,
-            uTexPerVertexIdCoordinates,
-            uTexPerObjectColorsAndFlags,
-            uTexPerObjectMatrix) {
-            uTexPerObjectPositionsDecodeMatrix(texturePerObjectPositionsDecodeMatrix, 1);
-            uTexPerVertexIdCoordinates(texturePerVertexIdCoordinates,                 2);
-            uTexPerObjectColorsAndFlags(texturePerObjectColorsAndFlags,               3);
-            uTexPerObjectMatrix(texturePerObjectInstanceMatrices,                     4);
-        };
-
         const draw8  = buffer.geometry8Bits.createDrawers( createTextureForSingleItems, gl.UNSIGNED_BYTE);
         const draw16 = buffer.geometry16Bits.createDrawers(createTextureForSingleItems, gl.UNSIGNED_SHORT);
         const draw32 = buffer.geometry32Bits.createDrawers(createTextureForSingleItems, gl.UNSIGNED_INT);
 
-        this.drawTriangles = function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
-            draw8.indices( uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
-            draw16.indices(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
-            draw32.indices(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
-        };
+        this.layerDrawState = {
+            bindCommonTextures: function(
+                uTexPerObjectPositionsDecodeMatrix,
+                uTexPerVertexIdCoordinates,
+                uTexPerObjectColorsAndFlags,
+                uTexPerObjectMatrix) {
+                uTexPerObjectPositionsDecodeMatrix(texturePerObjectPositionsDecodeMatrix, 1);
+                uTexPerVertexIdCoordinates(texturePerVertexIdCoordinates,                 2);
+                uTexPerObjectColorsAndFlags(texturePerObjectColorsAndFlags,               3);
+                uTexPerObjectMatrix(texturePerObjectInstanceMatrices,                     4);
+            },
 
-        this.drawEdges = function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
-            draw8.edges( uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
-            draw16.edges(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
-            draw32.edges(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+            drawTriangles: function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
+                draw8.indices( uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+                draw16.indices(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+                draw32.indices(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+            },
+
+            drawEdges: function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
+                draw8.edges( uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+                draw16.edges(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+                draw32.edges(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+            }
         };
 
         // Free up memory
