@@ -106,18 +106,17 @@ const DEFAULT_MATRIX = math.identityMat4();
  */
 export class DTXTrianglesLayer extends Layer {
 
-    constructor(model, cfg) {
+    constructor(model, primitive, origin) {
 
-        super();
+        super(model, primitive, origin);
 
         dataTextureRamStats.numberOfLayers++;
 
         this.sortId = `TriDTX-${++numLayers}`; // State sorting key.
 
-        this._renderers = getRenderers(model.scene, "dtx", cfg.primitive, false,
+        this._renderers = getRenderers(model.scene, "dtx", primitive, false,
                                        subGeometry => makeDTXRenderingAttributes(model.scene.canvas.gl, subGeometry));
         this._hasEdges = this._renderers.edgesRenderers;
-        this.model = model;
         this._edgesColorOpaqueAllowed = () => {
             if (this.model.scene.logarithmicDepthBufferEnabled) {
                 if (!this.model.scene._loggedWarning) {
@@ -251,7 +250,6 @@ export class DTXTrianglesLayer extends Layer {
         };
 
         this._state = new RenderState({
-            origin: math.vec3(cfg.origin),
             textureState: { },
             numVertices: 0,
         });
@@ -284,7 +282,7 @@ export class DTXTrianglesLayer extends Layer {
         /**
          * The type of primitives in this layer.
          */
-        this.primitive = cfg.primitive;
+        this.primitive = primitive;
 
         this._finalized = false;
     }
@@ -720,7 +718,7 @@ export class DTXTrianglesLayer extends Layer {
                     math.decompressPosition(worldPos, positionsDecodeMatrix);
                     math.mulMat4v4(this.model.worldMatrix, worldPos, worldPos);
                     math.transformPoint4(this.model.worldMatrix, worldPos, worldPos);
-                    math.addVec3(this._state.origin, worldPos, worldPos);
+                    math.addVec3(this.origin, worldPos, worldPos);
                     callback(worldPos);
                 }
             }
