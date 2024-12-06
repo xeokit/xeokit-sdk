@@ -34,7 +34,7 @@ const createClippingSetup = function(sectionPlanesState) {
                 dir:    getUniformSetter("sectionPlaneDir" + i)
             }));
             return (layer) => {
-                const origin = layer._state.origin;
+                const origin = layer.origin;
                 const model = layer.model;
                 const sectionPlanes = sectionPlanesState.sectionPlanes;
                 const numSectionPlanes = sectionPlanes.length;
@@ -506,7 +506,7 @@ export class LayerRenderer {
             setInputsState && setInputsState(frameCtx, layer._state.textureSet);
 
             const model = layer.model;
-            const origin = layer._state.origin;
+            const origin = layer.origin;
             const {position, rotationMatrix} = model;
 
             const camera = scene.camera;
