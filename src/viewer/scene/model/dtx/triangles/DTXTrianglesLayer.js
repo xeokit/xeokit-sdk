@@ -231,10 +231,8 @@ export class DTXTrianglesLayer extends Layer {
             perObjectEdgeIndexBaseOffsets: []
         };
 
-        this._state = new RenderState({
-            textureState: { },
-            numVertices: 0,
-        });
+        this._state = new RenderState({}); // needed ATM as setInputsState call argument inside LayerRenderer
+        this._numVertices = 0;
 
         this._portions = []; // These counts are used to avoid unnecessary render passes
 
@@ -298,12 +296,12 @@ export class DTXTrianglesLayer extends Layer {
                 numVertices += bucket.positionsCompressed.length / 3;
                 numIndices += bucket.indices.length / 3;
             });
-            if ((this._state.numVertices + numVertices) > MAX_DATA_TEXTURE_HEIGHT * 4096 ||
+            if ((this._numVertices + numVertices) > MAX_DATA_TEXTURE_HEIGHT * 4096 ||
                 (maxIndicesOfAnyBits + numIndices) > MAX_DATA_TEXTURE_HEIGHT * 4096) {
                 dataTextureRamStats.cannotCreatePortion.becauseTextureSize++;
             }
             retVal &&=
-                (this._state.numVertices + numVertices) <= MAX_DATA_TEXTURE_HEIGHT * 4096 &&
+                (this._numVertices + numVertices) <= MAX_DATA_TEXTURE_HEIGHT * 4096 &&
                 (maxIndicesOfAnyBits + numIndices) <= MAX_DATA_TEXTURE_HEIGHT * 4096;
         }
         return retVal;
@@ -361,7 +359,7 @@ export class DTXTrianglesLayer extends Layer {
                 const positionsCompressed = bucket.positionsCompressed;
                 buffer.positionsCompressed.push(positionsCompressed);
                 const numVertices = positionsCompressed.length / 3;
-                this._state.numVertices += numVertices;
+                this._numVertices += numVertices;
                 const vertexBase = buffer.lenPositionsCompressed / 3;
                 buffer.lenPositionsCompressed += positionsCompressed.length;
 
@@ -464,7 +462,7 @@ export class DTXTrianglesLayer extends Layer {
 
         // The number of rows in the texture is the number of objects in the layer.
         const texturePerObjectColorsAndFlags = createBindableDataTexture(gl, numPortions, 32, gl.UNSIGNED_BYTE, 512, populateTexArray, "sizeDataColorsAndFlags", true);
-        this._state.textureState.texturePerObjectColorsAndFlagsData = texturePerObjectColorsAndFlags.textureData;
+        this._texturePerObjectColorsAndFlagsData = texturePerObjectColorsAndFlags.textureData;
 
         const createDataTexture = function(dataArrays, entitiesCnt, entitySize, type, entitiesPerRow, statsProp, exposeData) {
             const populateTexArray = texArray => {
@@ -494,7 +492,7 @@ export class DTXTrianglesLayer extends Layer {
          * - N rows where N is the number of objects
          */
         const texturePerObjectInstanceMatrices = createTextureForMatrices(buffer.perObjectInstancePositioningMatrices, "sizeDataInstancesMatrices", true);
-        this._state.textureState.texturePerObjectInstanceMatricesData = texturePerObjectInstanceMatrices.textureData;
+        this._texturePerObjectInstanceMatricesData = texturePerObjectInstanceMatrices.textureData;
 
         /*
          * Texture that holds the objectDecodeAndInstanceMatrix per-object:
@@ -613,7 +611,7 @@ export class DTXTrianglesLayer extends Layer {
         this._deferredSetFlagsActive = false;
         if (this._deferredSetFlagsDirty) {
             this._deferredSetFlagsDirty = false;
-            this._state.textureState.texturePerObjectColorsAndFlagsData.reloadData();
+            this._texturePerObjectColorsAndFlagsData.reloadData();
         }
     }
 
@@ -642,7 +640,7 @@ export class DTXTrianglesLayer extends Layer {
         } else if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
             this._beginDeferredFlags(); // Subsequent flags updates now deferred
         }
-        this._state.textureState.texturePerObjectColorsAndFlagsData.setData(data, subPortionId, offset, !defer);
+        this._texturePerObjectColorsAndFlagsData.setData(data, subPortionId, offset, !defer);
     }
 
     _setFlags(portionId, flags, transparent, deferred = false) {
@@ -694,7 +692,7 @@ export class DTXTrianglesLayer extends Layer {
                 this._beginDeferredFlags(); // Subsequent flags updates now deferred
             }
             tempMat4a.set(matrix);
-            this._state.textureState.texturePerObjectInstanceMatricesData.setData(tempMat4a, subPortionIds[i], 0, !defer);
+            this._texturePerObjectInstanceMatricesData.setData(tempMat4a, subPortionIds[i], 0, !defer);
         }
     }
 
@@ -744,7 +742,6 @@ export class DTXTrianglesLayer extends Layer {
             return;
         }
         this.model.scene.off(this._onSceneRendering);
-        this._state.destroy();
         this._destroyed = true;
     }
 }
