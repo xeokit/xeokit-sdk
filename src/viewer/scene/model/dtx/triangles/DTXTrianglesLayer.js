@@ -128,7 +128,6 @@ export class DTXTrianglesLayer extends Layer {
                 return true;
             }
         };
-        this._instancing = false;
 
         const gl = model.scene.canvas.gl;
 
