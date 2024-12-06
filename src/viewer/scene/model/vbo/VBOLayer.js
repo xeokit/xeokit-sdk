@@ -440,7 +440,6 @@ export class VBOLayer extends Layer {
             if (geometry.colorsCompressed) {
                 // WARNING: colorsBuf might be already assigned above
                 state.colorsBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Uint8Array(geometry.colorsCompressed), 4, gl.STATIC_DRAW);
-                state.colorsForPointsNotInstancing = (this.primitive === "points");
             }
             if ((primitive !== "points") && (primitive !== "lines") && geometry.uvCompressed) {
                 state.uvBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, geometry.uvCompressed, 2, gl.STATIC_DRAW);
@@ -506,6 +505,104 @@ export class VBOLayer extends Layer {
         this._buffer = null;
 
         scratchMemory.acquire();
+
+        this._drawCallCache = new Map();
+        this.layerDrawState = {
+            getWorldNormalMatrix: () => this.model.worldNormalMatrix,
+            drawCall: (inputs, subGeometry) => {
+                if (! this._drawCallCache.has(inputs)) {
+                    this._drawCallCache.set(inputs, [ null, null, null ]);
+                }
+                const inputsCache = this._drawCallCache.get(inputs);
+                const cacheKey = subGeometry ? (subGeometry.vertices ? 0 : 1) : 2;
+                if (! inputsCache[cacheKey]) {
+                    const vao = gl.createVertexArray();
+                    gl.bindVertexArray(vao);
+
+                    const bindAttribute = (a, b, setDivisor) => b && a(b, setDivisor && 1);
+
+                    if (inputs.matrices) {
+                        const aModelMatrixCol = inputs.matrices.aModelMatrixCol;
+                        bindAttribute(aModelMatrixCol[0], state.modelMatrixCol0Buf, true);
+                        bindAttribute(aModelMatrixCol[1], state.modelMatrixCol1Buf, true);
+                        bindAttribute(aModelMatrixCol[2], state.modelMatrixCol2Buf, true);
+                        const aModelNormalMatrixCol = inputs.matrices.aModelNormalMatrixCol;
+                        if (aModelNormalMatrixCol) {
+                            bindAttribute(aModelNormalMatrixCol[0], state.modelNormalMatrixCol0Buf, true);
+                            bindAttribute(aModelNormalMatrixCol[1], state.modelNormalMatrixCol1Buf, true);
+                            bindAttribute(aModelNormalMatrixCol[2], state.modelNormalMatrixCol2Buf, true);
+                        }
+                    }
+
+                    const a = inputs.attributes;
+                    bindAttribute(a.position, state.positionsBuf);
+                    a.uV                && bindAttribute(a.uV,                state.uvBuf);
+                    a.normal            && bindAttribute(a.normal,            state.normalsBuf);
+                    a.metallicRoughness && bindAttribute(a.metallicRoughness, state.metallicRoughnessBuf, instancing);
+                    a.color             && bindAttribute(a.color,             state.colorsBuf,            instancing && state.colorsBuf && (primitive !== "points"));
+                    a.flags             && bindAttribute(a.flags,             state.flagsBuf,             instancing);
+                    a.offset            && bindAttribute(a.offset,            state.offsetsBuf,           instancing);
+                    a.pickColor         && bindAttribute(a.pickColor,         state.pickColorsBuf,        instancing);
+
+                    const drawer = (function() {
+                        // TODO: Use drawElements count and offset to draw only one entity
+
+                        const drawPoints = () => {
+                            if (instancing) {
+                                gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
+                            } else {
+                                gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
+                            }
+                        };
+
+                        const elementsDrawer = (mode, indicesBuf) => {
+                            indicesBuf.bind();
+                            return function() {
+                                const count  = indicesBuf.numItems;
+                                const type   = indicesBuf.itemType;
+                                const offset = 0;
+                                if (instancing) {
+                                    gl.drawElementsInstanced(mode, count, type, offset, state.numInstances);
+                                } else {
+                                    gl.drawElements(mode, count, type, offset);
+                                }
+                            };
+                        };
+
+                        if (primitive === "points") {
+                            return drawPoints;
+                        } else if (primitive === "lines") {
+                            if (subGeometry && subGeometry.vertices) {
+                                return drawPoints;
+                            } else {
+                                return elementsDrawer(gl.LINES, state.indicesBuf);
+                            }
+                        } else {    // triangles
+                            if (subGeometry && subGeometry.vertices) {
+                                return drawPoints;
+                            } else if (subGeometry && state.edgeIndicesBuf) {
+                                return elementsDrawer(gl.LINES, state.edgeIndicesBuf);
+                            } else {
+                                return elementsDrawer(gl.TRIANGLES, state.indicesBuf);
+                            }
+                        }
+                    })();
+
+                    gl.bindVertexArray(null);
+
+                    inputsCache[cacheKey] = {
+                        destroy: () => gl.deleteVertexArray(vao),
+                        draw: () => {
+                            gl.bindVertexArray(vao);
+                            drawer();
+                            gl.bindVertexArray(null);
+                        }
+                    };
+                }
+
+                inputsCache[cacheKey].draw();
+            }
+        };
 
         const scene = this.model.scene;
         this._renderers = getRenderers(scene, instancing ? "instancing" : "batching", primitive, true,
@@ -880,6 +977,7 @@ export class VBOLayer extends Layer {
             state.modelNormalMatrixCol2Buf = null;
         }
         state.destroy();
+        this._drawCallCache.forEach(inputsCache => inputsCache.forEach(v => v.destroy()));
         this._state = null;
     }
 }
