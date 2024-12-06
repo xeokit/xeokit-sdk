@@ -1,6 +1,6 @@
 import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
 import {makeVBORenderingAttributes} from "./VBORenderer.js";
-import {getRenderers, Layer} from "../layer/Layer.js";
+import {getColSilhEdgePickFlags, getRenderers, Layer} from "../layer/Layer.js";
 
 import {math} from "../../math/math.js";
 import {RenderState} from "../../webgl/RenderState.js";
@@ -91,9 +91,18 @@ export class VBOLayer extends Layer {
         super(model, primitive, origin);
 
         const instancing = !! cfg.geometry;
-        this._instancing = instancing;
 
         this._maxVerts = cfg.maxGeometryBatchSize;
+
+        const positionsDecodeMatrix = instancing ? cfg.geometry.positionsDecodeMatrix : cfg.positionsDecodeMatrix;
+        this._positionsDecodeMatrix = positionsDecodeMatrix && math.mat4(positionsDecodeMatrix);
+
+        this._uvDecodeMatrix = cfg.uvDecodeMatrix && math.mat3(cfg.uvDecodeMatrix);
+        this._instancedGeometry = cfg.geometry;
+        this._textureSet = cfg.textureSet;
+
+        this._modelAABB = (! instancing) && math.collapseAABB3(); // Model-space AABB
+        this._portions = [ ];
 
         const attribute = function() {
             let length = 0;
@@ -163,42 +172,6 @@ export class VBOLayer extends Layer {
                     edgeIndices:           attribute(), // used for triangulated
                 })
         };
-
-        const positionsDecodeMatrix = instancing ? cfg.geometry.positionsDecodeMatrix : cfg.positionsDecodeMatrix;
-
-        this._state = new RenderState({
-            positionsBuf: null,
-            colorsBuf: null,
-            offsetsBuf: null,
-            flagsBuf: null,
-            positionsDecodeMatrix: positionsDecodeMatrix && math.mat4(positionsDecodeMatrix),
-            metallicRoughnessBuf: null,
-            pickColorsBuf: null,
-            textureSet: cfg.textureSet,
-            ...(instancing
-                ? {
-                    obb: math.OBB3(),
-                    numInstances: 0,
-                    geometry: cfg.geometry,
-                    modelMatrixCol0Buf: null,
-                    modelMatrixCol1Buf: null,
-                    modelMatrixCol2Buf: null,
-                    modelNormalMatrixCol0Buf: null,
-                    modelNormalMatrixCol1Buf: null,
-                    modelNormalMatrixCol2Buf: null,
-                }
-                : {
-                    indicesBuf: null,
-                    uvBuf: null,
-                    normalsBuf: null,
-                    edgeIndicesBuf: null,
-                    uvDecodeMatrix: cfg.uvDecodeMatrix && math.mat3(cfg.uvDecodeMatrix),
-                })
-        });
-
-        this._modelAABB = (! instancing) && math.collapseAABB3(); // Model-space AABB
-        this._portions = [];
-        this._finalized = false;
     }
 
     /**
@@ -209,10 +182,7 @@ export class VBOLayer extends Layer {
      * @returns {Boolean} True if OK to create another portion.
      */
     canCreatePortion(lenPositions, lenIndices) {
-        if (this._finalized) {
-            throw "Already finalized";
-        }
-        return this._instancing || (((this._buffer.positions.length() + lenPositions) <= (this._maxVerts * 3)) && ((this._buffer.indices.length() + lenIndices) <= (this._maxVerts * 3)));
+        return this._instancedGeometry || (((this._buffer.positions.length() + lenPositions) <= (this._maxVerts * 3)) && ((this._buffer.indices.length() + lenIndices) <= (this._maxVerts * 3)));
     }
 
     /**
@@ -244,56 +214,56 @@ export class VBOLayer extends Layer {
      * @returns {number} Portion ID
      */
     createPortion(mesh, cfg) {
-
-        if (this._finalized) {
-            throw "Already finalized";
-        }
-
-        const buffer = this._buffer;
+        const buffer            = this._buffer;
+        const instancedGeometry = this._instancedGeometry;
+        const model             = this.model;
+        const portionId         = this._portions.length;
+        const primitive         = this.primitive;
+        const useCompressed     = !! this._positionsDecodeMatrix;
+        const scene = model.scene;
         const meshMatrix = cfg.meshMatrix;
-        const portionId = this._portions.length;
 
         const appendPortion = (portionBase, portionSize, indices, quantizedPositions, meshMatrix) => {
             const portion = {
                 portionBase: portionBase,
                 portionSize: portionSize,
-                retainedGeometry: this.model.scene.readableGeometryEnabled && (this.primitive !== "points") && (this.primitive !== "lines") && {
+                retainedGeometry: scene.readableGeometryEnabled && (primitive !== "points") && (primitive !== "lines") && {
                     indices:            indices,
                     quantizedPositions: quantizedPositions,
-                    offset:             this.model.scene.entityOffsetsEnabled && math.vec3(),
+                    offset:             scene.entityOffsetsEnabled && math.vec3(),
                     matrix:             meshMatrix && meshMatrix.slice(),
                     inverseMatrix:      null, // Lazy-computed for instancing in precisionRayPickSurface
                     normalMatrix:       null, // Lazy-computed for instancing in precisionRayPickSurface
                 }
             };
 
-            if ((this.primitive !== "points") && (this.primitive !== "lines")) {
+            if ((primitive !== "points") && (primitive !== "lines")) {
                 buffer.metallicRoughness.append([ cfg.metallic ?? 0, cfg.roughness ?? 255 ], portionSize);
             }
 
-            if (this.primitive !== "lines") {
+            if (primitive !== "lines") {
                 buffer.pickColors.append(cfg.pickColor.slice(0, 4), portionSize);
             }
 
             this._portions.push(portion);
-            this.model.numPortions++;
+            model.numPortions++;
             this._meshes.push(mesh);
             return portionId;
         };
 
-        if (this._instancing) {
-            const geometry = this._state.geometry;
+        if (instancedGeometry) {
+            const geometry = instancedGeometry;
 
             buffer.modelMatrixCol0.append([ meshMatrix[0], meshMatrix[4], meshMatrix[8], meshMatrix[12] ]);
             buffer.modelMatrixCol1.append([ meshMatrix[1], meshMatrix[5], meshMatrix[9], meshMatrix[13] ]);
             buffer.modelMatrixCol2.append([ meshMatrix[2], meshMatrix[6], meshMatrix[10], meshMatrix[14] ]);
 
-            if (this.primitive !== "points") {
+            if (primitive !== "points") {
                 const color = cfg.color; // Color is pre-quantized by SceneModel
                 buffer.colors.append([ color[0], color[1], color[2], cfg.opacity ?? 255 ]);
             }
 
-            if ((this.primitive !== "points") && (this.primitive !== "lines")) {
+            if ((primitive !== "points") && (primitive !== "lines")) {
                 if (geometry.normals) {
                     // Note: order of inverse and transpose doesn't matter
                     const normalMatrix = math.inverseMat4(math.transposeMat4(meshMatrix, math.mat4()));
@@ -303,13 +273,10 @@ export class VBOLayer extends Layer {
                 }
             }
 
-            this._state.numInstances++;
-
             return appendPortion(portionId, 1, geometry.indices, geometry.positionsCompressed, meshMatrix);
         } else {
-            const vertsBaseIndex = this._buffer.positions.length() / 3;
+            const vertsBaseIndex = buffer.positions.length() / 3;
 
-            const useCompressed = this._state.positionsDecodeMatrix;
             const positions = useCompressed ? cfg.positionsCompressed : cfg.positions;
             if (! positions) {
                 throw ((useCompressed ? "positionsCompressed" : "positions") + " expected");
@@ -345,7 +312,7 @@ export class VBOLayer extends Layer {
             const colorsCompressed = cfg.colorsCompressed;
             const color = cfg.color;
             if (colors) {
-                if (this.primitive === "points") {
+                if (primitive === "points") {
                     buffer.colors.append(colors, 1, 255.0);
                 } else {            // triangulated
                     const colorsData = [ ];
@@ -358,7 +325,7 @@ export class VBOLayer extends Layer {
                     buffer.colors.append(colorsData);
                 }
             } else if (colorsCompressed) {
-                if (this.primitive === "points") {
+                if (primitive === "points") {
                     buffer.colors.append(colorsCompressed);
                 } else {            // triangulated
                     const colorsData = [ ];
@@ -372,7 +339,7 @@ export class VBOLayer extends Layer {
                 }
             } else if (color) {
                 // Color is pre-quantized by VBOSceneModel
-                buffer.colors.append([ color[0], color[1], color[2], (this.primitive === "points") ? 1.0 : cfg.opacity ], numVerts);
+                buffer.colors.append([ color[0], color[1], color[2], (primitive === "points") ? 1.0 : cfg.opacity ], numVerts);
             }
 
             const nonEmpty = v => v && (v.length > 0) && v;
@@ -394,27 +361,49 @@ export class VBOLayer extends Layer {
     }
 
     compilePortions() {
-        const primitive = this.primitive;
-        const instancing = this._instancing;
-        const state = this._state;
-        const gl = this.model.scene.canvas.gl;
-        const buffer = this._buffer;
-        const maybeCreateGlBuffer = (target, srcData, size, usage, normalized = false) => (srcData.length > 0) ? new ArrayBuf(gl, target, srcData, srcData.length, size, usage, normalized) : null;
+        const buffer              = this._buffer;
+        const instancedGeometry   = this._instancedGeometry;
+        const model               = this.model;
+        const modelAABB           = this._modelAABB;
+        const origin              = this.origin;
+        const portions            = this._portions;
+        const primitive           = this.primitive;
+        const textureSet          = this._textureSet;
+        let positionsDecodeMatrix = this._positionsDecodeMatrix;
+        let uvDecodeMatrix        = this._uvDecodeMatrix;
 
-        this._attributesCnt = this._portions.reduce((acc,p) => acc + p.portionSize, 0);
+        const scene = model.scene;
+        const gl = scene.canvas.gl;
+        const instancing = !! instancedGeometry;
 
-        state.flagsBuf       = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(this._attributesCnt), 1, gl.DYNAMIC_DRAW);
+        const cleanups = [ ];
+
+        const state = { };
+
+        const maybeCreateGlBuffer = (target, srcData, size, usage, normalized = false) => {
+            if (srcData.length > 0) {
+                const buf = new ArrayBuf(gl, target, srcData, srcData.length, size, usage, normalized);
+                cleanups.push(() => buf.destroy());
+                return buf;
+            } else {
+                return null;
+            }
+        };
+
+        const attributesCnt = portions.reduce((acc,p) => acc + p.portionSize, 0);
+
+        state.flagsBuf       = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(attributesCnt), 1, gl.DYNAMIC_DRAW);
 
         state.colorsBuf      = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.colors.compileBuffer(Uint8Array), 4, gl.DYNAMIC_DRAW);
 
-        state.offsetsBuf     = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(this._attributesCnt * 3), 3, gl.DYNAMIC_DRAW) : null;
+        state.offsetsBuf     = scene.entityOffsetsEnabled ? maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(attributesCnt * 3), 3, gl.DYNAMIC_DRAW) : null;
 
         state.metallicRoughnessBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.metallicRoughness.compileBuffer(Uint8Array), 2, gl.STATIC_DRAW);
 
         state.pickColorsBuf  = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
 
         if (instancing) {
-            const geometry = state.geometry;
+            const geometry = instancedGeometry;
             state.edgeIndicesBuf = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.edgeIndices), 1, gl.STATIC_DRAW);
 
             state.modelMatrixCol0Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelMatrixCol0.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
@@ -437,7 +426,7 @@ export class VBOLayer extends Layer {
             }
             if ((primitive !== "points") && (primitive !== "lines") && geometry.uvCompressed) {
                 state.uvBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, geometry.uvCompressed, 2, gl.STATIC_DRAW);
-                state.uvDecodeMatrix = geometry.uvDecodeMatrix;
+                uvDecodeMatrix = geometry.uvDecodeMatrix;
             }
 
             if (state.modelMatrixCol0Buf && state.normalsBuf) { // WARNING: normalsBuf is never defined at the moment
@@ -448,19 +437,17 @@ export class VBOLayer extends Layer {
         } else {
             state.edgeIndicesBuf = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.edgeIndices.compileBuffer(Uint32Array), 1, gl.STATIC_DRAW);
 
-            const positions = (state.positionsDecodeMatrix
+            const positions = (positionsDecodeMatrix
                                ? buffer.positions.compileBuffer(Uint16Array)
-                               : (quantizePositions(buffer.positions.compileBuffer(Float64Array), this._modelAABB, state.positionsDecodeMatrix = math.mat4())));
+                               : (quantizePositions(buffer.positions.compileBuffer(Float64Array), modelAABB, positionsDecodeMatrix = math.mat4())));
             state.positionsBuf  = maybeCreateGlBuffer(gl.ARRAY_BUFFER, positions, 3, gl.STATIC_DRAW);
 
-            for (let i = 0, numPortions = this._portions.length; i < numPortions; i++) {
-                const portion = this._portions[i];
+            portions.forEach(portion => {
                 if (portion.retainedGeometry) {
-                    const start = portion.portionBase * 3;
-                    const end = start + (portion.portionSize * 3);
-                    portion.retainedGeometry.quantizedPositions = positions.subarray(start, end);
+                    const start = 3 * portion.portionBase;
+                    portion.retainedGeometry.quantizedPositions = positions.subarray(start, start + 3 * portion.portionSize);
                 }
-            }
+            });
 
             state.indicesBuf    = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.indices.compileBuffer(Uint32Array), 1, gl.STATIC_DRAW);
 
@@ -469,28 +456,60 @@ export class VBOLayer extends Layer {
 
             const uvs = buffer.uv.compileBuffer(Float32Array);
             if (uvs.length > 0) {
-                if (state.uvDecodeMatrix) {
+                if (uvDecodeMatrix) {
                     state.uvBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, uvs, 2, gl.STATIC_DRAW);
                 } else {
                     const bounds = geometryCompressionUtils.getUVBounds(uvs);
                     const result = geometryCompressionUtils.compressUVs(uvs, bounds.min, bounds.max);
-                    const uv = result.quantized;
-                    state.uvDecodeMatrix = math.mat3(result.decodeMatrix);
+                    uvDecodeMatrix = math.mat3(result.decodeMatrix);
                     state.uvBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, result.quantized, 2, gl.STATIC_DRAW);
                 }
             }
         }
 
-        state.geometry = null;
+        // Free up memory
         this._buffer = null;
 
         scratchMemory.acquire();
+        cleanups.push(() => scratchMemory.release());
 
-        this._finalized = true;
+        const drawCallCache = { };
+        let deferredFlagValues = null;
 
-        this._drawCallCache = { };
-        const textureSet = state.textureSet;
-        const scene = this.model.scene;
+        /**
+         * flags are 4bits values encoded on a 32bit base. color flag on the first 4 bits, silhouette flag on the next 4 bits and so on for edge, pick and clippable.
+         */
+        const setFlags = (portionId, flags, transparent, deferred = false) => {
+            getColSilhEdgePickFlags(flags, transparent, (primitive !== "points") && (primitive !== "lines"), scene, tempUint8Array4);
+
+            const clippableFlag = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 1 : 0;
+
+            let vertFlag = 0;
+            vertFlag |= tempUint8Array4[0];
+            vertFlag |= tempUint8Array4[1] << 4;
+            vertFlag |= tempUint8Array4[2] << 8;
+            vertFlag |= tempUint8Array4[3] << 12;
+            vertFlag |= clippableFlag << 16;
+
+            tempFloat32[0] = vertFlag;
+
+            const portion   = portions[portionId];
+            const firstFlag = portion.portionBase;
+            const lenFlags  = portion.portionSize;
+
+            if (deferred && (! instancedGeometry)) {
+                // Avoid zillions of individual WebGL bufferSubData calls - buffer them to apply in one shot
+                if (!deferredFlagValues) {
+                    deferredFlagValues = new Float32Array(attributesCnt);
+                }
+                fillArray(deferredFlagValues.subarray(firstFlag, firstFlag + lenFlags), tempFloat32);
+            } else if (state.flagsBuf) {
+                const tempArray = scratchMemory.getTypeArray(Float32Array, lenFlags);
+                fillArray(tempArray, tempFloat32);
+                state.flagsBuf.setData(tempArray, firstFlag);
+            }
+        };
+
         const solid = (primitive === "solid");
         return {
             renderers: getRenderers(scene, instancing ? "instancing" : "batching", primitive, true,
@@ -510,19 +529,220 @@ export class VBOLayer extends Layer {
                                (textureSet && textureSet.metallicRoughnessTexture ? "-metallicRoughnessTexture" : ""))))
                       : "")),
             surfaceHasNormals: !!state.normalsBuf,
+            setClippableFlags: setFlags,
+            setFlags: setFlags,
+            setFlags2: (portionId, flags, deferred) => { },
+            setDeferredFlags: () => {
+                if (deferredFlagValues) {
+                    state.flagsBuf.setData(deferredFlagValues);
+                    deferredFlagValues = null;
+                }
+            },
+
+            setColor: (portionId, color) => { // RGBA color is normalized as ints
+                if (state.colorsBuf) {
+                    const portion = portions[portionId];
+                    const tempArray = scratchMemory.getTypeArray(Uint8Array, portion.portionSize * 4);
+                    // alpha used to be unset for points, so effectively random (from last use)
+                    fillArray(tempArray, color.slice(0, 4));
+                    state.colorsBuf.setData(tempArray, portion.portionBase * 4);
+                }
+            },
+            setMatrix: (portionId, matrix) => {
+                if (state.modelMatrixCol0Buf) {
+                    const offset = portionId * 4;
+
+                    tempFloat32Vec4[0] = matrix[0];
+                    tempFloat32Vec4[1] = matrix[4];
+                    tempFloat32Vec4[2] = matrix[8];
+                    tempFloat32Vec4[3] = matrix[12];
+
+                    state.modelMatrixCol0Buf.setData(tempFloat32Vec4, offset);
+
+                    tempFloat32Vec4[0] = matrix[1];
+                    tempFloat32Vec4[1] = matrix[5];
+                    tempFloat32Vec4[2] = matrix[9];
+                    tempFloat32Vec4[3] = matrix[13];
+
+                    state.modelMatrixCol1Buf.setData(tempFloat32Vec4, offset);
+
+                    tempFloat32Vec4[0] = matrix[2];
+                    tempFloat32Vec4[1] = matrix[6];
+                    tempFloat32Vec4[2] = matrix[10];
+                    tempFloat32Vec4[3] = matrix[14];
+
+                    state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
+                }
+            },
+            setOffset: (portionId, offset) => {
+                if (!scene.entityOffsetsEnabled) {
+                    model.error("Entity#offset not enabled for this Viewer"); // See Viewer entityOffsetsEnabled
+                } else {
+                    const portion = portions[portionId];
+                    if (state.offsetsBuf) {
+                        tempVec3fa.set(offset);
+                        const tempArray = scratchMemory.getTypeArray(Float32Array, portion.portionSize * 3);
+                        fillArray(tempArray, tempVec3fa);
+                        state.offsetsBuf.setData(tempArray, portion.portionBase * 3);
+                    }
+                    if (portion.retainedGeometry) {
+                        portion.retainedGeometry.offset.set(offset);
+                    }
+                }
+            },
+
+            getEachIndex: (portionId, callback) => {
+                const retainedGeometry = portions[portionId].retainedGeometry;
+                if (retainedGeometry) {
+                    retainedGeometry.indices.forEach(i => callback(i));
+                }
+            },
+            getEachVertex: (portionId, callback) => {
+                const retainedGeometry = portions[portionId].retainedGeometry;
+                if (retainedGeometry) {
+                    const origVec = tempVec4b;
+                    if (origin) {
+                        origVec.set(origin, 0);
+                    } else {
+                        origVec[0] = origVec[1] = origVec[2] = 0;
+                    }
+                    origVec[3] = 1;
+                    const sceneModelMatrix = model.matrix;
+                    math.mulMat4v4(sceneModelMatrix, origVec, origVec);
+                    const positions = retainedGeometry.quantizedPositions;
+                    const worldPos = tempVec4a;
+                    for (let i = 0, len = positions.length; i < len; i += 3) {
+                        worldPos[0] = positions[i];
+                        worldPos[1] = positions[i + 1];
+                        worldPos[2] = positions[i + 2];
+                        math.decompressPosition(worldPos, positionsDecodeMatrix);
+                        if (retainedGeometry.matrix) {
+                            math.transformPoint3(retainedGeometry.matrix, worldPos, worldPos);
+                        }
+                        worldPos[3] = 1;
+                        math.mulMat4v4(sceneModelMatrix, worldPos, worldPos);
+                        math.addVec3(origVec, worldPos, worldPos);
+                        callback(worldPos);
+                    }
+                }
+            },
+            precisionRayPickSurface: (portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) => {
+                const retainedGeometry = portions[portionId].retainedGeometry;
+                if (! retainedGeometry) {
+                    return false;
+                } else {
+                    if (retainedGeometry.matrix && (! retainedGeometry.inverseMatrix)) {
+                        retainedGeometry.inverseMatrix = math.inverseMat4(retainedGeometry.matrix, math.mat4());
+                    }
+
+                    if (worldNormal && retainedGeometry.inverseMatrix && (! retainedGeometry.normalMatrix)) {
+                        retainedGeometry.normalMatrix = math.transposeMat4(retainedGeometry.inverseMatrix, math.mat4());
+                    }
+
+                    const positions = retainedGeometry.quantizedPositions;
+                    const indices   = retainedGeometry.indices;
+                    const offset    = retainedGeometry.offset;
+
+                    const rtcRayOrigin = tempVec3a;
+                    const rtcRayDir = tempVec3b;
+
+                    rtcRayOrigin.set(origin ? math.subVec3(worldRayOrigin, origin, tempVec3c) : worldRayOrigin);  // World -> RTC
+                    rtcRayDir.set(worldRayDir);
+
+                    if (offset) {
+                        math.subVec3(rtcRayOrigin, offset);
+                    }
+
+                    math.transformRay(model.worldNormalMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir); // RTC -> local
+
+                    if (retainedGeometry.inverseMatrix) {
+                        math.transformRay(retainedGeometry.inverseMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir);
+                    }
+
+                    const a = tempVec3d;
+                    const b = tempVec3e;
+                    const c = tempVec3f;
+
+                    let gotIntersect = false;
+                    let closestDist = 0;
+                    const closestIntersectPos = tempVec3g;
+
+                    for (let i = 0, len = indices.length; i < len; i += 3) {
+
+                        const ia = indices[i] * 3;
+                        const ib = indices[i + 1] * 3;
+                        const ic = indices[i + 2] * 3;
+
+                        a[0] = positions[ia];
+                        a[1] = positions[ia + 1];
+                        a[2] = positions[ia + 2];
+
+                        b[0] = positions[ib];
+                        b[1] = positions[ib + 1];
+                        b[2] = positions[ib + 2];
+
+                        c[0] = positions[ic];
+                        c[1] = positions[ic + 1];
+                        c[2] = positions[ic + 2];
+
+                        math.decompressPosition(a, positionsDecodeMatrix);
+                        math.decompressPosition(b, positionsDecodeMatrix);
+                        math.decompressPosition(c, positionsDecodeMatrix);
+
+                        if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, closestIntersectPos)) {
+
+                            if (retainedGeometry.matrix) {
+                                math.transformPoint3(retainedGeometry.matrix, closestIntersectPos, closestIntersectPos);
+                            }
+
+                            math.transformPoint3(model.worldMatrix, closestIntersectPos, closestIntersectPos);
+
+                            if (offset) {
+                                math.addVec3(closestIntersectPos, offset);
+                            }
+
+                            if (origin) {
+                                math.addVec3(closestIntersectPos, origin);
+                            }
+
+                            const dist = Math.abs(math.lenVec3(math.subVec3(closestIntersectPos, worldRayOrigin, [])));
+
+                            if (!gotIntersect || dist > closestDist) {
+                                closestDist = dist;
+                                worldSurfacePos.set(closestIntersectPos);
+                                if (worldNormal) { // Not that wasteful to eagerly compute - unlikely to hit >2 surfaces on most geometry
+                                    math.triangleNormal(a, b, c, worldNormal);
+                                }
+                                gotIntersect = true;
+                            }
+                        }
+                    }
+
+                    if (gotIntersect && worldNormal) {
+                        if (retainedGeometry.normalMatrix) {
+                            math.transformVec3(retainedGeometry.normalMatrix, worldNormal, worldNormal);
+                        }
+                        math.transformVec3(model.worldNormalMatrix, worldNormal, worldNormal);
+                        math.normalizeVec3(worldNormal);
+                    }
+
+                    return gotIntersect;
+                }
+            },
+
             layerDrawState: {
-                getWorldNormalMatrix:  () => this.model.worldNormalMatrix,
-                positionsDecodeMatrix: state.positionsDecodeMatrix,
-                uvDecodeMatrix:        state.uvDecodeMatrix,
-                textureSet:            state.textureSet,
+                getWorldNormalMatrix:  () => model.worldNormalMatrix,
+                positionsDecodeMatrix: positionsDecodeMatrix,
+                uvDecodeMatrix:        uvDecodeMatrix,
+                textureSet:            textureSet,
                 colorTextureSupported: state.uvBuf && textureSet && textureSet.colorTexture,
                 pbrSupported:          state.uvBuf && textureSet && textureSet.colorTexture && state.normalsBuf && state.metallicRoughnessBuf && textureSet.metallicRoughnessTexture,
                 drawCall: (inputs, subGeometry) => {
                     const hash = inputs.attributesHash;
-                    if (! (hash in this._drawCallCache)) {
-                        this._drawCallCache[hash] = [ null, null, null ];
+                    if (! (hash in drawCallCache)) {
+                        drawCallCache[hash] = [ null, null, null ];
                     }
-                    const inputsCache = this._drawCallCache[hash];
+                    const inputsCache = drawCallCache[hash];
                     const cacheKey = subGeometry ? (subGeometry.vertices ? 0 : 1) : 2;
                     if (! inputsCache[cacheKey]) {
                         const vao = gl.createVertexArray();
@@ -558,7 +778,7 @@ export class VBOLayer extends Layer {
 
                             const drawPoints = () => {
                                 if (instancing) {
-                                    gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
+                                    gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, portions.length);
                                 } else {
                                     gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
                                 }
@@ -571,7 +791,7 @@ export class VBOLayer extends Layer {
                                     const type   = indicesBuf.itemType;
                                     const offset = 0;
                                     if (instancing) {
-                                        gl.drawElementsInstanced(mode, count, type, offset, state.numInstances);
+                                        gl.drawElementsInstanced(mode, count, type, offset, portions.length);
                                     } else {
                                         gl.drawElements(mode, count, type, offset);
                                     }
@@ -599,372 +819,23 @@ export class VBOLayer extends Layer {
 
                         gl.bindVertexArray(null);
 
-                        inputsCache[cacheKey] = {
-                            destroy: () => gl.deleteVertexArray(vao),
-                            draw: () => {
-                                gl.bindVertexArray(vao);
-                                drawer();
-                                gl.bindVertexArray(null);
-                            }
+                        cleanups.push(() => gl.deleteVertexArray(vao));
+
+                        inputsCache[cacheKey] = () => {
+                            gl.bindVertexArray(vao);
+                            drawer();
+                            gl.bindVertexArray(null);
                         };
                     }
 
-                    inputsCache[cacheKey].draw();
+                    inputsCache[cacheKey]();
                 }
+            },
+
+            destroy: () => {
+                cleanups.forEach(c => c());
+                cleanups.length = 0;
             }
         };
-    }
-
-    _setClippableFlags(portionId, flags) {
-        this._setFlags(portionId, flags);
-    }
-
-    setColor(portionId, color) { // RGBA color is normalized as ints
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-        if (this._state.colorsBuf) {
-            const portion = this._portions[portionId];
-            const tempArray = scratchMemory.getTypeArray(Uint8Array, portion.portionSize * 4);
-            // alpha used to be unset for points, so effectively random (from last use)
-            fillArray(tempArray, color.slice(0, 4));
-            this._state.colorsBuf.setData(tempArray, portion.portionBase * 4);
-        }
-    }
-
-    /**
-     * flags are 4bits values encoded on a 32bit base. color flag on the first 4 bits, silhouette flag on the next 4 bits and so on for edge, pick and clippable.
-     */
-    _setFlags(portionId, flags, transparent, deferred = false) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-
-        this._getColSilhEdgePickFlags(flags, transparent, tempUint8Array4);
-
-        const clippableFlag = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 1 : 0;
-
-        let vertFlag = 0;
-        vertFlag |= tempUint8Array4[0];
-        vertFlag |= tempUint8Array4[1] << 4;
-        vertFlag |= tempUint8Array4[2] << 8;
-        vertFlag |= tempUint8Array4[3] << 12;
-        vertFlag |= clippableFlag << 16;
-
-        tempFloat32[0] = vertFlag;
-
-        const portion   = this._portions[portionId];
-        const firstFlag = portion.portionBase;
-        const lenFlags  = portion.portionSize;
-
-        if (deferred && (! this._instancing)) {
-            // Avoid zillions of individual WebGL bufferSubData calls - buffer them to apply in one shot
-            if (!this._deferredFlagValues) {
-                this._deferredFlagValues = new Float32Array(this._attributesCnt);
-            }
-            fillArray(this._deferredFlagValues.subarray(firstFlag, firstFlag + lenFlags), tempFloat32);
-        } else if (this._state.flagsBuf) {
-            const tempArray = scratchMemory.getTypeArray(Float32Array, lenFlags);
-            fillArray(tempArray, tempFloat32);
-            this._state.flagsBuf.setData(tempArray, firstFlag);
-        }
-    }
-
-    _setDeferredFlags() {
-        if (this._deferredFlagValues) {
-            this._state.flagsBuf.setData(this._deferredFlagValues);
-            this._deferredFlagValues = null;
-        }
-    }
-
-    _setFlags2(portionId, flags, deferred) {
-    }
-
-    setOffset(portionId, offset) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-        if (!this.model.scene.entityOffsetsEnabled) {
-            this.model.error("Entity#offset not enabled for this Viewer"); // See Viewer entityOffsetsEnabled
-            return;
-        }
-        const portion = this._portions[portionId];
-        if (this._state.offsetsBuf) {
-            tempVec3fa.set(offset);
-            const tempArray = scratchMemory.getTypeArray(Float32Array, portion.portionSize * 3);
-            fillArray(tempArray, tempVec3fa);
-            this._state.offsetsBuf.setData(tempArray, portion.portionBase * 3);
-        }
-        if (portion.retainedGeometry) {
-            portion.retainedGeometry.offset.set(offset);
-        }
-    }
-
-    setMatrix(portionId, matrix) {
-        if (! this._state.modelMatrixCol0Buf) {
-            return;
-        }
-
-        ////////////////////////////////////////
-        // TODO: Update portion matrix
-        ////////////////////////////////////////
-
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-
-        const offset = portionId * 4;
-
-        tempFloat32Vec4[0] = matrix[0];
-        tempFloat32Vec4[1] = matrix[4];
-        tempFloat32Vec4[2] = matrix[8];
-        tempFloat32Vec4[3] = matrix[12];
-
-        this._state.modelMatrixCol0Buf.setData(tempFloat32Vec4, offset);
-
-        tempFloat32Vec4[0] = matrix[1];
-        tempFloat32Vec4[1] = matrix[5];
-        tempFloat32Vec4[2] = matrix[9];
-        tempFloat32Vec4[3] = matrix[13];
-
-        this._state.modelMatrixCol1Buf.setData(tempFloat32Vec4, offset);
-
-        tempFloat32Vec4[0] = matrix[2];
-        tempFloat32Vec4[1] = matrix[6];
-        tempFloat32Vec4[2] = matrix[10];
-        tempFloat32Vec4[3] = matrix[14];
-
-        this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
-    }
-
-    //------------------------------------------------------------------------------------------------
-
-    getEachVertex(portionId, callback) {
-        const portion = this._portions[portionId];
-        if (!portion) {
-            this.model.error("portion not found: " + portionId);
-            return;
-        }
-
-        const retainedGeometry = portion.retainedGeometry;
-        if (!retainedGeometry) {
-            return;
-        }
-        const origin = tempVec4b;
-        if (this.origin) {
-            origin.set(this.origin, 0);
-        } else {
-            origin[0] = origin[1] = origin[2] = 0;
-        }
-        origin[3] = 1;
-        const sceneModelMatrix = this.model.matrix;
-        math.mulMat4v4(sceneModelMatrix, origin, origin);
-        const positions = retainedGeometry.quantizedPositions;
-        const positionsDecodeMatrix = this._state.positionsDecodeMatrix;
-        const worldPos = tempVec4a;
-        for (let i = 0, len = positions.length; i < len; i += 3) {
-            worldPos[0] = positions[i];
-            worldPos[1] = positions[i + 1];
-            worldPos[2] = positions[i + 2];
-            math.decompressPosition(worldPos, positionsDecodeMatrix);
-            if (retainedGeometry.matrix) {
-                math.transformPoint3(retainedGeometry.matrix, worldPos, worldPos);
-            }
-            worldPos[3] = 1;
-            math.mulMat4v4(sceneModelMatrix, worldPos, worldPos);
-            math.addVec3(origin, worldPos, worldPos);
-            callback(worldPos);
-        }
-    }
-
-    getEachIndex(portionId, callback) {
-        const portion = this._portions[portionId];
-        if (!portion) {
-            this.model.error("portion not found: " + portionId);
-        } else if (portion.retainedGeometry) {
-            portion.retainedGeometry.indices.forEach(i => callback(i));
-        }
-    }
-
-    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
-        const portion = this._portions[portionId];
-        if (!portion) {
-            this.model.error("portion not found: " + portionId);
-            return false;
-        }
-
-        const retainedGeometry = portion.retainedGeometry;
-        if (!retainedGeometry) {
-            return false;
-        }
-
-        if (retainedGeometry.matrix && (! retainedGeometry.inverseMatrix)) {
-            retainedGeometry.inverseMatrix = math.inverseMat4(retainedGeometry.matrix, math.mat4());
-        }
-
-        if (worldNormal && retainedGeometry.inverseMatrix && (! retainedGeometry.normalMatrix)) {
-            retainedGeometry.normalMatrix = math.transposeMat4(retainedGeometry.inverseMatrix, math.mat4());
-        }
-
-        const origin    = this.origin;
-        const positions = retainedGeometry.quantizedPositions;
-        const indices   = retainedGeometry.indices;
-        const offset    = retainedGeometry.offset;
-
-        const rtcRayOrigin = tempVec3a;
-        const rtcRayDir = tempVec3b;
-
-        rtcRayOrigin.set(origin ? math.subVec3(worldRayOrigin, origin, tempVec3c) : worldRayOrigin);  // World -> RTC
-        rtcRayDir.set(worldRayDir);
-
-        if (offset) {
-            math.subVec3(rtcRayOrigin, offset);
-        }
-
-        math.transformRay(this.model.worldNormalMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir); // RTC -> local
-
-        if (retainedGeometry.inverseMatrix) {
-            math.transformRay(retainedGeometry.inverseMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir);
-        }
-
-        const a = tempVec3d;
-        const b = tempVec3e;
-        const c = tempVec3f;
-
-        let gotIntersect = false;
-        let closestDist = 0;
-        const closestIntersectPos = tempVec3g;
-
-        for (let i = 0, len = indices.length; i < len; i += 3) {
-
-            const ia = indices[i] * 3;
-            const ib = indices[i + 1] * 3;
-            const ic = indices[i + 2] * 3;
-
-            a[0] = positions[ia];
-            a[1] = positions[ia + 1];
-            a[2] = positions[ia + 2];
-
-            b[0] = positions[ib];
-            b[1] = positions[ib + 1];
-            b[2] = positions[ib + 2];
-
-            c[0] = positions[ic];
-            c[1] = positions[ic + 1];
-            c[2] = positions[ic + 2];
-
-            const positionsDecodeMatrix = this._state.positionsDecodeMatrix;
-
-            math.decompressPosition(a, positionsDecodeMatrix);
-            math.decompressPosition(b, positionsDecodeMatrix);
-            math.decompressPosition(c, positionsDecodeMatrix);
-
-            if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, closestIntersectPos)) {
-
-                if (retainedGeometry.matrix) {
-                    math.transformPoint3(retainedGeometry.matrix, closestIntersectPos, closestIntersectPos);
-                }
-
-                math.transformPoint3(this.model.worldMatrix, closestIntersectPos, closestIntersectPos);
-
-                if (offset) {
-                    math.addVec3(closestIntersectPos, offset);
-                }
-
-                if (origin) {
-                    math.addVec3(closestIntersectPos, origin);
-                }
-
-                const dist = Math.abs(math.lenVec3(math.subVec3(closestIntersectPos, worldRayOrigin, [])));
-
-                if (!gotIntersect || dist > closestDist) {
-                    closestDist = dist;
-                    worldSurfacePos.set(closestIntersectPos);
-                    if (worldNormal) { // Not that wasteful to eagerly compute - unlikely to hit >2 surfaces on most geometry
-                        math.triangleNormal(a, b, c, worldNormal);
-                    }
-                    gotIntersect = true;
-                }
-            }
-        }
-
-        if (gotIntersect && worldNormal) {
-            if (retainedGeometry.normalMatrix) {
-                math.transformVec3(retainedGeometry.normalMatrix, worldNormal, worldNormal);
-            }
-            math.transformVec3(this.model.worldNormalMatrix, worldNormal, worldNormal);
-            math.normalizeVec3(worldNormal);
-        }
-
-        return gotIntersect;
-    }
-
-    destroy() {
-        scratchMemory.release();
-
-        const state = this._state;
-        if (state.positionsBuf) {
-            state.positionsBuf.destroy();
-            state.positionsBuf = null;
-        }
-        if (state.offsetsBuf) {
-            state.offsetsBuf.destroy();
-            state.offsetsBuf = null;
-        }
-        if (state.colorsBuf) {
-            state.colorsBuf.destroy();
-            state.colorsBuf = null;
-        }
-        if (state.flagsBuf) {
-            state.flagsBuf.destroy();
-            state.flagsBuf = null;
-        }
-        if (state.metallicRoughnessBuf) {
-            state.metallicRoughnessBuf.destroy();
-            state.metallicRoughnessBuf = null;
-        }
-        if (state.pickColorsBuf) {
-            state.pickColorsBuf.destroy();
-            state.pickColorsBuf = null;
-        }
-        if (state.indicesBuf) {
-            state.indicesBuf.destroy();
-            state.indicesBuf = null;
-        }
-        if (state.normalsBuf) {
-            state.normalsBuf.destroy();
-            state.normalsBuf = null;
-        }
-        if (state.edgeIndicesBuf) {
-            state.edgeIndicesBuf.destroy();
-            state.edgeIndicessBuf = null;
-        }
-        if (state.modelMatrixCol0Buf) {
-            state.modelMatrixCol0Buf.destroy();
-            state.modelMatrixCol0Buf = null;
-        }
-        if (state.modelMatrixCol1Buf) {
-            state.modelMatrixCol1Buf.destroy();
-            state.modelMatrixCol1Buf = null;
-        }
-        if (state.modelMatrixCol2Buf) {
-            state.modelMatrixCol2Buf.destroy();
-            state.modelMatrixCol2Buf = null;
-        }
-        if (state.modelNormalMatrixCol0Buf) {
-            state.modelNormalMatrixCol0Buf.destroy();
-            state.modelNormalMatrixCol0Buf = null;
-        }
-        if (state.modelNormalMatrixCol1Buf) {
-            state.modelNormalMatrixCol1Buf.destroy();
-            state.modelNormalMatrixCol1Buf = null;
-        }
-        if (state.modelNormalMatrixCol2Buf) {
-            state.modelNormalMatrixCol2Buf.destroy();
-            state.modelNormalMatrixCol2Buf = null;
-        }
-        state.destroy();
-        Object.values(this._drawCallCache).forEach(inputsCache => inputsCache.forEach(v => v.destroy()));
-        this._state = null;
     }
 }
