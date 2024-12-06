@@ -74,7 +74,6 @@ export class VBOLayer extends Layer {
      * @param model
      * @param primitive
      * @param origin
-     * @param instancing
      *
      * @param cfg
      * @param cfg.textureSet
@@ -87,7 +86,7 @@ export class VBOLayer extends Layer {
      * instancing:
      * @param cfg.geometry
      */
-    constructor(model, primitive, origin, instancing, cfg) {
+    constructor(model, primitive, origin, cfg) {
 
         super(model, primitive, origin);
 
@@ -98,6 +97,7 @@ export class VBOLayer extends Layer {
         this.solid = (this.primitive === "solid");
 
         const textureSet = cfg.textureSet;
+        const instancing = !! cfg.geometry;
         /**
          * State sorting key.
          * @type {string}
@@ -580,7 +580,7 @@ export class VBOLayer extends Layer {
         const firstFlag = portion.portionBase;
         const lenFlags  = portion.portionSize;
 
-        if (deferred) {
+        if (deferred && (! this._instancing)) {
             // Avoid zillions of individual WebGL bufferSubData calls - buffer them to apply in one shot
             if (!this._deferredFlagValues) {
                 this._deferredFlagValues = new Float32Array(this._attributesCnt);
