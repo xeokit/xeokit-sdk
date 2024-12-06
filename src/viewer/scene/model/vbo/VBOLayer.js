@@ -71,11 +71,13 @@ const scratchMemory = (function() {
 export class VBOLayer extends Layer {
 
     /**
+     * @param model
+     * @param primitive
+     * @param origin
+     * @param instancing
+     *
      * @param cfg
-     * @param cfg.model
-     * @param cfg.origin
      * @param cfg.textureSet
-     * @param cfg.primitive
      *
      * batching:
      * @param cfg.positionsDecodeMatrix
@@ -85,20 +87,9 @@ export class VBOLayer extends Layer {
      * instancing:
      * @param cfg.geometry
      */
-    constructor(instancing, cfg) {
+    constructor(model, primitive, origin, instancing, cfg) {
 
-        super();
-
-        /**
-         * Owner model
-         * @type {VBOSceneModel}
-         */
-        this.model = cfg.model;
-
-        /**
-         * The type of primitives in this layer.
-         */
-        this.primitive = cfg.primitive;
+        super(model, primitive, origin);
 
         /**
          * When true, this layer contains solid triangle meshes, otherwise this layer contains surface triangle meshes
@@ -106,6 +97,7 @@ export class VBOLayer extends Layer {
          */
         this.solid = (this.primitive === "solid");
 
+        const textureSet = cfg.textureSet;
         /**
          * State sorting key.
          * @type {string}
@@ -118,12 +110,12 @@ export class VBOLayer extends Layer {
                            + (instancing
                               ? ""
                               // TODO: These two parts need to be IDs (ie. unique):
-                              : ((cfg.textureSet && cfg.textureSet.colorTexture ? "-colorTexture" : "")
+                              : ((textureSet && textureSet.colorTexture ? "-colorTexture" : "")
                                  +
-                                 (cfg.textureSet && cfg.textureSet.metallicRoughnessTexture ? "-metallicRoughnessTexture" : ""))))
+                                 (textureSet && textureSet.metallicRoughnessTexture ? "-metallicRoughnessTexture" : ""))))
                         : ""));
 
-        const scene = cfg.model.scene;
+        const scene = model.scene;
         this._renderers = getRenderers(scene, instancing ? "instancing" : "batching", this.primitive, true,
                                        subGeometry => makeVBORenderingAttributes(scene, instancing, this.primitive, subGeometry));
 
@@ -206,7 +198,6 @@ export class VBOLayer extends Layer {
         const positionsDecodeMatrix = instancing ? cfg.geometry.positionsDecodeMatrix : cfg.positionsDecodeMatrix;
 
         this._state = new RenderState({
-            origin: cfg.origin && math.vec3(cfg.origin),
             positionsBuf: null,
             colorsBuf: null,
             offsetsBuf: null,
@@ -214,7 +205,7 @@ export class VBOLayer extends Layer {
             positionsDecodeMatrix: positionsDecodeMatrix && math.mat4(positionsDecodeMatrix),
             metallicRoughnessBuf: null,
             pickColorsBuf: null,
-            textureSet: cfg.textureSet,
+            textureSet: textureSet,
             pbrSupported: false, // Set in #finalize if we have enough to support quality rendering
             ...(instancing
                 ? {
@@ -682,10 +673,9 @@ export class VBOLayer extends Layer {
         if (!retainedGeometry) {
             return;
         }
-        const state = this._state;
         const origin = tempVec4b;
-        if (state.origin) {
-            origin.set(state.origin, 0);
+        if (this.origin) {
+            origin.set(this.origin, 0);
         } else {
             origin[0] = origin[1] = origin[2] = 0;
         }
@@ -693,7 +683,7 @@ export class VBOLayer extends Layer {
         const sceneModelMatrix = this.model.matrix;
         math.mulMat4v4(sceneModelMatrix, origin, origin);
         const positions = retainedGeometry.quantizedPositions;
-        const positionsDecodeMatrix = state.positionsDecodeMatrix;
+        const positionsDecodeMatrix = this._state.positionsDecodeMatrix;
         const worldPos = tempVec4a;
         for (let i = 0, len = positions.length; i < len; i += 3) {
             worldPos[0] = positions[i];
@@ -731,8 +721,6 @@ export class VBOLayer extends Layer {
             return false;
         }
 
-        const state = this._state;
-
         if (retainedGeometry.matrix && (! retainedGeometry.inverseMatrix)) {
             retainedGeometry.inverseMatrix = math.inverseMat4(retainedGeometry.matrix, math.mat4());
         }
@@ -741,7 +729,7 @@ export class VBOLayer extends Layer {
             retainedGeometry.normalMatrix = math.transposeMat4(retainedGeometry.inverseMatrix, math.mat4());
         }
 
-        const origin    = state.origin;
+        const origin    = this.origin;
         const positions = retainedGeometry.quantizedPositions;
         const indices   = retainedGeometry.indices;
         const offset    = retainedGeometry.offset;
@@ -788,7 +776,7 @@ export class VBOLayer extends Layer {
             c[1] = positions[ic + 1];
             c[2] = positions[ic + 2];
 
-            const positionsDecodeMatrix = state.positionsDecodeMatrix;
+            const positionsDecodeMatrix = this._state.positionsDecodeMatrix;
 
             math.decompressPosition(a, positionsDecodeMatrix);
             math.decompressPosition(b, positionsDecodeMatrix);
