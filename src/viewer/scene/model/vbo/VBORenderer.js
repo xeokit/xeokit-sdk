@@ -173,6 +173,14 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
                 }
             };
 
+            inputs.attributesHash = JSON.stringify((function() {
+                const attributeHashes = [ ];
+                (function rec(o) {
+                    Object.values(o).forEach(v => { if (v) { const h = v.attributeHash; if (h) attributeHashes.push(h); else rec(v); } });
+                })(inputs);
+                return attributeHashes;
+            })());
+
             return function(frameCtx, layer, sceneModelMat, viewMatrix, projMatrix, rtcOrigin, eye) {
                 const state = layer._state;
                 let offset = 0;
