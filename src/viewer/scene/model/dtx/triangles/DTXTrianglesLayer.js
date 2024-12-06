@@ -1,6 +1,6 @@
 import {ENTITY_FLAGS} from "../../ENTITY_FLAGS.js";
 import {makeDTXRenderingAttributes} from "./DTXTrianglesDrawable.js";
-import {getRenderers, Layer} from "../../layer/Layer.js";
+import {getColSilhEdgePickFlags, getRenderers, Layer} from "../../layer/Layer.js";
 
 import {math} from "../../../math/math.js";
 import {Configs} from "../../../../Configs.js";
@@ -128,8 +128,6 @@ export class DTXTrianglesLayer extends Layer {
                 len: () => numIndices,
 
                 accumulateIndices: (indices, edgeIndices) => {
-                    const buffer = this._buffer;
-
                     const accIndicesSubPortion = (indices && (indices.length > 0)) && (function() {
                         const indicesBase = lenIndices / 3;
                         lenIndices += indices.length;
@@ -212,7 +210,7 @@ export class DTXTrianglesLayer extends Layer {
             };
         };
 
-        this._buffer = {
+        const buffer = this._buffer = {
             positionsCompressed: [],
             lenPositionsCompressed: 0,
 
@@ -252,17 +250,7 @@ export class DTXTrianglesLayer extends Layer {
 
         this._bucketGeometries = {};
 
-        /**
-         * The number of updates in the current frame;
-         */
-        this._numUpdatesInFrame = 0;
-
-        /**
-         * The type of primitives in this layer.
-         */
-        this.primitive = primitive;
-
-        this._finalized = false;
+        this._primitive = primitive;
     }
 
     /**
@@ -272,9 +260,6 @@ export class DTXTrianglesLayer extends Layer {
      * @returns {Boolean} Wheter the requested portion can be created
      */
     canCreatePortion(portionCfg) {
-        if (this._finalized) {
-            throw "Already finalized";
-        }
         const numNewPortions = portionCfg.buckets.length;
         if ((this._portions.length + numNewPortions) > MAX_NUMBER_OF_OBJECTS_IN_LAYER) {
             dataTextureRamStats.cannotCreatePortion.because10BitsObjectId++;
@@ -324,9 +309,6 @@ export class DTXTrianglesLayer extends Layer {
      * @returns {number} Portion ID
      */
     createPortion(mesh, portionCfg) {
-        if (this._finalized) {
-            throw "Already finalized";
-        }
         const buffer = this._buffer;
         //   const portionAABB = portionCfg.worldAABB;
         const subPortionIds = portionCfg.buckets.map((bucket, bucketIndex) => {
@@ -420,8 +402,17 @@ export class DTXTrianglesLayer extends Layer {
      * No more portions can then be created.
      */
     compilePortions() {
-        const gl = this.model.scene.canvas.gl;
-        const buffer = this._buffer;
+        const buffer                       = this._buffer;
+        const model                        = this.model;
+        const numPortions                  = this._portions.length;
+        const origin                       = this.origin;
+        const portionToSubPortionsMap      = this._portionToSubPortionsMap;
+        const primitive                    = this._primitive;
+        const sortId                       = this._sortId;
+        const subPortionReadableGeometries = this._subPortionReadableGeometries;
+
+        const scene = model.scene;
+        const gl = scene.canvas.gl;
 
         /*
          * Texture that holds colors/pickColors/flags/flags2 per-object:
@@ -431,8 +422,6 @@ export class DTXTrianglesLayer extends Layer {
          * - 4 RGBA columns per row: for each object (pick) color and flags(2)
          * - N rows where N is the number of objects
          */
-        const numPortions = this._portions.length;
-
         const populateTexArray = texArray => {
             const pack32as4x8 = ui32 => [
                 (ui32 >> 24) & 255,
@@ -455,7 +444,7 @@ export class DTXTrianglesLayer extends Layer {
 
         // The number of rows in the texture is the number of objects in the layer.
         const texturePerObjectColorsAndFlags = createBindableDataTexture(gl, numPortions, 32, gl.UNSIGNED_BYTE, 512, populateTexArray, "sizeDataColorsAndFlags", true);
-        this._texturePerObjectColorsAndFlagsData = texturePerObjectColorsAndFlags.textureData;
+        const texturePerObjectColorsAndFlagsData = texturePerObjectColorsAndFlags.textureData;
 
         const createDataTexture = function(dataArrays, entitiesCnt, entitySize, type, entitiesPerRow, statsProp, exposeData) {
             const populateTexArray = texArray => {
@@ -485,7 +474,7 @@ export class DTXTrianglesLayer extends Layer {
          * - N rows where N is the number of objects
          */
         const texturePerObjectInstanceMatrices = createTextureForMatrices(buffer.perObjectInstancePositioningMatrices, "sizeDataInstancesMatrices", true);
-        this._texturePerObjectInstanceMatricesData = texturePerObjectInstanceMatrices.textureData;
+        const texturePerObjectInstanceMatricesData = texturePerObjectInstanceMatrices.textureData;
 
         /*
          * Texture that holds the objectDecodeAndInstanceMatrix per-object:
@@ -520,36 +509,142 @@ export class DTXTrianglesLayer extends Layer {
 
         // Free up memory
         this._buffer = null;
-        this._bucketGeometries = {};
-        this._deferredSetFlagsDirty = false; //
 
-        this._onSceneRendering = this.model.scene.on("rendering", () => {
-            if (this._deferredSetFlagsDirty) {
-                this._uploadDeferredFlags();
+        let deferredSetFlagsActive = false;
+        let deferredSetFlagsDirty = false;
+        let destroyed = false;
+        let numUpdatesInFrame = 0;
+
+
+        /**
+         * This will _start_ a "set-flags transaction".
+         *
+         * After invoking this method, calling setFlags/setFlags2 will not update
+         * the colors+flags texture but only store the new flags/flag2 in the
+         * colors+flags texture data array.
+         *
+         * After invoking this method, and when all desired setFlags/setFlags2 have
+         * been called on needed portions of the layer, invoke `uploadDeferredFlags`
+         * to actually upload the data array into the texture.
+         *
+         * In massive "set-flags" scenarios like VFC or LOD mechanisms, the combination of
+         * `beginDeferredFlags` + `uploadDeferredFlags`brings a speed-up of
+         * up to 80x when e.g. objects are massively (un)culled 🚀.
+         */
+        const beginDeferredFlags = () => { deferredSetFlagsActive = true; };
+
+        const onSceneRendering = scene.on("rendering", () => {
+            if (deferredSetFlagsDirty) {
+                // uploadDeferredFlags
+                /**
+                 * This will _commit_ a "set-flags transaction".
+                 * Invoking this method will update the colors+flags texture data with new
+                 * flags/flags2 set since the previous invocation of `beginDeferredFlags`.
+                 */
+                deferredSetFlagsActive = false;
+                deferredSetFlagsDirty = false;
+                texturePerObjectColorsAndFlagsData.reloadData();
             }
-            this._numUpdatesInFrame = 0;
+            numUpdatesInFrame = 0;
         });
 
-        const scene = this.model.scene;
+        const forEachSubPortionId = (portionId, cb) => {
+            const subPortionIds = portionToSubPortionsMap[portionId];
+            if (!subPortionIds) {
+                model.error("portion not found: " + portionId);
+            } else {
+                for (let i = 0, len = subPortionIds.length; i < len; i++) {
+                    cb(subPortionIds[i]);
+                }
+            }
+        };
 
-        this._finalized = true;
+        const setPortionColorsAndFlags = (subPortionId, offset, data, deferred) => {
+            const defer = deferredSetFlagsActive || deferred;
+            if (defer) {
+                deferredSetFlagsDirty = true;
+            } else if (++numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
+                beginDeferredFlags(); // Subsequent flags updates now deferred
+            }
+            texturePerObjectColorsAndFlagsData.setData(data, subPortionId, offset, !defer);
+        };
+
+        const setFlags2 = (portionId, flags, deferred = false) => {
+            tempUint8Array4.set([ (flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0, 0, 1, 2 ]);
+            forEachSubPortionId(portionId, subPortionId => setPortionColorsAndFlags(subPortionId, 3, tempUint8Array4, deferred));
+        };
 
         return {
-            renderers: getRenderers(scene, "dtx", this.primitive, false,
+            renderers: getRenderers(scene, "dtx", primitive, false,
                                            subGeometry => makeDTXRenderingAttributes(scene.canvas.gl, subGeometry)),
             edgesColorOpaqueAllowed: () => {
-                if (this.model.scene.logarithmicDepthBufferEnabled) {
-                    if (!this.model.scene._loggedWarning) {
+                if (scene.logarithmicDepthBufferEnabled) {
+                    if (!scene._loggedWarning) {
                         console.log("Edge enhancement for SceneModel data texture layers currently disabled with logarithmic depth buffer");
-                        this.model.scene._loggedWarning = true;
+                        scene._loggedWarning = true;
                     }
                     return false;
                 } else {
                     return true;
                 }
             },
-            sortId: this._sortId,
+            sortId: sortId,
             surfaceHasNormals: true,
+            setClippableFlags: setFlags2,
+            setFlags: (portionId, flags, transparent, deferred = false) => {
+                getColSilhEdgePickFlags(flags, transparent, true, scene, tempUint8Array4);
+                forEachSubPortionId(portionId, subPortionId => setPortionColorsAndFlags(subPortionId, 2, tempUint8Array4, deferred));
+            },
+            setFlags2: setFlags2,
+            setDeferredFlags: () => { },
+
+            setColor: (portionId, color) => {
+                tempUint8Array4.set(color);
+                forEachSubPortionId(portionId, subPortionId => setPortionColorsAndFlags(subPortionId, 0, tempUint8Array4, false));
+            },
+            setMatrix: (portionId, matrix) => {
+                forEachSubPortionId(portionId, subPortionId => {
+                    const defer = deferredSetFlagsActive;
+                    if (defer) {
+                        deferredSetFlagsDirty = true;
+                    } else if (++numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
+                        beginDeferredFlags(); // Subsequent flags updates now deferred
+                    }
+                    tempMat4a.set(matrix);
+                    texturePerObjectInstanceMatricesData.setData(tempMat4a, subPortionId, 0, !defer);
+                });
+            },
+            setOffset: (portionId, offset) =>  { /* NOT COMPLETE */ },
+
+            getEachIndex: (portionId, callback) => {
+                if (subPortionReadableGeometries) {
+                    forEachSubPortionId(
+                        portionId,
+                        subPortionId => subPortionReadableGeometries[subPortionId].indices.forEach(i => callback(i)));
+                }
+            },
+            getEachVertex: (portionId, callback) => {
+                if (subPortionReadableGeometries) {
+                    forEachSubPortionId(portionId, subPortionId => {
+                        const subPortionReadableGeometry = subPortionReadableGeometries[subPortionId];
+                        const positions = subPortionReadableGeometry.positionsCompressed;
+                        const positionsDecodeMatrix = subPortionReadableGeometry.positionsDecodeMatrix;
+                        const worldPos = tempVec4a;
+                        for (let i = 0, len = positions.length; i < len; i += 3) {
+                            worldPos[0] = positions[i];
+                            worldPos[1] = positions[i + 1];
+                            worldPos[2] = positions[i + 2];
+                            worldPos[3] = 1.0;
+                            math.decompressPosition(worldPos, positionsDecodeMatrix);
+                            math.mulMat4v4(model.worldMatrix, worldPos, worldPos);
+                            math.addVec3(origin, worldPos, worldPos);
+                            callback(worldPos);
+                        }
+                    });
+                }
+            },
+            precisionRayPickSurface: (portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) => false,
+
             layerDrawState: {
                 bindCommonTextures: function(
                     uTexPerObjectPositionsDecodeMatrix,
@@ -573,171 +668,15 @@ export class DTXTrianglesLayer extends Layer {
                     draw16.edges(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
                     draw32.edges(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
                 }
-            }
-        };
-    }
+            },
 
-    /**
-     * This will _start_ a "set-flags transaction".
-     *
-     * After invoking this method, calling setFlags/setFlags2 will not update
-     * the colors+flags texture but only store the new flags/flag2 in the
-     * colors+flags texture data array.
-     *
-     * After invoking this method, and when all desired setFlags/setFlags2 have
-     * been called on needed portions of the layer, invoke `_uploadDeferredFlags`
-     * to actually upload the data array into the texture.
-     *
-     * In massive "set-flags" scenarios like VFC or LOD mechanisms, the combination of
-     * `_beginDeferredFlags` + `_uploadDeferredFlags`brings a speed-up of
-     * up to 80x when e.g. objects are massively (un)culled 🚀.
-     */
-    _beginDeferredFlags() {
-        this._deferredSetFlagsActive = true;
-    }
-
-    /**
-     * This will _commit_ a "set-flags transaction".
-     *
-     * Invoking this method will update the colors+flags texture data with new
-     * flags/flags2 set since the previous invocation of `_beginDeferredFlags`.
-     */
-    _uploadDeferredFlags() {
-        this._deferredSetFlagsActive = false;
-        if (this._deferredSetFlagsDirty) {
-            this._deferredSetFlagsDirty = false;
-            this._texturePerObjectColorsAndFlagsData.reloadData();
-        }
-    }
-
-    _setClippableFlags(portionId, flags) {
-        this._setFlags2(portionId, flags);
-    }
-
-    setColor(portionId, color) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-        const subPortionIds = this._portionToSubPortionsMap[portionId];
-        for (let i = 0, len = subPortionIds.length; i < len; i++) {
-            tempUint8Array4[0] = color[0];
-            tempUint8Array4[1] = color[1];
-            tempUint8Array4[2] = color[2];
-            tempUint8Array4[3] = color[3];
-            this._setPortionColorsAndFlags(subPortionIds[i], 0, tempUint8Array4, false);
-        }
-    }
-
-    _setPortionColorsAndFlags(subPortionId, offset, data, deferred) {
-        const defer = this._deferredSetFlagsActive || deferred;
-        if (defer) {
-            this._deferredSetFlagsDirty = true;
-        } else if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
-            this._beginDeferredFlags(); // Subsequent flags updates now deferred
-        }
-        this._texturePerObjectColorsAndFlagsData.setData(data, subPortionId, offset, !defer);
-    }
-
-    _setFlags(portionId, flags, transparent, deferred = false) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-
-        this._getColSilhEdgePickFlags(flags, transparent, tempUint8Array4);
-
-        const subPortionIds = this._portionToSubPortionsMap[portionId];
-        for (let i = 0, len = subPortionIds.length; i < len; i++) {
-            this._setPortionColorsAndFlags(subPortionIds[i], 2, tempUint8Array4, deferred);
-        }
-    }
-
-    _setDeferredFlags() {
-    }
-
-    _setFlags2(portionId, flags, deferred = false) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-
-        const subPortionIds = this._portionToSubPortionsMap[portionId];
-        for (let i = 0, len = subPortionIds.length; i < len; i++) {
-            tempUint8Array4[0] = (flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
-            tempUint8Array4[1] = 0;
-            tempUint8Array4[2] = 1;
-            tempUint8Array4[3] = 2;
-            this._setPortionColorsAndFlags(subPortionIds[i], 3, tempUint8Array4, deferred);
-        }
-    }
-
-    setOffset(portionId, offset) {
-        // NOT COMPLETE
-    }
-
-    setMatrix(portionId, matrix) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-
-        const subPortionIds = this._portionToSubPortionsMap[portionId];
-        for (let i = 0, len = subPortionIds.length; i < len; i++) {
-            const defer = this._deferredSetFlagsActive;
-            if (defer) {
-                this._deferredSetFlagsDirty = true;
-            } else if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
-                this._beginDeferredFlags(); // Subsequent flags updates now deferred
-            }
-            tempMat4a.set(matrix);
-            this._texturePerObjectInstanceMatricesData.setData(tempMat4a, subPortionIds[i], 0, !defer);
-        }
-    }
-
-    //------------------------------------------------------------------------------------------------
-
-    getEachVertex(portionId, callback) {
-        const subPortionIds = this._portionToSubPortionsMap[portionId];
-        if (!subPortionIds) {
-            this.model.error("portion not found: " + portionId);
-        } else if (this._subPortionReadableGeometries) {
-            for (let i = 0, len = subPortionIds.length; i < len; i++) {
-                const subPortionReadableGeometry = this._subPortionReadableGeometries[subPortionIds[i]];
-                const positions = subPortionReadableGeometry.positionsCompressed;
-                const positionsDecodeMatrix = subPortionReadableGeometry.positionsDecodeMatrix;
-                const worldPos = tempVec4a;
-                for (let i = 0, len = positions.length; i < len; i += 3) {
-                    worldPos[0] = positions[i];
-                    worldPos[1] = positions[i + 1];
-                    worldPos[2] = positions[i + 2];
-                    worldPos[3] = 1.0;
-                    math.decompressPosition(worldPos, positionsDecodeMatrix);
-                    math.mulMat4v4(this.model.worldMatrix, worldPos, worldPos);
-                    math.transformPoint4(this.model.worldMatrix, worldPos, worldPos);
-                    math.addVec3(this.origin, worldPos, worldPos);
-                    callback(worldPos);
+            destroy: () => {
+                if (! destroyed) {
+                    scene.off(onSceneRendering);
+                    destroyed = true;
                 }
             }
-        }
-    }
-
-    getEachIndex(portionId, callback) {
-        const subPortionIds = this._portionToSubPortionsMap[portionId];
-        if (!subPortionIds) {
-            this.model.error("portion not found: " + portionId);
-        } else if (this._subPortionReadableGeometries) {
-            subPortionIds.forEach(
-                subPortionId => this._subPortionReadableGeometries[subPortionId].indices.forEach(i => callback(i)));
-        }
-    }
-
-    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
-        return false;
-    }
-
-    destroy() {
-        if (this._destroyed) {
-            return;
-        }
-        this.model.scene.off(this._onSceneRendering);
-        this._destroyed = true;
+        };
     }
 }
 
