@@ -508,7 +508,10 @@ export class VBOLayer extends Layer {
 
         this._drawCallCache = { };
         this.layerDrawState = {
-            getWorldNormalMatrix: () => this.model.worldNormalMatrix,
+            getWorldNormalMatrix:  () => this.model.worldNormalMatrix,
+            positionsDecodeMatrix: state.positionsDecodeMatrix,
+            uvDecodeMatrix:        state.uvDecodeMatrix,
+            textureSet:            state.textureSet,
             drawCall: (inputs, subGeometry) => {
                 const hash = inputs.attributesHash;
                 if (! (hash in this._drawCallCache)) {

@@ -505,7 +505,8 @@ export class LayerRenderer {
                 uIntensityRange(tempVec2);
             }
 
-            setInputsState && setInputsState(frameCtx, layer._state.textureSet);
+            const layerDrawState = layer.layerDrawState;
+            setInputsState && setInputsState(frameCtx, layerDrawState.textureSet);
 
             const model = layer.model;
             const origin = layer.origin;
@@ -541,7 +542,7 @@ export class LayerRenderer {
                 frameCtx.snapPickOrigin[2] = rtcOrigin[2];
             }
 
-            drawCall(frameCtx, layer, rotationMatrix, rtcViewMatrix, projMatrix, rtcOrigin, eye);
+            drawCall(frameCtx, layer.layerDrawState, rotationMatrix, rtcViewMatrix, projMatrix, rtcOrigin, eye);
 
             if (incrementDrawState) {
                 frameCtx.drawElements++;
