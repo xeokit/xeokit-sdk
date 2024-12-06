@@ -3010,7 +3010,7 @@ export class SceneModel extends Component {
         }
 
         if (! (layerId in this._vboLayers)) {
-            const layer = new VBOLayer(this, primitive, origin, instancing, {
+            const layer = new VBOLayer(this, primitive, origin, {
                 textureSet: cfg.textureSet,
                 ...(instancing ? {
                     geometry: geometry,
