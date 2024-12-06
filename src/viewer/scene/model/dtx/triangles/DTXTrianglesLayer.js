@@ -96,8 +96,6 @@ const tempMat4a = new Float32Array(16);
 const tempUint8Array4 = new Uint8Array(4);
 const tempFloat32Array3 = new Float32Array(3);
 
-let numLayers = 0;
-
 const DEFAULT_MATRIX = math.identityMat4();
 
 /**
@@ -110,6 +108,8 @@ export class DTXTrianglesLayer extends Layer {
         super(model, primitive, origin);
 
         dataTextureRamStats.numberOfLayers++;
+
+        this._sortId = `TriDTX-${dataTextureRamStats.numberOfLayers}`;
 
         const gl = model.scene.canvas.gl;
 
@@ -419,12 +419,7 @@ export class DTXTrianglesLayer extends Layer {
      *
      * No more portions can then be created.
      */
-    finalize() {
-
-        if (this._finalized) {
-            return;
-        }
-
+    compilePortions() {
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
 
@@ -523,31 +518,6 @@ export class DTXTrianglesLayer extends Layer {
         const draw16 = buffer.geometry16Bits.createDrawers(createTextureForSingleItems, gl.UNSIGNED_SHORT);
         const draw32 = buffer.geometry32Bits.createDrawers(createTextureForSingleItems, gl.UNSIGNED_INT);
 
-        this.layerDrawState = {
-            bindCommonTextures: function(
-                uTexPerObjectPositionsDecodeMatrix,
-                uTexPerVertexIdCoordinates,
-                uTexPerObjectColorsAndFlags,
-                uTexPerObjectMatrix) {
-                uTexPerObjectPositionsDecodeMatrix(texturePerObjectPositionsDecodeMatrix, 1);
-                uTexPerVertexIdCoordinates(texturePerVertexIdCoordinates,                 2);
-                uTexPerObjectColorsAndFlags(texturePerObjectColorsAndFlags,               3);
-                uTexPerObjectMatrix(texturePerObjectInstanceMatrices,                     4);
-            },
-
-            drawTriangles: function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
-                draw8.indices( uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
-                draw16.indices(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
-                draw32.indices(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
-            },
-
-            drawEdges: function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
-                draw8.edges( uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
-                draw16.edges(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
-                draw32.edges(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
-            }
-        };
-
         // Free up memory
         this._buffer = null;
         this._bucketGeometries = {};
@@ -561,24 +531,50 @@ export class DTXTrianglesLayer extends Layer {
         });
 
         const scene = this.model.scene;
-        this._renderers = getRenderers(scene, "dtx", this.primitive, false,
-                                       subGeometry => makeDTXRenderingAttributes(scene.canvas.gl, subGeometry));
-        this._hasEdges = this._renderers.edgesRenderers;
-        this._edgesColorOpaqueAllowed = () => {
-            if (this.model.scene.logarithmicDepthBufferEnabled) {
-                if (!this.model.scene._loggedWarning) {
-                    console.log("Edge enhancement for SceneModel data texture layers currently disabled with logarithmic depth buffer");
-                    this.model.scene._loggedWarning = true;
-                }
-                return false;
-            } else {
-                return true;
-            }
-        };
-        this.sortId = `TriDTX-${++numLayers}`; // State sorting key.
-        this._surfaceHasNormals = true;
 
         this._finalized = true;
+
+        return {
+            renderers: getRenderers(scene, "dtx", this.primitive, false,
+                                           subGeometry => makeDTXRenderingAttributes(scene.canvas.gl, subGeometry)),
+            edgesColorOpaqueAllowed: () => {
+                if (this.model.scene.logarithmicDepthBufferEnabled) {
+                    if (!this.model.scene._loggedWarning) {
+                        console.log("Edge enhancement for SceneModel data texture layers currently disabled with logarithmic depth buffer");
+                        this.model.scene._loggedWarning = true;
+                    }
+                    return false;
+                } else {
+                    return true;
+                }
+            },
+            sortId: this._sortId,
+            surfaceHasNormals: true,
+            layerDrawState: {
+                bindCommonTextures: function(
+                    uTexPerObjectPositionsDecodeMatrix,
+                    uTexPerVertexIdCoordinates,
+                    uTexPerObjectColorsAndFlags,
+                    uTexPerObjectMatrix) {
+                    uTexPerObjectPositionsDecodeMatrix(texturePerObjectPositionsDecodeMatrix, 1);
+                    uTexPerVertexIdCoordinates(texturePerVertexIdCoordinates,                 2);
+                    uTexPerObjectColorsAndFlags(texturePerObjectColorsAndFlags,               3);
+                    uTexPerObjectMatrix(texturePerObjectInstanceMatrices,                     4);
+                },
+
+                drawTriangles: function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
+                    draw8.indices( uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+                    draw16.indices(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+                    draw32.indices(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+                },
+
+                drawEdges: function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
+                    draw8.edges( uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+                    draw16.edges(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+                    draw32.edges(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+                }
+            }
+        };
     }
 
     /**
