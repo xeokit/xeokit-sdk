@@ -1,5 +1,4 @@
 export const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeometry) {
-    const gl = scene.canvas.gl;
     const lazyShaderVariable = function(name) {
         const variable = {
             toString: () => {
@@ -35,11 +34,6 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
      *  - viewNormalMatrix
      */
     const matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
-
-    /**
-     * A Vertex Array Object by Layer
-     */
-    const drawCallCache = new WeakMap();
 
     const needNormal = () => (params.viewNormal.needed || params.worldNormal.needed);
 
@@ -153,21 +147,31 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
             const uMatricesBlock  = getInputSetter("Matrices");
             const uUVDecodeMatrix = params.uvA.needed && getInputSetter("uvDecodeMatrix");
 
-            const aPosition          = getInputSetter("position");
-            const aOffset            = scene.entityOffsetsEnabled && getInputSetter("offset");
-            const aNormal            = needNormal() && getInputSetter("normal");
-            const aUV                = params.uvA.needed && getInputSetter("uv");
-            const aColor             = params.colorA.needed && getInputSetter("colorA255");
-            const aMetallicRoughness = params.metallicRoughnessA.needed && getInputSetter("metallicRoughness");
-            const aFlags             = getInputSetter("flags");
-            const aPickColor         = params.pickColorA.needed && getInputSetter("pickColor");
+            const inputs = {
+                attributes: {
+                    position:          getInputSetter("position"),
+                    normal:            needNormal() && getInputSetter("normal"),
+                    color:             params.colorA.needed && getInputSetter("colorA255"),
+                    pickColor:         params.pickColorA.needed && getInputSetter("pickColor"),
+                    uV:                params.uvA.needed && getInputSetter("uv"),
+                    metallicRoughness: params.metallicRoughnessA.needed && getInputSetter("metallicRoughness"),
+                    flags:             getInputSetter("flags"),
+                    offset:            scene.entityOffsetsEnabled && getInputSetter("offset")
+                },
 
-            const aModelMatrixCol0 = instancing && getInputSetter("modelMatrixCol0");
-            const aModelMatrixCol1 = instancing && getInputSetter("modelMatrixCol1");
-            const aModelMatrixCol2 = instancing && getInputSetter("modelMatrixCol2");
-            const aModelNormalMatrixCol0 = instancing && needNormal() && getInputSetter("modelNormalMatrixCol0");
-            const aModelNormalMatrixCol1 = instancing && needNormal() && getInputSetter("modelNormalMatrixCol1");
-            const aModelNormalMatrixCol2 = instancing && needNormal() && getInputSetter("modelNormalMatrixCol2");
+                matrices: instancing && {
+                    aModelMatrixCol: [
+                        getInputSetter("modelMatrixCol0"),
+                        getInputSetter("modelMatrixCol1"),
+                        getInputSetter("modelMatrixCol2")
+                    ],
+                    aModelNormalMatrixCol: needNormal() && [
+                        getInputSetter("modelNormalMatrixCol0"),
+                        getInputSetter("modelNormalMatrixCol1"),
+                        getInputSetter("modelNormalMatrixCol2")
+                    ]
+                }
+            };
 
             return function(frameCtx, layer, sceneModelMat, viewMatrix, projMatrix, rtcOrigin, eye) {
                 const state = layer._state;
@@ -178,91 +182,13 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
                 matricesUniformBlockBufferData.set(projMatrix, offset += mat4Size);
                 matricesUniformBlockBufferData.set(state.positionsDecodeMatrix, offset += mat4Size);
                 if (needNormal()) {
-                    matricesUniformBlockBufferData.set(layer.model.worldNormalMatrix, offset += mat4Size);
+                    matricesUniformBlockBufferData.set(layer.layerDrawState.getWorldNormalMatrix(), offset += mat4Size);
                     matricesUniformBlockBufferData.set(scene.camera.viewNormalMatrix, offset += mat4Size);
                 }
                 uMatricesBlock(matricesUniformBlockBufferData);
-
                 uUVDecodeMatrix && uUVDecodeMatrix(state.uvDecodeMatrix);
 
-                if (! drawCallCache.has(layer)) {
-                    const vao = gl.createVertexArray();
-                    gl.bindVertexArray(vao);
-
-                    const bindAttribute = (a, b, setDivisor) => b && a(b, setDivisor && 1);
-
-                    if (instancing) {
-                        bindAttribute(aModelMatrixCol0, state.modelMatrixCol0Buf, true);
-                        bindAttribute(aModelMatrixCol1, state.modelMatrixCol1Buf, true);
-                        bindAttribute(aModelMatrixCol2, state.modelMatrixCol2Buf, true);
-                        aModelNormalMatrixCol0 && bindAttribute(aModelNormalMatrixCol0, state.modelNormalMatrixCol0Buf, true);
-                        aModelNormalMatrixCol1 && bindAttribute(aModelNormalMatrixCol1, state.modelNormalMatrixCol1Buf, true);
-                        aModelNormalMatrixCol2 && bindAttribute(aModelNormalMatrixCol2, state.modelNormalMatrixCol2Buf, true);
-                    }
-
-                    bindAttribute(aPosition, state.positionsBuf);
-                    aUV                && bindAttribute(aUV,                state.uvBuf);
-                    aNormal            && bindAttribute(aNormal,            state.normalsBuf);
-                    aMetallicRoughness && bindAttribute(aMetallicRoughness, state.metallicRoughnessBuf, instancing);
-                    aColor             && bindAttribute(aColor,             state.colorsBuf,            instancing && state.colorsBuf && (!state.colorsForPointsNotInstancing));
-                    aFlags             && bindAttribute(aFlags,             state.flagsBuf,             instancing);
-                    aOffset            && bindAttribute(aOffset,            state.offsetsBuf,           instancing);
-                    aPickColor         && bindAttribute(aPickColor,         state.pickColorsBuf,        instancing);
-
-                    const drawer = (function() {
-                        // TODO: Use drawElements count and offset to draw only one entity
-
-                        const drawPoints = () => {
-                            if (instancing) {
-                                gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
-                            } else {
-                                gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
-                            }
-                        };
-
-                        const elementsDrawer = (mode, indicesBuf) => {
-                            indicesBuf.bind();
-                            return function() {
-                                const count  = indicesBuf.numItems;
-                                const type   = indicesBuf.itemType;
-                                const offset = 0;
-                                if (instancing) {
-                                    gl.drawElementsInstanced(mode, count, type, offset, state.numInstances);
-                                } else {
-                                    gl.drawElements(mode, count, type, offset);
-                                }
-                            };
-                        };
-
-                        if (primitive === "points") {
-                            return drawPoints;
-                        } else if (primitive === "lines") {
-                            if (subGeometry && subGeometry.vertices) {
-                                return drawPoints;
-                            } else {
-                                return elementsDrawer(gl.LINES, state.indicesBuf);
-                            }
-                        } else {    // triangles
-                            if (subGeometry && subGeometry.vertices) {
-                                return drawPoints;
-                            } else if (subGeometry && state.edgeIndicesBuf) {
-                                return elementsDrawer(gl.LINES, state.edgeIndicesBuf);
-                            } else {
-                                return elementsDrawer(gl.TRIANGLES, state.indicesBuf);
-                            }
-                        }
-                    })();
-
-                    gl.bindVertexArray(null);
-
-                    drawCallCache.set(layer, function(frameCtx) {
-                        gl.bindVertexArray(vao);
-                        drawer();
-                        gl.bindVertexArray(null);
-                    });
-                }
-
-                drawCallCache.get(layer)(frameCtx);
+                layer.layerDrawState.drawCall(inputs, subGeometry);
             };
         }
     };
