@@ -414,7 +414,12 @@ export const getRenderers = (function() {
 
 export class Layer {
 
-    constructor() {
+    constructor(model, primitive, origin) {
+
+        this.model     = model;
+        this.primitive = primitive;
+        this.origin    = origin;
+
         this._meshes = [];
         // The axis-aligned World-space boundary of this Layer's positions.
         this._aabb = math.collapseAABB3();
