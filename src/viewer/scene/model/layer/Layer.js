@@ -483,10 +483,10 @@ export class Layer {
             (this._numXRayedLayerPortions < this._portions.length)) {
 
             const saoRenderer = (renderOpaque && frameCtx.withSAO && this.model.saoEnabled && this._renderers.colorRenderers["sao+"]) || this._renderers.colorRenderers["sao-"];
-            const renderer = ((saoRenderer["PBR"] && frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported)
+            const renderer = ((saoRenderer["PBR"] && frameCtx.pbrEnabled && this.model.pbrEnabled && this.layerDrawState.pbrSupported)
                               ? saoRenderer["PBR"]
-                              : ((saoRenderer["texture"] && frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported)
-                                 ? saoRenderer["texture"][(this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number")) ? "alphaCutoff+" : "alphaCutoff-"]
+                              : ((saoRenderer["texture"] && frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this.layerDrawState.colorTextureSupported)
+                                 ? saoRenderer["texture"][(this.layerDrawState.textureSet && (typeof(this.layerDrawState.textureSet.alphaCutoff) === "number")) ? "alphaCutoff+" : "alphaCutoff-"]
                                  : saoRenderer["vertex"][((this.primitive === "points") || (this.primitive === "lines") || this._surfaceHasNormals) ? "flat-" : "flat+"]));
             const pass = renderOpaque ? RENDER_PASSES.COLOR_OPAQUE : RENDER_PASSES.COLOR_TRANSPARENT;
             this.__drawLayer(renderFlags, frameCtx, renderer, pass);
