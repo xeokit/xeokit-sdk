@@ -2979,7 +2979,7 @@ export class SceneModel extends Component {
             case "triangles":
             case "solid":
             case "surface":
-                dtxLayer = new DTXTrianglesLayer(this, {origin, primitive});
+                dtxLayer = new DTXTrianglesLayer(this, primitive, origin);
                 break;
             default:
                 return;
@@ -3010,10 +3010,7 @@ export class SceneModel extends Component {
         }
 
         if (! (layerId in this._vboLayers)) {
-            const layer = new VBOLayer(instancing, {
-                model: this,
-                primitive: primitive,
-                origin: origin,
+            const layer = new VBOLayer(this, primitive, origin, instancing, {
                 textureSet: cfg.textureSet,
                 ...(instancing ? {
                     geometry: geometry,
