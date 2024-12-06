@@ -112,23 +112,6 @@ export class DTXTrianglesLayer extends Layer {
 
         dataTextureRamStats.numberOfLayers++;
 
-        this.sortId = `TriDTX-${++numLayers}`; // State sorting key.
-
-        this._renderers = getRenderers(model.scene, "dtx", primitive, false,
-                                       subGeometry => makeDTXRenderingAttributes(model.scene.canvas.gl, subGeometry));
-        this._hasEdges = this._renderers.edgesRenderers;
-        this._edgesColorOpaqueAllowed = () => {
-            if (this.model.scene.logarithmicDepthBufferEnabled) {
-                if (!this.model.scene._loggedWarning) {
-                    console.log("Edge enhancement for SceneModel data texture layers currently disabled with logarithmic depth buffer");
-                    this.model.scene._loggedWarning = true;
-                }
-                return false;
-            } else {
-                return true;
-            }
-        };
-
         const gl = model.scene.canvas.gl;
 
         const geometryData = (indicesStatsProp, edgesStatsProp) => {
@@ -571,7 +554,6 @@ export class DTXTrianglesLayer extends Layer {
         // Free up memory
         this._buffer = null;
         this._bucketGeometries = {};
-        this._finalized = true;
         this._deferredSetFlagsDirty = false; //
 
         this._onSceneRendering = this.model.scene.on("rendering", () => {
@@ -580,7 +562,26 @@ export class DTXTrianglesLayer extends Layer {
             }
             this._numUpdatesInFrame = 0;
         });
+
+        const scene = this.model.scene;
+        this._renderers = getRenderers(scene, "dtx", this.primitive, false,
+                                       subGeometry => makeDTXRenderingAttributes(scene.canvas.gl, subGeometry));
+        this._hasEdges = this._renderers.edgesRenderers;
+        this._edgesColorOpaqueAllowed = () => {
+            if (this.model.scene.logarithmicDepthBufferEnabled) {
+                if (!this.model.scene._loggedWarning) {
+                    console.log("Edge enhancement for SceneModel data texture layers currently disabled with logarithmic depth buffer");
+                    this.model.scene._loggedWarning = true;
+                }
+                return false;
+            } else {
+                return true;
+            }
+        };
+        this.sortId = `TriDTX-${++numLayers}`; // State sorting key.
         this._surfaceHasNormals = true;
+
+        this._finalized = true;
     }
 
     /**
