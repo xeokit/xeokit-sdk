@@ -90,38 +90,7 @@ export class VBOLayer extends Layer {
 
         super(model, primitive, origin);
 
-        /**
-         * When true, this layer contains solid triangle meshes, otherwise this layer contains surface triangle meshes
-         * @type {boolean}
-         */
-        this.solid = (this.primitive === "solid");
-
-        const textureSet = cfg.textureSet;
         const instancing = !! cfg.geometry;
-        /**
-         * State sorting key.
-         * @type {string}
-         */
-        this.sortId = (((this.primitive === "points") ? "Points" : ((this.primitive === "lines") ? "Lines" : "Triangles"))
-                       + (instancing ? "Instancing" : "Batching") + "Layer" +
-                       (((this.primitive !== "points") && (this.primitive !== "lines"))
-                        ? ((this.solid ? "-solid" : "-surface")
-                           + "-autoNormals"
-                           + (instancing
-                              ? ""
-                              // TODO: These two parts need to be IDs (ie. unique):
-                              : ((textureSet && textureSet.colorTexture ? "-colorTexture" : "")
-                                 +
-                                 (textureSet && textureSet.metallicRoughnessTexture ? "-metallicRoughnessTexture" : ""))))
-                        : ""));
-
-        const scene = model.scene;
-        this._renderers = getRenderers(scene, instancing ? "instancing" : "batching", this.primitive, true,
-                                       subGeometry => makeVBORenderingAttributes(scene, instancing, this.primitive, subGeometry));
-
-        this._hasEdges = this._renderers.edgesRenderers;
-        this._edgesColorOpaqueAllowed = () => true;
-
         this._instancing = instancing;
 
         this._maxVerts = cfg.maxGeometryBatchSize;
@@ -205,7 +174,7 @@ export class VBOLayer extends Layer {
             positionsDecodeMatrix: positionsDecodeMatrix && math.mat4(positionsDecodeMatrix),
             metallicRoughnessBuf: null,
             pickColorsBuf: null,
-            textureSet: textureSet,
+            textureSet: cfg.textureSet,
             pbrSupported: false, // Set in #finalize if we have enough to support quality rendering
             ...(instancing
                 ? {
@@ -231,7 +200,6 @@ export class VBOLayer extends Layer {
         this._modelAABB = (! instancing) && math.collapseAABB3(); // Model-space AABB
         this._portions = [];
         this._finalized = false;
-        scratchMemory.acquire();
     }
 
     /**
@@ -432,6 +400,8 @@ export class VBOLayer extends Layer {
             throw "Already finalized";
         }
 
+        const primitive = this.primitive;
+        const instancing = this._instancing;
         const state = this._state;
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
@@ -449,7 +419,7 @@ export class VBOLayer extends Layer {
 
         state.pickColorsBuf  = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
 
-        if (this._instancing) {
+        if (instancing) {
             const geometry = state.geometry;
             state.edgeIndicesBuf = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.edgeIndices), 1, gl.STATIC_DRAW);
 
@@ -460,10 +430,10 @@ export class VBOLayer extends Layer {
             if (geometry.positionsCompressed) {
                 state.positionsBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, geometry.positionsCompressed, 3, gl.STATIC_DRAW);
             }
-            if ((this.primitive !== "points") && geometry.indices) {
+            if ((primitive !== "points") && geometry.indices) {
                 state.indicesBuf = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.indices), 1, gl.STATIC_DRAW);
             }
-            // if ((this.primitive !== "points") && (this.primitive !== "lines") && geometry.normalsCompressed && geometry.normalsCompressed.length > 0) {
+            // if ((primitive !== "points") && (primitive !== "lines") && geometry.normalsCompressed && geometry.normalsCompressed.length > 0) {
             //     const normalized = true; // For oct-encoded UInt8
             //     state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, geometry.normalsCompressed, geometry.normalsCompressed.length, 3, gl.STATIC_DRAW, normalized);
             // }
@@ -472,7 +442,7 @@ export class VBOLayer extends Layer {
                 state.colorsBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Uint8Array(geometry.colorsCompressed), 4, gl.STATIC_DRAW);
                 state.colorsForPointsNotInstancing = (this.primitive === "points");
             }
-            if ((this.primitive !== "points") && (this.primitive !== "lines") && geometry.uvCompressed) {
+            if ((primitive !== "points") && (primitive !== "lines") && geometry.uvCompressed) {
                 state.uvBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, geometry.uvCompressed, 2, gl.STATIC_DRAW);
                 state.uvDecodeMatrix = geometry.uvDecodeMatrix;
             }
@@ -532,9 +502,32 @@ export class VBOLayer extends Layer {
             && !!textureSet
             && !!textureSet.colorTexture;
 
-        this._surfaceHasNormals = !!state.normalsBuf;
         state.geometry = null;
         this._buffer = null;
+
+        scratchMemory.acquire();
+
+        const scene = this.model.scene;
+        this._renderers = getRenderers(scene, instancing ? "instancing" : "batching", primitive, true,
+                                       subGeometry => makeVBORenderingAttributes(scene, instancing, primitive, subGeometry));
+
+        this._hasEdges = this._renderers.edgesRenderers;
+        this._edgesColorOpaqueAllowed = () => true;
+        this.solid = (this.primitive === "solid");
+        this.sortId = (((primitive === "points") ? "Points" : ((primitive === "lines") ? "Lines" : "Triangles"))
+                       + (instancing ? "Instancing" : "Batching") + "Layer" +
+                       (((primitive !== "points") && (primitive !== "lines"))
+                        ? ((this.solid ? "-solid" : "-surface")
+                           + "-autoNormals"
+                           + (instancing
+                              ? ""
+                              // TODO: These two parts need to be IDs (ie. unique):
+                              : ((textureSet && textureSet.colorTexture ? "-colorTexture" : "")
+                                 +
+                                 (textureSet && textureSet.metallicRoughnessTexture ? "-metallicRoughnessTexture" : ""))))
+                        : ""));
+        this._surfaceHasNormals = !!state.normalsBuf;
+
         this._finalized = true;
     }
 
