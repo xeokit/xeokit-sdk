@@ -362,6 +362,7 @@ export class TreeViewPlugin extends Plugin {
      * @param {Boolean} [cfg.pruneEmptyNodes=true] When true, will not contain nodes that don't have content in the {@link Scene}. These are nodes whose {@link MetaObject}s don't have {@link Entity}s.
      * @param {RenderService} [cfg.renderService] Optional {@link RenderService} to use. Defaults to the {@link TreeViewPlugin}'s default {@link RenderService}.
      * @param {Boolean} [cfg.showIndeterminate=false] When true, will show indeterminate state for checkboxes when some but not all child nodes are checked
+     * @param {Boolean} [cfg.showProjectNode=false] When true, will show top level project node when hierarchy is set to "storeys"
      */
     constructor(viewer, cfg = {}) {
 
@@ -414,6 +415,7 @@ export class TreeViewPlugin extends Plugin {
         this._showListItemElementId = null;
         this._renderService = cfg.renderService || new RenderService();
         this._showIndeterminate = cfg.showIndeterminate ?? false;
+        this._showProjectNode = cfg.showProjectNode ?? false;
 
         if (!this._renderService) {
             throw new Error('TreeViewPlugin: no render service set');
@@ -968,11 +970,11 @@ export class TreeViewPlugin extends Plugin {
     _createStoreysNodes() {
         const rootMetaObjects = this._viewer.metaScene.rootMetaObjects;
         for (let id in rootMetaObjects) {
-            this._createStoreysNodes2(rootMetaObjects[id], null, null, null);
+            this._createStoreysNodes2(rootMetaObjects[id], null, null, null, null);
         }
     }
 
-    _createStoreysNodes2(metaObject, buildingNode, storeyNode, typeNodes) {
+    _createStoreysNodes2(metaObject, projectNode, buildingNode, storeyNode, typeNodes) {
         if (this._pruneEmptyNodes && (metaObject._countEntities === 0)) {
             return;
         }
@@ -980,10 +982,11 @@ export class TreeViewPlugin extends Plugin {
         const metaObjectName = metaObject.name;
         const children = metaObject.children;
         const objectId = metaObject.id;
-        if (metaObjectType === "IfcBuilding") {
-            buildingNode = {
+
+        if (this._showProjectNode && metaObjectType === 'IfcProject') {
+            projectNode = {
                 nodeId: `${this._id}-${objectId}`,
-                objectId: objectId,
+                objectId,
                 title: (metaObject.metaModels.length === 0) ? metaObjectName : this._rootNames[metaObject.metaModels[0].id] || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
                 type: metaObjectType,
                 parent: null,
@@ -991,9 +994,29 @@ export class TreeViewPlugin extends Plugin {
                 numVisibleEntities: 0,
                 checked: false,
                 xrayed: false,
+                children: [],
+            };
+            this._rootNodes.push(projectNode);
+            this._objectNodes[projectNode.objectId] = projectNode;
+            this._nodeNodes[projectNode.nodeId] = projectNode;
+        } else if (metaObjectType === "IfcBuilding") {
+            buildingNode = {
+                nodeId: `${this._id}-${objectId}`,
+                objectId: objectId,
+                title: (metaObject.metaModels.length === 0) ? metaObjectName : this._rootNames[metaObject.metaModels[0].id] || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
+                type: metaObjectType,
+                parent: projectNode,
+                numEntities: 0,
+                numVisibleEntities: 0,
+                checked: false,
+                xrayed: false,
                 children: []
             };
-            this._rootNodes.push(buildingNode);
+            if (projectNode) {
+                projectNode.children.push(buildingNode);
+            } else {
+                this._rootNodes.push(buildingNode);
+            }
             this._objectNodes[buildingNode.objectId] = buildingNode;
             this._nodeNodes[buildingNode.nodeId] = buildingNode;
         } else if (metaObjectType === "IfcBuildingStorey") {
@@ -1063,7 +1086,7 @@ export class TreeViewPlugin extends Plugin {
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
                 const childMetaObject = children[i];
-                this._createStoreysNodes2(childMetaObject, buildingNode, storeyNode, typeNodes);
+                this._createStoreysNodes2(childMetaObject, projectNode, buildingNode, storeyNode, typeNodes);
             }
         }
     }
