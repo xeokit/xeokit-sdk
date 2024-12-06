@@ -150,19 +150,19 @@ export const makeDTXRenderingAttributes = function(gl, subGeometry) {
             const uTexPerPrimitiveIdPortionIds       = getInputSetter("uTexPerPrimitiveIdPortionIds");
             const uTexPerPrimitiveIdIndices          = getInputSetter("uTexPerPrimitiveIdIndices");
 
-            return function(frameCtx, layer, sceneModelMat, viewMatrix, projMatrix, rtcOrigin, eye) {
+            return function(frameCtx, layerDrawState, sceneModelMat, viewMatrix, projMatrix, rtcOrigin, eye) {
                 uSceneModelMatrix(sceneModelMat);
                 uViewMatrix(viewMatrix);
                 uProjMatrix(projMatrix);
                 uCameraEyeRtc && uCameraEyeRtc(math.subVec3(eye, rtcOrigin, tempVec3));
 
-                layer.bindCommonTextures(
+                layerDrawState.bindCommonTextures(
                     uTexPerObjectPositionsDecodeMatrix,
                     uTexPerVertexIdCoordinates,
                     uTexPerObjectColorsAndFlags,
                     uTexPerObjectMatrix);
 
-                (subGeometry ? layer.drawEdges : layer.drawTriangles)(
+                (subGeometry ? layerDrawState.drawEdges : layerDrawState.drawTriangles)(
                     uTexPerPrimitiveIdPortionIds,
                     uTexPerPrimitiveIdIndices,
                     subGeometry ? (subGeometry.vertices ? gl.POINTS : gl.LINES) : gl.TRIANGLES);
