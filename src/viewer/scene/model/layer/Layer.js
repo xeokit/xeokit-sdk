@@ -437,6 +437,17 @@ export class Layer {
         this._numCulledLayerPortions = 0;
     }
 
+    finalize() {
+        if (! this._compiledPortions) {
+            this._compiledPortions = this.compilePortions();
+            this.solid = this._compiledPortions.solid;
+            this.sortId = this._compiledPortions.sortId;
+            this.layerDrawState = this._compiledPortions.layerDrawState;
+            this._renderers = this._compiledPortions.renderers;
+            this._hasEdges = this._renderers.edgesRenderers;
+        }
+    }
+
     aabbChanged() { this._aabbDirty = true; }
 
     __drawLayer(renderFlags, frameCtx, renderer, pass) {
@@ -487,7 +498,7 @@ export class Layer {
                               ? saoRenderer["PBR"]
                               : ((saoRenderer["texture"] && frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this.layerDrawState.colorTextureSupported)
                                  ? saoRenderer["texture"][(this.layerDrawState.textureSet && (typeof(this.layerDrawState.textureSet.alphaCutoff) === "number")) ? "alphaCutoff+" : "alphaCutoff-"]
-                                 : saoRenderer["vertex"][((this.primitive === "points") || (this.primitive === "lines") || this._surfaceHasNormals) ? "flat-" : "flat+"]));
+                                 : saoRenderer["vertex"][((this.primitive === "points") || (this.primitive === "lines") || this._compiledPortions.surfaceHasNormals) ? "flat-" : "flat+"]));
             const pass = renderOpaque ? RENDER_PASSES.COLOR_OPAQUE : RENDER_PASSES.COLOR_TRANSPARENT;
             this.__drawLayer(renderFlags, frameCtx, renderer, pass);
         }
@@ -551,7 +562,7 @@ export class Layer {
     }
 
     drawEdgesColorOpaque(renderFlags, frameCtx) {
-        if (this._edgesColorOpaqueAllowed()) {
+        if (this._compiledPortions.edgesColorOpaqueAllowed()) {
             this.__drawVertexEdges(renderFlags, frameCtx, RENDER_PASSES.EDGES_COLOR_OPAQUE);
         }
     }
