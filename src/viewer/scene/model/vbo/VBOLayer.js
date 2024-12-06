@@ -393,12 +393,7 @@ export class VBOLayer extends Layer {
         }
     }
 
-    finalize() {
-
-        if (this._finalized) {
-            throw "Already finalized";
-        }
-
+    compilePortions() {
         const primitive = this.primitive;
         const instancing = this._instancing;
         const state = this._state;
@@ -486,139 +481,138 @@ export class VBOLayer extends Layer {
             }
         }
 
-        const textureSet = state.textureSet;
-
         state.geometry = null;
         this._buffer = null;
 
         scratchMemory.acquire();
 
+        this._finalized = true;
+
         this._drawCallCache = { };
-        this.layerDrawState = {
-            getWorldNormalMatrix:  () => this.model.worldNormalMatrix,
-            positionsDecodeMatrix: state.positionsDecodeMatrix,
-            uvDecodeMatrix:        state.uvDecodeMatrix,
-            textureSet:            state.textureSet,
-            colorTextureSupported: state.uvBuf && textureSet && textureSet.colorTexture,
-            pbrSupported:          state.uvBuf && textureSet && textureSet.colorTexture && state.normalsBuf && state.metallicRoughnessBuf && textureSet.metallicRoughnessTexture,
-            drawCall: (inputs, subGeometry) => {
-                const hash = inputs.attributesHash;
-                if (! (hash in this._drawCallCache)) {
-                    this._drawCallCache[hash] = [ null, null, null ];
-                }
-                const inputsCache = this._drawCallCache[hash];
-                const cacheKey = subGeometry ? (subGeometry.vertices ? 0 : 1) : 2;
-                if (! inputsCache[cacheKey]) {
-                    const vao = gl.createVertexArray();
-                    gl.bindVertexArray(vao);
-
-                    const bindAttribute = (a, b, setDivisor) => b && a(b, setDivisor && 1);
-
-                    if (inputs.matrices) {
-                        const aModelMatrixCol = inputs.matrices.aModelMatrixCol;
-                        bindAttribute(aModelMatrixCol[0], state.modelMatrixCol0Buf, true);
-                        bindAttribute(aModelMatrixCol[1], state.modelMatrixCol1Buf, true);
-                        bindAttribute(aModelMatrixCol[2], state.modelMatrixCol2Buf, true);
-                        const aModelNormalMatrixCol = inputs.matrices.aModelNormalMatrixCol;
-                        if (aModelNormalMatrixCol) {
-                            bindAttribute(aModelNormalMatrixCol[0], state.modelNormalMatrixCol0Buf, true);
-                            bindAttribute(aModelNormalMatrixCol[1], state.modelNormalMatrixCol1Buf, true);
-                            bindAttribute(aModelNormalMatrixCol[2], state.modelNormalMatrixCol2Buf, true);
-                        }
+        const textureSet = state.textureSet;
+        const scene = this.model.scene;
+        const solid = (primitive === "solid");
+        return {
+            renderers: getRenderers(scene, instancing ? "instancing" : "batching", primitive, true,
+                                    subGeometry => makeVBORenderingAttributes(scene, instancing, primitive, subGeometry)),
+            edgesColorOpaqueAllowed: () => true,
+            solid: solid,
+            sortId: (((primitive === "points") ? "Points" : ((primitive === "lines") ? "Lines" : "Triangles"))
+                     + (instancing ? "Instancing" : "Batching") + "Layer" +
+                     (((primitive !== "points") && (primitive !== "lines"))
+                      ? ((solid ? "-solid" : "-surface")
+                         + "-autoNormals"
+                         + (instancing
+                            ? ""
+                            // TODO: These two parts need to be IDs (ie. unique):
+                            : ((textureSet && textureSet.colorTexture ? "-colorTexture" : "")
+                               +
+                               (textureSet && textureSet.metallicRoughnessTexture ? "-metallicRoughnessTexture" : ""))))
+                      : "")),
+            surfaceHasNormals: !!state.normalsBuf,
+            layerDrawState: {
+                getWorldNormalMatrix:  () => this.model.worldNormalMatrix,
+                positionsDecodeMatrix: state.positionsDecodeMatrix,
+                uvDecodeMatrix:        state.uvDecodeMatrix,
+                textureSet:            state.textureSet,
+                colorTextureSupported: state.uvBuf && textureSet && textureSet.colorTexture,
+                pbrSupported:          state.uvBuf && textureSet && textureSet.colorTexture && state.normalsBuf && state.metallicRoughnessBuf && textureSet.metallicRoughnessTexture,
+                drawCall: (inputs, subGeometry) => {
+                    const hash = inputs.attributesHash;
+                    if (! (hash in this._drawCallCache)) {
+                        this._drawCallCache[hash] = [ null, null, null ];
                     }
+                    const inputsCache = this._drawCallCache[hash];
+                    const cacheKey = subGeometry ? (subGeometry.vertices ? 0 : 1) : 2;
+                    if (! inputsCache[cacheKey]) {
+                        const vao = gl.createVertexArray();
+                        gl.bindVertexArray(vao);
 
-                    const a = inputs.attributes;
-                    bindAttribute(a.position, state.positionsBuf);
-                    a.uV                && bindAttribute(a.uV,                state.uvBuf);
-                    a.normal            && bindAttribute(a.normal,            state.normalsBuf);
-                    a.metallicRoughness && bindAttribute(a.metallicRoughness, state.metallicRoughnessBuf, instancing);
-                    a.color             && bindAttribute(a.color,             state.colorsBuf,            instancing && state.colorsBuf && (primitive !== "points"));
-                    a.flags             && bindAttribute(a.flags,             state.flagsBuf,             instancing);
-                    a.offset            && bindAttribute(a.offset,            state.offsetsBuf,           instancing);
-                    a.pickColor         && bindAttribute(a.pickColor,         state.pickColorsBuf,        instancing);
+                        const bindAttribute = (a, b, setDivisor) => b && a(b, setDivisor && 1);
 
-                    const drawer = (function() {
-                        // TODO: Use drawElements count and offset to draw only one entity
-
-                        const drawPoints = () => {
-                            if (instancing) {
-                                gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
-                            } else {
-                                gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
+                        if (inputs.matrices) {
+                            const aModelMatrixCol = inputs.matrices.aModelMatrixCol;
+                            bindAttribute(aModelMatrixCol[0], state.modelMatrixCol0Buf, true);
+                            bindAttribute(aModelMatrixCol[1], state.modelMatrixCol1Buf, true);
+                            bindAttribute(aModelMatrixCol[2], state.modelMatrixCol2Buf, true);
+                            const aModelNormalMatrixCol = inputs.matrices.aModelNormalMatrixCol;
+                            if (aModelNormalMatrixCol) {
+                                bindAttribute(aModelNormalMatrixCol[0], state.modelNormalMatrixCol0Buf, true);
+                                bindAttribute(aModelNormalMatrixCol[1], state.modelNormalMatrixCol1Buf, true);
+                                bindAttribute(aModelNormalMatrixCol[2], state.modelNormalMatrixCol2Buf, true);
                             }
-                        };
+                        }
 
-                        const elementsDrawer = (mode, indicesBuf) => {
-                            indicesBuf.bind();
-                            return function() {
-                                const count  = indicesBuf.numItems;
-                                const type   = indicesBuf.itemType;
-                                const offset = 0;
+                        const a = inputs.attributes;
+                        bindAttribute(a.position, state.positionsBuf);
+                        a.uV                && bindAttribute(a.uV,                state.uvBuf);
+                        a.normal            && bindAttribute(a.normal,            state.normalsBuf);
+                        a.metallicRoughness && bindAttribute(a.metallicRoughness, state.metallicRoughnessBuf, instancing);
+                        a.color             && bindAttribute(a.color,             state.colorsBuf,            instancing && state.colorsBuf && (primitive !== "points"));
+                        a.flags             && bindAttribute(a.flags,             state.flagsBuf,             instancing);
+                        a.offset            && bindAttribute(a.offset,            state.offsetsBuf,           instancing);
+                        a.pickColor         && bindAttribute(a.pickColor,         state.pickColorsBuf,        instancing);
+
+                        const drawer = (function() {
+                            // TODO: Use drawElements count and offset to draw only one entity
+
+                            const drawPoints = () => {
                                 if (instancing) {
-                                    gl.drawElementsInstanced(mode, count, type, offset, state.numInstances);
+                                    gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
                                 } else {
-                                    gl.drawElements(mode, count, type, offset);
+                                    gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
                                 }
                             };
+
+                            const elementsDrawer = (mode, indicesBuf) => {
+                                indicesBuf.bind();
+                                return function() {
+                                    const count  = indicesBuf.numItems;
+                                    const type   = indicesBuf.itemType;
+                                    const offset = 0;
+                                    if (instancing) {
+                                        gl.drawElementsInstanced(mode, count, type, offset, state.numInstances);
+                                    } else {
+                                        gl.drawElements(mode, count, type, offset);
+                                    }
+                                };
+                            };
+
+                            if (primitive === "points") {
+                                return drawPoints;
+                            } else if (primitive === "lines") {
+                                if (subGeometry && subGeometry.vertices) {
+                                    return drawPoints;
+                                } else {
+                                    return elementsDrawer(gl.LINES, state.indicesBuf);
+                                }
+                            } else {    // triangles
+                                if (subGeometry && subGeometry.vertices) {
+                                    return drawPoints;
+                                } else if (subGeometry && state.edgeIndicesBuf) {
+                                    return elementsDrawer(gl.LINES, state.edgeIndicesBuf);
+                                } else {
+                                    return elementsDrawer(gl.TRIANGLES, state.indicesBuf);
+                                }
+                            }
+                        })();
+
+                        gl.bindVertexArray(null);
+
+                        inputsCache[cacheKey] = {
+                            destroy: () => gl.deleteVertexArray(vao),
+                            draw: () => {
+                                gl.bindVertexArray(vao);
+                                drawer();
+                                gl.bindVertexArray(null);
+                            }
                         };
+                    }
 
-                        if (primitive === "points") {
-                            return drawPoints;
-                        } else if (primitive === "lines") {
-                            if (subGeometry && subGeometry.vertices) {
-                                return drawPoints;
-                            } else {
-                                return elementsDrawer(gl.LINES, state.indicesBuf);
-                            }
-                        } else {    // triangles
-                            if (subGeometry && subGeometry.vertices) {
-                                return drawPoints;
-                            } else if (subGeometry && state.edgeIndicesBuf) {
-                                return elementsDrawer(gl.LINES, state.edgeIndicesBuf);
-                            } else {
-                                return elementsDrawer(gl.TRIANGLES, state.indicesBuf);
-                            }
-                        }
-                    })();
-
-                    gl.bindVertexArray(null);
-
-                    inputsCache[cacheKey] = {
-                        destroy: () => gl.deleteVertexArray(vao),
-                        draw: () => {
-                            gl.bindVertexArray(vao);
-                            drawer();
-                            gl.bindVertexArray(null);
-                        }
-                    };
+                    inputsCache[cacheKey].draw();
                 }
-
-                inputsCache[cacheKey].draw();
             }
         };
-
-        const scene = this.model.scene;
-        this._renderers = getRenderers(scene, instancing ? "instancing" : "batching", primitive, true,
-                                       subGeometry => makeVBORenderingAttributes(scene, instancing, primitive, subGeometry));
-
-        this._hasEdges = this._renderers.edgesRenderers;
-        this._edgesColorOpaqueAllowed = () => true;
-        this.solid = (this.primitive === "solid");
-        this.sortId = (((primitive === "points") ? "Points" : ((primitive === "lines") ? "Lines" : "Triangles"))
-                       + (instancing ? "Instancing" : "Batching") + "Layer" +
-                       (((primitive !== "points") && (primitive !== "lines"))
-                        ? ((this.solid ? "-solid" : "-surface")
-                           + "-autoNormals"
-                           + (instancing
-                              ? ""
-                              // TODO: These two parts need to be IDs (ie. unique):
-                              : ((textureSet && textureSet.colorTexture ? "-colorTexture" : "")
-                                 +
-                                 (textureSet && textureSet.metallicRoughnessTexture ? "-metallicRoughnessTexture" : ""))))
-                        : ""));
-        this._surfaceHasNormals = !!state.normalsBuf;
-
-        this._finalized = true;
     }
 
     _setClippableFlags(portionId, flags) {
