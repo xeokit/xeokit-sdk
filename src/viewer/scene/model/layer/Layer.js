@@ -694,7 +694,7 @@ export class Layer {
             this._numTransparentLayerPortions++;
             this.model.numTransparentLayerPortions++;
         }
-        const deferred = (this.primitive !== "points") && (! this._instancing);
+        const deferred = (this.primitive !== "points");
         this._setFlags(portionId, flags, transparent, deferred);
         this._setFlags2(portionId, flags, deferred);
     }
