@@ -175,7 +175,6 @@ export class VBOLayer extends Layer {
             metallicRoughnessBuf: null,
             pickColorsBuf: null,
             textureSet: cfg.textureSet,
-            pbrSupported: false, // Set in #finalize if we have enough to support quality rendering
             ...(instancing
                 ? {
                     obb: math.OBB3(),
@@ -488,18 +487,6 @@ export class VBOLayer extends Layer {
         }
 
         const textureSet = state.textureSet;
-        state.pbrSupported
-            = !!state.metallicRoughnessBuf
-            && !!state.uvBuf
-            && !!state.normalsBuf
-            && !!textureSet
-            && !!textureSet.colorTexture
-            && !!textureSet.metallicRoughnessTexture;
-
-        state.colorTextureSupported
-            = !!state.uvBuf
-            && !!textureSet
-            && !!textureSet.colorTexture;
 
         state.geometry = null;
         this._buffer = null;
@@ -512,6 +499,8 @@ export class VBOLayer extends Layer {
             positionsDecodeMatrix: state.positionsDecodeMatrix,
             uvDecodeMatrix:        state.uvDecodeMatrix,
             textureSet:            state.textureSet,
+            colorTextureSupported: state.uvBuf && textureSet && textureSet.colorTexture,
+            pbrSupported:          state.uvBuf && textureSet && textureSet.colorTexture && state.normalsBuf && state.metallicRoughnessBuf && textureSet.metallicRoughnessTexture,
             drawCall: (inputs, subGeometry) => {
                 const hash = inputs.attributesHash;
                 if (! (hash in this._drawCallCache)) {
