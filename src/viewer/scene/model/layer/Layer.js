@@ -258,6 +258,68 @@ const createSAOSetup = (gl, sceneSAO, textureUnit = undefined) => {
     };
 };
 
+export const getColSilhEdgePickFlags = (flags, transparent, hasEdges, scene, dst) => {
+    const visible     = !!(flags & ENTITY_FLAGS.VISIBLE);
+    const xrayed      = !!(flags & ENTITY_FLAGS.XRAYED);
+    const highlighted = !!(flags & ENTITY_FLAGS.HIGHLIGHTED);
+    const selected    = !!(flags & ENTITY_FLAGS.SELECTED);
+    const edges       = !!(flags & ENTITY_FLAGS.EDGES);
+    const pickable    = !!(flags & ENTITY_FLAGS.PICKABLE);
+    const culled      = !!(flags & ENTITY_FLAGS.CULLED);
+
+    let colorFlag;
+    if (!visible || culled || xrayed
+        || (highlighted && !scene.highlightMaterial.glowThrough)
+        || (selected && !scene.selectedMaterial.glowThrough)) {
+        colorFlag = RENDER_PASSES.NOT_RENDERED;
+    } else {
+        if (transparent) {
+            colorFlag = RENDER_PASSES.COLOR_TRANSPARENT;
+        } else {
+            colorFlag = RENDER_PASSES.COLOR_OPAQUE;
+        }
+    }
+
+    let silhouetteFlag;
+    if (!visible || culled) {
+        silhouetteFlag = RENDER_PASSES.NOT_RENDERED;
+    } else if (selected) {
+        silhouetteFlag = RENDER_PASSES.SILHOUETTE_SELECTED;
+    } else if (highlighted) {
+        silhouetteFlag = RENDER_PASSES.SILHOUETTE_HIGHLIGHTED;
+    } else if (xrayed) {
+        silhouetteFlag = RENDER_PASSES.SILHOUETTE_XRAYED;
+    } else {
+        silhouetteFlag = RENDER_PASSES.NOT_RENDERED;
+    }
+
+    let edgeFlag = 0;
+    if ((!hasEdges) || (!visible) || culled) {
+        edgeFlag = RENDER_PASSES.NOT_RENDERED;
+    } else if (selected) {
+        edgeFlag = RENDER_PASSES.EDGES_SELECTED;
+    } else if (highlighted) {
+        edgeFlag = RENDER_PASSES.EDGES_HIGHLIGHTED;
+    } else if (xrayed) {
+        edgeFlag = RENDER_PASSES.EDGES_XRAYED;
+    } else if (edges) {
+        if (transparent) {
+            edgeFlag = RENDER_PASSES.EDGES_COLOR_TRANSPARENT;
+        } else {
+            edgeFlag = RENDER_PASSES.EDGES_COLOR_OPAQUE;
+        }
+    } else {
+        edgeFlag = RENDER_PASSES.NOT_RENDERED;
+    }
+
+    const pickFlag = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
+
+    dst[0] = colorFlag;
+    dst[1] = silhouetteFlag;
+    dst[2] = edgeFlag;
+    dst[3] = pickFlag;
+};
+
 export const getRenderers = (function() {
     const cachedRenderers = { };
 
@@ -445,6 +507,15 @@ export class Layer {
             this.layerDrawState = this._compiledPortions.layerDrawState;
             this._renderers = this._compiledPortions.renderers;
             this._hasEdges = this._renderers.edgesRenderers;
+            this._setFlags = this._compiledPortions.setFlags;
+
+            this.setColor  = this._compiledPortions.setColor;
+            this.setMatrix = this._compiledPortions.setMatrix;
+            this.setOffset = this._compiledPortions.setOffset;
+
+            this.getEachIndex = this._compiledPortions.getEachIndex;
+            this.getEachVertex = this._compiledPortions.getEachVertex;
+            this.precisionRayPickSurface = this._compiledPortions.precisionRayPickSurface;
         }
     }
 
@@ -707,17 +778,14 @@ export class Layer {
         }
         const deferred = (this.primitive !== "points");
         this._setFlags(portionId, flags, transparent, deferred);
-        this._setFlags2(portionId, flags, deferred);
+        this._compiledPortions.setFlags2(portionId, flags, deferred);
     }
 
     flushInitFlags() {
-        this._setDeferredFlags();
+        this._compiledPortions.setDeferredFlags();
     }
 
     setVisible(portionId, flags, transparent) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
         if (flags & ENTITY_FLAGS.VISIBLE) {
             this._numVisibleLayerPortions++;
             this.model.numVisibleLayerPortions++;
@@ -729,9 +797,6 @@ export class Layer {
     }
 
     setHighlighted(portionId, flags, transparent) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
         if (flags & ENTITY_FLAGS.HIGHLIGHTED) {
             this._numHighlightedLayerPortions++;
             this.model.numHighlightedLayerPortions++;
@@ -743,9 +808,6 @@ export class Layer {
     }
 
     setXRayed(portionId, flags, transparent) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
         if (flags & ENTITY_FLAGS.XRAYED) {
             this._numXRayedLayerPortions++;
             this.model.numXRayedLayerPortions++;
@@ -757,9 +819,6 @@ export class Layer {
     }
 
     setSelected(portionId, flags, transparent) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
         if (flags & ENTITY_FLAGS.SELECTED) {
             this._numSelectedLayerPortions++;
             this.model.numSelectedLayerPortions++;
@@ -771,9 +830,6 @@ export class Layer {
     }
 
     setEdges(portionId, flags, transparent) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
         if (this._hasEdges) {
             if (flags & ENTITY_FLAGS.EDGES) {
                 this._numEdgesLayerPortions++;
@@ -787,9 +843,6 @@ export class Layer {
     }
 
     setClippable(portionId, flags) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
         if (flags & ENTITY_FLAGS.CLIPPABLE) {
             this._numClippableLayerPortions++;
             this.model.numClippableLayerPortions++;
@@ -797,13 +850,10 @@ export class Layer {
             this._numClippableLayerPortions--;
             this.model.numClippableLayerPortions--;
         }
-        this._setClippableFlags(portionId, flags);
+        this._compiledPortions.setClippableFlags(portionId, flags);
     }
 
     setCulled(portionId, flags, transparent) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
         if (flags & ENTITY_FLAGS.CULLED) {
             this._numCulledLayerPortions++;
             this.model.numCulledLayerPortions++;
@@ -815,15 +865,9 @@ export class Layer {
     }
 
     setCollidable(portionId, flags) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
     }
 
     setPickable(portionId, flags, transparent) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
         if (flags & ENTITY_FLAGS.PICKABLE) {
             this._numPickableLayerPortions++;
             this.model.numPickableLayerPortions++;
@@ -845,67 +889,7 @@ export class Layer {
         this._setFlags(portionId, flags, transparent);
     }
 
-    _getColSilhEdgePickFlags(flags, transparent, dst) {
-
-        const visible = !!(flags & ENTITY_FLAGS.VISIBLE);
-        const xrayed = !!(flags & ENTITY_FLAGS.XRAYED);
-        const highlighted = !!(flags & ENTITY_FLAGS.HIGHLIGHTED);
-        const selected = !!(flags & ENTITY_FLAGS.SELECTED);
-        const edges = !!(this._hasEdges && flags & ENTITY_FLAGS.EDGES);
-        const pickable = !!(flags & ENTITY_FLAGS.PICKABLE);
-        const culled = !!(flags & ENTITY_FLAGS.CULLED);
-
-        let colorFlag;
-        if (!visible || culled || xrayed
-            || (highlighted && !this.model.scene.highlightMaterial.glowThrough)
-            || (selected && !this.model.scene.selectedMaterial.glowThrough)) {
-            colorFlag = RENDER_PASSES.NOT_RENDERED;
-        } else {
-            if (transparent) {
-                colorFlag = RENDER_PASSES.COLOR_TRANSPARENT;
-            } else {
-                colorFlag = RENDER_PASSES.COLOR_OPAQUE;
-            }
-        }
-
-        let silhouetteFlag;
-        if (!visible || culled) {
-            silhouetteFlag = RENDER_PASSES.NOT_RENDERED;
-        } else if (selected) {
-            silhouetteFlag = RENDER_PASSES.SILHOUETTE_SELECTED;
-        } else if (highlighted) {
-            silhouetteFlag = RENDER_PASSES.SILHOUETTE_HIGHLIGHTED;
-        } else if (xrayed) {
-            silhouetteFlag = RENDER_PASSES.SILHOUETTE_XRAYED;
-        } else {
-            silhouetteFlag = RENDER_PASSES.NOT_RENDERED;
-        }
-
-        let edgeFlag = 0;
-        if ((!this._hasEdges) || (!visible) || culled) {
-            edgeFlag = RENDER_PASSES.NOT_RENDERED;
-        } else if (selected) {
-            edgeFlag = RENDER_PASSES.EDGES_SELECTED;
-        } else if (highlighted) {
-            edgeFlag = RENDER_PASSES.EDGES_HIGHLIGHTED;
-        } else if (xrayed) {
-            edgeFlag = RENDER_PASSES.EDGES_XRAYED;
-        } else if (edges) {
-            if (transparent) {
-                edgeFlag = RENDER_PASSES.EDGES_COLOR_TRANSPARENT;
-            } else {
-                edgeFlag = RENDER_PASSES.EDGES_COLOR_OPAQUE;
-            }
-        } else {
-            edgeFlag = RENDER_PASSES.NOT_RENDERED;
-        }
-
-        const pickFlag = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
-
-        dst[0] = colorFlag;
-        dst[1] = silhouetteFlag;
-        dst[2] = edgeFlag;
-        dst[3] = pickFlag;
+    destroy() {
+        this._compiledPortions && this._compiledPortions.destroy();
     }
-
 }
