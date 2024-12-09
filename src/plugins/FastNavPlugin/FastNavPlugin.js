@@ -119,7 +119,7 @@ class FastNavPlugin extends Plugin {
         this._hideEdges = cfg.hideEdges !== false;
         this._hideTransparentObjects = !!cfg.hideTransparentObjects;
         this._scaleCanvasResolution = !!cfg.scaleCanvasResolution;
-        this._defaultScaleCanvasResolutionFactor = cfg.defaultScaleCanvasResolutionFactor || 1.0;
+        this._defaultScaleCanvasResolutionFactor = cfg.defaultScaleCanvasResolutionFactor;
         this._scaleCanvasResolutionFactor = cfg.scaleCanvasResolutionFactor || 0.6;
         this._delayBeforeRestore = (cfg.delayBeforeRestore !== false);
         this._delayBeforeRestoreSeconds = cfg.delayBeforeRestoreSeconds || 0.5;
@@ -135,6 +135,7 @@ class FastNavPlugin extends Plugin {
                 viewer.scene._renderer.setSAOEnabled(!this._hideSAO);
                 viewer.scene._renderer.setTransparentEnabled(!this._hideTransparentObjects);
                 viewer.scene._renderer.setEdgesEnabled(!this._hideEdges);
+                this._originalCanvasResolutionScale = viewer.scene.canvas.resolutionScale;
                 if (this._scaleCanvasResolution) {
                     viewer.scene.canvas.resolutionScale = this._scaleCanvasResolutionFactor;
                 } else {
@@ -145,7 +146,7 @@ class FastNavPlugin extends Plugin {
         };
 
         const switchToHighQuality = () => {
-            viewer.scene.canvas.resolutionScale = this._defaultScaleCanvasResolutionFactor;
+            viewer.scene.canvas.resolutionScale = this._defaultScaleCanvasResolutionFactor || this._originalCanvasResolutionScale || 1.0;
             viewer.scene._renderer.setEdgesEnabled(true);
             viewer.scene._renderer.setColorTextureEnabled(true);
             viewer.scene._renderer.setPBREnabled(true);
@@ -350,7 +351,7 @@ class FastNavPlugin extends Plugin {
      * @param {Number} defaultScaleCanvasResolutionFactor Factor by scale canvas resolution when we stop interacting with the viewer.
      */
     set defaultScaleCanvasResolutionFactor(defaultScaleCanvasResolutionFactor) {
-        this._defaultScaleCanvasResolutionFactor = defaultScaleCanvasResolutionFactor || 1.0;
+        this._defaultScaleCanvasResolutionFactor = defaultScaleCanvasResolutionFactor;
     }
 
     /**
