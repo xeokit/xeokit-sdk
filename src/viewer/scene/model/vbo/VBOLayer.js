@@ -157,12 +157,8 @@ export class VBOLayer extends Layer {
             ...(instancing
                 ? {
                     // Modeling matrix per instance, array for each column
-                    modelMatrixCol0:       attribute(),
-                    modelMatrixCol1:       attribute(),
-                    modelMatrixCol2:       attribute(),
-                    modelNormalMatrixCol0: attribute(), // used for triangulated
-                    modelNormalMatrixCol1: attribute(), // used for triangulated
-                    modelNormalMatrixCol2: attribute(), // used for triangulated
+                    modelMatrixCol:       [ attribute(), attribute(), attribute() ],
+                    modelNormalMatrixCol: [ attribute(), attribute(), attribute() ]
                 }
                 : {
                     positions:             attribute(),
@@ -252,11 +248,7 @@ export class VBOLayer extends Layer {
         };
 
         if (instancedGeometry) {
-            const geometry = instancedGeometry;
-
-            buffer.modelMatrixCol0.append([ meshMatrix[0], meshMatrix[4], meshMatrix[8], meshMatrix[12] ]);
-            buffer.modelMatrixCol1.append([ meshMatrix[1], meshMatrix[5], meshMatrix[9], meshMatrix[13] ]);
-            buffer.modelMatrixCol2.append([ meshMatrix[2], meshMatrix[6], meshMatrix[10], meshMatrix[14] ]);
+            buffer.modelMatrixCol.forEach((b, i) => b.append([ meshMatrix[i+0], meshMatrix[i+4], meshMatrix[i+8], meshMatrix[i+12] ]));
 
             if (primitive !== "points") {
                 const color = cfg.color; // Color is pre-quantized by SceneModel
@@ -264,16 +256,14 @@ export class VBOLayer extends Layer {
             }
 
             if ((primitive !== "points") && (primitive !== "lines")) {
-                if (geometry.normals) {
+                if (instancedGeometry.normals) {
                     // Note: order of inverse and transpose doesn't matter
                     const normalMatrix = math.inverseMat4(math.transposeMat4(meshMatrix, math.mat4()));
-                    buffer.modelNormalMatrixCol0.append([ normalMatrix[0], normalMatrix[4], normalMatrix[8], normalMatrix[12] ]);
-                    buffer.modelNormalMatrixCol0.append([ normalMatrix[1], normalMatrix[5], normalMatrix[9], normalMatrix[13] ]);
-                    buffer.modelNormalMatrixCol0.append([ normalMatrix[2], normalMatrix[6], normalMatrix[10], normalMatrix[14] ]);
+                    buffer.modelNormalMatrixCol.forEach((b, i) => b.append([ normalMatrix[i+0], normalMatrix[i+4], normalMatrix[i+8], normalMatrix[i+12] ]));
                 }
             }
 
-            return appendPortion(portionId, 1, geometry.indices, geometry.positionsCompressed, meshMatrix);
+            return appendPortion(portionId, 1, instancedGeometry.indices, instancedGeometry.positionsCompressed, meshMatrix);
         } else {
             const vertsBaseIndex = buffer.positions.length() / 3;
 
@@ -406,9 +396,7 @@ export class VBOLayer extends Layer {
             const geometry = instancedGeometry;
             state.edgeIndicesBuf = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.edgeIndices), 1, gl.STATIC_DRAW);
 
-            state.modelMatrixCol0Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelMatrixCol0.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
-            state.modelMatrixCol1Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelMatrixCol1.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
-            state.modelMatrixCol2Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelMatrixCol2.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
+            state.modelMatrixColBufs = buffer.modelMatrixCol.map(b => maybeCreateGlBuffer(gl.ARRAY_BUFFER, b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
 
             if (geometry.positionsCompressed) {
                 state.positionsBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, geometry.positionsCompressed, 3, gl.STATIC_DRAW);
@@ -429,10 +417,8 @@ export class VBOLayer extends Layer {
                 uvDecodeMatrix = geometry.uvDecodeMatrix;
             }
 
-            if (state.modelMatrixCol0Buf && state.normalsBuf) { // WARNING: normalsBuf is never defined at the moment
-                state.modelNormalMatrixCol0Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelNormalMatrixCol0.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
-                state.modelNormalMatrixCol1Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelNormalMatrixCol1.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
-                state.modelNormalMatrixCol2Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelNormalMatrixCol2.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
+            if (state.modelMatrixColBufs && state.normalsBuf) { // WARNING: normalsBuf is never defined at the moment
+                state.modelNormalMatrixColBufs = buffer.modelNormalMatrixCol.map(b => maybeCreateGlBuffer(gl.ARRAY_BUFFER, b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
             }
         } else {
             state.edgeIndicesBuf = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.edgeIndices.compileBuffer(Uint32Array), 1, gl.STATIC_DRAW);
@@ -549,29 +535,14 @@ export class VBOLayer extends Layer {
                 }
             },
             setMatrix: (portionId, matrix) => {
-                if (state.modelMatrixCol0Buf) {
-                    const offset = portionId * 4;
-
-                    tempFloat32Vec4[0] = matrix[0];
-                    tempFloat32Vec4[1] = matrix[4];
-                    tempFloat32Vec4[2] = matrix[8];
-                    tempFloat32Vec4[3] = matrix[12];
-
-                    state.modelMatrixCol0Buf.setData(tempFloat32Vec4, offset);
-
-                    tempFloat32Vec4[0] = matrix[1];
-                    tempFloat32Vec4[1] = matrix[5];
-                    tempFloat32Vec4[2] = matrix[9];
-                    tempFloat32Vec4[3] = matrix[13];
-
-                    state.modelMatrixCol1Buf.setData(tempFloat32Vec4, offset);
-
-                    tempFloat32Vec4[0] = matrix[2];
-                    tempFloat32Vec4[1] = matrix[6];
-                    tempFloat32Vec4[2] = matrix[10];
-                    tempFloat32Vec4[3] = matrix[14];
-
-                    state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
+                if (state.modelMatrixColBufs) {
+                    state.modelMatrixColBufs.forEach((b, i) => {
+                        tempFloat32Vec4[0] = matrix[i+0];
+                        tempFloat32Vec4[1] = matrix[i+4];
+                        tempFloat32Vec4[2] = matrix[i+8];
+                        tempFloat32Vec4[3] = matrix[i+12];
+                        b.setData(tempFloat32Vec4, portionId * 4);
+                    });
                 }
             },
             setOffset: (portionId, offset) => {
@@ -751,15 +722,10 @@ export class VBOLayer extends Layer {
                         const bindAttribute = (a, b, setDivisor) => b && a(b, setDivisor && 1);
 
                         if (inputs.matrices) {
-                            const aModelMatrixCol = inputs.matrices.aModelMatrixCol;
-                            bindAttribute(aModelMatrixCol[0], state.modelMatrixCol0Buf, true);
-                            bindAttribute(aModelMatrixCol[1], state.modelMatrixCol1Buf, true);
-                            bindAttribute(aModelMatrixCol[2], state.modelMatrixCol2Buf, true);
+                            state.modelMatrixColBufs.forEach((b, i) => bindAttribute(inputs.matrices.aModelMatrixCol[i], b, true));
                             const aModelNormalMatrixCol = inputs.matrices.aModelNormalMatrixCol;
                             if (aModelNormalMatrixCol) {
-                                bindAttribute(aModelNormalMatrixCol[0], state.modelNormalMatrixCol0Buf, true);
-                                bindAttribute(aModelNormalMatrixCol[1], state.modelNormalMatrixCol1Buf, true);
-                                bindAttribute(aModelNormalMatrixCol[2], state.modelNormalMatrixCol2Buf, true);
+                                state.modelNormalMatrixColBufs.forEach((b, i) => bindAttribute(aModelNormalMatrixCol[i], b, true));
                             }
                         }
 
