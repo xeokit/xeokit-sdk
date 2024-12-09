@@ -126,12 +126,9 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
                 src.push(`vec2 ${params.uvA} = (uvDecodeMatrix * vec3(uv, 1.0)).xy;`);
             }
 
-            if (instancing) {
-                src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0);");
-                src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
-            } else {
-                src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0));");
-            }
+            const modelMatrixTransposed = instancing && "mat4(modelMatrixCol0, modelMatrixCol1, modelMatrixCol2, vec4(0.0,0.0,0.0,1.0))";
+            src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)" + (modelMatrixTransposed ? (" * " + modelMatrixTransposed) : "") + ");");
+
             if (scene.entityOffsetsEnabled) {
                 src.push("worldPosition.xyz = worldPosition.xyz + offset;");
             }
