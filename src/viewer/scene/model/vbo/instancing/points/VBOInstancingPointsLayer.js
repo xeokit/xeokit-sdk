@@ -208,6 +208,7 @@ export class VBOInstancingPointsLayer {
             const colorsCompressed = new Uint8Array(geometry.colorsCompressed);
             const notNormalized = false;
             state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 4, gl.STATIC_DRAW, notNormalized);
+            state.colorsForPointsNotInstancing = true;
         }
         if (this._modelMatrixCol0.length > 0) {
             const normalized = false;

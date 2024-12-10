@@ -380,7 +380,7 @@ export class VBORenderer {
 
         if (this._aColor) {
             this._aColor.bindArrayBuffer(state.colorsBuf);
-            if (this._instancing && state.colorsBuf) {
+            if (this._instancing && state.colorsBuf && (!state.colorsForPointsNotInstancing)) {
                 gl.vertexAttribDivisor(this._aColor.location, 1);
             }
         }
