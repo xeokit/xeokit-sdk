@@ -5,6 +5,7 @@
   "module": "./dist/xeokit-sdk.es.js",
   "main": "./dist/xeokit-sdk.cjs.js",
   "types": "./types/index.d.ts",
+
   "scripts": {
     "build": "rollup --config rollup.config.js; rollup --config rollup.minified.config.js",
     "dev-build": "rollup --config rollup.dev.config.js",
