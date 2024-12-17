@@ -253,8 +253,8 @@ class MetaScene {
 
         for (let modelId in this.metaModels) {
             const metaModel = this.metaModels[modelId];
-            for (let i = 0, len = metaModel.metaObjects.length; i < len; i++) {
-                const metaObject = metaModel.metaObjects[i];
+            for (let objectId in metaModel.metaObjects) {
+                const metaObject = metaModel.metaObjects[objectId];
                 metaObject.metaModels.push(metaModel);
             }
         }
