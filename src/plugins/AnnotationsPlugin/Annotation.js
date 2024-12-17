@@ -46,10 +46,10 @@ class Annotation extends Marker {
             this._marker.addEventListener("click", this._onMouseClickedExternalMarker = () => {
                 this.plugin.fire("markerClicked", this);
             });
-            this._onContextMenuExtenalMarker = () => {
+            this._onContextMenuExternalMarker = () => {
                 this.plugin.fire("contextmenu", this);
             }
-            this._onContextMenuExtenalMarkerRemover = addContextMenuListener(this._markerHTML, this._onContextMenuExtenalMarker);
+            this._onContextMenuExternalMarkerRemover = addContextMenuListener(this._marker, this._onContextMenuExternalMarker);
             this._marker.addEventListener("mouseenter", this._onMouseEnterExternalMarker = () => {
                 this.plugin.fire("markerMouseEnter", this);
             });
@@ -420,7 +420,7 @@ class Annotation extends Marker {
                 this._marker = null;
             } else {
                 this._marker.removeEventListener("click", this._onMouseClickedExternalMarker);
-                this._onContextMenuExtenalMarkerRemover();
+                this._onContextMenuExternalMarkerRemover();
                 this._marker.removeEventListener("mouseenter", this._onMouseEnterExternalMarker);
                 this._marker.removeEventListener("mouseleave", this._onMouseLeaveExternalMarker);
                 this._marker = null;
