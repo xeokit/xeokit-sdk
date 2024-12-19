@@ -95,7 +95,7 @@ export class VBOLayer extends Layer {
         const positionsDecodeMatrix = instancing ? cfg.geometry.positionsDecodeMatrix : cfg.positionsDecodeMatrix;
         this._positionsDecodeMatrix = positionsDecodeMatrix && math.mat4(positionsDecodeMatrix);
 
-        this._uvDecodeMatrix = cfg.uvDecodeMatrix && math.mat3(cfg.uvDecodeMatrix);
+        this._cfgUvDecodeMatrix = cfg.uvDecodeMatrix && math.mat3(cfg.uvDecodeMatrix);
         this._instancedGeometry = cfg.geometry;
         this._textureSet = cfg.textureSet;
 
@@ -358,7 +358,7 @@ export class VBOLayer extends Layer {
         const primitive           = this.primitive;
         const textureSet          = this._textureSet;
         let positionsDecodeMatrix = this._positionsDecodeMatrix;
-        let uvDecodeMatrix        = this._uvDecodeMatrix;
+        const cfgUvDecodeMatrix   = this._cfgUvDecodeMatrix;
 
         const scene = model.scene;
         const gl = scene.canvas.gl;
@@ -466,36 +466,40 @@ export class VBOLayer extends Layer {
             });
         }
 
-        if (instancing) {
-            state.modelMatrixColBufs = buffer.modelMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
-            if (state.modelMatrixColBufs && state.normalsBuf) { // WARNING: normalsBuf is never defined at the moment
-                state.modelNormalMatrixColBufs = buffer.modelNormalMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
-            }
+        state.modelMatrixColBufs = instancing && buffer.modelMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
 
-            // if ((primitive !== "points") && (primitive !== "lines") && instancedGeometry.normalsCompressed && instancedGeometry.normalsCompressed.length > 0) {
-            //     const normalized = true; // For oct-encoded UInt8
-            //     state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, instancedGeometry.normalsCompressed, geometr.ynormalsCompressed.length, 3, gl.STATIC_DRAW, normalized);
-            // }
-            if ((primitive !== "points") && (primitive !== "lines") && instancedGeometry.uvCompressed) {
-                state.uvBuf = maybeCreateBuffer(instancedGeometry.uvCompressed, 2, gl.STATIC_DRAW);
-                uvDecodeMatrix = instancedGeometry.uvDecodeMatrix;
-            }
-        } else {
-            // Normals are already oct-encoded, so `normalized = true` for oct encoded UInts
-            state.normalsBuf = maybeCreateBuffer(buffer.normals.compileBuffer(Int8Array), 3, gl.STATIC_DRAW, true);
+        const normals = (instancing
+                         ? false // (primitive !== "points") && (primitive !== "lines") && instancedGeometry.normalsCompressed
+                         : buffer.normals.compileBuffer(Int8Array));
+        // Normals are already oct-encoded, so `normalized = true` for oct encoded UInts
+        state.normalsBuf = normals && maybeCreateBuffer(normals, 3, gl.STATIC_DRAW, true);
 
-            const uvs = buffer.uv.compileBuffer(Float32Array);
-            if (uvs.length > 0) {
-                if (uvDecodeMatrix) {
-                    state.uvBuf = maybeCreateBuffer(uvs, 2, gl.STATIC_DRAW);
-                } else {
-                    const bounds = geometryCompressionUtils.getUVBounds(uvs);
-                    const result = geometryCompressionUtils.compressUVs(uvs, bounds.min, bounds.max);
-                    uvDecodeMatrix = math.mat3(result.decodeMatrix);
-                    state.uvBuf = maybeCreateBuffer(result.quantized, 2, gl.STATIC_DRAW);
-                }
-            }
-        }
+        // WARNING: modelMatrixColBufs and normalsBuf are never simultaneously defined at the moment (when instancing=true)
+        state.modelNormalMatrixColBufs = state.modelMatrixColBufs && state.normalsBuf && buffer.modelNormalMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
+
+        const uvSetup = (instancing
+                         ? ((primitive !== "points") && (primitive !== "lines") && instancedGeometry.uvCompressed && {
+                             buf: maybeCreateBuffer(instancedGeometry.uvCompressed, 2, gl.STATIC_DRAW),
+                             mat: instancedGeometry.uvDecodeMatrix
+                         })
+                         : (function() {
+                             const uvs = buffer.uv.compileBuffer(Float32Array);
+                             if (uvs.length === 0) {
+                                 return null;
+                             } else if (cfgUvDecodeMatrix) {
+                                 return {
+                                     buf: maybeCreateBuffer(uvs, 2, gl.STATIC_DRAW),
+                                     mat: cfgUvDecodeMatrix
+                                 };
+                             } else {
+                                 const bounds = geometryCompressionUtils.getUVBounds(uvs);
+                                 const result = geometryCompressionUtils.compressUVs(uvs, bounds.min, bounds.max);
+                                 return {
+                                     buf: maybeCreateBuffer(result.quantized, 2, gl.STATIC_DRAW),
+                                     mat: math.mat3(result.decodeMatrix)
+                                 };
+                             }
+                         })());
 
         // Free up memory
         this._buffer = null;
@@ -748,10 +752,10 @@ export class VBOLayer extends Layer {
             layerDrawState: {
                 getWorldNormalMatrix:  () => model.worldNormalMatrix,
                 positionsDecodeMatrix: positionsDecodeMatrix,
-                uvDecodeMatrix:        uvDecodeMatrix,
+                uvDecodeMatrix:        uvSetup && uvSetup.mat,
                 textureSet:            textureSet,
-                colorTextureSupported: state.uvBuf && textureSet && textureSet.colorTexture,
-                pbrSupported:          state.uvBuf && textureSet && textureSet.colorTexture && state.normalsBuf && state.metallicRoughnessBuf && textureSet.metallicRoughnessTexture,
+                colorTextureSupported: uvSetup && textureSet && textureSet.colorTexture,
+                pbrSupported:          uvSetup && textureSet && textureSet.colorTexture && state.normalsBuf && state.metallicRoughnessBuf && textureSet.metallicRoughnessTexture,
                 drawCall: (inputs, subGeometry) => {
                     const hash = inputs.attributesHash;
                     if (! (hash in drawCallCache)) {
@@ -775,7 +779,7 @@ export class VBOLayer extends Layer {
 
                         const a = inputs.attributes;
                         bindAttribute(a.position, state.positionsBuf);
-                        a.uV                && bindAttribute(a.uV,                state.uvBuf);
+                        a.uV                && bindAttribute(a.uV,                uvSetup && uvSetup.buf);
                         a.normal            && bindAttribute(a.normal,            state.normalsBuf);
                         a.metallicRoughness && bindAttribute(a.metallicRoughness, state.metallicRoughnessBuf, instancing);
                         a.color             && bindAttribute(a.color,             state.colorsBuf,            instancing && state.colorsBuf && (primitive !== "points"));
