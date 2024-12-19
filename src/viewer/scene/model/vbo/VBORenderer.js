@@ -22,17 +22,6 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
         fragViewMatrix:     lazyShaderVariable("viewMatrix")
     };
 
-    /**
-     * Matrices Uniform Block Buffer
-     *
-     * In shaders, matrices in the Matrices Uniform Block MUST be set in this order:
-     *  - worldMatrix
-     *  - viewMatrix
-     *  - projMatrix
-     *  - positionsDecodeMatrix
-     *  - worldNormalMatrix
-     *  - viewNormalMatrix
-     */
     const matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
 
     const needNormal = () => (params.viewNormal.needed || params.worldNormal.needed);
@@ -58,25 +47,16 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
 
         appendVertexDefinitions: (src) => {
             src.push("in vec3 position;");
-            if (needNormal()) {
-                src.push("in vec3 normal;");
-            }
-            if (params.colorA.needed) {
-                src.push(`in vec4 colorA255;`);
-            }
-            if (params.pickColorA.needed) {
-                src.push("in vec4 pickColor;");
-            }
+            src.push("in float flags;");
+            needNormal()                     && src.push("in vec3 normal;");
+            params.colorA.needed             && src.push(`in vec4 colorA255;`);
+            params.pickColorA.needed         && src.push(`in vec4 ${params.pickColorA};`);
+            params.metallicRoughnessA.needed && src.push(`in vec2 ${params.metallicRoughnessA};`);
+            scene.entityOffsetsEnabled       && src.push("in vec3 offset;");
+
             if (params.uvA.needed) {
                 src.push("in vec2 uv;");
                 src.push("uniform mat3 uvDecodeMatrix;");
-            }
-            if (params.metallicRoughnessA.needed) {
-                src.push("in vec2 metallicRoughness;");
-            }
-            src.push("in float flags;");
-            if (scene.entityOffsetsEnabled) {
-                src.push("in vec3 offset;");
             }
 
             if (instancing) {
@@ -105,9 +85,7 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
 
         appendVertexData: (src, afterFlagsColorLines) => {
 
-            if (params.colorA.needed) {
-                src.push(`vec4 ${params.colorA} = colorA255 / 255.0;`);
-            }
+            params.colorA.needed && src.push(`vec4 ${params.colorA} = colorA255 / 255.0;`);
 
             afterFlagsColorLines.forEach(line => src.push(line));
 
@@ -122,22 +100,16 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
                 }
             }
 
-            if (params.uvA.needed) {
-                src.push(`vec2 ${params.uvA} = (uvDecodeMatrix * vec3(uv, 1.0)).xy;`);
-            }
+            params.uvA.needed && src.push(`vec2 ${params.uvA} = (uvDecodeMatrix * vec3(uv, 1.0)).xy;`);
 
             const modelMatrixTransposed = instancing && "mat4(modelMatrixCol0, modelMatrixCol1, modelMatrixCol2, vec4(0.0,0.0,0.0,1.0))";
             src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)" + (modelMatrixTransposed ? (" * " + modelMatrixTransposed) : "") + ");");
 
-            if (scene.entityOffsetsEnabled) {
-                src.push("worldPosition.xyz = worldPosition.xyz + offset;");
-            }
+            scene.entityOffsetsEnabled && src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         },
 
         appendFragmentDefinitions: (src) => {
-            if (params.fragViewMatrix.needed) {
-                matricesUniformBlockLines().forEach(line => src.push(line));
-            }
+            params.fragViewMatrix.needed && matricesUniformBlockLines().forEach(line => src.push(line));
         },
 
         makeDrawCall: function(getInputSetter) {
@@ -151,7 +123,7 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
                     color:             params.colorA.needed && getInputSetter("colorA255"),
                     pickColor:         params.pickColorA.needed && getInputSetter("pickColor"),
                     uV:                params.uvA.needed && getInputSetter("uv"),
-                    metallicRoughness: params.metallicRoughnessA.needed && getInputSetter("metallicRoughness"),
+                    metallicRoughness: params.metallicRoughnessA.needed && getInputSetter(`${params.metallicRoughnessA}`),
                     flags:             getInputSetter("flags"),
                     offset:            scene.entityOffsetsEnabled && getInputSetter("offset")
                 },
