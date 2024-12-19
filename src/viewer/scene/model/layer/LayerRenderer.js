@@ -367,9 +367,8 @@ export class LayerRenderer {
                 const attribute = gl.getActiveAttrib(handle, i);
                 const location = gl.getAttribLocation(handle, attribute.name);
                 activeInputs[attribute.name] = function(arrayBuf, divisor) {
-                    arrayBuf.bind();
+                    arrayBuf.bindAtLocation(location);
                     gl.enableVertexAttribArray(location);
-                    gl.vertexAttribPointer(location, arrayBuf.itemSize, arrayBuf.itemType, arrayBuf.normalized, arrayBuf.stride, arrayBuf.offset);
                     if (divisor) {
                         gl.vertexAttribDivisor(location, divisor);
                     }
