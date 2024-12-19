@@ -366,8 +366,6 @@ export class VBOLayer extends Layer {
 
         const cleanups = [ ];
 
-        const state = { };
-
         const createGlBuffer = (srcData, target, usage) => {
             if (srcData.length > 0) {
                 const type = ({
@@ -429,34 +427,33 @@ export class VBOLayer extends Layer {
 
         const attributesCnt = portions.reduce((acc,p) => acc + p.portionSize, 0);
 
-        state.flagsBuf = maybeCreateBuffer(new Float32Array(attributesCnt), 1, gl.DYNAMIC_DRAW);
+        const flagsBuf = maybeCreateBuffer(new Float32Array(attributesCnt), 1, gl.DYNAMIC_DRAW);
 
-        state.colorsBuf = maybeCreateBuffer(buffer.colors.compileBuffer(Uint8Array), 4, gl.DYNAMIC_DRAW);
-        if (instancing && instancedGeometry.colorsCompressed) {
-            state.colorsBuf = maybeCreateBuffer(new Uint8Array(instancedGeometry.colorsCompressed), 4, gl.STATIC_DRAW);
-        }
+        const colorsBuf = ((instancing && instancedGeometry.colorsCompressed)
+                           ? maybeCreateBuffer(new Uint8Array(instancedGeometry.colorsCompressed), 4, gl.STATIC_DRAW)
+                           : maybeCreateBuffer(buffer.colors.compileBuffer(Uint8Array), 4, gl.DYNAMIC_DRAW));
 
-        state.offsetsBuf = scene.entityOffsetsEnabled ? maybeCreateBuffer(new Float32Array(attributesCnt * 3), 3, gl.DYNAMIC_DRAW) : null;
+        const offsetsBuf = scene.entityOffsetsEnabled ? maybeCreateBuffer(new Float32Array(attributesCnt * 3), 3, gl.DYNAMIC_DRAW) : null;
 
-        state.metallicRoughnessBuf = maybeCreateBuffer(buffer.metallicRoughness.compileBuffer(Uint8Array), 2, gl.STATIC_DRAW);
+        const metallicRoughnessBuf = maybeCreateBuffer(buffer.metallicRoughness.compileBuffer(Uint8Array), 2, gl.STATIC_DRAW);
 
-        state.pickColorsBuf = maybeCreateBuffer(buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
+        const pickColorsBuf = maybeCreateBuffer(buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
 
-        state.edgeIndicesBuf = maybeCreateIndicesBuffer(instancing
+        const edgeIndicesBuf = maybeCreateIndicesBuffer(instancing
                                                         ? new Uint32Array(instancedGeometry.edgeIndices)
                                                         : buffer.edgeIndices.compileBuffer(Uint32Array));
 
         const indices = (instancing
                          ? ((primitive !== "points") && instancedGeometry.indices && new Uint32Array(instancedGeometry.indices))
                          : buffer.indices.compileBuffer(Uint32Array));
-        state.indicesBuf = indices && maybeCreateIndicesBuffer(indices);
+        const indicesBuf = indices && maybeCreateIndicesBuffer(indices);
 
         const positions = (instancing
                            ? instancedGeometry.positionsCompressed
                            : (positionsDecodeMatrix
                               ? buffer.positions.compileBuffer(Uint16Array)
                               : (quantizePositions(buffer.positions.compileBuffer(Float64Array), modelAABB, positionsDecodeMatrix = math.mat4()))));
-        state.positionsBuf = positions && maybeCreateBuffer(positions, 3, gl.STATIC_DRAW);
+        const positionsBuf = positions && maybeCreateBuffer(positions, 3, gl.STATIC_DRAW);
         if (! instancing) {
             portions.forEach(portion => {
                 if (portion.retainedGeometry) {
@@ -466,16 +463,16 @@ export class VBOLayer extends Layer {
             });
         }
 
-        state.modelMatrixColBufs = instancing && buffer.modelMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
+        const modelMatrixColBufs = instancing && buffer.modelMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
 
         const normals = (instancing
                          ? false // (primitive !== "points") && (primitive !== "lines") && instancedGeometry.normalsCompressed
                          : buffer.normals.compileBuffer(Int8Array));
         // Normals are already oct-encoded, so `normalized = true` for oct encoded UInts
-        state.normalsBuf = normals && maybeCreateBuffer(normals, 3, gl.STATIC_DRAW, true);
+        const normalsBuf = normals && maybeCreateBuffer(normals, 3, gl.STATIC_DRAW, true);
 
         // WARNING: modelMatrixColBufs and normalsBuf are never simultaneously defined at the moment (when instancing=true)
-        state.modelNormalMatrixColBufs = state.modelMatrixColBufs && state.normalsBuf && buffer.modelNormalMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
+        const modelNormalMatrixColBufs = modelMatrixColBufs && normalsBuf && buffer.modelNormalMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
 
         const uvSetup = (instancing
                          ? ((primitive !== "points") && (primitive !== "lines") && instancedGeometry.uvCompressed && {
@@ -537,10 +534,10 @@ export class VBOLayer extends Layer {
                     deferredFlagValues = new Float32Array(attributesCnt);
                 }
                 fillArray(deferredFlagValues.subarray(firstFlag, firstFlag + lenFlags), tempFloat32);
-            } else if (state.flagsBuf) {
+            } else if (flagsBuf) {
                 const tempArray = scratchMemory.getTypeArray(Float32Array, lenFlags);
                 fillArray(tempArray, tempFloat32);
-                state.flagsBuf.setSubData(tempArray, firstFlag);
+                flagsBuf.setSubData(tempArray, firstFlag);
             }
         };
 
@@ -562,29 +559,29 @@ export class VBOLayer extends Layer {
                                +
                                (textureSet && textureSet.metallicRoughnessTexture ? "-metallicRoughnessTexture" : ""))))
                       : "")),
-            surfaceHasNormals: !!state.normalsBuf,
+            surfaceHasNormals: !!normalsBuf,
             setClippableFlags: setFlags,
             setFlags: setFlags,
             setFlags2: (portionId, flags, deferred) => { },
             setDeferredFlags: () => {
                 if (deferredFlagValues) {
-                    state.flagsBuf.setData(deferredFlagValues);
+                    flagsBuf.setData(deferredFlagValues);
                     deferredFlagValues = null;
                 }
             },
 
             setColor: (portionId, color) => { // RGBA color is normalized as ints
-                if (state.colorsBuf) {
+                if (colorsBuf) {
                     const portion = portions[portionId];
                     const tempArray = scratchMemory.getTypeArray(Uint8Array, portion.portionSize * 4);
                     // alpha used to be unset for points, so effectively random (from last use)
                     fillArray(tempArray, color.slice(0, 4));
-                    state.colorsBuf.setSubData(tempArray, portion.portionBase * 4);
+                    colorsBuf.setSubData(tempArray, portion.portionBase * 4);
                 }
             },
             setMatrix: (portionId, matrix) => {
-                if (state.modelMatrixColBufs) {
-                    state.modelMatrixColBufs.forEach((b, i) => {
+                if (modelMatrixColBufs) {
+                    modelMatrixColBufs.forEach((b, i) => {
                         tempFloat32Vec4[0] = matrix[i+0];
                         tempFloat32Vec4[1] = matrix[i+4];
                         tempFloat32Vec4[2] = matrix[i+8];
@@ -598,11 +595,11 @@ export class VBOLayer extends Layer {
                     model.error("Entity#offset not enabled for this Viewer"); // See Viewer entityOffsetsEnabled
                 } else {
                     const portion = portions[portionId];
-                    if (state.offsetsBuf) {
+                    if (offsetsBuf) {
                         tempVec3fa.set(offset);
                         const tempArray = scratchMemory.getTypeArray(Float32Array, portion.portionSize * 3);
                         fillArray(tempArray, tempVec3fa);
-                        state.offsetsBuf.setSubData(tempArray, portion.portionBase * 3);
+                        offsetsBuf.setSubData(tempArray, portion.portionBase * 3);
                     }
                     if (portion.retainedGeometry) {
                         portion.retainedGeometry.offset.set(offset);
@@ -755,7 +752,7 @@ export class VBOLayer extends Layer {
                 uvDecodeMatrix:        uvSetup && uvSetup.mat,
                 textureSet:            textureSet,
                 colorTextureSupported: uvSetup && textureSet && textureSet.colorTexture,
-                pbrSupported:          uvSetup && textureSet && textureSet.colorTexture && state.normalsBuf && state.metallicRoughnessBuf && textureSet.metallicRoughnessTexture,
+                pbrSupported:          uvSetup && textureSet && textureSet.colorTexture && normalsBuf && metallicRoughnessBuf && textureSet.metallicRoughnessTexture,
                 drawCall: (inputs, subGeometry) => {
                     const hash = inputs.attributesHash;
                     if (! (hash in drawCallCache)) {
@@ -770,31 +767,31 @@ export class VBOLayer extends Layer {
                         const bindAttribute = (a, b, setDivisor) => b && a(b, setDivisor && 1);
 
                         if (inputs.matrices) {
-                            state.modelMatrixColBufs.forEach((b, i) => bindAttribute(inputs.matrices.aModelMatrixCol[i], b, true));
+                            modelMatrixColBufs.forEach((b, i) => bindAttribute(inputs.matrices.aModelMatrixCol[i], b, true));
                             const aModelNormalMatrixCol = inputs.matrices.aModelNormalMatrixCol;
                             if (aModelNormalMatrixCol) {
-                                state.modelNormalMatrixColBufs.forEach((b, i) => bindAttribute(aModelNormalMatrixCol[i], b, true));
+                                modelNormalMatrixColBufs.forEach((b, i) => bindAttribute(aModelNormalMatrixCol[i], b, true));
                             }
                         }
 
                         const a = inputs.attributes;
-                        bindAttribute(a.position, state.positionsBuf);
+                        bindAttribute(a.position, positionsBuf);
                         a.uV                && bindAttribute(a.uV,                uvSetup && uvSetup.buf);
-                        a.normal            && bindAttribute(a.normal,            state.normalsBuf);
-                        a.metallicRoughness && bindAttribute(a.metallicRoughness, state.metallicRoughnessBuf, instancing);
-                        a.color             && bindAttribute(a.color,             state.colorsBuf,            instancing && state.colorsBuf && (primitive !== "points"));
-                        a.flags             && bindAttribute(a.flags,             state.flagsBuf,             instancing);
-                        a.offset            && bindAttribute(a.offset,            state.offsetsBuf,           instancing);
-                        a.pickColor         && bindAttribute(a.pickColor,         state.pickColorsBuf,        instancing);
+                        a.normal            && bindAttribute(a.normal,            normalsBuf);
+                        a.metallicRoughness && bindAttribute(a.metallicRoughness, metallicRoughnessBuf, instancing);
+                        a.color             && bindAttribute(a.color,             colorsBuf,            instancing && (primitive !== "points"));
+                        a.flags             && bindAttribute(a.flags,             flagsBuf,             instancing);
+                        a.offset            && bindAttribute(a.offset,            offsetsBuf,           instancing);
+                        a.pickColor         && bindAttribute(a.pickColor,         pickColorsBuf,        instancing);
 
                         const drawer = (function() {
                             // TODO: Use drawElements count and offset to draw only one entity
 
                             const drawPoints = () => {
                                 if (instancing) {
-                                    gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, portions.length);
+                                    gl.drawArraysInstanced(gl.POINTS, 0, positionsBuf.numItems, portions.length);
                                 } else {
-                                    gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
+                                    gl.drawArrays(gl.POINTS, 0, positionsBuf.numItems);
                                 }
                             };
 
@@ -817,15 +814,15 @@ export class VBOLayer extends Layer {
                                 if (subGeometry && subGeometry.vertices) {
                                     return drawPoints;
                                 } else {
-                                    return elementsDrawer(gl.LINES, state.indicesBuf);
+                                    return elementsDrawer(gl.LINES, indicesBuf);
                                 }
                             } else {    // triangles
                                 if (subGeometry && subGeometry.vertices) {
                                     return drawPoints;
-                                } else if (subGeometry && state.edgeIndicesBuf) {
-                                    return elementsDrawer(gl.LINES, state.edgeIndicesBuf);
+                                } else if (subGeometry && edgeIndicesBuf) {
+                                    return elementsDrawer(gl.LINES, edgeIndicesBuf);
                                 } else {
-                                    return elementsDrawer(gl.TRIANGLES, state.indicesBuf);
+                                    return elementsDrawer(gl.TRIANGLES, indicesBuf);
                                 }
                             }
                         })();
