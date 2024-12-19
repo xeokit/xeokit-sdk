@@ -432,6 +432,9 @@ export class VBOLayer extends Layer {
         state.flagsBuf = maybeCreateBuffer(new Float32Array(attributesCnt), 1, gl.DYNAMIC_DRAW);
 
         state.colorsBuf = maybeCreateBuffer(buffer.colors.compileBuffer(Uint8Array), 4, gl.DYNAMIC_DRAW);
+        if (instancing && instancedGeometry.colorsCompressed) {
+            state.colorsBuf = maybeCreateBuffer(new Uint8Array(instancedGeometry.colorsCompressed), 4, gl.STATIC_DRAW);
+        }
 
         state.offsetsBuf = scene.entityOffsetsEnabled ? maybeCreateBuffer(new Float32Array(attributesCnt * 3), 3, gl.DYNAMIC_DRAW) : null;
 
@@ -439,50 +442,45 @@ export class VBOLayer extends Layer {
 
         state.pickColorsBuf = maybeCreateBuffer(buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
 
-        if (instancing) {
-            const geometry = instancedGeometry;
-            state.edgeIndicesBuf = maybeCreateIndicesBuffer(new Uint32Array(geometry.edgeIndices));
+        state.edgeIndicesBuf = maybeCreateIndicesBuffer(instancing
+                                                        ? new Uint32Array(instancedGeometry.edgeIndices)
+                                                        : buffer.edgeIndices.compileBuffer(Uint32Array));
 
-            state.modelMatrixColBufs = buffer.modelMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
+        const indices = (instancing
+                         ? ((primitive !== "points") && instancedGeometry.indices && new Uint32Array(instancedGeometry.indices))
+                         : buffer.indices.compileBuffer(Uint32Array));
+        state.indicesBuf = indices && maybeCreateIndicesBuffer(indices);
 
-            if (geometry.positionsCompressed) {
-                state.positionsBuf = maybeCreateBuffer(geometry.positionsCompressed, 3, gl.STATIC_DRAW);
-            }
-
-            state.indicesBuf = (primitive !== "points") && geometry.indices && maybeCreateIndicesBuffer(new Uint32Array(geometry.indices));
-            // if ((primitive !== "points") && (primitive !== "lines") && geometry.normalsCompressed && geometry.normalsCompressed.length > 0) {
-            //     const normalized = true; // For oct-encoded UInt8
-            //     state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, geometry.normalsCompressed, geometry.normalsCompressed.length, 3, gl.STATIC_DRAW, normalized);
-            // }
-            if (geometry.colorsCompressed) {
-                // WARNING: colorsBuf might be already assigned above
-                state.colorsBuf = maybeCreateBuffer(new Uint8Array(geometry.colorsCompressed), 4, gl.STATIC_DRAW);
-            }
-            if ((primitive !== "points") && (primitive !== "lines") && geometry.uvCompressed) {
-                state.uvBuf = maybeCreateBuffer(geometry.uvCompressed, 2, gl.STATIC_DRAW);
-                uvDecodeMatrix = geometry.uvDecodeMatrix;
-            }
-
-            if (state.modelMatrixColBufs && state.normalsBuf) { // WARNING: normalsBuf is never defined at the moment
-                state.modelNormalMatrixColBufs = buffer.modelNormalMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
-            }
-        } else {
-            state.edgeIndicesBuf = maybeCreateIndicesBuffer(buffer.edgeIndices.compileBuffer(Uint32Array));
-
-            const positions = (positionsDecodeMatrix
-                               ? buffer.positions.compileBuffer(Uint16Array)
-                               : (quantizePositions(buffer.positions.compileBuffer(Float64Array), modelAABB, positionsDecodeMatrix = math.mat4())));
-            state.positionsBuf = maybeCreateBuffer(positions, 3, gl.STATIC_DRAW);
-
+        const positions = (instancing
+                           ? instancedGeometry.positionsCompressed
+                           : (positionsDecodeMatrix
+                              ? buffer.positions.compileBuffer(Uint16Array)
+                              : (quantizePositions(buffer.positions.compileBuffer(Float64Array), modelAABB, positionsDecodeMatrix = math.mat4()))));
+        state.positionsBuf = positions && maybeCreateBuffer(positions, 3, gl.STATIC_DRAW);
+        if (! instancing) {
             portions.forEach(portion => {
                 if (portion.retainedGeometry) {
                     const start = 3 * portion.portionBase;
                     portion.retainedGeometry.quantizedPositions = positions.subarray(start, start + 3 * portion.portionSize);
                 }
             });
+        }
 
-            state.indicesBuf = maybeCreateIndicesBuffer(buffer.indices.compileBuffer(Uint32Array));
+        if (instancing) {
+            state.modelMatrixColBufs = buffer.modelMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
+            if (state.modelMatrixColBufs && state.normalsBuf) { // WARNING: normalsBuf is never defined at the moment
+                state.modelNormalMatrixColBufs = buffer.modelNormalMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
+            }
 
+            // if ((primitive !== "points") && (primitive !== "lines") && instancedGeometry.normalsCompressed && instancedGeometry.normalsCompressed.length > 0) {
+            //     const normalized = true; // For oct-encoded UInt8
+            //     state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, instancedGeometry.normalsCompressed, geometr.ynormalsCompressed.length, 3, gl.STATIC_DRAW, normalized);
+            // }
+            if ((primitive !== "points") && (primitive !== "lines") && instancedGeometry.uvCompressed) {
+                state.uvBuf = maybeCreateBuffer(instancedGeometry.uvCompressed, 2, gl.STATIC_DRAW);
+                uvDecodeMatrix = instancedGeometry.uvDecodeMatrix;
+            }
+        } else {
             // Normals are already oct-encoded, so `normalized = true` for oct encoded UInts
             state.normalsBuf = maybeCreateBuffer(buffer.normals.compileBuffer(Int8Array), 3, gl.STATIC_DRAW, true);
 
