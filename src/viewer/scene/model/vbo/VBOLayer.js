@@ -430,8 +430,8 @@ export class VBOLayer extends Layer {
         const flagsBuf = maybeCreateBuffer(new Float32Array(attributesCnt), 1, gl.DYNAMIC_DRAW);
 
         const colorsBuf = ((instancing && instancedGeometry.colorsCompressed)
-                           ? maybeCreateBuffer(new Uint8Array(instancedGeometry.colorsCompressed), 4, gl.STATIC_DRAW)
-                           : maybeCreateBuffer(buffer.colors.compileBuffer(Uint8Array), 4, gl.DYNAMIC_DRAW));
+                           ? maybeCreateBuffer(new Uint8Array(instancedGeometry.colorsCompressed), 4, gl.STATIC_DRAW, true)
+                           : maybeCreateBuffer(buffer.colors.compileBuffer(Uint8Array), 4, gl.DYNAMIC_DRAW, true));
 
         const offsetsBuf = scene.entityOffsetsEnabled ? maybeCreateBuffer(new Float32Array(attributesCnt * 3), 3, gl.DYNAMIC_DRAW) : null;
 
