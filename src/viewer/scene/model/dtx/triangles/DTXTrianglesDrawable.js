@@ -22,8 +22,7 @@ export const makeDTXRenderingAttributes = function(gl, subGeometry) {
         viewNormal:         lazyShaderVariable("viewNormal"),
         worldNormal:        null,
         worldPosition:      "worldPosition",
-        getFlag:            renderPassFlag => `int(flags[${renderPassFlag}])`,
-        fragViewMatrix:     null
+        getFlag:            renderPassFlag => `int(flags[${renderPassFlag}])`
     };
 
     const isTriangle = ! subGeometry;
