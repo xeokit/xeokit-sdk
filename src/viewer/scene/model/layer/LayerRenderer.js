@@ -191,6 +191,9 @@ export class LayerRenderer {
                 ]
                 : [ ]);
 
+        const vertexData = [ ];
+        renderingAttributes.appendVertexData(vertexData, afterFlagsColorLines);
+
         const buildVertexShader = () => {
             const src = [];
 
@@ -233,7 +236,7 @@ export class LayerRenderer {
 
             src.push("void main(void) {");
 
-            renderingAttributes.appendVertexData(src, afterFlagsColorLines);
+            vertexData.forEach(line => src.push(line));
 
             src.push(`vec4 viewPosition = ${viewParams.viewMatrix} * ${worldPosition};`);
 
