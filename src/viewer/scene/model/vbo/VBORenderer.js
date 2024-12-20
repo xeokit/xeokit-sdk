@@ -28,6 +28,31 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
         fragViewMatrix:     lazyShaderVariable("viewMatrix")
     };
 
+    const attributes = (function() {
+        return {
+            appendDefinitions: src => {
+                positionA.needed                 && src.push(`in vec3 ${positionA};`);
+                normalA.needed                   && src.push(`in vec3 ${normalA};`);
+                params.colorA.needed             && src.push(`in vec4 ${params.colorA};`);
+                params.pickColorA.needed         && src.push(`in vec4 ${params.pickColorA};`);
+                uvApremul.needed                 && src.push(`in vec2 ${uvApremul};`);
+                params.metallicRoughnessA.needed && src.push(`in vec2 ${params.metallicRoughnessA};`);
+                flagsA.needed                    && src.push(`in float ${flagsA};`);
+                offsetA.needed                   && src.push(`in vec3 ${offsetA};`);
+            },
+            getInputSetters: getInputSetter => ({
+                position:          positionA.needed && getInputSetter(`${positionA}`),
+                normal:            normalA.needed && getInputSetter(`${normalA}`),
+                color:             params.colorA.needed && getInputSetter(`${params.colorA}`),
+                pickColor:         params.pickColorA.needed && getInputSetter(`${params.pickColorA}`),
+                uV:                uvApremul.needed && getInputSetter(`${uvApremul}`),
+                metallicRoughness: params.metallicRoughnessA.needed && getInputSetter(`${params.metallicRoughnessA}`),
+                flags:             flagsA.needed && getInputSetter(`${flagsA}`),
+                offset:            offsetA.needed && getInputSetter(`${offsetA}`)
+            })
+        };
+    })();
+
     const matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
 
     const needNormal = () => (params.viewNormal.needed || params.worldNormal.needed);
@@ -52,18 +77,9 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
         getClippable: () => `((int(${flagsA}) >> 16 & 0xF) == 1) ? 1.0 : 0.0`,
 
         appendVertexDefinitions: (src) => {
-            positionA.needed                 && src.push(`in vec3 ${positionA};`);
-            flagsA.needed                    && src.push(`in float ${flagsA};`);
-            normalA.needed                   && src.push(`in vec3 ${normalA};`);
-            params.colorA.needed             && src.push(`in vec4 ${params.colorA};`);
-            params.pickColorA.needed         && src.push(`in vec4 ${params.pickColorA};`);
-            params.metallicRoughnessA.needed && src.push(`in vec2 ${params.metallicRoughnessA};`);
-            offsetA.needed                   && src.push(`in vec3 ${offsetA};`);
+            attributes.appendDefinitions(src);
 
-            if (uvApremul.needed) {
-                src.push(`in vec2 ${uvApremul};`);
-                src.push("uniform mat3 uvDecodeMatrix;");
-            }
+            params.uvA.needed && src.push("uniform mat3 uvDecodeMatrix;");
 
             if (instancing) {
                 src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
@@ -117,19 +133,10 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
 
         makeDrawCall: function(getInputSetter) {
             const uMatricesBlock  = getInputSetter("Matrices");
-            const uUVDecodeMatrix = uvApremul.needed && getInputSetter("uvDecodeMatrix");
+            const uUVDecodeMatrix = params.uvA.needed && getInputSetter("uvDecodeMatrix");
 
             const inputs = {
-                attributes: {
-                    position:          positionA.needed && getInputSetter(`${positionA}`),
-                    normal:            normalA.needed && getInputSetter(`${normalA}`),
-                    color:             params.colorA.needed && getInputSetter(`${params.colorA}`),
-                    pickColor:         params.pickColorA.needed && getInputSetter(`${params.pickColorA}`),
-                    uV:                uvApremul.needed && getInputSetter(`${uvApremul}`),
-                    metallicRoughness: params.metallicRoughnessA.needed && getInputSetter(`${params.metallicRoughnessA}`),
-                    flags:             flagsA.needed && getInputSetter(`${flagsA}`),
-                    offset:            offsetA.needed && getInputSetter(`${offsetA}`)
-                },
+                attributes: attributes.getInputSetters(getInputSetter),
 
                 matrices: instancing && {
                     aModelMatrixCol: [
