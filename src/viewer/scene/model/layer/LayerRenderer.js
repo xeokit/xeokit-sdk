@@ -121,7 +121,7 @@ export class LayerRenderer {
         const geoParams = renderingAttributes.parameters;
 
         const fragmentOutputs = [ ];
-        appendFragmentOutputs(fragmentOutputs, vWorldPosition, "gl_FragCoord", sliceColorOr, geoParams.fragViewMatrix);
+        appendFragmentOutputs(fragmentOutputs, vWorldPosition, "gl_FragCoord", sliceColorOr, geoParams.viewMatrix);
 
         const fragmentClippingLines = (function() {
             const src = [ ];
