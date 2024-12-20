@@ -49,7 +49,7 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
             src.push("in vec3 position;");
             src.push("in float flags;");
             needNormal()                     && src.push("in vec3 normal;");
-            params.colorA.needed             && src.push(`in vec4 colorA255;`);
+            params.colorA.needed             && src.push(`in vec4 ${params.colorA};`);
             params.pickColorA.needed         && src.push(`in vec4 ${params.pickColorA};`);
             params.metallicRoughnessA.needed && src.push(`in vec2 ${params.metallicRoughnessA};`);
             scene.entityOffsetsEnabled       && src.push("in vec3 offset;");
@@ -84,9 +84,6 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
         },
 
         appendVertexData: (src, afterFlagsColorLines) => {
-
-            params.colorA.needed && src.push(`vec4 ${params.colorA} = colorA255 / 255.0;`);
-
             afterFlagsColorLines.forEach(line => src.push(line));
 
             if (needNormal()) {
@@ -120,7 +117,7 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
                 attributes: {
                     position:          getInputSetter("position"),
                     normal:            needNormal() && getInputSetter("normal"),
-                    color:             params.colorA.needed && getInputSetter("colorA255"),
+                    color:             params.colorA.needed && getInputSetter(`${params.colorA}`),
                     pickColor:         params.pickColorA.needed && getInputSetter("pickColor"),
                     uV:                params.uvA.needed && getInputSetter("uv"),
                     metallicRoughness: params.metallicRoughnessA.needed && getInputSetter(`${params.metallicRoughnessA}`),
