@@ -1,57 +1,38 @@
 export const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeometry) {
-    const lazyShaderVariable = function(name) {
+    const lazyShaderVariable = function(name, type) {
         const variable = {
             toString: () => {
                 variable.needed = true;
                 return name;
-            }
+            },
+            definition: `in ${type} ${name};`
         };
         return variable;
     };
 
-    const positionA = lazyShaderVariable("positionA");
-    const normalA   = lazyShaderVariable("normalA");
-    const flagsA    = lazyShaderVariable("flagsA");
-    const uvApremul = lazyShaderVariable("uvApremul");
-    const offsetA   = lazyShaderVariable("offset");
+    const attributes = {
+        position:          lazyShaderVariable("positionA",         "vec3"),
+        normal:            lazyShaderVariable("normalA",           "vec3"),
+        color:             lazyShaderVariable("colorA",            "vec4"),
+        pickColor:         lazyShaderVariable("pickColor",         "vec4"),
+        uV:                lazyShaderVariable("uvApremul",         "vec2"),
+        metallicRoughness: lazyShaderVariable("metallicRoughness", "vec2"),
+        flags:             lazyShaderVariable("flagsA",            "float"),
+        offset:            lazyShaderVariable("offset",            "vec3")
+    };
 
     const params = {
-        colorA:             lazyShaderVariable("colorA"),
-        pickColorA:         lazyShaderVariable("pickColor"),
+        colorA:             attributes.color,
+        pickColorA:         attributes.pickColor,
         uvA:                lazyShaderVariable("aUv"),
-        metallicRoughnessA: lazyShaderVariable("metallicRoughness"),
+        metallicRoughnessA: attributes.metallicRoughness,
         viewMatrix:         "viewMatrix",
         viewNormal:         lazyShaderVariable("viewNormal"),
         worldNormal:        lazyShaderVariable("worldNormal"),
         worldPosition:      "worldPosition",
-        getFlag:            renderPassFlag => `(int(${flagsA}) >> ${renderPassFlag * 4} & 0xF)`,
+        getFlag:            renderPassFlag => `(int(${attributes.flags}) >> ${renderPassFlag * 4} & 0xF)`,
         fragViewMatrix:     lazyShaderVariable("viewMatrix")
     };
-
-    const attributes = (function() {
-        return {
-            appendDefinitions: src => {
-                positionA.needed                 && src.push(`in vec3 ${positionA};`);
-                normalA.needed                   && src.push(`in vec3 ${normalA};`);
-                params.colorA.needed             && src.push(`in vec4 ${params.colorA};`);
-                params.pickColorA.needed         && src.push(`in vec4 ${params.pickColorA};`);
-                uvApremul.needed                 && src.push(`in vec2 ${uvApremul};`);
-                params.metallicRoughnessA.needed && src.push(`in vec2 ${params.metallicRoughnessA};`);
-                flagsA.needed                    && src.push(`in float ${flagsA};`);
-                offsetA.needed                   && src.push(`in vec3 ${offsetA};`);
-            },
-            getInputSetters: getInputSetter => ({
-                position:          positionA.needed && getInputSetter(`${positionA}`),
-                normal:            normalA.needed && getInputSetter(`${normalA}`),
-                color:             params.colorA.needed && getInputSetter(`${params.colorA}`),
-                pickColor:         params.pickColorA.needed && getInputSetter(`${params.pickColorA}`),
-                uV:                uvApremul.needed && getInputSetter(`${uvApremul}`),
-                metallicRoughness: params.metallicRoughnessA.needed && getInputSetter(`${params.metallicRoughnessA}`),
-                flags:             flagsA.needed && getInputSetter(`${flagsA}`),
-                offset:            offsetA.needed && getInputSetter(`${offsetA}`)
-            })
-        };
-    })();
 
     const matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
 
@@ -74,10 +55,10 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
 
         parameters: params,
 
-        getClippable: () => `((int(${flagsA}) >> 16 & 0xF) == 1) ? 1.0 : 0.0`,
+        getClippable: () => `((int(${attributes.flags}) >> 16 & 0xF) == 1) ? 1.0 : 0.0`,
 
         appendVertexDefinitions: (src) => {
-            attributes.appendDefinitions(src);
+            Object.values(attributes).forEach(a => a.needed && src.push(a.definition));
 
             params.uvA.needed && src.push("uniform mat3 uvDecodeMatrix;");
 
@@ -109,22 +90,22 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
             afterFlagsColorLines.forEach(line => src.push(line));
 
             if (needNormal()) {
-                src.push(`vec4 modelNormal = vec4(octDecode(${normalA}.xy), 0.0);`);
+                src.push(`vec4 modelNormal = vec4(octDecode(${attributes.normal}.xy), 0.0);`);
                 if (instancing) {
                     src.push("modelNormal = vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
                 }
                 src.push(`vec3 ${params.worldNormal} = (worldNormalMatrix * modelNormal).xyz;`);
                 if (params.viewNormal.needed) {
-                    src.push(`vec3 viewNormal = normalize((viewNormalMatrix * vec4(${params.worldNormal}, 0.0)).xyz);`);
+                    src.push(`vec3 ${params.viewNormal} = normalize((viewNormalMatrix * vec4(${params.worldNormal}, 0.0)).xyz);`);
                 }
             }
 
-            params.uvA.needed && src.push(`vec2 ${params.uvA} = (uvDecodeMatrix * vec3(${uvApremul}, 1.0)).xy;`);
+            params.uvA.needed && src.push(`vec2 ${params.uvA} = (uvDecodeMatrix * vec3(${attributes.uV}, 1.0)).xy;`);
 
             const modelMatrixTransposed = instancing && "mat4(modelMatrixCol0, modelMatrixCol1, modelMatrixCol2, vec4(0.0,0.0,0.0,1.0))";
-            src.push(`vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(${positionA}, 1.0)${modelMatrixTransposed ? (" * " + modelMatrixTransposed) : ""});`);
+            src.push(`vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(${attributes.position}, 1.0)${modelMatrixTransposed ? (" * " + modelMatrixTransposed) : ""});`);
 
-            scene.entityOffsetsEnabled && src.push(`worldPosition.xyz = worldPosition.xyz + ${offsetA};`);
+            scene.entityOffsetsEnabled && src.push(`worldPosition.xyz = worldPosition.xyz + ${attributes.offset};`);
         },
 
         appendFragmentDefinitions: (src) => {
@@ -135,8 +116,10 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
             const uMatricesBlock  = getInputSetter("Matrices");
             const uUVDecodeMatrix = params.uvA.needed && getInputSetter("uvDecodeMatrix");
 
+            const attributeSetters = { };
+            Object.keys(attributes).forEach(k => { const a = attributes[k]; if (a.needed) { attributeSetters[k] = getInputSetter(a.toString()); } });
             const inputs = {
-                attributes: attributes.getInputSetters(getInputSetter),
+                attributes: attributeSetters,
 
                 matrices: instancing && {
                     aModelMatrixCol: [
