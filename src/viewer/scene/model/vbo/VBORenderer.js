@@ -30,8 +30,7 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
         viewNormal:         lazyShaderVariable("viewNormal"),
         worldNormal:        lazyShaderVariable("worldNormal"),
         worldPosition:      "worldPosition",
-        getFlag:            renderPassFlag => `(int(${attributes.flags}) >> ${renderPassFlag * 4} & 0xF)`,
-        fragViewMatrix:     lazyShaderVariable("viewMatrix")
+        getFlag:            renderPassFlag => `(int(${attributes.flags}) >> ${renderPassFlag * 4} & 0xF)`
     };
 
     const matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
@@ -108,9 +107,7 @@ export const makeVBORenderingAttributes = function(scene, instancing, primitive,
             scene.entityOffsetsEnabled && src.push(`worldPosition.xyz = worldPosition.xyz + ${attributes.offset};`);
         },
 
-        appendFragmentDefinitions: (src) => {
-            params.fragViewMatrix.needed && matricesUniformBlockLines().forEach(line => src.push(line));
-        },
+        appendFragmentDefinitions: (src) => matricesUniformBlockLines().forEach(line => src.push(line)),
 
         makeDrawCall: function(getInputSetter) {
             const uMatricesBlock  = getInputSetter("Matrices");
