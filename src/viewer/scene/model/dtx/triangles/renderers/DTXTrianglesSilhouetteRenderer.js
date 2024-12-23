@@ -426,10 +426,14 @@ export class DTXTrianglesSilhouetteRenderer {
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
+            src.push("uniform float sliceThickness;");
+            src.push("uniform vec4 sliceColor;");
         }
         src.push("uniform vec4 color;");
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
+        src.push("  vec4 newColor;");
+        src.push("  newColor = color;");
         if (clipping) {
             src.push("  bool clippable = vFlags2 > 0u;");
             src.push("  if (clippable) {");
@@ -439,15 +443,18 @@ export class DTXTrianglesSilhouetteRenderer {
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");
             }
-            src.push("  if (dist > 0.0) { ");
+            src.push("  if (dist > sliceThickness) { ");
             src.push("      discard;")
+            src.push("  }");
+            src.push("  if (dist > 0.0) { ");
+            src.push("      newColor = sliceColor;");
             src.push("  }");
             src.push("}");
         }
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("    outColor = color;");
+        src.push("    outColor = newColor;");
         src.push("}");
         return src;
     }
