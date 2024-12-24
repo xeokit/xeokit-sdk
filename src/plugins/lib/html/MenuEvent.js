@@ -10,14 +10,17 @@ export function addContextMenuListener(elem, callback) {
 
     const touchStartHandler = (event) => {
         event.preventDefault();
-        const touch = event.touches[0];
-        startX = touch.clientX;
-        startY = touch.clientY;
-
+        
         if (timeout) {
             clearTimeout(timeout);
             timeout = null;
         }
+        // If more than one finger touches the screen, cancel the timeout
+        if (event.touches.length > 1) return;
+
+        const touch = event.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
 
         timeout = setTimeout(() => {
             event.clientX = touch.clientX;
@@ -26,6 +29,14 @@ export function addContextMenuListener(elem, callback) {
             clearTimeout(timeout);
             timeout = null;
         }, longPressTimer);
+    };
+
+    const globalTouchStartHandler = (event) => {
+        // Cancel timeout if multiple touches are detected anywhere on the screen
+        if (event.touches.length > 1 && timeout) {
+            clearTimeout(timeout);
+            timeout = null;
+        }
     };
 
     const touchMoveHandler = (event) => {
@@ -58,6 +69,7 @@ export function addContextMenuListener(elem, callback) {
         elem.addEventListener('touchstart', touchStartHandler);
         elem.addEventListener('touchmove', touchMoveHandler);
         elem.addEventListener('touchend', touchEndHandler);
+        window.addEventListener('touchstart', globalTouchStartHandler);
     } else {
         elem.addEventListener('contextmenu', contextMenuHandler);
     }
@@ -67,6 +79,7 @@ export function addContextMenuListener(elem, callback) {
             elem.removeEventListener('touchstart', touchStartHandler);
             elem.removeEventListener('touchmove', touchMoveHandler);
             elem.removeEventListener('touchend', touchEndHandler);
+            window.removeEventListener('touchstart', globalTouchStartHandler);
         } else {
             elem.removeEventListener('contextmenu', contextMenuHandler);
         }
