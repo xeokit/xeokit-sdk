@@ -738,12 +738,19 @@ class ContextMenu {
                             const menuRect = subMenuElement.getBoundingClientRect();
 
                             const subMenuWidth = 200; // TODO
-                            const showOnLeft = ((itemRect.right + subMenuWidth) > window.innerWidth);
+                            const showOnRight = (itemRect.right + subMenuWidth) < window.innerWidth;
+                            const showOnLeft = (itemRect.left - subMenuWidth) > 0;
 
-                            if (showOnLeft) {
-                                self._showMenu(subMenu.id, itemRect.left - subMenuWidth, itemRect.top - 1);
-                            } else {
+                            if(showOnRight)
                                 self._showMenu(subMenu.id, itemRect.right - 5, itemRect.top - 1);
+                            else if (showOnLeft)
+                                self._showMenu(subMenu.id, itemRect.left - subMenuWidth, itemRect.top - 1);
+                            else {
+                                const spaceOnLeft = itemRect.left, spaceOnRight = window.innerWidth - itemRect.right;
+                                if(spaceOnRight > spaceOnLeft) 
+                                    self._showMenu(subMenu.id, itemRect.right - 5 - (subMenuWidth - spaceOnRight), itemRect.top - 1);
+                                else 
+                                    self._showMenu(subMenu.id, itemRect.left - spaceOnLeft, itemRect.top - 1);
                             }
 
                             lastSubMenu = subMenu;
