@@ -742,7 +742,7 @@ class Control {
                 material: materials.blue,
                 matrix: (function () {
                     const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0.8, 0, 0], math.identityMat4());
+                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
                     return math.mulMat4(rotate, translate, math.identityMat4());
                 })(),
                 pickable: false,
@@ -757,7 +757,7 @@ class Control {
                 material: materials.pickable,
                 matrix: (function () {
                     const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0.8, 0, 0], math.identityMat4());
+                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
                     return math.mulMat4(rotate, translate, math.identityMat4());
                 })(),
                 pickable: true,
@@ -909,7 +909,7 @@ class Control {
                 material: materials.blue,
                 matrix: (function () {
                     const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0.8, 0, 0], math.identityMat4());
+                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
                     return math.mulMat4(rotate, translate, math.identityMat4());
                 })(),
                 pickable: false,
