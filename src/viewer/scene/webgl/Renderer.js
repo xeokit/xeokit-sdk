@@ -11,6 +11,8 @@ import {SAODepthLimitedBlurRenderer} from "./sao/SAODepthLimitedBlurRenderer.js"
 import {RenderBufferManager} from "./RenderBufferManager.js";
 import {getExtension} from "./getExtension.js";
 
+const vec3_0 = math.vec3([0,0,0]);
+
 /**
  * @private
  */
@@ -713,9 +715,11 @@ const Renderer = function (scene, options) {
             // Transparent color fill
 
             if (normalFillTransparentBinLen > 0) {
+                const eye = frameCtx.pickOrigin || scene.camera.eye;
+                const byDist = normalFillTransparentBin.map(d => ({ drawable: d, distSq: math.distVec3(d.origin || vec3_0, eye) }));
+                byDist.sort((a, b) => b.distSq - a.distSq);
                 for (i = 0; i < normalFillTransparentBinLen; i++) {
-                    drawable = normalFillTransparentBin[i];
-                    drawable.drawColorTransparent(frameCtx);
+                    byDist[i].drawable.drawColorTransparent(frameCtx);
                 }
             }
 
