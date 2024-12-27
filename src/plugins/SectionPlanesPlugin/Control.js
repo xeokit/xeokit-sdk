@@ -343,8 +343,8 @@ class Control {
             };
         };
 
-        const addAxis = (material, rotationQuat) => {
-            const rotation = math.quaternionToRotationMat4(rotationQuat, math.identityMat4());
+        const addAxis = (material, direction) => {
+            const rotation = math.quaternionToRotationMat4(math.vec3PairToQuaternion([ 0, 1, 0 ], direction), math.identityMat4());
 
             const arrowT = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
             const arrowMatrix = math.mulMat4(rotation, arrowT, math.identityMat4());
@@ -588,9 +588,9 @@ class Control {
             //
             //----------------------------------------------------------------------------------------------------------
 
-            xAxis: addAxis(materials.red,   math.angleAxisToQuaternion([ 0, 0, 1, -90 * math.DEGTORAD ])),
-            yAxis: addAxis(materials.green, math.angleAxisToQuaternion([ 1, 0, 0, 180 * math.DEGTORAD ])),
-            zAxis: addAxis(materials.blue,  math.angleAxisToQuaternion([ 1, 0, 0, -90 * math.DEGTORAD ]))
+            xAxis: addAxis(materials.red,   [ 1, 0, 0 ]),
+            yAxis: addAxis(materials.green, [ 0, -1, 0 ]),
+            zAxis: addAxis(materials.blue,  [ 0, 0, -1 ])
         };
 
         meshesToAdd.forEach(m => rootNode.addChild(m, NO_STATE_INHERIT));
