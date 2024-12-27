@@ -276,7 +276,9 @@ class Control {
             })
         };
 
-        const addCurve = (material, matrix, matrix1, matrix2) => {
+        const meshesToAdd = [ ];
+
+        const addCurve = (material, highlightMaterial, matrix, matrix1, matrix2) => {
             const curve = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.curve,
                 material: material,
@@ -323,13 +325,35 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT);
 
+            const hoop = new Mesh(rootNode, {
+                geometry: shapes.hoop,
+                material: material,
+                highlighted: true,
+                highlightMaterial: highlightMaterial,
+                matrix: matrix,
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                visible: false,
+                isObject: false
+            });
+
+            meshesToAdd.push(hoop);
+
             return {
                 handleId: handle.id,
+                hoop: hoop,
                 set visible(v) {
                     curve.visible = handle.visible = arrow1.visible = arrow2.visible = v;
+                    if (! v) {
+                        hoop.visible = v;
+                    }
                 },
                 set culled(c) {
-                    curve.culled = handle.culled = arrow1.culled = arrow2.culled = c;
+                    curve.culled = handle.culled = arrow1.culled = arrow2.culled;
+                    if (! c) {
+                        hoop.culled = c;
+                    }
                 }
             };
         };
@@ -473,6 +497,7 @@ class Control {
 
             xCurve: addCurve(
                 materials.red,
+                materials.highlightRed,
                 (function () {
                     const rotate2 = math.rotationMat4v(90 * math.DEGTORAD, [0, 1, 0], math.identityMat4());
                     const rotate1 = math.rotationMat4v(270 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
@@ -497,6 +522,7 @@ class Control {
 
             yCurve: addCurve(
                 materials.green,
+                materials.highlightGreen,
                 (function() {
                     const q = math.identityQuaternion();
                     math.eulerToQuaternion([-90, 0, 0], "XYZ", q);
@@ -523,6 +549,7 @@ class Control {
 
             zCurve: addCurve(
                 materials.blue,
+                materials.highlightBlue,
                 math.rotationMat4v(180 * math.DEGTORAD, [1, 0, 0], math.identityMat4()),
                 (function () {
                     const translate = math.translateMat4c(.8, -0.07, 0, math.identityMat4());
@@ -561,6 +588,8 @@ class Control {
             zAxis: addAxis(materials.blue,  math.angleAxisToQuaternion([ 1, 0, 0, -90 * math.DEGTORAD ]))
         };
 
+        meshesToAdd.forEach(m => rootNode.addChild(m, NO_STATE_INHERIT));
+
         this._affordanceMeshes = {
 
             planeFrame: rootNode.addChild(new Mesh(rootNode, {
@@ -590,49 +619,6 @@ class Control {
                 visible: false,
                 scale: [1, 1, 1],
                 rotation: [0, 0, 45],
-                isObject: false
-            }), NO_STATE_INHERIT),
-
-            xHoop: rootNode.addChild(new Mesh(rootNode, { // Full
-                geometry: shapes.hoop,
-                material: materials.red,
-                highlighted: true,
-                highlightMaterial: materials.highlightRed,
-                matrix: (function () {
-                    const rotate2 = math.rotationMat4v(90 * math.DEGTORAD, [0, 1, 0], math.identityMat4());
-                    const rotate1 = math.rotationMat4v(270 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-                    return math.mulMat4(rotate1, rotate2, math.identityMat4());
-                })(),
-                pickable: false,
-                collidable: true,
-                clippable: false,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT),
-
-            yHoop: rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.hoop,
-                material: materials.green,
-                highlighted: true,
-                highlightMaterial: materials.highlightGreen,
-                rotation: [-90, 0, 0],
-                pickable: false,
-                collidable: true,
-                clippable: false,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT),
-
-            zHoop: rootNode.addChild(new Mesh(rootNode, { // Blue hoop about Z-axis
-                geometry: shapes.hoop,
-                material: materials.blue,
-                highlighted: true,
-                highlightMaterial: materials.highlightBlue,
-                matrix: math.rotationMat4v(180 * math.DEGTORAD, [1, 0, 0], math.identityMat4()),
-                pickable: false,
-                collidable: true,
-                clippable: false,
-                visible: false,
                 isObject: false
             }), NO_STATE_INHERIT),
 
@@ -933,17 +919,17 @@ class Control {
                         break;
 
                     case this._displayMeshes.xCurve.handleId:
-                        affordanceMesh = this._affordanceMeshes.xHoop;
+                        affordanceMesh = this._displayMeshes.xCurve.hoop;
                         nextDragAction = DRAG_ACTIONS.xRotate;
                         break;
 
                     case this._displayMeshes.yCurve.handleId:
-                        affordanceMesh = this._affordanceMeshes.yHoop;
+                        affordanceMesh = this._displayMeshes.yCurve.hoop;
                         nextDragAction = DRAG_ACTIONS.yRotate;
                         break;
 
                     case this._displayMeshes.zCurve.handleId:
-                        affordanceMesh = this._affordanceMeshes.zHoop;
+                        affordanceMesh = this._displayMeshes.zCurve.hoop;
                         nextDragAction = DRAG_ACTIONS.zRotate;
                         break;
 
