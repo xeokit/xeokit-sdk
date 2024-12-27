@@ -43,7 +43,6 @@ class Control {
 
         this._rootNode = null; // Root of Node graph that represents this control in the 3D scene
         this._displayMeshes = null; // Meshes that are always visible
-        this._affordanceMeshes = null; // Meshes displayed momentarily for affordance
 
         this._ignoreNextSectionPlaneDirUpdate = false;
 
@@ -130,13 +129,6 @@ class Control {
                 this._displayMeshes[id].visible = visible;
             }
         }
-        if (!visible) {
-            for (id in this._affordanceMeshes) {
-                if (this._affordanceMeshes.hasOwnProperty(id)) {
-                    this._affordanceMeshes[id].visible = visible;
-                }
-            }
-        }
     }
 
     /**
@@ -158,13 +150,6 @@ class Control {
         for (id in this._displayMeshes) {
             if (this._displayMeshes.hasOwnProperty(id)) {
                 this._displayMeshes[id].culled = culled;
-            }
-        }
-        if (!culled) {
-            for (id in this._affordanceMeshes) {
-                if (this._affordanceMeshes.hasOwnProperty(id)) {
-                    this._affordanceMeshes[id].culled = culled;
-                }
             }
         }
     }
@@ -609,39 +594,6 @@ class Control {
         };
 
         meshesToAdd.forEach(m => rootNode.addChild(m, NO_STATE_INHERIT));
-
-        this._affordanceMeshes = {
-
-            planeFrame: rootNode.addChild(new Mesh(rootNode, {
-                geometry: new ReadableGeometry(rootNode, buildTorusGeometry({
-                    center: [0, 0, 0],
-                    radius: 2,
-                    tube: tubeRadius,
-                    radialSegments: 4,
-                    tubeSegments: 4,
-                    arc: Math.PI * 2.0
-                })),
-                material: new PhongMaterial(rootNode, {
-                    ambient: [1, 1, 1],
-                    diffuse: [0, 0, 0],
-                    emissive: [1, 1, 0]
-                }),
-                highlighted: true,
-                highlightMaterial: new EmphasisMaterial(rootNode, {
-                    edges: false,
-                    filled: true,
-                    fillColor: [1, 1, 0],
-                    fillAlpha: 1.0
-                }),
-                pickable: false,
-                collidable: false,
-                clippable: false,
-                visible: false,
-                scale: [1, 1, 1],
-                rotation: [0, 0, 45],
-                isObject: false
-            }), NO_STATE_INHERIT)
-        };
     }
 
     _bindEvents() {
@@ -1032,7 +984,6 @@ class Control {
         this._setSectionPlane(null);
         this._rootNode.destroy();
         this._displayMeshes = {};
-        this._affordanceMeshes = {};
     }
 }
 
