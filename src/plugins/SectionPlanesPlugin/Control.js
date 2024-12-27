@@ -263,12 +263,20 @@ class Control {
 
         const meshesToAdd = [ ];
 
-        const addCurve = (material, highlightMaterial, direction, matrix1, matrix2) => {
+        const addCurve = (material, highlightMaterial, direction) => {
             const rotateToHorizontal = math.rotationMat4v(270 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
             const rotation = math.quaternionToRotationMat4(math.vec3PairToQuaternion([ 0, 1, 0 ], direction), math.identityMat4());
             const matrix = math.mulMat4(rotation, rotateToHorizontal, math.identityMat4());
 
             const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
+
+            const scaledArrowMatrix = (t, matR) => {
+                const matT = math.translateMat4v(t, math.identityMat4());
+                const ret = math.identityMat4();
+                math.mulMat4(matT, matR, ret);
+                math.mulMat4(matrix, ret, ret);
+                return math.mulMat4(ret, scale, math.identityMat4());
+            };
 
             const curve = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.curve,
@@ -297,7 +305,7 @@ class Control {
             const arrow1 = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.arrowHead,
                 material: material,
-                matrix: math.mulMat4(matrix1, scale, math.identityMat4()),
+                matrix: scaledArrowMatrix([ .8, .07, 0 ], math.rotationMat4v(180 * math.DEGTORAD, [0, 0, 1], math.identityMat4())),
                 pickable: true,
                 collidable: true,
                 clippable: false,
@@ -308,7 +316,7 @@ class Control {
             const arrow2 = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.arrowHead,
                 material: material,
-                matrix: math.mulMat4(matrix2, scale, math.identityMat4()),
+                matrix: scaledArrowMatrix([ .07, .8, 0 ], math.rotationMat4v(90 * math.DEGTORAD, [0, 0, 1], math.identityMat4())),
                 pickable: true,
                 collidable: true,
                 clippable: false,
@@ -506,57 +514,9 @@ class Control {
             //
             //----------------------------------------------------------------------------------------------------------
 
-            xCurve: addCurve(
-                materials.red,
-                materials.highlightRed,
-                [1,0,0],
-                (function () {
-                    const translate = math.translateMat4c(0., -0.07, -0.8, math.identityMat4());
-                    const rotate = math.rotationMat4v(0 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
-                    return math.mulMat4(translate, rotate, math.identityMat4());
-                })(),
-                (function () {
-                    const translate = math.translateMat4c(0.0, -0.8, -0.07, math.identityMat4());
-                    const rotate = math.rotationMat4v(90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-                    return math.mulMat4(translate, rotate, math.identityMat4());
-                })()),
-
-            //----------------------------------------------------------------------------------------------------------
-            //
-            //----------------------------------------------------------------------------------------------------------
-
-            yCurve: addCurve(
-                materials.green,
-                materials.highlightGreen,
-                [0,1,0],
-                (function () {
-                    const translate = math.translateMat4c(0.07, 0, -0.8, math.identityMat4());
-                    const rotate = math.rotationMat4v(90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
-                    return math.mulMat4(translate, rotate, math.identityMat4());
-                })(),
-                (function () {
-                    const translate = math.translateMat4c(0.8, 0.0, -0.07, math.identityMat4());
-                    const rotate = math.rotationMat4v(90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-                    return math.mulMat4(translate, rotate, math.identityMat4());
-                })()),
-
-            //----------------------------------------------------------------------------------------------------------
-            //
-            //----------------------------------------------------------------------------------------------------------
-
-            zCurve: addCurve(
-                materials.blue,
-                materials.highlightBlue,
-                [0,0,-1],
-                (function () {
-                    const translate = math.translateMat4c(.8, -0.07, 0, math.identityMat4());
-                    return translate;
-                })(),
-                (function () {
-                    const translate = math.translateMat4c(.05, -0.8, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
-                    return math.mulMat4(translate, rotate, math.identityMat4());
-                })()),
+            xCurve: addCurve(materials.red,   materials.highlightRed,   [ 1, 0, 0 ]),
+            yCurve: addCurve(materials.green, materials.highlightGreen, [ 0, 1, 0 ]),
+            zCurve: addCurve(materials.blue,  materials.highlightBlue,  [ 0, 0, -1 ]),
 
             //----------------------------------------------------------------------------------------------------------
             //
