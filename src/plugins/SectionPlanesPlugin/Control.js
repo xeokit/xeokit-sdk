@@ -676,11 +676,10 @@ class Control {
         })();
 
         {
-            let down = false;
             let lastAffordanceMesh = null;
 
             this._onCameraControlHover = this._viewer.cameraControl.on("hoverEnter", (hit) => {
-                if (this._visible && (! down)) {
+                if (this._visible && (! dragAction)) {
                     if (lastAffordanceMesh) {
                         lastAffordanceMesh.visible = false;
                     }
@@ -711,31 +710,28 @@ class Control {
                 e.preventDefault();
                 if (this._visible && (e.which === 1) && nextDragAction) { // Left button
                     this._viewer.cameraControl.pointerEnabled = false;
-                    down = true;
                     dragAction = nextDragAction;
                     lastCanvasPos.set(getClickCoordsWithinElement(e));
                 }
             });
 
             canvas.addEventListener("mousemove", this._canvasMouseMoveListener = (e) => {
-                if (this._visible && down) {
+                if (this._visible && dragAction) {
                     const canvasPos = getClickCoordsWithinElement(e);
-                    if (dragAction) {
-                        const [ isTranslate, axis ] = dragAction;
-                        if (isTranslate) {
-                            dragTranslateSectionPlane(axis, lastCanvasPos, canvasPos);
-                        } else {
-                            dragRotateSectionPlane(axis, lastCanvasPos, canvasPos);
-                        }
+                    const [ isTranslate, axis ] = dragAction;
+                    if (isTranslate) {
+                        dragTranslateSectionPlane(axis, lastCanvasPos, canvasPos);
+                    } else {
+                        dragRotateSectionPlane(axis, lastCanvasPos, canvasPos);
                     }
                     lastCanvasPos.set(canvasPos);
                 }
             });
 
             canvas.addEventListener("mouseup", this._canvasMouseUpListener = (e) => {
-                if (this._visible && down) {
+                if (this._visible && dragAction) {
                     this._viewer.cameraControl.pointerEnabled = true;
-                    down = false;
+                    dragAction = null;
                 }
             });
         }
