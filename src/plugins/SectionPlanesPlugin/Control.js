@@ -239,8 +239,6 @@ class Control {
             alphaMode: "blend"
         });
 
-        const meshesToAdd = [ ];
-
         const addAxis = (rgb, axisDirection, hoopDirection) => {
             const material = colorMaterial(rgb);
 
@@ -304,7 +302,7 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT);
 
-            const hoop = new Mesh(rootNode, {
+            const hoop = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.hoop,
                 material: material,
                 highlighted: true,
@@ -315,9 +313,7 @@ class Control {
                 clippable: false,
                 visible: false,
                 isObject: false
-            });
-
-            meshesToAdd.push(hoop);
+            }), NO_STATE_INHERIT);
 
 
             const axisRotation = math.quaternionToRotationMat4(math.vec3PairToQuaternion([ 0, 1, 0 ], axisDirection), math.identityMat4());
@@ -370,7 +366,7 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT);
 
-            const bigArrowHead = new Mesh(rootNode, {
+            const bigArrowHead = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.arrowHeadBig,
                 material: material,
                 matrix: arrowMatrix,
@@ -379,9 +375,7 @@ class Control {
                 clippable: false,
                 visible: false,
                 isObject: false
-            });
-
-            meshesToAdd.push(bigArrowHead);
+            }), NO_STATE_INHERIT);
 
             this._handlers[arrowHandle.id] = this._handlers[shaftHandle.id] = [ bigArrowHead, [ true, rgb ] ];
             this._handlers[rotateHandle.id] = [ hoop, [ false, rgb ] ];
@@ -498,8 +492,6 @@ class Control {
             yAxis: addAxis([0,1,0], [ 0, -1,  0 ], [ 0, 1,  0 ]),
             zAxis: addAxis([0,0,1], [ 0,  0, -1 ], [ 0, 0, -1 ])
         };
-
-        meshesToAdd.forEach(m => rootNode.addChild(m, NO_STATE_INHERIT));
     }
 
     _bindEvents() {
