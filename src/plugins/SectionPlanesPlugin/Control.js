@@ -973,17 +973,10 @@ class Control {
                     canvasPos[0] = event.x;
                     canvasPos[1] = event.y;
                 } else {
-                    var element = event.target;
-                    var totalOffsetLeft = 0;
-                    var totalOffsetTop = 0;
-
-                    while (element.offsetParent) {
-                        totalOffsetLeft += element.offsetLeft;
-                        totalOffsetTop += element.offsetTop;
-                        element = element.offsetParent;
-                    }
-                    canvasPos[0] = event.pageX - totalOffsetLeft;
-                    canvasPos[1] = event.pageY - totalOffsetTop;
+                    const element = event.target;
+                    const rect = element.getBoundingClientRect();
+                    canvasPos[0] = event.clientX - rect.left;
+                    canvasPos[1] = event.clientY - rect.top;
                 }
                 return canvasPos;
             };
