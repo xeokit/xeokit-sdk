@@ -499,6 +499,7 @@ class Control {
         const self = this;
 
         const rootNode = this._rootNode;
+        const setRootNodeScale = size => rootNode.scale = [size, size, size];
 
         var nextDragAction = null; // As we hover grabbed an arrow or hoop, self is the action we would do if we then dragged it.
         var dragAction = null; // Action we're doing while we drag an arrow or hoop.
@@ -509,30 +510,18 @@ class Control {
         const scene = this._viewer.scene;
 
         { // Keep gizmo screen size constant
-
             const tempVec3a = math.vec3([0, 0, 0]);
-
             let lastDist = -1;
-
             this._onSceneTick = scene.on("tick", () => {
-
                 const dist = Math.abs(math.lenVec3(math.subVec3(scene.camera.eye, this._pos, tempVec3a)));
-
-                if (dist !== lastDist) {
-                    if (camera.projection === "perspective") {
-                        const worldSize = (Math.tan(camera.perspective.fov * math.DEGTORAD)) * dist;
-                        const size = 0.07 * worldSize;
-                        rootNode.scale = [size, size, size];
-                        lastDist = dist;
+                if (camera.projection === "perspective") {
+                    if (dist !== lastDist) {
+                        setRootNodeScale(0.07 * dist * Math.tan(camera.perspective.fov * math.DEGTORAD));
                     }
+                } else if (camera.projection === "ortho") {
+                    setRootNodeScale(camera.ortho.scale / 10);
                 }
-
-                if (camera.projection === "ortho") {
-                    const worldSize = camera.ortho.scale / 10;
-                    const size = worldSize;
-                    rootNode.scale = [size, size, size];
-                    lastDist = dist;
-                }
+                lastDist = dist;
             });
         }
 
