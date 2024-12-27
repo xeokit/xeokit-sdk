@@ -232,22 +232,11 @@ class Control {
             fillAlpha: fillAlpha
         });
 
-        const materials = { // Reusable materials
-
-            pickable: new PhongMaterial(rootNode, { // Invisible material for pickable handles, which define a pickable 3D area
-                diffuse: [1, 1, 0],
-                alpha: 0, // Invisible
-                alphaMode: "blend"
-            }),
-
-            center: new PhongMaterial(rootNode, {
-                diffuse: [0.0, 0.0, 0.0],
-                emissive: [0, 0, 0],
-                ambient: [0.0, 0.0, 0.0],
-                specular: [.6, .6, .3],
-                shininess: 80
-            })
-        };
+        const pickableMaterial = new PhongMaterial(rootNode, { // Invisible material for pickable handles, which define a pickable 3D area
+            diffuse: [1, 1, 0],
+            alpha: 0, // Invisible
+            alphaMode: "blend"
+        });
 
         const meshesToAdd = [ ];
 
@@ -282,7 +271,7 @@ class Control {
 
             const rotateHandle = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.curveHandle,
-                material: materials.pickable,
+                material: pickableMaterial,
                 matrix: hoopMatrix,
                 pickable: true,
                 collidable: true,
@@ -349,7 +338,7 @@ class Control {
 
             const arrowHandle = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.arrowHeadHandle,
-                material: materials.pickable,
+                material: pickableMaterial,
                 matrix: arrowMatrix,
                 pickable: true,
                 collidable: true,
@@ -371,7 +360,7 @@ class Control {
 
             const shaftHandle = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.axisHandle,
-                material: materials.pickable,
+                material: pickableMaterial,
                 matrix: shaftMatrix,
                 pickable: true,
                 collidable: true,
@@ -488,7 +477,13 @@ class Control {
                 geometry: new ReadableGeometry(rootNode, buildSphereGeometry({
                     radius: 0.05
                 })),
-                material: materials.center,
+                material: new PhongMaterial(rootNode, {
+                    diffuse: [0.0, 0.0, 0.0],
+                    emissive: [0, 0, 0],
+                    ambient: [0.0, 0.0, 0.0],
+                    specular: [.6, .6, .3],
+                    shininess: 80
+                }),
                 pickable: false,
                 collidable: true,
                 clippable: false,
