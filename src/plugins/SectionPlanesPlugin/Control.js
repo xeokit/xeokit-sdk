@@ -491,186 +491,225 @@ class Control {
             //
             //----------------------------------------------------------------------------------------------------------
 
-            xAxisArrow: rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.arrowHead,
-                material: materials.red,
-                matrix: (function () {
+            xAxis: (function() {
+
+                const material = materials.red;
+
+                const arrowMatrix = (function () {
                     const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
                     const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
                     return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
+                })();
+
+                const shaftMatrix = (function () {
+                    const translate = math.translateMat4c(0, radius / 2, 0, math.identityMat4());
+                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
+                    return math.mulMat4(rotate, translate, math.identityMat4());
+                })();
+
+            const arrow = rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHead,
+                material: material,
+                matrix: arrowMatrix,
                 pickable: false,
                 collidable: true,
                 clippable: false,
                 visible: false,
                 isObject: false
-            }), NO_STATE_INHERIT),
+            }), NO_STATE_INHERIT);
 
-            xAxisArrowHandle: rootNode.addChild(new Mesh(rootNode, {
+            const arrowHandle = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.arrowHeadHandle,
                 material: materials.pickable,
-                matrix: (function () {
-                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
-                    return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
+                matrix: arrowMatrix,
                 pickable: true,
                 collidable: true,
                 clippable: false,
                 visible: false,
                 isObject: false
-            }), NO_STATE_INHERIT),
+            }), NO_STATE_INHERIT);
 
-            xAxis: rootNode.addChild(new Mesh(rootNode, {
+            const shaft = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.axis,
-                material: materials.red,
-                matrix: (function () {
-                    const translate = math.translateMat4c(0, radius / 2, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
-                    return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
+                material: material,
+                matrix: shaftMatrix,
                 pickable: false,
                 collidable: true,
                 clippable: false,
                 visible: false,
                 isObject: false
-            }), NO_STATE_INHERIT),
+            }), NO_STATE_INHERIT);
 
-            xShaftHandle: rootNode.addChild(new Mesh(rootNode, {
+            const shaftHandle = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.axisHandle,
                 material: materials.pickable,
-                matrix: (function () {
-                    const translate = math.translateMat4c(0, radius / 2, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
-                    return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
+                matrix: shaftMatrix,
                 pickable: true,
                 collidable: true,
                 clippable: false,
                 visible: false,
                 isObject: false
-            }), NO_STATE_INHERIT),
+            }), NO_STATE_INHERIT);
+
+                return {
+                    arrowHandleId: arrowHandle.id,
+                    shaftHandleId: shaftHandle.id,
+                    set visible(v) {
+                        arrow.visible = arrowHandle.visible = shaft.visible = shaftHandle.visible = v;
+                    },
+                    set culled(c) {
+                        arrow.culled = arrowHandle.culled = shaft.culled = shaftHandle.culled = c;
+                    }
+                };
+            })(),
 
             //----------------------------------------------------------------------------------------------------------
             //
             //----------------------------------------------------------------------------------------------------------
 
-            yAxisArrow: rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.arrowHead,
-                material: materials.green,
-                matrix: (function () {
+            yAxis: (function() {
+
+                const material = materials.green;
+
+                const arrowMatrix = (function () {
                     const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
                     const rotate = math.rotationMat4v(180 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
                     return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
+                })();
+
+                const shaftMatrix = math.translationMat4v([0, -radius / 2, 0], math.identityMat4());
+
+            const arrow = rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHead,
+                material: material,
+                matrix: arrowMatrix,
                 pickable: false,
                 collidable: true,
                 clippable: false,
                 visible: false,
                 isObject: false
-            }), NO_STATE_INHERIT),
+            }), NO_STATE_INHERIT);
 
-            yAxisArrowHandle: rootNode.addChild(new Mesh(rootNode, {
+            const arrowHandle = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.arrowHeadHandle,
                 material: materials.pickable,
-                matrix: (function () {
-                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(180 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-                    return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
+                matrix: arrowMatrix,
                 pickable: true,
                 collidable: true,
                 clippable: false,
                 visible: false,
                 isObject: false
-            }), NO_STATE_INHERIT),
+            }), NO_STATE_INHERIT);
 
-            yShaft: rootNode.addChild(new Mesh(rootNode, {
+            const shaft = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.axis,
-                material: materials.green,
-                position: [0, -radius / 2, 0],
+                material: material,
+                matrix: shaftMatrix,
                 pickable: false,
                 collidable: true,
                 clippable: false,
                 visible: false,
                 isObject: false
-            }), NO_STATE_INHERIT),
+            }), NO_STATE_INHERIT);
 
-            yShaftHandle: rootNode.addChild(new Mesh(rootNode, {
+            const shaftHandle = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.axisHandle,
                 material: materials.pickable,
-                position: [0, -radius / 2, 0],
+                matrix: shaftMatrix,
                 pickable: true,
                 collidable: true,
                 clippable: false,
                 visible: false,
                 isObject: false
-            }), NO_STATE_INHERIT),
+            }), NO_STATE_INHERIT);
+
+                return {
+                    arrowHandleId: arrowHandle.id,
+                    shaftHandleId: shaftHandle.id,
+                    set visible(v) {
+                        arrow.visible = arrowHandle.visible = shaft.visible = shaftHandle.visible = v;
+                    },
+                    set culled(c) {
+                        arrow.culled = arrowHandle.culled = shaft.culled = shaftHandle.culled = c;
+                    }
+                };
+            })(),
 
             //----------------------------------------------------------------------------------------------------------
             //
             //----------------------------------------------------------------------------------------------------------
 
-            zAxisArrow: rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.arrowHead,
-                material: materials.blue,
-                matrix: (function () {
+            zAxis: (function() {
+
+                const material = materials.blue;
+
+                const arrowMatrix = (function () {
                     const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
                     const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
                     return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
+                })();
+
+                const shaftMatrix = (function () {
+                    const translate = math.translateMat4c(0, radius / 2, 0, math.identityMat4());
+                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
+                    return math.mulMat4(rotate, translate, math.identityMat4());
+                })();
+
+            const arrow = rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHead,
+                material: material,
+                matrix: arrowMatrix,
                 pickable: false,
                 collidable: true,
                 clippable: false,
                 visible: false,
                 isObject: false
-            }), NO_STATE_INHERIT),
+            }), NO_STATE_INHERIT);
 
-            zAxisArrowHandle: rootNode.addChild(new Mesh(rootNode, {
+            const arrowHandle = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.arrowHeadHandle,
                 material: materials.pickable,
-                matrix: (function () {
-                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-                    return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
+                matrix: arrowMatrix,
                 pickable: true,
                 collidable: true,
                 clippable: false,
                 visible: false,
                 isObject: false
-            }), NO_STATE_INHERIT),
+            }), NO_STATE_INHERIT);
 
-
-            zShaft: rootNode.addChild(new Mesh(rootNode, {
+            const shaft = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.axis,
-                material: materials.blue,
-                matrix: (function () {
-                    const translate = math.translateMat4c(0, radius / 2, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-                    return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
-                clippable: false,
+                material: material,
+                matrix: shaftMatrix,
                 pickable: false,
                 collidable: true,
+                clippable: false,
                 visible: false,
                 isObject: false
-            }), NO_STATE_INHERIT),
+            }), NO_STATE_INHERIT);
 
-            zShaftHandle: rootNode.addChild(new Mesh(rootNode, {
+            const shaftHandle = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.axisHandle,
                 material: materials.pickable,
-                matrix: (function () {
-                    const translate = math.translateMat4c(0, radius / 2, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-                    return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
-                clippable: false,
+                matrix: shaftMatrix,
                 pickable: true,
                 collidable: true,
+                clippable: false,
                 visible: false,
                 isObject: false
-            }), NO_STATE_INHERIT)
+            }), NO_STATE_INHERIT);
+
+                return {
+                    arrowHandleId: arrowHandle.id,
+                    shaftHandleId: shaftHandle.id,
+                    set visible(v) {
+                        arrow.visible = arrowHandle.visible = shaft.visible = shaftHandle.visible = v;
+                    },
+                    set culled(c) {
+                        arrow.culled = arrowHandle.culled = shaft.culled = shaftHandle.culled = c;
+                    }
+                };
+            })()
         };
 
         this._affordanceMeshes = {
@@ -1014,32 +1053,32 @@ class Control {
                 const meshId = hit.entity.id;
                 switch (meshId) {
 
-                    case this._displayMeshes.xAxisArrowHandle.id:
+                    case this._displayMeshes.xAxis.arrowHandleId:
                         affordanceMesh = this._affordanceMeshes.xAxisArrow;
                         nextDragAction = DRAG_ACTIONS.xTranslate;
                         break;
 
-                    case this._displayMeshes.xShaftHandle.id:
+                    case this._displayMeshes.xAxis.shaftHandleId:
                         affordanceMesh = this._affordanceMeshes.xAxisArrow;
                         nextDragAction = DRAG_ACTIONS.xTranslate;
                         break;
 
-                    case this._displayMeshes.yAxisArrowHandle.id:
+                    case this._displayMeshes.yAxis.arrowHandleId:
                         affordanceMesh = this._affordanceMeshes.yAxisArrow;
                         nextDragAction = DRAG_ACTIONS.yTranslate;
                         break;
 
-                    case this._displayMeshes.yShaftHandle.id:
+                    case this._displayMeshes.yAxis.shaftHandleId:
                         affordanceMesh = this._affordanceMeshes.yAxisArrow;
                         nextDragAction = DRAG_ACTIONS.yTranslate;
                         break;
 
-                    case this._displayMeshes.zAxisArrowHandle.id:
+                    case this._displayMeshes.zAxis.arrowHandleId:
                         affordanceMesh = this._affordanceMeshes.zAxisArrow;
                         nextDragAction = DRAG_ACTIONS.zTranslate;
                         break;
 
-                    case this._displayMeshes.zShaftHandle.id:
+                    case this._displayMeshes.zAxis.shaftHandleId:
                         affordanceMesh = this._affordanceMeshes.zAxisArrow;
                         nextDragAction = DRAG_ACTIONS.zTranslate;
                         break;
