@@ -483,6 +483,7 @@ class Control {
                 pickable: false,
                 collidable: true,
                 clippable: false,
+                backfaces: true,
                 visible: false,
                 isObject: false
             }), NO_STATE_INHERIT),
@@ -494,6 +495,7 @@ class Control {
                 pickable: true,
                 collidable: true,
                 clippable: false,
+                backfaces: true,
                 visible: false,
                 isObject: false
             }), NO_STATE_INHERIT),
