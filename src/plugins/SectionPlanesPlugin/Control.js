@@ -712,18 +712,14 @@ class Control {
                 if (this._visible && (e.which === 1) && nextDragAction) { // Left button
                     this._viewer.cameraControl.pointerEnabled = false;
                     down = true;
-                    var canvasPos = getClickCoordsWithinElement(e);
                     dragAction = nextDragAction;
-                    lastCanvasPos[0] = canvasPos[0];
-                    lastCanvasPos[1] = canvasPos[1];
+                    lastCanvasPos.set(getClickCoordsWithinElement(e));
                 }
             });
 
             canvas.addEventListener("mousemove", this._canvasMouseMoveListener = (e) => {
                 if (this._visible && down) {
                     const canvasPos = getClickCoordsWithinElement(e);
-                    const x = canvasPos[0];
-                    const y = canvasPos[1];
                     if (dragAction) {
                         const [ isTranslate, axis ] = dragAction;
                         if (isTranslate) {
@@ -732,8 +728,7 @@ class Control {
                             dragRotateSectionPlane(axis, lastCanvasPos, canvasPos);
                         }
                     }
-                    lastCanvasPos[0] = x;
-                    lastCanvasPos[1] = y;
+                    lastCanvasPos.set(canvasPos);
                 }
             });
 
