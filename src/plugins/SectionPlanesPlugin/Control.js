@@ -582,7 +582,6 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
-                opacity: 0.2,
                 isObject: false
             }), NO_STATE_INHERIT),
 
