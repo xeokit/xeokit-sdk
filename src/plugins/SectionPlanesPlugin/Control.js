@@ -943,16 +943,7 @@ class Control {
 
             const tempVec3a = math.vec3([0, 0, 0]);
 
-            let distDirty = true;
             let lastDist = -1;
-
-            this._onCameraViewMatrix = scene.camera.on("viewMatrix", () => {
-                distDirty = true;
-            });
-
-            this._onCameraProjMatrix = scene.camera.on("projMatrix", () => {
-                distDirty = true;
-            });
 
             this._onSceneTick = scene.on("tick", () => {
 
@@ -1316,9 +1307,6 @@ class Control {
         canvas.removeEventListener("mousedown", this._canvasMouseDownListener);
         canvas.removeEventListener("mousemove", this._canvasMouseMoveListener);
         canvas.removeEventListener("mouseup", this._canvasMouseUpListener);
-
-        camera.off(this._onCameraViewMatrix);
-        camera.off(this._onCameraProjMatrix);
 
         cameraControl.off(this._onCameraControlHover);
         cameraControl.off(this._onCameraControlHoverLeave);
