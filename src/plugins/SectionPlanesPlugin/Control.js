@@ -498,8 +498,6 @@ class Control {
 
         const self = this;
 
-        var grabbed = false;
-
         const rootNode = this._rootNode;
 
         var nextDragAction = null; // As we hover grabbed an arrow or hoop, self is the action we would do if we then dragged it.
@@ -692,11 +690,9 @@ class Control {
                         affordanceMesh.visible = true;
                         lastAffordanceMesh = affordanceMesh;
                         nextDragAction = dragAction;
-                        grabbed = true;
                     } else {
                         lastAffordanceMesh = null;
                         nextDragAction = null;
-                        grabbed = false;
                     }
                 }
             });
@@ -713,7 +709,7 @@ class Control {
 
             canvas.addEventListener("mousedown", this._canvasMouseDownListener = (e) => {
                 e.preventDefault();
-                if (this._visible && grabbed) {
+                if (this._visible && nextDragAction) {
                     this._viewer.cameraControl.pointerEnabled = false;
                     if (e.which === 1) { // Left button
                         down = true;
@@ -746,10 +742,7 @@ class Control {
             canvas.addEventListener("mouseup", this._canvasMouseUpListener = (e) => {
                 if (this._visible) {
                     this._viewer.cameraControl.pointerEnabled = true;
-                    if (down) {
-                        down = false;
-                        grabbed = false;
-                    }
+                    down = false;
                 }
             });
         }
