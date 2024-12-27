@@ -709,15 +709,13 @@ class Control {
 
             canvas.addEventListener("mousedown", this._canvasMouseDownListener = (e) => {
                 e.preventDefault();
-                if (this._visible && nextDragAction) {
+                if (this._visible && (e.which === 1) && nextDragAction) { // Left button
                     this._viewer.cameraControl.pointerEnabled = false;
-                    if (e.which === 1) { // Left button
-                        down = true;
-                        var canvasPos = getClickCoordsWithinElement(e);
-                        dragAction = nextDragAction;
-                        lastCanvasPos[0] = canvasPos[0];
-                        lastCanvasPos[1] = canvasPos[1];
-                    }
+                    down = true;
+                    var canvasPos = getClickCoordsWithinElement(e);
+                    dragAction = nextDragAction;
+                    lastCanvasPos[0] = canvasPos[0];
+                    lastCanvasPos[1] = canvasPos[1];
                 }
             });
 
@@ -740,7 +738,7 @@ class Control {
             });
 
             canvas.addEventListener("mouseup", this._canvasMouseUpListener = (e) => {
-                if (this._visible) {
+                if (this._visible && down) {
                     this._viewer.cameraControl.pointerEnabled = true;
                     down = false;
                 }
