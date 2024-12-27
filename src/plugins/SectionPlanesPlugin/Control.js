@@ -678,70 +678,50 @@ class Control {
         })();
 
         {
-            var mouseDownLeft;
-            var mouseDownMiddle;
-            var mouseDownRight;
-            var down = false;
-            var lastAffordanceMesh;
+            let down = false;
+            let lastAffordanceMesh = null;
 
             this._onCameraControlHover = this._viewer.cameraControl.on("hoverEnter", (hit) => {
-                if (!this._visible) {
-                    return;
-                }
-                if (down) {
-                    return;
-                }
-                grabbed = false;
-                if (lastAffordanceMesh) {
-                    lastAffordanceMesh.visible = false;
-                }
-                var affordanceMesh;
-                const meshId = hit.entity.id;
-                if (meshId in this._handlers) {
-                    const [ affordanceMesh, dragAction ] = this._handlers[meshId];
-                    affordanceMesh.visible = true;
-                    lastAffordanceMesh = affordanceMesh;
-                    nextDragAction = dragAction;
-                    grabbed = true;
-                } else {
-                    lastAffordanceMesh = null;
-                    nextDragAction = null;
-                    grabbed = false;
+                if (this._visible && (! down)) {
+                    if (lastAffordanceMesh) {
+                        lastAffordanceMesh.visible = false;
+                    }
+                    const meshId = hit.entity.id;
+                    if (meshId in this._handlers) {
+                        const [ affordanceMesh, dragAction ] = this._handlers[meshId];
+                        affordanceMesh.visible = true;
+                        lastAffordanceMesh = affordanceMesh;
+                        nextDragAction = dragAction;
+                        grabbed = true;
+                    } else {
+                        lastAffordanceMesh = null;
+                        nextDragAction = null;
+                        grabbed = false;
+                    }
                 }
             });
 
             this._onCameraControlHoverLeave = this._viewer.cameraControl.on("hoverOutEntity", (hit) => {
-                if (!this._visible) {
-                    return;
+                if (this._visible) {
+                    if (lastAffordanceMesh) {
+                        lastAffordanceMesh.visible = false;
+                    }
+                    lastAffordanceMesh = null;
+                    nextDragAction = null;
                 }
-                if (lastAffordanceMesh) {
-                    lastAffordanceMesh.visible = false;
-                }
-                lastAffordanceMesh = null;
-                nextDragAction = null;
             });
 
             canvas.addEventListener("mousedown", this._canvasMouseDownListener = (e) => {
                 e.preventDefault();
-                if (!this._visible) {
-                    return;
-                }
-                if (!grabbed) {
-                    return;
-                }
-                this._viewer.cameraControl.pointerEnabled = false;
-                switch (e.which) {
-                    case 1: // Left button
-                        mouseDownLeft = true;
+                if (this._visible && grabbed) {
+                    this._viewer.cameraControl.pointerEnabled = false;
+                    if (e.which === 1) { // Left button
                         down = true;
                         var canvasPos = getClickCoordsWithinElement(e);
                         dragAction = nextDragAction;
                         lastCanvasPos[0] = canvasPos[0];
                         lastCanvasPos[1] = canvasPos[1];
-                        break;
-
-                    default:
-                        break;
+                    }
                 }
             });
 
@@ -764,28 +744,13 @@ class Control {
             });
 
             canvas.addEventListener("mouseup", this._canvasMouseUpListener = (e) => {
-                if (!this._visible) {
-                    return;
+                if (this._visible) {
+                    this._viewer.cameraControl.pointerEnabled = true;
+                    if (down) {
+                        down = false;
+                        grabbed = false;
+                    }
                 }
-                this._viewer.cameraControl.pointerEnabled = true;
-                if (!down) {
-                    return;
-                }
-                switch (e.which) {
-                    case 1: // Left button
-                        mouseDownLeft = false;
-                        break;
-                    case 2: // Middle/both buttons
-                        mouseDownMiddle = false;
-                        break;
-                    case 3: // Right button
-                        mouseDownRight = false;
-                        break;
-                    default:
-                        break;
-                }
-                down = false;
-                grabbed = false;
             });
         }
     }
