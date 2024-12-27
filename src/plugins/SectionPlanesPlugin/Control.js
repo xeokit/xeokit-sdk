@@ -240,18 +240,6 @@ class Control {
                 alphaMode: "blend"
             }),
 
-            red: colorMaterial([1, 0.0, 0.0]),
-
-            highlightRed: highlightMaterial([1, 0, 0], 0.6),
-
-            green: colorMaterial([0.0, 1, 0.0]),
-
-            highlightGreen: highlightMaterial([0, 1, 0], 0.6),
-
-            blue: colorMaterial([0.0, 0.0, 1]),
-
-            highlightBlue: highlightMaterial([0, 0, 1], 0.2),
-
             center: new PhongMaterial(rootNode, {
                 diffuse: [0.0, 0.0, 0.0],
                 emissive: [0, 0, 0],
@@ -263,10 +251,12 @@ class Control {
 
         const meshesToAdd = [ ];
 
-        const addCurve = (material, highlightMaterial, direction) => {
+        const addAxis = (rgb, axisDirection, hoopDirection) => {
+            const material = colorMaterial(rgb);
+
             const rotateToHorizontal = math.rotationMat4v(270 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-            const rotation = math.quaternionToRotationMat4(math.vec3PairToQuaternion([ 0, 1, 0 ], direction), math.identityMat4());
-            const matrix = math.mulMat4(rotation, rotateToHorizontal, math.identityMat4());
+            const hoopRotation = math.quaternionToRotationMat4(math.vec3PairToQuaternion([ 0, 1, 0 ], hoopDirection), math.identityMat4());
+            const hoopMatrix = math.mulMat4(hoopRotation, rotateToHorizontal, math.identityMat4());
 
             const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
 
@@ -274,14 +264,14 @@ class Control {
                 const matT = math.translateMat4v(t, math.identityMat4());
                 const ret = math.identityMat4();
                 math.mulMat4(matT, matR, ret);
-                math.mulMat4(matrix, ret, ret);
+                math.mulMat4(hoopMatrix, ret, ret);
                 return math.mulMat4(ret, scale, math.identityMat4());
             };
 
             const curve = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.curve,
                 material: material,
-                matrix: matrix,
+                matrix: hoopMatrix,
                 pickable: false,
                 collidable: true,
                 clippable: false,
@@ -290,10 +280,10 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT);
 
-            const handle = rootNode.addChild(new Mesh(rootNode, {
+            const rotateHandle = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.curveHandle,
                 material: materials.pickable,
-                matrix: matrix,
+                matrix: hoopMatrix,
                 pickable: true,
                 collidable: true,
                 clippable: false,
@@ -328,8 +318,8 @@ class Control {
                 geometry: shapes.hoop,
                 material: material,
                 highlighted: true,
-                highlightMaterial: highlightMaterial,
-                matrix: matrix,
+                highlightMaterial: highlightMaterial(rgb, 0.6),
+                matrix: hoopMatrix,
                 pickable: false,
                 collidable: true,
                 clippable: false,
@@ -339,32 +329,12 @@ class Control {
 
             meshesToAdd.push(hoop);
 
-            return {
-                handleId: handle.id,
-                hoop: hoop,
-                set visible(v) {
-                    curve.visible = handle.visible = arrow1.visible = arrow2.visible = v;
-                    if (! v) {
-                        hoop.visible = v;
-                    }
-                },
-                set culled(c) {
-                    curve.culled = handle.culled = arrow1.culled = arrow2.culled;
-                    if (! c) {
-                        hoop.culled = c;
-                    }
-                }
-            };
-        };
 
-        const addAxis = (material, direction) => {
-            const rotation = math.quaternionToRotationMat4(math.vec3PairToQuaternion([ 0, 1, 0 ], direction), math.identityMat4());
+            const axisRotation = math.quaternionToRotationMat4(math.vec3PairToQuaternion([ 0, 1, 0 ], axisDirection), math.identityMat4());
 
-            const arrowT = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
-            const arrowMatrix = math.mulMat4(rotation, arrowT, math.identityMat4());
-
-            const shaftT = math.translateMat4c(0, radius / 2, 0, math.identityMat4());
-            const shaftMatrix = math.mulMat4(rotation, shaftT, math.identityMat4());
+            const translatedAxisMatrix = (yOffset) => math.mulMat4(axisRotation, math.translateMat4c(0, yOffset, 0, math.identityMat4()), math.identityMat4());
+            const arrowMatrix = translatedAxisMatrix(radius + .1);
+            const shaftMatrix = translatedAxisMatrix(radius / 2);
 
             const arrow = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.arrowHead,
@@ -425,18 +395,22 @@ class Control {
 
             return {
                 arrowHandleId: arrowHandle.id,
+                rotateHandleId: rotateHandle.id,
                 shaftHandleId: shaftHandle.id,
                 bigArrowHead: bigArrowHead,
+                hoop: hoop,
                 set visible(v) {
-                    arrow.visible = arrowHandle.visible = shaft.visible = shaftHandle.visible = v;
+                    arrow.visible = arrowHandle.visible = shaft.visible = shaftHandle.visible = curve.visible = rotateHandle.visible = arrow1.visible = arrow2.visible = v;
                     if (! v) {
                         bigArrowHead.visible = v;
+                        hoop.visible = v;
                     }
                 },
                 set culled(c) {
-                    arrow.culled = arrowHandle.culled = shaft.culled = shaftHandle.culled = c;
+                    arrow.culled = arrowHandle.culled = shaft.culled = shaftHandle.culled = curve.culled = rotateHandle.culled = arrow1.culled = arrow2.culled = c;
                     if (! c) {
                         bigArrowHead.culled = c;
+                        hoop.culled = c;
                     }
                 }
             };
@@ -510,18 +484,6 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT),
 
-            //----------------------------------------------------------------------------------------------------------
-            //
-            //----------------------------------------------------------------------------------------------------------
-
-            xCurve: addCurve(materials.red,   materials.highlightRed,   [ 1, 0, 0 ]),
-            yCurve: addCurve(materials.green, materials.highlightGreen, [ 0, 1, 0 ]),
-            zCurve: addCurve(materials.blue,  materials.highlightBlue,  [ 0, 0, -1 ]),
-
-            //----------------------------------------------------------------------------------------------------------
-            //
-            //----------------------------------------------------------------------------------------------------------
-
             center: rootNode.addChild(new Mesh(rootNode, {
                 geometry: new ReadableGeometry(rootNode, buildSphereGeometry({
                     radius: 0.05
@@ -538,9 +500,9 @@ class Control {
             //
             //----------------------------------------------------------------------------------------------------------
 
-            xAxis: addAxis(materials.red,   [ 1, 0, 0 ]),
-            yAxis: addAxis(materials.green, [ 0, -1, 0 ]),
-            zAxis: addAxis(materials.blue,  [ 0, 0, -1 ])
+            xAxis: addAxis([1,0,0], [ 1,  0,  0 ], [ 1, 0,  0 ]),
+            yAxis: addAxis([0,1,0], [ 0, -1,  0 ], [ 0, 1,  0 ]),
+            zAxis: addAxis([0,0,1], [ 0,  0, -1 ], [ 0, 0, -1 ])
         };
 
         meshesToAdd.forEach(m => rootNode.addChild(m, NO_STATE_INHERIT));
@@ -783,18 +745,18 @@ class Control {
                         nextDragAction = DRAG_ACTIONS.zTranslate;
                         break;
 
-                    case this._displayMeshes.xCurve.handleId:
-                        affordanceMesh = this._displayMeshes.xCurve.hoop;
+                    case this._displayMeshes.xAxis.rotateHandleId:
+                        affordanceMesh = this._displayMeshes.xAxis.hoop;
                         nextDragAction = DRAG_ACTIONS.xRotate;
                         break;
 
-                    case this._displayMeshes.yCurve.handleId:
-                        affordanceMesh = this._displayMeshes.yCurve.hoop;
+                    case this._displayMeshes.yAxis.rotateHandleId:
+                        affordanceMesh = this._displayMeshes.yAxis.hoop;
                         nextDragAction = DRAG_ACTIONS.yRotate;
                         break;
 
-                    case this._displayMeshes.zCurve.handleId:
-                        affordanceMesh = this._displayMeshes.zCurve.hoop;
+                    case this._displayMeshes.zAxis.rotateHandleId:
+                        affordanceMesh = this._displayMeshes.zAxis.hoop;
                         nextDragAction = DRAG_ACTIONS.zRotate;
                         break;
 
