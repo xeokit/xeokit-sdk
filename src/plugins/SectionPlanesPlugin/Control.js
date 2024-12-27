@@ -327,23 +327,6 @@ class Control {
                 ambient: [0.0, 0.0, 0.0],
                 specular: [.6, .6, .3],
                 shininess: 80
-            }),
-
-            highlightBall: new EmphasisMaterial(rootNode, {
-                edges: false,
-                fill: true,
-                fillColor: [0.5, 0.5, 0.5],
-                fillAlpha: 0.5,
-                vertices: false
-            }),
-
-            highlightPlane: new EmphasisMaterial(rootNode, {
-                edges: true,
-                edgeWidth: 3,
-                fill: false,
-                fillColor: [0.5, 0.5, .5],
-                fillAlpha: 0.5,
-                vertices: false
             })
         };
 
