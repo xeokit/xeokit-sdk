@@ -43,6 +43,7 @@ class Control {
 
         this._rootNode = null; // Root of Node graph that represents this control in the 3D scene
         this._displayMeshes = null; // Meshes that are always visible
+        this._handlers = { };
 
         this._ignoreNextSectionPlaneDirUpdate = false;
 
@@ -382,12 +383,10 @@ class Control {
 
             meshesToAdd.push(bigArrowHead);
 
+            this._handlers[arrowHandle.id] = this._handlers[shaftHandle.id] = [ bigArrowHead, [ true, rgb ] ];
+            this._handlers[rotateHandle.id] = [ hoop, [ false, rgb ] ];
+
             return {
-                arrowHandleId: arrowHandle.id,
-                rotateHandleId: rotateHandle.id,
-                shaftHandleId: shaftHandle.id,
-                bigArrowHead: bigArrowHead,
-                hoop: hoop,
                 set visible(v) {
                     arrow.visible = arrowHandle.visible = shaft.visible = shaftHandle.visible = curve.visible = rotateHandle.visible = arrow1.visible = arrow2.visible = v;
                     if (! v) {
@@ -509,25 +508,11 @@ class Control {
 
         var grabbed = false;
 
-        const DRAG_ACTIONS = {
-            none: -1,
-            xTranslate: 0,
-            yTranslate: 1,
-            zTranslate: 2,
-            xRotate: 3,
-            yRotate: 4,
-            zRotate: 5
-        };
-
         const rootNode = this._rootNode;
 
         var nextDragAction = null; // As we hover grabbed an arrow or hoop, self is the action we would do if we then dragged it.
         var dragAction = null; // Action we're doing while we drag an arrow or hoop.
         const lastCanvasPos = math.vec2();
-
-        const xBaseAxis = math.vec3([1, 0, 0]);
-        const yBaseAxis = math.vec3([0, 1, 0]);
-        const zBaseAxis = math.vec3([0, 0, 1]);
 
         const canvas = this._viewer.scene.canvas.canvas;
         const camera = this._viewer.camera;
@@ -720,50 +705,17 @@ class Control {
                 }
                 var affordanceMesh;
                 const meshId = hit.entity.id;
-                switch (meshId) {
-
-                    case this._displayMeshes.xAxis.arrowHandleId:
-                    case this._displayMeshes.xAxis.shaftHandleId:
-                        affordanceMesh = this._displayMeshes.xAxis.bigArrowHead;
-                        nextDragAction = DRAG_ACTIONS.xTranslate;
-                        break;
-
-                    case this._displayMeshes.yAxis.arrowHandleId:
-                    case this._displayMeshes.yAxis.shaftHandleId:
-                        affordanceMesh = this._displayMeshes.yAxis.bigArrowHead;
-                        nextDragAction = DRAG_ACTIONS.yTranslate;
-                        break;
-
-                    case this._displayMeshes.zAxis.arrowHandleId:
-                    case this._displayMeshes.zAxis.shaftHandleId:
-                        affordanceMesh = this._displayMeshes.zAxis.bigArrowHead;
-                        nextDragAction = DRAG_ACTIONS.zTranslate;
-                        break;
-
-                    case this._displayMeshes.xAxis.rotateHandleId:
-                        affordanceMesh = this._displayMeshes.xAxis.hoop;
-                        nextDragAction = DRAG_ACTIONS.xRotate;
-                        break;
-
-                    case this._displayMeshes.yAxis.rotateHandleId:
-                        affordanceMesh = this._displayMeshes.yAxis.hoop;
-                        nextDragAction = DRAG_ACTIONS.yRotate;
-                        break;
-
-                    case this._displayMeshes.zAxis.rotateHandleId:
-                        affordanceMesh = this._displayMeshes.zAxis.hoop;
-                        nextDragAction = DRAG_ACTIONS.zRotate;
-                        break;
-
-                    default:
-                        nextDragAction = DRAG_ACTIONS.none;
-                        return; // Not clicked an arrow or hoop
-                }
-                if (affordanceMesh) {
+                if (meshId in this._handlers) {
+                    const [ affordanceMesh, dragAction ] = this._handlers[meshId];
                     affordanceMesh.visible = true;
+                    lastAffordanceMesh = affordanceMesh;
+                    nextDragAction = dragAction;
+                    grabbed = true;
+                } else {
+                    lastAffordanceMesh = null;
+                    nextDragAction = null;
+                    grabbed = false;
                 }
-                lastAffordanceMesh = affordanceMesh;
-                grabbed = true;
             });
 
             this._onCameraControlHoverLeave = this._viewer.cameraControl.on("hoverOutEntity", (hit) => {
@@ -774,7 +726,7 @@ class Control {
                     lastAffordanceMesh.visible = false;
                 }
                 lastAffordanceMesh = null;
-                nextDragAction = DRAG_ACTIONS.none;
+                nextDragAction = null;
             });
 
             canvas.addEventListener("mousedown", this._canvasMouseDownListener = (e) => {
@@ -802,39 +754,21 @@ class Control {
             });
 
             canvas.addEventListener("mousemove", this._canvasMouseMoveListener = (e) => {
-                if (!this._visible) {
-                    return;
+                if (this._visible && down) {
+                    const canvasPos = getClickCoordsWithinElement(e);
+                    const x = canvasPos[0];
+                    const y = canvasPos[1];
+                    if (dragAction) {
+                        const [ isTranslate, axis ] = dragAction;
+                        if (isTranslate) {
+                            dragTranslateSectionPlane(axis, lastCanvasPos, canvasPos);
+                        } else {
+                            dragRotateSectionPlane(axis, lastCanvasPos, canvasPos);
+                        }
+                    }
+                    lastCanvasPos[0] = x;
+                    lastCanvasPos[1] = y;
                 }
-                if (!down) {
-                    return;
-                }
-                var canvasPos = getClickCoordsWithinElement(e);
-                const x = canvasPos[0];
-                const y = canvasPos[1];
-
-                switch (dragAction) {
-                    case DRAG_ACTIONS.xTranslate:
-                        dragTranslateSectionPlane(xBaseAxis, lastCanvasPos, canvasPos);
-                        break;
-                    case DRAG_ACTIONS.yTranslate:
-                        dragTranslateSectionPlane(yBaseAxis, lastCanvasPos, canvasPos);
-                        break;
-                    case DRAG_ACTIONS.zTranslate:
-                        dragTranslateSectionPlane(zBaseAxis, lastCanvasPos, canvasPos);
-                        break;
-                    case DRAG_ACTIONS.xRotate:
-                        dragRotateSectionPlane(xBaseAxis, lastCanvasPos, canvasPos);
-                        break;
-                    case DRAG_ACTIONS.yRotate:
-                        dragRotateSectionPlane(yBaseAxis, lastCanvasPos, canvasPos);
-                        break;
-                    case DRAG_ACTIONS.zRotate:
-                        dragRotateSectionPlane(zBaseAxis, lastCanvasPos, canvasPos);
-                        break;
-                }
-
-                lastCanvasPos[0] = x;
-                lastCanvasPos[1] = y;
             });
 
             canvas.addEventListener("mouseup", this._canvasMouseUpListener = (e) => {
