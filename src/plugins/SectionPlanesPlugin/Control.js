@@ -1295,16 +1295,6 @@ class Control {
                 down = false;
                 grabbed = false;
             });
-
-            canvas.addEventListener("wheel", this._canvasWheelListener = (e) => {
-                if (!this._visible) {
-                    return;
-                }
-                var delta = Math.max(-1, Math.min(1, -e.deltaY * 40));
-                if (delta === 0) {
-                    return;
-                }
-            });
         }
     }
 
@@ -1326,7 +1316,6 @@ class Control {
         canvas.removeEventListener("mousedown", this._canvasMouseDownListener);
         canvas.removeEventListener("mousemove", this._canvasMouseMoveListener);
         canvas.removeEventListener("mouseup", this._canvasMouseUpListener);
-        canvas.removeEventListener("wheel", this._canvasWheelListener);
 
         camera.off(this._onCameraViewMatrix);
         camera.off(this._onCameraProjMatrix);
