@@ -482,8 +482,21 @@ class Zone extends Component {
         }
 
 
-        const positions = [].concat(...pos);
+        const min = idx => Math.min(...pos.map(p => p[idx]));
+        const max = idx => Math.max(...pos.map(p => p[idx]));
+
+        const xmin = min(0);
+        const ymin = min(1);
+        const zmin = min(2);
+        const xmax = max(0);
+        const ymax = max(1);
+        const zmax = max(2);
+
+        this._center = math.vec3([ (xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2 ]);
+
+        const positions = [].concat(...pos.map(p => math.subVec3(p, this._center, p)));
         this._zoneMesh = new Mesh(scene, {
+            origin: this._center,
             edges: this._edges,
             geometry: new ReadableGeometry(
                 scene,
@@ -524,19 +537,6 @@ class Zone extends Component {
         }
 
         this._metrics = null;
-
-
-        const min = idx => Math.min(...pos.map(p => p[idx]));
-        const max = idx => Math.max(...pos.map(p => p[idx]));
-
-        const xmin = min(0);
-        const ymin = min(1);
-        const zmin = min(2);
-        const xmax = max(0);
-        const ymax = max(1);
-        const zmax = max(2);
-
-        this._center = math.vec3([ (xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2 ]);
     }
 
     get baseArea() {
