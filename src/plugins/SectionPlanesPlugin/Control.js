@@ -411,14 +411,34 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT);
 
+            const bigArrowHead = new Mesh(rootNode, {
+                geometry: shapes.arrowHeadBig,
+                material: material,
+                matrix: arrowMatrix,
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                visible: false,
+                isObject: false
+            });
+
+            meshesToAdd.push(bigArrowHead);
+
             return {
                 arrowHandleId: arrowHandle.id,
                 shaftHandleId: shaftHandle.id,
+                bigArrowHead: bigArrowHead,
                 set visible(v) {
                     arrow.visible = arrowHandle.visible = shaft.visible = shaftHandle.visible = v;
+                    if (! v) {
+                        bigArrowHead.visible = v;
+                    }
                 },
                 set culled(c) {
                     arrow.culled = arrowHandle.culled = shaft.culled = shaftHandle.culled = c;
+                    if (! c) {
+                        bigArrowHead.culled = c;
+                    }
                 }
             };
         };
@@ -619,51 +639,6 @@ class Control {
                 visible: false,
                 scale: [1, 1, 1],
                 rotation: [0, 0, 45],
-                isObject: false
-            }), NO_STATE_INHERIT),
-
-            xAxisArrow: rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.arrowHeadBig,
-                material: materials.red,
-                matrix: (function () {
-                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
-                    return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
-                pickable: false,
-                collidable: true,
-                clippable: false,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT),
-
-            yAxisArrow: rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.arrowHeadBig,
-                material: materials.green,
-                matrix: (function () {
-                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(180 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-                    return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
-                pickable: false,
-                collidable: true,
-                clippable: false,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT),
-
-            zAxisArrow: rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.arrowHeadBig,
-                material: materials.blue,
-                matrix: (function () {
-                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-                    return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
-                pickable: false,
-                collidable: true,
-                clippable: false,
-                visible: false,
                 isObject: false
             }), NO_STATE_INHERIT)
         };
@@ -889,32 +864,20 @@ class Control {
                 switch (meshId) {
 
                     case this._displayMeshes.xAxis.arrowHandleId:
-                        affordanceMesh = this._affordanceMeshes.xAxisArrow;
-                        nextDragAction = DRAG_ACTIONS.xTranslate;
-                        break;
-
                     case this._displayMeshes.xAxis.shaftHandleId:
-                        affordanceMesh = this._affordanceMeshes.xAxisArrow;
+                        affordanceMesh = this._displayMeshes.xAxis.bigArrowHead;
                         nextDragAction = DRAG_ACTIONS.xTranslate;
                         break;
 
                     case this._displayMeshes.yAxis.arrowHandleId:
-                        affordanceMesh = this._affordanceMeshes.yAxisArrow;
-                        nextDragAction = DRAG_ACTIONS.yTranslate;
-                        break;
-
                     case this._displayMeshes.yAxis.shaftHandleId:
-                        affordanceMesh = this._affordanceMeshes.yAxisArrow;
+                        affordanceMesh = this._displayMeshes.yAxis.bigArrowHead;
                         nextDragAction = DRAG_ACTIONS.yTranslate;
                         break;
 
                     case this._displayMeshes.zAxis.arrowHandleId:
-                        affordanceMesh = this._affordanceMeshes.zAxisArrow;
-                        nextDragAction = DRAG_ACTIONS.zTranslate;
-                        break;
-
                     case this._displayMeshes.zAxis.shaftHandleId:
-                        affordanceMesh = this._affordanceMeshes.zAxisArrow;
+                        affordanceMesh = this._displayMeshes.zAxis.bigArrowHead;
                         nextDragAction = DRAG_ACTIONS.zTranslate;
                         break;
 
