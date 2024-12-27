@@ -536,7 +536,7 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT),
 
-            xAxisHandle: rootNode.addChild(new Mesh(rootNode, {
+            xShaftHandle: rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.axisHandle,
                 material: materials.pickable,
                 matrix: (function () {
@@ -658,7 +658,7 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT),
 
-            zAxisHandle: rootNode.addChild(new Mesh(rootNode, {
+            zShaftHandle: rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.axisHandle,
                 material: materials.pickable,
                 matrix: (function () {
@@ -1020,7 +1020,7 @@ class Control {
                         nextDragAction = DRAG_ACTIONS.xTranslate;
                         break;
 
-                    case this._displayMeshes.xAxisHandle.id:
+                    case this._displayMeshes.xShaftHandle.id:
                         affordanceMesh = this._affordanceMeshes.xAxisArrow;
                         nextDragAction = DRAG_ACTIONS.xTranslate;
                         break;
@@ -1040,7 +1040,7 @@ class Control {
                         nextDragAction = DRAG_ACTIONS.zTranslate;
                         break;
 
-                    case this._displayMeshes.zAxisHandle.id:
+                    case this._displayMeshes.zShaftHandle.id:
                         affordanceMesh = this._affordanceMeshes.zAxisArrow;
                         nextDragAction = DRAG_ACTIONS.zTranslate;
                         break;
