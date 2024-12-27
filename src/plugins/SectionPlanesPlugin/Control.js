@@ -276,6 +276,64 @@ class Control {
             })
         };
 
+        const addCurve = (material, matrix, matrix1, matrix2) => {
+            const curve = rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.curve,
+                material: material,
+                matrix: matrix,
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                backfaces: true,
+                visible: false,
+                isObject: false
+            }), NO_STATE_INHERIT);
+
+            const handle = rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.curveHandle,
+                material: materials.pickable,
+                matrix: matrix,
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                backfaces: true,
+                visible: false,
+                isObject: false
+            }), NO_STATE_INHERIT);
+
+            const arrow1 = rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHead,
+                material: material,
+                matrix: matrix1,
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                visible: false,
+                isObject: false
+            }), NO_STATE_INHERIT);
+
+            const arrow2 = rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHead,
+                material: material,
+                matrix: matrix2,
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                visible: false,
+                isObject: false
+            }), NO_STATE_INHERIT);
+
+            return {
+                handleId: handle.id,
+                set visible(v) {
+                    curve.visible = handle.visible = arrow1.visible = arrow2.visible = v;
+                },
+                set culled(c) {
+                    curve.culled = handle.culled = arrow1.culled = arrow2.culled = c;
+                }
+            };
+        };
+
         this._displayMeshes = {
 
             plane: rootNode.addChild(new Mesh(rootNode, {
@@ -348,253 +406,70 @@ class Control {
             //
             //----------------------------------------------------------------------------------------------------------
 
-            xCurveHandle: (function() {
-
-                const material = materials.red;
-
-                const matrix = (function () {
+            xCurve: addCurve(
+                materials.red,
+                (function () {
                     const rotate2 = math.rotationMat4v(90 * math.DEGTORAD, [0, 1, 0], math.identityMat4());
                     const rotate1 = math.rotationMat4v(270 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
                     return math.mulMat4(rotate1, rotate2, math.identityMat4());
-                })();
-
-                const mat1 = (function () {
+                })(),
+                (function () {
                     const translate = math.translateMat4c(0., -0.07, -0.8, math.identityMat4());
                     const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
                     const rotate = math.rotationMat4v(0 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
                     return math.mulMat4(math.mulMat4(translate, scale, math.identityMat4()), rotate, math.identityMat4());
-                })();
-
-                const mat2 = (function () {
+                })(),
+                (function () {
                     const translate = math.translateMat4c(0.0, -0.8, -0.07, math.identityMat4());
                     const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
                     const rotate = math.rotationMat4v(90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
                     return math.mulMat4(math.mulMat4(translate, scale, math.identityMat4()), rotate, math.identityMat4());
-                })();
-
-            const curve = rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.curve,
-                material: material,
-                matrix: matrix,
-                pickable: false,
-                collidable: true,
-                clippable: false,
-                backfaces: true,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT);
-
-            const handle = rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.curveHandle,
-                material: materials.pickable,
-                matrix: matrix,
-                pickable: true,
-                collidable: true,
-                clippable: false,
-                backfaces: true,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT);
-
-            const arrow1 = rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.arrowHead,
-                material: material,
-                matrix: mat1,
-                pickable: true,
-                collidable: true,
-                clippable: false,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT);
-
-            const arrow2 = rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.arrowHead,
-                material: material,
-                matrix: mat2,
-                pickable: true,
-                collidable: true,
-                clippable: false,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT);
-
-                return {
-                    id: handle.id,
-                    set visible(v) {
-                        curve.visible = handle.visible = arrow1.visible = arrow2.visible = v;
-                    },
-                    set culled(c) {
-                        curve.culled = handle.culled = arrow1.culled = arrow2.culle = c;
-                    }
-                };
-            })(),
+                })()),
 
             //----------------------------------------------------------------------------------------------------------
             //
             //----------------------------------------------------------------------------------------------------------
 
-            yCurveHandle: (function() {
-
-                const material = materials.green;
-
-                const matrix = (function() {
+            yCurve: addCurve(
+                materials.green,
+                (function() {
                     const q = math.identityQuaternion();
                     math.eulerToQuaternion([-90, 0, 0], "XYZ", q);
                     const m = math.mat4();
                     math.quaternionToMat4(q, m);
                     return m;
-                })();
-
-                const mat1 = (function () {
+                })(),
+                (function () {
                     const translate = math.translateMat4c(0.07, 0, -0.8, math.identityMat4());
                     const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
                     const rotate = math.rotationMat4v(90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
                     return math.mulMat4(math.mulMat4(translate, scale, math.identityMat4()), rotate, math.identityMat4());
-                })();
-
-                const mat2 = (function () {
+                })(),
+                (function () {
                     const translate = math.translateMat4c(0.8, 0.0, -0.07, math.identityMat4());
                     const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
                     const rotate = math.rotationMat4v(90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
                     return math.mulMat4(math.mulMat4(translate, scale, math.identityMat4()), rotate, math.identityMat4());
-                })();
-
-            const curve = rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.curve,
-                material: material,
-                matrix: matrix,
-                pickable: false,
-                collidable: true,
-                clippable: false,
-                backfaces: true,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT);
-
-            const handle = rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.curveHandle,
-                material: materials.pickable,
-                matrix: matrix,
-                pickable: true,
-                collidable: true,
-                clippable: false,
-                backfaces: true,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT);
-
-            const arrow1 = rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.arrowHead,
-                material: material,
-                matrix: mat1,
-                pickable: true,
-                collidable: true,
-                clippable: false,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT);
-
-            const arrow2 = rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.arrowHead,
-                material: material,
-                matrix: mat2,
-                pickable: true,
-                collidable: true,
-                clippable: false,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT);
-
-                return {
-                    id: handle.id,
-                    set visible(v) {
-                        curve.visible = handle.visible = arrow1.visible = arrow2.visible = v;
-                    },
-                    set culled(c) {
-                        curve.culled = handle.culled = arrow1.culled = arrow2.culle = c;
-                    }
-                };
-            })(),
+                })()),
 
             //----------------------------------------------------------------------------------------------------------
             //
             //----------------------------------------------------------------------------------------------------------
 
-            zCurveHandle: (function() {
-
-                const material = materials.blue;
-
-                const matrix = math.rotationMat4v(180 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-
-                const mat1 = (function () {
+            zCurve: addCurve(
+                materials.blue,
+                math.rotationMat4v(180 * math.DEGTORAD, [1, 0, 0], math.identityMat4()),
+                (function () {
                     const translate = math.translateMat4c(.8, -0.07, 0, math.identityMat4());
                     const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
                     return math.mulMat4(translate, scale, math.identityMat4());
-                })();
-
-                const mat2 = (function () {
+                })(),
+                (function () {
                     const translate = math.translateMat4c(.05, -0.8, 0, math.identityMat4());
                     const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
                     const rotate = math.rotationMat4v(90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
                     return math.mulMat4(math.mulMat4(translate, scale, math.identityMat4()), rotate, math.identityMat4());
-                })();
-
-            const curve = rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.curve,
-                material: material,
-                matrix: matrix,
-                pickable: false,
-                collidable: true,
-                clippable: false,
-                backfaces: true,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT);
-
-            const handle = rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.curveHandle,
-                material: materials.pickable,
-                matrix: matrix,
-                pickable: true,
-                collidable: true,
-                clippable: false,
-                backfaces: true,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT);
-
-            const arrow1 = rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.arrowHead,
-                material: material,
-                matrix: mat1,
-                pickable: true,
-                collidable: true,
-                clippable: false,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT);
-
-            const arrow2 = rootNode.addChild(new Mesh(rootNode, {
-                geometry: shapes.arrowHead,
-                material: material,
-                matrix: mat2,
-                pickable: true,
-                collidable: true,
-                clippable: false,
-                visible: false,
-                isObject: false
-            }), NO_STATE_INHERIT);
-
-                return {
-                    id: handle.id,
-                    set visible(v) {
-                        curve.visible = handle.visible = arrow1.visible = arrow2.visible = v;
-                    },
-                    set culled(c) {
-                        curve.culled = handle.culled = arrow1.culled = arrow2.culle = c;
-                    }
-                };
-            })(),
+                })()),
 
             //----------------------------------------------------------------------------------------------------------
             //
@@ -1170,17 +1045,17 @@ class Control {
                         nextDragAction = DRAG_ACTIONS.zTranslate;
                         break;
 
-                    case this._displayMeshes.xCurveHandle.id:
+                    case this._displayMeshes.xCurve.handleId:
                         affordanceMesh = this._affordanceMeshes.xHoop;
                         nextDragAction = DRAG_ACTIONS.xRotate;
                         break;
 
-                    case this._displayMeshes.yCurveHandle.id:
+                    case this._displayMeshes.yCurve.handleId:
                         affordanceMesh = this._affordanceMeshes.yHoop;
                         nextDragAction = DRAG_ACTIONS.yRotate;
                         break;
 
-                    case this._displayMeshes.zCurveHandle.id:
+                    case this._displayMeshes.zCurve.handleId:
                         affordanceMesh = this._affordanceMeshes.zHoop;
                         nextDragAction = DRAG_ACTIONS.zRotate;
                         break;
