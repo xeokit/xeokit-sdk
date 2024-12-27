@@ -334,7 +334,15 @@ class Control {
             };
         };
 
-        const addAxis = (material, arrowMatrix, shaftMatrix) => {
+        const addAxis = (material, rotationQuat) => {
+            const rotation = math.quaternionToRotationMat4(rotationQuat, math.identityMat4());
+
+            const arrowT = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
+            const arrowMatrix = math.mulMat4(rotation, arrowT, math.identityMat4());
+
+            const shaftT = math.translateMat4c(0, radius / 2, 0, math.identityMat4());
+            const shaftMatrix = math.mulMat4(rotation, shaftT, math.identityMat4());
+
             const arrow = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.arrowHead,
                 material: material,
@@ -548,40 +556,9 @@ class Control {
             //
             //----------------------------------------------------------------------------------------------------------
 
-            xAxis: addAxis(
-                materials.red,
-                (function () {
-                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
-                    return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
-                (function () {
-                    const translate = math.translateMat4c(0, radius / 2, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
-                    return math.mulMat4(rotate, translate, math.identityMat4());
-                })()),
-
-            yAxis: addAxis(
-                materials.green,
-                (function () {
-                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(180 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-                    return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
-                math.translationMat4v([0, -radius / 2, 0], math.identityMat4())),
-
-            zAxis: addAxis(
-                materials.blue,
-                (function () {
-                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-                    return math.mulMat4(rotate, translate, math.identityMat4());
-                })(),
-                (function () {
-                    const translate = math.translateMat4c(0, radius / 2, 0, math.identityMat4());
-                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-                    return math.mulMat4(rotate, translate, math.identityMat4());
-                })())
+            xAxis: addAxis(materials.red,   math.angleAxisToQuaternion([ 0, 0, 1, -90 * math.DEGTORAD ])),
+            yAxis: addAxis(materials.green, math.angleAxisToQuaternion([ 1, 0, 0, 180 * math.DEGTORAD ])),
+            zAxis: addAxis(materials.blue,  math.angleAxisToQuaternion([ 1, 0, 0, -90 * math.DEGTORAD ]))
         };
 
         this._affordanceMeshes = {
