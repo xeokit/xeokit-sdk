@@ -556,7 +556,7 @@ class Control {
         const localToWorldVec = (function () {
             const mat = math.mat4();
             return function (localVec, worldVec) {
-                math.quaternionToMat4(self._rootNode.quaternion, mat);
+                math.quaternionToMat4(rootNode.quaternion, mat);
                 math.transformVec3(mat, localVec, worldVec);
                 math.normalizeVec3(worldVec);
                 return worldVec;
@@ -575,7 +575,7 @@ class Control {
                 math.cross3Vec3(planeNormal, worldAxis, planeNormal);
                 math.normalizeVec3(planeNormal);
                 return planeNormal;
-            }
+            };
         })();
 
         const dragTranslateSectionPlane = (function () {
@@ -596,7 +596,7 @@ class Control {
                 if (self._sectionPlane) {
                     self._sectionPlane.pos = self._pos;
                 }
-            }
+            };
         })();
 
         var dragRotateSectionPlane = (function () {
@@ -604,6 +604,8 @@ class Control {
             const p2 = math.vec4();
             const c = math.vec4();
             const worldAxis = math.vec4();
+            const dir = math.vec3();
+            const mat = math.mat4();
             return function (baseAxis, fromMouse, toMouse) {
                 localToWorldVec(baseAxis, worldAxis);
                 const hasData = getPointerPlaneIntersect(fromMouse, worldAxis, p1) && getPointerPlaneIntersect(toMouse, worldAxis, p2);
@@ -630,8 +632,13 @@ class Control {
                     incDegrees = -incDegrees;
                 }
                 self._rootNode.rotate(baseAxis, incDegrees);
-                rotateSectionPlane();
-            }
+
+                if (self.sectionPlane) {
+                    math.quaternionToMat4(rootNode.quaternion, mat);  // << ---
+                    math.transformVec3(mat, [0, 0, 1], dir);
+                    self._setSectionPlaneDir(dir);
+                }
+            };
         })();
 
         var getPointerPlaneIntersect = (function () {
@@ -660,18 +667,6 @@ class Control {
                     return true;
                 }
                 return false;
-            }
-        })();
-
-        const rotateSectionPlane = (function () {
-            const dir = math.vec3();
-            const mat = math.mat4();
-            return function () {
-                if (self.sectionPlane) {
-                    math.quaternionToMat4(rootNode.quaternion, mat);  // << ---
-                    math.transformVec3(mat, [0, 0, 1], dir);
-                    self._setSectionPlaneDir(dir);
-                }
             };
         })();
 
