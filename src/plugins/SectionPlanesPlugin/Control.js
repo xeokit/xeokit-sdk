@@ -1020,7 +1020,7 @@ class Control {
             const worldAxis = math.vec4();
             return function (baseAxis, fromMouse, toMouse) {
                 localToWorldVec(baseAxis, worldAxis);
-                const planeNormal = getTranslationPlane(worldAxis, fromMouse, toMouse);
+                const planeNormal = getTranslationPlane(worldAxis);
                 getPointerPlaneIntersect(fromMouse, planeNormal, p1);
                 getPointerPlaneIntersect(toMouse, planeNormal, p2);
                 math.subVec3(p2, p1);
@@ -1044,7 +1044,7 @@ class Control {
                 localToWorldVec(baseAxis, worldAxis);
                 const hasData = getPointerPlaneIntersect(fromMouse, worldAxis, p1) && getPointerPlaneIntersect(toMouse, worldAxis, p2);
                 if (!hasData) { // Find intersections with view plane and project down to origin
-                    const planeNormal = getTranslationPlane(worldAxis, fromMouse, toMouse);
+                    const planeNormal = getTranslationPlane(worldAxis);
                     getPointerPlaneIntersect(fromMouse, planeNormal, p1, 1); // Ensure plane moves closer to camera so angles become workable
                     getPointerPlaneIntersect(toMouse, planeNormal, p2, 1);
                     var dot = math.dotVec3(p1, worldAxis);
