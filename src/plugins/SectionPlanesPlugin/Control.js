@@ -191,77 +191,61 @@ class Control {
 
         const rootNode = this._rootNode;
 
+        const arrowGeometry = (radiusBottom, height, radialSegments) => new ReadableGeometry(rootNode, buildCylinderGeometry({
+            radiusTop: 0.001,
+            radiusBottom: radiusBottom,
+            radialSegments: radialSegments,
+            heightSegments: 1,
+            height: height,
+            openEnded: false
+        }));
+
+        const tubeGeometry = (radius, height, radialSegments) => new ReadableGeometry(rootNode, buildCylinderGeometry({
+            radiusTop: radius,
+            radiusBottom: radius,
+            radialSegments: radialSegments,
+            heightSegments: 1,
+            height: height,
+            openEnded: false
+        }));
+
+        const torusGeometry = (tube, arcFraction, tubeSegments) => new ReadableGeometry(rootNode, buildTorusGeometry({
+            radius: hoopRadius,
+            tube: tube,
+            radialSegments: 64,
+            tubeSegments: tubeSegments,
+            arc: (Math.PI * 2.0) * arcFraction
+        }));
+
         const shapes = {// Reusable geometries
 
-            arrowHead: new ReadableGeometry(rootNode, buildCylinderGeometry({
-                radiusTop: 0.001,
-                radiusBottom: arrowRadius,
-                radialSegments: 32,
-                heightSegments: 1,
-                height: 0.2,
-                openEnded: false
-            })),
+            arrowHead: arrowGeometry(arrowRadius, 0.2, 32),
+            arrowHeadBig: arrowGeometry(0.09, 0.25, 32),
+            arrowHeadHandle: tubeGeometry(0.09, 0.37, 8),
 
-            arrowHeadBig: new ReadableGeometry(rootNode, buildCylinderGeometry({
-                radiusTop: 0.001,
-                radiusBottom: 0.09,
-                radialSegments: 32,
-                heightSegments: 1,
-                height: 0.25,
-                openEnded: false
-            })),
+            curve:       torusGeometry(tubeRadius, 0.25, 14),
+            curveHandle: torusGeometry(handleTubeRadius, 0.25, 14),
+            hoop:        torusGeometry(tubeRadius, 1, 8),
 
-            arrowHeadHandle: new ReadableGeometry(rootNode, buildCylinderGeometry({
-                radiusTop: 0.09,
-                radiusBottom: 0.09,
-                radialSegments: 8,
-                heightSegments: 1,
-                height: 0.37,
-                openEnded: false
-            })),
-
-            curve: new ReadableGeometry(rootNode, buildTorusGeometry({
-                radius: hoopRadius,
-                tube: tubeRadius,
-                radialSegments: 64,
-                tubeSegments: 14,
-                arc: (Math.PI * 2.0) / 4.0
-            })),
-
-            curveHandle: new ReadableGeometry(rootNode, buildTorusGeometry({
-                radius: hoopRadius,
-                tube: handleTubeRadius,
-                radialSegments: 64,
-                tubeSegments: 14,
-                arc: (Math.PI * 2.0) / 4.0
-            })),
-
-            hoop: new ReadableGeometry(rootNode, buildTorusGeometry({
-                radius: hoopRadius,
-                tube: tubeRadius,
-                radialSegments: 64,
-                tubeSegments: 8,
-                arc: (Math.PI * 2.0)
-            })),
-
-            axis: new ReadableGeometry(rootNode, buildCylinderGeometry({
-                radiusTop: tubeRadius,
-                radiusBottom: tubeRadius,
-                radialSegments: 20,
-                heightSegments: 1,
-                height: radius,
-                openEnded: false
-            })),
-
-            axisHandle: new ReadableGeometry(rootNode, buildCylinderGeometry({
-                radiusTop: 0.08,
-                radiusBottom: 0.08,
-                radialSegments: 20,
-                heightSegments: 1,
-                height: radius,
-                openEnded: false
-            }))
+            axis: tubeGeometry(tubeRadius, radius, 20),
+            axisHandle: tubeGeometry(0.08, radius, 20)
         };
+
+        const colorMaterial = (rgb) => new PhongMaterial(rootNode, {
+            diffuse: rgb,
+            emissive: rgb,
+            ambient: [0.0, 0.0, 0.0],
+            specular: [.6, .6, .3],
+            shininess: 80,
+            lineWidth: 2
+        });
+
+        const highlightMaterial = (rgb, fillAlpha) => new EmphasisMaterial(rootNode, {
+            edges: false,
+            fill: true,
+            fillColor: rgb,
+            fillAlpha: fillAlpha
+        });
 
         const materials = { // Reusable materials
 
@@ -271,53 +255,17 @@ class Control {
                 alphaMode: "blend"
             }),
 
-            red: new PhongMaterial(rootNode, {
-                diffuse: [1, 0.0, 0.0],
-                emissive: [1, 0.0, 0.0],
-                ambient: [0.0, 0.0, 0.0],
-                specular: [.6, .6, .3],
-                shininess: 80,
-                lineWidth: 2
-            }),
+            red: colorMaterial([1, 0.0, 0.0]),
 
-            highlightRed: new EmphasisMaterial(rootNode, { // Emphasis for red rotation affordance hoop
-                edges: false,
-                fill: true,
-                fillColor: [1, 0, 0],
-                fillAlpha: 0.6
-            }),
+            highlightRed: highlightMaterial([1, 0, 0], 0.6),
 
-            green: new PhongMaterial(rootNode, {
-                diffuse: [0.0, 1, 0.0],
-                emissive: [0.0, 1, 0.0],
-                ambient: [0.0, 0.0, 0.0],
-                specular: [.6, .6, .3],
-                shininess: 80,
-                lineWidth: 2
-            }),
+            green: colorMaterial([0.0, 1, 0.0]),
 
-            highlightGreen: new EmphasisMaterial(rootNode, { // Emphasis for green rotation affordance hoop
-                edges: false,
-                fill: true,
-                fillColor: [0, 1, 0],
-                fillAlpha: 0.6
-            }),
+            highlightGreen: highlightMaterial([0, 1, 0], 0.6),
 
-            blue: new PhongMaterial(rootNode, {
-                diffuse: [0.0, 0.0, 1],
-                emissive: [0.0, 0.0, 1],
-                ambient: [0.0, 0.0, 0.0],
-                specular: [.6, .6, .3],
-                shininess: 80,
-                lineWidth: 2
-            }),
+            blue: colorMaterial([0.0, 0.0, 1]),
 
-            highlightBlue: new EmphasisMaterial(rootNode, { // Emphasis for blue rotation affordance hoop
-                edges: false,
-                fill: true,
-                fillColor: [0, 0, 1],
-                fillAlpha: 0.2
-            }),
+            highlightBlue: highlightMaterial([0, 0, 1], 0.2),
 
             center: new PhongMaterial(rootNode, {
                 diffuse: [0.0, 0.0, 0.0],
