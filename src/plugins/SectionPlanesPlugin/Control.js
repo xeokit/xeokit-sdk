@@ -41,7 +41,6 @@ class Control {
         this._origin = math.vec3();
         this._rtcPos = math.vec3();
 
-        this._baseDir = math.vec3(); // Saves direction of clip plane when we start dragging an arrow or ring.
         this._rootNode = null; // Root of Node graph that represents this control in the 3D scene
         this._displayMeshes = null; // Meshes that are always visible
         this._affordanceMeshes = null; // Meshes displayed momentarily for affordance
@@ -105,7 +104,6 @@ class Control {
 
     /** @private */
     _setDir(xyz) {
-        this._baseDir.set(xyz);
         this._rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, xyz, quat);
     }
 
