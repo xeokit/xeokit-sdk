@@ -606,44 +606,45 @@ class Control {
             });
         }
 
+        this._unbindSectionPlane = () => { };
+
         this.__setSectionPlane = sectionPlane => {
-            if (this._sectionPlane) {
-                this._sectionPlane.off(this._onSectionPlanePos);
-                this._sectionPlane.off(this._onSectionPlaneDir);
-                this._onSectionPlanePos = null;
-                this._onSectionPlaneDir = null;
+            this.id = sectionPlane.id;
+            this._sectionPlane = sectionPlane;
+            const setPosFromSectionPlane = () => {
+                pos.set(sectionPlane.pos);
+                worldToRTCPos(pos, origin, rtcPos);
+                rootNode.origin = origin;
+                rootNode.position = rtcPos;
+            };
+            const setDirFromSectionPlane = () => {
+                rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, sectionPlane.dir, quat);
+            };
+            setPosFromSectionPlane();
+            setDirFromSectionPlane();
+            const onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
+            const onSectionPlaneDir = sectionPlane.on("dir", () => {
+                if (!ignoreNextSectionPlaneDirUpdate) {
+                    setDirFromSectionPlane();
+                } else {
+                    ignoreNextSectionPlaneDirUpdate = false;
+                }
+            });
+
+            this._unbindSectionPlane = () => {
+                this.id = null;
                 this._sectionPlane = null;
-            }
-            if (sectionPlane) {
-                this.id = sectionPlane.id;
-                const setPosFromSectionPlane = () => {
-                    pos.set(sectionPlane.pos);
-                    worldToRTCPos(pos, origin, rtcPos);
-                    rootNode.origin = origin;
-                    rootNode.position = rtcPos;
-                };
-                const setDirFromSectionPlane = () => {
-                    rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, sectionPlane.dir, quat);
-                };
-                setPosFromSectionPlane();
-                setDirFromSectionPlane();
-                this._sectionPlane = sectionPlane;
-                this._onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
-                this._onSectionPlaneDir = sectionPlane.on("dir", () => {
-                    if (!ignoreNextSectionPlaneDirUpdate) {
-                        setDirFromSectionPlane();
-                    } else {
-                        ignoreNextSectionPlaneDirUpdate = false;
-                    }
-                });
-            }
+                sectionPlane.off(onSectionPlanePos);
+                sectionPlane.off(onSectionPlaneDir);
+                this._unbindSectionPlane = () => { };
+            };
         };
 
         this.__destroy = () => {
             cleanups.forEach(c => c());
 
             // destroyNodes
-            this.__setSectionPlane(null);
+            this._unbindSectionPlane();
             rootNode.destroy();
             this._displayMeshes = {};
         };
@@ -660,7 +661,10 @@ class Control {
      * @private
      */
     _setSectionPlane(sectionPlane) {
-        this.__setSectionPlane(sectionPlane);
+        this._unbindSectionPlane();
+        if (sectionPlane) {
+            this.__setSectionPlane(sectionPlane);
+        }
     }
 
     /**
