@@ -67,15 +67,23 @@ class Control {
         }
         if (sectionPlane) {
             this.id = sectionPlane.id;
-            this._setPos(sectionPlane.pos);
-            this._setDir(sectionPlane.dir);
+            const setPosFromSectionPlane = () => {
+                const pos = sectionPlane.pos;
+                this._pos.set(pos);
+                worldToRTCPos(pos, this._origin, this._rtcPos);
+                this._rootNode.origin = this._origin;
+                this._rootNode.position = this._rtcPos;
+            };
+            const setDirFromSectionPlane = () => {
+                this._rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, sectionPlane.dir, quat);
+            };
+            setPosFromSectionPlane();
+            setDirFromSectionPlane();
             this._sectionPlane = sectionPlane;
-            this._onSectionPlanePos = sectionPlane.on("pos", () => {
-                this._setPos(this._sectionPlane.pos);
-            });
+            this._onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
             this._onSectionPlaneDir = sectionPlane.on("dir", () => {
                 if (!this._ignoreNextSectionPlaneDirUpdate) {
-                    this._setDir(this._sectionPlane.dir);
+                    setDirFromSectionPlane();
                 } else {
                     this._ignoreNextSectionPlaneDirUpdate = false;
                 }
@@ -89,22 +97,6 @@ class Control {
      */
     get sectionPlane() {
         return this._sectionPlane;
-    }
-
-    /** @private */
-    _setPos(xyz) {
-
-        this._pos.set(xyz);
-
-        worldToRTCPos(this._pos, this._origin, this._rtcPos);
-
-        this._rootNode.origin = this._origin;
-        this._rootNode.position = this._rtcPos;
-    }
-
-    /** @private */
-    _setDir(xyz) {
-        this._rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, xyz, quat);
     }
 
     /**
