@@ -386,12 +386,12 @@ class Control {
         var nextDragAction = null; // As we hover grabbed an arrow or hoop, self is the action we would do if we then dragged it.
         var dragAction = null; // Action we're doing while we drag an arrow or hoop.
         const lastCanvasPos = math.vec2();
+        const cleanups = [ ];
 
         { // Keep gizmo screen size constant
-            const tempVec3a = math.vec3([0, 0, 0]);
             let lastDist = -1;
-            this._onSceneTick = scene.on("tick", () => {
-                const dist = Math.abs(math.lenVec3(math.subVec3(scene.camera.eye, pos, tempVec3a)));
+            const onSceneTick = scene.on("tick", () => {
+                const dist = Math.abs(math.distVec3(camera.eye, pos));
                 if (camera.projection === "perspective") {
                     if (dist !== lastDist) {
                         setRootNodeScale(0.07 * dist * Math.tan(camera.perspective.fov * math.DEGTORAD));
@@ -401,6 +401,7 @@ class Control {
                 }
                 lastDist = dist;
             });
+            cleanups.push(() => scene.off(onSceneTick));
         }
 
         const getClickCoordsWithinElement = (function () {
@@ -540,7 +541,7 @@ class Control {
         {
             let lastAffordanceMesh = null;
 
-            this._onCameraControlHover = cameraControl.on("hoverEnter", (hit) => {
+            const onCameraControlHover = cameraControl.on("hoverEnter", (hit) => {
                 if (this._visible && (! dragAction)) {
                     if (lastAffordanceMesh) {
                         lastAffordanceMesh.visible = false;
@@ -557,8 +558,9 @@ class Control {
                     }
                 }
             });
+            cleanups.push(() => cameraControl.off(onCameraControlHover));
 
-            this._onCameraControlHoverLeave = cameraControl.on("hoverOutEntity", (hit) => {
+            const onCameraControlHoverLeave = cameraControl.on("hoverOutEntity", (hit) => {
                 if (this._visible) {
                     if (lastAffordanceMesh) {
                         lastAffordanceMesh.visible = false;
@@ -567,8 +569,14 @@ class Control {
                     nextDragAction = null;
                 }
             });
+            cleanups.push(() => cameraControl.off(onCameraControlHoverLeave));
 
-            canvas.addEventListener("mousedown", this._canvasMouseDownListener = (e) => {
+            const addCanvasEventListener = (type, listener) => {
+                canvas.addEventListener(type, listener);
+                cleanups.push(() => canvas.removeEventListener(type, listener));
+            };
+
+            addCanvasEventListener("mousedown", (e) => {
                 e.preventDefault();
                 if (this._visible && (e.which === 1) && nextDragAction) { // Left button
                     cameraControl.pointerEnabled = false;
@@ -577,7 +585,7 @@ class Control {
                 }
             });
 
-            canvas.addEventListener("mousemove", this._canvasMouseMoveListener = (e) => {
+            addCanvasEventListener("mousemove", (e) => {
                 if (this._visible && dragAction) {
                     const canvasPos = getClickCoordsWithinElement(e);
                     const [ isTranslate, axis ] = dragAction;
@@ -590,7 +598,7 @@ class Control {
                 }
             });
 
-            canvas.addEventListener("mouseup", this._canvasMouseUpListener = (e) => {
+            addCanvasEventListener("mouseup", (e) => {
                 if (this._visible && dragAction) {
                     cameraControl.pointerEnabled = true;
                     dragAction = null;
@@ -632,15 +640,7 @@ class Control {
         };
 
         this.__destroy = () => {
-            // unbindEvents
-            scene.off(this._onSceneTick);
-
-            canvas.removeEventListener("mousedown", this._canvasMouseDownListener);
-            canvas.removeEventListener("mousemove", this._canvasMouseMoveListener);
-            canvas.removeEventListener("mouseup", this._canvasMouseUpListener);
-
-            cameraControl.off(this._onCameraControlHover);
-            cameraControl.off(this._onCameraControlHoverLeave);
+            cleanups.forEach(c => c());
 
             // destroyNodes
             this.__setSectionPlane(null);
