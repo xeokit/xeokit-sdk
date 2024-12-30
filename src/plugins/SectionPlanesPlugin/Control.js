@@ -47,16 +47,7 @@ class Control {
 
         this._ignoreNextSectionPlaneDirUpdate = false;
 
-        this._createNodes();
-        this._bindEvents();
-    }
-
-    /**
-     * Builds the Entities that represent this Control.
-     * @private
-     */
-    _createNodes() {
-
+        // Builds the Entities that represent this Control.
         const NO_STATE_INHERIT = false;
         const scene = this._viewer.scene;
         const radius = 1.0;
@@ -388,13 +379,10 @@ class Control {
             yAxis: addAxis([0,1,0], [ 0, -1,  0 ], [ 0, 1,  0 ]),
             zAxis: addAxis([0,0,1], [ 0,  0, -1 ], [ 0, 0, -1 ])
         };
-    }
 
-    _bindEvents() {
-
+        // bindEvents
         const self = this;
 
-        const rootNode = this._rootNode;
         const setRootNodeScale = size => rootNode.scale = [size, size, size];
 
         var nextDragAction = null; // As we hover grabbed an arrow or hoop, self is the action we would do if we then dragged it.
@@ -403,7 +391,6 @@ class Control {
 
         const canvas = this._viewer.scene.canvas.canvas;
         const camera = this._viewer.camera;
-        const scene = this._viewer.scene;
 
         { // Keep gizmo screen size constant
             const tempVec3a = math.vec3([0, 0, 0]);
