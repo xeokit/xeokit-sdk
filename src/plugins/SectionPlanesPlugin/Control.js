@@ -52,95 +52,6 @@ class Control {
     }
 
     /**
-     * Called by SectionPlanesPlugin to assign this Control to a SectionPlane.
-     * SectionPlanesPlugin keeps SectionPlaneControls in a reuse pool.
-     * Call with a null or undefined value to disconnect the Control ffrom whatever SectionPlane it was assigned to.
-     * @private
-     */
-    _setSectionPlane(sectionPlane) {
-        if (this._sectionPlane) {
-            this._sectionPlane.off(this._onSectionPlanePos);
-            this._sectionPlane.off(this._onSectionPlaneDir);
-            this._onSectionPlanePos = null;
-            this._onSectionPlaneDir = null;
-            this._sectionPlane = null;
-        }
-        if (sectionPlane) {
-            this.id = sectionPlane.id;
-            const setPosFromSectionPlane = () => {
-                const pos = sectionPlane.pos;
-                this._pos.set(pos);
-                worldToRTCPos(pos, this._origin, this._rtcPos);
-                this._rootNode.origin = this._origin;
-                this._rootNode.position = this._rtcPos;
-            };
-            const setDirFromSectionPlane = () => {
-                this._rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, sectionPlane.dir, quat);
-            };
-            setPosFromSectionPlane();
-            setDirFromSectionPlane();
-            this._sectionPlane = sectionPlane;
-            this._onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
-            this._onSectionPlaneDir = sectionPlane.on("dir", () => {
-                if (!this._ignoreNextSectionPlaneDirUpdate) {
-                    setDirFromSectionPlane();
-                } else {
-                    this._ignoreNextSectionPlaneDirUpdate = false;
-                }
-            });
-        }
-    }
-
-    /**
-     * Gets the {@link SectionPlane} controlled by this Control.
-     * @returns {SectionPlane} The SectionPlane.
-     */
-    get sectionPlane() {
-        return this._sectionPlane;
-    }
-
-    /**
-     * Sets if this Control is visible.
-     *
-     * @type {Boolean}
-     */
-    setVisible(visible = true) {
-        if (this._visible === visible) {
-            return;
-        }
-        this._visible = visible;
-        var id;
-        for (id in this._displayMeshes) {
-            if (this._displayMeshes.hasOwnProperty(id)) {
-                this._displayMeshes[id].visible = visible;
-            }
-        }
-    }
-
-    /**
-     * Gets if this Control is visible.
-     *
-     * @type {Boolean}
-     */
-    getVisible() {
-        return this._visible;
-    }
-
-    /**
-     * Sets if this Control is culled. This is called by SectionPlanesPlugin to
-     * temporarily hide the Control while a snapshot is being taken by Viewer#getSnapshot().
-     * @param culled
-     */
-    setCulled(culled) {
-        var id;
-        for (id in this._displayMeshes) {
-            if (this._displayMeshes.hasOwnProperty(id)) {
-                this._displayMeshes[id].culled = culled;
-            }
-        }
-    }
-
-    /**
      * Builds the Entities that represent this Control.
      * @private
      */
@@ -731,6 +642,95 @@ class Control {
         this._setSectionPlane(null);
         this._rootNode.destroy();
         this._displayMeshes = {};
+    }
+
+    /**
+     * Called by SectionPlanesPlugin to assign this Control to a SectionPlane.
+     * SectionPlanesPlugin keeps SectionPlaneControls in a reuse pool.
+     * Call with a null or undefined value to disconnect the Control ffrom whatever SectionPlane it was assigned to.
+     * @private
+     */
+    _setSectionPlane(sectionPlane) {
+        if (this._sectionPlane) {
+            this._sectionPlane.off(this._onSectionPlanePos);
+            this._sectionPlane.off(this._onSectionPlaneDir);
+            this._onSectionPlanePos = null;
+            this._onSectionPlaneDir = null;
+            this._sectionPlane = null;
+        }
+        if (sectionPlane) {
+            this.id = sectionPlane.id;
+            const setPosFromSectionPlane = () => {
+                const pos = sectionPlane.pos;
+                this._pos.set(pos);
+                worldToRTCPos(pos, this._origin, this._rtcPos);
+                this._rootNode.origin = this._origin;
+                this._rootNode.position = this._rtcPos;
+            };
+            const setDirFromSectionPlane = () => {
+                this._rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, sectionPlane.dir, quat);
+            };
+            setPosFromSectionPlane();
+            setDirFromSectionPlane();
+            this._sectionPlane = sectionPlane;
+            this._onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
+            this._onSectionPlaneDir = sectionPlane.on("dir", () => {
+                if (!this._ignoreNextSectionPlaneDirUpdate) {
+                    setDirFromSectionPlane();
+                } else {
+                    this._ignoreNextSectionPlaneDirUpdate = false;
+                }
+            });
+        }
+    }
+
+    /**
+     * Gets the {@link SectionPlane} controlled by this Control.
+     * @returns {SectionPlane} The SectionPlane.
+     */
+    get sectionPlane() {
+        return this._sectionPlane;
+    }
+
+    /**
+     * Sets if this Control is visible.
+     *
+     * @type {Boolean}
+     */
+    setVisible(visible = true) {
+        if (this._visible === visible) {
+            return;
+        }
+        this._visible = visible;
+        var id;
+        for (id in this._displayMeshes) {
+            if (this._displayMeshes.hasOwnProperty(id)) {
+                this._displayMeshes[id].visible = visible;
+            }
+        }
+    }
+
+    /**
+     * Gets if this Control is visible.
+     *
+     * @type {Boolean}
+     */
+    getVisible() {
+        return this._visible;
+    }
+
+    /**
+     * Sets if this Control is culled. This is called by SectionPlanesPlugin to
+     * temporarily hide the Control while a snapshot is being taken by Viewer#getSnapshot().
+     * @param culled
+     */
+    setCulled(culled) {
+        var id;
+        for (id in this._displayMeshes) {
+            if (this._displayMeshes.hasOwnProperty(id)) {
+                this._displayMeshes[id].culled = culled;
+            }
+        }
     }
 }
 
