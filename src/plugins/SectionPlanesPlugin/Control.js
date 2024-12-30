@@ -34,35 +34,34 @@ class Control {
          */
         this.id = null;
 
-        this._viewer = plugin.viewer;
+        const viewer = plugin.viewer;
+        const camera = viewer.camera;
+        const cameraControl = viewer.cameraControl;
+        const scene = viewer.scene;
+        const canvas = scene.canvas.canvas;
 
         this._visible = false;
-        this._pos = math.vec3(); // Full-precision position of the center of the Control
-        this._origin = math.vec3();
-        this._rtcPos = math.vec3();
+        const pos = math.vec3(); // Full-precision position of the center of the Control
+        const origin = math.vec3();
+        const rtcPos = math.vec3();
 
-        this._rootNode = null; // Root of Node graph that represents this control in the 3D scene
-        this._displayMeshes = null; // Meshes that are always visible
-        this._handlers = { };
+        const handlers = { };
 
-        this._ignoreNextSectionPlaneDirUpdate = false;
+        let ignoreNextSectionPlaneDirUpdate = false;
 
         // Builds the Entities that represent this Control.
         const NO_STATE_INHERIT = false;
-        const scene = this._viewer.scene;
         const radius = 1.0;
         const handleTubeRadius = 0.06;
         const hoopRadius = radius - 0.2;
         const tubeRadius = 0.01;
         const arrowRadius = 0.07;
 
-        this._rootNode = new Node(scene, {
+        const rootNode = new Node(scene, { // Root of Node graph that represents this control in the 3D scene
             position: [0, 0, 0],
             scale: [5, 5, 5],
             isObject: false
         });
-
-        const rootNode = this._rootNode;
 
         const arrowGeometry = (radiusBottom, height, radialSegments) => new ReadableGeometry(rootNode, buildCylinderGeometry({
             radiusTop: 0.001,
@@ -264,8 +263,8 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT);
 
-            this._handlers[arrowHandle.id] = this._handlers[shaftHandle.id] = [ bigArrowHead, [ true, rgb ] ];
-            this._handlers[rotateHandle.id] = [ hoop, [ false, rgb ] ];
+            handlers[arrowHandle.id] = handlers[shaftHandle.id] = [ bigArrowHead, [ true, rgb ] ];
+            handlers[rotateHandle.id] = [ hoop, [ false, rgb ] ];
 
             return {
                 set visible(v) {
@@ -285,8 +284,7 @@ class Control {
             };
         };
 
-        this._displayMeshes = {
-
+        this._displayMeshes = { // Meshes that are always visible
             plane: rootNode.addChild(new Mesh(rootNode, {
                 geometry: new ReadableGeometry(rootNode, {
                     primitive: "triangles",
@@ -389,14 +387,11 @@ class Control {
         var dragAction = null; // Action we're doing while we drag an arrow or hoop.
         const lastCanvasPos = math.vec2();
 
-        const canvas = this._viewer.scene.canvas.canvas;
-        const camera = this._viewer.camera;
-
         { // Keep gizmo screen size constant
             const tempVec3a = math.vec3([0, 0, 0]);
             let lastDist = -1;
             this._onSceneTick = scene.on("tick", () => {
-                const dist = Math.abs(math.lenVec3(math.subVec3(scene.camera.eye, this._pos, tempVec3a)));
+                const dist = Math.abs(math.lenVec3(math.subVec3(scene.camera.eye, pos, tempVec3a)));
                 if (camera.projection === "perspective") {
                     if (dist !== lastDist) {
                         setRootNodeScale(0.07 * dist * Math.tan(camera.perspective.fov * math.DEGTORAD));
@@ -459,14 +454,13 @@ class Control {
                 const planeNormal = getTranslationPlane(worldAxis);
                 getPointerPlaneIntersect(fromMouse, planeNormal, p1);
                 getPointerPlaneIntersect(toMouse, planeNormal, p2);
-                math.subVec3(p2, p1);
+                math.subVec3(p2, p1, p2);
                 const dot = math.dotVec3(p2, worldAxis);
-                self._pos[0] += worldAxis[0] * dot;
-                self._pos[1] += worldAxis[1] * dot;
-                self._pos[2] += worldAxis[2] * dot;
-                self._rootNode.position = self._pos;
+                math.mulVec3Scalar(worldAxis, dot, p1);
+                math.addVec3(pos, p1, pos);
+                rootNode.position = pos;
                 if (self._sectionPlane) {
-                    self._sectionPlane.pos = self._pos;
+                    self._sectionPlane.pos = pos;
                 }
             };
         })();
@@ -503,16 +497,13 @@ class Control {
                 if (math.dotVec3(c, worldAxis) < 0.0) {
                     incDegrees = -incDegrees;
                 }
-                self._rootNode.rotate(baseAxis, incDegrees);
+                rootNode.rotate(baseAxis, incDegrees);
 
-                if (self.sectionPlane) {
+                if (self._sectionPlane) {
                     math.quaternionToMat4(rootNode.quaternion, mat);  // << ---
                     math.transformVec3(mat, [0, 0, 1], dir);
-
-                    if (self._sectionPlane) {
-                        self._ignoreNextSectionPlaneDirUpdate = true;
-                        self._sectionPlane.dir = dir;
-                    }
+                    ignoreNextSectionPlaneDirUpdate = true;
+                    self._sectionPlane.dir = dir;
                 }
             };
         })();
@@ -549,14 +540,14 @@ class Control {
         {
             let lastAffordanceMesh = null;
 
-            this._onCameraControlHover = this._viewer.cameraControl.on("hoverEnter", (hit) => {
+            this._onCameraControlHover = cameraControl.on("hoverEnter", (hit) => {
                 if (this._visible && (! dragAction)) {
                     if (lastAffordanceMesh) {
                         lastAffordanceMesh.visible = false;
                     }
                     const meshId = hit.entity.id;
-                    if (meshId in this._handlers) {
-                        const [ affordanceMesh, dragAction ] = this._handlers[meshId];
+                    if (meshId in handlers) {
+                        const [ affordanceMesh, dragAction ] = handlers[meshId];
                         affordanceMesh.visible = true;
                         lastAffordanceMesh = affordanceMesh;
                         nextDragAction = dragAction;
@@ -567,7 +558,7 @@ class Control {
                 }
             });
 
-            this._onCameraControlHoverLeave = this._viewer.cameraControl.on("hoverOutEntity", (hit) => {
+            this._onCameraControlHoverLeave = cameraControl.on("hoverOutEntity", (hit) => {
                 if (this._visible) {
                     if (lastAffordanceMesh) {
                         lastAffordanceMesh.visible = false;
@@ -580,7 +571,7 @@ class Control {
             canvas.addEventListener("mousedown", this._canvasMouseDownListener = (e) => {
                 e.preventDefault();
                 if (this._visible && (e.which === 1) && nextDragAction) { // Left button
-                    this._viewer.cameraControl.pointerEnabled = false;
+                    cameraControl.pointerEnabled = false;
                     dragAction = nextDragAction;
                     lastCanvasPos.set(getClickCoordsWithinElement(e));
                 }
@@ -601,7 +592,7 @@ class Control {
 
             canvas.addEventListener("mouseup", this._canvasMouseUpListener = (e) => {
                 if (this._visible && dragAction) {
-                    this._viewer.cameraControl.pointerEnabled = true;
+                    cameraControl.pointerEnabled = true;
                     dragAction = null;
                 }
             });
@@ -618,24 +609,23 @@ class Control {
             if (sectionPlane) {
                 this.id = sectionPlane.id;
                 const setPosFromSectionPlane = () => {
-                    const pos = sectionPlane.pos;
-                    this._pos.set(pos);
-                    worldToRTCPos(pos, this._origin, this._rtcPos);
-                    this._rootNode.origin = this._origin;
-                    this._rootNode.position = this._rtcPos;
+                    pos.set(sectionPlane.pos);
+                    worldToRTCPos(pos, origin, rtcPos);
+                    rootNode.origin = origin;
+                    rootNode.position = rtcPos;
                 };
                 const setDirFromSectionPlane = () => {
-                    this._rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, sectionPlane.dir, quat);
+                    rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, sectionPlane.dir, quat);
                 };
                 setPosFromSectionPlane();
                 setDirFromSectionPlane();
                 this._sectionPlane = sectionPlane;
                 this._onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
                 this._onSectionPlaneDir = sectionPlane.on("dir", () => {
-                    if (!this._ignoreNextSectionPlaneDirUpdate) {
+                    if (!ignoreNextSectionPlaneDirUpdate) {
                         setDirFromSectionPlane();
                     } else {
-                        this._ignoreNextSectionPlaneDirUpdate = false;
+                        ignoreNextSectionPlaneDirUpdate = false;
                     }
                 });
             }
@@ -643,12 +633,6 @@ class Control {
 
         this.__destroy = () => {
             // unbindEvents
-            const viewer = this._viewer;
-            const scene = viewer.scene;
-            const canvas = scene.canvas.canvas;
-            const camera = viewer.camera;
-            const cameraControl = viewer.cameraControl;
-
             scene.off(this._onSceneTick);
 
             canvas.removeEventListener("mousedown", this._canvasMouseDownListener);
@@ -659,8 +643,8 @@ class Control {
             cameraControl.off(this._onCameraControlHoverLeave);
 
             // destroyNodes
-            this._setSectionPlane(null);
-            this._rootNode.destroy();
+            this.__setSectionPlane(null);
+            rootNode.destroy();
             this._displayMeshes = {};
         };
     }
