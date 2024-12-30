@@ -378,18 +378,11 @@ class Control {
             addAxis([0,0,1], [ 0,  0, -1 ], [ 0, 0, -1 ])
         ];
 
-        // bindEvents
-        const self = this;
-
-        const setRootNodeScale = size => rootNode.scale = [size, size, size];
-
-        var nextDragAction = null; // As we hover grabbed an arrow or hoop, self is the action we would do if we then dragged it.
-        var dragAction = null; // Action we're doing while we drag an arrow or hoop.
-        const lastCanvasPos = math.vec2();
         const cleanups = [ ];
 
         { // Keep gizmo screen size constant
             let lastDist = -1;
+            const setRootNodeScale = size => rootNode.scale = [size, size, size];
             const onSceneTick = scene.on("tick", () => {
                 const dist = Math.abs(math.distVec3(camera.eye, pos));
                 if (camera.projection === "perspective") {
@@ -404,22 +397,18 @@ class Control {
             cleanups.push(() => scene.off(onSceneTick));
         }
 
-        const getClickCoordsWithinElement = (function () {
-            const canvasPos = new Float64Array(2);
-            return function (event) {
-                if (!event) {
-                    event = window.event;
-                    canvasPos[0] = event.x;
-                    canvasPos[1] = event.y;
-                } else {
-                    const element = event.target;
-                    const rect = element.getBoundingClientRect();
-                    canvasPos[0] = event.clientX - rect.left;
-                    canvasPos[1] = event.clientY - rect.top;
-                }
-                return canvasPos;
-            };
-        })();
+        const getClickCoordsWithinElement = (event, canvasPos) => {
+            if (!event) {
+                event = window.event;
+                canvasPos[0] = event.x;
+                canvasPos[1] = event.y;
+            } else {
+                const element = event.target;
+                const rect = element.getBoundingClientRect();
+                canvasPos[0] = event.clientX - rect.left;
+                canvasPos[1] = event.clientY - rect.top;
+            }
+        };
 
         const localToWorldVec = (function () {
             const mat = math.mat4();
@@ -431,28 +420,27 @@ class Control {
             };
         })();
 
-        var getTranslationPlane = (function () {
-            const planeNormal = math.vec3();
-            return function (worldAxis) {
-                const absX = Math.abs(worldAxis[0]);
-                if (absX > Math.abs(worldAxis[1]) && absX > Math.abs(worldAxis[2])) {
-                    math.cross3Vec3(worldAxis, [0, 1, 0], planeNormal);
-                } else {
-                    math.cross3Vec3(worldAxis, [1, 0, 0], planeNormal);
-                }
-                math.cross3Vec3(planeNormal, worldAxis, planeNormal);
-                math.normalizeVec3(planeNormal);
-                return planeNormal;
-            };
-        })();
+        const getTranslationPlane = (worldAxis, planeNormal) => {
+            const absX = Math.abs(worldAxis[0]);
+            if (absX > Math.abs(worldAxis[1]) && absX > Math.abs(worldAxis[2])) {
+                math.cross3Vec3(worldAxis, [0, 1, 0], planeNormal);
+            } else {
+                math.cross3Vec3(worldAxis, [1, 0, 0], planeNormal);
+            }
+            math.cross3Vec3(planeNormal, worldAxis, planeNormal);
+            math.normalizeVec3(planeNormal);
+        };
+
+        const self = this;
 
         const dragTranslateSectionPlane = (function () {
             const p1 = math.vec3();
             const p2 = math.vec3();
             const worldAxis = math.vec4();
+            const planeNormal = math.vec3();
             return function (baseAxis, fromMouse, toMouse) {
                 localToWorldVec(baseAxis, worldAxis);
-                const planeNormal = getTranslationPlane(worldAxis);
+                getTranslationPlane(worldAxis, planeNormal);
                 getPointerPlaneIntersect(fromMouse, planeNormal, p1);
                 getPointerPlaneIntersect(toMouse, planeNormal, p2);
                 math.subVec3(p2, p1, p2);
@@ -473,11 +461,12 @@ class Control {
             const worldAxis = math.vec4();
             const dir = math.vec3();
             const mat = math.mat4();
+            const planeNormal = math.vec3();
             return function (baseAxis, fromMouse, toMouse) {
                 localToWorldVec(baseAxis, worldAxis);
                 const hasData = getPointerPlaneIntersect(fromMouse, worldAxis, p1) && getPointerPlaneIntersect(toMouse, worldAxis, p2);
                 if (!hasData) { // Find intersections with view plane and project down to origin
-                    const planeNormal = getTranslationPlane(worldAxis);
+                    getTranslationPlane(worldAxis, planeNormal);
                     getPointerPlaneIntersect(fromMouse, planeNormal, p1, 1); // Ensure plane moves closer to camera so angles become workable
                     getPointerPlaneIntersect(toMouse, planeNormal, p2, 1);
                     var dot = math.dotVec3(p1, worldAxis);
@@ -540,6 +529,9 @@ class Control {
 
         {
             let lastAffordanceMesh = null;
+            let dragAction = null; // Action we're doing while we drag an arrow or hoop.
+            let nextDragAction = null; // As we hover grabbed an arrow or hoop, self is the action we would do if we then dragged it.
+            const lastCanvasPos = math.vec2();
 
             const onCameraControlHover = cameraControl.on("hoverEnter", (hit) => {
                 if (this._visible && (! dragAction)) {
@@ -581,13 +573,14 @@ class Control {
                 if (this._visible && (e.which === 1) && nextDragAction) { // Left button
                     cameraControl.pointerEnabled = false;
                     dragAction = nextDragAction;
-                    lastCanvasPos.set(getClickCoordsWithinElement(e));
+                    getClickCoordsWithinElement(e, lastCanvasPos);
                 }
             });
 
+            const canvasPos = new Float64Array(2);
             addCanvasEventListener("mousemove", (e) => {
                 if (this._visible && dragAction) {
-                    const canvasPos = getClickCoordsWithinElement(e);
+                    getClickCoordsWithinElement(e, canvasPos);
                     const [ isTranslate, axis ] = dragAction;
                     if (isTranslate) {
                         dragTranslateSectionPlane(axis, lastCanvasPos, canvasPos);
