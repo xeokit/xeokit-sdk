@@ -263,8 +263,27 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT);
 
-            handlers[arrowHandle.id] = handlers[shaftHandle.id] = [ bigArrowHead, (lastCanvasPos, canvasPos) => dragTranslateSectionPlane(rgb, lastCanvasPos, canvasPos) ];
-            handlers[rotateHandle.id] = [ hoop, (lastCanvasPos, canvasPos) => dragRotateSectionPlane(rgb, lastCanvasPos, canvasPos) ];
+            const lastCanvasPos = math.vec2();
+            handlers[arrowHandle.id] = handlers[shaftHandle.id] = [
+                bigArrowHead,
+                (initCanvasPos) => {
+                    lastCanvasPos.set(initCanvasPos);
+                    return canvasPos => {
+                        dragTranslateSectionPlane(rgb, lastCanvasPos, canvasPos);
+                        lastCanvasPos.set(canvasPos);
+                    };
+                }
+            ];
+            handlers[rotateHandle.id] = [
+                hoop,
+                (initCanvasPos) => {
+                    lastCanvasPos.set(initCanvasPos);
+                    return canvasPos => {
+                        dragRotateSectionPlane(rgb, lastCanvasPos, canvasPos);
+                        lastCanvasPos.set(canvasPos);
+                    };
+                }
+            ];
 
             return {
                 set visible(v) {
@@ -531,7 +550,6 @@ class Control {
             let lastAffordanceMesh = null;
             let dragAction = null; // Action we're doing while we drag an arrow or hoop.
             let nextDragAction = null; // As we hover grabbed an arrow or hoop, self is the action we would do if we then dragged it.
-            const lastCanvasPos = math.vec2();
 
             const onCameraControlHover = cameraControl.on("hoverEnter", (hit) => {
                 if (this._visible && (! dragAction)) {
@@ -568,21 +586,21 @@ class Control {
                 cleanups.push(() => canvas.removeEventListener(type, listener));
             };
 
+            const canvasPos = new Float64Array(2);
+
             addCanvasEventListener("mousedown", (e) => {
                 e.preventDefault();
                 if (this._visible && (e.which === 1) && nextDragAction) { // Left button
                     cameraControl.pointerEnabled = false;
-                    dragAction = nextDragAction;
-                    getClickCoordsWithinElement(e, lastCanvasPos);
+                    getClickCoordsWithinElement(e, canvasPos);
+                    dragAction = nextDragAction(canvasPos);
                 }
             });
 
-            const canvasPos = new Float64Array(2);
             addCanvasEventListener("mousemove", (e) => {
                 if (this._visible && dragAction) {
                     getClickCoordsWithinElement(e, canvasPos);
-                    dragAction(lastCanvasPos, canvasPos);
-                    lastCanvasPos.set(canvasPos);
+                    dragAction(canvasPos);
                 }
             });
 
