@@ -284,8 +284,8 @@ class Control {
             };
         };
 
-        this._displayMeshes = { // Meshes that are always visible
-            plane: rootNode.addChild(new Mesh(rootNode, {
+        this._displayMeshes = [ // Meshes that are always visible
+            rootNode.addChild(new Mesh(rootNode, { // plane
                 geometry: new ReadableGeometry(rootNode, {
                     primitive: "triangles",
                     positions: [
@@ -319,7 +319,7 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT),
 
-            planeFrame: rootNode.addChild(new Mesh(rootNode, { // Visible frame
+            rootNode.addChild(new Mesh(rootNode, { // Visible frame
                 geometry: new ReadableGeometry(rootNode, buildTorusGeometry({
                     center: [0, 0, 0],
                     radius: 1.7,
@@ -351,7 +351,7 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT),
 
-            center: rootNode.addChild(new Mesh(rootNode, {
+            rootNode.addChild(new Mesh(rootNode, { // center
                 geometry: new ReadableGeometry(rootNode, buildSphereGeometry({
                     radius: 0.05
                 })),
@@ -373,10 +373,10 @@ class Control {
             //
             //----------------------------------------------------------------------------------------------------------
 
-            xAxis: addAxis([1,0,0], [ 1,  0,  0 ], [ 1, 0,  0 ]),
-            yAxis: addAxis([0,1,0], [ 0, -1,  0 ], [ 0, 1,  0 ]),
-            zAxis: addAxis([0,0,1], [ 0,  0, -1 ], [ 0, 0, -1 ])
-        };
+            addAxis([1,0,0], [ 1,  0,  0 ], [ 1, 0,  0 ]),
+            addAxis([0,1,0], [ 0, -1,  0 ], [ 0, 1,  0 ]),
+            addAxis([0,0,1], [ 0,  0, -1 ], [ 0, 0, -1 ])
+        ];
 
         // bindEvents
         const self = this;
@@ -642,11 +642,12 @@ class Control {
 
         this.__destroy = () => {
             cleanups.forEach(c => c());
-
-            // destroyNodes
             this._unbindSectionPlane();
             rootNode.destroy();
-            this._displayMeshes = {};
+            this._displayMeshes = [ ];
+            for (let id in handlers) {
+                delete handlers[id];
+            }
         };
     }
 
@@ -681,15 +682,9 @@ class Control {
      * @type {Boolean}
      */
     setVisible(visible = true) {
-        if (this._visible === visible) {
-            return;
-        }
-        this._visible = visible;
-        var id;
-        for (id in this._displayMeshes) {
-            if (this._displayMeshes.hasOwnProperty(id)) {
-                this._displayMeshes[id].visible = visible;
-            }
+        if (this._visible !== visible) {
+            this._visible = visible;
+            this._displayMeshes.forEach(m => m.visible = visible);
         }
     }
 
@@ -708,12 +703,7 @@ class Control {
      * @param culled
      */
     setCulled(culled) {
-        var id;
-        for (id in this._displayMeshes) {
-            if (this._displayMeshes.hasOwnProperty(id)) {
-                this._displayMeshes[id].culled = culled;
-            }
-        }
+        this._displayMeshes.forEach(m => m.culled = culled);
     }
 }
 
