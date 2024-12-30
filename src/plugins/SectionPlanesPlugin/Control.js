@@ -263,8 +263,8 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT);
 
-            handlers[arrowHandle.id] = handlers[shaftHandle.id] = [ bigArrowHead, [ true, rgb ] ];
-            handlers[rotateHandle.id] = [ hoop, [ false, rgb ] ];
+            handlers[arrowHandle.id] = handlers[shaftHandle.id] = [ bigArrowHead, (lastCanvasPos, canvasPos) => dragTranslateSectionPlane(rgb, lastCanvasPos, canvasPos) ];
+            handlers[rotateHandle.id] = [ hoop, (lastCanvasPos, canvasPos) => dragRotateSectionPlane(rgb, lastCanvasPos, canvasPos) ];
 
             return {
                 set visible(v) {
@@ -581,12 +581,7 @@ class Control {
             addCanvasEventListener("mousemove", (e) => {
                 if (this._visible && dragAction) {
                     getClickCoordsWithinElement(e, canvasPos);
-                    const [ isTranslate, axis ] = dragAction;
-                    if (isTranslate) {
-                        dragTranslateSectionPlane(axis, lastCanvasPos, canvasPos);
-                    } else {
-                        dragRotateSectionPlane(axis, lastCanvasPos, canvasPos);
-                    }
+                    dragAction(lastCanvasPos, canvasPos);
                     lastCanvasPos.set(canvasPos);
                 }
             });
