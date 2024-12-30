@@ -606,29 +606,67 @@ class Control {
                 }
             });
         }
+
+        this.__setSectionPlane = sectionPlane => {
+            if (this._sectionPlane) {
+                this._sectionPlane.off(this._onSectionPlanePos);
+                this._sectionPlane.off(this._onSectionPlaneDir);
+                this._onSectionPlanePos = null;
+                this._onSectionPlaneDir = null;
+                this._sectionPlane = null;
+            }
+            if (sectionPlane) {
+                this.id = sectionPlane.id;
+                const setPosFromSectionPlane = () => {
+                    const pos = sectionPlane.pos;
+                    this._pos.set(pos);
+                    worldToRTCPos(pos, this._origin, this._rtcPos);
+                    this._rootNode.origin = this._origin;
+                    this._rootNode.position = this._rtcPos;
+                };
+                const setDirFromSectionPlane = () => {
+                    this._rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, sectionPlane.dir, quat);
+                };
+                setPosFromSectionPlane();
+                setDirFromSectionPlane();
+                this._sectionPlane = sectionPlane;
+                this._onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
+                this._onSectionPlaneDir = sectionPlane.on("dir", () => {
+                    if (!this._ignoreNextSectionPlaneDirUpdate) {
+                        setDirFromSectionPlane();
+                    } else {
+                        this._ignoreNextSectionPlaneDirUpdate = false;
+                    }
+                });
+            }
+        };
+
+        this.__destroy = () => {
+            // unbindEvents
+            const viewer = this._viewer;
+            const scene = viewer.scene;
+            const canvas = scene.canvas.canvas;
+            const camera = viewer.camera;
+            const cameraControl = viewer.cameraControl;
+
+            scene.off(this._onSceneTick);
+
+            canvas.removeEventListener("mousedown", this._canvasMouseDownListener);
+            canvas.removeEventListener("mousemove", this._canvasMouseMoveListener);
+            canvas.removeEventListener("mouseup", this._canvasMouseUpListener);
+
+            cameraControl.off(this._onCameraControlHover);
+            cameraControl.off(this._onCameraControlHoverLeave);
+
+            // destroyNodes
+            this._setSectionPlane(null);
+            this._rootNode.destroy();
+            this._displayMeshes = {};
+        };
     }
 
     _destroy() {
-        // unbindEvents
-        const viewer = this._viewer;
-        const scene = viewer.scene;
-        const canvas = scene.canvas.canvas;
-        const camera = viewer.camera;
-        const cameraControl = viewer.cameraControl;
-
-        scene.off(this._onSceneTick);
-
-        canvas.removeEventListener("mousedown", this._canvasMouseDownListener);
-        canvas.removeEventListener("mousemove", this._canvasMouseMoveListener);
-        canvas.removeEventListener("mouseup", this._canvasMouseUpListener);
-
-        cameraControl.off(this._onCameraControlHover);
-        cameraControl.off(this._onCameraControlHoverLeave);
-
-        // destroyNodes
-        this._setSectionPlane(null);
-        this._rootNode.destroy();
-        this._displayMeshes = {};
+        this.__destroy();
     }
 
     /**
@@ -638,37 +676,7 @@ class Control {
      * @private
      */
     _setSectionPlane(sectionPlane) {
-        if (this._sectionPlane) {
-            this._sectionPlane.off(this._onSectionPlanePos);
-            this._sectionPlane.off(this._onSectionPlaneDir);
-            this._onSectionPlanePos = null;
-            this._onSectionPlaneDir = null;
-            this._sectionPlane = null;
-        }
-        if (sectionPlane) {
-            this.id = sectionPlane.id;
-            const setPosFromSectionPlane = () => {
-                const pos = sectionPlane.pos;
-                this._pos.set(pos);
-                worldToRTCPos(pos, this._origin, this._rtcPos);
-                this._rootNode.origin = this._origin;
-                this._rootNode.position = this._rtcPos;
-            };
-            const setDirFromSectionPlane = () => {
-                this._rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, sectionPlane.dir, quat);
-            };
-            setPosFromSectionPlane();
-            setDirFromSectionPlane();
-            this._sectionPlane = sectionPlane;
-            this._onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
-            this._onSectionPlaneDir = sectionPlane.on("dir", () => {
-                if (!this._ignoreNextSectionPlaneDirUpdate) {
-                    setDirFromSectionPlane();
-                } else {
-                    this._ignoreNextSectionPlaneDirUpdate = false;
-                }
-            });
-        }
+        this.__setSectionPlane(sectionPlane);
     }
 
     /**
