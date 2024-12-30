@@ -107,13 +107,6 @@ class Control {
         this._rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, xyz, quat);
     }
 
-    _setSectionPlaneDir(dir) {
-        if (this._sectionPlane) {
-            this._ignoreNextSectionPlaneDirUpdate = true;
-            this._sectionPlane.dir = dir;
-        }
-    }
-
     /**
      * Sets if this Control is visible.
      *
@@ -625,7 +618,11 @@ class Control {
                 if (self.sectionPlane) {
                     math.quaternionToMat4(rootNode.quaternion, mat);  // << ---
                     math.transformVec3(mat, [0, 0, 1], dir);
-                    self._setSectionPlaneDir(dir);
+
+                    if (self._sectionPlane) {
+                        self._ignoreNextSectionPlaneDirUpdate = true;
+                        self._sectionPlane.dir = dir;
+                    }
                 }
             };
         })();
