@@ -722,12 +722,7 @@ class Control {
     }
 
     _destroy() {
-        this._unbindEvents();
-        this._destroyNodes();
-    }
-
-    _unbindEvents() {
-
+        // unbindEvents
         const viewer = this._viewer;
         const scene = viewer.scene;
         const canvas = scene.canvas.canvas;
@@ -742,9 +737,8 @@ class Control {
 
         cameraControl.off(this._onCameraControlHover);
         cameraControl.off(this._onCameraControlHoverLeave);
-    }
 
-    _destroyNodes() {
+        // destroyNodes
         this._setSectionPlane(null);
         this._rootNode.destroy();
         this._displayMeshes = {};
