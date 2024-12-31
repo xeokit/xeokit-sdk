@@ -10,6 +10,7 @@ import {Node} from "../../viewer/scene/nodes/Node.js";
 import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
 import {buildSphereGeometry} from "../../viewer/scene/geometry/builders/buildSphereGeometry.js";
 import {worldToRTCPos} from "../../viewer/scene/math/rtcCoords.js";
+import {transformToNode} from "../lib/ui/index.js";
 
 const zeroVec = new Float64Array([0, 0, 1]);
 const quat = new Float64Array(4);
@@ -556,68 +557,87 @@ class Control {
 
         {
             let deactivateActive = null;
-            let dragAction = null; // Action we're doing while we drag an arrow or hoop.
-            let nextDragAction = null; // As we hover grabbed an arrow or hoop, self is the action we would do if we then dragged it.
+            let currentDrag = null;
+            cleanups.push(() => { if (currentDrag) { currentDrag.cleanup(); } });
+            const canvasPos = math.vec2();
 
-            const onCameraControlHover = cameraControl.on("hoverEnter", (hit) => {
-                if (this._visible && (! dragAction)) {
-                    if (deactivateActive) {
-                        deactivateActive();
+            const copyCanvasPos = (event, vec2) => {
+                vec2[0] = event.clientX;
+                vec2[1] = event.clientY;
+                transformToNode(canvas.ownerDocument.documentElement, canvas, vec2);
+            };
+
+            const pickHandler = (e) => {
+                copyCanvasPos(e, canvasPos);
+                const pickResult = viewer.scene.pick({ canvasPos: canvasPos });
+                const pickEntity = pickResult && pickResult.entity;
+                const pickId = pickEntity && pickEntity.id;
+                return (pickId in handlers) && handlers[pickId];
+            };
+
+            const startDrag = (event, matchesEvent) => {
+                const handler = pickHandler(matchesEvent(event));
+                if (handler) {
+                    if (currentDrag) {
+                        currentDrag.cleanup();
                     }
-                    const meshId = hit.entity.id;
-                    if (meshId in handlers) {
-                        const handler = handlers[meshId];
+
+                    const dragAction = handler.initDragAction(canvasPos);
+                    if (dragAction) {
+                        cameraControl.pointerEnabled = false; // or .active = false ?
                         handler.setActivated(true);
-                        deactivateActive = () => handler.setActivated(false);
-                        nextDragAction = handler.initDragAction;
-                    } else {
-                        deactivateActive = null;
-                        nextDragAction = null;
-                    }
-                }
-            });
-            cleanups.push(() => cameraControl.off(onCameraControlHover));
 
-            const onCameraControlHoverLeave = cameraControl.on("hoverOutEntity", (hit) => {
-                if (this._visible) {
-                    if (deactivateActive) {
-                        deactivateActive();
+                        currentDrag = {
+                            onChange: event => {
+                                const e = matchesEvent(event);
+                                if (e) {
+                                    copyCanvasPos(e, canvasPos);
+                                    dragAction(canvasPos);
+                                }
+                            },
+                            cleanup: function() {
+                                currentDrag = null;
+                                cameraControl.pointerEnabled = true; // or .active = true ?
+                                handler.setActivated(false);
+                            }
+                        };
                     }
-                    deactivateActive = null;
-                    nextDragAction = null;
                 }
-            });
-            cleanups.push(() => cameraControl.off(onCameraControlHoverLeave));
+            };
 
             const addCanvasEventListener = (type, listener) => {
                 canvas.addEventListener(type, listener);
                 cleanups.push(() => canvas.removeEventListener(type, listener));
             };
 
-            const canvasPos = new Float64Array(2);
-
             addCanvasEventListener("mousedown", (e) => {
                 e.preventDefault();
-                if (this._visible && (e.which === 1) && nextDragAction) { // Left button
-                    getClickCoordsWithinElement(e, canvasPos);
-                    dragAction = nextDragAction(canvasPos);
-                    if (dragAction) {
-                        cameraControl.pointerEnabled = false;
-                    }
+                if (e.which === 1) {
+                    startDrag(e, event => (event.which === 1) && event);
                 }
             });
 
             addCanvasEventListener("mousemove", (e) => {
-                if (this._visible && dragAction) {
-                    getClickCoordsWithinElement(e, canvasPos);
-                    dragAction(canvasPos);
+                if (currentDrag) {
+                    currentDrag.onChange(e);
+                } else {
+                    if (deactivateActive) {
+                        deactivateActive();
+                    }
+                    const handler = pickHandler(e);
+                    if (handler) {
+                        handler.setActivated(true);
+                        deactivateActive = () => handler.setActivated(false);
+                    } else {
+                        deactivateActive = null;
+                    }
                 }
             });
 
             addCanvasEventListener("mouseup", (e) => {
-                if (this._visible && dragAction) {
-                    cameraControl.pointerEnabled = true;
-                    dragAction = null;
+                if (currentDrag) {
+                    currentDrag.onChange(e);
+                    currentDrag.cleanup();
                 }
             });
         }
