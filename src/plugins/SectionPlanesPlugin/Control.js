@@ -259,17 +259,51 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT);
 
-            const lastCanvasPos = math.vec2();
+            const closestPointOnAxis = (function() {
+                const worldAxis = math.vec4();
+                const org = math.vec3();
+                const dir = math.vec3();
+                return (canvasPos, dst) => {
+                    localToWorldVec(rgb, worldAxis);
+
+                    const P = rootNode.position;
+                    const D = worldAxis;
+
+                    math.canvasPosToWorldRay(canvas, scene.camera.viewMatrix, scene.camera.projMatrix, scene.camera.projection, canvasPos, org, dir);
+
+                    const d01 = math.dotVec3(D, dir);
+                    const v = math.subVec3(org, P, dst);
+                    const v0 = math.dotVec3(v, D);
+                    const v1 = math.dotVec3(v, dir);
+                    const det = 1 - d01 * d01;
+
+                    if (Math.abs(det) > 1e-10) { // if lines are not parallel
+                        const s = (v0 - d01 * v1) / det;
+                        math.addVec3(P, math.mulVec3Scalar(D, s, dst), dst);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                };
+            })();
+            const initOffset = math.vec3();
+            const tempVec3 = math.vec3();
             handlers[arrowHandle.id] = handlers[shaftHandle.id] = {
                 affordanceMesh: bigArrowHead,
                 initDragAction: (initCanvasPos) => {
-                    lastCanvasPos.set(initCanvasPos);
-                    return canvasPos => {
-                        dragTranslateSectionPlane(rgb, lastCanvasPos, canvasPos);
-                        lastCanvasPos.set(canvasPos);
-                    };
+                    return closestPointOnAxis(initCanvasPos, initOffset) && math.subVec3(initOffset, rootNode.position, initOffset) && ((canvasPos) => {
+                        if (closestPointOnAxis(canvasPos, tempVec3)) {
+                            math.subVec3(tempVec3, initOffset, tempVec3);
+                            rootNode.position = tempVec3;
+                            if (self._sectionPlane) {
+                                self._sectionPlane.pos = tempVec3;
+                            }
+                        }
+                    });
                 }
             };
+
+            const lastCanvasPos = math.vec2();
             handlers[rotateHandle.id] = {
                 affordanceMesh: hoop,
                 initDragAction: (initCanvasPos) => {
@@ -447,28 +481,6 @@ class Control {
         };
 
         const self = this;
-
-        const dragTranslateSectionPlane = (function () {
-            const p1 = math.vec3();
-            const p2 = math.vec3();
-            const worldAxis = math.vec4();
-            const planeNormal = math.vec3();
-            return function (baseAxis, fromMouse, toMouse) {
-                localToWorldVec(baseAxis, worldAxis);
-                getTranslationPlane(worldAxis, planeNormal);
-                getPointerPlaneIntersect(fromMouse, planeNormal, p1);
-                getPointerPlaneIntersect(toMouse, planeNormal, p2);
-                math.subVec3(p2, p1, p2);
-                const dot = math.dotVec3(p2, worldAxis);
-                math.mulVec3Scalar(worldAxis, dot, p1);
-                math.addVec3(rootNode.position, p1, p1);
-                rootNode.position = p1;
-                if (self._sectionPlane) {
-                    self._sectionPlane.pos = rootNode.position;
-                }
-            };
-        })();
-
         var dragRotateSectionPlane = (function () {
             const p1 = math.vec4();
             const p2 = math.vec4();
@@ -587,9 +599,11 @@ class Control {
             addCanvasEventListener("mousedown", (e) => {
                 e.preventDefault();
                 if (this._visible && (e.which === 1) && nextDragAction) { // Left button
-                    cameraControl.pointerEnabled = false;
                     getClickCoordsWithinElement(e, canvasPos);
                     dragAction = nextDragAction(canvasPos);
+                    if (dragAction) {
+                        cameraControl.pointerEnabled = false;
+                    }
                 }
             });
 
