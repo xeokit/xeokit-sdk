@@ -289,7 +289,7 @@ class Control {
             const initOffset = math.vec3();
             const tempVec3 = math.vec3();
             handlers[arrowHandle.id] = handlers[shaftHandle.id] = {
-                affordanceMesh: bigArrowHead,
+                setActivated: a => bigArrowHead.visible = a,
                 initDragAction: (initCanvasPos) => {
                     return closestPointOnAxis(initCanvasPos, initOffset) && math.subVec3(initOffset, rootNode.position, initOffset) && ((canvasPos) => {
                         if (closestPointOnAxis(canvasPos, tempVec3)) {
@@ -305,7 +305,7 @@ class Control {
 
             const lastCanvasPos = math.vec2();
             handlers[rotateHandle.id] = {
-                affordanceMesh: hoop,
+                setActivated: a => hoop.visible = a,
                 initDragAction: (initCanvasPos) => {
                     lastCanvasPos.set(initCanvasPos);
                     return canvasPos => {
@@ -555,23 +555,23 @@ class Control {
         })();
 
         {
-            let lastAffordanceMesh = null;
+            let deactivateActive = null;
             let dragAction = null; // Action we're doing while we drag an arrow or hoop.
             let nextDragAction = null; // As we hover grabbed an arrow or hoop, self is the action we would do if we then dragged it.
 
             const onCameraControlHover = cameraControl.on("hoverEnter", (hit) => {
                 if (this._visible && (! dragAction)) {
-                    if (lastAffordanceMesh) {
-                        lastAffordanceMesh.visible = false;
+                    if (deactivateActive) {
+                        deactivateActive();
                     }
                     const meshId = hit.entity.id;
                     if (meshId in handlers) {
                         const handler = handlers[meshId];
-                        handler.affordanceMesh.visible = true;
-                        lastAffordanceMesh = handler.affordanceMesh;
+                        handler.setActivated(true);
+                        deactivateActive = () => handler.setActivated(false);
                         nextDragAction = handler.initDragAction;
                     } else {
-                        lastAffordanceMesh = null;
+                        deactivateActive = null;
                         nextDragAction = null;
                     }
                 }
@@ -580,10 +580,10 @@ class Control {
 
             const onCameraControlHoverLeave = cameraControl.on("hoverOutEntity", (hit) => {
                 if (this._visible) {
-                    if (lastAffordanceMesh) {
-                        lastAffordanceMesh.visible = false;
+                    if (deactivateActive) {
+                        deactivateActive();
                     }
-                    lastAffordanceMesh = null;
+                    deactivateActive = null;
                     nextDragAction = null;
                 }
             });
