@@ -47,11 +47,9 @@ class Control {
 
         // Builds the Entities that represent this Control.
         const NO_STATE_INHERIT = false;
-        const radius = 1.0;
-        const handleTubeRadius = 0.06;
-        const hoopRadius = radius - 0.2;
+        const arrowLength = 1.0;
+        const handleRadius = 0.09;
         const tubeRadius = 0.01;
-        const arrowRadius = 0.07;
 
         const rootNode = new Node(scene, { // Root of Node graph that represents this control in the 3D scene
             position: [0, 0, 0],
@@ -59,10 +57,10 @@ class Control {
             isObject: false
         });
 
-        const arrowGeometry = (radiusBottom, height, radialSegments) => new ReadableGeometry(rootNode, buildCylinderGeometry({
+        const arrowGeometry = (radiusBottom, height) => new ReadableGeometry(rootNode, buildCylinderGeometry({
             radiusTop: 0.001,
             radiusBottom: radiusBottom,
-            radialSegments: radialSegments,
+            radialSegments: 32,
             heightSegments: 1,
             height: height,
             openEnded: false
@@ -78,7 +76,7 @@ class Control {
         }));
 
         const torusGeometry = (tube, arcFraction, tubeSegments) => new ReadableGeometry(rootNode, buildTorusGeometry({
-            radius: hoopRadius,
+            radius: arrowLength - 0.2,
             tube: tube,
             radialSegments: 64,
             tubeSegments: tubeSegments,
@@ -87,16 +85,16 @@ class Control {
 
         const shapes = {// Reusable geometries
 
-            arrowHead: arrowGeometry(arrowRadius, 0.2, 32),
-            arrowHeadBig: arrowGeometry(0.09, 0.25, 32),
-            arrowHeadHandle: tubeGeometry(0.09, 0.37, 8),
+            curve:       torusGeometry(tubeRadius,   0.25, 14),
+            curveHandle: torusGeometry(handleRadius, 0.25, 14),
+            hoop:        torusGeometry(tubeRadius,   1,     8),
 
-            curve:       torusGeometry(tubeRadius, 0.25, 14),
-            curveHandle: torusGeometry(handleTubeRadius, 0.25, 14),
-            hoop:        torusGeometry(tubeRadius, 1, 8),
+            arrowHead:       arrowGeometry(0.07, 0.2),
+            arrowHeadBig:    arrowGeometry(0.09, 0.25),
+            arrowHeadHandle: tubeGeometry(handleRadius, 0.37, 8),
 
-            axis: tubeGeometry(tubeRadius, radius, 20),
-            axisHandle: tubeGeometry(0.08, radius, 20)
+            axis:       tubeGeometry(tubeRadius,   arrowLength, 20),
+            axisHandle: tubeGeometry(handleRadius, arrowLength, 20)
         };
 
         const colorMaterial = (rgb) => new PhongMaterial(rootNode, {
@@ -202,8 +200,8 @@ class Control {
             const axisRotation = math.quaternionToRotationMat4(math.vec3PairToQuaternion([ 0, 1, 0 ], axisDirection), math.identityMat4());
 
             const translatedAxisMatrix = (yOffset) => math.mulMat4(axisRotation, math.translateMat4c(0, yOffset, 0, math.identityMat4()), math.identityMat4());
-            const arrowMatrix = translatedAxisMatrix(radius + .1);
-            const shaftMatrix = translatedAxisMatrix(radius / 2);
+            const arrowMatrix = translatedAxisMatrix(arrowLength + .1);
+            const shaftMatrix = translatedAxisMatrix(arrowLength / 2);
 
             const arrow = rootNode.addChild(new Mesh(rootNode, {
                 geometry: shapes.arrowHead,
