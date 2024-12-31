@@ -264,26 +264,26 @@ class Control {
             }), NO_STATE_INHERIT);
 
             const lastCanvasPos = math.vec2();
-            handlers[arrowHandle.id] = handlers[shaftHandle.id] = [
-                bigArrowHead,
-                (initCanvasPos) => {
+            handlers[arrowHandle.id] = handlers[shaftHandle.id] = {
+                affordanceMesh: bigArrowHead,
+                initDragAction: (initCanvasPos) => {
                     lastCanvasPos.set(initCanvasPos);
                     return canvasPos => {
                         dragTranslateSectionPlane(rgb, lastCanvasPos, canvasPos);
                         lastCanvasPos.set(canvasPos);
                     };
                 }
-            ];
-            handlers[rotateHandle.id] = [
-                hoop,
-                (initCanvasPos) => {
+            };
+            handlers[rotateHandle.id] = {
+                affordanceMesh: hoop,
+                initDragAction: (initCanvasPos) => {
                     lastCanvasPos.set(initCanvasPos);
                     return canvasPos => {
                         dragRotateSectionPlane(rgb, lastCanvasPos, canvasPos);
                         lastCanvasPos.set(canvasPos);
                     };
                 }
-            ];
+            };
 
             return {
                 set visible(v) {
@@ -558,10 +558,10 @@ class Control {
                     }
                     const meshId = hit.entity.id;
                     if (meshId in handlers) {
-                        const [ affordanceMesh, dragAction ] = handlers[meshId];
-                        affordanceMesh.visible = true;
-                        lastAffordanceMesh = affordanceMesh;
-                        nextDragAction = dragAction;
+                        const handler = handlers[meshId];
+                        handler.affordanceMesh.visible = true;
+                        lastAffordanceMesh = handler.affordanceMesh;
+                        nextDragAction = handler.initDragAction;
                     } else {
                         lastAffordanceMesh = null;
                         nextDragAction = null;
