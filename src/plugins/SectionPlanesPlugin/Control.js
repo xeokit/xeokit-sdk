@@ -638,6 +638,29 @@ class Control {
                     currentDrag.cleanup();
                 }
             });
+
+
+            addCanvasEventListener("touchstart", event => {
+                event.preventDefault();
+                if (event.touches.length === 1)
+                {
+                    const touchStartId = event.touches[0].identifier;
+                    startDrag(event, event => [...event.changedTouches].find(e => e.identifier === touchStartId));
+                }
+            });
+
+            addCanvasEventListener("touchmove", event => {
+                event.preventDefault();
+                currentDrag && currentDrag.onChange(event);
+            });
+
+            addCanvasEventListener("touchend",  event => {
+                event.preventDefault();
+                if (currentDrag) {
+                    currentDrag.onChange(event);
+                    currentDrag.cleanup();
+                }
+            });
         }
 
         this._unbindSectionPlane = () => { };
