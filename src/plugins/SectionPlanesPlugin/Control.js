@@ -41,11 +41,6 @@ class Control {
         const canvas = scene.canvas.canvas;
 
         this._visible = false;
-        const pos = math.vec3(); // Full-precision position of the center of the Control
-        const origin = math.vec3();
-        const rtcPos = math.vec3();
-
-        const handlers = { };
 
         let ignoreNextSectionPlaneDirUpdate = false;
 
@@ -125,6 +120,7 @@ class Control {
             alphaMode: "blend"
         });
 
+        const handlers = { };
         const addAxis = (rgb, axisDirection, hoopDirection) => {
             const material = colorMaterial(rgb);
 
@@ -403,7 +399,7 @@ class Control {
             let lastDist = -1;
             const setRootNodeScale = size => rootNode.scale = [size, size, size];
             const onSceneTick = scene.on("tick", () => {
-                const dist = Math.abs(math.distVec3(camera.eye, pos));
+                const dist = Math.abs(math.distVec3(camera.eye, rootNode.position));
                 if (camera.projection === "perspective") {
                     if (dist !== lastDist) {
                         setRootNodeScale(0.07 * dist * Math.tan(camera.perspective.fov * math.DEGTORAD));
@@ -465,10 +461,10 @@ class Control {
                 math.subVec3(p2, p1, p2);
                 const dot = math.dotVec3(p2, worldAxis);
                 math.mulVec3Scalar(worldAxis, dot, p1);
-                math.addVec3(pos, p1, pos);
-                rootNode.position = pos;
+                math.addVec3(rootNode.position, p1, p1);
+                rootNode.position = p1;
                 if (self._sectionPlane) {
-                    self._sectionPlane.pos = pos;
+                    self._sectionPlane.pos = rootNode.position;
                 }
             };
         })();
@@ -617,15 +613,8 @@ class Control {
         this.__setSectionPlane = sectionPlane => {
             this.id = sectionPlane.id;
             this._sectionPlane = sectionPlane;
-            const setPosFromSectionPlane = () => {
-                pos.set(sectionPlane.pos);
-                worldToRTCPos(pos, origin, rtcPos);
-                rootNode.origin = origin;
-                rootNode.position = rtcPos;
-            };
-            const setDirFromSectionPlane = () => {
-                rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, sectionPlane.dir, quat);
-            };
+            const setPosFromSectionPlane = () => rootNode.position = sectionPlane.pos;
+            const setDirFromSectionPlane = () => rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, sectionPlane.dir, quat);
             setPosFromSectionPlane();
             setDirFromSectionPlane();
             const onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
