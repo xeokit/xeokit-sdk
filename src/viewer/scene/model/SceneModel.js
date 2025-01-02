@@ -2,8 +2,8 @@ import {Component} from "../Component.js";
 import {math} from "../math/math.js";
 import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {SceneModelMesh} from './SceneModelMesh.js';
-import {VBOLayer} from './vbo/VBOLayer.js';
-import {DTXTrianglesLayer} from "./dtx/triangles/DTXTrianglesLayer.js";
+import {DTXLayer} from './layer/DTXLayer.js';
+import {VBOLayer} from './layer/VBOLayer.js';
 import {ENTITY_FLAGS} from './ENTITY_FLAGS.js';
 import {RenderFlags} from "../webgl/RenderFlags.js";
 import {worldToRTCPositions} from "../math/rtcCoords.js";
@@ -2979,7 +2979,7 @@ export class SceneModel extends Component {
             case "triangles":
             case "solid":
             case "surface":
-                dtxLayer = new DTXTrianglesLayer(this, primitive, origin);
+                dtxLayer = new DTXLayer(this, primitive, origin);
                 break;
             default:
                 return;
