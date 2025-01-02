@@ -1,8 +1,8 @@
-import {ENTITY_FLAGS} from "../../ENTITY_FLAGS.js";
-import {getColSilhEdgePickFlags, getRenderers, isPerspectiveMatrix, Layer} from "../../layer/Layer.js";
+import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
+import {getColSilhEdgePickFlags, getRenderers, isPerspectiveMatrix, Layer} from "./Layer.js";
 
-import {math} from "../../../math/math.js";
-import {Configs} from "../../../../Configs.js";
+import {math} from "../../math/math.js";
+import {Configs} from "../../../Configs.js";
 
 const dataTextureRamStats = {
     sizeDataColorsAndFlags: 0,
@@ -101,7 +101,7 @@ const DEFAULT_MATRIX = math.identityMat4();
 /**
  * @private
  */
-export class DTXTrianglesLayer extends Layer {
+export class DTXLayer extends Layer {
 
     constructor(model, primitive, origin) {
 
