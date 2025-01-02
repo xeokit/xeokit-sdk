@@ -65,7 +65,6 @@ export class LayerRenderer {
     constructor(scene, primitive, cfg, subGeometry, renderingAttributes) {
 
         const isVBO = renderingAttributes.isVBO;
-        const sliceColorEnabled = isVBO;
         const pointsMaterial = scene.pointsMaterial;
 
         const programName               = cfg.programName;
@@ -107,7 +106,7 @@ export class LayerRenderer {
         };
 
         const vWorldPosition = lazyShaderVariable("vWorldPosition");
-        const sliceColorOr   = ((sliceColorEnabled && clipping)
+        const sliceColorOr   = (clipping
                                 ? (function() {
                                     const sliceColorOr = color => {
                                         sliceColorOr.needed = true;
