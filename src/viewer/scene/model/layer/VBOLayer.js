@@ -1,5 +1,5 @@
 import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
-import {getColSilhEdgePickFlags, getRenderers, Layer} from "../layer/Layer.js";
+import {getColSilhEdgePickFlags, getRenderers, Layer} from "./Layer.js";
 
 import {math} from "../../math/math.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../compression.js";
