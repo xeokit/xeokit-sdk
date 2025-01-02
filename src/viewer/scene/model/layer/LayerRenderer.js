@@ -12,54 +12,6 @@ const iota = function(n) {
     return ret;
 };
 
-const createClippingSetup = function(sectionPlanesState) {
-    const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
-
-    return (numAllocatedSectionPlanes > 0) && {
-        getHash: () => sectionPlanesState.getHash(),
-        appendDefinitions: (src) => {
-            for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
-                src.push("uniform bool sectionPlaneActive" + i + ";");
-                src.push("uniform vec3 sectionPlanePos" + i + ";");
-                src.push("uniform vec3 sectionPlaneDir" + i + ";");
-            }
-        },
-        getDistance: (worldPosition) => {
-            return iota(numAllocatedSectionPlanes).map(i => `(sectionPlaneActive${i} ? clamp(dot(-sectionPlaneDir${i}.xyz, ${worldPosition} - sectionPlanePos${i}.xyz), 0.0, 1000.0) : 0.0)`).join(" + ");
-        },
-        setupInputs: (getUniformSetter) => {
-            const uSectionPlanes = iota(numAllocatedSectionPlanes).map(i => ({
-                active: getUniformSetter("sectionPlaneActive" + i),
-                pos:    getUniformSetter("sectionPlanePos" + i),
-                dir:    getUniformSetter("sectionPlaneDir" + i)
-            }));
-            return (layer) => {
-                const origin = layer.origin;
-                const model = layer.model;
-                const sectionPlanes = sectionPlanesState.sectionPlanes;
-                const numSectionPlanes = sectionPlanes.length;
-                const baseIndex = layer.layerIndex * numSectionPlanes;
-                const renderFlags = model.renderFlags;
-                for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
-                    const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
-                    if (sectionPlaneUniforms) {
-                        const active = (sectionPlaneIndex < numSectionPlanes) && renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                        sectionPlaneUniforms.active(active ? 1 : 0);
-                        if (active) {
-                            const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                            sectionPlaneUniforms.dir(sectionPlane.dir);
-                            sectionPlaneUniforms.pos(origin
-                                                     ? getPlaneRTCPos(
-                                                         sectionPlane.dist, sectionPlane.dir, origin, tempVec3, model.matrix)
-                                                     : sectionPlane.pos);
-                        }
-                    }
-                }
-            };
-        }
-    };
-};
-
 export class LayerRenderer {
 
     constructor(scene, primitive, cfg, subGeometry, renderingAttributes) {
@@ -93,7 +45,52 @@ export class LayerRenderer {
         this.getValid = () => hash === getHash();
 
         const gl = scene.canvas.gl;
-        const clipping = createClippingSetup(sectionPlanesState);
+        const clipping = (function() {
+            const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
+
+            return (numAllocatedSectionPlanes > 0) && {
+                appendDefinitions: (src) => {
+                    for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
+                        src.push("uniform bool sectionPlaneActive" + i + ";");
+                        src.push("uniform vec3 sectionPlanePos" + i + ";");
+                        src.push("uniform vec3 sectionPlaneDir" + i + ";");
+                    }
+                },
+                getDistance: (worldPosition) => {
+                    return iota(numAllocatedSectionPlanes).map(i => `(sectionPlaneActive${i} ? clamp(dot(-sectionPlaneDir${i}.xyz, ${worldPosition} - sectionPlanePos${i}.xyz), 0.0, 1000.0) : 0.0)`).join(" + ");
+                },
+                setupInputs: (getUniformSetter) => {
+                    const uSectionPlanes = iota(numAllocatedSectionPlanes).map(i => ({
+                        active: getUniformSetter("sectionPlaneActive" + i),
+                        pos:    getUniformSetter("sectionPlanePos" + i),
+                        dir:    getUniformSetter("sectionPlaneDir" + i)
+                    }));
+                    return (layer) => {
+                        const origin = layer.origin;
+                        const model = layer.model;
+                        const sectionPlanes = sectionPlanesState.sectionPlanes;
+                        const numSectionPlanes = sectionPlanes.length;
+                        const baseIndex = layer.layerIndex * numSectionPlanes;
+                        const renderFlags = model.renderFlags;
+                        for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
+                            const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
+                            if (sectionPlaneUniforms) {
+                                const active = (sectionPlaneIndex < numSectionPlanes) && renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                                sectionPlaneUniforms.active(active ? 1 : 0);
+                                if (active) {
+                                    const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                                    sectionPlaneUniforms.dir(sectionPlane.dir);
+                                    sectionPlaneUniforms.pos(origin
+                                                             ? getPlaneRTCPos(
+                                                                 sectionPlane.dist, sectionPlane.dir, origin, tempVec3, model.matrix)
+                                                             : sectionPlane.pos);
+                                }
+                            }
+                        }
+                    };
+                }
+            };
+        })();
 
         const lazyShaderVariable = function(name) {
             const variable = {
