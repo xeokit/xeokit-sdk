@@ -77,6 +77,14 @@ class MousePanRotateDollyHandler {
             keyDown[keyCode] = false;
         });
 
+        document.addEventListener("visibilitychange", this._onVisibilityChange = () => {
+            keyDown.splice(0);
+        })
+
+        window.addEventListener("blur", this._onBlur = () => {
+            keyDown.splice(0);
+        })
+
         function setMousedownState(pick = true) {
             setMousedownPositions();
             if (pick) {
@@ -355,6 +363,8 @@ class MousePanRotateDollyHandler {
 
         document.removeEventListener("keydown", this._documentKeyDownHandler);
         document.removeEventListener("keyup", this._documentKeyUpHandler);
+        document.removeEventListener("visibilitychange", this._onVisibilityChange);
+        window.removeEventListener("blur", this._onBlur);
         canvas.removeEventListener("mousedown", this._mouseDownHandler);
         document.removeEventListener("mousemove", this._documentMouseMoveHandler);
         canvas.removeEventListener("mousemove", this._canvasMouseMoveHandler);
