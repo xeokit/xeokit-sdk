@@ -595,31 +595,26 @@ export class Layer {
 
     // ---------------------- SILHOUETTE RENDERING -----------------------------------
 
-    __drawSilhouette(renderFlags, frameCtx, renderPass) {
+    __drawSilhouette(renderFlags, frameCtx, material, renderPass) {
+        frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(material.fillColor, material.fillAlpha, tempVec4);
         this.__drawLayer(renderFlags, frameCtx, this._renderers.silhouetteRenderer, renderPass);
     }
 
     drawSilhouetteXRayed(renderFlags, frameCtx) {
         if (this._numXRayedLayerPortions > 0) {
-            const mat = this.model.scene.xrayMaterial;
-            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.fillColor, mat.fillAlpha, tempVec4);
-            this.__drawSilhouette(renderFlags, frameCtx, RENDER_PASSES.SILHOUETTE_XRAYED);
+            this.__drawSilhouette(renderFlags, frameCtx, this.model.scene.xrayMaterial, RENDER_PASSES.SILHOUETTE_XRAYED);
         }
     }
 
     drawSilhouetteHighlighted(renderFlags, frameCtx) {
         if (this._numHighlightedLayerPortions > 0) {
-            const mat = this.model.scene.highlightMaterial;
-            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.fillColor, mat.fillAlpha, tempVec4);
-            this.__drawSilhouette(renderFlags, frameCtx, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
+            this.__drawSilhouette(renderFlags, frameCtx, this.model.scene.highlightMaterial, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
         }
     }
 
     drawSilhouetteSelected(renderFlags, frameCtx) {
         if (this._numSelectedLayerPortions > 0) {
-            const mat = this.model.scene.selectedMaterial;
-            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.fillColor, mat.fillAlpha, tempVec4);
-            this.__drawSilhouette(renderFlags, frameCtx, RENDER_PASSES.SILHOUETTE_SELECTED);
+            this.__drawSilhouette(renderFlags, frameCtx, this.model.scene.selectedMaterial, RENDER_PASSES.SILHOUETTE_SELECTED);
         }
     }
 
