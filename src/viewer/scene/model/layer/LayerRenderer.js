@@ -65,24 +65,21 @@ export class LayerRenderer {
                         pos:    getUniformSetter("sectionPlanePos" + i),
                         dir:    getUniformSetter("sectionPlaneDir" + i)
                     }));
-                    return (layer) => {
-                        const origin = layer.origin;
-                        const model = layer.model;
+                    return (layerIndex, layerOrigin, modelMatrix, sectionPlanesActivePerLayer) => {
                         const sectionPlanes = sectionPlanesState.sectionPlanes;
                         const numSectionPlanes = sectionPlanes.length;
-                        const baseIndex = layer.layerIndex * numSectionPlanes;
-                        const renderFlags = model.renderFlags;
+                        const baseIndex = layerIndex * numSectionPlanes;
                         for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
                             const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
                             if (sectionPlaneUniforms) {
-                                const active = (sectionPlaneIndex < numSectionPlanes) && renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                                const active = (sectionPlaneIndex < numSectionPlanes) && sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
                                 sectionPlaneUniforms.active(active ? 1 : 0);
                                 if (active) {
                                     const sectionPlane = sectionPlanes[sectionPlaneIndex];
                                     sectionPlaneUniforms.dir(sectionPlane.dir);
-                                    sectionPlaneUniforms.pos(origin
+                                    sectionPlaneUniforms.pos(layerOrigin
                                                              ? getPlaneRTCPos(
-                                                                 sectionPlane.dist, sectionPlane.dir, origin, tempVec3, model.matrix)
+                                                                 sectionPlane.dist, sectionPlane.dir, layerOrigin, tempVec3, modelMatrix)
                                                              : sectionPlane.pos);
                                 }
                             }
@@ -475,10 +472,13 @@ export class LayerRenderer {
                 program.bind();
             }
 
+            const origin = layer.origin;
+            const model = layer.model;
+
             uRenderPass && uRenderPass(renderPass);
 
             if (setClippingState) {
-                setClippingState(layer);
+                setClippingState(layer.layerIndex, origin, model.matrix, model.renderFlags.sectionPlanesActivePerLayer);
                 const crossSections = uSlice && scene.crossSections;
                 if (crossSections) {
                     uSlice.thickness(crossSections.sliceThickness);
@@ -505,10 +505,7 @@ export class LayerRenderer {
             const layerDrawState = layer.layerDrawState;
             setInputsState && setInputsState(frameCtx, layerDrawState.textureSet);
 
-            const model = layer.model;
-            const origin = layer.origin;
             const {position, rotationMatrix} = model;
-
             const camera = scene.camera;
             const viewMatrix = (isShadowProgram && frameCtx.shadowViewMatrix) || (usePickParams && frameCtx.pickViewMatrix) || camera.viewMatrix;
             const projMatrix = (isShadowProgram && frameCtx.shadowProjMatrix) || (usePickParams && frameCtx.pickProjMatrix) || camera.projMatrix;
