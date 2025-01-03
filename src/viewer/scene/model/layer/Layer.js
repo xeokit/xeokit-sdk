@@ -346,23 +346,8 @@ export const getRenderers = (function() {
                     makeRenderingAttributes(subGeometry));
             };
 
-            // Pre-initialize certain renderers that would otherwise be lazy-initialised on user interaction,
-            // such as picking or emphasis, so that there is no delay when user first begins interacting with the viewer.
-            const eager = function(createProgramSetup) {
-                let renderer = createProgramSetup(createRenderer);
-                return {
-                    drawLayer: (frameCtx, layer, renderPass) => renderer.drawLayer(frameCtx, layer, renderPass),
-                    revalidate: force => {
-                        if (force || (! renderer.getValid())) {
-                            renderer.destroy();
-                            renderer = createProgramSetup(createRenderer);
-                        }
-                    }
-                };
-            };
-
-            const lazy = function(createProgramSetup) {
-                let renderer = null;
+            const wrapRenderer = function(createProgramSetup, isEager) {
+                let renderer = isEager && createProgramSetup(createRenderer);
                 return {
                     drawLayer: (frameCtx, layer, renderPass) => {
                         if (! renderer) {
@@ -373,11 +358,16 @@ export const getRenderers = (function() {
                     revalidate: force => {
                         if (renderer && (force || (! renderer.getValid()))) {
                             renderer.destroy();
-                            renderer = null;
+                            renderer = isEager && createProgramSetup(createRenderer);
                         }
                     }
                 };
             };
+
+            // Pre-initialize certain renderers that would otherwise be lazy-initialised on user interaction,
+            // such as picking or emphasis, so that there is no delay when user first begins interacting with the viewer.
+            const eager = createProgramSetup => wrapRenderer(createProgramSetup, true);
+            const lazy  = createProgramSetup => wrapRenderer(createProgramSetup, false);
 
             const gl = scene.canvas.gl;
 
