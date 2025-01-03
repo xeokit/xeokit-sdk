@@ -47,6 +47,8 @@ const RENDER_PASSES = {
     PICK: 11
 };
 
+const safeInvVec3 = v => [ math.safeInv(v[0]), math.safeInv(v[1]), math.safeInv(v[2]) ];
+
 export const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
 
 const createLightSetup = function(lightsState, useMaps) {
@@ -718,11 +720,9 @@ export class Layer {
         }
 
         const aabb = this._aabb;
-        frameCtx.snapPickCoordinateScale = [
-            math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT,
-            math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT,
-            math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT
-        ];
+        frameCtx.snapPickCoordinateScale = math.mulVec3Scalar(
+            safeInvVec3([ aabb[3] - aabb[0], aabb[4] - aabb[1], aabb[5] - aabb[2] ]),
+            math.MAX_INT);
         frameCtx.snapPickLayerNumber++;
 
         const renderer = isSnapInit ? this._renderers.snapInitRenderer : ((frameCtx.snapMode === "edge") ? this._renderers.snapEdgeRenderer : this._renderers.snapVertexRenderer);
@@ -730,11 +730,7 @@ export class Layer {
 
         frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
             origin: frameCtx.snapPickOrigin.slice(),
-            coordinateScale: [
-                math.safeInv(frameCtx.snapPickCoordinateScale[0]),
-                math.safeInv(frameCtx.snapPickCoordinateScale[1]),
-                math.safeInv(frameCtx.snapPickCoordinateScale[2])
-            ]
+            coordinateScale: safeInvVec3(frameCtx.snapPickCoordinateScale)
         };
     }
 
