@@ -486,17 +486,6 @@ export class Layer {
         // The axis-aligned World-space boundary of this Layer's positions.
         this._aabb = math.collapseAABB3();
         this._aabbDirty = true;
-
-        // These counts are used to avoid unnecessary render passes
-        this._numVisibleLayerPortions = 0;
-        this._numTransparentLayerPortions = 0;
-        this._numXRayedLayerPortions = 0;
-        this._numSelectedLayerPortions = 0;
-        this._numHighlightedLayerPortions = 0;
-        this._numClippableLayerPortions = 0;
-        this._numEdgesLayerPortions = 0;
-        this._numPickableLayerPortions = 0;
-        this._numCulledLayerPortions = 0;
     }
 
     finalize() {
@@ -506,7 +495,6 @@ export class Layer {
             this.sortId = this._compiledPortions.sortId;
             this.layerDrawState = this._compiledPortions.layerDrawState;
             this._renderers = this._compiledPortions.renderers;
-            this._hasEdges = this._renderers.edgesRenderers;
             this._setFlags = this._compiledPortions.setFlags;
 
             this.setColor  = this._compiledPortions.setColor;
@@ -516,13 +504,45 @@ export class Layer {
             this.getEachIndex = this._compiledPortions.getEachIndex;
             this.getEachVertex = this._compiledPortions.getEachVertex;
             this.precisionRayPickSurface = this._compiledPortions.precisionRayPickSurface;
+
+            // These counts are used to avoid unnecessary render passes
+            this._countsByFlag = { };
+            const setupFlagCount = (entityFlag, modelCountProperty) => {
+                const cnt = {
+                    count: 0,
+                    fromFlags: (flags, onlyIncrement) => {
+                        if (flags & entityFlag) {
+                            cnt.count++;
+                            this.model[modelCountProperty]++;
+                        } else if (! onlyIncrement) {
+                            cnt.count--;
+                            this.model[modelCountProperty]--;
+                        }
+                    }
+                };
+                this._countsByFlag[entityFlag] = cnt;
+            };
+            setupFlagCount(ENTITY_FLAGS.VISIBLE,     "numVisibleLayerPortions");
+            setupFlagCount(ENTITY_FLAGS.CULLED,      "numCulledLayerPortions");
+            setupFlagCount(ENTITY_FLAGS.PICKABLE,    "numPickableLayerPortions");
+            setupFlagCount(ENTITY_FLAGS.CLIPPABLE,   "numClippableLayerPortions");
+            setupFlagCount(ENTITY_FLAGS.XRAYED,      "numXRayedLayerPortions");
+            setupFlagCount(ENTITY_FLAGS.HIGHLIGHTED, "numHighlightedLayerPortions");
+            setupFlagCount(ENTITY_FLAGS.SELECTED,    "numSelectedLayerPortions");
+            if (this._renderers.edgesRenderers) {
+                setupFlagCount(ENTITY_FLAGS.EDGES, "numEdgesLayerPortions");
+            }
+
+            // Optimize initFlags to not require Object.values call each time (adds up a lot)
+            this._countsByFlagArr = Object.values(this._countsByFlag);
+            this._numTransparentLayerPortions = 0;
         }
     }
 
     aabbChanged() { this._aabbDirty = true; }
 
     __drawLayer(renderFlags, frameCtx, renderer, pass) {
-        if ((this._numCulledLayerPortions < this._portions.length) && (this._numVisibleLayerPortions > 0)) {
+        if ((this._countsByFlag[ENTITY_FLAGS.CULLED].count < this._portions.length) && (this._countsByFlag[ENTITY_FLAGS.VISIBLE].count > 0)) {
             const backfacePasses = (this.primitive !== "points") && (this.primitive !== "lines") && [
                 RENDER_PASSES.COLOR_OPAQUE,
                 RENDER_PASSES.COLOR_TRANSPARENT,
@@ -562,7 +582,7 @@ export class Layer {
     __drawColor(renderFlags, frameCtx, renderOpaque) {
         if ((renderOpaque ? (this._numTransparentLayerPortions < this._portions.length) : (this._numTransparentLayerPortions > 0))
             &&
-            (this._numXRayedLayerPortions < this._portions.length)) {
+            (this._countsByFlag[ENTITY_FLAGS.XRAYED].count < this._portions.length)) {
 
             const saoRenderer = (renderOpaque && frameCtx.withSAO && this.model.saoEnabled && this._renderers.colorRenderers["sao+"]) || this._renderers.colorRenderers["sao-"];
             const renderer = ((saoRenderer["PBR"] && frameCtx.pbrEnabled && this.model.pbrEnabled && this.layerDrawState.pbrSupported)
@@ -588,7 +608,7 @@ export class Layer {
     drawDepth(renderFlags, frameCtx) {
         // Assume whatever post-effect uses depth (eg SAO) does not apply to transparent objects
         const renderer = this._renderers.depthRenderer;
-        if (renderer && (this._numTransparentLayerPortions < this._portions.length) && (this._numXRayedLayerPortions < this._portions.length)) {
+        if (renderer && (this._numTransparentLayerPortions < this._portions.length) && (this._countsByFlag[ENTITY_FLAGS.XRAYED].count < this._portions.length)) {
             this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.COLOR_OPAQUE);
         }
     }
@@ -601,19 +621,19 @@ export class Layer {
     }
 
     drawSilhouetteXRayed(renderFlags, frameCtx) {
-        if (this._numXRayedLayerPortions > 0) {
+        if (this._countsByFlag[ENTITY_FLAGS.XRAYED].count > 0) {
             this.__drawSilhouette(renderFlags, frameCtx, this.model.scene.xrayMaterial, RENDER_PASSES.SILHOUETTE_XRAYED);
         }
     }
 
     drawSilhouetteHighlighted(renderFlags, frameCtx) {
-        if (this._numHighlightedLayerPortions > 0) {
+        if (this._countsByFlag[ENTITY_FLAGS.HIGHLIGHTED].count > 0) {
             this.__drawSilhouette(renderFlags, frameCtx, this.model.scene.highlightMaterial, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
         }
     }
 
     drawSilhouetteSelected(renderFlags, frameCtx) {
-        if (this._numSelectedLayerPortions > 0) {
+        if (this._countsByFlag[ENTITY_FLAGS.SELECTED].count > 0) {
             this.__drawSilhouette(renderFlags, frameCtx, this.model.scene.selectedMaterial, RENDER_PASSES.SILHOUETTE_SELECTED);
         }
     }
@@ -622,7 +642,7 @@ export class Layer {
 
     __drawVertexEdges(renderFlags, frameCtx, renderPass) {
         const renderer = this._renderers.edgesRenderers && this._renderers.edgesRenderers.vertex;
-        if (renderer && (this._numEdgesLayerPortions > 0)) {
+        if (renderer && (this._countsByFlag[ENTITY_FLAGS.EDGES].count > 0)) {
             this.__drawLayer(renderFlags, frameCtx, renderer, renderPass);
         }
     }
@@ -648,19 +668,19 @@ export class Layer {
     }
 
     drawEdgesHighlighted(renderFlags, frameCtx) {
-        if (this._numHighlightedLayerPortions > 0) {
+        if (this._countsByFlag[ENTITY_FLAGS.HIGHLIGHTED].count > 0) {
             this.__drawUniformEdges(renderFlags, frameCtx, this.model.scene.highlightMaterial, RENDER_PASSES.EDGES_HIGHLIGHTED);
         }
     }
 
     drawEdgesSelected(renderFlags, frameCtx) {
-        if (this._numSelectedLayerPortions > 0) {
+        if (this._countsByFlag[ENTITY_FLAGS.SELECTED].count > 0) {
             this.__drawUniformEdges(renderFlags, frameCtx, this.model.scene.selectedMaterial, RENDER_PASSES.EDGES_SELECTED);
         }
     }
 
     drawEdgesXRayed(renderFlags, frameCtx) {
-        if (this._numXRayedLayerPortions > 0) {
+        if (this._countsByFlag[ENTITY_FLAGS.XRAYED].count > 0) {
             this.__drawUniformEdges(renderFlags, frameCtx, this.model.scene.xrayMaterial, RENDER_PASSES.EDGES_XRAYED);
         }
     }
@@ -735,38 +755,8 @@ export class Layer {
 
 
     initFlags(portionId, flags, transparent) {
-        if (flags & ENTITY_FLAGS.VISIBLE) {
-            this._numVisibleLayerPortions++;
-            this.model.numVisibleLayerPortions++;
-        }
-        if (flags & ENTITY_FLAGS.HIGHLIGHTED) {
-            this._numHighlightedLayerPortions++;
-            this.model.numHighlightedLayerPortions++;
-        }
-        if (flags & ENTITY_FLAGS.XRAYED) {
-            this._numXRayedLayerPortions++;
-            this.model.numXRayedLayerPortions++;
-        }
-        if (flags & ENTITY_FLAGS.SELECTED) {
-            this._numSelectedLayerPortions++;
-            this.model.numSelectedLayerPortions++;
-        }
-        if (flags & ENTITY_FLAGS.CLIPPABLE) {
-            this._numClippableLayerPortions++;
-            this.model.numClippableLayerPortions++;
-        }
-        if (this._hasEdges && flags & ENTITY_FLAGS.EDGES) {
-            this._numEdgesLayerPortions++;
-            this.model.numEdgesLayerPortions++;
-        }
-        if (flags & ENTITY_FLAGS.PICKABLE) {
-            this._numPickableLayerPortions++;
-            this.model.numPickableLayerPortions++;
-        }
-        if (flags & ENTITY_FLAGS.CULLED) {
-            this._numCulledLayerPortions++;
-            this.model.numCulledLayerPortions++;
-        }
+        this._countsByFlagArr.forEach(cnt => cnt.fromFlags(flags, true));
+
         if (transparent) {
             this._numTransparentLayerPortions++;
             this.model.numTransparentLayerPortions++;
@@ -781,96 +771,48 @@ export class Layer {
     }
 
     setVisible(portionId, flags, transparent) {
-        if (flags & ENTITY_FLAGS.VISIBLE) {
-            this._numVisibleLayerPortions++;
-            this.model.numVisibleLayerPortions++;
-        } else {
-            this._numVisibleLayerPortions--;
-            this.model.numVisibleLayerPortions--;
-        }
+        this._countsByFlag[ENTITY_FLAGS.VISIBLE].fromFlags(flags);
         this._setFlags(portionId, flags, transparent);
-    }
-
-    setHighlighted(portionId, flags, transparent) {
-        if (flags & ENTITY_FLAGS.HIGHLIGHTED) {
-            this._numHighlightedLayerPortions++;
-            this.model.numHighlightedLayerPortions++;
-        } else {
-            this._numHighlightedLayerPortions--;
-            this.model.numHighlightedLayerPortions--;
-        }
-        this._setFlags(portionId, flags, transparent);
-    }
-
-    setXRayed(portionId, flags, transparent) {
-        if (flags & ENTITY_FLAGS.XRAYED) {
-            this._numXRayedLayerPortions++;
-            this.model.numXRayedLayerPortions++;
-        } else {
-            this._numXRayedLayerPortions--;
-            this.model.numXRayedLayerPortions--;
-        }
-        this._setFlags(portionId, flags, transparent);
-    }
-
-    setSelected(portionId, flags, transparent) {
-        if (flags & ENTITY_FLAGS.SELECTED) {
-            this._numSelectedLayerPortions++;
-            this.model.numSelectedLayerPortions++;
-        } else {
-            this._numSelectedLayerPortions--;
-            this.model.numSelectedLayerPortions--;
-        }
-        this._setFlags(portionId, flags, transparent);
-    }
-
-    setEdges(portionId, flags, transparent) {
-        if (this._hasEdges) {
-            if (flags & ENTITY_FLAGS.EDGES) {
-                this._numEdgesLayerPortions++;
-                this.model.numEdgesLayerPortions++;
-            } else {
-                this._numEdgesLayerPortions--;
-                this.model.numEdgesLayerPortions--;
-            }
-            this._setFlags(portionId, flags, transparent);
-        }
-    }
-
-    setClippable(portionId, flags) {
-        if (flags & ENTITY_FLAGS.CLIPPABLE) {
-            this._numClippableLayerPortions++;
-            this.model.numClippableLayerPortions++;
-        } else {
-            this._numClippableLayerPortions--;
-            this.model.numClippableLayerPortions--;
-        }
-        this._compiledPortions.setClippableFlags(portionId, flags);
     }
 
     setCulled(portionId, flags, transparent) {
-        if (flags & ENTITY_FLAGS.CULLED) {
-            this._numCulledLayerPortions++;
-            this.model.numCulledLayerPortions++;
-        } else {
-            this._numCulledLayerPortions--;
-            this.model.numCulledLayerPortions--;
-        }
+        this._countsByFlag[ENTITY_FLAGS.CULLED].fromFlags(flags);
         this._setFlags(portionId, flags, transparent);
+    }
+
+    setPickable(portionId, flags, transparent) {
+        this._countsByFlag[ENTITY_FLAGS.PICKABLE].fromFlags(flags);
+        this._setFlags(portionId, flags, transparent);
+    }
+
+    setClippable(portionId, flags) {
+        this._countsByFlag[ENTITY_FLAGS.CLIPPABLE].fromFlags(flags);
+        this._compiledPortions.setClippableFlags(portionId, flags);
     }
 
     setCollidable(portionId, flags) {
     }
 
-    setPickable(portionId, flags, transparent) {
-        if (flags & ENTITY_FLAGS.PICKABLE) {
-            this._numPickableLayerPortions++;
-            this.model.numPickableLayerPortions++;
-        } else {
-            this._numPickableLayerPortions--;
-            this.model.numPickableLayerPortions--;
-        }
+    setXRayed(portionId, flags, transparent) {
+        this._countsByFlag[ENTITY_FLAGS.XRAYED].fromFlags(flags);
         this._setFlags(portionId, flags, transparent);
+    }
+
+    setHighlighted(portionId, flags, transparent) {
+        this._countsByFlag[ENTITY_FLAGS.HIGHLIGHTED].fromFlags(flags);
+        this._setFlags(portionId, flags, transparent);
+    }
+
+    setSelected(portionId, flags, transparent) {
+        this._countsByFlag[ENTITY_FLAGS.SELECTED].fromFlags(flags);
+        this._setFlags(portionId, flags, transparent);
+    }
+
+    setEdges(portionId, flags, transparent) {
+        if (this._countsByFlag[ENTITY_FLAGS.EDGES]) {
+            this._countsByFlag[ENTITY_FLAGS.EDGES].fromFlags(flags);
+            this._setFlags(portionId, flags, transparent);
+        }
     }
 
     setTransparent(portionId, flags, transparent) {
