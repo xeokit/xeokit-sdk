@@ -74,14 +74,12 @@ export class LayerRenderer {
                         const baseIndex = layerIndex * numSectionPlanes;
                         for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
                             const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
-                            if (sectionPlaneUniforms) {
-                                const active = (sectionPlaneIndex < numSectionPlanes) && sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                                sectionPlaneUniforms.active(active ? 1 : 0);
-                                if (active) {
-                                    const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                                    sectionPlaneUniforms.dir(sectionPlane.dir);
-                                    sectionPlaneUniforms.pos(getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcOrigin, tempVec3a));
-                                }
+                            const active = (sectionPlaneIndex < numSectionPlanes) && sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                            sectionPlaneUniforms.active(active ? 1 : 0);
+                            if (active) {
+                                const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                                sectionPlaneUniforms.dir(sectionPlane.dir);
+                                sectionPlaneUniforms.pos(getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcOrigin, tempVec3a));
                             }
                         }
                     };
