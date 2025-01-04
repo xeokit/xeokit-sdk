@@ -717,7 +717,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
         case "LambertMaterial":
             this._uMaterialColor = program.getLocation("materialColor");
             this._uMaterialEmissive = program.getLocation("materialEmissive");
-            this._uAlphaModeCutoff = program.getLocation("materialAlphaModeCutoff");
             break;
 
         case "PhongMaterial":
