@@ -160,6 +160,17 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
             gl.uniform1f(this._uPointSize, materialState.pointSize);
         }
 
+        const setupTexture = (mapUniform, matrixUniform, map) => {
+            if (mapUniform && map && map._state.texture) {
+                program.bindTexture(mapUniform, map._state.texture, frameCtx.textureUnit);
+                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                frameCtx.bindTexture++;
+                if (matrixUniform) {
+                    gl.uniformMatrix4fv(matrixUniform, false, map._state.matrix);
+                }
+            }
+        };
+
         switch (materialState.type) {
             case "LambertMaterial":
                 if (this._uMaterialColor) {
@@ -194,62 +205,15 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                         materialState.alphaCutoff,
                         0);
                 }
-                if (material._ambientMap && material._ambientMap._state.texture && this._uMaterialAmbientMap) {
-                    program.bindTexture(this._uMaterialAmbientMap, material._ambientMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uMaterialAmbientMapMatrix) {
-                        gl.uniformMatrix4fv(this._uMaterialAmbientMapMatrix, false, material._ambientMap._state.matrix);
-                    }
-                }
-                if (material._diffuseMap && material._diffuseMap._state.texture && this._uDiffuseMap) {
-                    program.bindTexture(this._uDiffuseMap, material._diffuseMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uDiffuseMapMatrix) {
-                        gl.uniformMatrix4fv(this._uDiffuseMapMatrix, false, material._diffuseMap._state.matrix);
-                    }
-                }
-                if (material._specularMap && material._specularMap._state.texture && this._uSpecularMap) {
-                    program.bindTexture(this._uSpecularMap, material._specularMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uSpecularMapMatrix) {
-                        gl.uniformMatrix4fv(this._uSpecularMapMatrix, false, material._specularMap._state.matrix);
-                    }
-                }
-                if (material._emissiveMap && material._emissiveMap._state.texture && this._uEmissiveMap) {
-                    program.bindTexture(this._uEmissiveMap, material._emissiveMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uEmissiveMapMatrix) {
-                        gl.uniformMatrix4fv(this._uEmissiveMapMatrix, false, material._emissiveMap._state.matrix);
-                    }
-                }
-                if (material._alphaMap && material._alphaMap._state.texture && this._uAlphaMap) {
-                    program.bindTexture(this._uAlphaMap, material._alphaMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uAlphaMapMatrix) {
-                        gl.uniformMatrix4fv(this._uAlphaMapMatrix, false, material._alphaMap._state.matrix);
-                    }
-                }
-                if (material._normalMap && material._normalMap._state.texture && this._uNormalMap) {
-                    program.bindTexture(this._uNormalMap, material._normalMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uNormalMapMatrix) {
-                        gl.uniformMatrix4fv(this._uNormalMapMatrix, false, material._normalMap._state.matrix);
-                    }
-                }
-                if (material._occlusionMap && material._occlusionMap._state.texture && this._uOcclusionMap) {
-                    program.bindTexture(this._uOcclusionMap, material._occlusionMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uOcclusionMapMatrix) {
-                        gl.uniformMatrix4fv(this._uOcclusionMapMatrix, false, material._occlusionMap._state.matrix);
-                    }
-                }
+
+                setupTexture(this._uMaterialAmbientMap, this._uMaterialAmbientMapMatrix, material._ambientMap);
+                setupTexture(this._uDiffuseMap,         this._uDiffuseMapMatrix,         material._diffuseMap);
+                setupTexture(this._uSpecularMap,        this._uSpecularMapMatrix,        material._specularMap);
+                setupTexture(this._uEmissiveMap,        this._uEmissiveMapMatrix,        material._emissiveMap);
+                setupTexture(this._uOcclusionMap,       this._uOcclusionMapMatrix,       material._occlusionMap);
+                setupTexture(this._uAlphaMap,           this._uAlphaMapMatrix,           material._alphaMap);
+                setupTexture(this._uNormalMap,          this._uNormalMapMatrix,          material._normalMap);
+
                 if (material._diffuseFresnel) {
                     if (this._uDiffuseFresnelEdgeBias) {
                         gl.uniform1f(this._uDiffuseFresnelEdgeBias, material._diffuseFresnel.edgeBias);
@@ -344,78 +308,16 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                         materialState.alphaCutoff,
                         0.0);
                 }
-                const baseColorMap = material._baseColorMap;
-                if (baseColorMap && baseColorMap._state.texture && this._uBaseColorMap) {
-                    program.bindTexture(this._uBaseColorMap, baseColorMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uBaseColorMapMatrix) {
-                        gl.uniformMatrix4fv(this._uBaseColorMapMatrix, false, baseColorMap._state.matrix);
-                    }
-                }
-                const metallicMap = material._metallicMap;
-                if (metallicMap && metallicMap._state.texture && this._uMetallicMap) {
-                    program.bindTexture(this._uMetallicMap, metallicMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uMetallicMapMatrix) {
-                        gl.uniformMatrix4fv(this._uMetallicMapMatrix, false, metallicMap._state.matrix);
-                    }
-                }
-                const roughnessMap = material._roughnessMap;
-                if (roughnessMap && roughnessMap._state.texture && this._uRoughnessMap) {
-                    program.bindTexture(this._uRoughnessMap, roughnessMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uRoughnessMapMatrix) {
-                        gl.uniformMatrix4fv(this._uRoughnessMapMatrix, false, roughnessMap._state.matrix);
-                    }
-                }
-                const metallicRoughnessMap = material._metallicRoughnessMap;
-                if (metallicRoughnessMap && metallicRoughnessMap._state.texture && this._uMetallicRoughnessMap) {
-                    program.bindTexture(this._uMetallicRoughnessMap, metallicRoughnessMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uMetallicRoughnessMapMatrix) {
-                        gl.uniformMatrix4fv(this._uMetallicRoughnessMapMatrix, false, metallicRoughnessMap._state.matrix);
-                    }
-                }
-                var emissiveMap = material._emissiveMap;
-                if (emissiveMap && emissiveMap._state.texture && this._uEmissiveMap) {
-                    program.bindTexture(this._uEmissiveMap, emissiveMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uEmissiveMapMatrix) {
-                        gl.uniformMatrix4fv(this._uEmissiveMapMatrix, false, emissiveMap._state.matrix);
-                    }
-                }
-                var occlusionMap = material._occlusionMap;
-                if (occlusionMap && material._occlusionMap._state.texture && this._uOcclusionMap) {
-                    program.bindTexture(this._uOcclusionMap, occlusionMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uOcclusionMapMatrix) {
-                        gl.uniformMatrix4fv(this._uOcclusionMapMatrix, false, occlusionMap._state.matrix);
-                    }
-                }
-                var alphaMap = material._alphaMap;
-                if (alphaMap && alphaMap._state.texture && this._uAlphaMap) {
-                    program.bindTexture(this._uAlphaMap, alphaMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uAlphaMapMatrix) {
-                        gl.uniformMatrix4fv(this._uAlphaMapMatrix, false, alphaMap._state.matrix);
-                    }
-                }
-                var normalMap = material._normalMap;
-                if (normalMap && normalMap._state.texture && this._uNormalMap) {
-                    program.bindTexture(this._uNormalMap, normalMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uNormalMapMatrix) {
-                        gl.uniformMatrix4fv(this._uNormalMapMatrix, false, normalMap._state.matrix);
-                    }
-                }
+
+                setupTexture(this._uBaseColorMap,         this._uBaseColorMapMatrix,         material._baseColorMap);
+                setupTexture(this._uMetallicMap,          this._uMetallicMapMatrix,          material._metallicMap);
+                setupTexture(this._uRoughnessMap,         this._uRoughnessMapMatrix,         material._roughnessMap);
+                setupTexture(this._uMetallicRoughnessMap, this._uMetallicRoughnessMapMatrix, material._metallicRoughnessMap);
+                setupTexture(this._uEmissiveMap,          this._uEmissiveMapMatrix,          material._emissiveMap);
+                setupTexture(this._uOcclusionMap,         this._uOcclusionMapMatrix,         material._occlusionMap);
+                setupTexture(this._uAlphaMap,             this._uAlphaMapMatrix,             material._alphaMap);
+                setupTexture(this._uNormalMap,            this._uNormalMapMatrix,            material._normalMap);
+
                 break;
 
             case "SpecularMaterial":
@@ -439,78 +341,16 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                         materialState.alphaCutoff,
                         0.0);
                 }
-                const diffuseMap = material._diffuseMap;
-                if (diffuseMap && diffuseMap._state.texture && this._uDiffuseMap) {
-                    program.bindTexture(this._uDiffuseMap, diffuseMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uDiffuseMapMatrix) {
-                        gl.uniformMatrix4fv(this._uDiffuseMapMatrix, false, diffuseMap._state.matrix);
-                    }
-                }
-                const specularMap = material._specularMap;
-                if (specularMap && specularMap._state.texture && this._uSpecularMap) {
-                    program.bindTexture(this._uSpecularMap, specularMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uSpecularMapMatrix) {
-                        gl.uniformMatrix4fv(this._uSpecularMapMatrix, false, specularMap._state.matrix);
-                    }
-                }
-                const glossinessMap = material._glossinessMap;
-                if (glossinessMap && glossinessMap._state.texture && this._uGlossinessMap) {
-                    program.bindTexture(this._uGlossinessMap, glossinessMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uGlossinessMapMatrix) {
-                        gl.uniformMatrix4fv(this._uGlossinessMapMatrix, false, glossinessMap._state.matrix);
-                    }
-                }
-                const specularGlossinessMap = material._specularGlossinessMap;
-                if (specularGlossinessMap && specularGlossinessMap._state.texture && this._uSpecularGlossinessMap) {
-                    program.bindTexture(this._uSpecularGlossinessMap, specularGlossinessMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uSpecularGlossinessMapMatrix) {
-                        gl.uniformMatrix4fv(this._uSpecularGlossinessMapMatrix, false, specularGlossinessMap._state.matrix);
-                    }
-                }
-                var emissiveMap = material._emissiveMap;
-                if (emissiveMap && emissiveMap._state.texture && this._uEmissiveMap) {
-                    program.bindTexture(this._uEmissiveMap, emissiveMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uEmissiveMapMatrix) {
-                        gl.uniformMatrix4fv(this._uEmissiveMapMatrix, false, emissiveMap._state.matrix);
-                    }
-                }
-                var occlusionMap = material._occlusionMap;
-                if (occlusionMap && occlusionMap._state.texture && this._uOcclusionMap) {
-                    program.bindTexture(this._uOcclusionMap, occlusionMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uOcclusionMapMatrix) {
-                        gl.uniformMatrix4fv(this._uOcclusionMapMatrix, false, occlusionMap._state.matrix);
-                    }
-                }
-                var alphaMap = material._alphaMap;
-                if (alphaMap && alphaMap._state.texture && this._uAlphaMap) {
-                    program.bindTexture(this._uAlphaMap, alphaMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uAlphaMapMatrix) {
-                        gl.uniformMatrix4fv(this._uAlphaMapMatrix, false, alphaMap._state.matrix);
-                    }
-                }
-                var normalMap = material._normalMap;
-                if (normalMap && normalMap._state.texture && this._uNormalMap) {
-                    program.bindTexture(this._uNormalMap, normalMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uNormalMapMatrix) {
-                        gl.uniformMatrix4fv(this._uNormalMapMatrix, false, normalMap._state.matrix);
-                    }
-                }
+
+                setupTexture(this._uDiffuseMap,            this._uDiffuseMapMatrix,            material._diffuseMap);
+                setupTexture(this._uSpecularMap,           this._uSpecularMapMatrix,           material._specularMap);
+                setupTexture(this._uGlossinessMap,         this._uGlossinessMapMatrix,         material._glossinessMap);
+                setupTexture(this._uSpecularGlossinessMap, this._uSpecularGlossinessMapMatrix, material._specularGlossinessMap);
+                setupTexture(this._uEmissiveMap,           this._uEmissiveMapMatrix,           material._emissiveMap);
+                setupTexture(this._uOcclusionMap,          this._uOcclusionMapMatrix,          material._occlusionMap);
+                setupTexture(this._uAlphaMap,              this._uAlphaMapMatrix,              material._alphaMap);
+                setupTexture(this._uNormalMap,             this._uNormalMapMatrix,             material._normalMap);
+
                 break;
         }
         this._lastMaterialId = materialState.id;
