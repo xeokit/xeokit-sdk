@@ -60,7 +60,7 @@ export class LayerRenderer {
                     }
                 },
                 getDistance: (worldPosition) => {
-                    return iota(numAllocatedSectionPlanes).map(i => `(sectionPlaneActive${i} ? clamp(dot(-sectionPlaneDir${i}.xyz, ${worldPosition} - sectionPlanePos${i}.xyz), 0.0, 1000.0) : 0.0)`).join(" + ");
+                    return iota(numAllocatedSectionPlanes).map(i => `(sectionPlaneActive${i} ? clamp(dot(-sectionPlaneDir${i}, ${worldPosition} - sectionPlanePos${i}), 0.0, 1000.0) : 0.0)`).join(" + ");
                 },
                 setupInputs: (getUniformSetter) => {
                     const uSectionPlanes = iota(numAllocatedSectionPlanes).map(i => ({
