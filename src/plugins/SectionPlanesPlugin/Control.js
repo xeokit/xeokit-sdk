@@ -57,6 +57,18 @@ class Control {
             isObject: false
         });
 
+        const pos = math.vec3();
+        const setPos = (function() {
+            const origin = math.vec3();
+            const rtcPos = math.vec3();
+            return function(p) {
+                pos.set(p);
+                worldToRTCPos(p, origin, rtcPos);
+                rootNode.origin = origin;
+                rootNode.position = rtcPos;
+            };
+        })();
+
         const arrowGeometry = (radiusBottom, height) => new ReadableGeometry(rootNode, buildCylinderGeometry({
             radiusTop: 0.001,
             radiusBottom: radiusBottom,
@@ -265,7 +277,7 @@ class Control {
                 return (canvasPos, dst) => {
                     localToWorldVec(rgb, worldAxis);
 
-                    const P = rootNode.position;
+                    const P = pos;
                     const D = worldAxis;
 
                     math.canvasPosToWorldRay(canvas, scene.camera.viewMatrix, scene.camera.projMatrix, scene.camera.projection, canvasPos, org, dir);
@@ -290,10 +302,10 @@ class Control {
             handlers[arrowHandle.id] = handlers[shaftHandle.id] = {
                 setActivated: a => bigArrowHead.visible = a,
                 initDragAction: (initCanvasPos) => {
-                    return closestPointOnAxis(initCanvasPos, initOffset) && math.subVec3(initOffset, rootNode.position, initOffset) && ((canvasPos) => {
+                    return closestPointOnAxis(initCanvasPos, initOffset) && math.subVec3(initOffset, pos, initOffset) && ((canvasPos) => {
                         if (closestPointOnAxis(canvasPos, tempVec3)) {
                             math.subVec3(tempVec3, initOffset, tempVec3);
-                            rootNode.position = tempVec3;
+                            setPos(tempVec3);
                             if (self._sectionPlane) {
                                 self._sectionPlane.pos = tempVec3;
                             }
@@ -432,7 +444,7 @@ class Control {
             let lastDist = -1;
             const setRootNodeScale = size => rootNode.scale = [size, size, size];
             const onSceneTick = scene.on("tick", () => {
-                const dist = Math.abs(math.distVec3(camera.eye, rootNode.position));
+                const dist = Math.abs(math.distVec3(camera.eye, pos));
                 if (camera.projection === "perspective") {
                     if (dist !== lastDist) {
                         setRootNodeScale(0.07 * dist * Math.tan(camera.perspective.fov * math.DEGTORAD));
@@ -668,7 +680,7 @@ class Control {
         this.__setSectionPlane = sectionPlane => {
             this.id = sectionPlane.id;
             this._sectionPlane = sectionPlane;
-            const setPosFromSectionPlane = () => rootNode.position = sectionPlane.pos;
+            const setPosFromSectionPlane = () => setPos(sectionPlane.pos);
             const setDirFromSectionPlane = () => rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, sectionPlane.dir, quat);
             setPosFromSectionPlane();
             setDirFromSectionPlane();
