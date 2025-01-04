@@ -162,9 +162,6 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 
         switch (materialState.type) {
             case "LambertMaterial":
-                if (this._uMaterialAmbient) {
-                    gl.uniform3fv(this._uMaterialAmbient, materialState.ambient);
-                }
                 if (this._uMaterialColor) {
                     gl.uniform4f(this._uMaterialColor, materialState.color[0], materialState.color[1], materialState.color[2], materialState.alpha);
                 }
