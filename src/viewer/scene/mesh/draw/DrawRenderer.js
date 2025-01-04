@@ -240,6 +240,7 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                 if (material._reflectivityMap && material._reflectivityMap._state.texture && this._uReflectivityMap) {
                     program.bindTexture(this._uReflectivityMap, material._reflectivityMap._state.texture, frameCtx.textureUnit);
                     frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                    frameCtx.bindTexture++;
                     if (this._uReflectivityMapMatrix) {
                         gl.uniformMatrix4fv(this._uReflectivityMapMatrix, false, material._reflectivityMap._state.matrix);
                     }
