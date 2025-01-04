@@ -160,17 +160,6 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
             gl.uniform1f(this._uPointSize, materialState.pointSize);
         }
 
-        const setupTexture = (mapUniform, matrixUniform, map) => {
-            if (mapUniform && map && map._state.texture) {
-                program.bindTexture(mapUniform, map._state.texture, frameCtx.textureUnit);
-                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                frameCtx.bindTexture++;
-                if (matrixUniform) {
-                    gl.uniformMatrix4fv(matrixUniform, false, map._state.matrix);
-                }
-            }
-        };
-
         switch (materialState.type) {
             case "LambertMaterial":
                 if (this._uMaterialColor) {
@@ -205,14 +194,6 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                         materialState.alphaCutoff,
                         0);
                 }
-
-                setupTexture(this._uMaterialAmbientMap, this._uMaterialAmbientMapMatrix, material._ambientMap);
-                setupTexture(this._uDiffuseMap,         this._uDiffuseMapMatrix,         material._diffuseMap);
-                setupTexture(this._uSpecularMap,        this._uSpecularMapMatrix,        material._specularMap);
-                setupTexture(this._uEmissiveMap,        this._uEmissiveMapMatrix,        material._emissiveMap);
-                setupTexture(this._uOcclusionMap,       this._uOcclusionMapMatrix,       material._occlusionMap);
-                setupTexture(this._uAlphaMap,           this._uAlphaMapMatrix,           material._alphaMap);
-                setupTexture(this._uNormalMap,          this._uNormalMapMatrix,          material._normalMap);
 
                 if (material._diffuseFresnel) {
                     if (this._uDiffuseFresnelEdgeBias) {
@@ -308,16 +289,6 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                         materialState.alphaCutoff,
                         0.0);
                 }
-
-                setupTexture(this._uBaseColorMap,         this._uBaseColorMapMatrix,         material._baseColorMap);
-                setupTexture(this._uMetallicMap,          this._uMetallicMapMatrix,          material._metallicMap);
-                setupTexture(this._uRoughnessMap,         this._uRoughnessMapMatrix,         material._roughnessMap);
-                setupTexture(this._uMetallicRoughnessMap, this._uMetallicRoughnessMapMatrix, material._metallicRoughnessMap);
-                setupTexture(this._uEmissiveMap,          this._uEmissiveMapMatrix,          material._emissiveMap);
-                setupTexture(this._uOcclusionMap,         this._uOcclusionMapMatrix,         material._occlusionMap);
-                setupTexture(this._uAlphaMap,             this._uAlphaMapMatrix,             material._alphaMap);
-                setupTexture(this._uNormalMap,            this._uNormalMapMatrix,            material._normalMap);
-
                 break;
 
             case "SpecularMaterial":
@@ -341,18 +312,11 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                         materialState.alphaCutoff,
                         0.0);
                 }
-
-                setupTexture(this._uDiffuseMap,            this._uDiffuseMapMatrix,            material._diffuseMap);
-                setupTexture(this._uSpecularMap,           this._uSpecularMapMatrix,           material._specularMap);
-                setupTexture(this._uGlossinessMap,         this._uGlossinessMapMatrix,         material._glossinessMap);
-                setupTexture(this._uSpecularGlossinessMap, this._uSpecularGlossinessMapMatrix, material._specularGlossinessMap);
-                setupTexture(this._uEmissiveMap,           this._uEmissiveMapMatrix,           material._emissiveMap);
-                setupTexture(this._uOcclusionMap,          this._uOcclusionMapMatrix,          material._occlusionMap);
-                setupTexture(this._uAlphaMap,              this._uAlphaMapMatrix,              material._alphaMap);
-                setupTexture(this._uNormalMap,             this._uNormalMapMatrix,             material._normalMap);
-
                 break;
         }
+
+        this._binders.forEach(b => b(frameCtx, material));
+
         this._lastMaterialId = materialState.id;
     }
 
@@ -521,6 +485,25 @@ DrawRenderer.prototype._allocate = function (mesh) {
 
     this._uPointSize = program.getLocation("pointSize");
 
+    this._binders = [ ];
+
+    const setupTextureBind = (mapUniformName, matrixUniformName, getMap) => {
+        if (getMap(material)) {
+            const uMapMatrix = program.getLocation(matrixUniformName);
+            this._binders.push((frameCtx, mtl) => {
+                const map = getMap(mtl);
+                if (map._state.texture) {
+                    program.bindTexture(mapUniformName, map._state.texture, frameCtx.textureUnit);
+                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_UNITS;
+                    frameCtx.bindTexture++;
+                    if (uMapMatrix) {
+                        gl.uniformMatrix4fv(uMapMatrix, false, map._state.matrix);
+                    }
+                }
+            });
+        }
+    };
+
     switch (materialState.type) {
         case "LambertMaterial":
             this._uMaterialColor = program.getLocation("materialColor");
@@ -534,34 +517,15 @@ DrawRenderer.prototype._allocate = function (mesh) {
             this._uMaterialEmissive = program.getLocation("materialEmissive");
             this._uAlphaModeCutoff = program.getLocation("materialAlphaModeCutoff");
             this._uMaterialShininess = program.getLocation("materialShininess");
-            if (material._ambientMap) {
-                this._uMaterialAmbientMap = "ambientMap";
-                this._uMaterialAmbientMapMatrix = program.getLocation("ambientMapMatrix");
-            }
-            if (material._diffuseMap) {
-                this._uDiffuseMap = "diffuseMap";
-                this._uDiffuseMapMatrix = program.getLocation("diffuseMapMatrix");
-            }
-            if (material._specularMap) {
-                this._uSpecularMap = "specularMap";
-                this._uSpecularMapMatrix = program.getLocation("specularMapMatrix");
-            }
-            if (material._emissiveMap) {
-                this._uEmissiveMap = "emissiveMap";
-                this._uEmissiveMapMatrix = program.getLocation("emissiveMapMatrix");
-            }
-            if (material._alphaMap) {
-                this._uAlphaMap = "alphaMap";
-                this._uAlphaMapMatrix = program.getLocation("alphaMapMatrix");
-            }
-            if (material._normalMap) {
-                this._uNormalMap = "normalMap";
-                this._uNormalMapMatrix = program.getLocation("normalMapMatrix");
-            }
-            if (material._occlusionMap) {
-                this._uOcclusionMap = "occlusionMap";
-                this._uOcclusionMapMatrix = program.getLocation("occlusionMapMatrix");
-            }
+
+            setupTextureBind("ambientMap",      "ambientMapMatrix",      mtl => mtl._ambientMap);
+            setupTextureBind("diffuseMap",      "diffuseMapMatrix",      mtl => mtl._diffuseMap);
+            setupTextureBind("specularMap",     "specularMapMatrix",     mtl => mtl._specularMap);
+            setupTextureBind("emissiveMap",     "emissiveMapMatrix",     mtl => mtl._emissiveMap);
+            setupTextureBind("alphaMap",        "alphaMapMatrix",        mtl => mtl._alphaMap);
+            setupTextureBind("normalMap",       "normalMapMatrix",       mtl => mtl._normalMap);
+            setupTextureBind("occlusionMap",    "occlusionMapMatrix",    mtl => mtl._occlusionMap);
+
             if (material._diffuseFresnel) {
                 this._uDiffuseFresnelEdgeBias = program.getLocation("diffuseFresnelEdgeBias");
                 this._uDiffuseFresnelCenterBias = program.getLocation("diffuseFresnelCenterBias");
@@ -599,38 +563,16 @@ DrawRenderer.prototype._allocate = function (mesh) {
             this._uMaterialSpecularF0 = program.getLocation("materialSpecularF0");
             this._uMaterialEmissive = program.getLocation("materialEmissive");
             this._uAlphaModeCutoff = program.getLocation("materialAlphaModeCutoff");
-            if (material._baseColorMap) {
-                this._uBaseColorMap = "baseColorMap";
-                this._uBaseColorMapMatrix = program.getLocation("baseColorMapMatrix");
-            }
-            if (material._metallicMap) {
-                this._uMetallicMap = "metallicMap";
-                this._uMetallicMapMatrix = program.getLocation("metallicMapMatrix");
-            }
-            if (material._roughnessMap) {
-                this._uRoughnessMap = "roughnessMap";
-                this._uRoughnessMapMatrix = program.getLocation("roughnessMapMatrix");
-            }
-            if (material._metallicRoughnessMap) {
-                this._uMetallicRoughnessMap = "metallicRoughnessMap";
-                this._uMetallicRoughnessMapMatrix = program.getLocation("metallicRoughnessMapMatrix");
-            }
-            if (material._emissiveMap) {
-                this._uEmissiveMap = "emissiveMap";
-                this._uEmissiveMapMatrix = program.getLocation("emissiveMapMatrix");
-            }
-            if (material._occlusionMap) {
-                this._uOcclusionMap = "occlusionMap";
-                this._uOcclusionMapMatrix = program.getLocation("occlusionMapMatrix");
-            }
-            if (material._alphaMap) {
-                this._uAlphaMap = "alphaMap";
-                this._uAlphaMapMatrix = program.getLocation("alphaMapMatrix");
-            }
-            if (material._normalMap) {
-                this._uNormalMap = "normalMap";
-                this._uNormalMapMatrix = program.getLocation("normalMapMatrix");
-            }
+
+            setupTextureBind("baseColorMap",         "baseColorMapMatrix",         mtl => mtl._baseColorMap);
+            setupTextureBind("metallicMap",          "metallicMapMatrix",          mtl => mtl._metallicMap);
+            setupTextureBind("roughnessMap",         "roughnessMapMatrix",         mtl => mtl._roughnessMap);
+            setupTextureBind("metallicRoughnessMap", "metallicRoughnessMapMatrix", mtl => mtl._metallicRoughnessMap);
+            setupTextureBind("emissiveMap",          "emissiveMapMatrix",          mtl => mtl._emissiveMap);
+            setupTextureBind("occlusionMap",         "occlusionMapMatrix",         mtl => mtl._occlusionMap);
+            setupTextureBind("alphaMap",             "alphaMapMatrix",             mtl => mtl._alphaMap);
+            setupTextureBind("normalMap",            "normalMapMatrix",            mtl => mtl._normalMap);
+
             break;
 
         case "SpecularMaterial":
@@ -639,38 +581,16 @@ DrawRenderer.prototype._allocate = function (mesh) {
             this._uMaterialGlossiness = program.getLocation("materialGlossiness");
             this._uMaterialEmissive = program.getLocation("materialEmissive");
             this._uAlphaModeCutoff = program.getLocation("materialAlphaModeCutoff");
-            if (material._diffuseMap) {
-                this._uDiffuseMap = "diffuseMap";
-                this._uDiffuseMapMatrix = program.getLocation("diffuseMapMatrix");
-            }
-            if (material._specularMap) {
-                this._uSpecularMap = "specularMap";
-                this._uSpecularMapMatrix = program.getLocation("specularMapMatrix");
-            }
-            if (material._glossinessMap) {
-                this._uGlossinessMap = "glossinessMap";
-                this._uGlossinessMapMatrix = program.getLocation("glossinessMapMatrix");
-            }
-            if (material._specularGlossinessMap) {
-                this._uSpecularGlossinessMap = "materialSpecularGlossinessMap";
-                this._uSpecularGlossinessMapMatrix = program.getLocation("materialSpecularGlossinessMapMatrix");
-            }
-            if (material._emissiveMap) {
-                this._uEmissiveMap = "emissiveMap";
-                this._uEmissiveMapMatrix = program.getLocation("emissiveMapMatrix");
-            }
-            if (material._occlusionMap) {
-                this._uOcclusionMap = "occlusionMap";
-                this._uOcclusionMapMatrix = program.getLocation("occlusionMapMatrix");
-            }
-            if (material._alphaMap) {
-                this._uAlphaMap = "alphaMap";
-                this._uAlphaMapMatrix = program.getLocation("alphaMapMatrix");
-            }
-            if (material._normalMap) {
-                this._uNormalMap = "normalMap";
-                this._uNormalMapMatrix = program.getLocation("normalMapMatrix");
-            }
+
+            setupTextureBind("diffuseMap",                    "diffuseMapMatrix",                    mtl => mtl._diffuseMap);
+            setupTextureBind("specularMap",                   "specularMapMatrix",                   mtl => mtl._specularMap);
+            setupTextureBind("glossinessMap",                 "glossinessMapMatrix",                 mtl => mtl._glossinessMap);
+            setupTextureBind("materialSpecularGlossinessMap", "materialSpecularGlossinessMapMatrix", mtl => mtl._specularGlossinessMap);
+            setupTextureBind("emissiveMap",                   "emissiveMapMatrix",                   mtl => mtl._emissiveMap);
+            setupTextureBind("occlusionMap",                  "occlusionMapMatrix",                  mtl => mtl._occlusionMap);
+            setupTextureBind("alphaMap",                      "alphaMapMatrix",                      mtl => mtl._alphaMap);
+            setupTextureBind("normalMap",                     "normalMapMatrix",                     mtl => mtl._normalMap);
+
             break;
     }
 
