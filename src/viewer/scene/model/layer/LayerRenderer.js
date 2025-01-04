@@ -5,6 +5,7 @@ import {Program} from "../../webgl/Program.js";
 const tempVec2 = math.vec2();
 const tempVec3 = math.vec3();
 const tempMat4 = math.mat4();
+const vec3zero = math.vec3([0,0,0]);
 
 const iota = function(n) {
     const ret = [ ];
@@ -475,11 +476,12 @@ export class LayerRenderer {
 
             const origin = layer.origin;
             const model = layer.model;
+            const modelMatrix = model.matrix;
 
             uRenderPass && uRenderPass(renderPass);
 
             if (setClippingState) {
-                setClippingState(layer.layerIndex, origin, model.matrix, model.renderFlags.sectionPlanesActivePerLayer);
+                setClippingState(layer.layerIndex, origin, modelMatrix, model.renderFlags.sectionPlanesActivePerLayer);
                 const crossSections = uSlice && scene.crossSections;
                 if (crossSections) {
                     uSlice.thickness(crossSections.sliceThickness);
@@ -515,21 +517,11 @@ export class LayerRenderer {
 
             uLogDepthBufFC && uLogDepthBufFC(2.0 / (Math.log(far + 1.0) / Math.LN2));
 
-            let rtcViewMatrix;
             const rtcOrigin = tempVec3;
-            rtcOrigin.set([0, 0, 0]);
-
-            const gotOrigin = (origin[0] !== 0 || origin[1] !== 0 || origin[2] !== 0);
-            const gotPosition = (position[0] !== 0 || position[1] !== 0 || position[2] !== 0);
-            if (gotOrigin || gotPosition) {
-                if (gotOrigin) {
-                    math.transformPoint3(rotationMatrix, origin, rtcOrigin);
-                }
-                math.addVec3(rtcOrigin, position, rtcOrigin);
-                rtcViewMatrix = createRTCViewMat(viewMatrix, rtcOrigin, tempMat4);
-            } else {
-                rtcViewMatrix = viewMatrix;
-            }
+            math.transformPoint3(modelMatrix, origin, rtcOrigin);
+            const rtcViewMatrix = (math.compareVec3(rtcOrigin, vec3zero)
+                                   ? viewMatrix
+                                   : createRTCViewMat(viewMatrix, rtcOrigin, tempMat4));
 
             if (frameCtx.snapPickOrigin) {
                 frameCtx.snapPickOrigin[0] = rtcOrigin[0];
