@@ -4,6 +4,7 @@ import {Program} from "../../webgl/Program.js";
 
 const tempVec2 = math.vec2();
 const tempVec3 = math.vec3();
+const tempVec3a = math.vec3();
 const tempMat4 = math.mat4();
 const vec3zero = math.vec3([0,0,0]);
 
@@ -67,7 +68,7 @@ export class LayerRenderer {
                         pos:    getUniformSetter("sectionPlanePos" + i),
                         dir:    getUniformSetter("sectionPlaneDir" + i)
                     }));
-                    return (layerIndex, layerOrigin, modelMatrix, sectionPlanesActivePerLayer) => {
+                    return (layerIndex, rtcOrigin, sectionPlanesActivePerLayer) => {
                         const sectionPlanes = sectionPlanesState.sectionPlanes;
                         const numSectionPlanes = sectionPlanes.length;
                         const baseIndex = layerIndex * numSectionPlanes;
@@ -79,10 +80,7 @@ export class LayerRenderer {
                                 if (active) {
                                     const sectionPlane = sectionPlanes[sectionPlaneIndex];
                                     sectionPlaneUniforms.dir(sectionPlane.dir);
-                                    sectionPlaneUniforms.pos(layerOrigin
-                                                             ? getPlaneRTCPos(
-                                                                 sectionPlane.dist, sectionPlane.dir, layerOrigin, tempVec3, modelMatrix)
-                                                             : sectionPlane.pos);
+                                    sectionPlaneUniforms.pos(getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcOrigin, tempVec3a));
                                 }
                             }
                         }
@@ -476,12 +474,13 @@ export class LayerRenderer {
 
             const origin = layer.origin;
             const model = layer.model;
-            const modelMatrix = model.matrix;
+            const rtcOrigin = tempVec3;
+            math.transformPoint3(model.matrix, origin, rtcOrigin);
 
             uRenderPass && uRenderPass(renderPass);
 
             if (setClippingState) {
-                setClippingState(layer.layerIndex, origin, modelMatrix, model.renderFlags.sectionPlanesActivePerLayer);
+                setClippingState(layer.layerIndex, rtcOrigin, model.renderFlags.sectionPlanesActivePerLayer);
                 const crossSections = uSlice && scene.crossSections;
                 if (crossSections) {
                     uSlice.thickness(crossSections.sliceThickness);
@@ -508,7 +507,6 @@ export class LayerRenderer {
             const layerDrawState = layer.layerDrawState;
             setInputsState && setInputsState(frameCtx, layerDrawState.textureSet);
 
-            const {position, rotationMatrix} = model;
             const camera = scene.camera;
             const viewMatrix = (isShadowProgram && frameCtx.shadowViewMatrix) || (usePickParams && frameCtx.pickViewMatrix) || camera.viewMatrix;
             const projMatrix = (isShadowProgram && frameCtx.shadowProjMatrix) || (usePickParams && frameCtx.pickProjMatrix) || camera.projMatrix;
@@ -517,8 +515,6 @@ export class LayerRenderer {
 
             uLogDepthBufFC && uLogDepthBufFC(2.0 / (Math.log(far + 1.0) / Math.LN2));
 
-            const rtcOrigin = tempVec3;
-            math.transformPoint3(modelMatrix, origin, rtcOrigin);
             const rtcViewMatrix = (math.compareVec3(rtcOrigin, vec3zero)
                                    ? viewMatrix
                                    : createRTCViewMat(viewMatrix, rtcOrigin, tempMat4));
@@ -529,7 +525,7 @@ export class LayerRenderer {
                 frameCtx.snapPickOrigin[2] = rtcOrigin[2];
             }
 
-            drawCall(frameCtx, layer.layerDrawState, rotationMatrix, rtcViewMatrix, projMatrix, rtcOrigin, eye);
+            drawCall(frameCtx, layer.layerDrawState, model.rotationMatrix, rtcViewMatrix, projMatrix, rtcOrigin, eye);
 
             if (incrementDrawState) {
                 frameCtx.drawElements++;
