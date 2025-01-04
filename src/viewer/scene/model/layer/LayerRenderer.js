@@ -471,6 +471,7 @@ export class LayerRenderer {
 
             const origin = layer.origin;
             const model = layer.model;
+            const camera = scene.camera;
             const rtcOrigin = tempVec3;
             math.transformPoint3(model.matrix, origin, rtcOrigin);
 
@@ -488,9 +489,9 @@ export class LayerRenderer {
             if (uPoint) {
                 uPoint.pointSize(pointsMaterial.pointSize);
                 if (uPoint.nearPlaneHeight) {
-                    const nearPlaneHeight = (scene.camera.projection === "ortho") ?
+                    const nearPlaneHeight = (camera.projection === "ortho") ?
                           1.0
-                          : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
+                          : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * camera.perspective.fov * Math.PI / 180.0)));
                     uPoint.nearPlaneHeight(nearPlaneHeight);
                 }
             }
@@ -504,10 +505,9 @@ export class LayerRenderer {
             const layerDrawState = layer.layerDrawState;
             setInputsState && setInputsState(frameCtx, layerDrawState.textureSet);
 
-            const camera = scene.camera;
             const viewMatrix = (isShadowProgram && frameCtx.shadowViewMatrix) || (usePickParams && frameCtx.pickViewMatrix) || camera.viewMatrix;
             const projMatrix = (isShadowProgram && frameCtx.shadowProjMatrix) || (usePickParams && frameCtx.pickProjMatrix) || camera.projMatrix;
-            const eye        = (usePickParams && frameCtx.pickOrigin) || scene.camera.eye;
+            const eye        = (usePickParams && frameCtx.pickOrigin) || camera.eye;
             const far        = (usePickParams && frameCtx.pickProjMatrix) ? frameCtx.pickZFar : camera.project.far;
 
             uLogDepthBufFC && uLogDepthBufFC(2.0 / (Math.log(far + 1.0) / Math.LN2));
@@ -522,7 +522,7 @@ export class LayerRenderer {
                 frameCtx.snapPickOrigin[2] = rtcOrigin[2];
             }
 
-            drawCall(frameCtx, layer.layerDrawState, model.rotationMatrix, rtcViewMatrix, projMatrix, rtcOrigin, eye);
+            drawCall(frameCtx, layerDrawState, model.rotationMatrix, rtcViewMatrix, projMatrix, rtcOrigin, eye);
 
             if (incrementDrawState) {
                 frameCtx.drawElements++;
