@@ -86,7 +86,6 @@ export const DrawShaderSource = function(mesh) {
                 }
             }
             if (geometryState.colors) {
-                src.push("in vec4 color;");
                 src.push("out vec4 vColor;");
             }
             if (primitiveName === "points") {
@@ -103,7 +102,7 @@ export const DrawShaderSource = function(mesh) {
                 }
             }
         },
-        appendVertexOutputs: (src) => {
+        appendVertexOutputs: (src, color) => {
             if (normals) {
                 if (quantizedGeometry) {
                     src.push("vec4 localNormal = vec4(octDecode(normal.xy), 0.0); ");
@@ -156,7 +155,7 @@ export const DrawShaderSource = function(mesh) {
                 }
             }
             if (geometryState.colors) {
-                src.push("vColor = color;");
+                src.push(`vColor = ${color};`);
             }
             if (primitiveName === "points") {
                 src.push("gl_PointSize = pointSize;");
