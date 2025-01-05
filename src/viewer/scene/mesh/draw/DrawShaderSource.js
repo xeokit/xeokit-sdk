@@ -486,7 +486,7 @@ function buildVertexDraw(mesh) {
         if (lightsState.lightMaps.length > 0) {
             src.push("vWorldNormal = worldNormal;");
         }
-        src.push("vViewNormal = normalize((viewNormalMatrix2 * vec4(worldNormal, 1.0)).xyz);");
+        src.push("vViewNormal = normalize((viewNormalMatrix2 * vec4(worldNormal, 0.0)).xyz);");
         src.push("vec3 tmpVec3;");
         src.push("float lightDist;");
         for (let i = 0, len = lightsState.lights.length; i < len; i++) { // Lights
