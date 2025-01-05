@@ -637,7 +637,6 @@ function buildFragmentDraw(mesh) {
 
         if (lightsState.lightMaps.length > 0) {
             src.push("uniform samplerCube lightMap;");
-            src.push("uniform mat4 viewNormalMatrix;");
         }
         if (lightsState.reflectionMaps.length > 0) {
             src.push("uniform samplerCube reflectionMap;");
