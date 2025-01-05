@@ -188,10 +188,8 @@ function buildVertexDraw(mesh) {
 function buildFragmentDraw(mesh) {
     const scene = mesh.scene;
     const sectionPlanesState = scene._sectionPlanesState;
-    const materialState = mesh._material._state;
     const geometryState = mesh._geometry._state;
     const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
-    const solid = false && materialState.backfaces;
     const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
     const src = [];
     src.push("#version 300 es");
@@ -235,12 +233,6 @@ function buildFragmentDraw(mesh) {
             src.push("}");
         }
         src.push("  if (dist > 0.0) { discard; }");
-        if (solid) {
-            src.push("  if (gl_FrontFacing == false) {");
-            src.push("     outColor = vec4(1.0, 0.0, 0.0, 1.0);");
-            src.push("     return;");
-            src.push("  }");
-        }
         src.push("}");
     }
     if (geometryState.primitiveName === "points") {
