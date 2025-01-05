@@ -159,8 +159,8 @@ ShadowRenderer.prototype._allocate = function (mesh) {
     const program = this._program;
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uModelMatrix = program.getLocation("modelMatrix");
-    this._uShadowViewMatrix = program.getLocation("shadowViewMatrix");
-    this._uShadowProjMatrix = program.getLocation("shadowProjMatrix");
+    this._uViewMatrix = program.getLocation("viewMatrix");
+    this._uProjMatrix = program.getLocation("projMatrix");
     this._uSectionPlanes = [];
     for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
         this._uSectionPlanes.push({
@@ -185,8 +185,8 @@ ShadowRenderer.prototype._bindProgram = function (frame) {
     const sectionPlanesState = scene._sectionPlanesState;
     this._program.bind();
     frame.useProgram++;
-    gl.uniformMatrix4fv(this._uShadowViewMatrix, false, frame.shadowViewMatrix);
-    gl.uniformMatrix4fv(this._uShadowProjMatrix, false, frame.shadowProjMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, frame.shadowViewMatrix);
+    gl.uniformMatrix4fv(this._uProjMatrix, false, frame.shadowProjMatrix);
     this._lastMaterialId = null;
     this._lastGeometryId = null;
 };
