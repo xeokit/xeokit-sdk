@@ -1,5 +1,9 @@
+import {math} from "../../math/math.js";
+const tmpVec4 = math.vec4();
+
 export function EmphasisEdgesShaderSource(mesh) {
-    const gammaOutput = mesh.scene.gammaOutput;
+    const scene = mesh.scene;
+    const gammaOutput = scene.gammaOutput;
     return {
         programName: "EmphasisEdges",
         appendVertexDefinitions: (src) => {
@@ -17,6 +21,18 @@ export function EmphasisEdgesShaderSource(mesh) {
             src.push("in vec4 vColor;");
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src) => src.push(`outColor = ${gammaOutput ? "linearToGamma(vColor, gammaFactor)" : "vColor"};`)
+        appendFragmentOutputs: (src) => src.push(`outColor = ${gammaOutput ? "linearToGamma(vColor, gammaFactor)" : "vColor"};`),
+        setupInputs: gammaOutput && ((getInputSetter) => {
+            const gammaFactor = getInputSetter("gammaFactor");
+            return () => gammaFactor(scene.gammaFactor);
+        }),
+        setupMaterialInputs: (getInputSetter) => {
+            const edgeColor = getInputSetter("edgeColor");
+            return (mtl) => {
+                tmpVec4.set(mtl.edgeColor);
+                tmpVec4[3] = mtl.edgeAlpha;
+                edgeColor(tmpVec4);
+            };
+        }
     };
 }
