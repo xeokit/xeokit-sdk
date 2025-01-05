@@ -2,6 +2,7 @@
  * @author xeolabs / https://github.com/xeolabs
  */
 
+import {MeshRenderer} from "../MeshRenderer.js";
 import {PickTriangleShaderSource} from "./PickTriangleShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from "../../stats.js";
@@ -17,7 +18,7 @@ const PickTriangleRenderer = function (hash, mesh) {
     this._hash = hash;
     this._scene = mesh.scene;
     this._useCount = 0;
-    this._shaderSource = new PickTriangleShaderSource(mesh);
+    this._programSetup = PickTriangleShaderSource(mesh);
     this._allocate(mesh);
 };
 
@@ -158,7 +159,7 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 PickTriangleRenderer.prototype._allocate = function (mesh) {
     const scene = mesh.scene;
     const gl = scene.canvas.gl;
-    this._program = new Program(gl, this._shaderSource);
+    this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
     this._useCount = 0;
     if (this._program.errors) {
         this.errors = this._program.errors;
