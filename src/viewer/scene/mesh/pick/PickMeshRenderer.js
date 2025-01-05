@@ -5,6 +5,7 @@
 import {MeshRenderer} from "../MeshRenderer.js";
 import {PickMeshShaderSource} from "./PickMeshShaderSource.js";
 import {Program} from "../../webgl/Program.js";
+import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 import {stats} from "../../stats.js";
 import {math} from "../../math/math.js";
 import {getPlaneRTCPos} from "../../math/rtcCoords.js";
@@ -70,7 +71,8 @@ PickMeshRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const meshState = mesh._state;
-    const materialState = mesh._material._state;
+    const material = mesh._material;
+    const materialState = material._state;
     const geometryState = mesh._geometry._state;
     const origin = mesh.origin;
 
@@ -130,6 +132,7 @@ PickMeshRenderer.prototype.drawMesh = function (frameCtx, mesh) {
             }
             frameCtx.frontface = frontface;
         }
+        this._setMaterialInputsState && this._setMaterialInputsState(material);
         this._lastMaterialId = materialState.id;
     }
 
@@ -155,15 +158,7 @@ PickMeshRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         this._lastGeometryId = geometryState.id;
     }
 
-    // Mesh-indexed color
-    var pickID = mesh._state.pickID;
-    const a = pickID >> 24 & 0xFF;
-    const b = pickID >> 16 & 0xFF;
-    const g = pickID >> 8 & 0xFF;
-    const r = pickID & 0xFF;
-    gl.uniform4f(this._uPickColor, r / 255, g / 255, b / 255, a / 255);
-
-    gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
+    this._setInputsState && this._setInputsState(frameCtx, mesh._state);
 
     if (geometryState.indicesBuf) {
         gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
@@ -182,6 +177,10 @@ PickMeshRenderer.prototype._allocate = function (mesh) {
         return;
     }
     const program = this._program;
+    const getInputSetter = makeInputSetters(gl, program.handle);
+    this._setInputsState = this._programSetup.setupInputs && this._programSetup.setupInputs(getInputSetter);
+    this._setMaterialInputsState = this._programSetup.setupMaterialInputs && this._programSetup.setupMaterialInputs(getInputSetter);
+
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uModelMatrix = program.getLocation("modelMatrix");
     this._uViewMatrix = program.getLocation("viewMatrix");
@@ -196,8 +195,6 @@ PickMeshRenderer.prototype._allocate = function (mesh) {
     }
     this._aPosition = program.getAttribute("position");
     this._uClippable = program.getLocation("clippable");
-    this._uPickColor = program.getLocation("pickColor");
-    this._uPickClipPos = program.getLocation("pickClipPos");
     this._uOffset = program.getLocation("offset");
     if (scene.logarithmicDepthBufferEnabled ) {
         this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
