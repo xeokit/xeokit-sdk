@@ -24,10 +24,7 @@ const DrawRenderer = function (hash, mesh) {
     this._hash = hash;
     this._scene = mesh.scene;
     this._useCount = 0;
-    if (mesh._material._state.type === "LambertMaterial")
-        this._programSetup = LambertShaderSource(mesh);
-    else
-        this._shaderSource = new DrawShaderSource(mesh);
+    this._programSetup = (mesh._material._state.type === "LambertMaterial") ? LambertShaderSource(mesh) : DrawShaderSource(mesh);
     this._allocate(mesh);
 };
 
@@ -252,11 +249,7 @@ DrawRenderer.prototype._allocate = function (mesh) {
     const sectionPlanesState = scene._sectionPlanesState;
     const materialState = mesh._material._state;
 
-    if (this._programSetup) {
-        this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
-    } else {
-        this._program = new Program(gl, this._shaderSource);
-    }
+    this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
     if (this._program.errors) {
         this.errors = this._program.errors;
         return;
