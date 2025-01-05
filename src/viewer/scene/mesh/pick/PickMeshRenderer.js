@@ -2,6 +2,7 @@
  * @author xeolabs / https://github.com/xeolabs
  */
 
+import {MeshRenderer} from "../MeshRenderer.js";
 import {PickMeshShaderSource} from "./PickMeshShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from "../../stats.js";
@@ -17,7 +18,7 @@ const tempVec3a = math.vec3();
  */
 const PickMeshRenderer = function (hash, mesh) {
     this._hash = hash;
-    this._shaderSource = new PickMeshShaderSource(mesh);
+    this._programSetup = PickMeshShaderSource(mesh);
     this._scene = mesh.scene;
     this._useCount = 0;
     this._allocate(mesh);
@@ -175,7 +176,7 @@ PickMeshRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 PickMeshRenderer.prototype._allocate = function (mesh) {
     const scene = mesh.scene;
     const gl = scene.canvas.gl;
-    this._program = new Program(gl, this._shaderSource);
+    this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
     if (this._program.errors) {
         this.errors = this._program.errors;
         return;
