@@ -159,6 +159,7 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
             frameCtx.lineWidth = materialState.lineWidth;
         }
 
+        this._setMaterialInputsState && this._setMaterialInputsState(material);
         this._setGeneralMaterialInputsState && this._setGeneralMaterialInputsState(material);
 
         this._binders.forEach(b => b(frameCtx, material));
@@ -175,20 +176,7 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         gl.uniform1i(this._uClippable, meshState.clippable);
     }
 
-    if (this._uColorize) {
-        const colorize = meshState.colorize;
-        const lastColorize = this._lastColorize;
-        if (lastColorize[0] !== colorize[0] ||
-            lastColorize[1] !== colorize[1] ||
-            lastColorize[2] !== colorize[2] ||
-            lastColorize[3] !== colorize[3]) {
-            gl.uniform4fv(this._uColorize, colorize);
-            lastColorize[0] = colorize[0];
-            lastColorize[1] = colorize[1];
-            lastColorize[2] = colorize[2];
-            lastColorize[3] = colorize[3];
-        }
-    }
+    this._setInputsState && this._setInputsState(frameCtx, mesh._state);
 
     gl.uniform3fv(this._uOffset, meshState.offset);
     gl.uniform3fv(this._uScale, mesh.scale);
@@ -254,6 +242,8 @@ DrawRenderer.prototype._allocate = function (mesh) {
     }
     const program = this._program;
     const getInputSetter = makeInputSetters(gl, program.handle);
+    this._setInputsState = this._programSetup.setupInputs && this._programSetup.setupInputs(getInputSetter);
+    this._setMaterialInputsState = this._programSetup.setupMaterialInputs && this._programSetup.setupMaterialInputs(getInputSetter);
     this._setGeometryInputsState = meshRenderer.setupGeometryInputs && meshRenderer.setupGeometryInputs(getInputSetter);
     this._setGeneralMaterialInputsState = meshRenderer.setupGeneralMaterialInputs && meshRenderer.setupGeneralMaterialInputs(getInputSetter);
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
@@ -262,7 +252,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
-    this._uGammaFactor = program.getLocation("gammaFactor");
     this._uLightAmbient = [];
     this._uLightColor = [];
     this._uLightDir = [];
@@ -358,8 +347,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
 
     switch (materialState.type) {
         case "LambertMaterial":
-            setupUniformBind("materialColor",    (loc, mtl) => gl.uniform4f(loc, mtl._state.color[0], mtl._state.color[1], mtl._state.color[2], mtl._state.alpha));
-            setupUniformBind("materialEmissive", (loc, mtl) => gl.uniform3fv(loc, mtl._state.emissive));
             break;
 
         case "PhongMaterial":
@@ -466,15 +453,12 @@ DrawRenderer.prototype._allocate = function (mesh) {
     this._aColor = program.getAttribute("color");
 
     this._uClippable = program.getLocation("clippable");
-    this._uColorize = program.getLocation("colorize");
     this._uOffset = program.getLocation("offset");
     this._uScale = program.getLocation("scale");
 
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
-
-    this._lastColorize = new Float32Array(4);
 
     this._baseTextureUnit = 0;
 
@@ -499,11 +483,6 @@ DrawRenderer.prototype._bindProgram = function (frameCtx) {
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
-
-    this._lastColorize[0] = -1;
-    this._lastColorize[1] = -1;
-    this._lastColorize[2] = -1;
-    this._lastColorize[3] = -1;
 
     gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
 
@@ -563,10 +542,6 @@ DrawRenderer.prototype._bindProgram = function (frameCtx) {
         program.bindTexture(this._uReflectionMap, lightsState.reflectionMaps[0].texture, frameCtx.textureUnit);
         frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
         frameCtx.bindTexture++;
-    }
-
-    if (this._uGammaFactor) {
-        gl.uniform1f(this._uGammaFactor, scene.gammaFactor);
     }
 
     this._baseTextureUnit = frameCtx.textureUnit;
