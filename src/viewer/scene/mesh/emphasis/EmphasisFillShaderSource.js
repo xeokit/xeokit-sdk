@@ -6,7 +6,6 @@ export function EmphasisFillShaderSource(mesh) {
     const lightsState = scene._lightsState;
     const primitive = mesh._geometry._state.primitiveName;
     const normals = (mesh._geometry._state.autoVertexNormals || mesh._geometry._state.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan");
-    const billboard = mesh._state.billboard;
     const gammaOutput = scene.gammaOutput;
 
     return {
@@ -15,8 +14,6 @@ export function EmphasisFillShaderSource(mesh) {
         appendVertexDefinitions: (src) => {
             src.push("uniform vec4 fillColor;");
             if (normals) {
-                src.push("uniform mat4 modelNormalMatrix;");
-                src.push("uniform mat4 viewNormalMatrix;");
                 for (let i = 0, len = lightsState.lights.length; i < len; i++) {
                     const light = lightsState.lights[i];
                     if (light.type === "ambient") {
@@ -36,20 +33,11 @@ export function EmphasisFillShaderSource(mesh) {
             }
             src.push("out vec4 vColor;");
         },
-        appendVertexOutputs: (src, color, pickColor, uv, normal) => {
+        appendVertexOutputs: (src, color, pickColor, uv, worldNormal, viewNormal) => {
             src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
             src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
             src.push("float lambertian = 1.0;");
             if (normals) {
-                src.push("mat4 modelNormalMatrix2 = modelNormalMatrix;");
-                src.push("mat4 viewNormalMatrix2 = viewNormalMatrix;");
-                if (billboard === "spherical" || billboard === "cylindrical") {
-                    src.push("mat4 modelViewNormalMatrix =  viewNormalMatrix2 * modelNormalMatrix2;");
-                    src.push("billboard(modelNormalMatrix2);");
-                    src.push("billboard(viewNormalMatrix2);");
-                    src.push("billboard(modelViewNormalMatrix);");
-                }
-                src.push(`vec3 viewNormal = normalize((viewNormalMatrix2 * modelNormalMatrix2 * vec4(${normal}, 0.0)).xyz);`);
                 for (let i = 0, len = lightsState.lights.length; i < len; i++) {
                     const light = lightsState.lights[i];
                     if (light.type === "ambient") {
@@ -70,7 +58,7 @@ export function EmphasisFillShaderSource(mesh) {
                     } else {
                         continue;
                     }
-                    src.push("lambertian = max(dot(-viewNormal, viewLightDir), 0.0);");
+                    src.push(`lambertian = max(dot(-${viewNormal}, viewLightDir), 0.0);`);
                     src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
                 }
             }
