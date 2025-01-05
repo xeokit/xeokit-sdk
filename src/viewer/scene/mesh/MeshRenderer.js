@@ -12,6 +12,7 @@ function buildVertex(programSetup, mesh) {
     const billboard = mesh._state.billboard;
     const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
     const stationary = mesh._state.stationary;
+    const getLogDepth = (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled;
     const src = [];
     src.push("#version 300 es");
     src.push("// " + programSetup.programName + " vertex shader");
@@ -24,7 +25,7 @@ function buildVertex(programSetup, mesh) {
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
     }
-    if (scene.logarithmicDepthBufferEnabled) {
+    if (getLogDepth) {
         src.push("uniform float logDepthBufFC;");
         src.push("out float vFragDepth;");
         src.push("bool isPerspectiveMatrix(mat4 m) {");
@@ -87,7 +88,7 @@ function buildVertex(programSetup, mesh) {
         src.push("vWorldPosition = worldPosition;");
     }
     src.push("vec4 clipPos = projMatrix * viewPosition;");
-    if (scene.logarithmicDepthBufferEnabled) {
+    if (getLogDepth) {
         src.push("vFragDepth = 1.0 + clipPos.w;");
         src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
     }
@@ -100,6 +101,7 @@ function buildFragment(programSetup, mesh) {
     const scene = mesh.scene;
     const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
     const clipping = numAllocatedSectionPlanes > 0;
+    const getLogDepth = (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled;
     const src = [];
     src.push("#version 300 es");
     src.push("// " + programSetup.programName + " fragment shader");
@@ -110,7 +112,7 @@ function buildFragment(programSetup, mesh) {
     src.push("precision mediump float;");
     src.push("precision mediump int;");
     src.push("#endif");
-    if (scene.logarithmicDepthBufferEnabled) {
+    if (getLogDepth) {
         src.push("in float isPerspective;");
         src.push("uniform float logDepthBufFC;");
         src.push("in float vFragDepth;");
@@ -137,8 +139,8 @@ function buildFragment(programSetup, mesh) {
         src.push("  if (dist > 0.0) { discard; }");
         src.push("}");
     }
-    programSetup.appendFragmentOutputs(src);
-    if (scene.logarithmicDepthBufferEnabled) {
+    programSetup.appendFragmentOutputs(src, "vWorldPosition", "gl_FragCoord");
+    if (getLogDepth) {
         src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
     }
     src.push("}");
