@@ -8,6 +8,7 @@ export const LambertShaderSource = function(mesh) {
     return {
         programName: "Lambert",
         discardPoints: true,
+        setupPointSize: true,
         appendVertexDefinitions: (src) => {
             src.push("uniform vec4 colorize;");
             src.push("uniform vec4 lightAmbient;");
@@ -35,9 +36,6 @@ export const LambertShaderSource = function(mesh) {
                 }
             }
             src.push("out vec4 vColor;");
-            if (geometryState.primitiveName === "points") {
-                src.push("uniform float pointSize;");
-            }
         },
         appendVertexOutputs: (src, color, pickColor, uv, normal) => {
             if (normals) {
@@ -86,9 +84,6 @@ export const LambertShaderSource = function(mesh) {
                 }
             }
             src.push("vColor = vec4((lightAmbient.rgb * lightAmbient.a * materialColor.rgb) + materialEmissive.rgb + (reflectedColor * materialColor.rgb), materialColor.a) * colorize;"); // TODO: How to have ambient bright enough for canvas BG but not too bright for scene?
-            if (geometryState.primitiveName === "points") {
-                src.push("gl_PointSize = pointSize;");
-            }
         },
         appendFragmentDefinitions: (src) => {
             src.push("in vec4 vColor;");
