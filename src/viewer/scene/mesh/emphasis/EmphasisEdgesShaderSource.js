@@ -1,16 +1,12 @@
-
-
-/**
- * @private
- */
-class EmphasisEdgesShaderSource {
+export class EmphasisEdgesShaderSource {
     constructor(mesh) {
-        this.vertex = buildVertex(mesh);
-        this.fragment = buildFragment(mesh);
+        const programName = "EmphasisEdges";
+        this.vertex = buildVertex(programName, mesh);
+        this.fragment = buildFragment(programName, mesh);
     }
 }
 
-function buildVertex(mesh) {
+function buildVertex(programName, mesh) {
     const scene = mesh.scene;
     const sectionPlanesState = scene._sectionPlanesState;
     const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
@@ -19,7 +15,7 @@ function buildVertex(mesh) {
     const stationary = mesh._state.stationary;
     const src = [];
     src.push("#version 300 es");
-    src.push("// Edges drawing vertex shader");
+    src.push("// " + programName + " vertex shader");
     src.push("in vec3 position;");
     src.push("uniform mat4 modelMatrix;");
     src.push("uniform mat4 viewMatrix;");
@@ -95,7 +91,7 @@ function buildVertex(mesh) {
     return src;
 }
 
-function buildFragment(mesh) {
+function buildFragment(programName, mesh) {
 
     const scene = mesh.scene;
     const sectionPlanesState = mesh.scene._sectionPlanesState;
@@ -103,7 +99,7 @@ function buildFragment(mesh) {
     const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
     const src = [];
     src.push("#version 300 es");
-    src.push("// Edges drawing fragment shader");
+    src.push("// " + programName + " fragment shader");
     src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
     src.push("precision highp float;");
     src.push("precision highp int;");
@@ -156,5 +152,3 @@ function buildFragment(mesh) {
     src.push("}");
     return src;
 }
-
-export {EmphasisEdgesShaderSource};
