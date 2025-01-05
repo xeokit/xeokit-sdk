@@ -6,6 +6,7 @@ import {MeshRenderer} from "../MeshRenderer.js";
 import {Map} from "../../utils/Map.js";
 import {EmphasisEdgesShaderSource} from "./EmphasisEdgesShaderSource.js";
 import {Program} from "../../webgl/Program.js";
+import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 import {stats} from '../../stats.js';
 import {math} from "../../math/math.js";
 import {getPlaneRTCPos} from "../../math/rtcCoords.js";
@@ -70,7 +71,6 @@ EmphasisEdgesRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     const scene = this._scene;
     const camera = scene.camera;
     const gl = scene.canvas.gl;
-    let materialState;
     const meshState = mesh._state;
     const geometry = mesh._geometry;
     const geometryState = geometry._state;
@@ -113,21 +113,24 @@ EmphasisEdgesRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
         }
     }
 
+    let material;
     switch (mode) {
         case 0:
-            materialState = mesh._xrayMaterial._state;
+            material = mesh._xrayMaterial;
             break;
         case 1:
-            materialState = mesh._highlightMaterial._state;
+            material = mesh._highlightMaterial;
             break;
         case 2:
-            materialState = mesh._selectedMaterial._state;
+            material = mesh._selectedMaterial;
             break;
         case 3:
         default:
-            materialState = mesh._edgeMaterial._state;
+            material = mesh._edgeMaterial;
             break;
     }
+
+    const materialState = material._state;
 
     if (materialState.id !== this._lastMaterialId) {
         const backfaces = materialState.backfaces;
@@ -143,11 +146,7 @@ EmphasisEdgesRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
             gl.lineWidth(materialState.edgeWidth);
             frameCtx.lineWidth = materialState.edgeWidth;
         }
-        if (this._uEdgeColor) {
-            const edgeColor = materialState.edgeColor;
-            const edgeAlpha = materialState.edgeAlpha;
-            gl.uniform4f(this._uEdgeColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
-        }
+        this._setMaterialInputsState && this._setMaterialInputsState(material);
         this._lastMaterialId = materialState.id;
     }
 
@@ -158,6 +157,8 @@ EmphasisEdgesRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     }
 
     gl.uniform3fv(this._uOffset, meshState.offset);
+
+    this._setInputsState && this._setInputsState();
 
     // Bind VBOs
     let indicesBuf;
@@ -201,6 +202,9 @@ EmphasisEdgesRenderer.prototype._allocate = function (mesh) {
     }
 
     const program = this._program;
+    const getInputSetter = makeInputSetters(gl, program.handle);
+    this._setInputsState = this._programSetup.setupInputs && this._programSetup.setupInputs(getInputSetter);
+    this._setMaterialInputsState = this._programSetup.setupMaterialInputs && this._programSetup.setupMaterialInputs(getInputSetter);
 
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uModelMatrix = program.getLocation("modelMatrix");
@@ -214,10 +218,8 @@ EmphasisEdgesRenderer.prototype._allocate = function (mesh) {
             dir: program.getLocation("sectionPlaneDir" + i)
         });
     }
-    this._uEdgeColor = program.getLocation("edgeColor");
     this._aPosition = program.getAttribute("position");
     this._uClippable = program.getLocation("clippable");
-    this._uGammaFactor = program.getLocation("gammaFactor");
     this._uOffset = program.getLocation("offset");
 
     if (scene.logarithmicDepthBufferEnabled ) {
@@ -250,10 +252,6 @@ EmphasisEdgesRenderer.prototype._bindProgram = function (frameCtx) {
     if (scene.logarithmicDepthBufferEnabled ) {
         const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
         gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
-    }
-
-    if (this._uGammaFactor) {
-        gl.uniform1f(this._uGammaFactor, scene.gammaFactor);
     }
 };
 
