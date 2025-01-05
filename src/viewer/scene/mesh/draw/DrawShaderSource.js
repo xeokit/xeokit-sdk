@@ -79,7 +79,6 @@ export const DrawShaderSource = function(mesh) {
                 }
             }
             if (texturing) {
-                src.push("in vec2 uv;");
                 src.push("out vec2 vUV;");
                 if (quantizedGeometry) {
                     src.push("uniform mat3 uvDecodeMatrix;");
@@ -102,7 +101,7 @@ export const DrawShaderSource = function(mesh) {
                 }
             }
         },
-        appendVertexOutputs: (src, color) => {
+        appendVertexOutputs: (src, color, pickColor, uv) => {
             if (normals) {
                 if (quantizedGeometry) {
                     src.push("vec4 localNormal = vec4(octDecode(normal.xy), 0.0); ");
@@ -149,9 +148,9 @@ export const DrawShaderSource = function(mesh) {
             }
             if (texturing) {
                 if (quantizedGeometry) {
-                    src.push("vUV = (uvDecodeMatrix * vec3(uv, 1.0)).xy;");
+                    src.push(`vUV = (uvDecodeMatrix * vec3(${uv}, 1.0)).xy;`);
                 } else {
-                    src.push("vUV = uv;");
+                    src.push(`vUV = ${uv};`);
                 }
             }
             if (geometryState.colors) {
