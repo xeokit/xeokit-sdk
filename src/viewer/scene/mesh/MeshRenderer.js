@@ -37,19 +37,26 @@ export function MeshRenderer(programSetup, mesh) {
         return variable;
     };
 
-    const localNormal = lazyShaderVariable("localNormal");
+    const worldNormal = lazyShaderVariable("worldNormal");
+    const viewNormal  = lazyShaderVariable("viewNormal");
 
     const programFragmentOutputs = [ ];
     programSetup.appendFragmentOutputs(programFragmentOutputs, "vWorldPosition", "gl_FragCoord");
 
     const programVertexOutputs = [ ];
-    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color, attributes.pickColor, attributes.uv, localNormal);
+    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color, attributes.pickColor, attributes.uv, worldNormal, viewNormal);
 
     const buildVertexShader = () => {
         const quantizedGeometry = geometryState.compressGeometry;
         const billboard = mesh._state.billboard;
         const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
         const stationary = mesh._state.stationary;
+
+        const viewNormalLines = viewNormal.needed && [
+            "mat4 viewNormalMatrix2 = viewNormalMatrix;",
+            isBillboard && "billboard(viewNormalMatrix2);",
+            `vec3 ${viewNormal} = normalize((viewNormalMatrix2 * vec4(${worldNormal}, 0.0)).xyz);`
+        ].filter(line => line);
 
         const mainVertexOutputs = (function() {
             const src = [ ];
@@ -83,9 +90,13 @@ export function MeshRenderer(programSetup, mesh) {
                     src.push("vec4 viewPosition = viewMatrix2 * worldPosition;");
                 }
             }
-            if (localNormal.needed) {
-                src.push(`vec3 ${localNormal} = ${quantizedGeometry ? `octDecode(${attributes.normal}.xy)` : attributes.normal};`);
+            if (worldNormal.needed) {
+                src.push(`vec3 localNormal = ${quantizedGeometry ? `octDecode(${attributes.normal}.xy)` : attributes.normal};`);
+                src.push("mat4 modelNormalMatrix2 = modelNormalMatrix;");
+                isBillboard && src.push("billboard(modelNormalMatrix2);");
+                src.push(`vec3 ${worldNormal} = (modelNormalMatrix2 * vec4(localNormal, 0.0)).xyz;`);
             }
+            viewNormalLines && viewNormalLines.forEach(line => src.push(line));
             return src;
         })();
 
@@ -100,7 +111,7 @@ export function MeshRenderer(programSetup, mesh) {
         src.push("uniform vec3 scale;");
         if (quantizedGeometry) {
             src.push("uniform mat4 positionsDecodeMatrix;");
-            if (localNormal.needed) {
+            if (worldNormal.needed) {
                 src.push("vec3 octDecode(vec2 oct) {");
                 src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
                 src.push("    if (v.z < 0.0) {");
@@ -138,6 +149,12 @@ export function MeshRenderer(programSetup, mesh) {
         }
         if (setupPointSize) {
             src.push("uniform float pointSize;");
+        }
+        if (worldNormal.needed) {
+            src.push("uniform mat4 modelNormalMatrix;");
+        }
+        if (viewNormal.needed) {
+            src.push("uniform mat4 viewNormalMatrix;");
         }
         programSetup.appendVertexDefinitions && programSetup.appendVertexDefinitions(src);
         src.push("void main(void) {");
