@@ -145,9 +145,6 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
         if (this._uPositionsDecodeMatrix) {
             gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
         }
-        if (this._uUVDecodeMatrix) {
-            gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, geometryState.uvDecodeMatrix);
-        }
         if (this._aPosition) {
             this._aPosition.bindArrayBuffer(geometryState.positionsBuf);
             frameCtx.bindArray++;
