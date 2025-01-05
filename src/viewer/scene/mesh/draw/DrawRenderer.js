@@ -4,6 +4,7 @@
 
 import {Map} from "../../utils/Map.js";
 import {DrawShaderSource} from "./DrawShaderSource.js";
+import {LambertShaderSource} from "./LambertShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from '../../stats.js';
 import {WEBGL_INFO} from '../../webglInfo.js';
@@ -22,7 +23,9 @@ const DrawRenderer = function (hash, mesh) {
     this._hash = hash;
     this._scene = mesh.scene;
     this._useCount = 0;
-    this._shaderSource = new DrawShaderSource(mesh);
+    this._shaderSource = ((mesh._material._state.type === "LambertMaterial")
+                          ? new LambertShaderSource(mesh)
+                          : new DrawShaderSource(mesh));
     this._allocate(mesh);
 };
 
