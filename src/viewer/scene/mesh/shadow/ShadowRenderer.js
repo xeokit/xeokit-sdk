@@ -1,3 +1,4 @@
+import {MeshRenderer} from "../MeshRenderer.js";
 import {ShadowShaderSource} from "./ShadowShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from "../../stats.js";
@@ -11,7 +12,7 @@ const tempVec3a = math.vec3();
  */
 const ShadowRenderer = function (hash, mesh) {
     this._hash = hash;
-    this._shaderSource = new ShadowShaderSource(mesh);
+    this._programSetup = ShadowShaderSource(mesh);
     this._scene = mesh.scene;
     this._useCount = 0;
     this._allocate(mesh);
@@ -149,7 +150,7 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
 ShadowRenderer.prototype._allocate = function (mesh) {
     const scene = mesh.scene;
     const gl = scene.canvas.gl;
-    this._program = new Program(gl, this._shaderSource);
+    this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
     this._scene = scene;
     this._useCount = 0;
     if (this._program.errors) {
