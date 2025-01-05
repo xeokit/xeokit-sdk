@@ -162,39 +162,9 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 
         switch (materialState.type) {
             case "LambertMaterial":
-                if (this._uMaterialColor) {
-                    gl.uniform4f(this._uMaterialColor, materialState.color[0], materialState.color[1], materialState.color[2], materialState.alpha);
-                }
-                if (this._uMaterialEmissive) {
-                    gl.uniform3fv(this._uMaterialEmissive, materialState.emissive);
-                }
                 break;
 
             case "PhongMaterial":
-                if (this._uMaterialShininess) {
-                    gl.uniform1f(this._uMaterialShininess, materialState.shininess);
-                }
-                if (this._uMaterialAmbient) {
-                    gl.uniform3fv(this._uMaterialAmbient, materialState.ambient);
-                }
-                if (this._uMaterialDiffuse) {
-                    gl.uniform3fv(this._uMaterialDiffuse, materialState.diffuse);
-                }
-                if (this._uMaterialSpecular) {
-                    gl.uniform3fv(this._uMaterialSpecular, materialState.specular);
-                }
-                if (this._uMaterialEmissive) {
-                    gl.uniform3fv(this._uMaterialEmissive, materialState.emissive);
-                }
-                if (this._uAlphaModeCutoff) {
-                    gl.uniform4f(
-                        this._uAlphaModeCutoff,
-                        1.0 * materialState.alpha,
-                        materialState.alphaMode === 1 ? 1.0 : 0.0,
-                        materialState.alphaCutoff,
-                        0);
-                }
-
                 if (material._diffuseFresnel) {
                     if (this._uDiffuseFresnelEdgeBias) {
                         gl.uniform1f(this._uDiffuseFresnelEdgeBias, material._diffuseFresnel.edgeBias);
@@ -266,52 +236,9 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                 break;
 
             case "MetallicMaterial":
-                if (this._uBaseColor) {
-                    gl.uniform3fv(this._uBaseColor, materialState.baseColor);
-                }
-                if (this._uMaterialMetallic) {
-                    gl.uniform1f(this._uMaterialMetallic, materialState.metallic);
-                }
-                if (this._uMaterialRoughness) {
-                    gl.uniform1f(this._uMaterialRoughness, materialState.roughness);
-                }
-                if (this._uMaterialSpecularF0) {
-                    gl.uniform1f(this._uMaterialSpecularF0, materialState.specularF0);
-                }
-                if (this._uMaterialEmissive) {
-                    gl.uniform3fv(this._uMaterialEmissive, materialState.emissive);
-                }
-                if (this._uAlphaModeCutoff) {
-                    gl.uniform4f(
-                        this._uAlphaModeCutoff,
-                        1.0 * materialState.alpha,
-                        materialState.alphaMode === 1 ? 1.0 : 0.0,
-                        materialState.alphaCutoff,
-                        0.0);
-                }
                 break;
 
             case "SpecularMaterial":
-                if (this._uMaterialDiffuse) {
-                    gl.uniform3fv(this._uMaterialDiffuse, materialState.diffuse);
-                }
-                if (this._uMaterialSpecular) {
-                    gl.uniform3fv(this._uMaterialSpecular, materialState.specular);
-                }
-                if (this._uMaterialGlossiness) {
-                    gl.uniform1f(this._uMaterialGlossiness, materialState.glossiness);
-                }
-                if (this._uMaterialEmissive) {
-                    gl.uniform3fv(this._uMaterialEmissive, materialState.emissive);
-                }
-                if (this._uAlphaModeCutoff) {
-                    gl.uniform4f(
-                        this._uAlphaModeCutoff,
-                        1.0 * materialState.alpha,
-                        materialState.alphaMode === 1 ? 1.0 : 0.0,
-                        materialState.alphaCutoff,
-                        0.0);
-                }
                 break;
         }
 
@@ -487,6 +414,13 @@ DrawRenderer.prototype._allocate = function (mesh) {
 
     this._binders = [ ];
 
+    const setupUniformBind = (uniformName, bind) => {
+        const uLoc = program.getLocation(uniformName);
+        if (uLoc) {
+            this._binders.push((frameCtx, mtl) => bind(uLoc, mtl));
+        }
+    };
+
     const setupTextureBind = (mapUniformName, matrixUniformName, getMap) => {
         if (getMap(material)) {
             const uMapMatrix = program.getLocation(matrixUniformName);
@@ -506,17 +440,17 @@ DrawRenderer.prototype._allocate = function (mesh) {
 
     switch (materialState.type) {
         case "LambertMaterial":
-            this._uMaterialColor = program.getLocation("materialColor");
-            this._uMaterialEmissive = program.getLocation("materialEmissive");
+            setupUniformBind("materialColor",    (loc, mtl) => gl.uniform4f(loc, mtl._state.color[0], mtl._state.color[1], mtl._state.color[2], mtl._state.alpha));
+            setupUniformBind("materialEmissive", (loc, mtl) => gl.uniform3fv(loc, mtl._state.emissive));
             break;
 
         case "PhongMaterial":
-            this._uMaterialAmbient = program.getLocation("materialAmbient");
-            this._uMaterialDiffuse = program.getLocation("materialDiffuse");
-            this._uMaterialSpecular = program.getLocation("materialSpecular");
-            this._uMaterialEmissive = program.getLocation("materialEmissive");
-            this._uAlphaModeCutoff = program.getLocation("materialAlphaModeCutoff");
-            this._uMaterialShininess = program.getLocation("materialShininess");
+            setupUniformBind("materialAmbient",         (loc, mtl) => gl.uniform3fv(loc, mtl._state.ambient));
+            setupUniformBind("materialDiffuse",         (loc, mtl) => gl.uniform3fv(loc, mtl._state.diffuse));
+            setupUniformBind("materialSpecular",        (loc, mtl) => gl.uniform3fv(loc, mtl._state.specular));
+            setupUniformBind("materialEmissive",        (loc, mtl) => gl.uniform3fv(loc, mtl._state.emissive));
+            setupUniformBind("materialShininess",       (loc, mtl) => gl.uniform1f (loc, mtl._state.shininess));
+            setupUniformBind("materialAlphaModeCutoff", (loc, mtl) => gl.uniform4f (loc, 1.0 * mtl._state.alpha, mtl._state.alphaMode === 1 ? 1.0 : 0.0, mtl._state.alphaCutoff, 0.0));
 
             setupTextureBind("ambientMap",      "ambientMapMatrix",      mtl => mtl._ambientMap);
             setupTextureBind("diffuseMap",      "diffuseMapMatrix",      mtl => mtl._diffuseMap);
@@ -557,12 +491,12 @@ DrawRenderer.prototype._allocate = function (mesh) {
             break;
 
         case "MetallicMaterial":
-            this._uBaseColor = program.getLocation("materialBaseColor");
-            this._uMaterialMetallic = program.getLocation("materialMetallic");
-            this._uMaterialRoughness = program.getLocation("materialRoughness");
-            this._uMaterialSpecularF0 = program.getLocation("materialSpecularF0");
-            this._uMaterialEmissive = program.getLocation("materialEmissive");
-            this._uAlphaModeCutoff = program.getLocation("materialAlphaModeCutoff");
+            setupUniformBind("materialBaseColor",       (loc, mtl) => gl.uniform3fv(loc, mtl._state.baseColor));
+            setupUniformBind("materialMetallic",        (loc, mtl) => gl.uniform1f (loc, mtl._state.metallic));
+            setupUniformBind("materialRoughness",       (loc, mtl) => gl.uniform1f (loc, mtl._state.roughness));
+            setupUniformBind("materialSpecularF0",      (loc, mtl) => gl.uniform1f (loc, mtl._state.specularF0));
+            setupUniformBind("materialEmissive",        (loc, mtl) => gl.uniform3fv(loc, mtl._state.emissive));
+            setupUniformBind("materialAlphaModeCutoff", (loc, mtl) => gl.uniform4f (loc, 1.0 * mtl._state.alpha, mtl._state.alphaMode === 1 ? 1.0 : 0.0, mtl._state.alphaCutoff, 0.0));
 
             setupTextureBind("baseColorMap",         "baseColorMapMatrix",         mtl => mtl._baseColorMap);
             setupTextureBind("metallicMap",          "metallicMapMatrix",          mtl => mtl._metallicMap);
@@ -576,11 +510,11 @@ DrawRenderer.prototype._allocate = function (mesh) {
             break;
 
         case "SpecularMaterial":
-            this._uMaterialDiffuse = program.getLocation("materialDiffuse");
-            this._uMaterialSpecular = program.getLocation("materialSpecular");
-            this._uMaterialGlossiness = program.getLocation("materialGlossiness");
-            this._uMaterialEmissive = program.getLocation("materialEmissive");
-            this._uAlphaModeCutoff = program.getLocation("materialAlphaModeCutoff");
+            setupUniformBind("materialDiffuse",         (loc, mtl) => gl.uniform3fv(loc, mtl._state.diffuse));
+            setupUniformBind("materialSpecular",        (loc, mtl) => gl.uniform3fv(loc, mtl._state.specular));
+            setupUniformBind("materialGlossiness",      (loc, mtl) => gl.uniform1f (loc, mtl._state.glossiness));
+            setupUniformBind("materialEmissive",        (loc, mtl) => gl.uniform3fv(loc, mtl._state.emissive));
+            setupUniformBind("materialAlphaModeCutoff", (loc, mtl) => gl.uniform4f (loc, 1.0 * mtl._state.alpha, mtl._state.alphaMode === 1 ? 1.0 : 0.0, mtl._state.alphaCutoff, 0.0));
 
             setupTextureBind("diffuseMap",                    "diffuseMapMatrix",                    mtl => mtl._diffuseMap);
             setupTextureBind("specularMap",                   "specularMapMatrix",                   mtl => mtl._specularMap);
