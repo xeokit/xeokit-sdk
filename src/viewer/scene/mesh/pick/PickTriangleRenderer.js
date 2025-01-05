@@ -5,6 +5,7 @@
 import {MeshRenderer} from "../MeshRenderer.js";
 import {PickTriangleShaderSource} from "./PickTriangleShaderSource.js";
 import {Program} from "../../webgl/Program.js";
+import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 import {stats} from "../../stats.js";
 import {getPlaneRTCPos} from "../../math/rtcCoords.js";
 import {math} from "../../math/math.js";
@@ -148,7 +149,7 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     }
     this._aPosition.bindArrayBuffer(positionsBuf);
 
-    gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
+    this._setInputsState && this._setInputsState(frameCtx, mesh._state);
 
     pickColorsBuf.bind();
     gl.enableVertexAttribArray(this._pickColor.location);
@@ -166,6 +167,9 @@ PickTriangleRenderer.prototype._allocate = function (mesh) {
         return;
     }
     const program = this._program;
+    const getInputSetter = makeInputSetters(gl, program.handle);
+    this._setInputsState = this._programSetup.setupInputs && this._programSetup.setupInputs(getInputSetter);
+
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uModelMatrix = program.getLocation("modelMatrix");
     this._uViewMatrix = program.getLocation("viewMatrix");
@@ -180,7 +184,6 @@ PickTriangleRenderer.prototype._allocate = function (mesh) {
     }
     this._aPosition = program.getAttribute("position");
     this._pickColor = program.getAttribute("pickColor");
-    this._uPickClipPos = program.getLocation("pickClipPos");
     this._uClippable = program.getLocation("clippable");
     this._uOffset = program.getLocation("offset");
     if (scene.logarithmicDepthBufferEnabled ) {
