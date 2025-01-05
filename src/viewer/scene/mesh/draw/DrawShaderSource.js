@@ -139,7 +139,6 @@ export const DrawShaderSource = function(mesh) {
             }
 
             // GAMMA CORRECTION
-            src.push("uniform float gammaFactor;");
             src.push("vec4 linearToLinear( in vec4 value ) {");
             src.push("  return value;");
             src.push("}");
@@ -147,6 +146,7 @@ export const DrawShaderSource = function(mesh) {
             src.push("  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );");
             src.push("}");
             if (gammaOutput) {
+                src.push("uniform float gammaFactor;");
                 src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
                 src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
                 src.push("}");
@@ -1042,6 +1042,14 @@ export const DrawShaderSource = function(mesh) {
             }
 
             src.push("outColor = fragColor;");
+        },
+        setupInputs: (getInputSetter) => {
+            const colorize = getInputSetter("colorize");
+            const gammaFactor = gammaOutput && getInputSetter("gammaFactor");
+            return (frameCtx, meshState) => {
+                colorize(meshState.colorize);
+                gammaFactor && gammaFactor(scene.gammaFactor);
+            };
         }
     };
 };
