@@ -1,5 +1,4 @@
 export const LambertShaderSource = function(mesh) {
-    const billboard = mesh._state.billboard;
     const geometryState = mesh._geometry._state;
     const lightsState = mesh.scene._lightsState;
     const primitive = geometryState.primitiveName;
@@ -15,8 +14,6 @@ export const LambertShaderSource = function(mesh) {
             src.push("uniform vec4 materialColor;");
             src.push("uniform vec3 materialEmissive;");
             if (normals) {
-                src.push("uniform mat4 modelNormalMatrix;");
-                src.push("uniform mat4 viewNormalMatrix;");
                 for (let i = 0, len = lightsState.lights.length; i < len; i++) {
                     const light = lightsState.lights[i];
                     if (light.type === "ambient") {
@@ -37,18 +34,7 @@ export const LambertShaderSource = function(mesh) {
             }
             src.push("out vec4 vColor;");
         },
-        appendVertexOutputs: (src, color, pickColor, uv, normal) => {
-            if (normals) {
-                src.push("mat4 modelNormalMatrix2 = modelNormalMatrix;");
-                src.push("mat4 viewNormalMatrix2 = viewNormalMatrix;");
-                if (billboard === "spherical" || billboard === "cylindrical") {
-                    src.push("mat4 modelViewNormalMatrix =  viewNormalMatrix2 * modelNormalMatrix2;");
-                    src.push("billboard(modelNormalMatrix2);");
-                    src.push("billboard(viewNormalMatrix2);");
-                    src.push("billboard(modelViewNormalMatrix);");
-                }
-                src.push(`vec3 viewNormal = normalize((viewNormalMatrix2 * modelNormalMatrix2 * vec4(${normal}, 0.0)).xyz);`);
-            }
+        appendVertexOutputs: (src, color, pickColor, uv, worldNormal, viewNormal) => {
             src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
             src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
             src.push("float lambertian = 1.0;");
@@ -79,7 +65,7 @@ export const LambertShaderSource = function(mesh) {
                     } else {
                         continue;
                     }
-                    src.push("lambertian = max(dot(-viewNormal, viewLightDir), 0.0);");
+                    src.push(`lambertian = max(dot(-${viewNormal}, viewLightDir), 0.0);`);
                     src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
                 }
             }
