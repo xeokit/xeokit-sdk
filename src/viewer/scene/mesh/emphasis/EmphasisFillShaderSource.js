@@ -168,9 +168,6 @@ function buildVertex(mesh) {
     if (clipping) {
         src.push("vWorldPosition = worldPosition;");
     }
-    if (mesh._geometry._state.primitiveName === "points") {
-        src.push("gl_PointSize = pointSize;");
-    }
     src.push("vec4 clipPos = projMatrix * viewPosition;");
     if (scene.logarithmicDepthBufferEnabled) {
         src.push("vFragDepth = 1.0 + clipPos.w;");
