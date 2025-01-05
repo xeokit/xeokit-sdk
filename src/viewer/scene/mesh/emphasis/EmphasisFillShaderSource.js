@@ -1,20 +1,16 @@
-import {WEBGL_INFO} from "../../webglInfo.js";
-
-/**
- * @private
- */
-class EmphasisFillShaderSource {
+export class EmphasisFillShaderSource {
     constructor(mesh) {
-        this.vertex = buildVertex(mesh);
-        this.fragment = buildFragment(mesh);
+        const programName = "EmphasisFill";
+        this.vertex = buildVertex(programName, mesh);
+        this.fragment = buildFragment(programName, mesh);
     }
 }
 
-function buildVertex(mesh) {
-
+function buildVertex(programName, mesh) {
     const scene = mesh.scene;
     const lightsState = scene._lightsState;
-    const normals = hasNormals(mesh);
+    const primitive = mesh._geometry._state.primitiveName;
+    const normals = (mesh._geometry._state.autoVertexNormals || mesh._geometry._state.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan");
     const sectionPlanesState = scene._sectionPlanesState;
     const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
     const quantizedGeometry = !!mesh._geometry._state.compressGeometry;
@@ -22,7 +18,7 @@ function buildVertex(mesh) {
     const stationary = mesh._state.stationary;
     const src = [];
     src.push("#version 300 es");
-    src.push("// EmphasisFillShaderSource vertex shader");
+    src.push("// " + programName + " vertex shader");
     src.push("in vec3 position;");
     src.push("uniform mat4 modelMatrix;");
     src.push("uniform mat4 viewMatrix;");
@@ -177,15 +173,7 @@ function buildVertex(mesh) {
     return src;
 }
 
-function hasNormals(mesh) {
-    const primitive = mesh._geometry._state.primitiveName;
-    if ((mesh._geometry._state.autoVertexNormals || mesh._geometry._state.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan")) {
-        return true;
-    }
-    return false;
-}
-
-function buildFragment(mesh) {
+function buildFragment(programName, mesh) {
 
     const scene = mesh.scene;
     const sectionPlanesState = mesh.scene._sectionPlanesState;
@@ -193,7 +181,7 @@ function buildFragment(mesh) {
     const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
     const src = [];
     src.push("#version 300 es");
-    src.push("// Lambertian drawing fragment shader");
+    src.push("// " + programName + " fragment shader");
     src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
     src.push("precision highp float;");
     src.push("precision highp int;");
@@ -201,13 +189,11 @@ function buildFragment(mesh) {
     src.push("precision mediump float;");
     src.push("precision mediump int;");
     src.push("#endif");
-
     if (scene.logarithmicDepthBufferEnabled) {
         src.push("in float isPerspective;");
         src.push("uniform float logDepthBufFC;");
         src.push("in float vFragDepth;");
     }
-
     if (gammaOutput) {
         src.push("uniform float gammaFactor;");
         src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
@@ -255,5 +241,3 @@ function buildFragment(mesh) {
     src.push("}");
     return src;
 }
-
-export {EmphasisFillShaderSource};
