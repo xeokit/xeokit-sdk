@@ -2,6 +2,7 @@
  * @author xeolabs / https://github.com/xeolabs
  */
 
+import {MeshRenderer} from "../MeshRenderer.js";
 import {Map} from "../../utils/Map.js";
 import {DrawShaderSource} from "./DrawShaderSource.js";
 import {LambertShaderSource} from "./LambertShaderSource.js";
@@ -23,9 +24,10 @@ const DrawRenderer = function (hash, mesh) {
     this._hash = hash;
     this._scene = mesh.scene;
     this._useCount = 0;
-    this._shaderSource = ((mesh._material._state.type === "LambertMaterial")
-                          ? new LambertShaderSource(mesh)
-                          : new DrawShaderSource(mesh));
+    if (mesh._material._state.type === "LambertMaterial")
+        this._programSetup = LambertShaderSource(mesh);
+    else
+        this._shaderSource = new DrawShaderSource(mesh);
     this._allocate(mesh);
 };
 
@@ -250,7 +252,11 @@ DrawRenderer.prototype._allocate = function (mesh) {
     const sectionPlanesState = scene._sectionPlanesState;
     const materialState = mesh._material._state;
 
-    this._program = new Program(gl, this._shaderSource);
+    if (this._programSetup) {
+        this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
+    } else {
+        this._program = new Program(gl, this._shaderSource);
+    }
     if (this._program.errors) {
         this.errors = this._program.errors;
         return;
