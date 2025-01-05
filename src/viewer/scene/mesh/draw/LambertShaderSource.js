@@ -1,9 +1,13 @@
+import {math} from "../../math/math.js";
+const tmpVec4 = math.vec4();
+
 export const LambertShaderSource = function(mesh) {
+    const scene = mesh.scene;
     const geometryState = mesh._geometry._state;
-    const lightsState = mesh.scene._lightsState;
+    const lightsState = scene._lightsState;
     const primitive = geometryState.primitiveName;
     const normals = (geometryState.autoVertexNormals || geometryState.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan");
-    const gammaOutput = mesh.scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
+    const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
     return {
         programName: "Lambert",
         discardPoints: true,
@@ -81,6 +85,24 @@ export const LambertShaderSource = function(mesh) {
             }
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src) => src.push(`outColor = ${gammaOutput ? "linearToGamma(vColor, gammaFactor)" : "vColor"};`)
+        appendFragmentOutputs: (src) => src.push(`outColor = ${gammaOutput ? "linearToGamma(vColor, gammaFactor)" : "vColor"};`),
+        setupInputs: (getInputSetter) => {
+            const colorize = getInputSetter("colorize");
+            const gammaFactor = gammaOutput && getInputSetter("gammaFactor");
+            return (frameCtx, meshState) => {
+                colorize(meshState.colorize);
+                gammaFactor && gammaFactor(scene.gammaFactor);
+            };
+        },
+        setupMaterialInputs: (getInputSetter) => {
+            const materialColor = getInputSetter("materialColor");
+            const materialEmissive = getInputSetter("materialEmissive");
+            return (mtl) => {
+                tmpVec4.set(mtl.color);
+                tmpVec4[3] = mtl.alpha;
+                materialColor(tmpVec4);
+                materialEmissive(mtl.emissive);
+            };
+        }
     };
 };
