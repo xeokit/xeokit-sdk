@@ -13,6 +13,7 @@ function buildVertex(mesh) {
     const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
     const quantizedGeometry = !!mesh._geometry._state.compressGeometry;
     const src = [];
+    src.push("#version 300 es");
     src.push("// Mesh shadow vertex shader");
     src.push("in vec3 position;");
     src.push("uniform mat4 modelMatrix;");
@@ -48,8 +49,8 @@ function buildFragment(mesh) {
     const sectionPlanesState = scene._sectionPlanesState;
     const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
     const src = [];
+    src.push("#version 300 es");
     src.push("// Mesh shadow fragment shader");
-
     src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
     src.push("precision highp float;");
     src.push("precision highp int;");
