@@ -5,11 +5,27 @@ export function MeshRenderer(programSetup, mesh) {
     const clipping = numAllocatedSectionPlanes > 0;
     const getLogDepth = (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled;
 
+    const lazyShaderAttribute = function(name, type) {
+        const variable = {
+            toString: () => {
+                variable.needed = true;
+                return name;
+            },
+            definition: `in ${type} ${name};`
+        };
+        return variable;
+    };
+
+    const attributes = {
+        position: lazyShaderAttribute("position", "vec3"),
+        color:    lazyShaderAttribute("color",    "vec4")
+    };
+
     const programFragmentOutputs = [ ];
     programSetup.appendFragmentOutputs(programFragmentOutputs, "vWorldPosition", "gl_FragCoord");
 
     const programVertexOutputs = [ ];
-    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs);
+    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color);
 
     const buildVertexShader = () => {
         const quantizedGeometry = !!mesh._geometry._state.compressGeometry;
@@ -19,7 +35,7 @@ export function MeshRenderer(programSetup, mesh) {
 
         const mainVertexOutputs = (function() {
             const src = [ ];
-            src.push("vec4 localPosition = vec4(position, 1.0);");
+            src.push(`vec4 localPosition = vec4(${attributes.position}, 1.0);`);
             if (quantizedGeometry) {
                 src.push("localPosition = positionsDecodeMatrix * localPosition;");
             }
@@ -55,7 +71,7 @@ export function MeshRenderer(programSetup, mesh) {
         const src = [];
         src.push("#version 300 es");
         src.push("// " + programSetup.programName + " vertex shader");
-        src.push("in vec3 position;");
+        Object.values(attributes).forEach(a => a.needed && src.push(a.definition));
         src.push("uniform mat4 modelMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
