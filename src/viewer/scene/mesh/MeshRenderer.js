@@ -48,7 +48,7 @@ function buildVertex(programSetup, mesh) {
         src.push("   mat[2][2] =1.0;");
         src.push("}");
     }
-    programSetup.appendVertexDefinitions(src);
+    programSetup.appendVertexDefinitions && programSetup.appendVertexDefinitions(src);
     src.push("void main(void) {");
     src.push("vec4 localPosition = vec4(position, 1.0); ");
     src.push("vec4 worldPosition;");
@@ -73,7 +73,7 @@ function buildVertex(programSetup, mesh) {
         src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         src.push("vec4 viewPosition  = viewMatrix2 * worldPosition; ");
     }
-    programSetup.appendVertexOutputs(src);
+    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(src);
     if (clipping) {
         src.push("vWorldPosition = worldPosition;");
     }
