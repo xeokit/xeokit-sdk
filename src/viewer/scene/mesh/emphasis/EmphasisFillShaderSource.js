@@ -124,6 +124,7 @@ function buildVertex(mesh) {
             src.push("billboard(modelViewNormalMatrix);");
         }
         src.push("worldPosition = modelMatrix2 * localPosition;");
+        src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         src.push("vec4 viewPosition = modelViewMatrix * localPosition;");
     } else {
         src.push("worldPosition = modelMatrix2 * localPosition;");
