@@ -5,6 +5,7 @@ export function MeshRenderer(programSetup, mesh) {
     const clipping = numAllocatedSectionPlanes > 0;
     const getLogDepth = (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled;
     const geometryState = mesh._geometry._state;
+    const quantizedGeometry = geometryState.compressGeometry;
     const isPoints = geometryState.primitiveName === "points";
     const setupPointSize = programSetup.setupPointSize && isPoints;
 
@@ -37,6 +38,7 @@ export function MeshRenderer(programSetup, mesh) {
         return variable;
     };
 
+    const uvDecoded   = lazyShaderVariable("uvDecoded");
     const worldNormal = lazyShaderVariable("worldNormal");
     const viewNormal  = lazyShaderVariable("viewNormal");
 
@@ -44,10 +46,9 @@ export function MeshRenderer(programSetup, mesh) {
     programSetup.appendFragmentOutputs(programFragmentOutputs, "vWorldPosition", "gl_FragCoord");
 
     const programVertexOutputs = [ ];
-    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color, attributes.pickColor, attributes.uv, worldNormal, viewNormal);
+    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color, attributes.pickColor, uvDecoded, worldNormal, viewNormal);
 
     const buildVertexShader = () => {
-        const quantizedGeometry = geometryState.compressGeometry;
         const billboard = mesh._state.billboard;
         const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
         const stationary = mesh._state.stationary;
@@ -90,6 +91,9 @@ export function MeshRenderer(programSetup, mesh) {
                     src.push("vec4 viewPosition = viewMatrix2 * worldPosition;");
                 }
             }
+            if (uvDecoded.needed) {
+                src.push(`vec2 uvDecoded = ${quantizedGeometry ? `(uvDecodeMatrix * vec3(${attributes.uv}, 1.0)).xy` : attributes.uv};`);
+            }
             if (worldNormal.needed) {
                 src.push(`vec3 localNormal = ${quantizedGeometry ? `octDecode(${attributes.normal}.xy)` : attributes.normal};`);
                 src.push("mat4 modelNormalMatrix2 = modelNormalMatrix;");
@@ -111,6 +115,9 @@ export function MeshRenderer(programSetup, mesh) {
         src.push("uniform vec3 scale;");
         if (quantizedGeometry) {
             src.push("uniform mat4 positionsDecodeMatrix;");
+            if (uvDecoded.needed) {
+                src.push("uniform mat3 uvDecodeMatrix;");
+            }
             if (worldNormal.needed) {
                 src.push("vec3 octDecode(vec2 oct) {");
                 src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
@@ -232,6 +239,10 @@ export function MeshRenderer(programSetup, mesh) {
     return {
         vertex:   buildVertexShader(),
         fragment: buildFragmentShader(),
+        setupGeometryInputs: uvDecoded.needed && quantizedGeometry && function(getInputSetter) {
+            const uvDecodeMatrix = getInputSetter("uvDecodeMatrix");
+            return (geometryState) => uvDecodeMatrix(geometryState.uvDecodeMatrix);
+        },
         setupGeneralMaterialInputs: setupPointSize && function(getInputSetter) {
             const pointSize = getInputSetter("pointSize");
             return (mtl) => pointSize(mtl.pointSize);
