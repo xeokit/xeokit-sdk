@@ -45,7 +45,6 @@ export const DrawShaderSource = function(mesh) {
                 src.push("out vec3 vWorldNormal;");
             }
             if (normals) {
-                src.push("in vec3 normal;");
                 src.push("uniform mat4 modelNormalMatrix;");
                 src.push("uniform mat4 viewNormalMatrix;");
                 src.push("out vec3 vViewNormal;");
@@ -67,15 +66,6 @@ export const DrawShaderSource = function(mesh) {
                     if (!(light.type === "dir" && light.space === "view")) {
                         src.push("out vec4 vViewLightReverseDirAndDist" + i + ";");
                     }
-                }
-                if (quantizedGeometry) {
-                    src.push("vec3 octDecode(vec2 oct) {");
-                    src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
-                    src.push("    if (v.z < 0.0) {");
-                    src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
-                    src.push("    }");
-                    src.push("    return normalize(v);");
-                    src.push("}");
                 }
             }
             if (texturing) {
@@ -101,13 +91,8 @@ export const DrawShaderSource = function(mesh) {
                 }
             }
         },
-        appendVertexOutputs: (src, color, pickColor, uv) => {
+        appendVertexOutputs: (src, color, pickColor, uv, normal) => {
             if (normals) {
-                if (quantizedGeometry) {
-                    src.push("vec4 localNormal = vec4(octDecode(normal.xy), 0.0); ");
-                } else {
-                    src.push("vec4 localNormal = vec4(normal, 0.0); ");
-                }
                 src.push("mat4 modelNormalMatrix2    = modelNormalMatrix;");
                 src.push("mat4 viewNormalMatrix2     = viewNormalMatrix;");
                 if (billboard === "spherical" || billboard === "cylindrical") {
@@ -116,7 +101,7 @@ export const DrawShaderSource = function(mesh) {
                     src.push("billboard(viewNormalMatrix2);");
                     src.push("billboard(modelViewNormalMatrix);");
                 }
-                src.push("vec3 worldNormal = (modelNormalMatrix2 * localNormal).xyz; ");
+                src.push(`vec3 worldNormal = (modelNormalMatrix2 * vec4(${normal}, 0.0)).xyz;`);
                 if (lightsState.lightMaps.length > 0) {
                     src.push("vWorldNormal = worldNormal;");
                 }

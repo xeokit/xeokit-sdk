@@ -20,14 +20,27 @@ export function MeshRenderer(programSetup, mesh) {
         position:  lazyShaderAttribute("position",  "vec3"),
         color:     lazyShaderAttribute("color",     "vec4"),
         pickColor: lazyShaderAttribute("pickColor", "vec4"),
-        uv:        lazyShaderAttribute("uv",        "vec2")
+        uv:        lazyShaderAttribute("uv",        "vec2"),
+        normal:    lazyShaderAttribute("normal",    "vec3")
     };
+
+    const lazyShaderVariable = function(name) {
+        const variable = {
+            toString: () => {
+                variable.needed = true;
+                return name;
+            }
+        };
+        return variable;
+    };
+
+    const localNormal = lazyShaderVariable("localNormal");
 
     const programFragmentOutputs = [ ];
     programSetup.appendFragmentOutputs(programFragmentOutputs, "vWorldPosition", "gl_FragCoord");
 
     const programVertexOutputs = [ ];
-    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color, attributes.pickColor, attributes.uv);
+    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color, attributes.pickColor, attributes.uv, localNormal);
 
     const buildVertexShader = () => {
         const quantizedGeometry = !!mesh._geometry._state.compressGeometry;
@@ -67,6 +80,9 @@ export function MeshRenderer(programSetup, mesh) {
                     src.push("vec4 viewPosition = viewMatrix2 * worldPosition;");
                 }
             }
+            if (localNormal.needed) {
+                src.push(`vec3 ${localNormal} = ${quantizedGeometry ? `octDecode(${attributes.normal}.xy)` : attributes.normal};`);
+            }
             return src;
         })();
 
@@ -81,6 +97,15 @@ export function MeshRenderer(programSetup, mesh) {
         src.push("uniform vec3 scale;");
         if (quantizedGeometry) {
             src.push("uniform mat4 positionsDecodeMatrix;");
+            if (localNormal.needed) {
+                src.push("vec3 octDecode(vec2 oct) {");
+                src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
+                src.push("    if (v.z < 0.0) {");
+                src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
+                src.push("    }");
+                src.push("    return normalize(v);");
+                src.push("}");
+            }
         }
         if (getLogDepth) {
             src.push("uniform float logDepthBufFC;");
