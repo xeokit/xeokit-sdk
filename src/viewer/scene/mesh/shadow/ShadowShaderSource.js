@@ -10,7 +10,7 @@ class ShadowShaderSource {
 
 function buildVertex(mesh) {
     const scene = mesh.scene;
-    const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
+    const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
     const quantizedGeometry = !!mesh._geometry._state.compressGeometry;
     const src = [];
     src.push("#version 300 es");
