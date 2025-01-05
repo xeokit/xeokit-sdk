@@ -37,6 +37,7 @@ export const DrawShaderSource = function(mesh) {
 
     return {
         programName: "Draw",
+        discardPoints: true,
         meshStateBackground: background,
         transformClipPos: clipPos => background ? `${clipPos}.xyww` : clipPos,
         appendVertexDefinitions: (src) => {
@@ -644,14 +645,6 @@ export const DrawShaderSource = function(mesh) {
             src.push("out vec4 outColor;");
         },
         appendFragmentOutputs: (src) => {
-            if (primitiveName === "points") {
-                src.push("vec2 cxy = 2.0 * gl_PointCoord - 1.0;");
-                src.push("float r = dot(cxy, cxy);");
-                src.push("if (r > 1.0) {");
-                src.push("   discard;");
-                src.push("}");
-            }
-
             src.push("float occlusion = 1.0;");
 
             if (materialState.ambient) {

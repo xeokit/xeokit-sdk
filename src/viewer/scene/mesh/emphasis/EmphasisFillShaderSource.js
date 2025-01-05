@@ -11,6 +11,7 @@ export function EmphasisFillShaderSource(mesh) {
 
     return {
         programName: "EmphasisFill",
+        discardPoints: true,
         appendVertexDefinitions: (src) => {
             src.push("uniform vec4 fillColor;");
             if (normals) {
@@ -88,16 +89,7 @@ export function EmphasisFillShaderSource(mesh) {
             src.push("in vec4 vColor;");
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src) => {
-            if (mesh._geometry._state.primitiveName === "points") {
-                src.push("vec2 cxy = 2.0 * gl_PointCoord - 1.0;");
-                src.push("float r = dot(cxy, cxy);");
-                src.push("if (r > 1.0) {");
-                src.push("   discard;");
-                src.push("}");
-            }
-            src.push(`outColor = ${gammaOutput ? "linearToGamma(vColor, gammaFactor)" : "vColor"};`);
-        },
+        appendFragmentOutputs: (src) => src.push(`outColor = ${gammaOutput ? "linearToGamma(vColor, gammaFactor)" : "vColor"};`),
         setupInputs: gammaOutput && ((getInputSetter) => {
             const gammaFactor = getInputSetter("gammaFactor");
             return () => gammaFactor(scene.gammaFactor);
