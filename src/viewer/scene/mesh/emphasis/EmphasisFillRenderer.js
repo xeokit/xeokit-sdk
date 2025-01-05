@@ -2,6 +2,7 @@
  * @author xeolabs / https://github.com/xeolabs
  */
 
+import {MeshRenderer} from "../MeshRenderer.js";
 import {Map} from "../../utils/Map.js";
 import {EmphasisFillShaderSource} from "./EmphasisFillShaderSource.js";
 import {Program} from "../../webgl/Program.js";
@@ -21,7 +22,7 @@ const EmphasisFillRenderer = function (hash, mesh) {
     this._hash = hash;
     this._scene = mesh.scene;
     this._useCount = 0;
-    this._shaderSource = new EmphasisFillShaderSource(mesh);
+    this._programSetup = EmphasisFillShaderSource(mesh);
     this._allocate(mesh);
 };
 
@@ -179,7 +180,7 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
     const lightsState = scene._lightsState;
     const sectionPlanesState = scene._sectionPlanesState;
     const gl = scene.canvas.gl;
-    this._program = new Program(gl, this._shaderSource);
+    this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
     if (this._program.errors) {
         this.errors = this._program.errors;
         return;
