@@ -1003,8 +1003,7 @@ function buildFragmentDraw(mesh) {
     if (normals && (material._diffuseFresnel ||
         material._specularFresnel ||
         material._alphaFresnel ||
-        material._emissiveFresnel ||
-        material._reflectivityFresnel)) {
+        material._emissiveFresnel)) {
         src.push("float fresnel(vec3 eyeDir, vec3 normal, float edgeBias, float centerBias, float power) {");
         src.push("    float fr = abs(dot(eyeDir, normal));");
         src.push("    float finalFr = clamp((fr - edgeBias) / (centerBias - edgeBias), 0.0, 1.0);");
@@ -1030,13 +1029,6 @@ function buildFragmentDraw(mesh) {
             src.push("uniform float  alphaFresnelPower;");
             src.push("uniform vec3   alphaFresnelCenterColor;");
             src.push("uniform vec3   alphaFresnelEdgeColor;");
-        }
-        if (material._reflectivityFresnel) {
-            src.push("uniform float  materialSpecularF0FresnelCenterBias;");
-            src.push("uniform float  materialSpecularF0FresnelEdgeBias;");
-            src.push("uniform float  materialSpecularF0FresnelPower;");
-            src.push("uniform vec3   materialSpecularF0FresnelCenterColor;");
-            src.push("uniform vec3   materialSpecularF0FresnelEdgeColor;");
         }
         if (material._emissiveFresnel) {
             src.push("uniform float  emissiveFresnelCenterBias;");

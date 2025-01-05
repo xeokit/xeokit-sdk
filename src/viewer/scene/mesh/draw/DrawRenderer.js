@@ -309,23 +309,6 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                         gl.uniform1f(this._uAlphaFresnelPower, material._alphaFresnel.power);
                     }
                 }
-                if (material._reflectivityFresnel) {
-                    if (this._uReflectivityFresnelEdgeBias) {
-                        gl.uniform1f(this._uReflectivityFresnelEdgeBias, material._reflectivityFresnel.edgeBias);
-                    }
-                    if (this._uReflectivityFresnelCenterBias) {
-                        gl.uniform1f(this._uReflectivityFresnelCenterBias, material._reflectivityFresnel.centerBias);
-                    }
-                    if (this._uReflectivityFresnelEdgeColor) {
-                        gl.uniform3fv(this._uReflectivityFresnelEdgeColor, material._reflectivityFresnel.edgeColor);
-                    }
-                    if (this._uReflectivityFresnelCenterColor) {
-                        gl.uniform3fv(this._uReflectivityFresnelCenterColor, material._reflectivityFresnel.centerColor);
-                    }
-                    if (this._uReflectivityFresnelPower) {
-                        gl.uniform1f(this._uReflectivityFresnelPower, material._reflectivityFresnel.power);
-                    }
-                }
                 if (material._emissiveFresnel) {
                     if (this._uEmissiveFresnelEdgeBias) {
                         gl.uniform1f(this._uEmissiveFresnelEdgeBias, material._emissiveFresnel.edgeBias);
@@ -778,13 +761,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
                 this._uAlphaFresnelEdgeColor = program.getLocation("alphaFresnelEdgeColor");
                 this._uAlphaFresnelCenterColor = program.getLocation("alphaFresnelCenterColor");
                 this._uAlphaFresnelPower = program.getLocation("alphaFresnelPower");
-            }
-            if (material._reflectivityFresnel) {
-                this._uReflectivityFresnelEdgeBias = program.getLocation("reflectivityFresnelEdgeBias");
-                this._uReflectivityFresnelCenterBias = program.getLocation("reflectivityFresnelCenterBias");
-                this._uReflectivityFresnelEdgeColor = program.getLocation("reflectivityFresnelEdgeColor");
-                this._uReflectivityFresnelCenterColor = program.getLocation("reflectivityFresnelCenterColor");
-                this._uReflectivityFresnelPower = program.getLocation("reflectivityFresnelPower");
             }
             if (material._emissiveFresnel) {
                 this._uEmissiveFresnelEdgeBias = program.getLocation("emissiveFresnelEdgeBias");
