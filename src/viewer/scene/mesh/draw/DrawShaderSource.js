@@ -8,7 +8,6 @@ export const DrawShaderSource = function(mesh) {
     const material = mesh._material;
     const meshState = mesh._state;
     const geometryState = mesh._geometry._state;
-    const quantizedGeometry = !!geometryState.compressGeometry;
     const texturing = geometryState.uvBuf && (material._ambientMap ||
                                               material._occlusionMap ||
                                               material._baseColorMap ||
@@ -69,9 +68,6 @@ export const DrawShaderSource = function(mesh) {
             }
             if (texturing) {
                 src.push("out vec2 vUV;");
-                if (quantizedGeometry) {
-                    src.push("uniform mat3 uvDecodeMatrix;");
-                }
             }
             if (geometryState.colors) {
                 src.push("out vec4 vColor;");
@@ -119,11 +115,7 @@ export const DrawShaderSource = function(mesh) {
                 }
             }
             if (texturing) {
-                if (quantizedGeometry) {
-                    src.push(`vUV = (uvDecodeMatrix * vec3(${uv}, 1.0)).xy;`);
-                } else {
-                    src.push(`vUV = ${uv};`);
-                }
+                src.push(`vUV = ${uv};`);
             }
             if (geometryState.colors) {
                 src.push(`vColor = ${color};`);
