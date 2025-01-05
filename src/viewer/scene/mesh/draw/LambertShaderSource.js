@@ -1,7 +1,6 @@
 export const LambertShaderSource = function(mesh) {
     const billboard = mesh._state.billboard;
     const geometryState = mesh._geometry._state;
-    const quantizedGeometry = !!geometryState.compressGeometry;
     const lightsState = mesh.scene._lightsState;
     const primitive = geometryState.primitiveName;
     const normals = (geometryState.autoVertexNormals || geometryState.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan");
@@ -14,7 +13,6 @@ export const LambertShaderSource = function(mesh) {
             src.push("uniform vec4 materialColor;");
             src.push("uniform vec3 materialEmissive;");
             if (normals) {
-                src.push("in vec3 normal;");
                 src.push("uniform mat4 modelNormalMatrix;");
                 src.push("uniform mat4 viewNormalMatrix;");
                 for (let i = 0, len = lightsState.lights.length; i < len; i++) {
@@ -34,28 +32,14 @@ export const LambertShaderSource = function(mesh) {
                         src.push("uniform vec3 lightDir" + i + ";");
                     }
                 }
-                if (quantizedGeometry) {
-                    src.push("vec3 octDecode(vec2 oct) {");
-                    src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
-                    src.push("    if (v.z < 0.0) {");
-                    src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
-                    src.push("    }");
-                    src.push("    return normalize(v);");
-                    src.push("}");
-                }
             }
             src.push("out vec4 vColor;");
             if (geometryState.primitiveName === "points") {
                 src.push("uniform float pointSize;");
             }
         },
-        appendVertexOutputs: (src) => {
+        appendVertexOutputs: (src, color, pickColor, uv, normal) => {
             if (normals) {
-                if (quantizedGeometry) {
-                    src.push("vec4 localNormal = vec4(octDecode(normal.xy), 0.0); ");
-                } else {
-                    src.push("vec4 localNormal = vec4(normal, 0.0); ");
-                }
                 src.push("mat4 modelNormalMatrix2 = modelNormalMatrix;");
                 src.push("mat4 viewNormalMatrix2 = viewNormalMatrix;");
                 if (billboard === "spherical" || billboard === "cylindrical") {
@@ -64,7 +48,7 @@ export const LambertShaderSource = function(mesh) {
                     src.push("billboard(viewNormalMatrix2);");
                     src.push("billboard(modelViewNormalMatrix);");
                 }
-                src.push("vec3 viewNormal = normalize((viewNormalMatrix2 * modelNormalMatrix2 * localNormal).xyz);");
+                src.push(`vec3 viewNormal = normalize((viewNormalMatrix2 * modelNormalMatrix2 * vec4(${normal}, 0.0)).xyz);`);
             }
             src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
             src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
