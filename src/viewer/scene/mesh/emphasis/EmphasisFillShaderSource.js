@@ -27,7 +27,6 @@ function buildVertex(mesh) {
     src.push("uniform mat4 modelMatrix;");
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
-    src.push("uniform vec4 colorize;");
     src.push("uniform vec3 offset;");
     src.push("uniform vec3 scale;");
     if (quantizedGeometry) {
@@ -44,7 +43,6 @@ function buildVertex(mesh) {
     if (clipping) {
         src.push("out vec4 vWorldPosition;");
     }
-    src.push("uniform vec4   lightAmbient;");
     src.push("uniform vec4   fillColor;");
     if (normals) {
         src.push("in vec3 normal;");
