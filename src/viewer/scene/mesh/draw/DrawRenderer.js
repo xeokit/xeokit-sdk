@@ -196,11 +196,9 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     // Bind VBOs
 
     if (geometryState.id !== this._lastGeometryId) {
+        this._setGeometryInputsState && this._setGeometryInputsState(geometryState);
         if (this._uPositionsDecodeMatrix) {
             gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
-        }
-        if (this._uUVDecodeMatrix) {
-            gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, geometryState.uvDecodeMatrix);
         }
         if (this._aPosition) {
             this._aPosition.bindArrayBuffer(geometryState.positionsBuf);
@@ -256,9 +254,9 @@ DrawRenderer.prototype._allocate = function (mesh) {
     }
     const program = this._program;
     const getInputSetter = makeInputSetters(gl, program.handle);
+    this._setGeometryInputsState = meshRenderer.setupGeometryInputs && meshRenderer.setupGeometryInputs(getInputSetter);
     this._setGeneralMaterialInputsState = meshRenderer.setupGeneralMaterialInputs && meshRenderer.setupGeneralMaterialInputs(getInputSetter);
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-    this._uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
     this._uModelMatrix = program.getLocation("modelMatrix");
     this._uModelNormalMatrix = program.getLocation("modelNormalMatrix");
     this._uViewMatrix = program.getLocation("viewMatrix");
