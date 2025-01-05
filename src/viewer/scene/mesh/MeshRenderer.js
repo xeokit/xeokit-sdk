@@ -5,6 +5,12 @@ export function MeshRenderer(programSetup, mesh) {
     const clipping = numAllocatedSectionPlanes > 0;
     const getLogDepth = (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled;
 
+    const programFragmentOutputs = [ ];
+    programSetup.appendFragmentOutputs(programFragmentOutputs, "vWorldPosition", "gl_FragCoord");
+
+    const programVertexOutputs = [ ];
+    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs);
+
     const buildVertexShader = () => {
         const quantizedGeometry = !!mesh._geometry._state.compressGeometry;
         const billboard = mesh._state.billboard;
@@ -81,7 +87,7 @@ export function MeshRenderer(programSetup, mesh) {
                 src.push("vec4 viewPosition = viewMatrix2 * worldPosition;");
             }
         }
-        programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(src);
+        programVertexOutputs.forEach(line => src.push(line));
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
         }
@@ -133,7 +139,7 @@ export function MeshRenderer(programSetup, mesh) {
             src.push("  if (dist > 0.0) { discard; }");
             src.push("}");
         }
-        programSetup.appendFragmentOutputs(src, "vWorldPosition", "gl_FragCoord");
+        programFragmentOutputs.forEach(line => src.push(line));
         if (getLogDepth) {
             src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
