@@ -160,88 +160,6 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
             gl.uniform1f(this._uPointSize, materialState.pointSize);
         }
 
-        switch (materialState.type) {
-            case "LambertMaterial":
-                break;
-
-            case "PhongMaterial":
-                if (material._diffuseFresnel) {
-                    if (this._uDiffuseFresnelEdgeBias) {
-                        gl.uniform1f(this._uDiffuseFresnelEdgeBias, material._diffuseFresnel.edgeBias);
-                    }
-                    if (this._uDiffuseFresnelCenterBias) {
-                        gl.uniform1f(this._uDiffuseFresnelCenterBias, material._diffuseFresnel.centerBias);
-                    }
-                    if (this._uDiffuseFresnelEdgeColor) {
-                        gl.uniform3fv(this._uDiffuseFresnelEdgeColor, material._diffuseFresnel.edgeColor);
-                    }
-                    if (this._uDiffuseFresnelCenterColor) {
-                        gl.uniform3fv(this._uDiffuseFresnelCenterColor, material._diffuseFresnel.centerColor);
-                    }
-                    if (this._uDiffuseFresnelPower) {
-                        gl.uniform1f(this._uDiffuseFresnelPower, material._diffuseFresnel.power);
-                    }
-                }
-                if (material._specularFresnel) {
-                    if (this._uSpecularFresnelEdgeBias) {
-                        gl.uniform1f(this._uSpecularFresnelEdgeBias, material._specularFresnel.edgeBias);
-                    }
-                    if (this._uSpecularFresnelCenterBias) {
-                        gl.uniform1f(this._uSpecularFresnelCenterBias, material._specularFresnel.centerBias);
-                    }
-                    if (this._uSpecularFresnelEdgeColor) {
-                        gl.uniform3fv(this._uSpecularFresnelEdgeColor, material._specularFresnel.edgeColor);
-                    }
-                    if (this._uSpecularFresnelCenterColor) {
-                        gl.uniform3fv(this._uSpecularFresnelCenterColor, material._specularFresnel.centerColor);
-                    }
-                    if (this._uSpecularFresnelPower) {
-                        gl.uniform1f(this._uSpecularFresnelPower, material._specularFresnel.power);
-                    }
-                }
-                if (material._alphaFresnel) {
-                    if (this._uAlphaFresnelEdgeBias) {
-                        gl.uniform1f(this._uAlphaFresnelEdgeBias, material._alphaFresnel.edgeBias);
-                    }
-                    if (this._uAlphaFresnelCenterBias) {
-                        gl.uniform1f(this._uAlphaFresnelCenterBias, material._alphaFresnel.centerBias);
-                    }
-                    if (this._uAlphaFresnelEdgeColor) {
-                        gl.uniform3fv(this._uAlphaFresnelEdgeColor, material._alphaFresnel.edgeColor);
-                    }
-                    if (this._uAlphaFresnelCenterColor) {
-                        gl.uniform3fv(this._uAlphaFresnelCenterColor, material._alphaFresnel.centerColor);
-                    }
-                    if (this._uAlphaFresnelPower) {
-                        gl.uniform1f(this._uAlphaFresnelPower, material._alphaFresnel.power);
-                    }
-                }
-                if (material._emissiveFresnel) {
-                    if (this._uEmissiveFresnelEdgeBias) {
-                        gl.uniform1f(this._uEmissiveFresnelEdgeBias, material._emissiveFresnel.edgeBias);
-                    }
-                    if (this._uEmissiveFresnelCenterBias) {
-                        gl.uniform1f(this._uEmissiveFresnelCenterBias, material._emissiveFresnel.centerBias);
-                    }
-                    if (this._uEmissiveFresnelEdgeColor) {
-                        gl.uniform3fv(this._uEmissiveFresnelEdgeColor, material._emissiveFresnel.edgeColor);
-                    }
-                    if (this._uEmissiveFresnelCenterColor) {
-                        gl.uniform3fv(this._uEmissiveFresnelCenterColor, material._emissiveFresnel.centerColor);
-                    }
-                    if (this._uEmissiveFresnelPower) {
-                        gl.uniform1f(this._uEmissiveFresnelPower, material._emissiveFresnel.power);
-                    }
-                }
-                break;
-
-            case "MetallicMaterial":
-                break;
-
-            case "SpecularMaterial":
-                break;
-        }
-
         this._binders.forEach(b => b(frameCtx, material));
 
         this._lastMaterialId = materialState.id;
@@ -460,34 +378,48 @@ DrawRenderer.prototype._allocate = function (mesh) {
             setupTextureBind("normalMap",       "normalMapMatrix",       mtl => mtl._normalMap);
             setupTextureBind("occlusionMap",    "occlusionMapMatrix",    mtl => mtl._occlusionMap);
 
-            if (material._diffuseFresnel) {
-                this._uDiffuseFresnelEdgeBias = program.getLocation("diffuseFresnelEdgeBias");
-                this._uDiffuseFresnelCenterBias = program.getLocation("diffuseFresnelCenterBias");
-                this._uDiffuseFresnelEdgeColor = program.getLocation("diffuseFresnelEdgeColor");
-                this._uDiffuseFresnelCenterColor = program.getLocation("diffuseFresnelCenterColor");
-                this._uDiffuseFresnelPower = program.getLocation("diffuseFresnelPower");
-            }
-            if (material._specularFresnel) {
-                this._uSpecularFresnelEdgeBias = program.getLocation("specularFresnelEdgeBias");
-                this._uSpecularFresnelCenterBias = program.getLocation("specularFresnelCenterBias");
-                this._uSpecularFresnelEdgeColor = program.getLocation("specularFresnelEdgeColor");
-                this._uSpecularFresnelCenterColor = program.getLocation("specularFresnelCenterColor");
-                this._uSpecularFresnelPower = program.getLocation("specularFresnelPower");
-            }
-            if (material._alphaFresnel) {
-                this._uAlphaFresnelEdgeBias = program.getLocation("alphaFresnelEdgeBias");
-                this._uAlphaFresnelCenterBias = program.getLocation("alphaFresnelCenterBias");
-                this._uAlphaFresnelEdgeColor = program.getLocation("alphaFresnelEdgeColor");
-                this._uAlphaFresnelCenterColor = program.getLocation("alphaFresnelCenterColor");
-                this._uAlphaFresnelPower = program.getLocation("alphaFresnelPower");
-            }
-            if (material._emissiveFresnel) {
-                this._uEmissiveFresnelEdgeBias = program.getLocation("emissiveFresnelEdgeBias");
-                this._uEmissiveFresnelCenterBias = program.getLocation("emissiveFresnelCenterBias");
-                this._uEmissiveFresnelEdgeColor = program.getLocation("emissiveFresnelEdgeColor");
-                this._uEmissiveFresnelCenterColor = program.getLocation("emissiveFresnelCenterColor");
-                this._uEmissiveFresnelPower = program.getLocation("emissiveFresnelPower");
-            }
+            const setupFresnelBind = (edgeBiasName, centerBiasName, edgeColorName, centerColorName, powerName, getMaterialFresnel) => {
+                if (getMaterialFresnel(material)) {
+                    setupUniformBind(edgeBiasName,    (loc, mtl) => gl.uniform1f (loc, getMaterialFresnel(mtl).edgeBias));
+                    setupUniformBind(centerBiasName,  (loc, mtl) => gl.uniform1f (loc, getMaterialFresnel(mtl).centerBias));
+                    setupUniformBind(edgeColorName,   (loc, mtl) => gl.uniform3fv(loc, getMaterialFresnel(mtl).edgeColor));
+                    setupUniformBind(centerColorName, (loc, mtl) => gl.uniform3fv(loc, getMaterialFresnel(mtl).centerColor));
+                    setupUniformBind(powerName,       (loc, mtl) => gl.uniform1f (loc, getMaterialFresnel(mtl).power));
+                }
+            };
+
+            setupFresnelBind(
+                "diffuseFresnelEdgeBias",
+                "diffuseFresnelCenterBias",
+                "diffuseFresnelEdgeColor",
+                "diffuseFresnelCenterColor",
+                "diffuseFresnelPower",
+                mtl => mtl._diffuseFresnel);
+
+            setupFresnelBind(
+                "specularFresnelEdgeBias",
+                "specularFresnelCenterBias",
+                "specularFresnelEdgeColor",
+                "specularFresnelCenterColor",
+                "specularFresnelPower",
+                mtl => mtl._specularFresnel);
+
+            setupFresnelBind(
+                "alphaFresnelEdgeBias",
+                "alphaFresnelCenterBias",
+                "alphaFresnelEdgeColor",
+                "alphaFresnelCenterColor",
+                "alphaFresnelPower",
+                mtl => mtl._alphaFresnel);
+
+            setupFresnelBind(
+                "emissiveFresnelEdgeBias",
+                "emissiveFresnelCenterBias",
+                "emissiveFresnelEdgeColor",
+                "emissiveFresnelCenterColor",
+                "emissiveFresnelPower",
+                mtl => mtl._emissiveFresnel);
+
             break;
 
         case "MetallicMaterial":
