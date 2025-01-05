@@ -297,7 +297,6 @@ function buildFragmentDraw(mesh) {
     const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
     const normals = hasNormals(mesh);
     const uvs = geometryState.uvBuf;
-    const solid = false && materialState.backfaces;
     const phongMaterial = (materialState.type === "PhongMaterial");
     const metallicMaterial = (materialState.type === "MetallicMaterial");
     const specularMaterial = (materialState.type === "SpecularMaterial");
@@ -839,12 +838,6 @@ function buildFragmentDraw(mesh) {
             src.push("}");
         }
         src.push("  if (dist > 0.0) { discard; }");
-        if (solid) {
-            src.push("  if (gl_FrontFacing == false) {");
-            src.push("     outColor = vec4(1.0, 0.0, 0.0, 1.0);");
-            src.push("     return;");
-            src.push("  }");
-        }
         src.push("}");
     }
 
