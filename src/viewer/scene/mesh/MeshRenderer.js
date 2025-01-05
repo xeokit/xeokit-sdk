@@ -17,15 +17,16 @@ export function MeshRenderer(programSetup, mesh) {
     };
 
     const attributes = {
-        position: lazyShaderAttribute("position", "vec3"),
-        color:    lazyShaderAttribute("color",    "vec4")
+        position:  lazyShaderAttribute("position",  "vec3"),
+        color:     lazyShaderAttribute("color",     "vec4"),
+        pickColor: lazyShaderAttribute("pickColor", "vec4"),
     };
 
     const programFragmentOutputs = [ ];
     programSetup.appendFragmentOutputs(programFragmentOutputs, "vWorldPosition", "gl_FragCoord");
 
     const programVertexOutputs = [ ];
-    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color);
+    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color, attributes.pickColor);
 
     const buildVertexShader = () => {
         const quantizedGeometry = !!mesh._geometry._state.compressGeometry;
