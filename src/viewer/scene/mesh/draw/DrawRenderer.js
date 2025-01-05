@@ -7,6 +7,7 @@ import {Map} from "../../utils/Map.js";
 import {DrawShaderSource} from "./DrawShaderSource.js";
 import {LambertShaderSource} from "./LambertShaderSource.js";
 import {Program} from "../../webgl/Program.js";
+import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 import {stats} from '../../stats.js';
 import {WEBGL_INFO} from '../../webglInfo.js';
 import {math} from "../../math/math.js";
@@ -158,9 +159,7 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
             frameCtx.lineWidth = materialState.lineWidth;
         }
 
-        if (this._uPointSize) {
-            gl.uniform1f(this._uPointSize, materialState.pointSize);
-        }
+        this._setGeneralMaterialInputsState && this._setGeneralMaterialInputsState(material);
 
         this._binders.forEach(b => b(frameCtx, material));
 
@@ -249,12 +248,15 @@ DrawRenderer.prototype._allocate = function (mesh) {
     const sectionPlanesState = scene._sectionPlanesState;
     const materialState = mesh._material._state;
 
-    this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
+    const meshRenderer = MeshRenderer(this._programSetup, mesh);
+    this._program = new Program(gl, { vertex: meshRenderer.vertex, fragment: meshRenderer.fragment });
     if (this._program.errors) {
         this.errors = this._program.errors;
         return;
     }
     const program = this._program;
+    const getInputSetter = makeInputSetters(gl, program.handle);
+    this._setGeneralMaterialInputsState = meshRenderer.setupGeneralMaterialInputs && meshRenderer.setupGeneralMaterialInputs(getInputSetter);
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
     this._uModelMatrix = program.getLocation("modelMatrix");
@@ -329,8 +331,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
             dir: program.getLocation("sectionPlaneDir" + i)
         });
     }
-
-    this._uPointSize = program.getLocation("pointSize");
 
     this._binders = [ ];
 
