@@ -86,9 +86,6 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
             gl.lineWidth(materialState.lineWidth);
             frame.lineWidth = materialState.lineWidth;
         }
-        if (this._uPointSize) {
-            gl.uniform1i(this._uPointSize, materialState.pointSize);
-        }
         this._lastMaterialId = materialState.id;
     }
     gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, mesh.worldMatrix);
