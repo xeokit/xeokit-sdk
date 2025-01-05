@@ -60,6 +60,8 @@ function buildVertex(programSetup, mesh) {
     src.push("mat4 modelMatrix2 = modelMatrix;");
     if (stationary) {
         src.push("viewMatrix2[3][0] = viewMatrix2[3][1] = viewMatrix2[3][2] = 0.0;")
+    } else if (programSetup.meshStateBackground) {
+        src.push("viewMatrix2[3] = vec4(0.0, 0.0, 0.0 ,1.0);");
     }
     if (billboard === "spherical" || billboard === "cylindrical") {
         src.push("mat4 modelViewMatrix = viewMatrix2 * modelMatrix2;");
@@ -83,7 +85,7 @@ function buildVertex(programSetup, mesh) {
         src.push("vFragDepth = 1.0 + clipPos.w;");
         src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
     }
-    src.push("gl_Position = clipPos;");
+    src.push("gl_Position = " + (programSetup.transformClipPos ? programSetup.transformClipPos("clipPos") : "clipPos") + ";");
     src.push("}");
     return src;
 };
