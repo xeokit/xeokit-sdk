@@ -38,6 +38,7 @@ export const DrawShaderSource = function(mesh) {
     return {
         programName: "Draw",
         discardPoints: true,
+        setupPointSize: true,
         meshStateBackground: background,
         transformClipPos: clipPos => background ? `${clipPos}.xyww` : clipPos,
         appendVertexDefinitions: (src) => {
@@ -77,9 +78,6 @@ export const DrawShaderSource = function(mesh) {
             }
             if (geometryState.colors) {
                 src.push("out vec4 vColor;");
-            }
-            if (primitiveName === "points") {
-                src.push("uniform float pointSize;");
             }
             if (receivesShadow) {
                 src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
@@ -141,9 +139,6 @@ export const DrawShaderSource = function(mesh) {
             }
             if (geometryState.colors) {
                 src.push(`vColor = ${color};`);
-            }
-            if (primitiveName === "points") {
-                src.push("gl_PointSize = pointSize;");
             }
             src.push("   vViewPosition = viewPosition.xyz;");
             if (receivesShadow) {
