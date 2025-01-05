@@ -4,6 +4,8 @@ export function MeshRenderer(programSetup, mesh) {
     const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
     const clipping = numAllocatedSectionPlanes > 0;
     const getLogDepth = (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled;
+    const geometryState = mesh._geometry._state;
+    const isPoints = geometryState.primitiveName === "points";
 
     const lazyShaderAttribute = function(name, type) {
         const variable = {
@@ -43,7 +45,7 @@ export function MeshRenderer(programSetup, mesh) {
     programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color, attributes.pickColor, attributes.uv, localNormal);
 
     const buildVertexShader = () => {
-        const quantizedGeometry = !!mesh._geometry._state.compressGeometry;
+        const quantizedGeometry = geometryState.compressGeometry;
         const billboard = mesh._state.billboard;
         const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
         const stationary = mesh._state.stationary;
@@ -186,6 +188,13 @@ export function MeshRenderer(programSetup, mesh) {
                 src.push("}");
             }
             src.push("  if (dist > 0.0) { discard; }");
+            src.push("}");
+        }
+        if (isPoints && programSetup.discardPoints) {
+            src.push("vec2 cxy = 2.0 * gl_PointCoord - 1.0;");
+            src.push("float r = dot(cxy, cxy);");
+            src.push("if (r > 1.0) {");
+            src.push("   discard;");
             src.push("}");
         }
         programFragmentOutputs.forEach(line => src.push(line));
