@@ -7,6 +7,7 @@ export const LambertShaderSource = function(mesh) {
     const gammaOutput = mesh.scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
     return {
         programName: "Lambert",
+        discardPoints: true,
         appendVertexDefinitions: (src) => {
             src.push("uniform vec4 colorize;");
             src.push("uniform vec4 lightAmbient;");
@@ -99,16 +100,6 @@ export const LambertShaderSource = function(mesh) {
             }
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src) => {
-            if (geometryState.primitiveName === "points") {
-                src.push("vec2 cxy = 2.0 * gl_PointCoord - 1.0;");
-                src.push("float r = dot(cxy, cxy);");
-                src.push("if (r > 1.0) {");
-                src.push("   discard;");
-                src.push("}");
-
-            }
-            src.push(`outColor = ${gammaOutput ? "linearToGamma(vColor, gammaFactor)" : "vColor"};`);
-        }
+        appendFragmentOutputs: (src) => src.push(`outColor = ${gammaOutput ? "linearToGamma(vColor, gammaFactor)" : "vColor"};`)
     };
 };
