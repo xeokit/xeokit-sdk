@@ -17,6 +17,41 @@ export function MeshRenderer(programSetup, mesh) {
         const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
         const stationary = mesh._state.stationary;
 
+        const mainVertexOutputs = (function() {
+            const src = [ ];
+            src.push("vec4 localPosition = vec4(position, 1.0);");
+            if (quantizedGeometry) {
+                src.push("localPosition = positionsDecodeMatrix * localPosition;");
+            }
+            if (programSetup.dontBillboardAnything) {
+                src.push("vec4 worldPosition = modelMatrix * localPosition;");
+                src.push("worldPosition.xyz = worldPosition.xyz + offset;");
+                src.push("vec4 viewPosition = viewMatrix * worldPosition;");
+            } else {
+                src.push("mat4 viewMatrix2 = viewMatrix;");
+                src.push("mat4 modelMatrix2 = modelMatrix;");
+                if (stationary) {
+                    src.push("viewMatrix2[3][0] = viewMatrix2[3][1] = viewMatrix2[3][2] = 0.0;");
+                } else if (programSetup.meshStateBackground) {
+                    src.push("viewMatrix2[3] = vec4(0.0, 0.0, 0.0 ,1.0);");
+                }
+                if (isBillboard) {
+                    src.push("mat4 modelViewMatrix = viewMatrix2 * modelMatrix2;");
+                    src.push("billboard(modelMatrix2);");
+                    src.push("billboard(viewMatrix2);");
+                }
+                src.push("vec4 worldPosition = modelMatrix2 * localPosition;");
+                src.push("worldPosition.xyz = worldPosition.xyz + offset;");
+                if (isBillboard) {
+                    src.push("billboard(modelViewMatrix);");
+                    src.push("vec4 viewPosition = modelViewMatrix * localPosition;");
+                } else {
+                    src.push("vec4 viewPosition = viewMatrix2 * worldPosition;");
+                }
+            }
+            return src;
+        })();
+
         const src = [];
         src.push("#version 300 es");
         src.push("// " + programSetup.programName + " vertex shader");
@@ -57,36 +92,7 @@ export function MeshRenderer(programSetup, mesh) {
         }
         programSetup.appendVertexDefinitions && programSetup.appendVertexDefinitions(src);
         src.push("void main(void) {");
-        src.push("vec4 localPosition = vec4(position, 1.0); ");
-        if (quantizedGeometry) {
-            src.push("localPosition = positionsDecodeMatrix * localPosition;");
-        }
-        if (programSetup.dontBillboardAnything) {
-            src.push("vec4 worldPosition = modelMatrix * localPosition;");
-            src.push("worldPosition.xyz = worldPosition.xyz + offset;");
-            src.push("vec4 viewPosition = viewMatrix * worldPosition;");
-        } else {
-            src.push("mat4 viewMatrix2 = viewMatrix;");
-            src.push("mat4 modelMatrix2 = modelMatrix;");
-            if (stationary) {
-                src.push("viewMatrix2[3][0] = viewMatrix2[3][1] = viewMatrix2[3][2] = 0.0;");
-            } else if (programSetup.meshStateBackground) {
-                src.push("viewMatrix2[3] = vec4(0.0, 0.0, 0.0 ,1.0);");
-            }
-            if (isBillboard) {
-                src.push("mat4 modelViewMatrix = viewMatrix2 * modelMatrix2;");
-                src.push("billboard(modelMatrix2);");
-                src.push("billboard(viewMatrix2);");
-            }
-            src.push("vec4 worldPosition = modelMatrix2 * localPosition;");
-            src.push("worldPosition.xyz = worldPosition.xyz + offset;");
-            if (isBillboard) {
-                src.push("billboard(modelViewMatrix);");
-                src.push("vec4 viewPosition = modelViewMatrix * localPosition;");
-            } else {
-                src.push("vec4 viewPosition = viewMatrix2 * worldPosition;");
-            }
-        }
+        mainVertexOutputs.forEach(line => src.push(line));
         programVertexOutputs.forEach(line => src.push(line));
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
