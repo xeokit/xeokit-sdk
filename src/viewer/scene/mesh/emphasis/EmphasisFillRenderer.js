@@ -6,6 +6,7 @@ import {MeshRenderer} from "../MeshRenderer.js";
 import {Map} from "../../utils/Map.js";
 import {EmphasisFillShaderSource} from "./EmphasisFillShaderSource.js";
 import {Program} from "../../webgl/Program.js";
+import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 import {stats} from '../../stats.js';
 import {math} from "../../math/math.js";
 import {getPlaneRTCPos} from "../../math/rtcCoords.js";
@@ -72,7 +73,8 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     const scene = this._scene;
     const camera = scene.camera;
     const gl = scene.canvas.gl;
-    const materialState = mode === 0 ? mesh._xrayMaterial._state : (mode === 1 ? mesh._highlightMaterial._state : mesh._selectedMaterial._state);
+    const material = mode === 0 ? mesh._xrayMaterial : (mode === 1 ? mesh._highlightMaterial : mesh._selectedMaterial);
+    const materialState = material._state;
     const meshState = mesh._state;
     const geometryState = mesh._geometry._state;
     const origin = mesh.origin;
@@ -116,7 +118,6 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     }
 
     if (materialState.id !== this._lastMaterialId) {
-        const fillColor = materialState.fillColor;
         const backfaces = materialState.backfaces;
         if (frameCtx.backfaces !== backfaces) {
             if (backfaces) {
@@ -126,7 +127,7 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
             }
             frameCtx.backfaces = backfaces;
         }
-        gl.uniform4f(this._uFillColor, fillColor[0], fillColor[1], fillColor[2], materialState.fillAlpha);
+        this._setMaterialInputsState && this._setMaterialInputsState(material);
         this._lastMaterialId = materialState.id;
     }
 
@@ -166,6 +167,8 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
         this._lastGeometryId = geometryState.id;
     }
 
+    this._setInputsState && this._setInputsState();
+
     if (geometryState.indicesBuf) {
         gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
         frameCtx.drawElements++;
@@ -186,6 +189,10 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
         return;
     }
     const program = this._program;
+    const getInputSetter = makeInputSetters(gl, program.handle);
+    this._setInputsState = this._programSetup.setupInputs && this._programSetup.setupInputs(getInputSetter);
+    this._setMaterialInputsState = this._programSetup.setupMaterialInputs && this._programSetup.setupMaterialInputs(getInputSetter);
+
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uModelMatrix = program.getLocation("modelMatrix");
     this._uModelNormalMatrix = program.getLocation("modelNormalMatrix");
@@ -224,11 +231,9 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
             dir: program.getLocation("sectionPlaneDir" + i)
         });
     }
-    this._uFillColor = program.getLocation("fillColor");
     this._aPosition = program.getAttribute("position");
     this._aNormal = program.getAttribute("normal");
     this._uClippable = program.getLocation("clippable");
-    this._uGammaFactor = program.getLocation("gammaFactor");
     this._uOffset = program.getLocation("offset");
     if (scene.logarithmicDepthBufferEnabled ) {
         this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
@@ -275,9 +280,6 @@ EmphasisFillRenderer.prototype._bindProgram = function (frameCtx) {
                 gl.uniform3fv(this._uLightDir[i], light.dir);
             }
         }
-    }
-    if (this._uGammaFactor) {
-        gl.uniform1f(this._uGammaFactor, scene.gammaFactor);
     }
 };
 
