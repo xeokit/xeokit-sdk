@@ -4,15 +4,15 @@ export const PickTriangleShaderSource = function(mesh) {
         dontBillboardAnything: true,
         transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * ${clipPos}.w, ${clipPos}.zw)`,
         appendVertexDefinitions: (src) => {
-            src.push("in vec4 color;");
+            src.push("in vec4 pickColor;");
             src.push("uniform vec2 pickClipPos;");
             src.push("out vec4 vColor;");
         },
-        appendVertexOutputs: (src) => src.push("vColor = color;"),
+        appendVertexOutputs: (src) => src.push("vColor = pickColor;"),
         appendFragmentDefinitions: (src) => {
             src.push("in vec4 vColor;");
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src) => src.push("   outColor = vColor;")
+        appendFragmentOutputs: (src) => src.push("outColor = vColor;")
     };
 };
