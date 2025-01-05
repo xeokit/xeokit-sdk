@@ -70,6 +70,7 @@ function buildVertexLambert(mesh) {
     const geometryState = mesh._geometry._state;
     const billboard = mesh._state.billboard;
     const stationary = mesh._state.stationary;
+    const normals = hasNormals(mesh);
     const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
     const quantizedGeometry = !!geometryState.compressGeometry;
 
@@ -100,7 +101,7 @@ function buildVertexLambert(mesh) {
     src.push("uniform vec4 lightAmbient;");
     src.push("uniform vec4 materialColor;");
     src.push("uniform vec3 materialEmissive;");
-    if (geometryState.normalsBuf) {
+    if (normals) {
         src.push("in vec3 normal;");
         src.push("uniform mat4 modelNormalMatrix;");
         src.push("uniform mat4 viewNormalMatrix;");
@@ -156,7 +157,7 @@ function buildVertexLambert(mesh) {
     if (quantizedGeometry) {
         src.push("localPosition = positionsDecodeMatrix * localPosition;");
     }
-    if (geometryState.normalsBuf) {
+    if (normals) {
         if (quantizedGeometry) {
             src.push("vec4 localNormal = vec4(octDecode(normal.xy), 0.0); ");
         } else {
@@ -175,7 +176,7 @@ function buildVertexLambert(mesh) {
         src.push("billboard(modelMatrix2);");
         src.push("billboard(viewMatrix2);");
         src.push("billboard(modelViewMatrix);");
-        if (geometryState.normalsBuf) {
+        if (normals) {
             src.push("mat4 modelViewNormalMatrix =  viewNormalMatrix2 * modelNormalMatrix2;");
             src.push("billboard(modelNormalMatrix2);");
             src.push("billboard(viewNormalMatrix2);");
@@ -189,13 +190,13 @@ function buildVertexLambert(mesh) {
         src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         src.push("vec4 viewPosition  = viewMatrix2 * worldPosition; ");
     }
-    if (geometryState.normalsBuf) {
+    if (normals) {
         src.push("vec3 viewNormal = normalize((viewNormalMatrix2 * modelNormalMatrix2 * localNormal).xyz);");
     }
     src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
     src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
     src.push("float lambertian = 1.0;");
-    if (geometryState.normalsBuf) {
+    if (normals) {
         for (let i = 0, len = lightsState.lights.length; i < len; i++) {
             const light = lightsState.lights[i];
             if (light.type === "ambient") {
