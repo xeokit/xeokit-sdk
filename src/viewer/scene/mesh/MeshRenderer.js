@@ -6,6 +6,7 @@ export function MeshRenderer(programSetup, mesh) {
     const getLogDepth = (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled;
     const geometryState = mesh._geometry._state;
     const isPoints = geometryState.primitiveName === "points";
+    const setupPointSize = programSetup.setupPointSize && isPoints;
 
     const lazyShaderAttribute = function(name, type) {
         const variable = {
@@ -135,10 +136,16 @@ export function MeshRenderer(programSetup, mesh) {
             src.push("   mat[2][2] =1.0;");
             src.push("}");
         }
+        if (setupPointSize) {
+            src.push("uniform float pointSize;");
+        }
         programSetup.appendVertexDefinitions && programSetup.appendVertexDefinitions(src);
         src.push("void main(void) {");
         mainVertexOutputs.forEach(line => src.push(line));
         programVertexOutputs.forEach(line => src.push(line));
+        if (setupPointSize) {
+            src.push("gl_PointSize = pointSize;");
+        }
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
         }
@@ -207,6 +214,10 @@ export function MeshRenderer(programSetup, mesh) {
 
     return {
         vertex:   buildVertexShader(),
-        fragment: buildFragmentShader()
+        fragment: buildFragmentShader(),
+        setupGeneralMaterialInputs: setupPointSize && function(getInputSetter) {
+            const pointSize = getInputSetter("pointSize");
+            return (mtl) => pointSize(mtl.pointSize);
+        }
     };
 };
