@@ -27,7 +27,6 @@ export const DrawShaderSource = function(mesh) {
     const normals = (mesh._geometry._state.autoVertexNormals || mesh._geometry._state.normalsBuf) && (primitiveName === "triangles" || primitiveName === "triangle-strip" || primitiveName === "triangle-fan");
     const receivesShadow = mesh.receivesShadow && lightsState.lights.some(l => l.castsShadow);
     const background = meshState.background;
-    const billboard = meshState.billboard;
     const materialState = material._state;
     const uvs = geometryState.uvBuf;
     const phongMaterial    = (materialState.type === "PhongMaterial");
@@ -47,8 +46,6 @@ export const DrawShaderSource = function(mesh) {
                 src.push("out vec3 vWorldNormal;");
             }
             if (normals) {
-                src.push("uniform mat4 modelNormalMatrix;");
-                src.push("uniform mat4 viewNormalMatrix;");
                 src.push("out vec3 vViewNormal;");
                 for (let i = 0, len = lightsState.lights.length; i < len; i++) {
                     const light = lightsState.lights[i];
@@ -90,21 +87,12 @@ export const DrawShaderSource = function(mesh) {
                 }
             }
         },
-        appendVertexOutputs: (src, color, pickColor, uv, normal) => {
+        appendVertexOutputs: (src, color, pickColor, uv, worldNormal, viewNormal) => {
             if (normals) {
-                src.push("mat4 modelNormalMatrix2    = modelNormalMatrix;");
-                src.push("mat4 viewNormalMatrix2     = viewNormalMatrix;");
-                if (billboard === "spherical" || billboard === "cylindrical") {
-                    src.push("mat4 modelViewNormalMatrix =  viewNormalMatrix2 * modelNormalMatrix2;");
-                    src.push("billboard(modelNormalMatrix2);");
-                    src.push("billboard(viewNormalMatrix2);");
-                    src.push("billboard(modelViewNormalMatrix);");
-                }
-                src.push(`vec3 worldNormal = (modelNormalMatrix2 * vec4(${normal}, 0.0)).xyz;`);
                 if (lightsState.lightMaps.length > 0) {
-                    src.push("vWorldNormal = worldNormal;");
+                    src.push(`vWorldNormal = ${worldNormal};`);
                 }
-                src.push("vViewNormal = normalize((viewNormalMatrix2 * vec4(worldNormal, 0.0)).xyz);");
+                src.push(`vViewNormal = ${viewNormal};`);
                 src.push("vec3 tmpVec3;");
                 src.push("float lightDist;");
                 for (let i = 0, len = lightsState.lights.length; i < len; i++) { // Lights
