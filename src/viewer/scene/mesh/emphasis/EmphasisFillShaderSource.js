@@ -1,9 +1,13 @@
+import {math} from "../../math/math.js";
+const tmpVec4 = math.vec4();
+
 export function EmphasisFillShaderSource(mesh) {
-    const lightsState = mesh.scene._lightsState;
+    const scene = mesh.scene;
+    const lightsState = scene._lightsState;
     const primitive = mesh._geometry._state.primitiveName;
     const normals = (mesh._geometry._state.autoVertexNormals || mesh._geometry._state.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan");
     const billboard = mesh._state.billboard;
-    const gammaOutput = mesh.scene.gammaOutput;
+    const gammaOutput = scene.gammaOutput;
 
     return {
         programName: "EmphasisFill",
@@ -93,6 +97,18 @@ export function EmphasisFillShaderSource(mesh) {
                 src.push("}");
             }
             src.push(`outColor = ${gammaOutput ? "linearToGamma(vColor, gammaFactor)" : "vColor"};`);
+        },
+        setupInputs: gammaOutput && ((getInputSetter) => {
+            const gammaFactor = getInputSetter("gammaFactor");
+            return () => gammaFactor(scene.gammaFactor);
+        }),
+        setupMaterialInputs: (getInputSetter) => {
+            const fillColor = getInputSetter("fillColor");
+            return (mtl) => {
+                tmpVec4.set(mtl.fillColor);
+                tmpVec4[3] = mtl.fillAlpha;
+                fillColor(tmpVec4);
+            };
         }
     };
 }
