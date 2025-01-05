@@ -17,8 +17,8 @@ function buildVertex(mesh) {
     src.push("// Mesh shadow vertex shader");
     src.push("in vec3 position;");
     src.push("uniform mat4 modelMatrix;");
-    src.push("uniform mat4 shadowViewMatrix;");
-    src.push("uniform mat4 shadowProjMatrix;");
+    src.push("uniform mat4 viewMatrix;");
+    src.push("uniform mat4 projMatrix;");
     src.push("uniform vec3 offset;");
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
@@ -34,11 +34,11 @@ function buildVertex(mesh) {
     }
     src.push("worldPosition = modelMatrix * localPosition;");
     src.push("worldPosition.xyz = worldPosition.xyz + offset;");
-    src.push("vec4 viewPosition  = shadowViewMatrix * worldPosition; ");
+    src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
     if (clipping) {
         src.push("vWorldPosition = worldPosition;");
     }
-    src.push("   gl_Position = shadowProjMatrix * viewPosition;");
+    src.push("   gl_Position = projMatrix * viewPosition;");
     src.push("}");
     return src;
 }
