@@ -168,8 +168,6 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         this._setMaterialInputsState && this._setMaterialInputsState(material, acquireTextureUnit);
         this._setGeneralMaterialInputsState && this._setGeneralMaterialInputsState(material);
 
-        this._binders.forEach(b => b(frameCtx, material));
-
         this._lastMaterialId = materialState.id;
     }
 
@@ -323,46 +321,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
             pos: program.getLocation("sectionPlanePos" + i),
             dir: program.getLocation("sectionPlaneDir" + i)
         });
-    }
-
-    this._binders = [ ];
-
-    const setupUniformBind = (uniformName, bind) => {
-        const uLoc = program.getLocation(uniformName);
-        if (uLoc) {
-            this._binders.push((frameCtx, mtl) => bind(uLoc, mtl));
-        }
-    };
-
-    switch (materialState.type) {
-        case "LambertMaterial":
-            break;
-
-        case "PhongMaterial":
-            setupUniformBind("materialAmbient",         (loc, mtl) => gl.uniform3fv(loc, mtl._state.ambient));
-            setupUniformBind("materialDiffuse",         (loc, mtl) => gl.uniform3fv(loc, mtl._state.diffuse));
-            setupUniformBind("materialSpecular",        (loc, mtl) => gl.uniform3fv(loc, mtl._state.specular));
-            setupUniformBind("materialEmissive",        (loc, mtl) => gl.uniform3fv(loc, mtl._state.emissive));
-            setupUniformBind("materialShininess",       (loc, mtl) => gl.uniform1f (loc, mtl._state.shininess));
-            setupUniformBind("materialAlphaModeCutoff", (loc, mtl) => gl.uniform4f (loc, 1.0 * mtl._state.alpha, mtl._state.alphaMode === 1 ? 1.0 : 0.0, mtl._state.alphaCutoff, 0.0));
-            break;
-
-        case "MetallicMaterial":
-            setupUniformBind("materialBaseColor",       (loc, mtl) => gl.uniform3fv(loc, mtl._state.baseColor));
-            setupUniformBind("materialMetallic",        (loc, mtl) => gl.uniform1f (loc, mtl._state.metallic));
-            setupUniformBind("materialRoughness",       (loc, mtl) => gl.uniform1f (loc, mtl._state.roughness));
-            setupUniformBind("materialSpecularF0",      (loc, mtl) => gl.uniform1f (loc, mtl._state.specularF0));
-            setupUniformBind("materialEmissive",        (loc, mtl) => gl.uniform3fv(loc, mtl._state.emissive));
-            setupUniformBind("materialAlphaModeCutoff", (loc, mtl) => gl.uniform4f (loc, 1.0 * mtl._state.alpha, mtl._state.alphaMode === 1 ? 1.0 : 0.0, mtl._state.alphaCutoff, 0.0));
-            break;
-
-        case "SpecularMaterial":
-            setupUniformBind("materialDiffuse",         (loc, mtl) => gl.uniform3fv(loc, mtl._state.diffuse));
-            setupUniformBind("materialSpecular",        (loc, mtl) => gl.uniform3fv(loc, mtl._state.specular));
-            setupUniformBind("materialGlossiness",      (loc, mtl) => gl.uniform1f (loc, mtl._state.glossiness));
-            setupUniformBind("materialEmissive",        (loc, mtl) => gl.uniform3fv(loc, mtl._state.emissive));
-            setupUniformBind("materialAlphaModeCutoff", (loc, mtl) => gl.uniform4f (loc, 1.0 * mtl._state.alpha, mtl._state.alphaMode === 1 ? 1.0 : 0.0, mtl._state.alphaCutoff, 0.0));
-            break;
     }
 
     this._aPosition = program.getAttribute("position");
