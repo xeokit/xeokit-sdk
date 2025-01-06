@@ -638,8 +638,6 @@ function buildFragmentDraw(mesh) {
         }
         if (lightsState.reflectionMaps.length > 0) {
             src.push("uniform samplerCube reflectionMap;");
-        }
-        if (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0) {
             src.push("uniform mat4 viewMatrix;");
         }
 
