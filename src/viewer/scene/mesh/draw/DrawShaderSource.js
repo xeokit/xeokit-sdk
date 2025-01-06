@@ -20,6 +20,7 @@ export const DrawShaderSource = function(mesh) {
     const specularMaterial = (materialState.type === "SpecularMaterial");
     const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
 
+
     const setupFresnel = (name, colorSwizzle, getMaterialValue) => {
         const edgeBias    = name + "FresnelEdgeBias";
         const centerBias  = name + "FresnelCenterBias";
@@ -132,6 +133,37 @@ export const DrawShaderSource = function(mesh) {
     ].filter(t => t);
 
     const texturePosNeeded = activeTextureMaps.length > 0;
+
+
+    const setupUniform = (name, type, getMaterialValue) => {
+        const initValue = getMaterialValue(material);
+        const isDefined = (type === "float") ? ((initValue !== undefined) && (initValue !== null)) : initValue;
+        return isDefined && {
+            appendDefinitions: (src) => src.push(`uniform ${type} ${name};`),
+            getValueExpression: () => name
+        };
+    };
+
+    const materialAmbient         = setupUniform("materialAmbient",         "vec3",  mtl => mtl.ambient);
+    const materialDiffuse         = setupUniform("materialDiffuse",         "vec3",  mtl => mtl.diffuse);
+    const materialBaseColor       = setupUniform("materialBaseColor",       "vec3",  mtl => mtl.baseColor);
+    const materialEmissive        = setupUniform("materialEmissive",        "vec3",  mtl => mtl.emissive);
+    const materialSpecular        = setupUniform("materialSpecular",        "vec3",  mtl => mtl.specular);
+
+    const materialGlossiness      = setupUniform("materialGlossiness",      "float", mtl => mtl.glossiness);
+    const materialMetallic        = setupUniform("materialMetallic",        "float", mtl => mtl.metallic);
+    const materialRoughness       = setupUniform("materialRoughness",       "float", mtl => mtl.roughness);
+    const materialShininess       = setupUniform("materialShininess",       "float", mtl => mtl.shininess);
+    const materialSpecularF0      = setupUniform("materialSpecularF0",      "float", mtl => mtl.specularF0);
+
+    const materialAlphaModeCutoff = setupUniform("materialAlphaModeCutoff", "vec4",  mtl => (mtl.alpha !== undefined) && (mtl.alpha !== null)); // [alpha, alphaMode, alphaCutoff]
+
+    const activeUniforms = [
+        materialAmbient, materialDiffuse, materialBaseColor, materialEmissive, materialSpecular,
+        materialGlossiness, materialMetallic, materialRoughness, materialShininess, materialSpecularF0,
+        materialAlphaModeCutoff
+    ].filter(u => u);
+
 
     return {
         programName: "Draw",
@@ -474,39 +506,7 @@ export const DrawShaderSource = function(mesh) {
             // MATERIAL CHANNEL INPUTS
             //--------------------------------------------------------------------------------
 
-            if (materialState.ambient) {
-                src.push("uniform vec3 materialAmbient;");
-            }
-            if (materialState.baseColor) {
-                src.push("uniform vec3 materialBaseColor;");
-            }
-            if (materialState.alpha !== undefined && materialState.alpha !== null) {
-                src.push("uniform vec4 materialAlphaModeCutoff;"); // [alpha, alphaMode, alphaCutoff]
-            }
-            if (materialState.emissive) {
-                src.push("uniform vec3 materialEmissive;");
-            }
-            if (materialState.diffuse) {
-                src.push("uniform vec3 materialDiffuse;");
-            }
-            if (materialState.glossiness !== undefined && materialState.glossiness !== null) {
-                src.push("uniform float materialGlossiness;");
-            }
-            if (materialState.shininess !== undefined && materialState.shininess !== null) {
-                src.push("uniform float materialShininess;");  // Phong channel
-            }
-            if (materialState.specular) {
-                src.push("uniform vec3 materialSpecular;");
-            }
-            if (materialState.metallic !== undefined && materialState.metallic !== null) {
-                src.push("uniform float materialMetallic;");
-            }
-            if (materialState.roughness !== undefined && materialState.roughness !== null) {
-                src.push("uniform float materialRoughness;");
-            }
-            if (materialState.specularF0 !== undefined && materialState.specularF0 !== null) {
-                src.push("uniform float materialSpecularF0;");
-            }
+            activeUniforms.forEach(u => u.appendDefinitions(src));
 
             //--------------------------------------------------------------------------------
             // MATERIAL TEXTURE INPUTS
@@ -606,68 +606,34 @@ export const DrawShaderSource = function(mesh) {
         appendFragmentOutputs: (src) => {
             src.push("float occlusion = 1.0;");
 
-            if (materialState.ambient) {
-                src.push("vec3 ambientColor = materialAmbient;");
-            } else {
-                src.push("vec3 ambientColor = vec3(1.0, 1.0, 1.0);");
-            }
+            src.push(`vec3 ambientColor = ${materialAmbient ? materialAmbient.getValueExpression() : "vec3(1.0)"};`);
 
-            if (materialState.diffuse) {
-                src.push("vec3 diffuseColor = materialDiffuse;");
-            } else if (materialState.baseColor) {
-                src.push("vec3 diffuseColor = materialBaseColor;");
-            } else {
-                src.push("vec3 diffuseColor = vec3(1.0, 1.0, 1.0);");
-            }
+            const diffuseColor = (materialDiffuse
+                                  ? materialDiffuse.getValueExpression()
+                                  : (materialBaseColor
+                                     ? materialBaseColor.getValueExpression()
+                                     : "vec3(1.0)"));
+            src.push(`vec3 diffuseColor = ${diffuseColor};`);
 
             if (geometryState.colors) {
                 src.push("diffuseColor *= vColor.rgb;");
             }
 
-            if (materialState.emissive) {
-                src.push("vec3 emissiveColor = materialEmissive;"); // Emissive default is (0,0,0), so initializing here
-            } else {
-                src.push("vec3  emissiveColor = vec3(0.0, 0.0, 0.0);");
-            }
+            src.push(`vec3 emissiveColor = ${materialEmissive ? materialEmissive.getValueExpression() : "vec3(0.0)"};`);
+            src.push(`vec3 specular      = ${materialSpecular ? materialSpecular.getValueExpression() : "vec3(1.0)"};`);
 
-            if (materialState.specular) {
-                src.push("vec3 specular = materialSpecular;");
-            } else {
-                src.push("vec3 specular = vec3(1.0, 1.0, 1.0);");
-            }
+            src.push(`float glossiness = ${materialGlossiness ? materialGlossiness.getValueExpression() : "1.0"};`);
+            src.push(`float metallic   = ${materialMetallic   ? materialMetallic.getValueExpression()   : "1.0"};`);
+            src.push(`float roughness  = ${materialRoughness  ? materialRoughness.getValueExpression()  : "1.0"};`);
+            src.push(`float shininess  = ${materialShininess  ? materialShininess.getValueExpression()  : "1.0"};`);
+            src.push(`float specularF0 = ${materialSpecularF0 ? materialSpecularF0.getValueExpression() : "1.0"};`);
 
-            if (materialState.alpha !== undefined) {
-                src.push("float alpha = materialAlphaModeCutoff[0];");
-            } else {
-                src.push("float alpha = 1.0;");
-            }
+            src.push(`vec4 alphaModeCutoff = ${materialAlphaModeCutoff ? materialAlphaModeCutoff.getValueExpression() : "vec4(1.0, 0.0, 0.0, 0.0)"};`);
+
+            src.push("float alpha = alphaModeCutoff[0];");
 
             if (geometryState.colors) {
                 src.push("alpha *= vColor.a;");
-            }
-
-            if (materialState.glossiness !== undefined) {
-                src.push("float glossiness = materialGlossiness;");
-            } else {
-                src.push("float glossiness = 1.0;");
-            }
-
-            if (materialState.metallic !== undefined) {
-                src.push("float metallic = materialMetallic;");
-            } else {
-                src.push("float metallic = 1.0;");
-            }
-
-            if (materialState.roughness !== undefined) {
-                src.push("float roughness = materialRoughness;");
-            } else {
-                src.push("float roughness = 1.0;");
-            }
-
-            if (materialState.specularF0 !== undefined) {
-                src.push("float specularF0 = materialSpecularF0;");
-            } else {
-                src.push("float specularF0 = 1.0;");
             }
 
             //--------------------------------------------------------------------------------
@@ -731,7 +697,7 @@ export const DrawShaderSource = function(mesh) {
                 alphaFresnel    && src.push(`alpha         *= ${alphaFresnel.getValueExpression   ("viewEyeDir", "viewNormal")};`);
                 emissiveFresnel && src.push(`emissiveColor *= ${emissiveFresnel.getValueExpression("viewEyeDir", "viewNormal")};`);
 
-                src.push("if (materialAlphaModeCutoff[1] == 1.0 && alpha < materialAlphaModeCutoff[2]) {"); // ie. (alphaMode == "mask" && alpha < alphaCutoff)
+                src.push("if (alphaModeCutoff[1] == 1.0 && alpha < alphaModeCutoff[2]) {"); // ie. (alphaMode == "mask" && alpha < alphaCutoff)
                 src.push("   discard;"); // TODO: Discard earlier within this shader?
                 src.push("}");
 
@@ -746,7 +712,7 @@ export const DrawShaderSource = function(mesh) {
                 if (phongMaterial) {
                     src.push("material.diffuseColor      = diffuseColor;");
                     src.push("material.specularColor     = specular;");
-                    src.push("material.shine             = materialShininess;");
+                    src.push("material.shine             = shininess;");
                 }
 
                 if (specularMaterial) {
