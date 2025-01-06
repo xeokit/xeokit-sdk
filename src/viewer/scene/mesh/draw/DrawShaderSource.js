@@ -1230,7 +1230,7 @@ function buildFragmentDraw(mesh) {
         } else {
             src.push("textureCoord = texturePos.xy;");
         }
-        src.push("vec4 ambientTexel = texture(ambientMap, textureCoord).rgb;");
+        src.push("vec4 ambientTexel = texture(ambientMap, textureCoord);");
         src.push("ambientTexel = " + TEXTURE_DECODE_FUNCS[material._ambientMap._state.encoding] + "(ambientTexel);");
         src.push("ambientColor *= ambientTexel.rgb;");
     }
