@@ -365,48 +365,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
             setupTextureBind("normalMap",       "normalMapMatrix",       mtl => mtl._normalMap);
             setupTextureBind("occlusionMap",    "occlusionMapMatrix",    mtl => mtl._occlusionMap);
 
-            const setupFresnelBind = (edgeBiasName, centerBiasName, edgeColorName, centerColorName, powerName, getMaterialFresnel) => {
-                if (getMaterialFresnel(material)) {
-                    setupUniformBind(edgeBiasName,    (loc, mtl) => gl.uniform1f (loc, getMaterialFresnel(mtl).edgeBias));
-                    setupUniformBind(centerBiasName,  (loc, mtl) => gl.uniform1f (loc, getMaterialFresnel(mtl).centerBias));
-                    setupUniformBind(edgeColorName,   (loc, mtl) => gl.uniform3fv(loc, getMaterialFresnel(mtl).edgeColor));
-                    setupUniformBind(centerColorName, (loc, mtl) => gl.uniform3fv(loc, getMaterialFresnel(mtl).centerColor));
-                    setupUniformBind(powerName,       (loc, mtl) => gl.uniform1f (loc, getMaterialFresnel(mtl).power));
-                }
-            };
-
-            setupFresnelBind(
-                "diffuseFresnelEdgeBias",
-                "diffuseFresnelCenterBias",
-                "diffuseFresnelEdgeColor",
-                "diffuseFresnelCenterColor",
-                "diffuseFresnelPower",
-                mtl => mtl._diffuseFresnel);
-
-            setupFresnelBind(
-                "specularFresnelEdgeBias",
-                "specularFresnelCenterBias",
-                "specularFresnelEdgeColor",
-                "specularFresnelCenterColor",
-                "specularFresnelPower",
-                mtl => mtl._specularFresnel);
-
-            setupFresnelBind(
-                "alphaFresnelEdgeBias",
-                "alphaFresnelCenterBias",
-                "alphaFresnelEdgeColor",
-                "alphaFresnelCenterColor",
-                "alphaFresnelPower",
-                mtl => mtl._alphaFresnel);
-
-            setupFresnelBind(
-                "emissiveFresnelEdgeBias",
-                "emissiveFresnelCenterBias",
-                "emissiveFresnelEdgeColor",
-                "emissiveFresnelCenterColor",
-                "emissiveFresnelPower",
-                mtl => mtl._emissiveFresnel);
-
             break;
 
         case "MetallicMaterial":
