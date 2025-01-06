@@ -8,19 +8,6 @@ export const DrawShaderSource = function(mesh) {
     const material = mesh._material;
     const meshState = mesh._state;
     const geometryState = mesh._geometry._state;
-    const texturing = geometryState.uvBuf && (material._ambientMap ||
-                                              material._occlusionMap ||
-                                              material._baseColorMap ||
-                                              material._diffuseMap ||
-                                              material._alphaMap ||
-                                              material._specularMap ||
-                                              material._glossinessMap ||
-                                              material._specularGlossinessMap ||
-                                              material._emissiveMap ||
-                                              material._metallicMap ||
-                                              material._roughnessMap ||
-                                              material._metallicRoughnessMap ||
-                                              material._normalMap);
     const lightsState = scene._lightsState;
     const primitiveName = geometryState.primitiveName;
     const normals = (mesh._geometry._state.autoVertexNormals || mesh._geometry._state.normalsBuf) && (primitiveName === "triangles" || primitiveName === "triangle-strip" || primitiveName === "triangle-fan");
@@ -77,6 +64,56 @@ export const DrawShaderSource = function(mesh) {
 
     const activeFresnels = [ diffuseFresnel, specularFresnel, alphaFresnel, emissiveFresnel ].filter(f => f);
 
+
+    const setup2dTexture = (name, getMaterialValue) => {
+        const initValue = uvs && getMaterialValue(material);
+        return initValue && (function() {
+            const map    = name + "Map";
+            const matrix = initValue._state.matrix && (name + "MapMatrix");
+            const getTexCoordExpression = texturePos => (matrix ? `(${matrix} * ${texturePos}).xy` : `${texturePos}.xy`);
+            return {
+                appendDefinitions: (src) => {
+                    src.push(`uniform sampler2D ${map};`);
+                    if (initValue._state.matrix) {
+                        src.push(`uniform mat4 ${matrix};`);
+                    }
+                },
+                getTexCoordExpression: getTexCoordExpression,
+                getValueExpression: (texturePos) => {
+                    const texel = `texture(${map}, ${getTexCoordExpression(texturePos)})`;
+                    const enc = initValue._state.encoding;
+                    return (enc !== LinearEncoding) ? `${TEXTURE_DECODE_FUNCS[enc]}(${texel})` : texel;
+                }
+            };
+        })();
+    };
+
+    const ambientMap   = setup2dTexture("ambient",   mtl => mtl._ambientMap);
+    const baseColorMap = setup2dTexture("baseColor", mtl => mtl._baseColorMap);
+    const diffuseMap   = setup2dTexture("diffuse",   mtl => mtl._diffuseMap);
+    const emissiveMap  = setup2dTexture("emissive",  mtl => mtl._emissiveMap);
+    const occlusionMap = setup2dTexture("occlusion", mtl => mtl._occlusionMap);
+    const alphaMap     = setup2dTexture("alpha",     mtl => mtl._alphaMap);
+
+    const metallicMap           = normals && setup2dTexture("metallic",           mtl => mtl._metallicMap);
+    const roughnessMap          = normals && setup2dTexture("roughness",          mtl => mtl._roughnessMap);
+    const metallicRoughnessMap  = normals && setup2dTexture("metallicRoughness",  mtl => mtl._metallicRoughnessMap);
+
+    const specularMap           = normals && setup2dTexture("specular",           mtl => mtl._specularMap);
+    const glossinessMap         = normals && setup2dTexture("glossiness",         mtl => mtl._glossinessMap);
+    const specularGlossinessMap = normals && setup2dTexture("specularGlossiness", mtl => mtl._specularGlossinessMap);
+
+    const normalMap             = normals && setup2dTexture("normal",             mtl => mtl._normalMap);
+
+    const activeTextureMaps = [
+        ambientMap, baseColorMap, diffuseMap, emissiveMap, occlusionMap, alphaMap,
+        metallicMap, roughnessMap, metallicRoughnessMap,
+        specularMap, glossinessMap, specularGlossinessMap,
+        normalMap
+    ].filter(t => t);
+
+    const texturePosNeeded = activeTextureMaps.length > 0;
+
     return {
         programName: "Draw",
         discardPoints: true,
@@ -110,7 +147,7 @@ export const DrawShaderSource = function(mesh) {
                     }
                 }
             }
-            if (texturing) {
+            if (texturePosNeeded) {
                 src.push("out vec2 vUV;");
             }
             if (geometryState.colors) {
@@ -158,7 +195,7 @@ export const DrawShaderSource = function(mesh) {
                     }
                 }
             }
-            if (texturing) {
+            if (texturePosNeeded) {
                 src.push(`vUV = ${uv};`);
             }
             if (geometryState.colors) {
@@ -403,20 +440,7 @@ export const DrawShaderSource = function(mesh) {
                 src.push("in vec4 vColor;");
             }
 
-            if (uvs &&
-                ((normals && material._normalMap)
-                 || material._ambientMap
-                 || material._baseColorMap
-                 || material._diffuseMap
-                 || material._emissiveMap
-                 || material._metallicMap
-                 || material._roughnessMap
-                 || material._metallicRoughnessMap
-                 || material._specularMap
-                 || material._glossinessMap
-                 || material._specularGlossinessMap
-                 || material._occlusionMap
-                 || material._alphaMap)) {
+            if (texturePosNeeded) {
                 src.push("in vec2 vUV;");
             }
 
@@ -469,54 +493,10 @@ export const DrawShaderSource = function(mesh) {
             // MATERIAL TEXTURE INPUTS
             //--------------------------------------------------------------------------------
 
-            if (uvs && material._ambientMap) {
-                src.push("uniform sampler2D ambientMap;");
-                if (material._ambientMap._state.matrix) {
-                    src.push("uniform mat4 ambientMapMatrix;");
-                }
-            }
-            if (uvs && material._baseColorMap) {
-                src.push("uniform sampler2D baseColorMap;");
-                if (material._baseColorMap._state.matrix) {
-                    src.push("uniform mat4 baseColorMapMatrix;");
-                }
-            }
-            if (uvs && material._diffuseMap) {
-                src.push("uniform sampler2D diffuseMap;");
-                if (material._diffuseMap._state.matrix) {
-                    src.push("uniform mat4 diffuseMapMatrix;");
-                }
-            }
-            if (uvs && material._emissiveMap) {
-                src.push("uniform sampler2D emissiveMap;");
-                if (material._emissiveMap._state.matrix) {
-                    src.push("uniform mat4 emissiveMapMatrix;");
-                }
-            }
-            if (normals && uvs && material._metallicMap) {
-                src.push("uniform sampler2D metallicMap;");
-                if (material._metallicMap._state.matrix) {
-                    src.push("uniform mat4 metallicMapMatrix;");
-                }
-            }
-            if (normals && uvs && material._roughnessMap) {
-                src.push("uniform sampler2D roughnessMap;");
-                if (material._roughnessMap._state.matrix) {
-                    src.push("uniform mat4 roughnessMapMatrix;");
-                }
-            }
-            if (normals && uvs && material._metallicRoughnessMap) {
-                src.push("uniform sampler2D metallicRoughnessMap;");
-                if (material._metallicRoughnessMap._state.matrix) {
-                    src.push("uniform mat4 metallicRoughnessMapMatrix;");
-                }
-            }
-            if (normals && uvs && material._normalMap) {
-                src.push("uniform sampler2D normalMap;");
-                if (material._normalMap._state.matrix) {
-                    src.push("uniform mat4 normalMapMatrix;");
-                }
-                src.push("vec3 perturbNormal2Arb( vec3 eye_pos, vec3 surf_norm, vec2 uv ) {");
+            activeTextureMaps.forEach(t => t.appendDefinitions(src));
+
+            if (normalMap) {
+                src.push("vec3 perturbNormal2Arb( vec3 eye_pos, vec3 surf_norm, vec2 uv, vec4 texel ) {");
                 src.push("      vec3 q0 = vec3( dFdx( eye_pos.x ), dFdx( eye_pos.y ), dFdx( eye_pos.z ) );");
                 src.push("      vec3 q1 = vec3( dFdy( eye_pos.x ), dFdy( eye_pos.y ), dFdy( eye_pos.z ) );");
                 src.push("      vec2 st0 = dFdx( uv.st );");
@@ -524,41 +504,11 @@ export const DrawShaderSource = function(mesh) {
                 src.push("      vec3 S = normalize( q0 * st1.t - q1 * st0.t );");
                 src.push("      vec3 T = normalize( -q0 * st1.s + q1 * st0.s );");
                 src.push("      vec3 N = normalize( surf_norm );");
-                src.push("      vec3 mapN = texture( normalMap, uv ).xyz * 2.0 - 1.0;");
+                src.push("      vec3 mapN = texel.xyz * 2.0 - 1.0;");
                 src.push("      mat3 tsn = mat3( S, T, N );");
                 //     src.push("      mapN *= 3.0;");
                 src.push("      return normalize( tsn * mapN );");
                 src.push("}");
-            }
-            if (uvs && material._occlusionMap) {
-                src.push("uniform sampler2D occlusionMap;");
-                if (material._occlusionMap._state.matrix) {
-                    src.push("uniform mat4 occlusionMapMatrix;");
-                }
-            }
-            if (uvs && material._alphaMap) {
-                src.push("uniform sampler2D alphaMap;");
-                if (material._alphaMap._state.matrix) {
-                    src.push("uniform mat4 alphaMapMatrix;");
-                }
-            }
-            if (normals && uvs && material._specularMap) {
-                src.push("uniform sampler2D specularMap;");
-                if (material._specularMap._state.matrix) {
-                    src.push("uniform mat4 specularMapMatrix;");
-                }
-            }
-            if (normals && uvs && material._glossinessMap) {
-                src.push("uniform sampler2D glossinessMap;");
-                if (material._glossinessMap._state.matrix) {
-                    src.push("uniform mat4 glossinessMapMatrix;");
-                }
-            }
-            if (normals && uvs && material._specularGlossinessMap) {
-                src.push("uniform sampler2D materialSpecularGlossinessMap;");
-                if (material._specularGlossinessMap._state.matrix) {
-                    src.push("uniform mat4 materialSpecularGlossinessMapMatrix;");
-                }
             }
 
             //--------------------------------------------------------------------------------
@@ -705,86 +655,25 @@ export const DrawShaderSource = function(mesh) {
             // TEXTURING
             //--------------------------------------------------------------------------------
 
-            if (uvs && ((normals && material._normalMap)
-                        || material._ambientMap
-                        || material._baseColorMap
-                        || material._diffuseMap
-                        || material._occlusionMap
-                        || material._emissiveMap
-                        || material._metallicMap
-                        || material._roughnessMap
-                        || material._metallicRoughnessMap
-                        || material._specularMap
-                        || material._glossinessMap
-                        || material._specularGlossinessMap
-                        || material._alphaMap)) {
+            if (texturePosNeeded) {
                 src.push("vec4 texturePos = vec4(vUV.s, vUV.t, 1.0, 1.0);");
-                src.push("vec2 textureCoord;");
             }
 
-            if (uvs && material._ambientMap) {
-                if (material._ambientMap._state.matrix) {
-                    src.push("textureCoord = (ambientMapMatrix * texturePos).xy;");
-                } else {
-                    src.push("textureCoord = texturePos.xy;");
-                }
-                src.push("vec4 ambientTexel = texture(ambientMap, textureCoord);");
-                src.push("ambientTexel = " + TEXTURE_DECODE_FUNCS[material._ambientMap._state.encoding] + "(ambientTexel);");
-                src.push("ambientColor *= ambientTexel.rgb;");
+            ambientMap && src.push(`ambientColor *= ${ambientMap.getValueExpression("texturePos")}.rgb;`);
+            if (baseColorMap) {
+                src.push("vec4 baseColorTexel = " + baseColorMap.getValueExpression("texturePos") + ";");
+                src.push("diffuseColor *= baseColorTexel.rgb;");
+                src.push("alpha *= baseColorTexel.a;");
             }
-
-            if (uvs && material._diffuseMap) {
-                if (material._diffuseMap._state.matrix) {
-                    src.push("textureCoord = (diffuseMapMatrix * texturePos).xy;");
-                } else {
-                    src.push("textureCoord = texturePos.xy;");
-                }
-                src.push("vec4 diffuseTexel = texture(diffuseMap, textureCoord);");
-                src.push("diffuseTexel = " + TEXTURE_DECODE_FUNCS[material._diffuseMap._state.encoding] + "(diffuseTexel);");
+            if (diffuseMap) {
+                src.push("vec4 diffuseTexel = " + diffuseMap.getValueExpression("texturePos") + ";");
                 src.push("diffuseColor *= diffuseTexel.rgb;");
                 src.push("alpha *= diffuseTexel.a;");
             }
 
-            if (uvs && material._baseColorMap) {
-                if (material._baseColorMap._state.matrix) {
-                    src.push("textureCoord = (baseColorMapMatrix * texturePos).xy;");
-                } else {
-                    src.push("textureCoord = texturePos.xy;");
-                }
-                src.push("vec4 baseColorTexel = texture(baseColorMap, textureCoord);");
-                src.push("baseColorTexel = " + TEXTURE_DECODE_FUNCS[material._baseColorMap._state.encoding] + "(baseColorTexel);");
-                src.push("diffuseColor *= baseColorTexel.rgb;");
-                src.push("alpha *= baseColorTexel.a;");
-            }
-
-            if (uvs && material._emissiveMap) {
-                if (material._emissiveMap._state.matrix) {
-                    src.push("textureCoord = (emissiveMapMatrix * texturePos).xy;");
-                } else {
-                    src.push("textureCoord = texturePos.xy;");
-                }
-                src.push("vec4 emissiveTexel = texture(emissiveMap, textureCoord);");
-                src.push("emissiveTexel = " + TEXTURE_DECODE_FUNCS[material._emissiveMap._state.encoding] + "(emissiveTexel);");
-                src.push("emissiveColor = emissiveTexel.rgb;");
-            }
-
-            if (uvs && material._alphaMap) {
-                if (material._alphaMap._state.matrix) {
-                    src.push("textureCoord = (alphaMapMatrix * texturePos).xy;");
-                } else {
-                    src.push("textureCoord = texturePos.xy;");
-                }
-                src.push("alpha *= texture(alphaMap, textureCoord).r;");
-            }
-
-            if (uvs && material._occlusionMap) {
-                if (material._occlusionMap._state.matrix) {
-                    src.push("textureCoord = (occlusionMapMatrix * texturePos).xy;");
-                } else {
-                    src.push("textureCoord = texturePos.xy;");
-                }
-                src.push("occlusion *= texture(occlusionMap, textureCoord).r;");
-            }
+            emissiveMap  && src.push(`emissiveColor = ${emissiveMap.getValueExpression("texturePos")}.rgb;`);
+            occlusionMap && src.push(`occlusion    *= ${occlusionMap.getValueExpression("texturePos")}.r;`);
+            alphaMap     && src.push(`alpha        *= ${alphaMap.getValueExpression("texturePos")}.r;`);
 
             if (normals && ((lightsState.lights.length > 0) || lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0)) {
 
@@ -792,74 +681,29 @@ export const DrawShaderSource = function(mesh) {
                 // SHADING
                 //--------------------------------------------------------------------------------
 
-                if (uvs && material._normalMap) {
-                    if (material._normalMap._state.matrix) {
-                        src.push("textureCoord = (normalMapMatrix * texturePos).xy;");
-                    } else {
-                        src.push("textureCoord = texturePos.xy;");
-                    }
-                    src.push("vec3 viewNormal = perturbNormal2Arb( vViewPosition, normalize(vViewNormal), textureCoord );");
-                } else {
-                    src.push("vec3 viewNormal = normalize(vViewNormal);");
+                metallicMap  && src.push(`metallic  *= ${metallicMap.getValueExpression("texturePos")}.r;`);
+                roughnessMap && src.push(`roughness *= ${roughnessMap.getValueExpression("texturePos")}.r;`);
+
+                if (metallicRoughnessMap) {
+                    src.push("vec4 metalRoughTexel = " + metallicRoughnessMap.getValueExpression("texturePos") + ";");
+                    src.push("metallic  *= metalRoughTexel.b;");
+                    src.push("roughness *= metalRoughTexel.g;");
                 }
 
-                if (uvs && material._specularMap) {
-                    if (material._specularMap._state.matrix) {
-                        src.push("textureCoord = (specularMapMatrix * texturePos).xy;");
-                    } else {
-                        src.push("textureCoord = texturePos.xy;");
-                    }
-                    src.push("specular *= texture(specularMap, textureCoord).rgb;");
+                specularMap   && src.push(`specular *= ${specularMap.getValueExpression("texturePos")}.rgb;`);
+                glossinessMap && src.push(`glossiness *= ${glossinessMap.getValueExpression("texturePos")}.r;`);
+
+                if (specularGlossinessMap) {
+                    src.push("vec4 specGlossTexel = " + specularGlossinessMap.getValueExpression("texturePos") + ";"); // TODO: what if only RGB texture?
+                    src.push("specular   *= specGlossTexel.rgb;");
+                    src.push("glossiness *= specGlossTexel.a;");
                 }
 
-                if (uvs && material._glossinessMap) {
-                    if (material._glossinessMap._state.matrix) {
-                        src.push("textureCoord = (glossinessMapMatrix * texturePos).xy;");
-                    } else {
-                        src.push("textureCoord = texturePos.xy;");
-                    }
-                    src.push("glossiness *= texture(glossinessMap, textureCoord).r;");
-                }
-
-                if (uvs && material._specularGlossinessMap) {
-                    if (material._specularGlossinessMap._state.matrix) {
-                        src.push("textureCoord = (materialSpecularGlossinessMapMatrix * texturePos).xy;");
-                    } else {
-                        src.push("textureCoord = texturePos.xy;");
-                    }
-                    src.push("vec4 specGlossRGB = texture(materialSpecularGlossinessMap, textureCoord).rgba;"); // TODO: what if only RGB texture?
-                    src.push("specular *= specGlossRGB.rgb;");
-                    src.push("glossiness *= specGlossRGB.a;");
-                }
-
-                if (uvs && material._metallicMap) {
-                    if (material._metallicMap._state.matrix) {
-                        src.push("textureCoord = (metallicMapMatrix * texturePos).xy;");
-                    } else {
-                        src.push("textureCoord = texturePos.xy;");
-                    }
-                    src.push("metallic *= texture(metallicMap, textureCoord).r;");
-                }
-
-                if (uvs && material._roughnessMap) {
-                    if (material._roughnessMap._state.matrix) {
-                        src.push("textureCoord = (roughnessMapMatrix * texturePos).xy;");
-                    } else {
-                        src.push("textureCoord = texturePos.xy;");
-                    }
-                    src.push("roughness *= texture(roughnessMap, textureCoord).r;");
-                }
-
-                if (uvs && material._metallicRoughnessMap) {
-                    if (material._metallicRoughnessMap._state.matrix) {
-                        src.push("textureCoord = (metallicRoughnessMapMatrix * texturePos).xy;");
-                    } else {
-                        src.push("textureCoord = texturePos.xy;");
-                    }
-                    src.push("vec3 metalRoughRGB = texture(metallicRoughnessMap, textureCoord).rgb;");
-                    src.push("metallic *= metalRoughRGB.b;");
-                    src.push("roughness *= metalRoughRGB.g;");
-                }
+                const vViewNormalized = "normalize(vViewNormal)";
+                const viewNormal = (normalMap
+                                    ? `perturbNormal2Arb(vViewPosition, ${vViewNormalized}, ${normalMap.getTexCoordExpression("texturePos")}, ${normalMap.getValueExpression("texturePos")})`
+                                    : vViewNormalized);
+                src.push(`vec3 viewNormal = ${viewNormal};`);
 
                 src.push("vec3 viewEyeDir = normalize(-vViewPosition);");
 
