@@ -436,9 +436,6 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                 if (this._uMaterialGlossiness) {
                     gl.uniform1f(this._uMaterialGlossiness, materialState.glossiness);
                 }
-                if (this._uMaterialReflectivity) {
-                    gl.uniform1f(this._uMaterialReflectivity, materialState.reflectivity);
-                }
                 if (this._uMaterialEmissive) {
                     gl.uniform3fv(this._uMaterialEmissive, materialState.emissive);
                 }
@@ -816,7 +813,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
             this._uMaterialDiffuse = program.getLocation("materialDiffuse");
             this._uMaterialSpecular = program.getLocation("materialSpecular");
             this._uMaterialGlossiness = program.getLocation("materialGlossiness");
-            this._uMaterialReflectivity = program.getLocation("reflectivityFresnel");
             this._uMaterialEmissive = program.getLocation("materialEmissive");
             this._uAlphaModeCutoff = program.getLocation("materialAlphaModeCutoff");
             if (material._diffuseMap) {
