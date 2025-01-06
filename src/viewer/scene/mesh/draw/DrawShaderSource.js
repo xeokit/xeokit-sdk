@@ -51,7 +51,6 @@ function hasTextures(mesh) {
         material._metallicMap ||
         material._roughnessMap ||
         material._metallicRoughnessMap ||
-        material._reflectivityMap ||
         material._normalMap);
 }
 
