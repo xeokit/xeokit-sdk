@@ -51,6 +51,21 @@ export const DrawShaderSource = function(mesh) {
             getValueExpression: (viewEyeDir, viewNormal) => {
                 const fresnel = `fresnel(${viewEyeDir}, ${viewNormal}, ${edgeBias}, ${centerBias}, ${power})`;
                 return `mix(${edgeColor + colorSwizzle}, ${centerColor + colorSwizzle}, ${fresnel})`;
+            },
+            setupInputs: (getInputSetter) => {
+                const uEdgeBias    = getInputSetter(edgeBias);
+                const uCenterBias  = getInputSetter(centerBias);
+                const uPower       = getInputSetter(power);
+                const uEdgeColor   = getInputSetter(edgeColor);
+                const uCenterColor = getInputSetter(centerColor);
+                return (mtl) => {
+                    const value = getMaterialValue(mtl);
+                    uEdgeBias   (value.edgeBias);
+                    uCenterBias (value.centerBias);
+                    uPower      (value.power);
+                    uEdgeColor  (value.edgeColor);
+                    uCenterColor(value.centerColor);
+                };
             }
         };
     };
@@ -1038,6 +1053,10 @@ export const DrawShaderSource = function(mesh) {
                 colorize(meshState.colorize);
                 gammaFactor && gammaFactor(scene.gammaFactor);
             };
+        },
+        setupMaterialInputs: (getInputSetter) => {
+            const binders = activeFresnels.map(f => f && f.setupInputs(getInputSetter));
+            return (binders.length > 0) && (mtl => binders.forEach(bind => bind(mtl)));
         }
     };
 };
