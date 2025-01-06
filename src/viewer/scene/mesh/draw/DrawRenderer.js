@@ -94,7 +94,86 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         if (background) {
             gl.depthFunc(gl.LEQUAL);
         }
-        this._bindProgram(frameCtx);
+
+        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
+        const scene = this._scene;
+        const gl = scene.canvas.gl;
+        const lightsState = scene._lightsState;
+        const project = scene.camera.project;
+        let light;
+
+        const program = this._program;
+
+        program.bind();
+
+        frameCtx.useProgram++;
+        frameCtx.textureUnit = 0;
+
+        this._lastMaterialId = null;
+        this._lastVertexBufsId = null;
+        this._lastGeometryId = null;
+
+        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
+            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
+        }
+
+        for (var i = 0, len = lightsState.lights.length; i < len; i++) {
+
+            light = lightsState.lights[i];
+
+            if (this._uLightAmbient[i]) {
+                gl.uniform4f(this._uLightAmbient[i], light.color[0], light.color[1], light.color[2], light.intensity);
+
+            } else {
+
+                if (this._uLightColor[i]) {
+                    gl.uniform4f(this._uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
+                }
+
+                if (this._uLightPos[i]) {
+                    gl.uniform3fv(this._uLightPos[i], light.pos);
+                    if (this._uLightAttenuation[i]) {
+                        gl.uniform1f(this._uLightAttenuation[i], light.attenuation);
+                    }
+                }
+
+                if (this._uLightDir[i]) {
+                    gl.uniform3fv(this._uLightDir[i], light.dir);
+                }
+
+                if (light.castsShadow) {
+                    if (this._uShadowViewMatrix[i]) {
+                        gl.uniformMatrix4fv(this._uShadowViewMatrix[i], false, light.getShadowViewMatrix());
+                    }
+                    if (this._uShadowProjMatrix[i]) {
+                        gl.uniformMatrix4fv(this._uShadowProjMatrix[i], false, light.getShadowProjMatrix());
+                    }
+                    const shadowRenderBuf = light.getShadowRenderBuf();
+                    if (shadowRenderBuf) {
+                        program.bindTexture("shadowMap" + i, shadowRenderBuf.getTexture(), frameCtx.textureUnit);
+                        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                        frameCtx.bindTexture++;
+                    }
+                }
+            }
+        }
+
+        if (lightsState.lightMaps.length > 0 && lightsState.lightMaps[0].texture && this._uLightMap) {
+            program.bindTexture(this._uLightMap, lightsState.lightMaps[0].texture, frameCtx.textureUnit);
+            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+            frameCtx.bindTexture++;
+        }
+
+        if (lightsState.reflectionMaps.length > 0 && lightsState.reflectionMaps[0].texture && this._uReflectionMap) {
+            program.bindTexture(this._uReflectionMap, lightsState.reflectionMaps[0].texture, frameCtx.textureUnit);
+            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+            frameCtx.bindTexture++;
+        }
+
+        this._baseTextureUnit = frameCtx.textureUnit;
     }
 
     gl.uniformMatrix4fv(this._uViewMatrix, false, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
@@ -338,89 +417,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
 
     this._baseTextureUnit = 0;
 
-};
-
-DrawRenderer.prototype._bindProgram = function (frameCtx) {
-
-    const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
-    const scene = this._scene;
-    const gl = scene.canvas.gl;
-    const lightsState = scene._lightsState;
-    const project = scene.camera.project;
-    let light;
-
-    const program = this._program;
-
-    program.bind();
-
-    frameCtx.useProgram++;
-    frameCtx.textureUnit = 0;
-
-    this._lastMaterialId = null;
-    this._lastVertexBufsId = null;
-    this._lastGeometryId = null;
-
-    gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
-
-    if (scene.logarithmicDepthBufferEnabled) {
-        const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
-        gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
-    }
-
-    for (var i = 0, len = lightsState.lights.length; i < len; i++) {
-
-        light = lightsState.lights[i];
-
-        if (this._uLightAmbient[i]) {
-            gl.uniform4f(this._uLightAmbient[i], light.color[0], light.color[1], light.color[2], light.intensity);
-
-        } else {
-
-            if (this._uLightColor[i]) {
-                gl.uniform4f(this._uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
-            }
-
-            if (this._uLightPos[i]) {
-                gl.uniform3fv(this._uLightPos[i], light.pos);
-                if (this._uLightAttenuation[i]) {
-                    gl.uniform1f(this._uLightAttenuation[i], light.attenuation);
-                }
-            }
-
-            if (this._uLightDir[i]) {
-                gl.uniform3fv(this._uLightDir[i], light.dir);
-            }
-
-            if (light.castsShadow) {
-                if (this._uShadowViewMatrix[i]) {
-                    gl.uniformMatrix4fv(this._uShadowViewMatrix[i], false, light.getShadowViewMatrix());
-                }
-                if (this._uShadowProjMatrix[i]) {
-                    gl.uniformMatrix4fv(this._uShadowProjMatrix[i], false, light.getShadowProjMatrix());
-                }
-                const shadowRenderBuf = light.getShadowRenderBuf();
-                if (shadowRenderBuf) {
-                    program.bindTexture("shadowMap" + i, shadowRenderBuf.getTexture(), frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                }
-            }
-        }
-    }
-
-    if (lightsState.lightMaps.length > 0 && lightsState.lightMaps[0].texture && this._uLightMap) {
-        program.bindTexture(this._uLightMap, lightsState.lightMaps[0].texture, frameCtx.textureUnit);
-        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-        frameCtx.bindTexture++;
-    }
-
-    if (lightsState.reflectionMaps.length > 0 && lightsState.reflectionMaps[0].texture && this._uReflectionMap) {
-        program.bindTexture(this._uReflectionMap, lightsState.reflectionMaps[0].texture, frameCtx.textureUnit);
-        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-        frameCtx.bindTexture++;
-    }
-
-    this._baseTextureUnit = frameCtx.textureUnit;
 };
 
 export {DrawRenderer};
