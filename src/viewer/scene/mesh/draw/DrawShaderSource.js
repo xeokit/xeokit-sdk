@@ -1,3 +1,6 @@
+import {math} from "../../math/math.js";
+const tmpVec4 = math.vec4();
+
 import {LinearEncoding, sRGBEncoding} from "../../constants/constants.js";
 const TEXTURE_DECODE_FUNCS = {};
 TEXTURE_DECODE_FUNCS[LinearEncoding] = "linearToLinear";
@@ -19,7 +22,7 @@ export const DrawShaderSource = function(mesh) {
     const metallicMaterial = (materialState.type === "MetallicMaterial");
     const specularMaterial = (materialState.type === "SpecularMaterial");
     const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
-
+    const hasNormalsAndLights = normals && ((lightsState.lights.length > 0) || lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0);
 
     const setupFresnel = (name, colorSwizzle, getMaterialValue) => {
         const edgeBias    = name + "FresnelEdgeBias";
@@ -140,23 +143,37 @@ export const DrawShaderSource = function(mesh) {
         const isDefined = (type === "float") ? ((initValue !== undefined) && (initValue !== null)) : initValue;
         return isDefined && {
             appendDefinitions: (src) => src.push(`uniform ${type} ${name};`),
-            getValueExpression: () => name
+            getValueExpression: () => name,
+            setupInputs: (getInputSetter) => {
+                const setUniform = getInputSetter(name);
+                return (mtl) => setUniform(getMaterialValue(mtl));
+            }
         };
     };
 
-    const materialAmbient         = setupUniform("materialAmbient",         "vec3",  mtl => mtl.ambient);
-    const materialDiffuse         = setupUniform("materialDiffuse",         "vec3",  mtl => mtl.diffuse);
-    const materialBaseColor       = setupUniform("materialBaseColor",       "vec3",  mtl => mtl.baseColor);
-    const materialEmissive        = setupUniform("materialEmissive",        "vec3",  mtl => mtl.emissive);
-    const materialSpecular        = setupUniform("materialSpecular",        "vec3",  mtl => mtl.specular);
+    const l = hasNormalsAndLights;
 
-    const materialGlossiness      = setupUniform("materialGlossiness",      "float", mtl => mtl.glossiness);
-    const materialMetallic        = setupUniform("materialMetallic",        "float", mtl => mtl.metallic);
-    const materialRoughness       = setupUniform("materialRoughness",       "float", mtl => mtl.roughness);
-    const materialShininess       = setupUniform("materialShininess",       "float", mtl => mtl.shininess);
-    const materialSpecularF0      = setupUniform("materialSpecularF0",      "float", mtl => mtl.specularF0);
-
-    const materialAlphaModeCutoff = setupUniform("materialAlphaModeCutoff", "vec4",  mtl => (mtl.alpha !== undefined) && (mtl.alpha !== null)); // [alpha, alphaMode, alphaCutoff]
+    const materialAmbient         = (p          ) && (!l) && setupUniform("materialAmbient", "vec3",  mtl => mtl.ambient);
+    const materialDiffuse         = (p ||      s) &&   l  && setupUniform("materialDiffuse", "vec3",  mtl => mtl.diffuse);
+    const materialBaseColor       = (     m     ) && setupUniform("materialBaseColor",       "vec3",  mtl => mtl.baseColor);
+    const materialEmissive        = (p || m || s) && setupUniform("materialEmissive",        "vec3",  mtl => mtl.emissive);
+    const materialSpecular        = (p ||      s) &&   l && setupUniform("materialSpecular", "vec3",  mtl => mtl.specular);
+    const materialGlossiness      = (          s) && setupUniform("materialGlossiness",      "float", mtl => mtl.glossiness);
+    const materialMetallic        = (     m     ) && setupUniform("materialMetallic",        "float", mtl => mtl.metallic);
+    const materialRoughness       = (     m || s) && setupUniform("materialRoughness",       "float", mtl => mtl.roughness);
+    const materialShininess       = (p          ) && l && setupUniform("materialShininess",  "float", mtl => mtl.shininess);
+    const materialSpecularF0      = (     m     ) && setupUniform("materialSpecularF0",      "float", mtl => mtl.specularF0);
+    const materialAlphaModeCutoff = (p || m || s) && setupUniform("materialAlphaModeCutoff", "vec4",  mtl => {
+        const alpha = mtl.alpha;
+        if ((alpha !== undefined) && (alpha !== null)) {
+            tmpVec4[0] = alpha;
+            tmpVec4[1] = (mtl.alphaMode === 1 ? 1 : 0);
+            tmpVec4[2] = mtl.alphaCutoff;
+            return tmpVec4;
+        } else {
+            return null;
+        }
+    });
 
     const activeUniforms = [
         materialAmbient, materialDiffuse, materialBaseColor, materialEmissive, materialSpecular,
@@ -660,7 +677,7 @@ export const DrawShaderSource = function(mesh) {
             occlusionMap && src.push(`occlusion    *= ${occlusionMap.getValueExpression("texturePos")}.r;`);
             alphaMap     && src.push(`alpha        *= ${alphaMap.getValueExpression("texturePos")}.r;`);
 
-            if (normals && ((lightsState.lights.length > 0) || lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0)) {
+            if (hasNormalsAndLights) {
 
                 //--------------------------------------------------------------------------------
                 // SHADING
@@ -884,7 +901,7 @@ export const DrawShaderSource = function(mesh) {
             };
         },
         setupMaterialInputs: (getInputSetter) => {
-            const binders = activeFresnels.concat(activeTextureMaps).map(f => f && f.setupInputs(getInputSetter));
+            const binders = activeFresnels.concat(activeTextureMaps).concat(activeUniforms).map(f => f && f.setupInputs(getInputSetter));
             return (binders.length > 0) && ((mtl, acquireTextureUnit) => binders.forEach(bind => bind(mtl, acquireTextureUnit)));
         }
     };
