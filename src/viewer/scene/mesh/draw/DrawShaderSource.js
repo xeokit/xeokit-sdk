@@ -328,12 +328,6 @@ export const DrawShaderSource = function(mesh) {
 
                 src.push("#define saturate(a) clamp( a, 0.0, 1.0 )");
 
-                // UTILITY DEFINITIONS
-
-                src.push("vec3 inverseTransformDirection(in vec3 dir, in mat4 matrix) {");
-                src.push("   return normalize( ( vec4( dir, 0.0 ) * matrix ).xyz );");
-                src.push("}");
-
                 // STRUCTURES
 
                 src.push("struct IncidentLight {");
@@ -349,7 +343,6 @@ export const DrawShaderSource = function(mesh) {
                 src.push("struct Geometry {");
                 src.push("   vec3 position;");
                 src.push("   vec3 viewNormal;");
-                src.push("   vec3 worldNormal;");
                 src.push("   vec3 viewEyeDir;");
                 src.push("};");
 
@@ -362,57 +355,7 @@ export const DrawShaderSource = function(mesh) {
 
                 // COMMON UTILS
 
-                if (phongMaterial) {
-
-                    if (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0) {
-
-                        src.push("void computePhongLightMapping(const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
-
-                        if (lightsState.lightMaps.length > 0) {
-                            src.push("   vec3 irradiance = " + TEXTURE_DECODE_FUNCS[lightsState.lightMaps[0].encoding] + "(texture(lightMap, geometry.worldNormal)).rgb;");
-                            src.push("   irradiance *= PI;");
-                            src.push("   vec3 diffuseBRDFContrib = (RECIPROCAL_PI * material.diffuseColor);");
-                            src.push("   reflectedLight.diffuse += irradiance * diffuseBRDFContrib;");
-                        }
-                        if (lightsState.reflectionMaps.length > 0) {
-                            src.push("   vec3 reflectVec             = reflect(-geometry.viewEyeDir, geometry.viewNormal);");
-                            src.push("   vec3 radiance               = texture(reflectionMap, reflectVec).rgb * 0.2;");
-                            src.push("   radiance *= PI;");
-                            src.push("   reflectedLight.specular     += radiance;");
-                        }
-                        src.push("}");
-                    }
-
-                    src.push("void computePhongLighting(const in IncidentLight directLight, const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
-                    src.push("   float dotNL     = saturate(dot(geometry.viewNormal, directLight.direction));");
-                    src.push("   vec3 irradiance = dotNL * directLight.color * PI;");
-                    src.push("   reflectedLight.diffuse  += irradiance * (RECIPROCAL_PI * material.diffuseColor);");
-                    src.push("   reflectedLight.specular += directLight.color * material.specularColor * pow(max(dot(reflect(-directLight.direction, -geometry.viewNormal), geometry.viewEyeDir), 0.0), material.shine);");
-                    src.push("}");
-                }
-
                 if (metallicMaterial || specularMaterial) {
-
-                    // IRRADIANCE EVALUATION
-
-                    src.push("float GGXRoughnessToBlinnExponent(const in float ggxRoughness) {");
-                    src.push("   float r = ggxRoughness + 0.0001;");
-                    src.push("   return (2.0 / (r * r) - 2.0);");
-                    src.push("}");
-
-                    src.push("float getSpecularMIPLevel(const in float blinnShininessExponent, const in int maxMIPLevel) {");
-                    src.push("   float maxMIPLevelScalar = float( maxMIPLevel );");
-                    src.push("   float desiredMIPLevel = maxMIPLevelScalar - 0.79248 - 0.5 * log2( ( blinnShininessExponent * blinnShininessExponent ) + 1.0 );");
-                    src.push("   return clamp( desiredMIPLevel, 0.0, maxMIPLevelScalar );");
-                    src.push("}");
-
-                    if (lightsState.reflectionMaps.length > 0) {
-                        src.push("vec3 getLightProbeIndirectRadiance(const in vec3 reflectVec, const in float blinnShininessExponent, const in int maxMIPLevel) {");
-                        src.push("   float mipLevel = 0.5 * getSpecularMIPLevel(blinnShininessExponent, maxMIPLevel);"); //TODO: a random factor - fix this
-                        src.push("   vec3 envMapColor = " + TEXTURE_DECODE_FUNCS[lightsState.reflectionMaps[0].encoding] + "(texture(reflectionMap, reflectVec, mipLevel)).rgb;");
-                        src.push("  return envMapColor;");
-                        src.push("}");
-                    }
 
                     // SPECULAR BRDF EVALUATION
 
@@ -462,36 +405,6 @@ export const DrawShaderSource = function(mesh) {
                     src.push("   float a004 = min(r.x * r.x, exp2(-9.28 * dotNV)) * r.x + r.y;");
                     src.push("   vec2 AB    = vec2(-1.04, 1.04) * a004 + r.zw;");
                     src.push("   return specularColor * AB.x + AB.y;");
-                    src.push("}");
-
-                    if (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0) {
-
-                        src.push("void computePBRLightMapping(const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
-                        if (lightsState.lightMaps.length > 0) {
-                            src.push("   vec3 irradiance = sRGBToLinear(texture(lightMap, geometry.worldNormal)).rgb;");
-                            src.push("   irradiance *= PI;");
-                            src.push("   vec3 diffuseBRDFContrib = (RECIPROCAL_PI * material.diffuseColor);");
-                            src.push("   reflectedLight.diffuse += irradiance * diffuseBRDFContrib;");
-                            //   src.push("   reflectedLight.diffuse = vec3(1.0, 0.0, 0.0);");
-                        }
-                        if (lightsState.reflectionMaps.length > 0) {
-                            src.push("   vec3 reflectVec             = reflect(-geometry.viewEyeDir, geometry.viewNormal);");
-                            src.push("   reflectVec                  = inverseTransformDirection(reflectVec, viewMatrix);");
-                            src.push("   float blinnExpFromRoughness = GGXRoughnessToBlinnExponent(material.specularRoughness);");
-                            src.push("   vec3 radiance               = getLightProbeIndirectRadiance(reflectVec, blinnExpFromRoughness, 8);");
-                            src.push("   vec3 specularBRDFContrib    = BRDF_Specular_GGX_Environment(geometry, material.specularColor, material.specularRoughness);");
-                            src.push("   reflectedLight.specular     += radiance * specularBRDFContrib;");
-                        }
-                        src.push("}");
-                    }
-
-                    // MAIN LIGHTING COMPUTATION FUNCTION
-
-                    src.push("void computePBRLighting(const in IncidentLight incidentLight, const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
-                    src.push("   float dotNL     = saturate(dot(geometry.viewNormal, incidentLight.direction));");
-                    src.push("   vec3 irradiance = dotNL * incidentLight.color * PI;");
-                    src.push("   reflectedLight.diffuse  += irradiance * (RECIPROCAL_PI * material.diffuseColor);");
-                    src.push("   reflectedLight.specular += irradiance * BRDF_Specular_GGX(incidentLight, geometry, material.specularColor, material.specularRoughness);");
                     src.push("}");
 
                 } // (metallicMaterial || specularMaterial)
@@ -747,20 +660,35 @@ export const DrawShaderSource = function(mesh) {
                 }
 
                 src.push("geometry.position      = vViewPosition;");
-                if (lightsState.lightMaps.length > 0) {
-                    src.push("geometry.worldNormal   = normalize(vWorldNormal);");
-                }
                 src.push("geometry.viewNormal    = viewNormal;");
                 src.push("geometry.viewEyeDir    = viewEyeDir;");
 
                 // ENVIRONMENT AND REFLECTION MAP SHADING
 
-                if ((phongMaterial) && (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0)) {
-                    src.push("computePhongLightMapping(geometry, material, reflectedLight);");
-                }
+                if (phongMaterial || metallicMaterial || specularMaterial) {
+                    if (lightsState.lightMaps.length > 0) {
+                        const decode = phongMaterial ? TEXTURE_DECODE_FUNCS[lightsState.lightMaps[0].encoding] : "sRGBToLinear";
+                        const irradiance = `${decode}(texture(lightMap, normalize(vWorldNormal))).rgb`;
+                        src.push(`reflectedLight.diffuse += material.diffuseColor * ${irradiance};`);
+                    }
+                    if (lightsState.reflectionMaps.length > 0) {
+                        const reflectVec = `reflect(-geometry.viewEyeDir, geometry.viewNormal)`;
+                        const spec = (phongMaterial
+                                      ? `0.2 * PI * texture(reflectionMap, ${reflectVec}).rgb`
+                                      : (function() {
+                                          const blinnExpFromRoughness = `2.0 / pow(material.specularRoughness + 0.0001, 2.0) - 2.0`;
+                                          const specularBRDFContrib = "BRDF_Specular_GGX_Environment(geometry, material.specularColor, material.specularRoughness)";
 
-                if ((specularMaterial || metallicMaterial) && (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0)) {
-                    src.push("computePBRLightMapping(geometry, material, reflectedLight);");
+                                          const viewReflectVec = `normalize((vec4(${reflectVec}, 0.0) * viewMatrix).xyz)`;
+                                          const maxMIPLevelScalar = "4.0";
+                                          const desiredMIPLevel = `${maxMIPLevelScalar} - 0.39624 - 0.25 * log2(pow(${blinnExpFromRoughness}, 2.0) + 1.0)`;
+                                          const mipLevel = `clamp(${desiredMIPLevel}, 0.0, ${maxMIPLevelScalar})`; //TODO: a random factor - fix this
+                                          const indirectRadiance = `${TEXTURE_DECODE_FUNCS[lightsState.reflectionMaps[0].encoding]}(texture(reflectionMap, ${viewReflectVec}, ${mipLevel})).rgb`;
+
+                                          return `${specularBRDFContrib} * ${indirectRadiance}`;
+                                      })());
+                        src.push(`reflectedLight.specular += ${spec};`);
+                    }
                 }
 
                 // LIGHT SOURCE SHADING
@@ -849,12 +777,14 @@ export const DrawShaderSource = function(mesh) {
 
                     src.push("light.direction = viewLightDir;");
 
-                    if (phongMaterial) {
-                        src.push("computePhongLighting(light, geometry, material, reflectedLight);");
-                    }
-
-                    if (specularMaterial || metallicMaterial) {
-                        src.push("computePBRLighting(light, geometry, material, reflectedLight);");
+                    if (phongMaterial || metallicMaterial || specularMaterial) {
+                        const dotNL = "saturate(dot(geometry.viewNormal, light.direction))";
+                        src.push(`vec3 irradiance${i} = ${dotNL} * light.color * PI;`);
+                        src.push(`reflectedLight.diffuse  += irradiance${i} * (RECIPROCAL_PI * material.diffuseColor);`);
+                        const spec = (phongMaterial
+                                      ? "light.color * material.specularColor * pow(max(dot(reflect(-light.direction, -geometry.viewNormal), geometry.viewEyeDir), 0.0), material.shine)"
+                                      : `irradiance${i} * BRDF_Specular_GGX(light, geometry, material.specularColor, material.specularRoughness)`);
+                        src.push(`reflectedLight.specular += ${spec};`);
                     }
                 }
 
@@ -864,14 +794,7 @@ export const DrawShaderSource = function(mesh) {
 
                 //src.push("reflectedLight.diffuse *= shadow;");
 
-                // COMBINE TERMS
-
-                if (phongMaterial) {
-                    src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * diffuseColor) + ((occlusion * (( reflectedLight.diffuse + reflectedLight.specular)))) + emissiveColor;");
-
-                } else {
-                    src.push("vec3 outgoingLight = (occlusion * (reflectedLight.diffuse)) + (occlusion * reflectedLight.specular) + emissiveColor;");
-                }
+                src.push("vec3 outgoingLight = emissiveColor + occlusion * (reflectedLight.diffuse + reflectedLight.specular)" + (phongMaterial ? " + lightAmbient.rgb * lightAmbient.a * diffuseColor" : "") + ";");
 
             } else {
 
@@ -879,9 +802,7 @@ export const DrawShaderSource = function(mesh) {
                 // NO SHADING - EMISSIVE and AMBIENT ONLY
                 //--------------------------------------------------------------------------------
 
-                src.push("ambientColor *= (lightAmbient.rgb * lightAmbient.a);");
-
-                src.push("vec3 outgoingLight = emissiveColor + ambientColor;");
+                src.push("vec3 outgoingLight = emissiveColor + lightAmbient.rgb * lightAmbient.a * ambientColor;");
             }
 
             src.push("vec4 fragColor = vec4(outgoingLight, alpha) * colorize;");
