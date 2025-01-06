@@ -83,27 +83,46 @@ export const DrawShaderSource = function(mesh) {
                     const texel = `texture(${map}, ${getTexCoordExpression(texturePos)})`;
                     const enc = initValue._state.encoding;
                     return (enc !== LinearEncoding) ? `${TEXTURE_DECODE_FUNCS[enc]}(${texel})` : texel;
+                },
+                setupInputs: (getInputSetter) => {
+                    const uMap    = getInputSetter(map);
+                    const uMatrix = matrix && getInputSetter(matrix);
+                    return (mtl, acquireTextureUnit) => {
+                        const value = getMaterialValue(mtl);
+                        const tex = value._state.texture;
+                        if (tex) {
+                            uMap(tex, acquireTextureUnit());
+                            let matrix = value._state.matrix;
+                            if (matrix) {
+                                uMatrix(matrix);
+                            }
+                        }
+                    };
                 }
             };
         })();
     };
 
-    const ambientMap   = setup2dTexture("ambient",   mtl => mtl._ambientMap);
-    const baseColorMap = setup2dTexture("baseColor", mtl => mtl._baseColorMap);
-    const diffuseMap   = setup2dTexture("diffuse",   mtl => mtl._diffuseMap);
-    const emissiveMap  = setup2dTexture("emissive",  mtl => mtl._emissiveMap);
-    const occlusionMap = setup2dTexture("occlusion", mtl => mtl._occlusionMap);
-    const alphaMap     = setup2dTexture("alpha",     mtl => mtl._alphaMap);
+    const p = phongMaterial;
+    const m = metallicMaterial;
+    const s = specularMaterial;
 
-    const metallicMap           = normals && setup2dTexture("metallic",           mtl => mtl._metallicMap);
-    const roughnessMap          = normals && setup2dTexture("roughness",          mtl => mtl._roughnessMap);
-    const metallicRoughnessMap  = normals && setup2dTexture("metallicRoughness",  mtl => mtl._metallicRoughnessMap);
+    const ambientMap   = (p          ) && setup2dTexture("ambient",   mtl => mtl._ambientMap);
+    const baseColorMap = (     m     ) && setup2dTexture("baseColor", mtl => mtl._baseColorMap);
+    const diffuseMap   = (p ||      s) && setup2dTexture("diffuse",   mtl => mtl._diffuseMap);
+    const emissiveMap  = (p || m || s) && setup2dTexture("emissive",  mtl => mtl._emissiveMap);
+    const occlusionMap = (p || m || s) && setup2dTexture("occlusion", mtl => mtl._occlusionMap);
+    const alphaMap     = (p || m || s) && setup2dTexture("alpha",     mtl => mtl._alphaMap);
 
-    const specularMap           = normals && setup2dTexture("specular",           mtl => mtl._specularMap);
-    const glossinessMap         = normals && setup2dTexture("glossiness",         mtl => mtl._glossinessMap);
-    const specularGlossinessMap = normals && setup2dTexture("specularGlossiness", mtl => mtl._specularGlossinessMap);
+    const metallicMap           = m && normals && setup2dTexture("metallic",           mtl => mtl._metallicMap);
+    const roughnessMap          = m && normals && setup2dTexture("roughness",          mtl => mtl._roughnessMap);
+    const metallicRoughnessMap  = m && normals && setup2dTexture("metallicRoughness",  mtl => mtl._metallicRoughnessMap);
 
-    const normalMap             = normals && setup2dTexture("normal",             mtl => mtl._normalMap);
+    const specularMap           = (p || s) && normals && setup2dTexture("specular",           mtl => mtl._specularMap);
+    const glossinessMap         = (     s) && normals && setup2dTexture("glossiness",         mtl => mtl._glossinessMap);
+    const specularGlossinessMap = (     s) && normals && setup2dTexture("specularGlossiness", mtl => mtl._specularGlossinessMap);
+
+    const normalMap             = (p || m || s) && normals && setup2dTexture("normal", mtl => mtl._normalMap);
 
     const activeTextureMaps = [
         ambientMap, baseColorMap, diffuseMap, emissiveMap, occlusionMap, alphaMap,
@@ -899,8 +918,8 @@ export const DrawShaderSource = function(mesh) {
             };
         },
         setupMaterialInputs: (getInputSetter) => {
-            const binders = activeFresnels.map(f => f && f.setupInputs(getInputSetter));
-            return (binders.length > 0) && (mtl => binders.forEach(bind => bind(mtl)));
+            const binders = activeFresnels.concat(activeTextureMaps).map(f => f && f.setupInputs(getInputSetter));
+            return (binders.length > 0) && ((mtl, acquireTextureUnit) => binders.forEach(bind => bind(mtl, acquireTextureUnit)));
         }
     };
 };
