@@ -33,6 +33,35 @@ export const DrawShaderSource = function(mesh) {
     const specularMaterial = (materialState.type === "SpecularMaterial");
     const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
 
+    const setupFresnel = (name, colorSwizzle, getMaterialValue) => {
+        const edgeBias    = name + "FresnelEdgeBias";
+        const centerBias  = name + "FresnelCenterBias";
+        const power       = name + "FresnelPower";
+        const edgeColor   = name + "FresnelEdgeColor";
+        const centerColor = name + "FresnelCenterColor";
+
+        return normals && getMaterialValue(material) && {
+            appendDefinitions: (src) => {
+                src.push(`uniform float ${edgeBias};`);
+                src.push(`uniform float ${centerBias};`);
+                src.push(`uniform float ${power};`);
+                src.push(`uniform vec3  ${edgeColor};`);
+                src.push(`uniform vec3  ${centerColor};`);
+            },
+            getValueExpression: (viewEyeDir, viewNormal) => {
+                const fresnel = `fresnel(${viewEyeDir}, ${viewNormal}, ${edgeBias}, ${centerBias}, ${power})`;
+                return `mix(${edgeColor + colorSwizzle}, ${centerColor + colorSwizzle}, ${fresnel})`;
+            }
+        };
+    };
+
+    const diffuseFresnel  = setupFresnel("diffuse",  "",   mtl => mtl._diffuseFresnel);
+    const specularFresnel = setupFresnel("specular", "",   mtl => mtl._specularFresnel);
+    const alphaFresnel    = setupFresnel("alpha",    ".r", mtl => mtl._alphaFresnel);
+    const emissiveFresnel = setupFresnel("emissive", "",   mtl => mtl._emissiveFresnel);
+
+    const activeFresnels = [ diffuseFresnel, specularFresnel, alphaFresnel, emissiveFresnel ].filter(f => f);
+
     return {
         programName: "Draw",
         discardPoints: true,
@@ -521,43 +550,14 @@ export const DrawShaderSource = function(mesh) {
             // MATERIAL FRESNEL INPUTS
             //--------------------------------------------------------------------------------
 
-            if (normals && (material._diffuseFresnel ||
-                            material._specularFresnel ||
-                            material._alphaFresnel ||
-                            material._emissiveFresnel)) {
+            if (activeFresnels.length > 0) {
                 src.push("float fresnel(vec3 eyeDir, vec3 normal, float edgeBias, float centerBias, float power) {");
                 src.push("    float fr = abs(dot(eyeDir, normal));");
                 src.push("    float finalFr = clamp((fr - edgeBias) / (centerBias - edgeBias), 0.0, 1.0);");
                 src.push("    return pow(finalFr, power);");
                 src.push("}");
-                if (material._diffuseFresnel) {
-                    src.push("uniform float  diffuseFresnelCenterBias;");
-                    src.push("uniform float  diffuseFresnelEdgeBias;");
-                    src.push("uniform float  diffuseFresnelPower;");
-                    src.push("uniform vec3   diffuseFresnelCenterColor;");
-                    src.push("uniform vec3   diffuseFresnelEdgeColor;");
-                }
-                if (material._specularFresnel) {
-                    src.push("uniform float  specularFresnelCenterBias;");
-                    src.push("uniform float  specularFresnelEdgeBias;");
-                    src.push("uniform float  specularFresnelPower;");
-                    src.push("uniform vec3   specularFresnelCenterColor;");
-                    src.push("uniform vec3   specularFresnelEdgeColor;");
-                }
-                if (material._alphaFresnel) {
-                    src.push("uniform float  alphaFresnelCenterBias;");
-                    src.push("uniform float  alphaFresnelEdgeBias;");
-                    src.push("uniform float  alphaFresnelPower;");
-                    src.push("uniform vec3   alphaFresnelCenterColor;");
-                    src.push("uniform vec3   alphaFresnelEdgeColor;");
-                }
-                if (material._emissiveFresnel) {
-                    src.push("uniform float  emissiveFresnelCenterBias;");
-                    src.push("uniform float  emissiveFresnelEdgeBias;");
-                    src.push("uniform float  emissiveFresnelPower;");
-                    src.push("uniform vec3   emissiveFresnelCenterColor;");
-                    src.push("uniform vec3   emissiveFresnelEdgeColor;");
-                }
+
+                activeFresnels.forEach(f => f.appendDefinitions(src));
             }
 
             //--------------------------------------------------------------------------------
@@ -848,22 +848,10 @@ export const DrawShaderSource = function(mesh) {
 
                 src.push("vec3 viewEyeDir = normalize(-vViewPosition);");
 
-                if (material._diffuseFresnel) {
-                    src.push("float diffuseFresnel = fresnel(viewEyeDir, viewNormal, diffuseFresnelEdgeBias, diffuseFresnelCenterBias, diffuseFresnelPower);");
-                    src.push("diffuseColor *= mix(diffuseFresnelEdgeColor, diffuseFresnelCenterColor, diffuseFresnel);");
-                }
-                if (material._specularFresnel) {
-                    src.push("float specularFresnel = fresnel(viewEyeDir, viewNormal, specularFresnelEdgeBias, specularFresnelCenterBias, specularFresnelPower);");
-                    src.push("specular *= mix(specularFresnelEdgeColor, specularFresnelCenterColor, specularFresnel);");
-                }
-                if (material._alphaFresnel) {
-                    src.push("float alphaFresnel = fresnel(viewEyeDir, viewNormal, alphaFresnelEdgeBias, alphaFresnelCenterBias, alphaFresnelPower);");
-                    src.push("alpha *= mix(alphaFresnelEdgeColor.r, alphaFresnelCenterColor.r, alphaFresnel);");
-                }
-                if (material._emissiveFresnel) {
-                    src.push("float emissiveFresnel = fresnel(viewEyeDir, viewNormal, emissiveFresnelEdgeBias, emissiveFresnelCenterBias, emissiveFresnelPower);");
-                    src.push("emissiveColor *= mix(emissiveFresnelEdgeColor, emissiveFresnelCenterColor, emissiveFresnel);");
-                }
+                diffuseFresnel  && src.push(`diffuseColor  *= ${diffuseFresnel.getValueExpression ("viewEyeDir", "viewNormal")};`);
+                specularFresnel && src.push(`specular      *= ${specularFresnel.getValueExpression("viewEyeDir", "viewNormal")};`);
+                alphaFresnel    && src.push(`alpha         *= ${alphaFresnel.getValueExpression   ("viewEyeDir", "viewNormal")};`);
+                emissiveFresnel && src.push(`emissiveColor *= ${emissiveFresnel.getValueExpression("viewEyeDir", "viewNormal")};`);
 
                 src.push("if (materialAlphaModeCutoff[1] == 1.0 && alpha < materialAlphaModeCutoff[2]) {"); // ie. (alphaMode == "mask" && alpha < alphaCutoff)
                 src.push("   discard;"); // TODO: Discard earlier within this shader?
