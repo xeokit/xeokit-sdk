@@ -9,7 +9,6 @@ import {LambertShaderSource} from "./LambertShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 import {stats} from '../../stats.js';
-import {WEBGL_INFO} from '../../webglInfo.js';
 import {math} from "../../math/math.js";
 import {getPlaneRTCPos} from "../../math/rtcCoords.js";
 
@@ -77,7 +76,6 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         this._allocate(mesh);
     }
 
-    const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
     const scene = mesh.scene;
     const material = mesh._material;
     const gl = scene.canvas.gl;
@@ -95,7 +93,6 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
             gl.depthFunc(gl.LEQUAL);
         }
 
-        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const lightsState = scene._lightsState;
@@ -107,7 +104,6 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         program.bind();
 
         frameCtx.useProgram++;
-        frameCtx.textureUnit = 0;
 
         this._lastMaterialId = null;
         this._lastVertexBufsId = null;
@@ -151,29 +147,15 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                     if (this._uShadowProjMatrix[i]) {
                         gl.uniformMatrix4fv(this._uShadowProjMatrix[i], false, light.getShadowProjMatrix());
                     }
-                    const shadowRenderBuf = light.getShadowRenderBuf();
+                    const shadowRenderBuf = this._uShadowMap[i] && light.getShadowRenderBuf();
                     if (shadowRenderBuf) {
-                        program.bindTexture("shadowMap" + i, shadowRenderBuf.getTexture(), frameCtx.textureUnit);
-                        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                        frameCtx.bindTexture++;
+                        this._uShadowMap[i](shadowRenderBuf.getTexture());
                     }
                 }
             }
         }
 
-        if (lightsState.lightMaps.length > 0 && lightsState.lightMaps[0].texture && this._uLightMap) {
-            program.bindTexture(this._uLightMap, lightsState.lightMaps[0].texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            frameCtx.bindTexture++;
-        }
-
-        if (lightsState.reflectionMaps.length > 0 && lightsState.reflectionMaps[0].texture && this._uReflectionMap) {
-            program.bindTexture(this._uReflectionMap, lightsState.reflectionMaps[0].texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            frameCtx.bindTexture++;
-        }
-
-        this._baseTextureUnit = frameCtx.textureUnit;
+        this._setLightInputState && this._setLightInputState();
     }
 
     gl.uniformMatrix4fv(this._uViewMatrix, false, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
@@ -211,8 +193,6 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 
     if (materialState.id !== this._lastMaterialId) {
 
-        frameCtx.textureUnit = this._baseTextureUnit;
-
         const backfaces = materialState.backfaces;
         if (frameCtx.backfaces !== backfaces) {
             if (backfaces) {
@@ -238,13 +218,7 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
             frameCtx.lineWidth = materialState.lineWidth;
         }
 
-        const acquireTextureUnit = function() {
-            const unit = frameCtx.textureUnit;
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            frameCtx.bindTexture++;
-            return unit;
-        };
-        this._setMaterialInputsState && this._setMaterialInputsState(material, acquireTextureUnit);
+        this._setMaterialInputsState && this._setMaterialInputsState(material);
         this._setGeneralMaterialInputsState && this._setGeneralMaterialInputsState(material);
 
         this._lastMaterialId = materialState.id;
@@ -324,9 +298,10 @@ DrawRenderer.prototype._allocate = function (mesh) {
         return;
     }
     const program = this._program;
-    const getInputSetter = makeInputSetters(gl, program.handle);
+    const getInputSetter = makeInputSetters(gl, program.handle, true);
     this._setInputsState = this._programSetup.setupInputs && this._programSetup.setupInputs(getInputSetter);
     this._setMaterialInputsState = this._programSetup.setupMaterialInputs && this._programSetup.setupMaterialInputs(getInputSetter);
+    this._setLightInputState = this._programSetup.setupLightInputs && this._programSetup.setupLightInputs(getInputSetter);
     this._setGeometryInputsState = meshRenderer.setupGeometryInputs && meshRenderer.setupGeometryInputs(getInputSetter);
     this._setGeneralMaterialInputsState = meshRenderer.setupGeneralMaterialInputs && meshRenderer.setupGeneralMaterialInputs(getInputSetter);
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
@@ -382,15 +357,8 @@ DrawRenderer.prototype._allocate = function (mesh) {
         if (light.castsShadow) {
             this._uShadowViewMatrix[i] = program.getLocation("shadowViewMatrix" + i);
             this._uShadowProjMatrix[i] = program.getLocation("shadowProjMatrix" + i);
+            this._uShadowMap[i] = getInputSetter("shadowMap" + i);
         }
-    }
-
-    if (lightsState.lightMaps.length > 0) {
-        this._uLightMap = "lightMap";
-    }
-
-    if (lightsState.reflectionMaps.length > 0) {
-        this._uReflectionMap = "reflectionMap";
     }
 
     this._uSectionPlanes = [];
@@ -414,9 +382,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
-
-    this._baseTextureUnit = 0;
-
 };
 
 export {DrawRenderer};
