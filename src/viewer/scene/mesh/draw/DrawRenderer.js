@@ -159,7 +159,13 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
             frameCtx.lineWidth = materialState.lineWidth;
         }
 
-        this._setMaterialInputsState && this._setMaterialInputsState(material);
+        const acquireTextureUnit = function() {
+            const unit = frameCtx.textureUnit;
+            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+            frameCtx.bindTexture++;
+            return unit;
+        };
+        this._setMaterialInputsState && this._setMaterialInputsState(material, acquireTextureUnit);
         this._setGeneralMaterialInputsState && this._setGeneralMaterialInputsState(material);
 
         this._binders.forEach(b => b(frameCtx, material));
@@ -328,23 +334,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
         }
     };
 
-    const setupTextureBind = (mapUniformName, matrixUniformName, getMap) => {
-        if (getMap(material)) {
-            const uMapMatrix = program.getLocation(matrixUniformName);
-            this._binders.push((frameCtx, mtl) => {
-                const map = getMap(mtl);
-                if (map._state.texture) {
-                    program.bindTexture(mapUniformName, map._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_UNITS;
-                    frameCtx.bindTexture++;
-                    if (uMapMatrix) {
-                        gl.uniformMatrix4fv(uMapMatrix, false, map._state.matrix);
-                    }
-                }
-            });
-        }
-    };
-
     switch (materialState.type) {
         case "LambertMaterial":
             break;
@@ -356,15 +345,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
             setupUniformBind("materialEmissive",        (loc, mtl) => gl.uniform3fv(loc, mtl._state.emissive));
             setupUniformBind("materialShininess",       (loc, mtl) => gl.uniform1f (loc, mtl._state.shininess));
             setupUniformBind("materialAlphaModeCutoff", (loc, mtl) => gl.uniform4f (loc, 1.0 * mtl._state.alpha, mtl._state.alphaMode === 1 ? 1.0 : 0.0, mtl._state.alphaCutoff, 0.0));
-
-            setupTextureBind("ambientMap",      "ambientMapMatrix",      mtl => mtl._ambientMap);
-            setupTextureBind("diffuseMap",      "diffuseMapMatrix",      mtl => mtl._diffuseMap);
-            setupTextureBind("specularMap",     "specularMapMatrix",     mtl => mtl._specularMap);
-            setupTextureBind("emissiveMap",     "emissiveMapMatrix",     mtl => mtl._emissiveMap);
-            setupTextureBind("alphaMap",        "alphaMapMatrix",        mtl => mtl._alphaMap);
-            setupTextureBind("normalMap",       "normalMapMatrix",       mtl => mtl._normalMap);
-            setupTextureBind("occlusionMap",    "occlusionMapMatrix",    mtl => mtl._occlusionMap);
-
             break;
 
         case "MetallicMaterial":
@@ -374,16 +354,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
             setupUniformBind("materialSpecularF0",      (loc, mtl) => gl.uniform1f (loc, mtl._state.specularF0));
             setupUniformBind("materialEmissive",        (loc, mtl) => gl.uniform3fv(loc, mtl._state.emissive));
             setupUniformBind("materialAlphaModeCutoff", (loc, mtl) => gl.uniform4f (loc, 1.0 * mtl._state.alpha, mtl._state.alphaMode === 1 ? 1.0 : 0.0, mtl._state.alphaCutoff, 0.0));
-
-            setupTextureBind("baseColorMap",         "baseColorMapMatrix",         mtl => mtl._baseColorMap);
-            setupTextureBind("metallicMap",          "metallicMapMatrix",          mtl => mtl._metallicMap);
-            setupTextureBind("roughnessMap",         "roughnessMapMatrix",         mtl => mtl._roughnessMap);
-            setupTextureBind("metallicRoughnessMap", "metallicRoughnessMapMatrix", mtl => mtl._metallicRoughnessMap);
-            setupTextureBind("emissiveMap",          "emissiveMapMatrix",          mtl => mtl._emissiveMap);
-            setupTextureBind("occlusionMap",         "occlusionMapMatrix",         mtl => mtl._occlusionMap);
-            setupTextureBind("alphaMap",             "alphaMapMatrix",             mtl => mtl._alphaMap);
-            setupTextureBind("normalMap",            "normalMapMatrix",            mtl => mtl._normalMap);
-
             break;
 
         case "SpecularMaterial":
@@ -392,16 +362,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
             setupUniformBind("materialGlossiness",      (loc, mtl) => gl.uniform1f (loc, mtl._state.glossiness));
             setupUniformBind("materialEmissive",        (loc, mtl) => gl.uniform3fv(loc, mtl._state.emissive));
             setupUniformBind("materialAlphaModeCutoff", (loc, mtl) => gl.uniform4f (loc, 1.0 * mtl._state.alpha, mtl._state.alphaMode === 1 ? 1.0 : 0.0, mtl._state.alphaCutoff, 0.0));
-
-            setupTextureBind("diffuseMap",                    "diffuseMapMatrix",                    mtl => mtl._diffuseMap);
-            setupTextureBind("specularMap",                   "specularMapMatrix",                   mtl => mtl._specularMap);
-            setupTextureBind("glossinessMap",                 "glossinessMapMatrix",                 mtl => mtl._glossinessMap);
-            setupTextureBind("specularGlossinessMap",         "specularGlossinessMapMatrix",         mtl => mtl._specularGlossinessMap);
-            setupTextureBind("emissiveMap",                   "emissiveMapMatrix",                   mtl => mtl._emissiveMap);
-            setupTextureBind("occlusionMap",                  "occlusionMapMatrix",                  mtl => mtl._occlusionMap);
-            setupTextureBind("alphaMap",                      "alphaMapMatrix",                      mtl => mtl._alphaMap);
-            setupTextureBind("normalMap",                     "normalMapMatrix",                     mtl => mtl._normalMap);
-
             break;
     }
 
