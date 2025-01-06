@@ -234,14 +234,6 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                         gl.uniformMatrix4fv(this._uAlphaMapMatrix, false, material._alphaMap._state.matrix);
                     }
                 }
-                if (material._reflectivityMap && material._reflectivityMap._state.texture && this._uReflectivityMap) {
-                    program.bindTexture(this._uReflectivityMap, material._reflectivityMap._state.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                    if (this._uReflectivityMapMatrix) {
-                        gl.uniformMatrix4fv(this._uReflectivityMapMatrix, false, material._reflectivityMap._state.matrix);
-                    }
-                }
                 if (material._normalMap && material._normalMap._state.texture && this._uNormalMap) {
                     program.bindTexture(this._uNormalMap, material._normalMap._state.texture, frameCtx.textureUnit);
                     frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
@@ -725,10 +717,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
             if (material._alphaMap) {
                 this._uAlphaMap = "alphaMap";
                 this._uAlphaMapMatrix = program.getLocation("alphaMapMatrix");
-            }
-            if (material._reflectivityMap) {
-                this._uReflectivityMap = "reflectivityMap";
-                this._uReflectivityMapMatrix = program.getLocation("reflectivityMapMatrix");
             }
             if (material._normalMap) {
                 this._uNormalMap = "normalMap";
