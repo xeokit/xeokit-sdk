@@ -189,7 +189,7 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
         return;
     }
     const program = this._program;
-    const getInputSetter = makeInputSetters(gl, program.handle);
+    const getInputSetter = makeInputSetters(gl, program.handle, true);
     this._setInputsState = this._programSetup.setupInputs && this._programSetup.setupInputs(getInputSetter);
     this._setMaterialInputsState = this._programSetup.setupMaterialInputs && this._programSetup.setupMaterialInputs(getInputSetter);
 
@@ -252,7 +252,6 @@ EmphasisFillRenderer.prototype._bindProgram = function (frameCtx) {
     const program = this._program;
     program.bind();
     frameCtx.useProgram++;
-    frameCtx.textureUnit = 0;
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;

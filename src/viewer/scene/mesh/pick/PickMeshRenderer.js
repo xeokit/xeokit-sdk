@@ -177,7 +177,7 @@ PickMeshRenderer.prototype._allocate = function (mesh) {
         return;
     }
     const program = this._program;
-    const getInputSetter = makeInputSetters(gl, program.handle);
+    const getInputSetter = makeInputSetters(gl, program.handle, true);
     this._setInputsState = this._programSetup.setupInputs && this._programSetup.setupInputs(getInputSetter);
     this._setMaterialInputsState = this._programSetup.setupMaterialInputs && this._programSetup.setupMaterialInputs(getInputSetter);
 
