@@ -950,7 +950,7 @@ function buildFragmentDraw(mesh) {
             src.push("uniform mat4 metallicRoughnessMapMatrix;");
         }
     }
-    if (normals && material._normalMap) {
+    if (normals && uvs && material._normalMap) {
         src.push("uniform sampler2D normalMap;");
         if (material._normalMap._state.matrix) {
             src.push("uniform mat4 normalMapMatrix;");
