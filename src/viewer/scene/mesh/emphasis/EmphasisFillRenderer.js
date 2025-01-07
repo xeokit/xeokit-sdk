@@ -180,7 +180,6 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
 
 EmphasisFillRenderer.prototype._allocate = function (mesh) {
     const scene = mesh.scene;
-    const lightsState = scene._lightsState;
     const sectionPlanesState = scene._sectionPlanesState;
     const gl = scene.canvas.gl;
     this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
@@ -192,6 +191,7 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
     const getInputSetter = makeInputSetters(gl, program.handle, true);
     this._setInputsState = this._programSetup.setupInputs && this._programSetup.setupInputs(getInputSetter);
     this._setMaterialInputsState = this._programSetup.setupMaterialInputs && this._programSetup.setupMaterialInputs(getInputSetter);
+    this._setLightInputState = this._programSetup.setupLightInputs && this._programSetup.setupLightInputs(getInputSetter);
 
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uModelMatrix = program.getLocation("modelMatrix");
@@ -199,30 +199,6 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
-    this._uLightAmbient = [];
-    this._uLightColor = [];
-    this._uLightDir = [];
-    this._uLightPos = [];
-    this._uLightAttenuation = [];
-    for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-        const light = lightsState.lights[i];
-        switch (light.type) {
-            case "ambient":
-                this._uLightAmbient[i] = program.getLocation("lightAmbient");
-                break;
-            case "dir":
-                this._uLightColor[i] = program.getLocation("lightColor" + i);
-                this._uLightPos[i] = null;
-                this._uLightDir[i] = program.getLocation("lightDir" + i);
-                break;
-            case "point":
-                this._uLightColor[i] = program.getLocation("lightColor" + i);
-                this._uLightPos[i] = program.getLocation("lightPos" + i);
-                this._uLightDir[i] = null;
-                this._uLightAttenuation[i] = program.getLocation("lightAttenuation" + i);
-                break;
-        }
-    }
     this._uSectionPlanes = [];
     for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
         this._uSectionPlanes.push({
@@ -246,7 +222,6 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
 EmphasisFillRenderer.prototype._bindProgram = function (frameCtx) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
-    const lightsState = scene._lightsState;
     const camera = scene.camera;
     const project = camera.project;
     const program = this._program;
@@ -261,25 +236,8 @@ EmphasisFillRenderer.prototype._bindProgram = function (frameCtx) {
         const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
         gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
     }
-    for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-        const light = lightsState.lights[i];
-        if (this._uLightAmbient[i]) {
-            gl.uniform4f(this._uLightAmbient[i], light.color[0], light.color[1], light.color[2], light.intensity);
-        } else {
-            if (this._uLightColor[i]) {
-                gl.uniform4f(this._uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
-            }
-            if (this._uLightPos[i]) {
-                gl.uniform3fv(this._uLightPos[i], light.pos);
-                if (this._uLightAttenuation[i]) {
-                    gl.uniform1f(this._uLightAttenuation[i], light.attenuation);
-                }
-            }
-            if (this._uLightDir[i]) {
-                gl.uniform3fv(this._uLightDir[i], light.dir);
-            }
-        }
-    }
+
+    this._setLightInputState && this._setLightInputState();
 };
 
 export {EmphasisFillRenderer};
