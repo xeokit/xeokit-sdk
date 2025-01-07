@@ -1,4 +1,4 @@
-export const makeInputSetters = function(gl, handle) {
+export const makeInputSetters = function(gl, handle, assignTextureUnitsAutomatically) {
     const activeInputs = { };
 
     const numAttributes = gl.getProgramParameter(handle, gl.ACTIVE_ATTRIBUTES);
@@ -30,6 +30,7 @@ export const makeInputSetters = function(gl, handle) {
     }
 
     const numUniforms = gl.getProgramParameter(handle, gl.ACTIVE_UNIFORMS);
+    let nextUnit = 0;
     for (let i = 0; i < numUniforms; ++i) {
         const u = gl.getActiveUniform(handle, i);
         let uName = u.name;
@@ -56,13 +57,24 @@ export const makeInputSetters = function(gl, handle) {
              ((u.type === gl.UNSIGNED_INT_SAMPLER_2D)
               ||
               (u.type === gl.INT_SAMPLER_2D)))) {
-            activeInputs[uName] = function(texture, unit) {
-                const bound = texture.bind(unit);
-                if (bound) {
-                    gl.uniform1i(location, unit);
-                }
-                return bound;
-            };
+            if (assignTextureUnitsAutomatically) {
+                const unit = nextUnit++;
+                activeInputs[uName] = function(texture) {
+                    const bound = texture.bind(unit);
+                    if (bound) {
+                        gl.uniform1i(location, unit);
+                    }
+                    return bound;
+                };
+            } else {
+                activeInputs[uName] = function(texture, unit) {
+                    const bound = texture.bind(unit);
+                    if (bound) {
+                        gl.uniform1i(location, unit);
+                    }
+                    return bound;
+                };
+            }
         } else {
             activeInputs[uName] = (function() {
                 if (u.size === 1) {
