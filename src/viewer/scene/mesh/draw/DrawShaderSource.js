@@ -1,3 +1,4 @@
+import {createGammaOutputSetup} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
@@ -21,7 +22,7 @@ export const DrawShaderSource = function(mesh) {
     const phongMaterial    = (materialState.type === "PhongMaterial");
     const metallicMaterial = (materialState.type === "MetallicMaterial");
     const specularMaterial = (materialState.type === "SpecularMaterial");
-    const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
+    const gammaOutputSetup = createGammaOutputSetup(scene);
 
     const setupFresnel = (name, colorSwizzle, getMaterialValue) => {
         const edgeBias    = name + "FresnelEdgeBias";
@@ -305,12 +306,7 @@ export const DrawShaderSource = function(mesh) {
             src.push("vec4 sRGBToLinear( in vec4 value ) {");
             src.push("  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );");
             src.push("}");
-            if (gammaOutput) {
-                src.push("uniform float gammaFactor;");
-                src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
-                src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
-                src.push("}");
-            }
+            gammaOutputSetup && gammaOutputSetup.appendDefinitions(src);
             if (normals) {
 
                 //--------------------------------------------------------------------------------
@@ -817,18 +813,18 @@ export const DrawShaderSource = function(mesh) {
 
             src.push("vec4 fragColor = vec4(outgoingLight, alpha) * colorize;");
 
-            if (gammaOutput) {
-                src.push("fragColor = linearToGamma(fragColor, gammaFactor);");
+            if (gammaOutputSetup) {
+                src.push(`fragColor = ${gammaOutputSetup.getValueExpression("fragColor")};`);
             }
 
             src.push("outColor = fragColor;");
         },
         setupInputs: (getInputSetter) => {
             const colorize = getInputSetter("colorize");
-            const gammaFactor = gammaOutput && getInputSetter("gammaFactor");
+            const setGammaOutput = gammaOutputSetup && gammaOutputSetup.setupInputs(getInputSetter);
             return (frameCtx, meshState) => {
                 colorize(meshState.colorize);
-                gammaFactor && gammaFactor(scene.gammaFactor);
+                setGammaOutput && setGammaOutput();
             };
         },
         setupMaterialInputs: (getInputSetter) => {
