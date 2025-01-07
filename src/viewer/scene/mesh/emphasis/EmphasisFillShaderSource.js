@@ -1,3 +1,4 @@
+import {createGammaOutputSetup} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
@@ -6,7 +7,7 @@ export function EmphasisFillShaderSource(mesh) {
     const lightsState = scene._lightsState;
     const primitive = mesh._geometry._state.primitiveName;
     const normals = (mesh._geometry._state.autoVertexNormals || mesh._geometry._state.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan");
-    const gammaOutput = scene.gammaOutput;
+    const gammaOutputSetup = createGammaOutputSetup(scene);
 
     return {
         programName: "EmphasisFill",
@@ -68,20 +69,12 @@ export function EmphasisFillShaderSource(mesh) {
             //src.push("vColor = vec4(reflectedColor + fillColor.rgb, fillColor.a);");
         },
         appendFragmentDefinitions: (src) => {
-            if (gammaOutput) {
-                src.push("uniform float gammaFactor;");
-                src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
-                src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
-                src.push("}");
-            }
+            gammaOutputSetup && gammaOutputSetup.appendDefinitions(src);
             src.push("in vec4 vColor;");
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src) => src.push(`outColor = ${gammaOutput ? "linearToGamma(vColor, gammaFactor)" : "vColor"};`),
-        setupInputs: gammaOutput && ((getInputSetter) => {
-            const gammaFactor = getInputSetter("gammaFactor");
-            return () => gammaFactor(scene.gammaFactor);
-        }),
+        appendFragmentOutputs: (src) => src.push(`outColor = ${gammaOutputSetup ? gammaOutputSetup.getValueExpression("vColor") : "vColor"};`),
+        setupInputs: gammaOutputSetup && gammaOutputSetup.setupInputs,
         setupMaterialInputs: (getInputSetter) => {
             const fillColor = getInputSetter("fillColor");
             return (mtl) => {
