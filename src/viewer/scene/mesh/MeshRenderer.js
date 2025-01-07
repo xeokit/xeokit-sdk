@@ -1,3 +1,6 @@
+import {math} from "../math/math.js";
+const tempVec4 = math.vec4();
+
 export function MeshRenderer(programSetup, mesh) {
 
     const scene = mesh.scene;
@@ -262,6 +265,94 @@ export const createGammaOutputSetup = function(scene) {
         setupInputs: (getInputSetter) => {
             const gammaFactor = getInputSetter("gammaFactor");
             return () => gammaFactor(scene.gammaFactor);
+        }
+    };
+};
+
+export const createLightSetup = function(lightsState) {
+    const lights = lightsState.lights;
+    return {
+        appendDefinitions: (src) => {
+            for (let i = 0, len = lights.length; i < len; i++) {
+                const light = lights[i];
+                if (light.type === "ambient") {
+                    continue;
+                }
+                src.push("uniform vec4 lightColor" + i + ";");
+                if (light.type === "dir") {
+                    src.push("uniform vec3 lightDir" + i + ";");
+                }
+                if (light.type === "point") {
+                    src.push("uniform vec3 lightPos" + i + ";");
+                }
+                if (light.type === "spot") { // not used
+                    src.push("uniform vec3 lightPos" + i + ";");
+                }
+            }
+
+        },
+        getDirectionalLights: (viewMatrix, viewPosition) => {
+            return lights.map((light, i) => {
+                const withViewLightDir = direction => ({
+                    color: `lightColor${i}.rgb * lightColor${i}.a`,
+                    direction: `normalize(${direction})`
+                });
+                if (light.type === "dir") {
+                    if (light.space === "view") {
+                        return withViewLightDir(`lightDir${i}`);
+                    } else {
+                        return withViewLightDir(`(${viewMatrix} * vec4(lightDir${i}, 0.0)).xyz`);
+                    }
+                } else if (light.type === "point") {
+                    if (light.space === "view") {
+                        return withViewLightDir(`lightPos${i} - ${viewPosition}.xyz`);
+                    } else {
+                        return withViewLightDir(`(${viewMatrix} * vec4(lightPos${i}, 0.0)).xyz)`);
+                    }
+                } else {
+                    return null;
+                }
+            }).filter(v => v);
+        },
+        setupInputs: (getUniformSetter) => {
+            const uLightColor = [];
+            const uLightDir = [];
+            const uLightPos = [];
+
+            for (let i = 0, len = lights.length; i < len; i++) {
+                const light = lights[i];
+                switch (light.type) {
+                case "dir":
+                    uLightColor[i] = getUniformSetter("lightColor" + i);
+                    uLightPos[i] = null;
+                    uLightDir[i] = getUniformSetter("lightDir" + i);
+                    break;
+                case "point":
+                    uLightColor[i] = getUniformSetter("lightColor" + i);
+                    uLightPos[i] = getUniformSetter("lightPos" + i);
+                    uLightDir[i] = null;
+                    break;
+                }
+            }
+
+            return () => {
+                for (let i = 0, len = lights.length; i < len; i++) {
+                    const light = lights[i];
+                    if (uLightColor[i]) {
+                        tempVec4[0] = light.color[0];
+                        tempVec4[1] = light.color[1];
+                        tempVec4[2] = light.color[2];
+                        tempVec4[3] = light.intensity;
+                        uLightColor[i](tempVec4);
+                    }
+                    if (uLightPos[i]) {
+                        uLightPos[i](light.pos);
+                    }
+                    if (uLightDir[i]) {
+                        uLightDir[i](light.dir);
+                    }
+                }
+            };
         }
     };
 };
