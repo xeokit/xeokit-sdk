@@ -249,3 +249,19 @@ export function MeshRenderer(programSetup, mesh) {
         }
     };
 };
+
+export const createGammaOutputSetup = function(scene) {
+    return scene.gammaOutput && {
+        appendDefinitions: (src) => {
+            src.push("uniform float gammaFactor;");
+            src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
+            src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
+            src.push("}");
+        },
+        getValueExpression: (color) => `linearToGamma(${color}, gammaFactor)`,
+        setupInputs: (getInputSetter) => {
+            const gammaFactor = getInputSetter("gammaFactor");
+            return () => gammaFactor(scene.gammaFactor);
+        }
+    };
+};

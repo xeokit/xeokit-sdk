@@ -1,3 +1,4 @@
+import {createGammaOutputSetup} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
@@ -7,7 +8,8 @@ export const LambertShaderSource = function(mesh) {
     const lightsState = scene._lightsState;
     const primitive = geometryState.primitiveName;
     const normals = (geometryState.autoVertexNormals || geometryState.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan");
-    const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
+    const gammaOutputSetup = createGammaOutputSetup(scene);
+
     return {
         programName: "Lambert",
         discardPoints: true,
@@ -77,21 +79,16 @@ export const LambertShaderSource = function(mesh) {
         },
         appendFragmentDefinitions: (src) => {
             src.push("in vec4 vColor;");
-            if (gammaOutput) {
-                src.push("uniform float gammaFactor;");
-                src.push("    vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
-                src.push("    return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
-                src.push("}");
-            }
+            gammaOutputSetup && gammaOutputSetup.appendDefinitions(src);
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src) => src.push(`outColor = ${gammaOutput ? "linearToGamma(vColor, gammaFactor)" : "vColor"};`),
+        appendFragmentOutputs: (src) => src.push(`outColor = ${gammaOutputSetup ? gammaOutputSetup.getValueExpression("vColor") : "vColor"};`),
         setupInputs: (getInputSetter) => {
             const colorize = getInputSetter("colorize");
-            const gammaFactor = gammaOutput && getInputSetter("gammaFactor");
+            const setGammaOutput = gammaOutputSetup && gammaOutputSetup.setupInputs(getInputSetter);
             return (frameCtx, meshState) => {
                 colorize(meshState.colorize);
-                gammaFactor && gammaFactor(scene.gammaFactor);
+                setGammaOutput && setGammaOutput();
             };
         },
         setupMaterialInputs: (getInputSetter) => {
