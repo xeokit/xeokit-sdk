@@ -4,6 +4,7 @@
 
 import {MeshRenderer} from "../MeshRenderer.js";
 import {Map} from "../../utils/Map.js";
+import {EmphasisEdgesShaderSource} from "./EmphasisEdgesShaderSource.js";
 import {EmphasisFillShaderSource} from "./EmphasisFillShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
@@ -18,54 +19,58 @@ const tempVec3a = math.vec3();
 /**
  * @private
  */
-const EmphasisFillRenderer = function (hash, mesh) {
+const EmphasisRenderer = function (hash, mesh, isFill, deleteInstance) {
     this.id = ids.addItem({});
     this._hash = hash;
     this._scene = mesh.scene;
     this._useCount = 0;
-    this._programSetup = EmphasisFillShaderSource(mesh);
+    this._isFill = isFill;
+    this._programSetup = isFill ? EmphasisFillShaderSource(mesh) : EmphasisEdgesShaderSource(mesh);
     this._allocate(mesh);
+    this._delete = deleteInstance;
 };
 
-const xrayFillRenderers = {};
+const renderers = {};
 
-EmphasisFillRenderer.get = function (mesh) {
+EmphasisRenderer.get = function(mesh, isFill) {
+    const matKey = isFill ? "EmphasisFill" : "EmphasisEdges";
+    if (! (matKey in renderers)) {
+        renderers[matKey] = { };
+    }
     const hash = [
         mesh.scene.id,
         mesh.scene.gammaOutput ? "go" : "", // Gamma input not needed
         mesh.scene._lightsState.getHash(),
         mesh.scene._sectionPlanesState.getHash(),
-        !!mesh._geometry._state.normalsBuf ? "n" : "",
+        (isFill && mesh._geometry._state.normalsBuf) ? "n" : "",
         mesh._geometry._state.compressGeometry ? "cp" : "",
         mesh._state.hash
     ].join(";");
-    let renderer = xrayFillRenderers[hash];
-    if (!renderer) {
-        renderer = new EmphasisFillRenderer(hash, mesh);
-        xrayFillRenderers[hash] = renderer;
+    if (! (hash in renderers[matKey])) {
+        renderers[matKey][hash] = new EmphasisRenderer(hash, mesh, isFill, () => { delete renderers[matKey][hash]; });
         stats.memory.programs++;
     }
+    const renderer = renderers[matKey][hash];
     renderer._useCount++;
     return renderer;
 };
 
-EmphasisFillRenderer.prototype.put = function () {
+EmphasisRenderer.prototype.put = function () {
     if (--this._useCount === 0) {
         ids.removeItem(this.id);
         if (this._program) {
             this._program.destroy();
         }
-        delete xrayFillRenderers[this._hash];
+        this._delete();
         stats.memory.programs--;
     }
 };
 
-EmphasisFillRenderer.prototype.webglContextRestored = function () {
+EmphasisRenderer.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
-EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
-
+EmphasisRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     if (!this._program) {
         this._allocate(mesh);
     }
@@ -73,11 +78,11 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     const scene = this._scene;
     const camera = scene.camera;
     const gl = scene.canvas.gl;
-    const material = mode === 0 ? mesh._xrayMaterial : (mode === 1 ? mesh._highlightMaterial : mesh._selectedMaterial);
-    const materialState = material._state;
     const meshState = mesh._state;
-    const geometryState = mesh._geometry._state;
+    const geometry = mesh._geometry;
+    const geometryState = geometry._state;
     const origin = mesh.origin;
+    const isFill = this._isFill;
 
     if (frameCtx.lastProgramId !== this._program.id) {
         frameCtx.lastProgramId = this._program.id;
@@ -85,7 +90,7 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     }
 
     gl.uniformMatrix4fv(this._uViewMatrix, false, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
-    gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
+    isFill && gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
     if (meshState.clippable) {
         const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
@@ -117,6 +122,10 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
         }
     }
 
+    const material = (mode === 0) ? mesh._xrayMaterial : ((mode === 1) ? mesh._highlightMaterial : ((mode === 2) ? mesh._selectedMaterial : mesh._edgeMaterial));
+
+    const materialState = material._state;
+
     if (materialState.id !== this._lastMaterialId) {
         const backfaces = materialState.backfaces;
         if (frameCtx.backfaces !== backfaces) {
@@ -127,12 +136,16 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
             }
             frameCtx.backfaces = backfaces;
         }
+        if ((! isFill) && (frameCtx.lineWidth !== materialState.edgeWidth)) {
+            gl.lineWidth(materialState.edgeWidth);
+            frameCtx.lineWidth = materialState.edgeWidth;
+        }
         this._setMaterialInputsState && this._setMaterialInputsState(material);
         this._lastMaterialId = materialState.id;
     }
 
     gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, mesh.worldMatrix);
-    if (this._uModelNormalMatrix) {
+    if (isFill && this._uModelNormalMatrix) {
         gl.uniformMatrix4fv(this._uModelNormalMatrix, gl.FALSE, mesh.worldNormalMatrix);
     }
 
@@ -142,52 +155,83 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
 
     gl.uniform3fv(this._uOffset, meshState.offset);
 
-    // Bind VBOs
-    if (geometryState.id !== this._lastGeometryId) {
-        if (this._uPositionsDecodeMatrix) {
-            gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
-        }
-        if (this._aPosition) {
-            this._aPosition.bindArrayBuffer(geometryState.positionsBuf);
-            frameCtx.bindArray++;
-        }
-        if (this._aNormal) {
-            this._aNormal.bindArrayBuffer(geometryState.normalsBuf);
-            frameCtx.bindArray++;
-        }
-        if (geometryState.indicesBuf) {
-            geometryState.indicesBuf.bind();
-            frameCtx.bindArray++;
-            // gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
-            // frameCtx.drawElements++;
-        } else if (geometryState.positionsBuf) {
-            // gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
-            //  frameCtx.drawArrays++;
-        }
-        this._lastGeometryId = geometryState.id;
-    }
-
     this._setInputsState && this._setInputsState();
 
-    if (geometryState.indicesBuf) {
-        gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
-        frameCtx.drawElements++;
-    } else if (geometryState.positionsBuf) {
-        gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
-        frameCtx.drawArrays++;
+    // Bind VBOs
+    if (isFill) {
+        if (geometryState.id !== this._lastGeometryId) {
+            if (this._uPositionsDecodeMatrix) {
+                gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
+            }
+            if (this._aPosition) {
+                this._aPosition.bindArrayBuffer(geometryState.positionsBuf);
+                frameCtx.bindArray++;
+            }
+            if (this._aNormal) {
+                this._aNormal.bindArrayBuffer(geometryState.normalsBuf);
+                frameCtx.bindArray++;
+            }
+            if (geometryState.indicesBuf) {
+                geometryState.indicesBuf.bind();
+                frameCtx.bindArray++;
+                // gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
+                // frameCtx.drawElements++;
+            } else if (geometryState.positionsBuf) {
+                // gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
+                //  frameCtx.drawArrays++;
+            }
+            this._lastGeometryId = geometryState.id;
+        }
+
+        if (geometryState.indicesBuf) {
+            gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
+            frameCtx.drawElements++;
+        } else if (geometryState.positionsBuf) {
+            gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
+            frameCtx.drawArrays++;
+        }
+    } else {
+        let indicesBuf;
+        if (geometryState.primitive === gl.TRIANGLES) {
+            indicesBuf = geometry._getEdgeIndices();
+        } else if (geometryState.primitive === gl.LINES) {
+            indicesBuf = geometryState.indicesBuf;
+        }
+
+        if (indicesBuf) {
+            if (geometryState.id !== this._lastGeometryId) {
+                if (this._uPositionsDecodeMatrix) {
+                    gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
+                }
+                if (this._aPosition) {
+                    this._aPosition.bindArrayBuffer(geometryState.positionsBuf);
+                    frameCtx.bindArray++;
+                }
+                indicesBuf.bind();
+                frameCtx.bindArray++;
+                this._lastGeometryId = geometryState.id;
+            }
+
+            gl.drawElements(gl.LINES, indicesBuf.numItems, indicesBuf.itemType, 0);
+
+            frameCtx.drawElements++;
+        }
     }
 };
 
-EmphasisFillRenderer.prototype._allocate = function (mesh) {
+EmphasisRenderer.prototype._allocate = function (mesh) {
+    const isFill = this._isFill;
     const scene = mesh.scene;
-    const sectionPlanesState = scene._sectionPlanesState;
     const gl = scene.canvas.gl;
+    const sectionPlanesState = scene._sectionPlanesState;
+
     this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
     if (this._program.errors) {
         this.errors = this._program.errors;
         return;
     }
     const program = this._program;
+
     const getInputSetter = makeInputSetters(gl, program.handle, true);
     this._setInputsState = this._programSetup.setupInputs && this._programSetup.setupInputs(getInputSetter);
     this._setMaterialInputsState = this._programSetup.setupMaterialInputs && this._programSetup.setupMaterialInputs(getInputSetter);
@@ -195,9 +239,9 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
 
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uModelMatrix = program.getLocation("modelMatrix");
-    this._uModelNormalMatrix = program.getLocation("modelNormalMatrix");
+    this._uModelNormalMatrix = isFill && program.getLocation("modelNormalMatrix");
     this._uViewMatrix = program.getLocation("viewMatrix");
-    this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
+    this._uViewNormalMatrix = isFill && program.getLocation("viewNormalMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
     this._uSectionPlanes = [];
     for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
@@ -208,7 +252,7 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
         });
     }
     this._aPosition = program.getAttribute("position");
-    this._aNormal = program.getAttribute("normal");
+    this._aNormal = isFill && program.getAttribute("normal");
     this._uClippable = program.getLocation("clippable");
     this._uOffset = program.getLocation("offset");
     if (scene.logarithmicDepthBufferEnabled ) {
@@ -219,7 +263,7 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
     this._lastGeometryId = null;
 };
 
-EmphasisFillRenderer.prototype._bindProgram = function (frameCtx) {
+EmphasisRenderer.prototype._bindProgram = function (frameCtx) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const camera = scene.camera;
@@ -230,14 +274,12 @@ EmphasisFillRenderer.prototype._bindProgram = function (frameCtx) {
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
-    this._lastIndicesBufId = null;
     gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
     if (scene.logarithmicDepthBufferEnabled ) {
         const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
         gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
     }
-
     this._setLightInputState && this._setLightInputState();
 };
 
-export {EmphasisFillRenderer};
+export {EmphasisRenderer};
