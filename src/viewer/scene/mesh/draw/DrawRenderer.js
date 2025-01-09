@@ -116,45 +116,6 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
 
-        for (var i = 0, len = lightsState.lights.length; i < len; i++) {
-
-            light = lightsState.lights[i];
-
-            if (this._uLightAmbient[i]) {
-                gl.uniform4f(this._uLightAmbient[i], light.color[0], light.color[1], light.color[2], light.intensity);
-
-            } else {
-
-                if (this._uLightColor[i]) {
-                    gl.uniform4f(this._uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
-                }
-
-                if (this._uLightPos[i]) {
-                    gl.uniform3fv(this._uLightPos[i], light.pos);
-                    if (this._uLightAttenuation[i]) {
-                        gl.uniform1f(this._uLightAttenuation[i], light.attenuation);
-                    }
-                }
-
-                if (this._uLightDir[i]) {
-                    gl.uniform3fv(this._uLightDir[i], light.dir);
-                }
-
-                if (light.castsShadow) {
-                    if (this._uShadowViewMatrix[i]) {
-                        gl.uniformMatrix4fv(this._uShadowViewMatrix[i], false, light.getShadowViewMatrix());
-                    }
-                    if (this._uShadowProjMatrix[i]) {
-                        gl.uniformMatrix4fv(this._uShadowProjMatrix[i], false, light.getShadowProjMatrix());
-                    }
-                    const shadowRenderBuf = this._uShadowMap[i] && light.getShadowRenderBuf();
-                    if (shadowRenderBuf) {
-                        this._uShadowMap[i](shadowRenderBuf.getTexture());
-                    }
-                }
-            }
-        }
-
         this._setLightInputState && this._setLightInputState();
     }
 
@@ -310,55 +271,9 @@ DrawRenderer.prototype._allocate = function (mesh) {
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
-    this._uLightAmbient = [];
-    this._uLightColor = [];
-    this._uLightDir = [];
-    this._uLightPos = [];
-    this._uLightAttenuation = [];
-    this._uShadowViewMatrix = [];
-    this._uShadowProjMatrix = [];
 
     if (scene.logarithmicDepthBufferEnabled) {
         this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
-    }
-
-    const lights = lightsState.lights;
-    let light;
-
-    for (var i = 0, len = lights.length; i < len; i++) {
-        light = lights[i];
-        switch (light.type) {
-
-            case "ambient":
-                this._uLightAmbient[i] = program.getLocation("lightAmbient");
-                break;
-
-            case "dir":
-                this._uLightColor[i] = program.getLocation("lightColor" + i);
-                this._uLightPos[i] = null;
-                this._uLightDir[i] = program.getLocation("lightDir" + i);
-                break;
-
-            case "point":
-                this._uLightColor[i] = program.getLocation("lightColor" + i);
-                this._uLightPos[i] = program.getLocation("lightPos" + i);
-                this._uLightDir[i] = null;
-                this._uLightAttenuation[i] = program.getLocation("lightAttenuation" + i);
-                break;
-
-            case "spot":
-                this._uLightColor[i] = program.getLocation("lightColor" + i);
-                this._uLightPos[i] = program.getLocation("lightPos" + i);
-                this._uLightDir[i] = program.getLocation("lightDir" + i);
-                this._uLightAttenuation[i] = program.getLocation("lightAttenuation" + i);
-                break;
-        }
-
-        if (light.castsShadow) {
-            this._uShadowViewMatrix[i] = program.getLocation("shadowViewMatrix" + i);
-            this._uShadowProjMatrix[i] = program.getLocation("shadowProjMatrix" + i);
-            this._uShadowMap[i] = getInputSetter("shadowMap" + i);
-        }
     }
 
     this._uSectionPlanes = [];
