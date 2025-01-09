@@ -273,6 +273,7 @@ export const createLightSetup = function(lightsState) {
     const lights = lightsState.lights;
     return {
         appendDefinitions: (src) => {
+            src.push("uniform vec4 lightAmbient;");
             for (let i = 0, len = lights.length; i < len; i++) {
                 const light = lights[i];
                 if (light.type === "ambient") {
@@ -287,10 +288,11 @@ export const createLightSetup = function(lightsState) {
                 }
                 if (light.type === "spot") { // not used
                     src.push("uniform vec3 lightPos" + i + ";");
+                    src.push("uniform vec3 lightDir" + i + ";");
                 }
             }
-
         },
+        getAmbientColor: () => "lightAmbient.rgb * lightAmbient.a",
         getDirectionalLights: (viewMatrix, viewPosition) => {
             return lights.map((light, i) => {
                 const withViewLightDir = direction => ({
@@ -315,9 +317,15 @@ export const createLightSetup = function(lightsState) {
             }).filter(v => v);
         },
         setupInputs: (getUniformSetter) => {
+            const uLightAmbient = getUniformSetter("lightAmbient");
+
             const uLightColor = [];
             const uLightDir = [];
             const uLightPos = [];
+
+            const uShadowViewMatrix = [];
+            const uShadowProjMatrix = [];
+            const uShadowMap        = [];
 
             for (let i = 0, len = lights.length; i < len; i++) {
                 const light = lights[i];
@@ -332,10 +340,22 @@ export const createLightSetup = function(lightsState) {
                     uLightPos[i] = getUniformSetter("lightPos" + i);
                     uLightDir[i] = null;
                     break;
+                case "spot":
+                    uLightColor[i] = getUniformSetter("lightColor" + i);
+                    uLightPos[i] = getUniformSetter("lightPos" + i);
+                    uLightDir[i] = getUniformSetter("lightDir" + i);
+                    break;
+                }
+
+                if (light.castsShadow) {
+                    uShadowViewMatrix[i] = getUniformSetter("shadowViewMatrix" + i);
+                    uShadowProjMatrix[i] = getUniformSetter("shadowProjMatrix" + i);
+                    uShadowMap[i]        = getUniformSetter("shadowMap" + i);
                 }
             }
 
             return () => {
+                uLightAmbient(lightsState.getAmbientColorAndIntensity());
                 for (let i = 0, len = lights.length; i < len; i++) {
                     const light = lights[i];
                     if (uLightColor[i]) {
@@ -350,6 +370,18 @@ export const createLightSetup = function(lightsState) {
                     }
                     if (uLightDir[i]) {
                         uLightDir[i](light.dir);
+                    }
+                    if (light.castsShadow) {
+                        if (uShadowViewMatrix[i]) {
+                            uShadowViewMatrix[i](light.getShadowViewMatrix());
+                        }
+                        if (uShadowProjMatrix[i]) {
+                            uShadowProjMatrix[i](light.getShadowProjMatrix());
+                        }
+                        const shadowRenderBuf = uShadowMap[i] && light.getShadowRenderBuf();
+                        if (shadowRenderBuf) {
+                            uShadowMap[i](shadowRenderBuf.getTexture());
+                        }
                     }
                 }
             };
