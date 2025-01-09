@@ -1297,7 +1297,29 @@ class Mesh extends Component {
      * @private
      */
     compile() {
-        const drawHash = this._makeDrawHash();
+        const scene = this.scene;
+        const state = this._state;
+        const hash = [
+            scene.canvas.canvas.id,
+            scene._sectionPlanesState.getHash()
+        ];
+        if (state.stationary) {
+            hash.push("/s");
+        }
+        if (state.billboard === "none") {
+            hash.push("/n");
+        } else if (state.billboard === "spherical") {
+            hash.push("/s");
+        } else if (state.billboard === "cylindrical") {
+            hash.push("/c");
+        }
+        hash.push(";");
+
+        const drawHash = hash.concat([
+            scene.gammaOutput ? "go" : "",
+            scene._lightsState.getHash(),
+            state.receivesShadow ? "/rs" : ""
+        ]).join("");
         if (this._state.drawHash !== drawHash) {
             this._state.drawHash = drawHash;
             this._putDrawRenderers();
@@ -1306,7 +1328,7 @@ class Mesh extends Component {
             this._emphasisFillRenderer  = EmphasisRenderer.get(this, true);
             this._emphasisEdgesRenderer = EmphasisRenderer.get(this, false);
         }
-        const pickOcclusionHash = this._makePickOcclusionHash();
+        const pickOcclusionHash = hash.join("");
         if (this._state.pickOcclusionHash !== pickOcclusionHash) {
             this._state.pickOcclusionHash = pickOcclusionHash;
             this._putPickRenderers();
@@ -1392,53 +1414,6 @@ class Mesh extends Component {
         if (this._occlusionRenderer) {
             this._occlusionRenderer.webglContextRestored();
         }
-    }
-
-    _makeDrawHash() {
-        const scene = this.scene;
-        const hash = [
-            scene.canvas.canvas.id,
-            scene.gammaOutput ? "go" : "",
-            scene._lightsState.getHash(),
-            scene._sectionPlanesState.getHash()
-        ];
-        const state = this._state;
-        if (state.stationary) {
-            hash.push("/s");
-        }
-        if (state.billboard === "none") {
-            hash.push("/n");
-        } else if (state.billboard === "spherical") {
-            hash.push("/s");
-        } else if (state.billboard === "cylindrical") {
-            hash.push("/c");
-        }
-        if (state.receivesShadow) {
-            hash.push("/rs");
-        }
-        hash.push(";");
-        return hash.join("");
-    }
-
-    _makePickOcclusionHash() {
-        const scene = this.scene;
-        const hash = [
-            scene.canvas.canvas.id,
-            scene._sectionPlanesState.getHash()
-        ];
-        const state = this._state;
-        if (state.stationary) {
-            hash.push("/s");
-        }
-        if (state.billboard === "none") {
-            hash.push("/n");
-        } else if (state.billboard === "spherical") {
-            hash.push("/s");
-        } else if (state.billboard === "cylindrical") {
-            hash.push("/c");
-        }
-        hash.push(";");
-        return hash.join("");
     }
 
     _buildAABB(worldMatrix, aabb) {
