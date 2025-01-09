@@ -1382,7 +1382,7 @@ class Mesh extends Component {
             this._pickMeshRenderer.webglContextRestored();
         }
         if (this._pickTriangleRenderer) {
-            this._pickMeshRenderer.webglContextRestored();
+            this._pickTriangleRenderer.webglContextRestored();
         }
         if (this._occlusionRenderer) {
             this._occlusionRenderer.webglContextRestored();
