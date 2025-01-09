@@ -263,13 +263,30 @@ class Mesh extends Component {
             isUI: cfg.isUI
         });
 
-        this._drawRenderer = null;
-        this._shadowRenderer = null;
-        this._emphasisFillRenderer = null;
-        this._emphasisEdgesRenderer = null;
-        this._pickMeshRenderer = null;
-        this._pickTriangleRenderer = null;
-        this._occlusionRenderer = null;
+        const wrapRenderer = (getInstance) => {
+            let instance = null;
+            return {
+                get: () => { return instance ||= getInstance(); },
+                getId: () => instance.id,
+                webglContextRestored: () => instance && instance.webglContextRestored(),
+                put: () => {
+                    if (instance) {
+                        instance.put();
+                        instance = null;
+                    }
+                }
+            };
+        };
+
+        this._renderers = {
+            _drawRenderer:          wrapRenderer(() => DrawRenderer.get(this)),
+            _shadowRenderer:        wrapRenderer(() => ShadowRenderer.get(this)),
+            _emphasisFillRenderer:  wrapRenderer(() => EmphasisRenderer.get(this, true)),
+            _emphasisEdgesRenderer: wrapRenderer(() => EmphasisRenderer.get(this, false)),
+            _pickMeshRenderer:      wrapRenderer(() => PickMeshRenderer.get(this)),
+            _pickTriangleRenderer:  wrapRenderer(() => PickTriangleRenderer.get(this)),
+            _occlusionRenderer:     wrapRenderer(() => OcclusionRenderer.get(this))
+        };
 
         this._geometry = cfg.geometry ? this._checkComponent2(["ReadableGeometry", "VBOGeometry"], cfg.geometry) : this.scene.geometry;
         this._material = cfg.material ? this._checkComponent2(["PhongMaterial", "MetallicMaterial", "SpecularMaterial", "LambertMaterial"], cfg.material) : this.scene.material;
@@ -1322,20 +1339,24 @@ class Mesh extends Component {
         ]).join("");
         if (this._state.drawHash !== drawHash) {
             this._state.drawHash = drawHash;
-            this._putDrawRenderers();
-            this._drawRenderer = DrawRenderer.get(this);
-            // this._shadowRenderer = ShadowRenderer.get(this);
-            this._emphasisFillRenderer  = EmphasisRenderer.get(this, true);
-            this._emphasisEdgesRenderer = EmphasisRenderer.get(this, false);
+            this._renderers._drawRenderer.put();
+            this._renderers._shadowRenderer.put();
+            this._renderers._emphasisFillRenderer.put();
+            this._renderers._emphasisEdgesRenderer.put();
+            this._renderers._drawRenderer.get();
+            // this._renderers._shadowRenderer.get();
+            this._renderers._emphasisFillRenderer.get();
+            this._renderers._emphasisEdgesRenderer.get();
         }
         const pickOcclusionHash = hash.join("");
         if (this._state.pickOcclusionHash !== pickOcclusionHash) {
             this._state.pickOcclusionHash = pickOcclusionHash;
-            this._putPickRenderers();
-            this._pickMeshRenderer = PickMeshRenderer.get(this);
+            this._renderers._pickMeshRenderer.put();
+            this._renderers._pickTriangleRenderer.put();
+            this._renderers._pickMeshRenderer.get();
             if (this._state.occluder) {
-                this._putOcclusionRenderer();
-                this._occlusionRenderer = OcclusionRenderer.get(this);
+                this._renderers._occlusionRenderer.put();
+                this._renderers._occlusionRenderer.get();
             }
         }
     }
@@ -1393,27 +1414,7 @@ class Mesh extends Component {
     }
 
     _webglContextRestored() {
-        if (this._drawRenderer) {
-            this._drawRenderer.webglContextRestored();
-        }
-        if (this._shadowRenderer) {
-            this._shadowRenderer.webglContextRestored();
-        }
-        if (this._emphasisFillRenderer) {
-            this._emphasisFillRenderer.webglContextRestored();
-        }
-        if (this._emphasisEdgesRenderer) {
-            this._emphasisEdgesRenderer.webglContextRestored();
-        }
-        if (this._pickMeshRenderer) {
-            this._pickMeshRenderer.webglContextRestored();
-        }
-        if (this._pickTriangleRenderer) {
-            this._pickTriangleRenderer.webglContextRestored();
-        }
-        if (this._occlusionRenderer) {
-            this._occlusionRenderer.webglContextRestored();
-        }
+        Object.values(this._renderers).forEach(r => r.webglContextRestored());
     }
 
     _buildAABB(worldMatrix, aabb) {
@@ -1552,43 +1553,6 @@ class Mesh extends Component {
         return this.translate(zAxis, distance);
     }
 
-    _putDrawRenderers() {
-        if (this._drawRenderer) {
-            this._drawRenderer.put();
-            this._drawRenderer = null;
-        }
-        if (this._shadowRenderer) {
-            this._shadowRenderer.put();
-            this._shadowRenderer = null;
-        }
-        if (this._emphasisFillRenderer) {
-            this._emphasisFillRenderer.put();
-            this._emphasisFillRenderer = null;
-        }
-        if (this._emphasisEdgesRenderer) {
-            this._emphasisEdgesRenderer.put();
-            this._emphasisEdgesRenderer = null;
-        }
-    }
-
-    _putPickRenderers() {
-        if (this._pickMeshRenderer) {
-            this._pickMeshRenderer.put();
-            this._pickMeshRenderer = null;
-        }
-        if (this._pickTriangleRenderer) {
-            this._pickTriangleRenderer.put();
-            this._pickTriangleRenderer = null;
-        }
-    }
-
-    _putOcclusionRenderer() {
-        if (this._occlusionRenderer) {
-            this._occlusionRenderer.put();
-            this._occlusionRenderer = null;
-        }
-    }
-
     /**
      * Comparison function used by the renderer to determine the order in which xeokit should render the Mesh, relative to to other Meshes.
      *
@@ -1602,7 +1566,7 @@ class Mesh extends Component {
      */
     stateSortCompare(mesh1, mesh2) {
         return (mesh1._state.layer - mesh2._state.layer)
-            || (mesh1._drawRenderer.id - mesh2._drawRenderer.id) // Program state
+            || (mesh1._renderers._drawRenderer.getId() - mesh2._renderers._drawRenderer.getId()) // Program state
             || (mesh1._material._state.id - mesh2._material._state.id) // Material state
             || (mesh1._geometry._state.id - mesh2._geometry._state.id); // Geometry state
     }
@@ -1740,16 +1704,12 @@ class Mesh extends Component {
 
     /** @private  */
     drawColorOpaque(frameCtx) {
-        if (this._drawRenderer || (this._drawRenderer = DrawRenderer.get(this))) {
-            this._drawRenderer.drawMesh(frameCtx, this);
-        }
+        this._renderers._drawRenderer.get().drawMesh(frameCtx, this);
     }
 
     /** @private  */
     drawColorTransparent(frameCtx) {
-        if (this._drawRenderer || (this._drawRenderer = DrawRenderer.get(this))) {
-            this._drawRenderer.drawMesh(frameCtx, this);
-        }
+        this._renderers._drawRenderer.get().drawMesh(frameCtx, this);
     }
 
     // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
@@ -1760,87 +1720,65 @@ class Mesh extends Component {
 
     /** @private  */
     drawSilhouetteXRayed(frameCtx) {
-        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisRenderer.get(this, true))) {
-            this._emphasisFillRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
-        }
+        this._renderers._emphasisFillRenderer.get().drawMesh(frameCtx, this, 0); // 0 == xray
     }
 
     /** @private  */
     drawSilhouetteHighlighted(frameCtx) {
-        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisRenderer.get(this, true))) {
-            this._emphasisFillRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
-        }
+        this._renderers._emphasisFillRenderer.get().drawMesh(frameCtx, this, 1); // 1 == highlight
     }
 
     /** @private  */
     drawSilhouetteSelected(frameCtx) {
-        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisRenderer.get(this, true))) {
-            this._emphasisFillRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
-        }
+        this._renderers._emphasisFillRenderer.get().drawMesh(frameCtx, this, 2); // 2 == selected
     }
 
     // ---------------------- EDGES RENDERING -----------------------------------
 
     /** @private  */
     drawEdgesColorOpaque(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisRenderer.get(this, false))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 3); // 3 == edges
-        }
+        this._renderers._emphasisEdgesRenderer.get().drawMesh(frameCtx, this, 3); // 3 == edges
     }
 
     /** @private  */
     drawEdgesColorTransparent(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisRenderer.get(this, false))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 3); // 3 == edges
-        }
+        this._renderers._emphasisEdgesRenderer.get().drawMesh(frameCtx, this, 3); // 3 == edges
     }
 
     /** @private  */
     drawEdgesXRayed(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisRenderer.get(this, false))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
-        }
+        this._renderers._emphasisEdgesRenderer.get().drawMesh(frameCtx, this, 0); // 0 == xray
     }
 
     /** @private  */
     drawEdgesHighlighted(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisRenderer.get(this, false))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
-        }
+        this._renderers._emphasisEdgesRenderer.get().drawMesh(frameCtx, this, 1); // 1 == highlight
     }
 
     /** @private  */
     drawEdgesSelected(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisRenderer.get(this, false))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
-        }
+        this._renderers._emphasisEdgesRenderer.get().drawMesh(frameCtx, this, 2); // 2 == selected
     }
 
     // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
 
     /** @private  */
     drawOcclusion(frameCtx) {
-        if (this._state.occluder && this._occlusionRenderer || (this._occlusionRenderer = OcclusionRenderer.get(this))) {
-            this._occlusionRenderer.drawMesh(frameCtx, this);
-        }
+        this._renderers._occlusionRenderer.get().drawMesh(frameCtx, this);
     }
 
     // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
 
     /** @private  */
     drawShadow(frameCtx) {
-        if (this._shadowRenderer || (this._shadowRenderer = ShadowRenderer.get(this))) {
-            this._shadowRenderer.drawMesh(frameCtx, this);
-        }
+        this._renderers._shadowRenderer.get().drawMesh(frameCtx, this);
     }
 
     // ---------------------- PICKING RENDERING ----------------------------------
 
     /** @private  */
     drawPickMesh(frameCtx) {
-        if (this._pickMeshRenderer || (this._pickMeshRenderer = PickMeshRenderer.get(this))) {
-            this._pickMeshRenderer.drawMesh(frameCtx, this);
-        }
+        this._renderers._pickMeshRenderer.get().drawMesh(frameCtx, this);
     }
 
     /** @private
@@ -1851,9 +1789,7 @@ class Mesh extends Component {
 
     /** @private  */
     drawPickTriangles(frameCtx) {
-        if (this._pickTriangleRenderer || (this._pickTriangleRenderer = PickTriangleRenderer.get(this))) {
-            this._pickTriangleRenderer.drawMesh(frameCtx, this);
-        }
+        this._renderers._pickTriangleRenderer.get().drawMesh(frameCtx, this);
     }
 
     /** @private */
@@ -1883,9 +1819,8 @@ class Mesh extends Component {
      */
     destroy() {
         super.destroy(); // xeokit.Object
-        this._putDrawRenderers();
-        this._putPickRenderers();
-        this._putOcclusionRenderer();
+        Object.values(this._renderers).forEach(r => r.put());
+
         this.scene._renderer.putPickID(this._state.pickID); // TODO: somehow puch this down into xeokit framework?
         if (this._isObject) {
             this.scene._deregisterObject(this);
