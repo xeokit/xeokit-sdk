@@ -24,7 +24,8 @@ export function EmphasisFillShaderSource(mesh) {
             });
             // TODO: A blending mode for emphasis materials, to select add/multiply/mix
             //src.push("vColor = vec4((mix(reflectedColor, fillColor.rgb, 0.7)), fillColor.a);");
-            src.push("vColor = vec4(reflectedColor * fillColor.rgb, fillColor.a);");
+            const ambientComponent = lightSetup ? (lightSetup.getAmbientColor() + " + ") : "";
+            src.push(`vColor = vec4((${ambientComponent}reflectedColor) * fillColor.rgb, fillColor.a);`);
             //src.push("vColor = vec4(reflectedColor + fillColor.rgb, fillColor.a);");
         },
         appendFragmentDefinitions: (src) => {
