@@ -31,7 +31,7 @@ OcclusionRenderer.get = function (mesh) {
         mesh.scene.canvas.canvas.id,
         mesh.scene._sectionPlanesState.getHash(),
         mesh._geometry._state.hash,
-        mesh._state.occlusionHash
+        mesh._state.pickOcclusionHash
     ].join(";");
     let renderer = renderers[hash];
     if (!renderer) {

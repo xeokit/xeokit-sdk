@@ -256,7 +256,7 @@ class Mesh extends Component {
             colorize: null,
             pickID: this.scene._renderer.getPickID(this),
             drawHash: "",
-            pickHash: "",
+            pickOcclusionHash: "",
             offset: math.vec3(),
             origin: null,
             originHash: null,
@@ -1306,16 +1306,12 @@ class Mesh extends Component {
             this._emphasisFillRenderer  = EmphasisRenderer.get(this, true);
             this._emphasisEdgesRenderer = EmphasisRenderer.get(this, false);
         }
-        const pickHash = this._makePickHash();
-        if (this._state.pickHash !== pickHash) {
-            this._state.pickHash = pickHash;
+        const pickOcclusionHash = this._makePickOcclusionHash();
+        if (this._state.pickOcclusionHash !== pickOcclusionHash) {
+            this._state.pickOcclusionHash = pickOcclusionHash;
             this._putPickRenderers();
             this._pickMeshRenderer = PickMeshRenderer.get(this);
-        }
-        if (this._state.occluder) {
-            const occlusionHash = this._makeOcclusionHash();
-            if (this._state.occlusionHash !== occlusionHash) {
-                this._state.occlusionHash = occlusionHash;
+            if (this._state.occluder) {
                 this._putOcclusionRenderer();
                 this._occlusionRenderer = OcclusionRenderer.get(this);
             }
@@ -1424,28 +1420,7 @@ class Mesh extends Component {
         return hash.join("");
     }
 
-    _makePickHash() {
-        const scene = this.scene;
-        const hash = [
-            scene.canvas.canvas.id,
-            scene._sectionPlanesState.getHash()
-        ];
-        const state = this._state;
-        if (state.stationary) {
-            hash.push("/s");
-        }
-        if (state.billboard === "none") {
-            hash.push("/n");
-        } else if (state.billboard === "spherical") {
-            hash.push("/s");
-        } else if (state.billboard === "cylindrical") {
-            hash.push("/c");
-        }
-        hash.push(";");
-        return hash.join("");
-    }
-
-    _makeOcclusionHash() {
+    _makePickOcclusionHash() {
         const scene = this.scene;
         const hash = [
             scene.canvas.canvas.id,
