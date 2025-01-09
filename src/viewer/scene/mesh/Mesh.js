@@ -9,8 +9,7 @@ import {createRTCViewMat} from '../math/rtcCoords.js';
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {DrawRenderer} from "./draw/DrawRenderer.js";
-import {EmphasisFillRenderer} from "./emphasis/EmphasisFillRenderer.js";
-import {EmphasisEdgesRenderer} from "./emphasis/EmphasisEdgesRenderer.js";
+import {EmphasisRenderer} from "./emphasis/EmphasisRenderer.js";
 import {PickMeshRenderer} from "./pick/PickMeshRenderer.js";
 import {PickTriangleRenderer} from "./pick/PickTriangleRenderer.js";
 import {OcclusionRenderer} from "./occlusion/OcclusionRenderer.js";
@@ -1304,8 +1303,8 @@ class Mesh extends Component {
             this._putDrawRenderers();
             this._drawRenderer = DrawRenderer.get(this);
             // this._shadowRenderer = ShadowRenderer.get(this);
-            this._emphasisFillRenderer = EmphasisFillRenderer.get(this);
-            this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this);
+            this._emphasisFillRenderer  = EmphasisRenderer.get(this, true);
+            this._emphasisEdgesRenderer = EmphasisRenderer.get(this, false);
         }
         const pickHash = this._makePickHash();
         if (this._state.pickHash !== pickHash) {
@@ -1811,21 +1810,21 @@ class Mesh extends Component {
 
     /** @private  */
     drawSilhouetteXRayed(frameCtx) {
-        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
+        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisRenderer.get(this, true))) {
             this._emphasisFillRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
         }
     }
 
     /** @private  */
     drawSilhouetteHighlighted(frameCtx) {
-        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
+        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisRenderer.get(this, true))) {
             this._emphasisFillRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
         }
     }
 
     /** @private  */
     drawSilhouetteSelected(frameCtx) {
-        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
+        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisRenderer.get(this, true))) {
             this._emphasisFillRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
         }
     }
@@ -1834,35 +1833,35 @@ class Mesh extends Component {
 
     /** @private  */
     drawEdgesColorOpaque(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
+        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisRenderer.get(this, false))) {
             this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 3); // 3 == edges
         }
     }
 
     /** @private  */
     drawEdgesColorTransparent(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
+        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisRenderer.get(this, false))) {
             this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 3); // 3 == edges
         }
     }
 
     /** @private  */
     drawEdgesXRayed(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
+        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisRenderer.get(this, false))) {
             this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
         }
     }
 
     /** @private  */
     drawEdgesHighlighted(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
+        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisRenderer.get(this, false))) {
             this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
         }
     }
 
     /** @private  */
     drawEdgesSelected(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
+        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisRenderer.get(this, false))) {
             this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
         }
     }
