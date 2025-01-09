@@ -128,9 +128,11 @@ export class TrianglesSnapRenderer extends VBORenderer{
         //=============================================================
 
         if (frameCtx.snapMode === "edge") {
-            state.edgeIndicesBuf.bind();
-            gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
-            state.edgeIndicesBuf.unbind(); // needed?
+            if (state.edgeIndicesBuf) {
+                state.edgeIndicesBuf.bind();
+                gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
+                state.edgeIndicesBuf.unbind(); // needed?
+            }
         } else {
             gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
         }

@@ -19,7 +19,9 @@ export class TrianglesBatchingRenderer extends VBORenderer {
         } = drawCfg;
 
         if (this._edges) {
-            gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
+            if (state.edgeIndicesBuf) {
+                gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
+            }
         } else {
             const count = frameCtx.pickElementsCount || state.indicesBuf.numItems;
             const offset = frameCtx.pickElementsOffset ? frameCtx.pickElementsOffset * state.indicesBuf.itemByteSize : 0;

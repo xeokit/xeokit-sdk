@@ -407,7 +407,7 @@ export class VBORenderer {
         }
 
         if (this._instancing) {
-            if (this._edges) {
+            if (this._edges && state.edgeIndicesBuf) {
                 state.edgeIndicesBuf.bind();
             } else {
                 if (state.indicesBuf) {
@@ -415,7 +415,7 @@ export class VBORenderer {
                 }
             }
         } else {
-            if (this._edges) {
+            if (this._edges && state.edgeIndicesBuf) {
                 state.edgeIndicesBuf.bind();
             } else {
                 if (state.indicesBuf) {

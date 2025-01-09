@@ -134,10 +134,12 @@ export class TrianglesSnapRenderer extends VBORenderer {
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         gl.vertexAttribDivisor(this._aFlags.location, 1);
 
-        if (frameCtx.snapMode === "edge") {
-            state.edgeIndicesBuf.bind();
-            gl.drawElementsInstanced(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0, state.numInstances);
-            state.edgeIndicesBuf.unbind(); // needed?
+        if (frameCtx.snapMode === "edge" ) {
+            if (state.edgeIndicesBuf) {
+                state.edgeIndicesBuf.bind();
+                gl.drawElementsInstanced(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0, state.numInstances);
+                state.edgeIndicesBuf.unbind(); // needed?
+            }
         } else {
             gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
         }
