@@ -1,6 +1,6 @@
 import {createGammaOutputSetup} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
-const tmpVec4 = math.vec4();
+const tempVec4 = math.vec4();
 
 import {LinearEncoding, sRGBEncoding} from "../../constants/constants.js";
 const TEXTURE_DECODE_FUNCS = {};
@@ -178,10 +178,10 @@ export const DrawShaderSource = function(mesh) {
     const materialAlphaModeCutoff = (p || m || s) && setupUniform("materialAlphaModeCutoff", "vec4",  mtl => {
         const alpha = mtl.alpha;
         if ((alpha !== undefined) && (alpha !== null)) {
-            tmpVec4[0] = alpha;
-            tmpVec4[1] = (mtl.alphaMode === 1 ? 1 : 0);
-            tmpVec4[2] = mtl.alphaCutoff;
-            return tmpVec4;
+            tempVec4[0] = alpha;
+            tempVec4[1] = (mtl.alphaMode === 1 ? 1 : 0);
+            tempVec4[2] = mtl.alphaCutoff;
+            return tempVec4;
         } else {
             return null;
         }
@@ -234,7 +234,6 @@ export const DrawShaderSource = function(mesh) {
                 src.push("out vec4 vColor;");
             }
             if (receivesShadow) {
-                src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
                 for (let i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
                     if (lightsState.lights[i].castsShadow) {
                         src.push("uniform mat4 shadowViewMatrix" + i + ";");
@@ -494,9 +493,6 @@ export const DrawShaderSource = function(mesh) {
                         continue;
                     }
                     src.push("uniform vec4 lightColor" + i + ";");
-                    if (light.type === "point") {
-                        src.push("uniform vec3 lightAttenuation" + i + ";");
-                    }
                     if (light.type === "dir" && light.space === "view") {
                         src.push("uniform vec3 lightDir" + i + ";");
                     }
@@ -832,9 +828,80 @@ export const DrawShaderSource = function(mesh) {
             return (binders.length > 0) && (mtl => binders.forEach(bind => bind(mtl)));
         },
         setupLightInputs: (getInputSetter) => {
+            const uLightAmbient = (phongMaterial || (!hasNormalsAndLights)) && getInputSetter("lightAmbient");
+
+            const uLightColor = [];
+            const uLightDir = [];
+            const uLightPos = [];
+
+            const uShadowViewMatrix = [];
+            const uShadowProjMatrix = [];
+            const uShadowMap        = [];
+
+            if (normals) {
+                for (let i = 0, len = lightsState.lights.length; i < len; i++) {
+                    const light = lightsState.lights[i];
+                    switch (light.type) {
+                    case "dir":
+                        uLightColor[i] = getInputSetter("lightColor" + i);
+                        uLightPos[i] = null;
+                        uLightDir[i] = getInputSetter("lightDir" + i);
+                        break;
+                    case "point":
+                        uLightColor[i] = getInputSetter("lightColor" + i);
+                        uLightPos[i] = getInputSetter("lightPos" + i);
+                        uLightDir[i] = null;
+                        break;
+                    case "spot":
+                        uLightColor[i] = getInputSetter("lightColor" + i);
+                        uLightPos[i] = getInputSetter("lightPos" + i);
+                        uLightDir[i] = getInputSetter("lightDir" + i);
+                        break;
+                    }
+
+                    if (light.castsShadow) {
+                        uShadowViewMatrix[i] = getInputSetter("shadowViewMatrix" + i);
+                        uShadowProjMatrix[i] = getInputSetter("shadowProjMatrix" + i);
+                        uShadowMap[i]        = getInputSetter("shadowMap" + i);
+                    }
+                }
+            }
+
             const uLightMap = lightMap && lightMap.setupInputs(getInputSetter);
             const uReflectionMap = reflectionMap && reflectionMap.setupInputs(getInputSetter);
             return () => {
+                uLightAmbient && uLightAmbient(lightsState.getAmbientColorAndIntensity());
+                if (normals) {
+                    for (let i = 0, len = lightsState.lights.length; i < len; i++) {
+                        const light = lightsState.lights[i];
+                        if (uLightColor[i]) {
+                            tempVec4[0] = light.color[0];
+                            tempVec4[1] = light.color[1];
+                            tempVec4[2] = light.color[2];
+                            tempVec4[3] = light.intensity;
+                            uLightColor[i](tempVec4);
+                        }
+                        if (uLightPos[i]) {
+                            uLightPos[i](light.pos);
+                        }
+                        if (uLightDir[i]) {
+                            uLightDir[i](light.dir);
+                        }
+                        if (light.castsShadow) {
+                            if (uShadowViewMatrix[i]) {
+                                uShadowViewMatrix[i](light.getShadowViewMatrix());
+                            }
+                            if (uShadowProjMatrix[i]) {
+                                uShadowProjMatrix[i](light.getShadowProjMatrix());
+                            }
+                            const shadowRenderBuf = uShadowMap[i] && light.getShadowRenderBuf();
+                            if (shadowRenderBuf) {
+                                uShadowMap[i](shadowRenderBuf.getTexture());
+                            }
+                        }
+                    }
+                }
+
                 uLightMap && uLightMap();
                 uReflectionMap && uReflectionMap();
             };
