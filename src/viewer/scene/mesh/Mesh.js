@@ -279,37 +279,35 @@ class Mesh extends Component {
                         }
                         const hash = rendererClass.getHash(mesh, ...restArgs);
                         if (! (hash in renderersCache[mtlKey])) {
-                            const instance = new rendererClass(mesh, ...restArgs);
-                            if (instance.errors) {
-                                console.log(instance.errors.join("\n"));
+                            const renderer = new rendererClass(mesh, ...restArgs);
+                            if (renderer.errors) {
+                                console.log(renderer.errors.join("\n"));
                                 return null;
                             }
-                            instance.id = ids.addItem({});
-                            instance._useCount = 0;
-                            instance._delete = () => { delete renderersCache[mtlKey][hash]; };
-                            renderersCache[mtlKey][hash] = instance;
+                            const id = ids.addItem({});
+                            renderersCache[mtlKey][hash] = {
+                                renderer: renderer,
+                                id: id,
+                                useCount: 0,
+                                delete: () => {
+                                    ids.removeItem(id);
+                                    if (renderer._program) {
+                                        renderer._program.destroy();
+                                    }
+                                    delete renderersCache[mtlKey][hash];
+                                    stats.memory.programs--;
+                                }
+                            };
                             stats.memory.programs++;
                         }
                         instance = renderersCache[mtlKey][hash];
-                        instance._useCount++;
+                        instance.useCount++;
                     }
-                    return instance;
+                    return instance.renderer;
                 },
                 getId: () => instance.id,
-                webglContextRestored: () => { if (instance) { instance._program = null; } },
-                put: () => {
-                    if (instance) {
-                        if (--instance._useCount === 0) {
-                            ids.removeItem(instance.id);
-                            if (instance._program) {
-                                instance._program.destroy();
-                            }
-                            instance._delete();
-                            stats.memory.programs--;
-                        }
-                        instance = null;
-                    }
-                }
+                webglContextRestored: () => { if (instance) {                                  instance.delete();   instance = null; } },
+                put:                  () => { if (instance) { if (--instance.useCount === 0) { instance.delete(); } instance = null; } }
             };
         };
 
