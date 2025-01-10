@@ -15,48 +15,56 @@ const tempVec3a = math.vec3();
 /**
  * @private
  */
-const PickTriangleRenderer = function (hash, mesh) {
-    this._hash = hash;
+const PickTriangleRenderer = function(mesh) {
     this._scene = mesh.scene;
     this._useCount = 0;
     this._programSetup = PickTriangleShaderSource(mesh);
     this._allocate(mesh);
 };
 
+PickTriangleRenderer.getHash = (mesh, ...rest) => [
+    mesh.scene.canvas.canvas.id,
+    mesh.scene._sectionPlanesState.getHash(),
+    mesh._geometry._state.compressGeometry ? "cp" : "",
+    mesh._state.hash
+].join(";");
+
+const rendererClass = PickTriangleRenderer;
+
 const renderers = {};
 
-PickTriangleRenderer.get = function (mesh) {
-    const hash = [
-        mesh.scene.canvas.canvas.id,
-        mesh.scene._sectionPlanesState.getHash(),
-        mesh._geometry._state.compressGeometry ? "cp" : "",
-        mesh._state.hash
-    ].join(";");
-    let renderer = renderers[hash];
-    if (!renderer) {
-        renderer = new PickTriangleRenderer(hash, mesh);
+rendererClass.getInstance = function(matKey, mesh, ...rest) {
+    if (! (matKey in renderers)) {
+        renderers[matKey] = { };
+    }
+    const hash = rendererClass.getHash(mesh, ...rest);
+    if (! (hash in renderers[matKey])) {
+        const renderer = new rendererClass(mesh, ...rest);
         if (renderer.errors) {
             console.log(renderer.errors.join("\n"));
             return null;
         }
-        renderers[hash] = renderer;
+        renderer._hash = hash;
+        renderer._delete = () => { delete renderers[matKey][hash]; };
+        renderers[matKey][hash] = renderer;
         stats.memory.programs++;
     }
+    const renderer = renderers[matKey][hash];
     renderer._useCount++;
     return renderer;
 };
 
-PickTriangleRenderer.prototype.put = function () {
+rendererClass.prototype.put = function () {
     if (--this._useCount === 0) {
         if (this._program) {
             this._program.destroy();
         }
-        delete renderers[this._hash];
+        this._delete();
         stats.memory.programs--;
     }
 };
 
-PickTriangleRenderer.prototype.webglContextRestored = function () {
+rendererClass.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
