@@ -8,7 +8,6 @@ import {EmphasisEdgesShaderSource} from "./EmphasisEdgesShaderSource.js";
 import {EmphasisFillShaderSource} from "./EmphasisFillShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
-import {stats} from '../../stats.js';
 import {math} from "../../math/math.js";
 import {getPlaneRTCPos} from "../../math/rtcCoords.js";
 
@@ -22,7 +21,6 @@ const tempVec3a = math.vec3();
 const EmphasisRenderer = function(mesh, isFill) {
     this.id = ids.addItem({});
     this._scene = mesh.scene;
-    this._useCount = 0;
     this._isFill = isFill;
     this._programSetup = isFill ? EmphasisFillShaderSource(mesh) : EmphasisEdgesShaderSource(mesh);
     this._allocate(mesh);
@@ -37,46 +35,6 @@ EmphasisRenderer.getHash = (mesh, isFill) => [
     mesh._geometry._state.compressGeometry ? "cp" : "",
     mesh._state.hash
 ].join(";");
-
-const rendererClass = EmphasisRenderer;
-
-const renderers = {};
-
-rendererClass.getInstance = function(matKey, mesh, ...rest) {
-    if (! (matKey in renderers)) {
-        renderers[matKey] = { };
-    }
-    const hash = rendererClass.getHash(mesh, ...rest);
-    if (! (hash in renderers[matKey])) {
-        const renderer = new rendererClass(mesh, ...rest);
-        if (renderer.errors) {
-            console.log(renderer.errors.join("\n"));
-            return null;
-        }
-        renderer._hash = hash;
-        renderer._delete = () => { delete renderers[matKey][hash]; };
-        renderers[matKey][hash] = renderer;
-        stats.memory.programs++;
-    }
-    const renderer = renderers[matKey][hash];
-    renderer._useCount++;
-    return renderer;
-};
-
-rendererClass.prototype.put = function () {
-    if (--this._useCount === 0) {
-        ids.removeItem(this.id);
-        if (this._program) {
-            this._program.destroy();
-        }
-        this._delete();
-        stats.memory.programs--;
-    }
-};
-
-rendererClass.prototype.webglContextRestored = function () {
-    this._program = null;
-};
 
 EmphasisRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     if (!this._program) {
