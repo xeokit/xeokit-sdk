@@ -19,35 +19,43 @@ const tempVec3a = math.vec3();
 /**
  * @private
  */
-const EmphasisRenderer = function (hash, mesh, isFill, deleteInstance) {
+const EmphasisRenderer = function(mesh, isFill) {
     this.id = ids.addItem({});
-    this._hash = hash;
     this._scene = mesh.scene;
     this._useCount = 0;
     this._isFill = isFill;
     this._programSetup = isFill ? EmphasisFillShaderSource(mesh) : EmphasisEdgesShaderSource(mesh);
     this._allocate(mesh);
-    this._delete = deleteInstance;
 };
+
+EmphasisRenderer.getHash = (mesh, isFill) => [
+    mesh.scene.id,
+    mesh.scene.gammaOutput ? "go" : "", // Gamma input not needed
+    isFill && mesh.scene._lightsState.getHash(),
+    mesh.scene._sectionPlanesState.getHash(),
+    (isFill && mesh._geometry._state.normalsBuf) ? "n" : "",
+    mesh._geometry._state.compressGeometry ? "cp" : "",
+    mesh._state.hash
+].join(";");
+
+const rendererClass = EmphasisRenderer;
 
 const renderers = {};
 
-EmphasisRenderer.get = function(mesh, isFill) {
-    const matKey = isFill ? "EmphasisFill" : "EmphasisEdges";
+rendererClass.getInstance = function(matKey, mesh, ...rest) {
     if (! (matKey in renderers)) {
         renderers[matKey] = { };
     }
-    const hash = [
-        mesh.scene.id,
-        mesh.scene.gammaOutput ? "go" : "", // Gamma input not needed
-        mesh.scene._lightsState.getHash(),
-        mesh.scene._sectionPlanesState.getHash(),
-        (isFill && mesh._geometry._state.normalsBuf) ? "n" : "",
-        mesh._geometry._state.compressGeometry ? "cp" : "",
-        mesh._state.hash
-    ].join(";");
+    const hash = rendererClass.getHash(mesh, ...rest);
     if (! (hash in renderers[matKey])) {
-        renderers[matKey][hash] = new EmphasisRenderer(hash, mesh, isFill, () => { delete renderers[matKey][hash]; });
+        const renderer = new rendererClass(mesh, ...rest);
+        if (renderer.errors) {
+            console.log(renderer.errors.join("\n"));
+            return null;
+        }
+        renderer._hash = hash;
+        renderer._delete = () => { delete renderers[matKey][hash]; };
+        renderers[matKey][hash] = renderer;
         stats.memory.programs++;
     }
     const renderer = renderers[matKey][hash];
@@ -55,7 +63,7 @@ EmphasisRenderer.get = function(mesh, isFill) {
     return renderer;
 };
 
-EmphasisRenderer.prototype.put = function () {
+rendererClass.prototype.put = function () {
     if (--this._useCount === 0) {
         ids.removeItem(this.id);
         if (this._program) {
@@ -66,7 +74,7 @@ EmphasisRenderer.prototype.put = function () {
     }
 };
 
-EmphasisRenderer.prototype.webglContextRestored = function () {
+rendererClass.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
