@@ -19,54 +19,61 @@ const ids = new Map({});
 /**
  * @private
  */
-const DrawRenderer = function (hash, mesh) {
+const DrawRenderer = function(mesh) {
     this.id = ids.addItem({});
-    this._hash = hash;
     this._scene = mesh.scene;
     this._useCount = 0;
     this._programSetup = (mesh._material._state.type === "LambertMaterial") ? LambertShaderSource(mesh) : DrawShaderSource(mesh);
     this._allocate(mesh);
 };
 
-const drawRenderers = {};
+DrawRenderer.getHash = (mesh) => [
+    mesh.scene.canvas.canvas.id,
+    mesh.scene.gammaOutput ? "go" : "",
+    mesh.scene._lightsState.getHash(),
+    mesh.scene._sectionPlanesState.getHash(),
+    mesh._geometry._state.hash,
+    mesh._material._state.hash,
+    mesh._state.drawHash
+].join(";");
 
-DrawRenderer.get = function (mesh) {
-    const scene = mesh.scene;
-    const hash = [
-        scene.canvas.canvas.id,
-        scene.gammaOutput ? "go" : "",
-        scene._lightsState.getHash(),
-        scene._sectionPlanesState.getHash(),
-        mesh._geometry._state.hash,
-        mesh._material._state.hash,
-        mesh._state.drawHash
-    ].join(";");
-    let renderer = drawRenderers[hash];
-    if (!renderer) {
-        renderer = new DrawRenderer(hash, mesh);
+const rendererClass = DrawRenderer;
+
+const renderers = {};
+
+rendererClass.getInstance = function(matKey, mesh, ...rest) {
+    if (! (matKey in renderers)) {
+        renderers[matKey] = { };
+    }
+    const hash = rendererClass.getHash(mesh, ...rest);
+    if (! (hash in renderers[matKey])) {
+        const renderer = new rendererClass(mesh, ...rest);
         if (renderer.errors) {
             console.log(renderer.errors.join("\n"));
             return null;
         }
-        drawRenderers[hash] = renderer;
+        renderer._hash = hash;
+        renderer._delete = () => { delete renderers[matKey][hash]; };
+        renderers[matKey][hash] = renderer;
         stats.memory.programs++;
     }
+    const renderer = renderers[matKey][hash];
     renderer._useCount++;
     return renderer;
 };
 
-DrawRenderer.prototype.put = function () {
+rendererClass.prototype.put = function () {
     if (--this._useCount === 0) {
         ids.removeItem(this.id);
         if (this._program) {
             this._program.destroy();
         }
-        delete drawRenderers[this._hash];
+        this._delete();
         stats.memory.programs--;
     }
 };
 
-DrawRenderer.prototype.webglContextRestored = function () {
+rendererClass.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
