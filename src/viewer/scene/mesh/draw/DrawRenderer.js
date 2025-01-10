@@ -3,26 +3,20 @@
  */
 
 import {MeshRenderer} from "../MeshRenderer.js";
-import {Map} from "../../utils/Map.js";
 import {DrawShaderSource} from "./DrawShaderSource.js";
 import {LambertShaderSource} from "./LambertShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
-import {stats} from '../../stats.js';
 import {math} from "../../math/math.js";
 import {getPlaneRTCPos} from "../../math/rtcCoords.js";
 
 const tempVec3a = math.vec3();
 
-const ids = new Map({});
-
 /**
  * @private
  */
 const DrawRenderer = function(mesh) {
-    this.id = ids.addItem({});
     this._scene = mesh.scene;
-    this._useCount = 0;
     this._programSetup = (mesh._material._state.type === "LambertMaterial") ? LambertShaderSource(mesh) : DrawShaderSource(mesh);
     this._allocate(mesh);
 };
@@ -36,46 +30,6 @@ DrawRenderer.getHash = (mesh) => [
     mesh._material._state.hash,
     mesh._state.drawHash
 ].join(";");
-
-const rendererClass = DrawRenderer;
-
-const renderers = {};
-
-rendererClass.getInstance = function(matKey, mesh, ...rest) {
-    if (! (matKey in renderers)) {
-        renderers[matKey] = { };
-    }
-    const hash = rendererClass.getHash(mesh, ...rest);
-    if (! (hash in renderers[matKey])) {
-        const renderer = new rendererClass(mesh, ...rest);
-        if (renderer.errors) {
-            console.log(renderer.errors.join("\n"));
-            return null;
-        }
-        renderer._hash = hash;
-        renderer._delete = () => { delete renderers[matKey][hash]; };
-        renderers[matKey][hash] = renderer;
-        stats.memory.programs++;
-    }
-    const renderer = renderers[matKey][hash];
-    renderer._useCount++;
-    return renderer;
-};
-
-rendererClass.prototype.put = function () {
-    if (--this._useCount === 0) {
-        ids.removeItem(this.id);
-        if (this._program) {
-            this._program.destroy();
-        }
-        this._delete();
-        stats.memory.programs--;
-    }
-};
-
-rendererClass.prototype.webglContextRestored = function () {
-    this._program = null;
-};
 
 DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 
