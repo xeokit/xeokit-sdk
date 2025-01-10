@@ -17,6 +17,8 @@ import {ShadowRenderer} from "./shadow/ShadowRenderer.js";
 
 import {geometryCompressionUtils} from '../math/geometryCompressionUtils.js';
 import {RenderFlags} from "../webgl/RenderFlags.js";
+import {stats} from '../stats.js';
+import {Map} from "../utils/Map.js";
 
 const obb = math.OBB3();
 const angleAxis = math.vec4();
@@ -30,6 +32,9 @@ const veca = math.vec3(3);
 const vecb = math.vec3(3);
 
 const identityMat = math.identityMat4();
+
+const ids = new Map({});
+const renderersCache = { };
 
 /**
  * @desc An {@link Entity} that is a drawable element, with a {@link Geometry} and a {@link Material}, that can be
@@ -263,15 +268,45 @@ class Mesh extends Component {
             isUI: cfg.isUI
         });
 
-        const wrapRenderer = (getInstance) => {
+        const wrapRenderer = (mtlKey, rendererClass, restArgs) => {
             let instance = null;
             return {
-                get: () => { return instance ||= getInstance(); },
+                get: () => {
+                    if (! instance) {
+                        const mesh = this;
+                        if (! (mtlKey in renderersCache)) {
+                            renderersCache[mtlKey] = { };
+                        }
+                        const hash = rendererClass.getHash(mesh, ...restArgs);
+                        if (! (hash in renderersCache[mtlKey])) {
+                            const instance = new rendererClass(mesh, ...restArgs);
+                            if (instance.errors) {
+                                console.log(instance.errors.join("\n"));
+                                return null;
+                            }
+                            instance.id = ids.addItem({});
+                            instance._useCount = 0;
+                            instance._delete = () => { delete renderersCache[mtlKey][hash]; };
+                            renderersCache[mtlKey][hash] = instance;
+                            stats.memory.programs++;
+                        }
+                        instance = renderersCache[mtlKey][hash];
+                        instance._useCount++;
+                    }
+                    return instance;
+                },
                 getId: () => instance.id,
-                webglContextRestored: () => instance && instance.webglContextRestored(),
+                webglContextRestored: () => { if (instance) { instance._program = null; } },
                 put: () => {
                     if (instance) {
-                        instance.put();
+                        if (--instance._useCount === 0) {
+                            ids.removeItem(instance.id);
+                            if (instance._program) {
+                                instance._program.destroy();
+                            }
+                            instance._delete();
+                            stats.memory.programs--;
+                        }
                         instance = null;
                     }
                 }
@@ -279,13 +314,13 @@ class Mesh extends Component {
         };
 
         this._renderers = {
-            _drawRenderer:          wrapRenderer(() => DrawRenderer.getInstance("Draw", this)),
-            _shadowRenderer:        wrapRenderer(() => ShadowRenderer.getInstance("Shadow", this)),
-            _emphasisFillRenderer:  wrapRenderer(() => EmphasisRenderer.getInstance("EmphasisFill", this, true)),
-            _emphasisEdgesRenderer: wrapRenderer(() => EmphasisRenderer.getInstance("EmphasisEdges", this, false)),
-            _pickMeshRenderer:      wrapRenderer(() => PickMeshRenderer.getInstance("PickMesh", this)),
-            _pickTriangleRenderer:  wrapRenderer(() => PickTriangleRenderer.getInstance("PickTriangle", this)),
-            _occlusionRenderer:     wrapRenderer(() => OcclusionRenderer.getInstance("Occlusion", this))
+            _drawRenderer:          wrapRenderer("Draw",          DrawRenderer,         [ ]),
+            _shadowRenderer:        wrapRenderer("Shadow",        ShadowRenderer,       [ ]),
+            _emphasisFillRenderer:  wrapRenderer("EmphasisFill",  EmphasisRenderer,     [ true ]),
+            _emphasisEdgesRenderer: wrapRenderer("EmphasisEdges", EmphasisRenderer,     [ false ]),
+            _pickMeshRenderer:      wrapRenderer("PickMesh",      PickMeshRenderer,     [ ]),
+            _pickTriangleRenderer:  wrapRenderer("PickTriangle",  PickTriangleRenderer, [ ]),
+            _occlusionRenderer:     wrapRenderer("Occlusion",     OcclusionRenderer,    [ ])
         };
 
         this._geometry = cfg.geometry ? this._checkComponent2(["ReadableGeometry", "VBOGeometry"], cfg.geometry) : this.scene.geometry;

@@ -1,7 +1,6 @@
 import {MeshRenderer} from "../MeshRenderer.js";
 import {ShadowShaderSource} from "./ShadowShaderSource.js";
 import {Program} from "../../webgl/Program.js";
-import {stats} from "../../stats.js";
 import {math} from "../../math/math.js";
 import {getPlaneRTCPos} from "../../math/rtcCoords.js";
 
@@ -13,7 +12,6 @@ const tempVec3a = math.vec3();
 const ShadowRenderer = function(mesh) {
     this._programSetup = ShadowShaderSource(mesh);
     this._scene = mesh.scene;
-    this._useCount = 0;
     this._allocate(mesh);
 };
 
@@ -23,45 +21,6 @@ ShadowRenderer.getHash = (mesh, ...rest) => [
     mesh._geometry._state.hash,
     mesh._state.hash
 ].join(";");
-
-const rendererClass = ShadowRenderer;
-
-const renderers = {};
-
-rendererClass.getInstance = function(matKey, mesh, ...rest) {
-    if (! (matKey in renderers)) {
-        renderers[matKey] = { };
-    }
-    const hash = rendererClass.getHash(mesh, ...rest);
-    if (! (hash in renderers[matKey])) {
-        const renderer = new rendererClass(mesh, ...rest);
-        if (renderer.errors) {
-            console.log(renderer.errors.join("\n"));
-            return null;
-        }
-        renderer._hash = hash;
-        renderer._delete = () => { delete renderers[matKey][hash]; };
-        renderers[matKey][hash] = renderer;
-        stats.memory.programs++;
-    }
-    const renderer = renderers[matKey][hash];
-    renderer._useCount++;
-    return renderer;
-};
-
-rendererClass.prototype.put = function () {
-    if (--this._useCount === 0) {
-        if (this._program) {
-            this._program.destroy();
-        }
-        this._delete();
-        stats.memory.programs--;
-    }
-};
-
-rendererClass.prototype.webglContextRestored = function () {
-    this._program = null;
-};
 
 ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
     if (!this._program) {
@@ -164,7 +123,6 @@ ShadowRenderer.prototype._allocate = function (mesh) {
     const gl = scene.canvas.gl;
     this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
     this._scene = scene;
-    this._useCount = 0;
     if (this._program.errors) {
         this.errors = this._program.errors;
         return;
