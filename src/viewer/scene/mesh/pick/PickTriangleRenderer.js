@@ -6,7 +6,6 @@ import {MeshRenderer} from "../MeshRenderer.js";
 import {PickTriangleShaderSource} from "./PickTriangleShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
-import {stats} from "../../stats.js";
 import {getPlaneRTCPos} from "../../math/rtcCoords.js";
 import {math} from "../../math/math.js";
 
@@ -17,7 +16,6 @@ const tempVec3a = math.vec3();
  */
 const PickTriangleRenderer = function(mesh) {
     this._scene = mesh.scene;
-    this._useCount = 0;
     this._programSetup = PickTriangleShaderSource(mesh);
     this._allocate(mesh);
 };
@@ -28,45 +26,6 @@ PickTriangleRenderer.getHash = (mesh, ...rest) => [
     mesh._geometry._state.compressGeometry ? "cp" : "",
     mesh._state.hash
 ].join(";");
-
-const rendererClass = PickTriangleRenderer;
-
-const renderers = {};
-
-rendererClass.getInstance = function(matKey, mesh, ...rest) {
-    if (! (matKey in renderers)) {
-        renderers[matKey] = { };
-    }
-    const hash = rendererClass.getHash(mesh, ...rest);
-    if (! (hash in renderers[matKey])) {
-        const renderer = new rendererClass(mesh, ...rest);
-        if (renderer.errors) {
-            console.log(renderer.errors.join("\n"));
-            return null;
-        }
-        renderer._hash = hash;
-        renderer._delete = () => { delete renderers[matKey][hash]; };
-        renderers[matKey][hash] = renderer;
-        stats.memory.programs++;
-    }
-    const renderer = renderers[matKey][hash];
-    renderer._useCount++;
-    return renderer;
-};
-
-rendererClass.prototype.put = function () {
-    if (--this._useCount === 0) {
-        if (this._program) {
-            this._program.destroy();
-        }
-        this._delete();
-        stats.memory.programs--;
-    }
-};
-
-rendererClass.prototype.webglContextRestored = function () {
-    this._program = null;
-};
 
 PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 
@@ -169,7 +128,6 @@ PickTriangleRenderer.prototype._allocate = function (mesh) {
     const scene = mesh.scene;
     const gl = scene.canvas.gl;
     this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
-    this._useCount = 0;
     if (this._program.errors) {
         this.errors = this._program.errors;
         return;
