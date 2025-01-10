@@ -279,13 +279,13 @@ class Mesh extends Component {
         };
 
         this._renderers = {
-            _drawRenderer:          wrapRenderer(() => DrawRenderer.get(this)),
-            _shadowRenderer:        wrapRenderer(() => ShadowRenderer.get(this)),
-            _emphasisFillRenderer:  wrapRenderer(() => EmphasisRenderer.get(this, true)),
-            _emphasisEdgesRenderer: wrapRenderer(() => EmphasisRenderer.get(this, false)),
-            _pickMeshRenderer:      wrapRenderer(() => PickMeshRenderer.get(this)),
-            _pickTriangleRenderer:  wrapRenderer(() => PickTriangleRenderer.get(this)),
-            _occlusionRenderer:     wrapRenderer(() => OcclusionRenderer.get(this))
+            _drawRenderer:          wrapRenderer(() => DrawRenderer.getInstance("Draw", this)),
+            _shadowRenderer:        wrapRenderer(() => ShadowRenderer.getInstance("Shadow", this)),
+            _emphasisFillRenderer:  wrapRenderer(() => EmphasisRenderer.getInstance("EmphasisFill", this, true)),
+            _emphasisEdgesRenderer: wrapRenderer(() => EmphasisRenderer.getInstance("EmphasisEdges", this, false)),
+            _pickMeshRenderer:      wrapRenderer(() => PickMeshRenderer.getInstance("PickMesh", this)),
+            _pickTriangleRenderer:  wrapRenderer(() => PickTriangleRenderer.getInstance("PickTriangle", this)),
+            _occlusionRenderer:     wrapRenderer(() => OcclusionRenderer.getInstance("Occlusion", this))
         };
 
         this._geometry = cfg.geometry ? this._checkComponent2(["ReadableGeometry", "VBOGeometry"], cfg.geometry) : this.scene.geometry;
