@@ -15,10 +15,56 @@ const tempVec3a = math.vec3();
 /**
  * @private
  */
-const DrawRenderer = function(mesh) {
-    this._scene = mesh.scene;
-    this._programSetup = (mesh._material._state.type === "LambertMaterial") ? LambertShaderSource(mesh) : DrawShaderSource(mesh);
-    this._allocate(mesh);
+export const DrawRenderer = function(mesh) {
+    const scene = mesh.scene;
+    const gl = scene.canvas.gl;
+    const programSetup = (mesh._material._state.type === "LambertMaterial") ? LambertShaderSource(mesh) : DrawShaderSource(mesh);
+    const meshRenderer = MeshRenderer(programSetup, mesh);
+    const program = new Program(gl, { vertex: meshRenderer.vertex, fragment: meshRenderer.fragment });
+    if (program.errors) {
+        this.errors = program.errors;
+    } else {
+        this._scene = scene;
+        this._program = program;
+        const getInputSetter = makeInputSetters(gl, program.handle, true);
+        this._setInputsState = programSetup.setupInputs && programSetup.setupInputs(getInputSetter);
+        this._setMaterialInputsState = programSetup.setupMaterialInputs && programSetup.setupMaterialInputs(getInputSetter);
+        this._setLightInputState = programSetup.setupLightInputs && programSetup.setupLightInputs(getInputSetter);
+        this._setGeometryInputsState = meshRenderer.setupGeometryInputs && meshRenderer.setupGeometryInputs(getInputSetter);
+        this._setGeneralMaterialInputsState = meshRenderer.setupGeneralMaterialInputs && meshRenderer.setupGeneralMaterialInputs(getInputSetter);
+        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
+        this._uModelMatrix = program.getLocation("modelMatrix");
+        this._uModelNormalMatrix = program.getLocation("modelNormalMatrix");
+        this._uViewMatrix = program.getLocation("viewMatrix");
+        this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
+        this._uProjMatrix = program.getLocation("projMatrix");
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+        }
+
+        this._uSectionPlanes = [];
+        for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
+            this._uSectionPlanes.push({
+                active: program.getLocation("sectionPlaneActive" + i),
+                pos: program.getLocation("sectionPlanePos" + i),
+                dir: program.getLocation("sectionPlaneDir" + i)
+            });
+        }
+
+        this._aPosition = program.getAttribute("position");
+        this._aNormal = program.getAttribute("normal");
+        this._aUV = program.getAttribute("uv");
+        this._aColor = program.getAttribute("color");
+
+        this._uClippable = program.getLocation("clippable");
+        this._uOffset = program.getLocation("offset");
+        this._uScale = program.getLocation("scale");
+
+        this._lastMaterialId = null;
+        this._lastVertexBufsId = null;
+        this._lastGeometryId = null;
+    }
 };
 
 DrawRenderer.getHash = (mesh) => [
@@ -199,60 +245,3 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         gl.depthFunc(gl.LESS);
     }
 };
-
-DrawRenderer.prototype._allocate = function (mesh) {
-    const scene = mesh.scene;
-    const gl = scene.canvas.gl;
-    const material = mesh._material;
-    const lightsState = scene._lightsState;
-    const sectionPlanesState = scene._sectionPlanesState;
-    const materialState = mesh._material._state;
-
-    const meshRenderer = MeshRenderer(this._programSetup, mesh);
-    this._program = new Program(gl, { vertex: meshRenderer.vertex, fragment: meshRenderer.fragment });
-    if (this._program.errors) {
-        this.errors = this._program.errors;
-        return;
-    }
-    const program = this._program;
-    const getInputSetter = makeInputSetters(gl, program.handle, true);
-    this._setInputsState = this._programSetup.setupInputs && this._programSetup.setupInputs(getInputSetter);
-    this._setMaterialInputsState = this._programSetup.setupMaterialInputs && this._programSetup.setupMaterialInputs(getInputSetter);
-    this._setLightInputState = this._programSetup.setupLightInputs && this._programSetup.setupLightInputs(getInputSetter);
-    this._setGeometryInputsState = meshRenderer.setupGeometryInputs && meshRenderer.setupGeometryInputs(getInputSetter);
-    this._setGeneralMaterialInputsState = meshRenderer.setupGeneralMaterialInputs && meshRenderer.setupGeneralMaterialInputs(getInputSetter);
-    this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-    this._uModelMatrix = program.getLocation("modelMatrix");
-    this._uModelNormalMatrix = program.getLocation("modelNormalMatrix");
-    this._uViewMatrix = program.getLocation("viewMatrix");
-    this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
-    this._uProjMatrix = program.getLocation("projMatrix");
-
-    if (scene.logarithmicDepthBufferEnabled) {
-        this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
-    }
-
-    this._uSectionPlanes = [];
-    for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
-        this._uSectionPlanes.push({
-            active: program.getLocation("sectionPlaneActive" + i),
-            pos: program.getLocation("sectionPlanePos" + i),
-            dir: program.getLocation("sectionPlaneDir" + i)
-        });
-    }
-
-    this._aPosition = program.getAttribute("position");
-    this._aNormal = program.getAttribute("normal");
-    this._aUV = program.getAttribute("uv");
-    this._aColor = program.getAttribute("color");
-
-    this._uClippable = program.getLocation("clippable");
-    this._uOffset = program.getLocation("offset");
-    this._uScale = program.getLocation("scale");
-
-    this._lastMaterialId = null;
-    this._lastVertexBufsId = null;
-    this._lastGeometryId = null;
-};
-
-export {DrawRenderer};
