@@ -15,10 +15,36 @@ const tempVec3a = math.vec3();
 /**
  * @private
  */
-const OcclusionRenderer = function(mesh) {
-    this._programSetup = OcclusionShaderSource();
-    this._scene = mesh.scene;
-    this._allocate(mesh);
+export const OcclusionRenderer = function(mesh) {
+    const scene = mesh.scene;
+    const program = new Program(scene.canvas.gl, MeshRenderer(OcclusionShaderSource(), mesh));
+    if (program.errors) {
+        this.errors = program.errors;
+    } else {
+        this._scene = scene;
+        this._program = program;
+        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
+        this._uModelMatrix = program.getLocation("modelMatrix");
+        this._uViewMatrix = program.getLocation("viewMatrix");
+        this._uProjMatrix = program.getLocation("projMatrix");
+        this._uSectionPlanes = [];
+        for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
+            this._uSectionPlanes.push({
+                active: program.getLocation("sectionPlaneActive" + i),
+                pos: program.getLocation("sectionPlanePos" + i),
+                dir: program.getLocation("sectionPlaneDir" + i)
+            });
+        }
+        this._aPosition = program.getAttribute("position");
+        this._uClippable = program.getLocation("clippable");
+        this._uOffset = program.getLocation("offset");
+        if (scene.logarithmicDepthBufferEnabled ) {
+            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+        }
+        this._lastMaterialId = null;
+        this._lastVertexBufsId = null;
+        this._lastGeometryId = null;
+    }
 };
 
 OcclusionRenderer.getHash = (mesh, ...rest) => [
@@ -42,7 +68,16 @@ OcclusionRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 
     if (frameCtx.lastProgramId !== this._program.id) {
         frameCtx.lastProgramId = this._program.id;
-        this._bindProgram(frameCtx);
+        const project = scene.camera.project;
+        this._program.bind();
+        frameCtx.useProgram++;
+        if (scene.logarithmicDepthBufferEnabled ) {
+            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
+            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
+        }
+        this._lastMaterialId = null;
+        this._lastVertexBufsId = null;
+        this._lastGeometryId = null;
     }
 
     if (materialState.id !== this._lastMaterialId) {
@@ -131,52 +166,3 @@ OcclusionRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
     }
 };
-
-OcclusionRenderer.prototype._allocate = function (mesh) {
-    const scene = mesh.scene;
-    const gl = scene.canvas.gl;
-    this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
-    if (this._program.errors) {
-        this.errors = this._program.errors;
-        return;
-    }
-    const program = this._program;
-    this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-    this._uModelMatrix = program.getLocation("modelMatrix");
-    this._uViewMatrix = program.getLocation("viewMatrix");
-    this._uProjMatrix = program.getLocation("projMatrix");
-    this._uSectionPlanes = [];
-    for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
-        this._uSectionPlanes.push({
-            active: program.getLocation("sectionPlaneActive" + i),
-            pos: program.getLocation("sectionPlanePos" + i),
-            dir: program.getLocation("sectionPlaneDir" + i)
-        });
-    }
-    this._aPosition = program.getAttribute("position");
-    this._uClippable = program.getLocation("clippable");
-    this._uOffset = program.getLocation("offset");
-    if (scene.logarithmicDepthBufferEnabled ) {
-        this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
-    }
-    this._lastMaterialId = null;
-    this._lastVertexBufsId = null;
-    this._lastGeometryId = null;
-};
-
-OcclusionRenderer.prototype._bindProgram = function (frameCtx) {
-    const scene = this._scene;
-    const project = scene.camera.project;
-    const gl = scene.canvas.gl;
-    this._program.bind();
-    frameCtx.useProgram++;
-    if (scene.logarithmicDepthBufferEnabled ) {
-        const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
-        gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
-    }
-    this._lastMaterialId = null;
-    this._lastVertexBufsId = null;
-    this._lastGeometryId = null;
-};
-
-export {OcclusionRenderer};
