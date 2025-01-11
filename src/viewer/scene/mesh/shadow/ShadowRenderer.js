@@ -37,12 +37,10 @@ export const ShadowRenderer = function(mesh) {
     }
 };
 
-ShadowRenderer.getHash = (mesh, ...rest) => [
-    mesh.scene.canvas.canvas.id,
-    mesh.scene._sectionPlanesState.getHash(),
+ShadowRenderer.getHash = (mesh) => [
     mesh._geometry._state.hash,
     mesh._state.hash
-].join(";");
+];
 
 ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
     const scene = this._scene;
