@@ -16,6 +16,8 @@ const tempVec3a = math.vec3();
  * @private
  */
 export const EmphasisRenderer = function(mesh, isFill) {
+    const useNormals = isFill;
+
     const scene = mesh.scene;
     const gl = scene.canvas.gl;
     const programSetup = isFill ? EmphasisFillShaderSource(mesh) : EmphasisEdgesShaderSource(mesh);
@@ -23,8 +25,8 @@ export const EmphasisRenderer = function(mesh, isFill) {
     if (program.errors) {
         this.errors = program.errors;
     } else {
-        this._scene = scene;
         this._isFill = isFill;
+        this._scene = scene;
         this._program = program;
 
         const getInputSetter = makeInputSetters(gl, program.handle, true);
@@ -34,9 +36,9 @@ export const EmphasisRenderer = function(mesh, isFill) {
 
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uModelMatrix = program.getLocation("modelMatrix");
-        this._uModelNormalMatrix = isFill && program.getLocation("modelNormalMatrix");
+        this._uModelNormalMatrix = useNormals && program.getLocation("modelNormalMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
-        this._uViewNormalMatrix = isFill && program.getLocation("viewNormalMatrix");
+        this._uViewNormalMatrix = useNormals && program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];
         for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
@@ -47,7 +49,7 @@ export const EmphasisRenderer = function(mesh, isFill) {
             });
         }
         this._aPosition = program.getAttribute("position");
-        this._aNormal = isFill && program.getAttribute("normal");
+        this._aNormal = useNormals && program.getAttribute("normal");
         this._uClippable = program.getLocation("clippable");
         this._uOffset = program.getLocation("offset");
         if (scene.logarithmicDepthBufferEnabled ) {
