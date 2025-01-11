@@ -276,7 +276,10 @@ class Mesh extends Component {
                     if (! (mtlKey in renderersCache)) {
                         renderersCache[mtlKey] = { };
                     }
-                    const hash = rendererClass.getHash(mesh, ...restArgs);
+                    const hash = [
+                        mesh.scene.canvas.canvas.id,
+                        mesh.scene._sectionPlanesState.getHash()
+                    ].concat(rendererClass.getHash(mesh, ...restArgs)).join(";");
                     if (! (hash in renderersCache[mtlKey])) {
                         const renderer = new rendererClass(mesh, ...restArgs);
                         if (renderer.errors) {
