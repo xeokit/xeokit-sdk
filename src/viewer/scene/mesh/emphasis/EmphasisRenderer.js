@@ -3,7 +3,6 @@
  */
 
 import {MeshRenderer} from "../MeshRenderer.js";
-import {Map} from "../../utils/Map.js";
 import {EmphasisEdgesShaderSource} from "./EmphasisEdgesShaderSource.js";
 import {EmphasisFillShaderSource} from "./EmphasisFillShaderSource.js";
 import {Program} from "../../webgl/Program.js";
@@ -11,19 +10,53 @@ import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 import {math} from "../../math/math.js";
 import {getPlaneRTCPos} from "../../math/rtcCoords.js";
 
-const ids = new Map({});
-
 const tempVec3a = math.vec3();
 
 /**
  * @private
  */
-const EmphasisRenderer = function(mesh, isFill) {
-    this.id = ids.addItem({});
-    this._scene = mesh.scene;
-    this._isFill = isFill;
-    this._programSetup = isFill ? EmphasisFillShaderSource(mesh) : EmphasisEdgesShaderSource(mesh);
-    this._allocate(mesh);
+export const EmphasisRenderer = function(mesh, isFill) {
+    const scene = mesh.scene;
+    const gl = scene.canvas.gl;
+    const programSetup = isFill ? EmphasisFillShaderSource(mesh) : EmphasisEdgesShaderSource(mesh);
+    const program = new Program(gl, MeshRenderer(programSetup, mesh));
+    if (program.errors) {
+        this.errors = program.errors;
+    } else {
+        this._scene = scene;
+        this._isFill = isFill;
+        this._program = program;
+
+        const getInputSetter = makeInputSetters(gl, program.handle, true);
+        this._setInputsState = programSetup.setupInputs && programSetup.setupInputs(getInputSetter);
+        this._setMaterialInputsState = programSetup.setupMaterialInputs && programSetup.setupMaterialInputs(getInputSetter);
+        this._setLightInputState = programSetup.setupLightInputs && programSetup.setupLightInputs(getInputSetter);
+
+        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
+        this._uModelMatrix = program.getLocation("modelMatrix");
+        this._uModelNormalMatrix = isFill && program.getLocation("modelNormalMatrix");
+        this._uViewMatrix = program.getLocation("viewMatrix");
+        this._uViewNormalMatrix = isFill && program.getLocation("viewNormalMatrix");
+        this._uProjMatrix = program.getLocation("projMatrix");
+        this._uSectionPlanes = [];
+        for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
+            this._uSectionPlanes.push({
+                active: program.getLocation("sectionPlaneActive" + i),
+                pos: program.getLocation("sectionPlanePos" + i),
+                dir: program.getLocation("sectionPlaneDir" + i)
+            });
+        }
+        this._aPosition = program.getAttribute("position");
+        this._aNormal = isFill && program.getAttribute("normal");
+        this._uClippable = program.getLocation("clippable");
+        this._uOffset = program.getLocation("offset");
+        if (scene.logarithmicDepthBufferEnabled ) {
+            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+        }
+        this._lastMaterialId = null;
+        this._lastVertexBufsId = null;
+        this._lastGeometryId = null;
+    }
 };
 
 EmphasisRenderer.getHash = (mesh, isFill) => [
@@ -48,7 +81,19 @@ EmphasisRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
 
     if (frameCtx.lastProgramId !== this._program.id) {
         frameCtx.lastProgramId = this._program.id;
-        this._bindProgram(frameCtx);
+        const project = camera.project;
+        const program = this._program;
+        program.bind();
+        frameCtx.useProgram++;
+        this._lastMaterialId = null;
+        this._lastVertexBufsId = null;
+        this._lastGeometryId = null;
+        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
+        if (scene.logarithmicDepthBufferEnabled ) {
+            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
+            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
+        }
+        this._setLightInputState && this._setLightInputState();
     }
 
     gl.uniformMatrix4fv(this._uViewMatrix, false, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
@@ -180,68 +225,3 @@ EmphasisRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
         }
     }
 };
-
-EmphasisRenderer.prototype._allocate = function (mesh) {
-    const isFill = this._isFill;
-    const scene = mesh.scene;
-    const gl = scene.canvas.gl;
-    const sectionPlanesState = scene._sectionPlanesState;
-
-    this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
-    if (this._program.errors) {
-        this.errors = this._program.errors;
-        return;
-    }
-    const program = this._program;
-
-    const getInputSetter = makeInputSetters(gl, program.handle, true);
-    this._setInputsState = this._programSetup.setupInputs && this._programSetup.setupInputs(getInputSetter);
-    this._setMaterialInputsState = this._programSetup.setupMaterialInputs && this._programSetup.setupMaterialInputs(getInputSetter);
-    this._setLightInputState = this._programSetup.setupLightInputs && this._programSetup.setupLightInputs(getInputSetter);
-
-    this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-    this._uModelMatrix = program.getLocation("modelMatrix");
-    this._uModelNormalMatrix = isFill && program.getLocation("modelNormalMatrix");
-    this._uViewMatrix = program.getLocation("viewMatrix");
-    this._uViewNormalMatrix = isFill && program.getLocation("viewNormalMatrix");
-    this._uProjMatrix = program.getLocation("projMatrix");
-    this._uSectionPlanes = [];
-    for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
-        this._uSectionPlanes.push({
-            active: program.getLocation("sectionPlaneActive" + i),
-            pos: program.getLocation("sectionPlanePos" + i),
-            dir: program.getLocation("sectionPlaneDir" + i)
-        });
-    }
-    this._aPosition = program.getAttribute("position");
-    this._aNormal = isFill && program.getAttribute("normal");
-    this._uClippable = program.getLocation("clippable");
-    this._uOffset = program.getLocation("offset");
-    if (scene.logarithmicDepthBufferEnabled ) {
-        this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
-    }
-    this._lastMaterialId = null;
-    this._lastVertexBufsId = null;
-    this._lastGeometryId = null;
-};
-
-EmphasisRenderer.prototype._bindProgram = function (frameCtx) {
-    const scene = this._scene;
-    const gl = scene.canvas.gl;
-    const camera = scene.camera;
-    const project = camera.project;
-    const program = this._program;
-    program.bind();
-    frameCtx.useProgram++;
-    this._lastMaterialId = null;
-    this._lastVertexBufsId = null;
-    this._lastGeometryId = null;
-    gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
-    if (scene.logarithmicDepthBufferEnabled ) {
-        const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
-        gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
-    }
-    this._setLightInputState && this._setLightInputState();
-};
-
-export {EmphasisRenderer};
