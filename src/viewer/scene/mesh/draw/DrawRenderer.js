@@ -68,14 +68,12 @@ export const DrawRenderer = function(mesh) {
 };
 
 DrawRenderer.getHash = (mesh) => [
-    mesh.scene.canvas.canvas.id,
+    mesh._geometry._state.hash,
+    mesh._state.drawHash,
     mesh.scene.gammaOutput ? "go" : "",
     mesh.scene._lightsState.getHash(),
-    mesh.scene._sectionPlanesState.getHash(),
-    mesh._geometry._state.hash,
-    mesh._material._state.hash,
-    mesh._state.drawHash
-].join(";");
+    mesh._material._state.hash
+];
 
 DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const scene = mesh.scene;
