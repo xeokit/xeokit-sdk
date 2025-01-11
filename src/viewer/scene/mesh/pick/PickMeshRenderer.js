@@ -53,12 +53,10 @@ export const PickMeshRenderer = function(mesh) {
     }
 };
 
-PickMeshRenderer.getHash = (mesh, ...rest) => [
-    mesh.scene.canvas.canvas.id,
-    mesh.scene._sectionPlanesState.getHash(),
+PickMeshRenderer.getHash = (mesh) => [
     mesh._geometry._state.hash,
     mesh._state.hash
-].join(";");
+];
 
 PickMeshRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const scene = this._scene;
