@@ -270,44 +270,48 @@ class Mesh extends Component {
 
         const wrapRenderer = (mtlKey, rendererClass, restArgs) => {
             let instance = null;
-            return {
-                get: () => {
-                    if (! instance) {
-                        const mesh = this;
-                        if (! (mtlKey in renderersCache)) {
-                            renderersCache[mtlKey] = { };
-                        }
-                        const hash = rendererClass.getHash(mesh, ...restArgs);
-                        if (! (hash in renderersCache[mtlKey])) {
-                            const renderer = new rendererClass(mesh, ...restArgs);
-                            if (renderer.errors) {
-                                console.log(renderer.errors.join("\n"));
-                                return null;
-                            }
-                            const id = ids.addItem({});
-                            renderersCache[mtlKey][hash] = {
-                                renderer: renderer,
-                                id: id,
-                                useCount: 0,
-                                delete: () => {
-                                    ids.removeItem(id);
-                                    if (renderer._program) {
-                                        renderer._program.destroy();
-                                    }
-                                    delete renderersCache[mtlKey][hash];
-                                    stats.memory.programs--;
-                                }
-                            };
-                            stats.memory.programs++;
-                        }
-                        instance = renderersCache[mtlKey][hash];
-                        instance.useCount++;
+            const ensureInstance = () => {
+                if (! instance) {
+                    const mesh = this;
+                    if (! (mtlKey in renderersCache)) {
+                        renderersCache[mtlKey] = { };
                     }
-                    return instance.renderer;
-                },
+                    const hash = rendererClass.getHash(mesh, ...restArgs);
+                    if (! (hash in renderersCache[mtlKey])) {
+                        const renderer = new rendererClass(mesh, ...restArgs);
+                        if (renderer.errors) {
+                            console.log(renderer.errors.join("\n"));
+                            return;
+                        }
+                        const id = ids.addItem({});
+                        renderersCache[mtlKey][hash] = {
+                            renderer: renderer,
+                            id: id,
+                            useCount: 0,
+                            delete: () => {
+                                ids.removeItem(id);
+                                if (renderer._program) {
+                                    renderer._program.destroy();
+                                }
+                                delete renderersCache[mtlKey][hash];
+                                stats.memory.programs--;
+                            }
+                        };
+                        stats.memory.programs++;
+                    }
+                    instance = renderersCache[mtlKey][hash];
+                    instance.useCount++;
+                }
+            };
+            return {
+                get: ensureInstance,
                 getId: () => instance.id,
                 webglContextRestored: () => { if (instance) {                                  instance.delete();   instance = null; } },
-                put:                  () => { if (instance) { if (--instance.useCount === 0) { instance.delete(); } instance = null; } }
+                put:                  () => { if (instance) { if (--instance.useCount === 0) { instance.delete(); } instance = null; } },
+                drawMesh: (frameCtx, mesh, ...rest) => {
+                    ensureInstance();
+                    instance && instance.renderer.drawMesh(frameCtx, mesh, ...rest);
+                }
             };
         };
 
@@ -1737,12 +1741,12 @@ class Mesh extends Component {
 
     /** @private  */
     drawColorOpaque(frameCtx) {
-        this._renderers._drawRenderer.get().drawMesh(frameCtx, this);
+        this._renderers._drawRenderer.drawMesh(frameCtx, this);
     }
 
     /** @private  */
     drawColorTransparent(frameCtx) {
-        this._renderers._drawRenderer.get().drawMesh(frameCtx, this);
+        this._renderers._drawRenderer.drawMesh(frameCtx, this);
     }
 
     // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
@@ -1753,65 +1757,65 @@ class Mesh extends Component {
 
     /** @private  */
     drawSilhouetteXRayed(frameCtx) {
-        this._renderers._emphasisFillRenderer.get().drawMesh(frameCtx, this, 0); // 0 == xray
+        this._renderers._emphasisFillRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
     }
 
     /** @private  */
     drawSilhouetteHighlighted(frameCtx) {
-        this._renderers._emphasisFillRenderer.get().drawMesh(frameCtx, this, 1); // 1 == highlight
+        this._renderers._emphasisFillRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
     }
 
     /** @private  */
     drawSilhouetteSelected(frameCtx) {
-        this._renderers._emphasisFillRenderer.get().drawMesh(frameCtx, this, 2); // 2 == selected
+        this._renderers._emphasisFillRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
     }
 
     // ---------------------- EDGES RENDERING -----------------------------------
 
     /** @private  */
     drawEdgesColorOpaque(frameCtx) {
-        this._renderers._emphasisEdgesRenderer.get().drawMesh(frameCtx, this, 3); // 3 == edges
+        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, 3); // 3 == edges
     }
 
     /** @private  */
     drawEdgesColorTransparent(frameCtx) {
-        this._renderers._emphasisEdgesRenderer.get().drawMesh(frameCtx, this, 3); // 3 == edges
+        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, 3); // 3 == edges
     }
 
     /** @private  */
     drawEdgesXRayed(frameCtx) {
-        this._renderers._emphasisEdgesRenderer.get().drawMesh(frameCtx, this, 0); // 0 == xray
+        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
     }
 
     /** @private  */
     drawEdgesHighlighted(frameCtx) {
-        this._renderers._emphasisEdgesRenderer.get().drawMesh(frameCtx, this, 1); // 1 == highlight
+        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
     }
 
     /** @private  */
     drawEdgesSelected(frameCtx) {
-        this._renderers._emphasisEdgesRenderer.get().drawMesh(frameCtx, this, 2); // 2 == selected
+        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
     }
 
     // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
 
     /** @private  */
     drawOcclusion(frameCtx) {
-        this._renderers._occlusionRenderer.get().drawMesh(frameCtx, this);
+        this._renderers._occlusionRenderer.drawMesh(frameCtx, this);
     }
 
     // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
 
     /** @private  */
     drawShadow(frameCtx) {
-        this._renderers._shadowRenderer.get().drawMesh(frameCtx, this);
+        this._renderers._shadowRenderer.drawMesh(frameCtx, this);
     }
 
     // ---------------------- PICKING RENDERING ----------------------------------
 
     /** @private  */
     drawPickMesh(frameCtx) {
-        this._renderers._pickMeshRenderer.get().drawMesh(frameCtx, this);
+        this._renderers._pickMeshRenderer.drawMesh(frameCtx, this);
     }
 
     /** @private
@@ -1822,7 +1826,7 @@ class Mesh extends Component {
 
     /** @private  */
     drawPickTriangles(frameCtx) {
-        this._renderers._pickTriangleRenderer.get().drawMesh(frameCtx, this);
+        this._renderers._pickTriangleRenderer.drawMesh(frameCtx, this);
     }
 
     /** @private */
