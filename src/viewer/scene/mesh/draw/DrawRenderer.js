@@ -32,11 +32,6 @@ DrawRenderer.getHash = (mesh) => [
 ].join(";");
 
 DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
-
-    if (!this._program) {
-        this._allocate(mesh);
-    }
-
     const scene = mesh.scene;
     const material = mesh._material;
     const gl = scene.canvas.gl;
