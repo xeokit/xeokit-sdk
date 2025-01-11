@@ -9,10 +9,32 @@ const tempVec3a = math.vec3();
 /**
  * @private
  */
-const ShadowRenderer = function(mesh) {
-    this._programSetup = ShadowShaderSource(mesh);
-    this._scene = mesh.scene;
-    this._allocate(mesh);
+export const ShadowRenderer = function(mesh) {
+    const scene = mesh.scene;
+    const program = new Program(scene.canvas.gl, MeshRenderer(ShadowShaderSource(mesh), mesh));
+    if (program.errors) {
+        this.errors = program.errors;
+    } else {
+        this._scene = scene;
+        this._program = program;
+        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
+        this._uModelMatrix = program.getLocation("modelMatrix");
+        this._uViewMatrix = program.getLocation("viewMatrix");
+        this._uProjMatrix = program.getLocation("projMatrix");
+        this._uSectionPlanes = [];
+        for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
+            this._uSectionPlanes.push({
+                active: program.getLocation("sectionPlaneActive" + i),
+                pos: program.getLocation("sectionPlanePos" + i),
+                dir: program.getLocation("sectionPlaneDir" + i)
+            });
+        }
+        this._aPosition = program.getAttribute("position");
+        this._uClippable = program.getLocation("clippable");
+        this._uOffset = program.getLocation("offset");
+        this._lastMaterialId = null;
+        this._lastGeometryId = null;
+    }
 };
 
 ShadowRenderer.getHash = (mesh, ...rest) => [
@@ -28,10 +50,18 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
     const materialState = mesh._material._state;
     const meshState = mesh._state;
     const geometryState = mesh._geometry._state;
+
     if (frame.lastProgramId !== this._program.id) {
         frame.lastProgramId = this._program.id;
-        this._bindProgram(frame);
+        const sectionPlanesState = scene._sectionPlanesState;
+        this._program.bind();
+        frame.useProgram++;
+        gl.uniformMatrix4fv(this._uViewMatrix, false, frame.shadowViewMatrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, frame.shadowProjMatrix);
+        this._lastMaterialId = null;
+        this._lastGeometryId = null;
     }
+
     if (materialState.id !== this._lastMaterialId) {
         const backfaces = materialState.backfaces;
         if (frame.backfaces !== backfaces) {
@@ -114,46 +144,3 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
         frame.drawArrays++;
     }
 };
-
-ShadowRenderer.prototype._allocate = function (mesh) {
-    const scene = mesh.scene;
-    const gl = scene.canvas.gl;
-    this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
-    this._scene = scene;
-    if (this._program.errors) {
-        this.errors = this._program.errors;
-        return;
-    }
-    const program = this._program;
-    this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-    this._uModelMatrix = program.getLocation("modelMatrix");
-    this._uViewMatrix = program.getLocation("viewMatrix");
-    this._uProjMatrix = program.getLocation("projMatrix");
-    this._uSectionPlanes = [];
-    for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
-        this._uSectionPlanes.push({
-            active: program.getLocation("sectionPlaneActive" + i),
-            pos: program.getLocation("sectionPlanePos" + i),
-            dir: program.getLocation("sectionPlaneDir" + i)
-        });
-    }
-    this._aPosition = program.getAttribute("position");
-    this._uClippable = program.getLocation("clippable");
-    this._uOffset = program.getLocation("offset");
-    this._lastMaterialId = null;
-    this._lastGeometryId = null;
-};
-
-ShadowRenderer.prototype._bindProgram = function (frame) {
-    const scene = this._scene;
-    const gl = scene.canvas.gl;
-    const sectionPlanesState = scene._sectionPlanesState;
-    this._program.bind();
-    frame.useProgram++;
-    gl.uniformMatrix4fv(this._uViewMatrix, false, frame.shadowViewMatrix);
-    gl.uniformMatrix4fv(this._uProjMatrix, false, frame.shadowProjMatrix);
-    this._lastMaterialId = null;
-    this._lastGeometryId = null;
-};
-
-export {ShadowRenderer};
