@@ -37,10 +37,6 @@ EmphasisRenderer.getHash = (mesh, isFill) => [
 ].join(";");
 
 EmphasisRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
-    if (!this._program) {
-        this._allocate(mesh);
-    }
-
     const scene = this._scene;
     const camera = scene.camera;
     const gl = scene.canvas.gl;
