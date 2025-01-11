@@ -29,11 +29,6 @@ OcclusionRenderer.getHash = (mesh, ...rest) => [
 ].join(";");
 
 OcclusionRenderer.prototype.drawMesh = function (frameCtx, mesh) {
-
-    if (!this._program) {
-        this._allocate(mesh);
-    }
-
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const materialState = mesh._material._state;
