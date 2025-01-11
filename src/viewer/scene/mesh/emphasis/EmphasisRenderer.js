@@ -60,14 +60,12 @@ export const EmphasisRenderer = function(mesh, isFill) {
 };
 
 EmphasisRenderer.getHash = (mesh, isFill) => [
-    mesh.scene.id,
+    mesh._state.hash,
     mesh.scene.gammaOutput ? "go" : "", // Gamma input not needed
     isFill && mesh.scene._lightsState.getHash(),
-    mesh.scene._sectionPlanesState.getHash(),
     (isFill && mesh._geometry._state.normalsBuf) ? "n" : "",
-    mesh._geometry._state.compressGeometry ? "cp" : "",
-    mesh._state.hash
-].join(";");
+    mesh._geometry._state.compressGeometry ? "cp" : ""
+];
 
 EmphasisRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     const scene = this._scene;
