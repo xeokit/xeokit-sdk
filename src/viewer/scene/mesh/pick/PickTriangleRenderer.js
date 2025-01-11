@@ -28,11 +28,6 @@ PickTriangleRenderer.getHash = (mesh, ...rest) => [
 ].join(";");
 
 PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
-
-    if (!this._program) {
-        this._allocate(mesh);
-    }
-
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const meshState = mesh._state;
