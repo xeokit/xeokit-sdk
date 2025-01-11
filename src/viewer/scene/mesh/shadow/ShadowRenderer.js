@@ -23,9 +23,6 @@ ShadowRenderer.getHash = (mesh, ...rest) => [
 ].join(";");
 
 ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
-    if (!this._program) {
-        this._allocate(mesh);
-    }
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const materialState = mesh._material._state;
@@ -148,9 +145,6 @@ ShadowRenderer.prototype._allocate = function (mesh) {
 };
 
 ShadowRenderer.prototype._bindProgram = function (frame) {
-    if (!this._program) {
-        this._allocate(mesh);
-    }
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const sectionPlanesState = scene._sectionPlanesState;
