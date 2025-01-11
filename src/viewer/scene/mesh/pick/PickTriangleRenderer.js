@@ -14,10 +14,39 @@ const tempVec3a = math.vec3();
 /**
  * @private
  */
-const PickTriangleRenderer = function(mesh) {
-    this._scene = mesh.scene;
-    this._programSetup = PickTriangleShaderSource(mesh);
-    this._allocate(mesh);
+export const PickTriangleRenderer = function(mesh) {
+    const scene = mesh.scene;
+    const gl = scene.canvas.gl;
+    const programSetup = PickTriangleShaderSource(mesh);
+    const program = new Program(gl, MeshRenderer(programSetup, mesh));
+    if (program.errors) {
+        this.errors = program.errors;
+    } else {
+        this._scene = mesh.scene;
+        this._program = program;
+        const getInputSetter = makeInputSetters(gl, program.handle, true);
+        this._setInputsState = programSetup.setupInputs && programSetup.setupInputs(getInputSetter);
+
+        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
+        this._uModelMatrix = program.getLocation("modelMatrix");
+        this._uViewMatrix = program.getLocation("viewMatrix");
+        this._uProjMatrix = program.getLocation("projMatrix");
+        this._uSectionPlanes = [];
+        for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
+            this._uSectionPlanes.push({
+                active: program.getLocation("sectionPlaneActive" + i),
+                pos: program.getLocation("sectionPlanePos" + i),
+                dir: program.getLocation("sectionPlaneDir" + i)
+            });
+        }
+        this._aPosition = program.getAttribute("position");
+        this._pickColor = program.getAttribute("pickColor");
+        this._uClippable = program.getLocation("clippable");
+        this._uOffset = program.getLocation("offset");
+        if (scene.logarithmicDepthBufferEnabled ) {
+            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+        }
+    }
 };
 
 PickTriangleRenderer.getHash = (mesh, ...rest) => [
@@ -118,41 +147,3 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     gl.vertexAttribPointer(this._pickColor.location, pickColorsBuf.itemSize, pickColorsBuf.itemType, true, 0, 0); // Normalize
     gl.drawArrays(geometryState.primitive, 0, positionsBuf.numItems / 3);
 };
-
-PickTriangleRenderer.prototype._allocate = function (mesh) {
-    const scene = mesh.scene;
-    const gl = scene.canvas.gl;
-    this._program = new Program(gl, MeshRenderer(this._programSetup, mesh));
-    if (this._program.errors) {
-        this.errors = this._program.errors;
-        return;
-    }
-    const program = this._program;
-    const getInputSetter = makeInputSetters(gl, program.handle, true);
-    this._setInputsState = this._programSetup.setupInputs && this._programSetup.setupInputs(getInputSetter);
-
-    this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-    this._uModelMatrix = program.getLocation("modelMatrix");
-    this._uViewMatrix = program.getLocation("viewMatrix");
-    this._uProjMatrix = program.getLocation("projMatrix");
-    this._uSectionPlanes = [];
-    for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
-        this._uSectionPlanes.push({
-            active: program.getLocation("sectionPlaneActive" + i),
-            pos: program.getLocation("sectionPlanePos" + i),
-            dir: program.getLocation("sectionPlaneDir" + i)
-        });
-    }
-    this._aPosition = program.getAttribute("position");
-    this._pickColor = program.getAttribute("pickColor");
-    this._uClippable = program.getLocation("clippable");
-    this._uOffset = program.getLocation("offset");
-    if (scene.logarithmicDepthBufferEnabled ) {
-        this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
-    }
-};
-
-export {PickTriangleRenderer};
-
-
-
