@@ -47,12 +47,10 @@ export const OcclusionRenderer = function(mesh) {
     }
 };
 
-OcclusionRenderer.getHash = (mesh, ...rest) => [
-    mesh.scene.canvas.canvas.id,
-    mesh.scene._sectionPlanesState.getHash(),
+OcclusionRenderer.getHash = (mesh) => [
     mesh._geometry._state.hash,
     mesh._state.pickOcclusionHash
-].join(";");
+];
 
 OcclusionRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const scene = this._scene;
