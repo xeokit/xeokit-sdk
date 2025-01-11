@@ -10,6 +10,8 @@ const tempVec3a = math.vec3();
  * @private
  */
 export const ShadowRenderer = function(mesh) {
+    const useNormals = false;
+
     const scene = mesh.scene;
     const program = new Program(scene.canvas.gl, MeshRenderer(ShadowShaderSource(mesh), mesh));
     if (program.errors) {
@@ -19,7 +21,9 @@ export const ShadowRenderer = function(mesh) {
         this._program = program;
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uModelMatrix = program.getLocation("modelMatrix");
+        this._uModelNormalMatrix = useNormals && program.getLocation("modelNormalMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
+        this._uViewNormalMatrix = useNormals && program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];
         for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
@@ -30,6 +34,7 @@ export const ShadowRenderer = function(mesh) {
             });
         }
         this._aPosition = program.getAttribute("position");
+        this._aNormal = useNormals && program.getAttribute("normal");
         this._uClippable = program.getLocation("clippable");
         this._uOffset = program.getLocation("offset");
         this._lastMaterialId = null;
