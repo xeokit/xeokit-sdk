@@ -49,12 +49,10 @@ export const PickTriangleRenderer = function(mesh) {
     }
 };
 
-PickTriangleRenderer.getHash = (mesh, ...rest) => [
-    mesh.scene.canvas.canvas.id,
-    mesh.scene._sectionPlanesState.getHash(),
+PickTriangleRenderer.getHash = (mesh) => [
     mesh._geometry._state.compressGeometry ? "cp" : "",
     mesh._state.hash
-].join(";");
+];
 
 PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const scene = this._scene;
