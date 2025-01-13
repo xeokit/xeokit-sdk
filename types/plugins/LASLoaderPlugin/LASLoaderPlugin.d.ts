@@ -10,6 +10,10 @@ export declare interface ILASDefaultDataSource {
    * @param {Function} error Callback fired on error.
    */
   getLAS(src: string | number, ok: (LAS: ArrayBuffer) => void, error: (e: Error) => void): void;
+
+  get cacheBuster(): boolean;
+
+  set cacheBuster(value: boolean);
 }
 
 export declare type LASLoaderPluginConfiguration = {

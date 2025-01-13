@@ -10,6 +10,10 @@ export declare interface ICityJSONDefaultDataSource {
    * @param {Function} error Callback fired on error.
    */
   getCityJSON(src: string | number, ok: (json: any)=> void, error: (e: Error)=> void): void;
+
+  get cacheBuster(): boolean;
+
+  set cacheBuster(value: boolean);
 }
 
 export declare type CityJSONLoaderPluginConfiguration = {

@@ -56,14 +56,28 @@ export declare type LoadXKTModel = {
     saoEnabled?: boolean;
     /** Indicates if physically-based rendering (PBR) will apply to the model. Only works when {@link Scene.pbrEnabled} is also ````true````. */
     pbrEnabled?: boolean;
+    /** Indicates if base color texture rendering is enabled for the model. Overridden by ````pbrEnabled````.  Only works when {@link Scene#colorTextureEnabled} is also ````true````. */
+    colorTextureEnabled?: boolean;
     /** When we set this ````true````, then we force rendering of backfaces for the model. */
     backfaces?: boolean;
     /** When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). */
     excludeUnclassifiedObjects?: boolean;
     /** Indicates whether to globalize each {@link Entity.id} and {@link MetaObject.id}, in case you need to prevent ID clashes with other models. */
     globalizeObjectIds?: boolean;
-    /** Indicates whether to enable geometry reuse */
+    /** Indicates whether to enable geometry reuse (````true```` by default) or whether to expand
+     * all geometry instances into batches (````false````), and not use instancing to render them. Setting this ````false```` can significantly
+     * improve Viewer performance for models that have excessive geometry reuse, but may also increases the amount of
+     * browser and GPU memory used by the model. See [#769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info. */
     reuseGeometries?: boolean;
+    /** When ````true```` (default) use data textures (DTX), where appropriate, to
+     * represent the returned model. Set false to always use vertex buffer objects (VBOs). Note that DTX is only applicable
+     * to non-textured triangle meshes, and that VBOs are always used for meshes that have textures, line segments, or point
+     * primitives. Only works while {@link DTX#enabled} is also ````true````. */
+    dtxEnabled?: boolean;
+    /** Specifies the rendering order for the model. This is used to control the order in which
+     * SceneModels are drawn when they have transparent objects, to give control over the order in which those objects are blended within the transparent
+     * render pass. */
+    renderOrder?: number;
 }
 
 export declare interface IXKTDefaultDataSource {
@@ -84,6 +98,10 @@ export declare interface IXKTDefaultDataSource {
      * @param {Function} error Callback fired on error.
      */
     getXKT(src: string | number, ok: (buffer: ArrayBuffer) => void, error: (e: Error) => void): void;
+
+    get cacheBuster(): boolean;
+
+    set cacheBuster(value: boolean);
 }
 
 /**

@@ -31,6 +31,10 @@ export declare interface IGLTFDefaultDataSource {
    * @param {Function} error Fired on error while loading the glTF binary asset.
    */
   getArrayBuffer(glTFSrc: string | number, binarySrc: string | number, ok: Function, error: Function): void;
+
+  get cacheBuster(): boolean;
+
+  set cacheBuster(value: boolean);
 }
 
 export declare type GLTFLoaderPluginConfiguration =  {

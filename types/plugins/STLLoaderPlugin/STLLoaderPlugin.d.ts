@@ -9,6 +9,10 @@ export declare interface ISTLDefaultDataSource {
    * @param {Function} error Fired on error while loading the STL file.
    */
   getSTL(src: string | number, ok: Function, error: Function): void;
+
+  get cacheBuster(): boolean;
+
+  set cacheBuster(value: boolean);
 }
 
 export declare type STLLoaderPluginCOnfiguration = {
