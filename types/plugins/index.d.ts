@@ -4,6 +4,7 @@ export * from "./AxisGizmoPlugin";
 export * from "./BCFViewpointsPlugin";
 export * from "./CityJSONLoaderPlugin";
 export * from "./DistanceMeasurementsPlugin";
+export * from "./DotBIMLoaderPlugin";
 export * from "./FastNavPlugin";
 export * from "./GLTFLoaderPlugin";
 export * from "./LASLoaderPlugin";
