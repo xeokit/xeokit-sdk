@@ -313,6 +313,10 @@ export class SceneModelMesh {
         }
     }
 
+    isSolid() {
+        return this.layer.solid;
+    }
+
     /**
      * Returns the volume of this SceneModelMesh.
      * @returns {number}

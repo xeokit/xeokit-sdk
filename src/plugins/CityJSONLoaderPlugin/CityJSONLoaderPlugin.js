@@ -1,7 +1,7 @@
 import {math, Plugin, SceneModel, utils} from "../../viewer/index.js";
 import {CityJSONDefaultDataSource} from "./CityJSONDefaultDataSource.js";
 
-import {earcut} from '../lib/earcut.js';
+import earcut from '../../viewer/scene/libs/earcut.js';
 
 const tempVec2a = math.vec2();
 const tempVec3a = math.vec3();
