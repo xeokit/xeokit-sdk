@@ -1,5 +1,5 @@
-import {Plugin} from "../../viewer/Plugin.js";
-import {RenderService} from "./RenderService.js";
+import { Plugin } from "../../viewer/Plugin.js";
+import { RenderService } from "./RenderService.js";
 
 const treeViews = [];
 
@@ -363,6 +363,8 @@ export class TreeViewPlugin extends Plugin {
      * @param {RenderService} [cfg.renderService] Optional {@link RenderService} to use. Defaults to the {@link TreeViewPlugin}'s default {@link RenderService}.
      * @param {Boolean} [cfg.showIndeterminate=false] When true, will show indeterminate state for checkboxes when some but not all child nodes are checked
      * @param {Boolean} [cfg.showProjectNode=false] When true, will show top level project node when hierarchy is set to "storeys"
+     * @param {Function} [cfg.elevationSortFunction] Optional function to replace the default elevation sort function. The function should take two nodes and return -1, 0 or 1. 
+     * @param {Function} [cfg.defaultSortFunction] Optional function to replace the default sort function. The function should take two nodes and return -1, 0 or 1.
      */
     constructor(viewer, cfg = {}) {
 
@@ -416,6 +418,8 @@ export class TreeViewPlugin extends Plugin {
         this._renderService = cfg.renderService || new RenderService();
         this._showIndeterminate = cfg.showIndeterminate ?? false;
         this._showProjectNode = cfg.showProjectNode ?? false;
+        this._elevationSortFunction = cfg.elevationSortFunction ?? undefined;
+        this._defaultSortFunction = cfg.defaultSortFunction ?? undefined;
 
         if (!this._renderService) {
             throw new Error('TreeViewPlugin: no render service set');
@@ -1229,9 +1233,11 @@ export class TreeViewPlugin extends Plugin {
         }
         const firstChild = children[0];
         if ((this._hierarchy === "storeys" || this._hierarchy === "containment") &&  firstChild.type === "IfcBuildingStorey") {
-            children.sort(this._getSpatialSortFunc());
+            if (this._elevationSortFunction) children.sort(this._elevationSortFunction);
+            else children.sort(this._getSpatialSortFunc());
         } else {
-            children.sort(this._alphaSortFunc);
+            if (this._defaultSortFunction) children.sort(this._defaultSortFunction)
+            else children.sort(this._alphaSortFunc);
         }
         for (let i = 0, len = children.length; i < len; i++) {
             const node = children[i];
