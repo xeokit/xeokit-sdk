@@ -21,6 +21,10 @@ export declare type TreeViewPluginConfiguration = {
   renderService?: ITreeViewRenderService;
   /** When true, will show indeterminate state for checkboxes when some but not all child nodes are checked */
   showIndeterminate?: boolean;
+  /** Optional function to replace the default elevation sort function. The function should take two nodes and return -1, 0 or 1.  */
+  elevationSortFunction?: (node1: TreeViewNode, node2: TreeViewNode) => number;
+  /** Optional function to replace the default sort function. The function should take two nodes and return -1, 0 or 1.  */
+  defaultSortFunction?: (node1: TreeViewNode, node2: TreeViewNode) => number;
 };
 
 /**
