@@ -5,14 +5,14 @@
   "module": "./dist/xeokit-sdk.es.js",
   "main": "./dist/xeokit-sdk.cjs.js",
   "types": "./types/index.d.ts",
-
   "scripts": {
     "build": "rollup --config rollup.config.js; rollup --config rollup.minified.config.js",
     "dev-build": "rollup --config rollup.dev.config.js",
     "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc",
     "typedocs": "rm -Rf ./docs/*; typedoc --tsconfig tsconfig.json",
     "publish": "npm publish --access public",
-    "changelog": "git fetch; auto-changelog --commit-limit false --package --template changelog-template.hbs"
+    "changelog": "git fetch; auto-changelog --commit-limit false --package --template changelog-template.hbs",
+    "test": "npx percy exec -- npx playwright test"
   },
   "repository": {
     "type": "git",
@@ -59,13 +59,19 @@
     "@loaders.gl/core": "^3.2.6",
     "@loaders.gl/gltf": "^3.2.6",
     "@loaders.gl/las": "^3.2.6",
+    "@percy/cli": "^1.30.6",
+    "@percy/playwright": "^1.0.7",
+    "dotenv": "^16.4.7",
     "html2canvas": "^1.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
     "@babel/preset-env": "^7.18.6",
+    "@playwright/test": "^1.49.1",
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-node-resolve": "^13.2.1",
+    "@types/node": "^22.10.6",
+    "auto-changelog": "^2.4.0",
     "esdoc": "^1.1.0",
     "esdoc-custom-theme": "^1.4.2",
     "esdoc-publish-html-plugin": "^1.1.2",
@@ -74,8 +80,7 @@
     "parse5": "^7.0.0",
     "rollup": "^2.70.2",
     "rollup-plugin-terser": "^7.0.2",
-    "typedoc": "^0.22.15",
-    "auto-changelog": "^2.4.0"
+    "typedoc": "^0.22.15"
   },
   "files": [
     "/src",
