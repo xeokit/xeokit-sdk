@@ -3,7 +3,10 @@ on:
   push:
     branches:
       - master     # Build on every push to main
-
+  pull_request:
+    branches:
+      - master
+ 
 jobs:
   # -------------------------------------
   # 1. Build job (for pushes to main)
