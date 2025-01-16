@@ -111,6 +111,8 @@ class Annotation extends Marker {
 
         this.setMarkerShown(cfg.markerShown !== false);
         this.setLabelShown(cfg.labelShown);
+        this._preventWidthUpdate = false;
+        this._currentMarkerWidth = undefined;
 
         /**
          * Optional World-space position for {@link Camera#eye}, used when this Annotation is associated with a {@link Camera} position.
@@ -212,18 +214,23 @@ class Annotation extends Marker {
         const boundary = this.scene.canvas.boundary;
         const left = boundary[0] + this.canvasPos[0];
         const top  = boundary[1] + this.canvasPos[1];
-        const markerRect = this._marker.getBoundingClientRect();
-        const markerWidth = markerRect.width;
+        if (this._preventWidthUpdate && (this._currentMarkerWidth === undefined)) {
+            this._currentMarkerWidth = this._marker.getBoundingClientRect().width;
+        }
+        const markerWidth = this._preventWidthUpdate ? this._currentMarkerWidth : this._marker.getBoundingClientRect().width;
         const markerDir = (this._markerAlign === "right") ? -1 : ((this._markerAlign === "center") ? 0 : 1);
         const markerCenter = left + markerDir * (markerWidth / 2 - 12);
         this._marker.style.left = px(markerCenter - markerWidth / 2);
         this._marker.style.top  = px(top - 12);
         this._marker.style["z-index"] = 90005 + Math.floor(this._viewPos[2]) + 1;
 
-        const labelRect = this._label.getBoundingClientRect();
-        const labelWidth = labelRect.width;
         const labelDir = Math.sign(this._labelPosition);
-        this._label.style.left = px(markerCenter + labelDir * (markerWidth / 2 + Math.abs(this._labelPosition) + labelWidth / 2) - labelWidth / 2);
+        if (labelDir === 1) {
+            this._label.style.left = px(markerCenter + labelDir * (markerWidth / 2 + Math.abs(this._labelPosition)));
+        } else {
+            const labelWidth = this._label.getBoundingClientRect().width;
+            this._label.style.left = px(markerCenter + labelDir * (markerWidth / 2 + Math.abs(this._labelPosition) + labelWidth / 2) - labelWidth / 2);
+        }
         this._label.style.top  = px(top - 17);
         this._label.style["z-index"] = 90005 + Math.floor(this._viewPos[2]) + 1;
     }
@@ -257,6 +264,17 @@ class Annotation extends Marker {
             this.entity = pickResult.entity;
             this.worldPos = offsetWorldPos;
         }
+    }
+
+    /**
+     * Purely performance setting. If `true` then it will prevent continuous `getBoundingClientRect()`
+     * calls when updating the Annotation's canvas position.
+     *
+     * @param {Boolean}
+     */
+    setPreventWidthUpdate(value) {
+        this._preventWidthUpdate = value;
+        this._currentMarkerWidth = undefined;
     }
 
     /**
