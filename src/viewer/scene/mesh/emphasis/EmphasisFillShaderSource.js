@@ -50,7 +50,5 @@ export const EmphasisFillShaderSource = function(mesh) {
 EmphasisFillShaderSource.getHash = (mesh) => [
     mesh._state.hash,
     mesh.scene.gammaOutput ? "go" : "", // Gamma input not needed
-    mesh.scene._lightsState.getHash(),
-    mesh._geometry._state.normalsBuf ? "n" : "",
-    mesh._geometry._state.compressGeometry ? "cp" : ""
+    mesh.scene._lightsState.getHash()
 ];
