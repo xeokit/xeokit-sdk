@@ -6,7 +6,6 @@ import {MeshRenderer} from "../MeshRenderer.js";
 import {OcclusionShaderSource} from "./OcclusionShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
-import {math} from "../../math/math.js";
 
 export const OcclusionRenderer = {
     getHash: (mesh) => [
@@ -35,9 +34,6 @@ export const OcclusionRenderer = {
             const uModelNormalMatrix = useNormals && program.getLocation("modelNormalMatrix");
             const uViewNormalMatrix = useNormals && program.getLocation("viewNormalMatrix");
 
-            const uOffset = program.getLocation("offset");
-            const uLogDepthBufFC = scene.logarithmicDepthBufferEnabled && program.getLocation("logDepthBufFC");
-
             let lastMaterialId = null;
             let lastGeometryId = null;
 
@@ -65,10 +61,6 @@ export const OcclusionRenderer = {
                         frameCtx.useProgram++;
                         lastMaterialId = null;
                         lastGeometryId = null;
-                        if (uLogDepthBufFC ) {
-                            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
-                            gl.uniform1f(uLogDepthBufFC, logDepthBufFC);
-                        }
                         setLightInputState && setLightInputState();
                     }
 
@@ -99,10 +91,8 @@ export const OcclusionRenderer = {
                         lastMaterialId = materialState.id;
                     }
 
-                    setMeshInputsState(mesh, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix, project.matrix);
+                    setMeshInputsState(mesh, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix, project.matrix, project.far);
                     useNormals && uModelNormalMatrix && gl.uniformMatrix4fv(uModelNormalMatrix, gl.FALSE, mesh.worldNormalMatrix);
-
-                    gl.uniform3fv(uOffset, meshState.offset);
 
                     setInputsState && setInputsState();
 
