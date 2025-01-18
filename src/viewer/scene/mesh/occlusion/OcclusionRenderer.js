@@ -37,8 +37,6 @@ export const OcclusionRenderer = {
             const uViewNormalMatrix = useNormals && program.getLocation("viewNormalMatrix");
             const uProjMatrix = program.getLocation("projMatrix");
 
-            const aPosition = program.getAttribute("position");
-
             const uOffset = program.getLocation("offset");
             const uLogDepthBufFC = scene.logarithmicDepthBufferEnabled && program.getLocation("logDepthBufFC");
 
@@ -113,12 +111,8 @@ export const OcclusionRenderer = {
                     setInputsState && setInputsState();
 
                     if (geometryState.id !== lastGeometryId) {
-                        setGeometryInputsState(geometryState);
+                        setGeometryInputsState(geometryState, () => frameCtx.bindArray++);
 
-                        if (aPosition) {
-                            aPosition.bindArrayBuffer(geometryState.positionsBuf);
-                            frameCtx.bindArray++;
-                        }
                         if (geometryState.indicesBuf) {
                             geometryState.indicesBuf.bind();
                             frameCtx.bindArray++;
