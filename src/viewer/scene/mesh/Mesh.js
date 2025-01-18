@@ -273,39 +273,37 @@ class Mesh extends Component {
 
         const material = cfg.material ? this._checkComponent2(["PhongMaterial", "MetallicMaterial", "SpecularMaterial", "LambertMaterial"], cfg.material) : this.scene.material;
 
-        const wrapRenderer = (mtlKey, programSetupClass) => {
+        const wrapRenderer = (programSetupClass) => {
             let instance = null;
             const ensureInstance = () => {
                 if (! instance) {
                     const mesh = this;
-                    if (! (mtlKey in renderersCache)) {
-                        renderersCache[mtlKey] = { };
-                    }
                     const hash = [
+                        programSetupClass.name,
                         mesh.scene.canvas.canvas.id,
                         mesh.scene._sectionPlanesState.getHash()
                     ].concat(programSetupClass.getHash(mesh)).join(";");
-                    if (! (hash in renderersCache[mtlKey])) {
+                    if (! (hash in renderersCache)) {
                         const renderer = instantiateMeshRenderer(mesh, programSetupClass(mesh));
                         if (renderer.errors) {
                             console.log(renderer.errors.join("\n"));
                             return;
                         }
                         const id = ids.addItem({});
-                        renderersCache[mtlKey][hash] = {
+                        renderersCache[hash] = {
                             drawMesh: renderer.drawMesh,
                             id: id,
                             useCount: 0,
                             delete: () => {
                                 ids.removeItem(id);
                                 renderer.destroy();
-                                delete renderersCache[mtlKey][hash];
+                                delete renderersCache[hash];
                                 stats.memory.programs--;
                             }
                         };
                         stats.memory.programs++;
                     }
-                    instance = renderersCache[mtlKey][hash];
+                    instance = renderersCache[hash];
                     instance.useCount++;
                 }
             };
@@ -322,13 +320,13 @@ class Mesh extends Component {
         };
 
         this._renderers = {
-            _drawRenderer:          wrapRenderer("Draw",          (material.type === "LambertMaterial") ? LambertShaderSource : DrawShaderSource),
-            _shadowRenderer:        wrapRenderer("Shadow",        ShadowShaderSource),
-            _emphasisFillRenderer:  wrapRenderer("EmphasisFill",  EmphasisFillShaderSource),
-            _emphasisEdgesRenderer: wrapRenderer("EmphasisEdges", EmphasisEdgesShaderSource),
-            _pickMeshRenderer:      wrapRenderer("PickMesh",      PickMeshShaderSource),
-            _pickTriangleRenderer:  wrapRenderer("PickTriangle",  PickTriangleShaderSource),
-            _occlusionRenderer:     wrapRenderer("Occlusion",     OcclusionShaderSource)
+            _drawRenderer:          wrapRenderer((material.type === "LambertMaterial") ? LambertShaderSource : DrawShaderSource),
+            _shadowRenderer:        wrapRenderer(ShadowShaderSource),
+            _emphasisFillRenderer:  wrapRenderer(EmphasisFillShaderSource),
+            _emphasisEdgesRenderer: wrapRenderer(EmphasisEdgesShaderSource),
+            _pickMeshRenderer:      wrapRenderer(PickMeshShaderSource),
+            _pickTriangleRenderer:  wrapRenderer(PickTriangleShaderSource),
+            _occlusionRenderer:     wrapRenderer(OcclusionShaderSource)
         };
 
         this._geometry = cfg.geometry ? this._checkComponent2(["ReadableGeometry", "VBOGeometry"], cfg.geometry) : this.scene.geometry;
