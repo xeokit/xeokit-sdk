@@ -568,10 +568,6 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
             this._aColor.bindArrayBuffer(geometryState.colorsBuf);
             frameCtx.bindArray++;
         }
-        if (this._aFlags) {
-            this._aFlags.bindArrayBuffer(geometryState.flagsBuf);
-            frameCtx.bindArray++;
-        }
         if (geometryState.indicesBuf) {
             geometryState.indicesBuf.bind();
             frameCtx.bindArray++;
@@ -842,7 +838,6 @@ DrawRenderer.prototype._allocate = function (mesh) {
     this._aNormal = program.getAttribute("normal");
     this._aUV = program.getAttribute("uv");
     this._aColor = program.getAttribute("color");
-    this._aFlags = program.getAttribute("flags");
 
     this._uClippable = program.getLocation("clippable");
     this._uColorize = program.getLocation("colorize");
