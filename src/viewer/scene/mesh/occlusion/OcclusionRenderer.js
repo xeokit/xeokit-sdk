@@ -5,26 +5,34 @@
 import {MeshRenderer} from "../MeshRenderer.js";
 import {OcclusionShaderSource} from "./OcclusionShaderSource.js";
 import {Program} from "../../webgl/Program.js";
+import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 import {math} from "../../math/math.js";
 import {getPlaneRTCPos} from "../../math/rtcCoords.js";
 
 const tempVec3a = math.vec3();
 
-// No ID, because there is exactly one PickMeshRenderer per scene
-
 /**
  * @private
  */
-export const OcclusionRenderer = function(mesh) {
-    const useNormals = false;
-
+export const OcclusionRenderer = function(mesh) { // There is exactly one OcclusionRenderer per scene
     const scene = mesh.scene;
-    const program = new Program(scene.canvas.gl, MeshRenderer(OcclusionShaderSource(), mesh));
+    const gl = scene.canvas.gl;
+    const programSetup = OcclusionShaderSource();
+    const program = new Program(gl, MeshRenderer(programSetup, mesh));
     if (program.errors) {
         this.errors = program.errors;
     } else {
+        const useNormals = false;
+        this._useNormals = useNormals;
+
         this._scene = scene;
         this._program = program;
+
+        const getInputSetter = makeInputSetters(gl, program.handle, true);
+        this._setInputsState = programSetup.setupInputs && programSetup.setupInputs(getInputSetter);
+        this._setMaterialInputsState = programSetup.setupMaterialInputs && programSetup.setupMaterialInputs(getInputSetter);
+        this._setLightInputState = programSetup.setupLightInputs && programSetup.setupLightInputs(getInputSetter);
+
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uModelMatrix = program.getLocation("modelMatrix");
         this._uModelNormalMatrix = useNormals && program.getLocation("modelNormalMatrix");
@@ -58,56 +66,40 @@ OcclusionRenderer.getHash = (mesh) => [
 ];
 
 OcclusionRenderer.prototype.drawMesh = function (frameCtx, mesh) {
+    const material = mesh._material;
+
+    const useNormals = this._useNormals;
     const scene = this._scene;
+    const camera = scene.camera;
     const gl = scene.canvas.gl;
-    const materialState = mesh._material._state;
     const meshState = mesh._state;
-    const geometryState = mesh._geometry._state;
+    const geometry = mesh._geometry;
+    const geometryState = geometry._state;
     const origin = mesh.origin;
+    const materialState = material._state;
 
     if (materialState.alpha < 1.0) {
         return;
     }
 
-    if (frameCtx.lastProgramId !== this._program.id) {
-        frameCtx.lastProgramId = this._program.id;
-        const project = scene.camera.project;
-        this._program.bind();
+    const program = this._program;
+    if (frameCtx.lastProgramId !== program.id) {
+        frameCtx.lastProgramId = program.id;
+        const project = camera.project;
+        program.bind();
         frameCtx.useProgram++;
+        this._lastMaterialId = null;
+        this._lastVertexBufsId = null;
+        this._lastGeometryId = null;
         if (scene.logarithmicDepthBufferEnabled ) {
             const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
-        this._lastMaterialId = null;
-        this._lastVertexBufsId = null;
-        this._lastGeometryId = null;
+        this._setLightInputState && this._setLightInputState();
     }
-
-    if (materialState.id !== this._lastMaterialId) {
-        const backfaces = materialState.backfaces;
-        if (frameCtx.backfaces !== backfaces) {
-            if (backfaces) {
-                gl.disable(gl.CULL_FACE);
-            } else {
-                gl.enable(gl.CULL_FACE);
-            }
-            frameCtx.backfaces = backfaces;
-        }
-        const frontface = materialState.frontface;
-        if (frameCtx.frontface !== frontface) {
-            if (frontface) {
-                gl.frontFace(gl.CCW);
-            } else {
-                gl.frontFace(gl.CW);
-            }
-            frameCtx.frontface = frontface;
-        }
-        this._lastMaterialId = materialState.id;
-    }
-
-    const camera = scene.camera;
 
     gl.uniformMatrix4fv(this._uViewMatrix, false, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
+    useNormals && gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
     if (meshState.clippable) {
         const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
@@ -139,14 +131,42 @@ OcclusionRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         }
     }
 
-    gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
-    gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, mesh.worldMatrix);
-
-    if (this._uClippable) {
-        gl.uniform1i(this._uClippable, mesh._state.clippable);
+    if (materialState.id !== this._lastMaterialId) {
+        const backfaces = materialState.backfaces;
+        if (frameCtx.backfaces !== backfaces) {
+            if (backfaces) {
+                gl.disable(gl.CULL_FACE);
+            } else {
+                gl.enable(gl.CULL_FACE);
+            }
+            frameCtx.backfaces = backfaces;
+        }
+        const frontface = materialState.frontface;
+        if (frameCtx.frontface !== frontface) {
+            if (frontface) {
+                gl.frontFace(gl.CCW);
+            } else {
+                gl.frontFace(gl.CW);
+            }
+            frameCtx.frontface = frontface;
+        }
+        this._setMaterialInputsState && this._setMaterialInputsState(material);
+        this._lastMaterialId = materialState.id;
     }
 
-    gl.uniform3fv(this._uOffset, mesh._state.offset);
+    gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
+    gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, mesh.worldMatrix);
+    if (useNormals && this._uModelNormalMatrix) {
+        gl.uniformMatrix4fv(this._uModelNormalMatrix, gl.FALSE, mesh.worldNormalMatrix);
+    }
+
+    if (this._uClippable) {
+        gl.uniform1i(this._uClippable, meshState.clippable);
+    }
+
+    gl.uniform3fv(this._uOffset, meshState.offset);
+
+    this._setInputsState && this._setInputsState();
 
     if (geometryState.id !== this._lastGeometryId) {
         if (this._uPositionsDecodeMatrix) {
