@@ -21,8 +21,6 @@ export const OcclusionRenderer = {
         if (program.errors) {
             return { errors: program.errors };
         } else {
-            const useNormals = false;
-
             const getInputSetter = makeInputSetters(gl, program.handle, true);
             const setInputsState = programSetup.setupInputs && programSetup.setupInputs(getInputSetter);
             const setMaterialInputsState = programSetup.setupMaterialInputs && programSetup.setupMaterialInputs(getInputSetter);
@@ -30,9 +28,6 @@ export const OcclusionRenderer = {
             const setGeometryInputsState = meshRenderer.setupGeometryInputs(getInputSetter);
             const setMeshInputsState = meshRenderer.setupMeshInputs(getInputSetter);
             const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
-
-            const uModelNormalMatrix = useNormals && program.getLocation("modelNormalMatrix");
-            const uViewNormalMatrix = useNormals && program.getLocation("viewNormalMatrix");
 
             let lastMaterialId = null;
             let lastGeometryId = null;
@@ -64,8 +59,6 @@ export const OcclusionRenderer = {
                         setLightInputState && setLightInputState();
                     }
 
-                    useNormals && gl.uniformMatrix4fv(uViewNormalMatrix, false, camera.viewNormalMatrix);
-
                     setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, meshState.clippable, scene._sectionPlanesState);
 
                     if (materialState.id !== lastMaterialId) {
@@ -91,8 +84,7 @@ export const OcclusionRenderer = {
                         lastMaterialId = materialState.id;
                     }
 
-                    setMeshInputsState(mesh, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix, project.matrix, project.far);
-                    useNormals && uModelNormalMatrix && gl.uniformMatrix4fv(uModelNormalMatrix, gl.FALSE, mesh.worldNormalMatrix);
+                    setMeshInputsState(mesh, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix, camera.viewNormalMatrix, project.matrix, project.far);
 
                     setInputsState && setInputsState();
 
