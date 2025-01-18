@@ -42,10 +42,6 @@ export const DrawRenderer = {
 
             const uLogDepthBufFC = scene.logarithmicDepthBufferEnabled && program.getLocation("logDepthBufFC");
 
-            const aNormal = program.getAttribute("normal");
-            const aUV = program.getAttribute("uv");
-            const aColor = program.getAttribute("color");
-
             const uOffset = program.getLocation("offset");
             const uScale = program.getLocation("scale");
 
@@ -144,18 +140,6 @@ export const DrawRenderer = {
                     if (geometryState.id !== lastGeometryId) {
                         setGeometryInputsState(geometryState, () => frameCtx.bindArray++);
 
-                        if (aNormal) {
-                            aNormal.bindArrayBuffer(geometryState.normalsBuf);
-                            frameCtx.bindArray++;
-                        }
-                        if (aUV) {
-                            aUV.bindArrayBuffer(geometryState.uvBuf);
-                            frameCtx.bindArray++;
-                        }
-                        if (aColor) {
-                            aColor.bindArrayBuffer(geometryState.colorsBuf);
-                            frameCtx.bindArray++;
-                        }
                         if (geometryState.indicesBuf) {
                             geometryState.indicesBuf.bind();
                             frameCtx.bindArray++;
