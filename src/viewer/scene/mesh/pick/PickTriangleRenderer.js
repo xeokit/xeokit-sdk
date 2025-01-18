@@ -31,8 +31,6 @@ export const PickTriangleRenderer = {
             const uViewMatrix = program.getLocation("viewMatrix");
             const uProjMatrix = program.getLocation("projMatrix");
 
-            const pickColor = program.getAttribute("pickColor");
-
             const uOffset = program.getLocation("offset");
             const uLogDepthBufFC = scene.logarithmicDepthBufferEnabled && program.getLocation("logDepthBufFC");
 
@@ -48,8 +46,6 @@ export const PickTriangleRenderer = {
                     const backfaces = materialState.backfaces;
                     const frontface = materialState.frontface;
                     const project = scene.camera.project;
-                    const positionsBuf = geometry._getPickTrianglePositions();
-                    const pickColorsBuf = geometry._getPickTriangleColors();
 
                     program.bind();
 
@@ -87,13 +83,11 @@ export const PickTriangleRenderer = {
 
                     gl.uniform3fv(uOffset, mesh._state.offset);
 
-                    setGeometryInputsState(geometryState, () => frameCtx.bindArray++, { positionsBuf: positionsBuf });
+                    const positionsBuf = geometry._getPickTrianglePositions();
+                    setGeometryInputsState(geometryState, () => frameCtx.bindArray++, { positionsBuf: positionsBuf, pickColorsBuf: geometry._getPickTriangleColors() });
 
                     setInputsState && setInputsState(frameCtx, mesh._state);
 
-                    pickColorsBuf.bind();
-                    gl.enableVertexAttribArray(pickColor.location);
-                    gl.vertexAttribPointer(pickColor.location, pickColorsBuf.itemSize, pickColorsBuf.itemType, true, 0, 0); // Normalize
                     gl.drawArrays(geometryState.primitive, 0, positionsBuf.numItems / 3);
                 }
             };
