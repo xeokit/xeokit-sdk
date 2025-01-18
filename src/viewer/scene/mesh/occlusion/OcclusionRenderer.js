@@ -3,7 +3,6 @@
  */
 
 import {MeshRenderer} from "../MeshRenderer.js";
-import {OcclusionShaderSource} from "./OcclusionShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 
@@ -12,10 +11,9 @@ export const OcclusionRenderer = {
         mesh._geometry._state.hash,
         mesh._state.pickOcclusionHash
     ],
-    instantiate: (mesh) => { // There is exactly one OcclusionRenderer per scene
+    instantiate: (programSetup, mesh) => {
         const scene = mesh.scene;
         const gl = scene.canvas.gl;
-        const programSetup = OcclusionShaderSource();
         const meshRenderer = MeshRenderer(programSetup, mesh);
         const program = new Program(gl, { vertex: meshRenderer.vertex, fragment: meshRenderer.fragment });
         if (program.errors) {
