@@ -67,7 +67,7 @@ export const ShadowRenderer = {
                         lastMaterialId = materialState.id;
                     }
 
-                    setMeshInputsState(mesh, frame.shadowViewMatrix, frame.shadowProjMatrix, scene.camera.project.far);
+                    setMeshInputsState(mesh, frame.shadowViewMatrix, scene.camera.viewNormalMatrix, frame.shadowProjMatrix, scene.camera.project.far);
 
                     setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, meshState.clippable, scene._sectionPlanesState);
 
