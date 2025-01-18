@@ -22,3 +22,8 @@ export const PickTriangleShaderSource = function(mesh) {
         }
     };
 };
+
+PickTriangleShaderSource.getHash = (mesh) => [
+    mesh._geometry._state.compressGeometry ? "cp" : "",
+    mesh._state.hash
+];
