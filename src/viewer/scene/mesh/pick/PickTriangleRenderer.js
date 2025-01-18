@@ -144,10 +144,8 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     gl.uniform3fv(this._uOffset, mesh._state.offset);
     if (this._uPositionsDecodeMatrix) {
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
-        this._aPosition.bindArrayBuffer(positionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
-    } else {
-        this._aPosition.bindArrayBuffer(positionsBuf);
     }
+    this._aPosition.bindArrayBuffer(positionsBuf);
 
     gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
 
