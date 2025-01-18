@@ -25,9 +25,9 @@ export const PickMeshRenderer = {
             const getInputSetter = makeInputSetters(gl, program.handle, true);
             const setInputsState = programSetup.setupInputs && programSetup.setupInputs(getInputSetter);
             const setMaterialInputsState = programSetup.setupMaterialInputs && programSetup.setupMaterialInputs(getInputSetter);
+            const setGeometryInputsState = meshRenderer.setupGeometryInputs(getInputSetter);
             const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
 
-            const uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
             const uModelMatrix = program.getLocation("modelMatrix");
             const uViewMatrix = program.getLocation("viewMatrix");
             const uProjMatrix = program.getLocation("projMatrix");
@@ -96,7 +96,7 @@ export const PickMeshRenderer = {
                     gl.uniform3fv(uOffset, mesh._state.offset);
 
                     if (geometryState.id !== lastGeometryId) {
-                        uPositionsDecodeMatrix && gl.uniformMatrix4fv(uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
+                        setGeometryInputsState(geometryState);
 
                         if (aPosition) {
                             aPosition.bindArrayBuffer(geometryState.positionsBuf);
