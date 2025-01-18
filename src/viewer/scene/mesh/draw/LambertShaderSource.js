@@ -11,8 +11,11 @@ export const LambertShaderSource = function(mesh) {
 
     return {
         programName: "Lambert",
+        canActAsBackground: true,
         discardPoints: true,
         setupPointSize: true,
+        setsFrontFace: true,
+        setsLineWidth: true,
         appendVertexDefinitions: (src) => {
             src.push("uniform vec4 colorize;");
             src.push("uniform vec4 materialColor;");
