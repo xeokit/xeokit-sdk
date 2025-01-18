@@ -242,15 +242,27 @@ export function MeshRenderer(programSetup, mesh) {
         return src;
     };
 
+    const binder = (arrayBuf, onBindAttribute) => ({ // see ArrayBuf.js and Attribute.js
+        bindAtLocation: location => {
+            arrayBuf.bind();
+            arrayBuf._gl.vertexAttribPointer(location, arrayBuf.itemSize, arrayBuf.itemType, arrayBuf.normalized, 0, 0);
+            onBindAttribute();
+        }
+    });
+
     return {
         vertex:   buildVertexShader(),
         fragment: buildFragmentShader(),
         setupGeometryInputs: (getInputSetter) => {
             const uPositionsDecodeMatrix = quantizedGeometry && getInputSetter("positionsDecodeMatrix");
             const uvDecodeMatrix = uvDecoded.needed && quantizedGeometry && getInputSetter("uvDecodeMatrix");
-            return (geometryState) => {
+            const aPosition = getInputSetter("position");
+
+            return (geometryState, onBindAttribute, triangleGeometry) => {
                 uPositionsDecodeMatrix && uPositionsDecodeMatrix(geometryState.positionsDecodeMatrix);
                 uvDecodeMatrix && uvDecodeMatrix(geometryState.uvDecodeMatrix);
+
+                aPosition(binder((triangleGeometry || geometryState).positionsBuf, onBindAttribute));
             };
         },
         setupGeneralMaterialInputs: setupPointSize && function(getInputSetter) {
