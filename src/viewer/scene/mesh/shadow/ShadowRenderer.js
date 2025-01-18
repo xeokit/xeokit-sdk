@@ -19,9 +19,9 @@ export const ShadowRenderer = {
             return { errors: program.errors };
         } else {
             const getInputSetter = makeInputSetters(gl, program.handle, true);
+            const setGeometryInputsState = meshRenderer.setupGeometryInputs(getInputSetter);
             const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
 
-            const uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
             const uModelMatrix = program.getLocation("modelMatrix");
             const uViewMatrix = program.getLocation("viewMatrix");
             const uProjMatrix = program.getLocation("projMatrix");
@@ -83,7 +83,7 @@ export const ShadowRenderer = {
 
                     gl.uniform3fv(uOffset, mesh._state.offset);
                     if (geometryState.id !== lastGeometryId) {
-                        uPositionsDecodeMatrix && gl.uniformMatrix4fv(uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
+                        setGeometryInputsState(geometryState);
 
                         if (aPosition) {
                             aPosition.bindArrayBuffer(geometryState.positionsBuf);
