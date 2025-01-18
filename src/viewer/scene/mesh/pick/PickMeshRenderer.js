@@ -144,7 +144,7 @@ PickMeshRenderer.prototype.drawMesh = function (frameCtx, mesh) {
             gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
         }
         if (this._aPosition) {
-            this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
+            this._aPosition.bindArrayBuffer(geometryState.positionsBuf);
             frameCtx.bindArray++;
         }
         if (geometryState.indicesBuf) {
