@@ -15,6 +15,27 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
     const quantizedGeometry = geometryState.compressGeometry;
     const isPoints = geometryState.primitiveName === "points";
     const setupPointSize = programSetup.setupPointSize && isPoints;
+    const gammaOutputSetup = programSetup.useGammaOutput && scene.gammaOutput && (function() {
+        let needed = false;
+        return {
+            appendDefinitions: (src) => {
+                if (needed) {
+                    src.push("uniform float gammaFactor;");
+                    src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
+                    src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
+                    src.push("}");
+                }
+            },
+            getValueExpression: (color) => {
+                needed = true;
+                return `linearToGamma(${color}, gammaFactor)`;
+            },
+            setupInputs: (getInputSetter) => {
+                const gammaFactor = needed && getInputSetter("gammaFactor");
+                return () => gammaFactor && gammaFactor(scene.gammaFactor);
+            }
+        };
+    })();
 
     const lazyShaderAttribute = function(name, type) {
         const variable = {
@@ -50,7 +71,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
     const viewNormal  = lazyShaderVariable("viewNormal");
 
     const programFragmentOutputs = [ ];
-    programSetup.appendFragmentOutputs(programFragmentOutputs, "gl_FragCoord");
+    programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord");
 
     const programVertexOutputs = [ ];
     programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color, attributes.pickColor, uvDecoded, worldNormal, viewNormal);
@@ -215,6 +236,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
+        gammaOutputSetup && gammaOutputSetup.appendDefinitions(src);
         programSetup.appendFragmentDefinitions(src);
         src.push("void main(void) {");
         if (clipping) {
@@ -250,6 +272,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
     } else {
         const getInputSetter = makeInputSetters(gl, program.handle, true);
         const setInputsState = programSetup.setupInputs && programSetup.setupInputs(getInputSetter);
+        const setGammaOutput = gammaOutputSetup && gammaOutputSetup.setupInputs(getInputSetter);
         const setMaterialInputsState = programSetup.setupMaterialInputs && programSetup.setupMaterialInputs(getInputSetter);
         const setLightInputState = programSetup.setupLightInputs && programSetup.setupLightInputs(getInputSetter);
         const setGeometryInputsState = (function() {
@@ -414,6 +437,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                 }
 
                 setInputsState && setInputsState(frameCtx, meshState);
+                setGammaOutput && setGammaOutput();
 
                 if (programSetup.usePickView) {
                     setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, camera.viewNormalMatrix, frameCtx.pickProjMatrix, project.far);
@@ -475,22 +499,6 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             }
         };
     }
-};
-
-export const createGammaOutputSetup = function(scene) {
-    return scene.gammaOutput && {
-        appendDefinitions: (src) => {
-            src.push("uniform float gammaFactor;");
-            src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
-            src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
-            src.push("}");
-        },
-        getValueExpression: (color) => `linearToGamma(${color}, gammaFactor)`,
-        setupInputs: (getInputSetter) => {
-            const gammaFactor = getInputSetter("gammaFactor");
-            return () => gammaFactor(scene.gammaFactor);
-        }
-    };
 };
 
 export const createLightSetup = function(lightsState) {
