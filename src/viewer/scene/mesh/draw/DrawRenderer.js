@@ -7,7 +7,6 @@ import {DrawShaderSource} from "./DrawShaderSource.js";
 import {LambertShaderSource} from "./LambertShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
-import {math} from "../../math/math.js";
 
 export const DrawRenderer = {
     getHash: (mesh) => [
@@ -34,14 +33,6 @@ export const DrawRenderer = {
             const setGeneralMaterialInputsState = meshRenderer.setupGeneralMaterialInputs && meshRenderer.setupGeneralMaterialInputs(getInputSetter);
             const setMeshInputsState = meshRenderer.setupMeshInputs(getInputSetter);
             const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
-
-            const uModelNormalMatrix = program.getLocation("modelNormalMatrix");
-            const uViewNormalMatrix = program.getLocation("viewNormalMatrix");
-
-            const uLogDepthBufFC = scene.logarithmicDepthBufferEnabled && program.getLocation("logDepthBufFC");
-
-            const uOffset = program.getLocation("offset");
-            const uScale = program.getLocation("scale");
 
             let lastMaterialId = null;
             let lastGeometryId = null;
@@ -77,15 +68,8 @@ export const DrawRenderer = {
                         lastMaterialId = null;
                         lastGeometryId = null;
 
-                        if (uLogDepthBufFC) {
-                            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
-                            gl.uniform1f(uLogDepthBufFC, logDepthBufFC);
-                        }
-
                         setLightInputState && setLightInputState();
                     }
-
-                    gl.uniformMatrix4fv(uViewNormalMatrix, false, camera.viewNormalMatrix);
 
                     setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, meshState.clippable, scene._sectionPlanesState);
 
@@ -122,14 +106,9 @@ export const DrawRenderer = {
                         lastMaterialId = materialState.id;
                     }
 
-                    setMeshInputsState(mesh, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix, project.matrix);
-
-                    uModelNormalMatrix && gl.uniformMatrix4fv(uModelNormalMatrix, gl.FALSE, mesh.worldNormalMatrix);
+                    setMeshInputsState(mesh, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix, camera.viewNormalMatrix, project.matrix, project.far);
 
                     setInputsState && setInputsState(frameCtx, mesh._state);
-
-                    gl.uniform3fv(uOffset, meshState.offset);
-                    gl.uniform3fv(uScale, mesh.scale);
 
                     // Bind VBOs
 

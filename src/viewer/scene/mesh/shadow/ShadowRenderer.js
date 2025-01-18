@@ -9,8 +9,6 @@ export const ShadowRenderer = {
         mesh._state.hash
     ],
     instantiate: (mesh) => {
-        const useNormals = false;
-
         const scene = mesh.scene;
         const gl = scene.canvas.gl;
         const meshRenderer = MeshRenderer(ShadowShaderSource(mesh), mesh);
@@ -22,8 +20,6 @@ export const ShadowRenderer = {
             const setGeometryInputsState = meshRenderer.setupGeometryInputs(getInputSetter);
             const setMeshInputsState = meshRenderer.setupMeshInputs(getInputSetter);
             const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
-
-            const uOffset = program.getLocation("offset");
 
             let lastMaterialId = null;
             let lastGeometryId = null;
@@ -71,11 +67,10 @@ export const ShadowRenderer = {
                         lastMaterialId = materialState.id;
                     }
 
-                    setMeshInputsState(mesh, frame.shadowViewMatrix, frame.shadowProjMatrix);
+                    setMeshInputsState(mesh, frame.shadowViewMatrix, frame.shadowProjMatrix, scene.camera.project.far);
 
                     setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, meshState.clippable, scene._sectionPlanesState);
 
-                    gl.uniform3fv(uOffset, mesh._state.offset);
                     if (geometryState.id !== lastGeometryId) {
                         setGeometryInputsState(geometryState, () => frame.bindArray++);
 
