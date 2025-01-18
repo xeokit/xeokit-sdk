@@ -14,13 +14,10 @@ export const PickMeshShaderSource = function() {
             src.push("out vec4 outColor;");
         },
         appendFragmentOutputs: (src) => src.push("outColor = pickColor;"),
-        setupInputs: (getInputSetter) => {
-            const pickClipPos = getInputSetter("pickClipPos");
+        setupMeshInputs: (getInputSetter) => {
             const pickColor = getInputSetter("pickColor");
-            return (frameCtx, meshState) => {
-                pickClipPos(frameCtx.pickClipPos);
-
-                var pickID = meshState.pickID; // Mesh-indexed color
+            return (mesh) => {
+                var pickID = mesh._state.pickID; // Mesh-indexed color
                 tmpVec4[0] = pickID       & 0xFF;
                 tmpVec4[1] = pickID >>  8 & 0xFF;
                 tmpVec4[2] = pickID >> 16 & 0xFF;
@@ -28,6 +25,10 @@ export const PickMeshShaderSource = function() {
                 math.mulVec4Scalar(tmpVec4, 1 / 255, tmpVec4);
                 pickColor(tmpVec4);
             };
+        },
+        setupPickClipPosInputs: (getInputSetter) => {
+            const pickClipPos = getInputSetter("pickClipPos");
+            return (pos) => pickClipPos(pos);
         }
     };
 };

@@ -271,7 +271,8 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         return { errors: program.errors };
     } else {
         const getInputSetter = makeInputSetters(gl, program.handle, true);
-        const setInputsState = programSetup.setupInputs && programSetup.setupInputs(getInputSetter);
+        const setPickClipPosState = programSetup.setupPickClipPosInputs && programSetup.setupPickClipPosInputs(getInputSetter);
+        const setProgramMeshInputsState = programSetup.setupMeshInputs && programSetup.setupMeshInputs(getInputSetter);
         const setGammaOutput = gammaOutputSetup && gammaOutputSetup.setupInputs(getInputSetter);
         const setMaterialInputsState = programSetup.setupMaterialInputs && programSetup.setupMaterialInputs(getInputSetter);
         const setLightInputState = programSetup.setupLightInputs && programSetup.setupLightInputs(getInputSetter);
@@ -436,7 +437,8 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                     lastMaterialId = materialState.id;
                 }
 
-                setInputsState && setInputsState(frameCtx, meshState);
+                setPickClipPosState && setPickClipPosState(frameCtx.pickClipPos);
+                setProgramMeshInputsState && setProgramMeshInputsState(mesh);
                 setGammaOutput && setGammaOutput();
 
                 if (programSetup.usePickView) {
