@@ -257,12 +257,20 @@ export function MeshRenderer(programSetup, mesh) {
             const uPositionsDecodeMatrix = quantizedGeometry && getInputSetter("positionsDecodeMatrix");
             const uvDecodeMatrix = uvDecoded.needed && quantizedGeometry && getInputSetter("uvDecodeMatrix");
             const aPosition = getInputSetter("position");
+            const aNormal = attributes.normal.needed && getInputSetter("normal");
+            const aUV = attributes.uv.needed && getInputSetter("uv");
+            const aColor = attributes.color.needed && getInputSetter("color");
+            const aPickColor = attributes.pickColor.needed && getInputSetter("pickColor");
 
             return (geometryState, onBindAttribute, triangleGeometry) => {
                 uPositionsDecodeMatrix && uPositionsDecodeMatrix(geometryState.positionsDecodeMatrix);
                 uvDecodeMatrix && uvDecodeMatrix(geometryState.uvDecodeMatrix);
 
                 aPosition(binder((triangleGeometry || geometryState).positionsBuf, onBindAttribute));
+                aNormal && aNormal(binder(geometryState.normalsBuf, onBindAttribute));
+                aUV && aUV(binder(geometryState.uvBuf, onBindAttribute));
+                aColor && aColor(binder(geometryState.colorsBuf, onBindAttribute));
+                aPickColor && aPickColor(binder(triangleGeometry.pickColorsBuf, onBindAttribute));
             };
         },
         setupGeneralMaterialInputs: setupPointSize && function(getInputSetter) {
