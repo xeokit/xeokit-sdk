@@ -24,9 +24,9 @@ export const PickTriangleRenderer = {
         } else {
             const getInputSetter = makeInputSetters(gl, program.handle, true);
             const setInputsState = programSetup.setupInputs && programSetup.setupInputs(getInputSetter);
+            const setGeometryInputsState = meshRenderer.setupGeometryInputs(getInputSetter);
             const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
 
-            const uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
             const uModelMatrix = program.getLocation("modelMatrix");
             const uViewMatrix = program.getLocation("viewMatrix");
             const uProjMatrix = program.getLocation("projMatrix");
@@ -87,9 +87,8 @@ export const PickTriangleRenderer = {
                     gl.uniformMatrix4fv(uModelMatrix, false, mesh.worldMatrix);
 
                     gl.uniform3fv(uOffset, mesh._state.offset);
-                    if (uPositionsDecodeMatrix) {
-                        gl.uniformMatrix4fv(uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
-                    }
+
+                    setGeometryInputsState(geometryState);
                     aPosition.bindArrayBuffer(positionsBuf);
 
                     setInputsState && setInputsState(frameCtx, mesh._state);
