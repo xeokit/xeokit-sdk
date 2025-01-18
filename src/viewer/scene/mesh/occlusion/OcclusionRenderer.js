@@ -29,13 +29,11 @@ export const OcclusionRenderer = {
             const setMaterialInputsState = programSetup.setupMaterialInputs && programSetup.setupMaterialInputs(getInputSetter);
             const setLightInputState = programSetup.setupLightInputs && programSetup.setupLightInputs(getInputSetter);
             const setGeometryInputsState = meshRenderer.setupGeometryInputs(getInputSetter);
+            const setMeshInputsState = meshRenderer.setupMeshInputs(getInputSetter);
             const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
 
-            const uModelMatrix = program.getLocation("modelMatrix");
             const uModelNormalMatrix = useNormals && program.getLocation("modelNormalMatrix");
-            const uViewMatrix = program.getLocation("viewMatrix");
             const uViewNormalMatrix = useNormals && program.getLocation("viewNormalMatrix");
-            const uProjMatrix = program.getLocation("projMatrix");
 
             const uOffset = program.getLocation("offset");
             const uLogDepthBufFC = scene.logarithmicDepthBufferEnabled && program.getLocation("logDepthBufFC");
@@ -55,6 +53,7 @@ export const OcclusionRenderer = {
                     const geometryState = geometry._state;
                     const origin = mesh.origin;
                     const materialState = material._state;
+                    const project = camera.project;
 
                     if (materialState.alpha < 1.0) {
                         return;
@@ -62,7 +61,6 @@ export const OcclusionRenderer = {
 
                     if (frameCtx.lastProgramId !== program.id) {
                         frameCtx.lastProgramId = program.id;
-                        const project = camera.project;
                         program.bind();
                         frameCtx.useProgram++;
                         lastMaterialId = null;
@@ -74,7 +72,6 @@ export const OcclusionRenderer = {
                         setLightInputState && setLightInputState();
                     }
 
-                    gl.uniformMatrix4fv(uViewMatrix, false, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
                     useNormals && gl.uniformMatrix4fv(uViewNormalMatrix, false, camera.viewNormalMatrix);
 
                     setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, meshState.clippable, scene._sectionPlanesState);
@@ -102,8 +99,7 @@ export const OcclusionRenderer = {
                         lastMaterialId = materialState.id;
                     }
 
-                    gl.uniformMatrix4fv(uProjMatrix, false, camera._project._state.matrix);
-                    gl.uniformMatrix4fv(uModelMatrix, gl.FALSE, mesh.worldMatrix);
+                    setMeshInputsState(mesh, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix, project.matrix);
                     useNormals && uModelNormalMatrix && gl.uniformMatrix4fv(uModelNormalMatrix, gl.FALSE, mesh.worldNormalMatrix);
 
                     gl.uniform3fv(uOffset, meshState.offset);
