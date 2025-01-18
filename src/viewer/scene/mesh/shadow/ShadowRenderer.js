@@ -89,16 +89,6 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
         this._lastMaterialId = materialState.id;
     }
     gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, mesh.worldMatrix);
-    if (geometryState.combineGeometry) {
-        const vertexBufs = mesh.vertexBufs;
-        if (vertexBufs.id !== this._lastVertexBufsId) {
-            if (vertexBufs.positionsBuf && this._aPosition) {
-                this._aPosition.bindArrayBuffer(vertexBufs.positionsBuf);
-                frame.bindArray++;
-            }
-            this._lastVertexBufsId = vertexBufs.id;
-        }
-    }
     if (meshState.clippable) {
         const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -137,38 +127,22 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
         if (this._uPositionsDecodeMatrix) {
             gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
         }
-        if (geometryState.combineGeometry) { // VBOs were bound by the preceding VertexBufs chunk
-            if (geometryState.indicesBufCombined) {
-                geometryState.indicesBufCombined.bind();
-                frame.bindArray++;
-            }
-        } else {
-            if (this._aPosition) {
-                this._aPosition.bindArrayBuffer(geometryState.positionsBuf);
-                frame.bindArray++;
-            }
-            if (geometryState.indicesBuf) {
-                geometryState.indicesBuf.bind();
-                frame.bindArray++;
-            }
+        if (this._aPosition) {
+            this._aPosition.bindArrayBuffer(geometryState.positionsBuf);
+            frame.bindArray++;
+        }
+        if (geometryState.indicesBuf) {
+            geometryState.indicesBuf.bind();
+            frame.bindArray++;
         }
         this._lastGeometryId = geometryState.id;
     }
-    if (geometryState.combineGeometry) {
-        if (geometryState.indicesBufCombined) {
-            gl.drawElements(geometryState.primitive, geometryState.indicesBufCombined.numItems, geometryState.indicesBufCombined.itemType, 0);
-            frame.drawElements++;
-        } else {
-            // TODO: drawArrays() with VertexBufs positions
-        }
-    } else {
-        if (geometryState.indicesBuf) {
-            gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
-            frame.drawElements++;
-        } else if (geometryState.positionsBuf) {
-            gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
-            frame.drawArrays++;
-        }
+    if (geometryState.indicesBuf) {
+        gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
+        frame.drawElements++;
+    } else if (geometryState.positionsBuf) {
+        gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
+        frame.drawArrays++;
     }
 };
 
@@ -199,7 +173,6 @@ ShadowRenderer.prototype._allocate = function (mesh) {
     this._uClippable = program.getLocation("clippable");
     this._uOffset = program.getLocation("offset");
     this._lastMaterialId = null;
-    this._lastVertexBufsId = null;
     this._lastGeometryId = null;
 };
 
@@ -215,7 +188,6 @@ ShadowRenderer.prototype._bindProgram = function (frame) {
     gl.uniformMatrix4fv(this._uShadowViewMatrix, false, frame.shadowViewMatrix);
     gl.uniformMatrix4fv(this._uShadowProjMatrix, false, frame.shadowProjMatrix);
     this._lastMaterialId = null;
-    this._lastVertexBufsId = null;
     this._lastGeometryId = null;
 };
 
