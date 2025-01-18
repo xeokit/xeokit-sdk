@@ -615,8 +615,8 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     if (geometryState.indicesBuf) {
         gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
         frameCtx.drawElements++;
-    } else if (geometryState.positions) {
-        gl.drawArrays(gl.TRIANGLES, 0, geometryState.positions.numItems);
+    } else if (geometryState.positionsBuf) {
+        gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
         frameCtx.drawArrays++;
     }
 
