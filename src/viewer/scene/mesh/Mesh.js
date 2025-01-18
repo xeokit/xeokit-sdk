@@ -9,11 +9,19 @@ import {createRTCViewMat} from '../math/rtcCoords.js';
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {DrawRenderer} from "./draw/DrawRenderer.js";
+import {DrawShaderSource} from "./draw/DrawShaderSource.js";
+import {LambertShaderSource} from "./draw/LambertShaderSource.js";
 import {EmphasisRenderer} from "./emphasis/EmphasisRenderer.js";
+import {EmphasisEdgesShaderSource} from "./emphasis/EmphasisEdgesShaderSource.js";
+import {EmphasisFillShaderSource} from "./emphasis/EmphasisFillShaderSource.js";
 import {PickMeshRenderer} from "./pick/PickMeshRenderer.js";
+import {PickMeshShaderSource} from "./pick/PickMeshShaderSource.js";
 import {PickTriangleRenderer} from "./pick/PickTriangleRenderer.js";
+import {PickTriangleShaderSource} from "./pick/PickTriangleShaderSource.js";
 import {OcclusionRenderer} from "./occlusion/OcclusionRenderer.js";
+import {OcclusionShaderSource} from "./occlusion/OcclusionShaderSource.js";
 import {ShadowRenderer} from "./shadow/ShadowRenderer.js";
+import {ShadowShaderSource} from "./shadow/ShadowShaderSource.js";
 
 import {geometryCompressionUtils} from '../math/geometryCompressionUtils.js';
 import {RenderFlags} from "../webgl/RenderFlags.js";
@@ -268,7 +276,9 @@ class Mesh extends Component {
             isUI: cfg.isUI
         });
 
-        const wrapRenderer = (mtlKey, rendererClass, restArgs) => {
+        const material = cfg.material ? this._checkComponent2(["PhongMaterial", "MetallicMaterial", "SpecularMaterial", "LambertMaterial"], cfg.material) : this.scene.material;
+
+        const wrapRenderer = (mtlKey, rendererClass, programSetupClass, restArgs) => {
             let instance = null;
             const ensureInstance = () => {
                 if (! instance) {
@@ -281,7 +291,7 @@ class Mesh extends Component {
                         mesh.scene._sectionPlanesState.getHash()
                     ].concat(rendererClass.getHash(mesh, ...restArgs)).join(";");
                     if (! (hash in renderersCache[mtlKey])) {
-                        const renderer = rendererClass.instantiate(mesh, ...restArgs);
+                        const renderer = rendererClass.instantiate(programSetupClass(mesh), mesh, ...restArgs);
                         if (renderer.errors) {
                             console.log(renderer.errors.join("\n"));
                             return;
@@ -317,17 +327,17 @@ class Mesh extends Component {
         };
 
         this._renderers = {
-            _drawRenderer:          wrapRenderer("Draw",          DrawRenderer,         [ ]),
-            _shadowRenderer:        wrapRenderer("Shadow",        ShadowRenderer,       [ ]),
-            _emphasisFillRenderer:  wrapRenderer("EmphasisFill",  EmphasisRenderer,     [ true ]),
-            _emphasisEdgesRenderer: wrapRenderer("EmphasisEdges", EmphasisRenderer,     [ false ]),
-            _pickMeshRenderer:      wrapRenderer("PickMesh",      PickMeshRenderer,     [ ]),
-            _pickTriangleRenderer:  wrapRenderer("PickTriangle",  PickTriangleRenderer, [ ]),
-            _occlusionRenderer:     wrapRenderer("Occlusion",     OcclusionRenderer,    [ ])
+            _drawRenderer:          wrapRenderer("Draw",          DrawRenderer,         (material.type === "LambertMaterial") ? LambertShaderSource : DrawShaderSource, [ ]),
+            _shadowRenderer:        wrapRenderer("Shadow",        ShadowRenderer,       ShadowShaderSource,        [ ]),
+            _emphasisFillRenderer:  wrapRenderer("EmphasisFill",  EmphasisRenderer,     EmphasisFillShaderSource,  [ true ]),
+            _emphasisEdgesRenderer: wrapRenderer("EmphasisEdges", EmphasisRenderer,     EmphasisEdgesShaderSource, [ false ]),
+            _pickMeshRenderer:      wrapRenderer("PickMesh",      PickMeshRenderer,     PickMeshShaderSource,      [ ]),
+            _pickTriangleRenderer:  wrapRenderer("PickTriangle",  PickTriangleRenderer, PickTriangleShaderSource,  [ ]),
+            _occlusionRenderer:     wrapRenderer("Occlusion",     OcclusionRenderer,    OcclusionShaderSource,     [ ])
         };
 
         this._geometry = cfg.geometry ? this._checkComponent2(["ReadableGeometry", "VBOGeometry"], cfg.geometry) : this.scene.geometry;
-        this._material = cfg.material ? this._checkComponent2(["PhongMaterial", "MetallicMaterial", "SpecularMaterial", "LambertMaterial"], cfg.material) : this.scene.material;
+        this._material = material;
         this._xrayMaterial = cfg.xrayMaterial ? this._checkComponent("EmphasisMaterial", cfg.xrayMaterial) : this.scene.xrayMaterial;
         this._highlightMaterial = cfg.highlightMaterial ? this._checkComponent("EmphasisMaterial", cfg.highlightMaterial) : this.scene.highlightMaterial;
         this._selectedMaterial = cfg.selectedMaterial ? this._checkComponent("EmphasisMaterial", cfg.selectedMaterial) : this.scene.selectedMaterial;
