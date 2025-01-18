@@ -812,9 +812,9 @@ export const DrawShaderSource = function(mesh) {
 
             src.push(`outColor = ${getGammaOutputExpression ? getGammaOutputExpression("fragColor") : "fragColor"};`);
         },
-        setupInputs: (getInputSetter) => {
+        setupMeshInputs: (getInputSetter) => {
             const colorize = getInputSetter("colorize");
-            return (frameCtx, meshState) => colorize(meshState.colorize);
+            return (mesh) => colorize(mesh.colorize);
         },
         setupMaterialInputs: (getInputSetter) => {
             const binders = activeFresnels.concat(activeTextureMaps).concat(activeUniforms).map(f => f && f.setupInputs(getInputSetter));
