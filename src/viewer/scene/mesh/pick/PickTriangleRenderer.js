@@ -120,10 +120,6 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 
     gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
 
-    if (scene.logarithmicDepthBufferEnabled) {
-        gl.uniform1f(this._uZFar, scene.camera.project.far);
-    }
-
     if (frameCtx.backfaces !== backfaces) {
         if (backfaces) {
             gl.disable(gl.CULL_FACE);
