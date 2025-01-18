@@ -50,7 +50,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
     const viewNormal  = lazyShaderVariable("viewNormal");
 
     const programFragmentOutputs = [ ];
-    programSetup.appendFragmentOutputs(programFragmentOutputs, "vWorldPosition", "gl_FragCoord");
+    programSetup.appendFragmentOutputs(programFragmentOutputs, "gl_FragCoord");
 
     const programVertexOutputs = [ ];
     programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color, attributes.pickColor, uvDecoded, worldNormal, viewNormal);
