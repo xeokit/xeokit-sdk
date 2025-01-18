@@ -1,6 +1,10 @@
 import {ShadowShaderSource} from "./ShadowShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from "../../stats.js";
+import {math} from "../../math/math.js";
+import {getPlaneRTCPos} from "../../math/rtcCoords.js";
+
+const tempVec3a = math.vec3();
 
 /**
  * @private
@@ -53,6 +57,7 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const materialState = mesh._material._state;
+    const meshState = mesh._state;
     const geometryState = mesh._geometry._state;
     if (frame.lastProgramId !== this._program.id) {
         frame.lastProgramId = this._program.id;
@@ -97,8 +102,38 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
             this._lastVertexBufsId = vertexBufs.id;
         }
     }
+    if (meshState.clippable) {
+        const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
+        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
+        if (numAllocatedSectionPlanes > 0) {
+            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
+            const renderFlags = mesh.renderFlags;
+            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
+                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
+                if (sectionPlaneUniforms) {
+                    if (sectionPlaneIndex < numSectionPlanes) {
+                        const active = renderFlags.sectionPlanesActivePerLayer[sectionPlaneIndex];
+                        gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                        if (active) {
+                            const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                            if (origin) {
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                                gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
+                            } else {
+                                gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                            }
+                            gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                        }
+                    } else {
+                        gl.uniform1i(sectionPlaneUniforms.active, 0);
+                    }
+                }
+            }
+        }
+    }
+
     if (this._uClippable) {
-        gl.uniform1i(this._uClippable, mesh._state.clippable);
+        gl.uniform1i(this._uClippable, meshState.clippable);
     }
     gl.uniform3fv(this._uOffset, mesh._state.offset);
     if (geometryState.id !== this._lastGeometryId) {
@@ -185,29 +220,6 @@ ShadowRenderer.prototype._bindProgram = function (frame) {
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
-    if (sectionPlanesState.getNumAllocatedSectionPlanes() > 0) {
-        let sectionPlaneUniforms;
-        let uSectionPlaneActive;
-        let sectionPlane;
-        let uSectionPlanePos;
-        let uSectionPlaneDir;
-        for (let i = 0, len = this._uSectionPlanes.length; i < len; i++) {
-            sectionPlaneUniforms = this._uSectionPlanes[i];
-            uSectionPlaneActive = sectionPlaneUniforms.active;
-            sectionPlane = sectionPlanesState.sectionPlanes[i];
-            if (uSectionPlaneActive) {
-                gl.uniform1i(uSectionPlaneActive, sectionPlane.active);
-            }
-            uSectionPlanePos = sectionPlaneUniforms.pos;
-            if (uSectionPlanePos) {
-                gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-            }
-            uSectionPlaneDir = sectionPlaneUniforms.dir;
-            if (uSectionPlaneDir) {
-                gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-            }
-        }
-    }
 };
 
 export {ShadowRenderer};
