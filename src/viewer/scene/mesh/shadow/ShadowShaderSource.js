@@ -16,7 +16,7 @@ export const ShadowShaderSource = function() {
             src.push("}");
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push(`outColor = encodeFloat(${gl_FragCoord}.z);`)
+        appendFragmentOutputs: (src, gl_FragCoord) => src.push(`outColor = encodeFloat(${gl_FragCoord}.z);`)
     };
 };
 
