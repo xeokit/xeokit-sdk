@@ -34,6 +34,5 @@ export const EmphasisEdgesShaderSource = function(mesh) {
 
 EmphasisEdgesShaderSource.getHash = (mesh) => [
     mesh._state.hash,
-    mesh.scene.gammaOutput ? "go" : "", // Gamma input not needed
-    mesh._geometry._state.compressGeometry ? "cp" : ""
+    mesh.scene.gammaOutput ? "go" : "" // Gamma input not needed
 ];
