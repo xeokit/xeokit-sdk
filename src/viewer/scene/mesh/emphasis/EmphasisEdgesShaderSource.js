@@ -1,26 +1,21 @@
-import {createGammaOutputSetup} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
-export const EmphasisEdgesShaderSource = function(mesh) {
-    const scene = mesh.scene;
-    const gammaOutputSetup = createGammaOutputSetup(scene);
-
+export const EmphasisEdgesShaderSource = function() {
     return {
         programName: "EmphasisEdges",
         setsEdgeWidth: true,
+        useGammaOutput: true,
         appendVertexDefinitions: (src) => {
             src.push("uniform vec4 edgeColor;");
             src.push("out vec4 vColor;");
         },
         appendVertexOutputs: (src) => src.push("vColor = edgeColor;"),
         appendFragmentDefinitions: (src) => {
-            gammaOutputSetup && gammaOutputSetup.appendDefinitions(src);
             src.push("in vec4 vColor;");
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src) => src.push(`outColor = ${gammaOutputSetup ? gammaOutputSetup.getValueExpression("vColor") : "vColor"};`),
-        setupInputs: gammaOutputSetup && gammaOutputSetup.setupInputs,
+        appendFragmentOutputs: (src, getGammaOutputExpression) => src.push(`outColor = ${getGammaOutputExpression ? getGammaOutputExpression("vColor") : "vColor"};`),
         setupMaterialInputs: (getInputSetter) => {
             const edgeColor = getInputSetter("edgeColor");
             return (mtl) => {

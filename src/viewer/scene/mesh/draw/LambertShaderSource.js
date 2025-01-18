@@ -1,13 +1,11 @@
-import {createGammaOutputSetup, createLightSetup} from "../MeshRenderer.js";
+import {createLightSetup} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
 export const LambertShaderSource = function(mesh) {
-    const scene = mesh.scene;
     const geometryState = mesh._geometry._state;
     const primitive = geometryState.primitiveName;
-    const lightSetup = (geometryState.autoVertexNormals || geometryState.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan") && createLightSetup(scene._lightsState);
-    const gammaOutputSetup = createGammaOutputSetup(scene);
+    const lightSetup = (geometryState.autoVertexNormals || geometryState.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan") && createLightSetup(mesh.scene._lightsState);
 
     return {
         programName: "Lambert",
@@ -16,6 +14,7 @@ export const LambertShaderSource = function(mesh) {
         setupPointSize: true,
         setsFrontFace: true,
         setsLineWidth: true,
+        useGammaOutput: true,
         appendVertexDefinitions: (src) => {
             src.push("uniform vec4 colorize;");
             src.push("uniform vec4 materialColor;");
@@ -33,17 +32,12 @@ export const LambertShaderSource = function(mesh) {
         },
         appendFragmentDefinitions: (src) => {
             src.push("in vec4 vColor;");
-            gammaOutputSetup && gammaOutputSetup.appendDefinitions(src);
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src) => src.push(`outColor = ${gammaOutputSetup ? gammaOutputSetup.getValueExpression("vColor") : "vColor"};`),
+        appendFragmentOutputs: (src, getGammaOutputExpression) => src.push(`outColor = ${getGammaOutputExpression ? getGammaOutputExpression("vColor") : "vColor"};`),
         setupInputs: (getInputSetter) => {
             const colorize = getInputSetter("colorize");
-            const setGammaOutput = gammaOutputSetup && gammaOutputSetup.setupInputs(getInputSetter);
-            return (frameCtx, meshState) => {
-                colorize(meshState.colorize);
-                setGammaOutput && setGammaOutput();
-            };
+            return (frameCtx, meshState) => colorize(meshState.colorize);
         },
         setupMaterialInputs: (getInputSetter) => {
             const materialColor = getInputSetter("materialColor");

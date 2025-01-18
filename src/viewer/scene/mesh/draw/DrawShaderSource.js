@@ -1,4 +1,3 @@
-import {createGammaOutputSetup} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tempVec4 = math.vec4();
 
@@ -22,7 +21,6 @@ export const DrawShaderSource = function(mesh) {
     const phongMaterial    = (materialState.type === "PhongMaterial");
     const metallicMaterial = (materialState.type === "MetallicMaterial");
     const specularMaterial = (materialState.type === "SpecularMaterial");
-    const gammaOutputSetup = createGammaOutputSetup(scene);
 
     const setupFresnel = (name, colorSwizzle, getMaterialValue) => {
         const edgeBias    = name + "FresnelEdgeBias";
@@ -201,6 +199,7 @@ export const DrawShaderSource = function(mesh) {
         setupPointSize: true,
         setsFrontFace: true,
         setsLineWidth: true,
+        useGammaOutput: true,
         meshStateBackground: background,
         transformClipPos: clipPos => background ? `${clipPos}.xyww` : clipPos,
         appendVertexDefinitions: (src) => {
@@ -308,7 +307,6 @@ export const DrawShaderSource = function(mesh) {
             src.push("vec4 sRGBToLinear( in vec4 value ) {");
             src.push("  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );");
             src.push("}");
-            gammaOutputSetup && gammaOutputSetup.appendDefinitions(src);
             if (normals) {
 
                 //--------------------------------------------------------------------------------
@@ -539,7 +537,7 @@ export const DrawShaderSource = function(mesh) {
             //================================================================================
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src) => {
+        appendFragmentOutputs: (src, getGammaOutputExpression) => {
             src.push("float occlusion = 1.0;");
 
             src.push(`vec3 ambientColor = ${materialAmbient ? materialAmbient.getValueExpression() : "vec3(1.0)"};`);
@@ -812,19 +810,11 @@ export const DrawShaderSource = function(mesh) {
 
             src.push("vec4 fragColor = vec4(outgoingLight, alpha) * colorize;");
 
-            if (gammaOutputSetup) {
-                src.push(`fragColor = ${gammaOutputSetup.getValueExpression("fragColor")};`);
-            }
-
-            src.push("outColor = fragColor;");
+            src.push(`outColor = ${getGammaOutputExpression ? getGammaOutputExpression("fragColor") : "fragColor"};`);
         },
         setupInputs: (getInputSetter) => {
             const colorize = getInputSetter("colorize");
-            const setGammaOutput = gammaOutputSetup && gammaOutputSetup.setupInputs(getInputSetter);
-            return (frameCtx, meshState) => {
-                colorize(meshState.colorize);
-                setGammaOutput && setGammaOutput();
-            };
+            return (frameCtx, meshState) => colorize(meshState.colorize);
         },
         setupMaterialInputs: (getInputSetter) => {
             const binders = activeFresnels.concat(activeTextureMaps).concat(activeUniforms).map(f => f && f.setupInputs(getInputSetter));
