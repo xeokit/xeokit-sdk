@@ -3,7 +3,6 @@
  */
 
 import {MeshRenderer} from "../MeshRenderer.js";
-import {PickMeshShaderSource} from "./PickMeshShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 
@@ -12,10 +11,9 @@ export const PickMeshRenderer = {
         mesh._geometry._state.hash,
         mesh._state.hash
     ],
-    instantiate: (mesh) => { // There is exactly one PickMeshRenderer per scene
+    instantiate: (programSetup, mesh) => {
         const scene = mesh.scene;
         const gl = scene.canvas.gl;
-        const programSetup = PickMeshShaderSource(mesh);
         const meshRenderer = MeshRenderer(programSetup, mesh);
         const program = new Program(gl, { vertex: meshRenderer.vertex, fragment: meshRenderer.fragment });
         if (program.errors) {
