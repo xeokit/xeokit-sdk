@@ -35,8 +35,7 @@ export const PickMeshRenderer = {
 
             return {
                 destroy: () => program.destroy(),
-                drawMesh: (frameCtx, mesh) => {
-                    const material = mesh._material;
+                drawMesh: (frameCtx, mesh, material) => {
                     const materialState = material._state;
                     const meshState = mesh._state;
                     const geometry = mesh._geometry;
@@ -97,7 +96,13 @@ export const PickMeshRenderer = {
 
                     setInputsState && setInputsState(frameCtx, meshState);
 
-                    setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, camera.viewNormalMatrix, frameCtx.pickProjMatrix, project.far);
+                    if (programSetup.usePickView) {
+                        setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, camera.viewNormalMatrix, frameCtx.pickProjMatrix, project.far);
+                    } else if (programSetup.useShadowView) {
+                        setMeshInputsState(mesh, frameCtx.shadowViewMatrix, camera.viewNormalMatrix, frameCtx.shadowProjMatrix, camera.project.far);
+                    } else {
+                        setMeshInputsState(mesh, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix, camera.viewNormalMatrix, project.matrix, project.far);
+                    }
 
                     if (programSetup.trianglePick) {
                         const positionsBuf = geometry._getPickTrianglePositions();
