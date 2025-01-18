@@ -7,13 +7,6 @@ import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 
 export const DrawRenderer = {
-    getHash: (mesh) => [
-        mesh._geometry._state.hash,
-        mesh._state.drawHash,
-        mesh.scene.gammaOutput ? "go" : "",
-        mesh.scene._lightsState.getHash(),
-        mesh._material._state.hash
-    ],
     instantiate: (programSetup, mesh) => {
         const scene = mesh.scene;
         const gl = scene.canvas.gl;

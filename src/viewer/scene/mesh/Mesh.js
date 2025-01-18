@@ -278,7 +278,7 @@ class Mesh extends Component {
 
         const material = cfg.material ? this._checkComponent2(["PhongMaterial", "MetallicMaterial", "SpecularMaterial", "LambertMaterial"], cfg.material) : this.scene.material;
 
-        const wrapRenderer = (mtlKey, rendererClass, programSetupClass, restArgs) => {
+        const wrapRenderer = (mtlKey, rendererClass, programSetupClass) => {
             let instance = null;
             const ensureInstance = () => {
                 if (! instance) {
@@ -289,9 +289,9 @@ class Mesh extends Component {
                     const hash = [
                         mesh.scene.canvas.canvas.id,
                         mesh.scene._sectionPlanesState.getHash()
-                    ].concat(rendererClass.getHash(mesh, ...restArgs)).join(";");
+                    ].concat(programSetupClass.getHash(mesh)).join(";");
                     if (! (hash in renderersCache[mtlKey])) {
-                        const renderer = rendererClass.instantiate(programSetupClass(mesh), mesh, ...restArgs);
+                        const renderer = rendererClass.instantiate(programSetupClass(mesh), mesh);
                         if (renderer.errors) {
                             console.log(renderer.errors.join("\n"));
                             return;
@@ -327,13 +327,13 @@ class Mesh extends Component {
         };
 
         this._renderers = {
-            _drawRenderer:          wrapRenderer("Draw",          DrawRenderer,         (material.type === "LambertMaterial") ? LambertShaderSource : DrawShaderSource, [ ]),
-            _shadowRenderer:        wrapRenderer("Shadow",        ShadowRenderer,       ShadowShaderSource,        [ ]),
-            _emphasisFillRenderer:  wrapRenderer("EmphasisFill",  EmphasisRenderer,     EmphasisFillShaderSource,  [ true ]),
-            _emphasisEdgesRenderer: wrapRenderer("EmphasisEdges", EmphasisRenderer,     EmphasisEdgesShaderSource, [ false ]),
-            _pickMeshRenderer:      wrapRenderer("PickMesh",      PickMeshRenderer,     PickMeshShaderSource,      [ ]),
-            _pickTriangleRenderer:  wrapRenderer("PickTriangle",  PickTriangleRenderer, PickTriangleShaderSource,  [ ]),
-            _occlusionRenderer:     wrapRenderer("Occlusion",     OcclusionRenderer,    OcclusionShaderSource,     [ ])
+            _drawRenderer:          wrapRenderer("Draw",          DrawRenderer,         (material.type === "LambertMaterial") ? LambertShaderSource : DrawShaderSource),
+            _shadowRenderer:        wrapRenderer("Shadow",        ShadowRenderer,       ShadowShaderSource),
+            _emphasisFillRenderer:  wrapRenderer("EmphasisFill",  EmphasisRenderer,     EmphasisFillShaderSource),
+            _emphasisEdgesRenderer: wrapRenderer("EmphasisEdges", EmphasisRenderer,     EmphasisEdgesShaderSource),
+            _pickMeshRenderer:      wrapRenderer("PickMesh",      PickMeshRenderer,     PickMeshShaderSource),
+            _pickTriangleRenderer:  wrapRenderer("PickTriangle",  PickTriangleRenderer, PickTriangleShaderSource),
+            _occlusionRenderer:     wrapRenderer("Occlusion",     OcclusionRenderer,    OcclusionShaderSource)
         };
 
         this._geometry = cfg.geometry ? this._checkComponent2(["ReadableGeometry", "VBOGeometry"], cfg.geometry) : this.scene.geometry;
