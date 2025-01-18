@@ -196,8 +196,11 @@ export const DrawShaderSource = function(mesh) {
 
     return {
         programName: "Draw",
+        canActAsBackground: true,
         discardPoints: true,
         setupPointSize: true,
+        setsFrontFace: true,
+        setsLineWidth: true,
         meshStateBackground: background,
         transformClipPos: clipPos => background ? `${clipPos}.xyww` : clipPos,
         appendVertexDefinitions: (src) => {

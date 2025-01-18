@@ -8,6 +8,7 @@ export function EmphasisEdgesShaderSource(mesh) {
 
     return {
         programName: "EmphasisEdges",
+        setsEdgeWidth: true,
         appendVertexDefinitions: (src) => {
             src.push("uniform vec4 edgeColor;");
             src.push("out vec4 vColor;");
