@@ -3,8 +3,6 @@
  */
 
 import {MeshRenderer} from "../MeshRenderer.js";
-import {DrawShaderSource} from "./DrawShaderSource.js";
-import {LambertShaderSource} from "./LambertShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 
@@ -16,10 +14,9 @@ export const DrawRenderer = {
         mesh.scene._lightsState.getHash(),
         mesh._material._state.hash
     ],
-    instantiate: (mesh) => {
+    instantiate: (programSetup, mesh) => {
         const scene = mesh.scene;
         const gl = scene.canvas.gl;
-        const programSetup = (mesh._material._state.type === "LambertMaterial") ? LambertShaderSource(mesh) : DrawShaderSource(mesh);
         const meshRenderer = MeshRenderer(programSetup, mesh);
         const program = new Program(gl, { vertex: meshRenderer.vertex, fragment: meshRenderer.fragment });
         if (program.errors) {
