@@ -2,6 +2,7 @@ export const PickTriangleShaderSource = function(mesh) {
     return {
         programName: "PickTriangle",
         setsFrontFace: true,
+        usePickView: true,
         trianglePick: true,
         dontBillboardAnything: true,
         transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * ${clipPos}.w, ${clipPos}.zw)`,
