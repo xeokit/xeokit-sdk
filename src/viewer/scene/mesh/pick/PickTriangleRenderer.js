@@ -6,7 +6,6 @@ import {MeshRenderer} from "../MeshRenderer.js";
 import {PickTriangleShaderSource} from "./PickTriangleShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
-import {math} from "../../math/math.js";
 
 export const PickTriangleRenderer = {
     getHash: (mesh) => [
@@ -28,9 +27,6 @@ export const PickTriangleRenderer = {
             const setMeshInputsState = meshRenderer.setupMeshInputs(getInputSetter);
             const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
 
-            const uOffset = program.getLocation("offset");
-            const uLogDepthBufFC = scene.logarithmicDepthBufferEnabled && program.getLocation("logDepthBufFC");
-
             return {
                 destroy: () => program.destroy(),
                 drawMesh: (frameCtx, mesh) => {
@@ -47,11 +43,6 @@ export const PickTriangleRenderer = {
                     program.bind();
 
                     frameCtx.useProgram++;
-
-                    if (uLogDepthBufFC ) {
-                        const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
-                        gl.uniform1f(uLogDepthBufFC, logDepthBufFC);
-                    }
 
                     setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, meshState.clippable, scene._sectionPlanesState);
 
@@ -72,9 +63,7 @@ export const PickTriangleRenderer = {
                         frameCtx.frontface = frontface;
                     }
 
-                    setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, frameCtx.pickProjMatrix);
-
-                    gl.uniform3fv(uOffset, mesh._state.offset);
+                    setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, frameCtx.pickProjMatrix, project.far);
 
                     const positionsBuf = geometry._getPickTrianglePositions();
                     setGeometryInputsState(geometryState, () => frameCtx.bindArray++, { positionsBuf: positionsBuf, pickColorsBuf: geometry._getPickTriangleColors() });
