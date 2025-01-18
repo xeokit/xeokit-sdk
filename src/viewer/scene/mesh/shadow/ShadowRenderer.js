@@ -93,7 +93,7 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
         const vertexBufs = mesh.vertexBufs;
         if (vertexBufs.id !== this._lastVertexBufsId) {
             if (vertexBufs.positionsBuf && this._aPosition) {
-                this._aPosition.bindArrayBuffer(vertexBufs.positionsBuf, vertexBufs.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
+                this._aPosition.bindArrayBuffer(vertexBufs.positionsBuf);
                 frame.bindArray++;
             }
             this._lastVertexBufsId = vertexBufs.id;
@@ -144,7 +144,7 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
             }
         } else {
             if (this._aPosition) {
-                this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
+                this._aPosition.bindArrayBuffer(geometryState.positionsBuf);
                 frame.bindArray++;
             }
             if (geometryState.indicesBuf) {
