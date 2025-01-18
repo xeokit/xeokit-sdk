@@ -1,4 +1,7 @@
 import {math} from "../math/math.js";
+import {getPlaneRTCPos} from "../math/rtcCoords.js";
+
+const tempVec3a = math.vec3();
 const tempVec4 = math.vec4();
 
 export function MeshRenderer(programSetup, mesh) {
@@ -249,6 +252,48 @@ export function MeshRenderer(programSetup, mesh) {
         setupGeneralMaterialInputs: setupPointSize && function(getInputSetter) {
             const pointSize = getInputSetter("pointSize");
             return (mtl) => pointSize(mtl.pointSize);
+        },
+        setupSectionPlanesInputs: (getInputSetter) => {
+            return clipping && (function() {
+                const uClippable = getInputSetter("clippable");
+                const uSectionPlanes = [];
+                for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
+                    uSectionPlanes.push({
+                        active: getInputSetter("sectionPlaneActive" + i),
+                        pos:    getInputSetter("sectionPlanePos" + i),
+                        dir:    getInputSetter("sectionPlaneDir" + i)
+                    });
+                }
+
+                return (origin, renderFlags, clippable, sectionPlanesState) => {
+                    uClippable(clippable);
+
+                    if (clippable) {
+                        const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
+                        const sectionPlanes = sectionPlanesState.sectionPlanes;
+                        const numSectionPlanes = sectionPlanes.length;
+                        if (numAllocatedSectionPlanes > 0) {
+                            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
+                                const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
+                                if (sectionPlaneUniforms) {
+                                    const active = (sectionPlaneIndex < numSectionPlanes) && renderFlags.sectionPlanesActivePerLayer[sectionPlaneIndex];
+                                    sectionPlaneUniforms.active(active ? 1 : 0);
+                                    if (active) {
+                                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                                        if (origin) {
+                                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                                            sectionPlaneUniforms.pos(rtcSectionPlanePos);
+                                        } else {
+                                            sectionPlaneUniforms.pos(sectionPlane.pos);
+                                        }
+                                        sectionPlaneUniforms.dir(sectionPlane.dir);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+            })();
         }
     };
 };

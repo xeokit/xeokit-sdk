@@ -8,9 +8,6 @@ import {EmphasisFillShaderSource} from "./EmphasisFillShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 import {math} from "../../math/math.js";
-import {getPlaneRTCPos} from "../../math/rtcCoords.js";
-
-const tempVec3a = math.vec3();
 
 export const EmphasisRenderer = {
     getHash: (mesh, isFill) => [
@@ -24,7 +21,8 @@ export const EmphasisRenderer = {
         const scene = mesh.scene;
         const gl = scene.canvas.gl;
         const programSetup = isFill ? EmphasisFillShaderSource(mesh) : EmphasisEdgesShaderSource(mesh);
-        const program = new Program(gl, MeshRenderer(programSetup, mesh));
+        const meshRenderer = MeshRenderer(programSetup, mesh);
+        const program = new Program(gl, { vertex: meshRenderer.vertex, fragment: meshRenderer.fragment });
         if (program.errors) {
             return { errors: program.errors };
         } else {
@@ -34,6 +32,7 @@ export const EmphasisRenderer = {
             const setInputsState = programSetup.setupInputs && programSetup.setupInputs(getInputSetter);
             const setMaterialInputsState = programSetup.setupMaterialInputs && programSetup.setupMaterialInputs(getInputSetter);
             const setLightInputState = programSetup.setupLightInputs && programSetup.setupLightInputs(getInputSetter);
+            const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
 
             const uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
             const uModelMatrix = program.getLocation("modelMatrix");
@@ -41,17 +40,10 @@ export const EmphasisRenderer = {
             const uViewMatrix = program.getLocation("viewMatrix");
             const uViewNormalMatrix = useNormals && program.getLocation("viewNormalMatrix");
             const uProjMatrix = program.getLocation("projMatrix");
-            const uSectionPlanes = [];
-            for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
-                uSectionPlanes.push({
-                    active: program.getLocation("sectionPlaneActive" + i),
-                    pos: program.getLocation("sectionPlanePos" + i),
-                    dir: program.getLocation("sectionPlaneDir" + i)
-                });
-            }
+
             const aPosition = program.getAttribute("position");
             const aNormal = useNormals && program.getAttribute("normal");
-            const uClippable = program.getLocation("clippable");
+
             const uOffset = program.getLocation("offset");
             const uLogDepthBufFC = scene.logarithmicDepthBufferEnabled && program.getLocation("logDepthBufFC");
 
@@ -89,35 +81,7 @@ export const EmphasisRenderer = {
                     gl.uniformMatrix4fv(uViewMatrix, false, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
                     useNormals && gl.uniformMatrix4fv(uViewNormalMatrix, false, camera.viewNormalMatrix);
 
-                    if (meshState.clippable) {
-                        const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
-                        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-                        if (numAllocatedSectionPlanes > 0) {
-                            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-                            const renderFlags = mesh.renderFlags;
-                            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
-                                const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
-                                if (sectionPlaneUniforms) {
-                                    if (sectionPlaneIndex < numSectionPlanes) {
-                                        const active = renderFlags.sectionPlanesActivePerLayer[sectionPlaneIndex];
-                                        gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                                        if (active) {
-                                            const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                                            if (origin) {
-                                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
-                                                gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                                            } else {
-                                                gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                                            }
-                                            gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                                        }
-                                    } else {
-                                        gl.uniform1i(sectionPlaneUniforms.active, 0);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, meshState.clippable, scene._sectionPlanesState);
 
                     if (materialState.id !== lastMaterialId) {
                         const backfaces = materialState.backfaces;
@@ -139,7 +103,6 @@ export const EmphasisRenderer = {
 
                     gl.uniformMatrix4fv(uModelMatrix, gl.FALSE, mesh.worldMatrix);
                     useNormals && uModelNormalMatrix && gl.uniformMatrix4fv(uModelNormalMatrix, gl.FALSE, mesh.worldNormalMatrix);
-                    uClippable && gl.uniform1i(uClippable, meshState.clippable);
 
                     gl.uniform3fv(uOffset, meshState.offset);
 
