@@ -251,7 +251,6 @@ EmphasisFillRenderer.prototype._bindProgram = function (frameCtx) {
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
     this._lastIndicesBufId = null;
-    gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.normalMatrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
     if (scene.logarithmicDepthBufferEnabled ) {
         const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
