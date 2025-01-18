@@ -155,9 +155,8 @@ ShadowRenderer.prototype._allocate = function (mesh) {
     this._uModelMatrix = program.getLocation("modelMatrix");
     this._uShadowViewMatrix = program.getLocation("shadowViewMatrix");
     this._uShadowProjMatrix = program.getLocation("shadowProjMatrix");
-    this._uSectionPlanes = {};
-    const clips = scene._sectionPlanesState.sectionPlanes;
-    for (let i = 0, len = clips.length; i < len; i++) {
+    this._uSectionPlanes = [];
+    for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
         this._uSectionPlanes.push({
             active: program.getLocation("sectionPlaneActive" + i),
             pos: program.getLocation("sectionPlanePos" + i),
