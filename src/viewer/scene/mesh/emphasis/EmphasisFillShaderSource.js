@@ -2,7 +2,7 @@ import {createGammaOutputSetup, createLightSetup} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
-export function EmphasisFillShaderSource(mesh) {
+export const EmphasisFillShaderSource = function(mesh) {
     const scene = mesh.scene;
     const geometryState = mesh._geometry._state;
     const primitive = geometryState.primitiveName;
@@ -45,4 +45,12 @@ export function EmphasisFillShaderSource(mesh) {
         },
         setupLightInputs: lightSetup && lightSetup.setupInputs
     };
-}
+};
+
+EmphasisFillShaderSource.getHash = (mesh) => [
+    mesh._state.hash,
+    mesh.scene.gammaOutput ? "go" : "", // Gamma input not needed
+    mesh.scene._lightsState.getHash(),
+    mesh._geometry._state.normalsBuf ? "n" : "",
+    mesh._geometry._state.compressGeometry ? "cp" : ""
+];

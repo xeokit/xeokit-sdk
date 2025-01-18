@@ -7,10 +7,6 @@ import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 
 export const OcclusionRenderer = {
-    getHash: (mesh) => [
-        mesh._geometry._state.hash,
-        mesh._state.pickOcclusionHash
-    ],
     instantiate: (programSetup, mesh) => {
         const scene = mesh.scene;
         const gl = scene.canvas.gl;
