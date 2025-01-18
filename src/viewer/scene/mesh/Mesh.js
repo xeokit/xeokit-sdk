@@ -281,21 +281,19 @@ class Mesh extends Component {
                         mesh.scene._sectionPlanesState.getHash()
                     ].concat(rendererClass.getHash(mesh, ...restArgs)).join(";");
                     if (! (hash in renderersCache[mtlKey])) {
-                        const renderer = new rendererClass(mesh, ...restArgs);
+                        const renderer = rendererClass.instantiate(mesh, ...restArgs);
                         if (renderer.errors) {
                             console.log(renderer.errors.join("\n"));
                             return;
                         }
                         const id = ids.addItem({});
                         renderersCache[mtlKey][hash] = {
-                            renderer: renderer,
+                            drawMesh: renderer.drawMesh,
                             id: id,
                             useCount: 0,
                             delete: () => {
                                 ids.removeItem(id);
-                                if (renderer._program) {
-                                    renderer._program.destroy();
-                                }
+                                renderer.destroy();
                                 delete renderersCache[mtlKey][hash];
                                 stats.memory.programs--;
                             }
@@ -313,7 +311,7 @@ class Mesh extends Component {
                 put:                  () => { if (instance) { if (--instance.useCount === 0) { instance.delete(); } instance = null; } },
                 drawMesh: (frameCtx, mesh, ...rest) => {
                     ensureInstance();
-                    instance && instance.renderer.drawMesh(frameCtx, mesh, ...rest);
+                    instance && instance.drawMesh(frameCtx, mesh, ...rest);
                 }
             };
         };
