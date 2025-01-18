@@ -7,13 +7,6 @@ import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 
 export const EmphasisRenderer = {
-    getHash: (mesh, isFill) => [
-        mesh._state.hash,
-        mesh.scene.gammaOutput ? "go" : "", // Gamma input not needed
-        isFill && mesh.scene._lightsState.getHash(),
-        (isFill && mesh._geometry._state.normalsBuf) ? "n" : "",
-        mesh._geometry._state.compressGeometry ? "cp" : ""
-    ],
     instantiate: (programSetup, mesh) => {
         const scene = mesh.scene;
         const gl = scene.canvas.gl;

@@ -2,7 +2,7 @@ import {createGammaOutputSetup} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
-export function EmphasisEdgesShaderSource(mesh) {
+export const EmphasisEdgesShaderSource = function(mesh) {
     const scene = mesh.scene;
     const gammaOutputSetup = createGammaOutputSetup(scene);
 
@@ -30,4 +30,10 @@ export function EmphasisEdgesShaderSource(mesh) {
             };
         }
     };
-}
+};
+
+EmphasisEdgesShaderSource.getHash = (mesh) => [
+    mesh._state.hash,
+    mesh.scene.gammaOutput ? "go" : "", // Gamma input not needed
+    mesh._geometry._state.compressGeometry ? "cp" : ""
+];
