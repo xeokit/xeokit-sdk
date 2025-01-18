@@ -30,11 +30,10 @@ export const DrawRenderer = {
             const setInputsState = programSetup.setupInputs && programSetup.setupInputs(getInputSetter);
             const setMaterialInputsState = programSetup.setupMaterialInputs && programSetup.setupMaterialInputs(getInputSetter);
             const setLightInputState = programSetup.setupLightInputs && programSetup.setupLightInputs(getInputSetter);
-            const setGeometryInputsState = meshRenderer.setupGeometryInputs && meshRenderer.setupGeometryInputs(getInputSetter);
+            const setGeometryInputsState = meshRenderer.setupGeometryInputs(getInputSetter);
             const setGeneralMaterialInputsState = meshRenderer.setupGeneralMaterialInputs && meshRenderer.setupGeneralMaterialInputs(getInputSetter);
             const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
 
-            const uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
             const uModelMatrix = program.getLocation("modelMatrix");
             const uModelNormalMatrix = program.getLocation("modelNormalMatrix");
             const uViewMatrix = program.getLocation("viewMatrix");
@@ -144,8 +143,7 @@ export const DrawRenderer = {
                     // Bind VBOs
 
                     if (geometryState.id !== lastGeometryId) {
-                        setGeometryInputsState && setGeometryInputsState(geometryState);
-                        uPositionsDecodeMatrix && gl.uniformMatrix4fv(uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
+                        setGeometryInputsState(geometryState);
 
                         if (aPosition) {
                             aPosition.bindArrayBuffer(geometryState.positionsBuf);
