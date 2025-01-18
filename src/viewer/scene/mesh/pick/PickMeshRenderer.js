@@ -75,7 +75,7 @@ export const PickMeshRenderer = {
                         lastMaterialId = materialState.id;
                     }
 
-                    setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, frameCtx.pickProjMatrix, project.far);
+                    setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, scene.camera.viewNormalMatrix, frameCtx.pickProjMatrix, project.far);
 
                     if (geometryState.id !== lastGeometryId) {
                         setGeometryInputsState(geometryState, () => frameCtx.bindArray++);
