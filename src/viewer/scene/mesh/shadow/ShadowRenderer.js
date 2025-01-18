@@ -20,11 +20,8 @@ export const ShadowRenderer = {
         } else {
             const getInputSetter = makeInputSetters(gl, program.handle, true);
             const setGeometryInputsState = meshRenderer.setupGeometryInputs(getInputSetter);
+            const setMeshInputsState = meshRenderer.setupMeshInputs(getInputSetter);
             const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
-
-            const uModelMatrix = program.getLocation("modelMatrix");
-            const uViewMatrix = program.getLocation("viewMatrix");
-            const uProjMatrix = program.getLocation("projMatrix");
 
             const uOffset = program.getLocation("offset");
 
@@ -44,8 +41,6 @@ export const ShadowRenderer = {
                         const sectionPlanesState = scene._sectionPlanesState;
                         program.bind();
                         frame.useProgram++;
-                        gl.uniformMatrix4fv(uViewMatrix, false, frame.shadowViewMatrix);
-                        gl.uniformMatrix4fv(uProjMatrix, false, frame.shadowProjMatrix);
                         lastMaterialId = null;
                         lastGeometryId = null;
                     }
@@ -75,7 +70,8 @@ export const ShadowRenderer = {
                         }
                         lastMaterialId = materialState.id;
                     }
-                    gl.uniformMatrix4fv(uModelMatrix, gl.FALSE, mesh.worldMatrix);
+
+                    setMeshInputsState(mesh, frame.shadowViewMatrix, frame.shadowProjMatrix);
 
                     setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, meshState.clippable, scene._sectionPlanesState);
 
