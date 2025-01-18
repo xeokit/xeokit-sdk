@@ -207,7 +207,6 @@ OcclusionRenderer.prototype._bindProgram = function (frameCtx) {
     const gl = scene.canvas.gl;
     this._program.bind();
     frameCtx.useProgram++;
-    gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
     if (scene.logarithmicDepthBufferEnabled ) {
         const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
         gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
