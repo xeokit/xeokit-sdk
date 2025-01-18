@@ -32,13 +32,11 @@ export const DrawRenderer = {
             const setLightInputState = programSetup.setupLightInputs && programSetup.setupLightInputs(getInputSetter);
             const setGeometryInputsState = meshRenderer.setupGeometryInputs(getInputSetter);
             const setGeneralMaterialInputsState = meshRenderer.setupGeneralMaterialInputs && meshRenderer.setupGeneralMaterialInputs(getInputSetter);
+            const setMeshInputsState = meshRenderer.setupMeshInputs(getInputSetter);
             const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
 
-            const uModelMatrix = program.getLocation("modelMatrix");
             const uModelNormalMatrix = program.getLocation("modelNormalMatrix");
-            const uViewMatrix = program.getLocation("viewMatrix");
             const uViewNormalMatrix = program.getLocation("viewNormalMatrix");
-            const uProjMatrix = program.getLocation("projMatrix");
 
             const uLogDepthBufFC = scene.logarithmicDepthBufferEnabled && program.getLocation("logDepthBufFC");
 
@@ -60,6 +58,7 @@ export const DrawRenderer = {
                     const camera = scene.camera;
                     const origin = mesh.origin;
                     const background = meshState.background;
+                    const project = camera.project;
 
                     if (frameCtx.lastProgramId !== program.id) {
                         frameCtx.lastProgramId = program.id;
@@ -69,7 +68,6 @@ export const DrawRenderer = {
 
                         const gl = scene.canvas.gl;
                         const lightsState = scene._lightsState;
-                        const project = scene.camera.project;
                         let light;
 
                         program.bind();
@@ -79,8 +77,6 @@ export const DrawRenderer = {
                         lastMaterialId = null;
                         lastGeometryId = null;
 
-                        gl.uniformMatrix4fv(uProjMatrix, false, project.matrix);
-
                         if (uLogDepthBufFC) {
                             const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
                             gl.uniform1f(uLogDepthBufFC, logDepthBufFC);
@@ -89,7 +85,6 @@ export const DrawRenderer = {
                         setLightInputState && setLightInputState();
                     }
 
-                    gl.uniformMatrix4fv(uViewMatrix, false, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
                     gl.uniformMatrix4fv(uViewNormalMatrix, false, camera.viewNormalMatrix);
 
                     setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, meshState.clippable, scene._sectionPlanesState);
@@ -127,7 +122,8 @@ export const DrawRenderer = {
                         lastMaterialId = materialState.id;
                     }
 
-                    gl.uniformMatrix4fv(uModelMatrix, gl.FALSE, mesh.worldMatrix);
+                    setMeshInputsState(mesh, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix, project.matrix);
+
                     uModelNormalMatrix && gl.uniformMatrix4fv(uModelNormalMatrix, gl.FALSE, mesh.worldNormalMatrix);
 
                     setInputsState && setInputsState(frameCtx, mesh._state);

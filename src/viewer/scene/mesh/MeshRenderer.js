@@ -253,6 +253,16 @@ export function MeshRenderer(programSetup, mesh) {
     return {
         vertex:   buildVertexShader(),
         fragment: buildFragmentShader(),
+        setupMeshInputs: (getInputSetter) => {
+            const uModelMatrix = getInputSetter("modelMatrix");
+            const uViewMatrix = getInputSetter("viewMatrix");
+            const uProjMatrix = getInputSetter("projMatrix");
+            return (mesh, viewMatrix, projMatrix) => {
+                uModelMatrix(mesh.worldMatrix);
+                uViewMatrix(viewMatrix);
+                uProjMatrix(projMatrix);
+            };
+        },
         setupGeometryInputs: (getInputSetter) => {
             const uPositionsDecodeMatrix = quantizedGeometry && getInputSetter("positionsDecodeMatrix");
             const uvDecodeMatrix = uvDecoded.needed && quantizedGeometry && getInputSetter("uvDecodeMatrix");
