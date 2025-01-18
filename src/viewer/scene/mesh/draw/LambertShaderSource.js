@@ -35,9 +35,9 @@ export const LambertShaderSource = function(mesh) {
             src.push("out vec4 outColor;");
         },
         appendFragmentOutputs: (src, getGammaOutputExpression) => src.push(`outColor = ${getGammaOutputExpression ? getGammaOutputExpression("vColor") : "vColor"};`),
-        setupInputs: (getInputSetter) => {
+        setupMeshInputs: (getInputSetter) => {
             const colorize = getInputSetter("colorize");
-            return (frameCtx, meshState) => colorize(meshState.colorize);
+            return (mesh) => colorize(mesh.colorize);
         },
         setupMaterialInputs: (getInputSetter) => {
             const materialColor = getInputSetter("materialColor");
