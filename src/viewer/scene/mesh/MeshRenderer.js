@@ -245,9 +245,13 @@ export function MeshRenderer(programSetup, mesh) {
     return {
         vertex:   buildVertexShader(),
         fragment: buildFragmentShader(),
-        setupGeometryInputs: uvDecoded.needed && quantizedGeometry && function(getInputSetter) {
-            const uvDecodeMatrix = getInputSetter("uvDecodeMatrix");
-            return (geometryState) => uvDecodeMatrix(geometryState.uvDecodeMatrix);
+        setupGeometryInputs: (getInputSetter) => {
+            const uPositionsDecodeMatrix = quantizedGeometry && getInputSetter("positionsDecodeMatrix");
+            const uvDecodeMatrix = uvDecoded.needed && quantizedGeometry && getInputSetter("uvDecodeMatrix");
+            return (geometryState) => {
+                uPositionsDecodeMatrix && uPositionsDecodeMatrix(geometryState.positionsDecodeMatrix);
+                uvDecodeMatrix && uvDecodeMatrix(geometryState.uvDecodeMatrix);
+            };
         },
         setupGeneralMaterialInputs: setupPointSize && function(getInputSetter) {
             const pointSize = getInputSetter("pointSize");
