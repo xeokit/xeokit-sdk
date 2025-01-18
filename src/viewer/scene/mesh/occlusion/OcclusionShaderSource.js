@@ -9,6 +9,5 @@ export const OcclusionShaderSource = function() {
 };
 
 OcclusionShaderSource.getHash = (mesh) => [
-    mesh._geometry._state.hash,
     mesh._state.pickOcclusionHash
 ];
