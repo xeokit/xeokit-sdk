@@ -63,7 +63,7 @@ export const PickTriangleRenderer = {
                         frameCtx.frontface = frontface;
                     }
 
-                    setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, frameCtx.pickProjMatrix, project.far);
+                    setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, scene.camera.viewNormalMatrix, frameCtx.pickProjMatrix, project.far);
 
                     const positionsBuf = geometry._getPickTrianglePositions();
                     setGeometryInputsState(geometryState, () => frameCtx.bindArray++, { positionsBuf: positionsBuf, pickColorsBuf: geometry._getPickTriangleColors() });
