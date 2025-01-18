@@ -16,9 +16,9 @@ export const PickTriangleShaderSource = function() {
             src.push("out vec4 outColor;");
         },
         appendFragmentOutputs: (src) => src.push("outColor = vColor;"),
-        setupInputs: (getInputSetter) => {
+        setupPickClipPosInputs: (getInputSetter) => {
             const pickClipPos = getInputSetter("pickClipPos");
-            return (frameCtx) => pickClipPos(frameCtx.pickClipPos);
+            return (pos) => pickClipPos(pos);
         }
     };
 };
