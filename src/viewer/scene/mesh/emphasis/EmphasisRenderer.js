@@ -3,8 +3,6 @@
  */
 
 import {MeshRenderer} from "../MeshRenderer.js";
-import {EmphasisEdgesShaderSource} from "./EmphasisEdgesShaderSource.js";
-import {EmphasisFillShaderSource} from "./EmphasisFillShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 
@@ -16,10 +14,9 @@ export const EmphasisRenderer = {
         (isFill && mesh._geometry._state.normalsBuf) ? "n" : "",
         mesh._geometry._state.compressGeometry ? "cp" : ""
     ],
-    instantiate: (mesh, isFill) => {
+    instantiate: (programSetup, mesh) => {
         const scene = mesh.scene;
         const gl = scene.canvas.gl;
-        const programSetup = isFill ? EmphasisFillShaderSource(mesh) : EmphasisEdgesShaderSource(mesh);
         const meshRenderer = MeshRenderer(programSetup, mesh);
         const program = new Program(gl, { vertex: meshRenderer.vertex, fragment: meshRenderer.fragment });
         if (program.errors) {
