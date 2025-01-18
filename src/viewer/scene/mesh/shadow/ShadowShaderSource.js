@@ -3,6 +3,7 @@ export const ShadowShaderSource = function(mesh) {
         programName: "Shadow",
         setsFrontFace: true,
         setsLineWidth: true,
+        useShadowView: true,
         dontBillboardAnything: true,
         dontGetLogDepth: true,
         appendFragmentDefinitions: (src) => {
