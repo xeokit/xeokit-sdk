@@ -26,8 +26,6 @@ export const ShadowRenderer = {
             const uViewMatrix = program.getLocation("viewMatrix");
             const uProjMatrix = program.getLocation("projMatrix");
 
-            const aPosition = program.getAttribute("position");
-
             const uOffset = program.getLocation("offset");
 
             let lastMaterialId = null;
@@ -83,12 +81,8 @@ export const ShadowRenderer = {
 
                     gl.uniform3fv(uOffset, mesh._state.offset);
                     if (geometryState.id !== lastGeometryId) {
-                        setGeometryInputsState(geometryState);
+                        setGeometryInputsState(geometryState, () => frame.bindArray++);
 
-                        if (aPosition) {
-                            aPosition.bindArrayBuffer(geometryState.positionsBuf);
-                            frame.bindArray++;
-                        }
                         if (geometryState.indicesBuf) {
                             geometryState.indicesBuf.bind();
                             frame.bindArray++;
