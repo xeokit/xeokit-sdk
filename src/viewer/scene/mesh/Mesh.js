@@ -309,9 +309,9 @@ class Mesh extends Component {
                 getId: () => instance.id,
                 webglContextRestored: () => { if (instance) {                                  instance.delete();   instance = null; } },
                 put:                  () => { if (instance) { if (--instance.useCount === 0) { instance.delete(); } instance = null; } },
-                drawMesh: (frameCtx, mesh, ...rest) => {
+                drawMesh: (frameCtx, mesh, material) => {
                     ensureInstance();
-                    instance && instance.drawMesh(frameCtx, mesh, ...rest);
+                    instance && instance.drawMesh(frameCtx, mesh, material);
                 }
             };
         };
@@ -1742,12 +1742,12 @@ class Mesh extends Component {
 
     /** @private  */
     drawColorOpaque(frameCtx) {
-        this._renderers._drawRenderer.drawMesh(frameCtx, this);
+        this._renderers._drawRenderer.drawMesh(frameCtx, this, this._material);
     }
 
     /** @private  */
     drawColorTransparent(frameCtx) {
-        this._renderers._drawRenderer.drawMesh(frameCtx, this);
+        this._renderers._drawRenderer.drawMesh(frameCtx, this, this._material);
     }
 
     // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
@@ -1758,65 +1758,65 @@ class Mesh extends Component {
 
     /** @private  */
     drawSilhouetteXRayed(frameCtx) {
-        this._renderers._emphasisFillRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
+        this._renderers._emphasisFillRenderer.drawMesh(frameCtx, this, this._xrayMaterial);
     }
 
     /** @private  */
     drawSilhouetteHighlighted(frameCtx) {
-        this._renderers._emphasisFillRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
+        this._renderers._emphasisFillRenderer.drawMesh(frameCtx, this, this._highlightMaterial);
     }
 
     /** @private  */
     drawSilhouetteSelected(frameCtx) {
-        this._renderers._emphasisFillRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
+        this._renderers._emphasisFillRenderer.drawMesh(frameCtx, this, this._selectedMaterial);
     }
 
     // ---------------------- EDGES RENDERING -----------------------------------
 
     /** @private  */
     drawEdgesColorOpaque(frameCtx) {
-        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, 3); // 3 == edges
+        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, this._edgeMaterial);
     }
 
     /** @private  */
     drawEdgesColorTransparent(frameCtx) {
-        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, 3); // 3 == edges
+        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, this._edgeMaterial);
     }
 
     /** @private  */
     drawEdgesXRayed(frameCtx) {
-        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
+        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, this._xrayMaterial);
     }
 
     /** @private  */
     drawEdgesHighlighted(frameCtx) {
-        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
+        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, this._highlightMaterial);
     }
 
     /** @private  */
     drawEdgesSelected(frameCtx) {
-        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
+        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, this._selectedMaterial);
     }
 
     // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
 
     /** @private  */
     drawOcclusion(frameCtx) {
-        this._renderers._occlusionRenderer.drawMesh(frameCtx, this);
+        this._renderers._occlusionRenderer.drawMesh(frameCtx, this, this._material);
     }
 
     // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
 
     /** @private  */
     drawShadow(frameCtx) {
-        this._renderers._shadowRenderer.drawMesh(frameCtx, this);
+        this._renderers._shadowRenderer.drawMesh(frameCtx, this, this._material);
     }
 
     // ---------------------- PICKING RENDERING ----------------------------------
 
     /** @private  */
     drawPickMesh(frameCtx) {
-        this._renderers._pickMeshRenderer.drawMesh(frameCtx, this);
+        this._renderers._pickMeshRenderer.drawMesh(frameCtx, this, this._material);
     }
 
     /** @private
@@ -1827,7 +1827,7 @@ class Mesh extends Component {
 
     /** @private  */
     drawPickTriangles(frameCtx) {
-        this._renderers._pickTriangleRenderer.drawMesh(frameCtx, this);
+        this._renderers._pickTriangleRenderer.drawMesh(frameCtx, this, this._material);
     }
 
     /** @private */
