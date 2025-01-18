@@ -25,11 +25,8 @@ export const PickTriangleRenderer = {
             const getInputSetter = makeInputSetters(gl, program.handle, true);
             const setInputsState = programSetup.setupInputs && programSetup.setupInputs(getInputSetter);
             const setGeometryInputsState = meshRenderer.setupGeometryInputs(getInputSetter);
+            const setMeshInputsState = meshRenderer.setupMeshInputs(getInputSetter);
             const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
-
-            const uModelMatrix = program.getLocation("modelMatrix");
-            const uViewMatrix = program.getLocation("viewMatrix");
-            const uProjMatrix = program.getLocation("projMatrix");
 
             const uOffset = program.getLocation("offset");
             const uLogDepthBufFC = scene.logarithmicDepthBufferEnabled && program.getLocation("logDepthBufFC");
@@ -56,11 +53,7 @@ export const PickTriangleRenderer = {
                         gl.uniform1f(uLogDepthBufFC, logDepthBufFC);
                     }
 
-                    gl.uniformMatrix4fv(uViewMatrix, false, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix);
-
                     setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, meshState.clippable, scene._sectionPlanesState);
-
-                    gl.uniformMatrix4fv(uProjMatrix, false, frameCtx.pickProjMatrix);
 
                     if (frameCtx.backfaces !== backfaces) {
                         if (backfaces) {
@@ -79,7 +72,7 @@ export const PickTriangleRenderer = {
                         frameCtx.frontface = frontface;
                     }
 
-                    gl.uniformMatrix4fv(uModelMatrix, false, mesh.worldMatrix);
+                    setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, frameCtx.pickProjMatrix);
 
                     gl.uniform3fv(uOffset, mesh._state.offset);
 
