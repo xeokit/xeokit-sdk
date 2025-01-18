@@ -6,7 +6,6 @@ import {MeshRenderer} from "../MeshRenderer.js";
 import {PickMeshShaderSource} from "./PickMeshShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
-import {math} from "../../math/math.js";
 
 export const PickMeshRenderer = {
     getHash: (mesh) => [
@@ -29,9 +28,6 @@ export const PickMeshRenderer = {
             const setMeshInputsState = meshRenderer.setupMeshInputs(getInputSetter);
             const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
 
-            const uOffset = program.getLocation("offset");
-            const uLogDepthBufFC = scene.logarithmicDepthBufferEnabled && program.getLocation("logDepthBufFC");
-
             let lastMaterialId = null;
             let lastGeometryId = null;
 
@@ -44,16 +40,12 @@ export const PickMeshRenderer = {
                     const materialState = material._state;
                     const geometryState = mesh._geometry._state;
                     const origin = mesh.origin;
+                    const project = scene.camera.project;
 
                     if (frameCtx.lastProgramId !== program.id) {
                         frameCtx.lastProgramId = program.id;
-                        const project = scene.camera.project;
                         program.bind();
                         frameCtx.useProgram++;
-                        if (uLogDepthBufFC) {
-                            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
-                            gl.uniform1f(uLogDepthBufFC, logDepthBufFC);
-                        }
                         lastMaterialId = null;
                         lastGeometryId = null;
                     }
@@ -83,9 +75,7 @@ export const PickMeshRenderer = {
                         lastMaterialId = materialState.id;
                     }
 
-                    setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, frameCtx.pickProjMatrix);
-
-                    gl.uniform3fv(uOffset, mesh._state.offset);
+                    setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, frameCtx.pickProjMatrix, project.far);
 
                     if (geometryState.id !== lastGeometryId) {
                         setGeometryInputsState(geometryState, () => frameCtx.bindArray++);

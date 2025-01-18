@@ -255,12 +255,24 @@ export function MeshRenderer(programSetup, mesh) {
         fragment: buildFragmentShader(),
         setupMeshInputs: (getInputSetter) => {
             const uModelMatrix = getInputSetter("modelMatrix");
+            const uModelNormalMatrix = worldNormal.needed && getInputSetter("modelNormalMatrix");
             const uViewMatrix = getInputSetter("viewMatrix");
+            const uViewNormalMatrix = viewNormal.needed && getInputSetter("viewNormalMatrix");
             const uProjMatrix = getInputSetter("projMatrix");
-            return (mesh, viewMatrix, projMatrix) => {
+
+            const uOffset = getInputSetter("offset");
+            const uScale = getInputSetter("scale");
+            const uLogDepthBufFC = getLogDepth && getInputSetter("logDepthBufFC");
+
+            return (mesh, viewMatrix, viewNormalMatrix, projMatrix, far) => {
                 uModelMatrix(mesh.worldMatrix);
+                uModelNormalMatrix && uModelNormalMatrix(mesh.worldNormalMatrix);
                 uViewMatrix(viewMatrix);
+                uViewNormalMatrix && uViewNormalMatrix(viewNormalMatrix);
                 uProjMatrix(projMatrix);
+                uOffset(mesh.offset);
+                uScale(mesh.scale);
+                uLogDepthBufFC && uLogDepthBufFC(2.0 / (Math.log(far + 1.0) / Math.LN2));
             };
         },
         setupGeometryInputs: (getInputSetter) => {
