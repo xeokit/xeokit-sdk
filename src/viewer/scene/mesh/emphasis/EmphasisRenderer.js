@@ -30,6 +30,7 @@ export const EmphasisRenderer = {
             const setMaterialInputsState = programSetup.setupMaterialInputs && programSetup.setupMaterialInputs(getInputSetter);
             const setLightInputState = programSetup.setupLightInputs && programSetup.setupLightInputs(getInputSetter);
             const setGeometryInputsState = meshRenderer.setupGeometryInputs(getInputSetter);
+            const setGeneralMaterialInputsState = meshRenderer.setupGeneralMaterialInputs && meshRenderer.setupGeneralMaterialInputs(getInputSetter);
             const setMeshInputsState = meshRenderer.setupMeshInputs(getInputSetter);
             const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
 
@@ -40,15 +41,18 @@ export const EmphasisRenderer = {
                 destroy: () => program.destroy(),
                 drawMesh: (frameCtx, mesh, mode) => {
                     const material = (mode === 0) ? mesh._xrayMaterial : ((mode === 1) ? mesh._highlightMaterial : ((mode === 2) ? mesh._selectedMaterial : mesh._edgeMaterial));
-
-                    const camera = scene.camera;
-                    const gl = scene.canvas.gl;
+                    const materialState = material._state;
                     const meshState = mesh._state;
                     const geometry = mesh._geometry;
                     const geometryState = geometry._state;
                     const origin = mesh.origin;
-                    const materialState = material._state;
+                    const camera = scene.camera;
                     const project = camera.project;
+                    const actsAsBackground = programSetup.canActAsBackground && meshState.background;
+
+                    if (programSetup.skipIfTransparent && (materialState.alpha < 1.0)) {
+                        return;
+                    }
 
                     if (frameCtx.lastProgramId !== program.id) {
                         frameCtx.lastProgramId = program.id;
@@ -57,63 +61,60 @@ export const EmphasisRenderer = {
                         lastMaterialId = null;
                         lastGeometryId = null;
                         setLightInputState && setLightInputState();
+                        if (actsAsBackground) {
+                            gl.depthFunc(gl.LEQUAL);
+                        }
                     }
 
                     setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, meshState.clippable, scene._sectionPlanesState);
 
                     if (materialState.id !== lastMaterialId) {
-                        const backfaces = materialState.backfaces;
-                        if (frameCtx.backfaces !== backfaces) {
-                            if (backfaces) {
+                        if (frameCtx.backfaces !== materialState.backfaces) {
+                            if (materialState.backfaces) {
                                 gl.disable(gl.CULL_FACE);
                             } else {
                                 gl.enable(gl.CULL_FACE);
                             }
-                            frameCtx.backfaces = backfaces;
+                            frameCtx.backfaces = materialState.backfaces;
                         }
-                        if ((! isFill) && (frameCtx.lineWidth !== materialState.edgeWidth)) {
+
+                        if (programSetup.setsFrontFace && (frameCtx.frontface !== materialState.frontface)) {
+                            gl.frontFace(materialState.frontface ? gl.CCW : gl.CW);
+                            frameCtx.frontface = materialState.frontface;
+                        }
+
+                        if (programSetup.setsEdgeWidth && (frameCtx.lineWidth !== materialState.edgeWidth)) {
                             gl.lineWidth(materialState.edgeWidth);
                             frameCtx.lineWidth = materialState.edgeWidth;
                         }
+
+                        if (programSetup.setsLineWidth && (frameCtx.lineWidth !== materialState.lineWidth)) {
+                            gl.lineWidth(materialState.lineWidth);
+                            frameCtx.lineWidth = materialState.lineWidth;
+                        }
+
                         setMaterialInputsState && setMaterialInputsState(material);
+                        setGeneralMaterialInputsState && setGeneralMaterialInputsState(material);
+
                         lastMaterialId = materialState.id;
                     }
 
+                    setInputsState && setInputsState(frameCtx, meshState);
+
                     setMeshInputsState(mesh, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix, camera.viewNormalMatrix, project.matrix, project.far);
 
-                    setInputsState && setInputsState();
-
-                    // Bind VBOs
-                    if (isFill) {
+                    if (programSetup.trianglePick) {
+                        const positionsBuf = geometry._getPickTrianglePositions();
                         if (geometryState.id !== lastGeometryId) {
-                            setGeometryInputsState(geometryState, () => frameCtx.bindArray++);
-
-                            if (geometryState.indicesBuf) {
-                                geometryState.indicesBuf.bind();
-                                frameCtx.bindArray++;
-                                // gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
-                                // frameCtx.drawElements++;
-                            } else if (geometryState.positionsBuf) {
-                                // gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
-                                //  frameCtx.drawArrays++;
-                            }
+                            setGeometryInputsState(geometryState, () => frameCtx.bindArray++, { positionsBuf: positionsBuf, pickColorsBuf: geometry._getPickTriangleColors() });
                             lastGeometryId = geometryState.id;
                         }
 
-                        if (geometryState.indicesBuf) {
-                            gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
-                            frameCtx.drawElements++;
-                        } else if (geometryState.positionsBuf) {
-                            gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
-                            frameCtx.drawArrays++;
-                        }
-                    } else {
-                        let indicesBuf;
-                        if (geometryState.primitive === gl.TRIANGLES) {
-                            indicesBuf = geometry._getEdgeIndices();
-                        } else if (geometryState.primitive === gl.LINES) {
-                            indicesBuf = geometryState.indicesBuf;
-                        }
+                        gl.drawArrays(geometryState.primitive, 0, positionsBuf.numItems / 3);
+                    } else if (programSetup.setsEdgeWidth) {
+                        const indicesBuf = ((geometryState.primitive === gl.TRIANGLES)
+                                            ? geometry._getEdgeIndices()
+                                            : ((geometryState.primitive === gl.LINES) && geometryState.indicesBuf));
 
                         if (indicesBuf) {
                             if (geometryState.id !== lastGeometryId) {
@@ -128,6 +129,28 @@ export const EmphasisRenderer = {
 
                             frameCtx.drawElements++;
                         }
+                    } else {
+                        if (geometryState.id !== lastGeometryId) {
+                            setGeometryInputsState(geometryState, () => frameCtx.bindArray++);
+
+                            if (geometryState.indicesBuf) {
+                                geometryState.indicesBuf.bind();
+                                frameCtx.bindArray++;
+                            }
+                            lastGeometryId = geometryState.id;
+                        }
+
+                        if (geometryState.indicesBuf) {
+                            gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
+                            frameCtx.drawElements++;
+                        } else if (geometryState.positionsBuf) {
+                            gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
+                            frameCtx.drawArrays++;
+                        }
+                    }
+
+                    if (actsAsBackground) {
+                        gl.depthFunc(gl.LESS);
                     }
                 }
             };
