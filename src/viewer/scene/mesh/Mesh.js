@@ -8,19 +8,14 @@ import {math} from '../math/math.js';
 import {createRTCViewMat} from '../math/rtcCoords.js';
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
-import {DrawRenderer} from "./draw/DrawRenderer.js";
+import {instantiateMeshRenderer} from "./MeshRenderer.js";
 import {DrawShaderSource} from "./draw/DrawShaderSource.js";
 import {LambertShaderSource} from "./draw/LambertShaderSource.js";
-import {EmphasisRenderer} from "./emphasis/EmphasisRenderer.js";
 import {EmphasisEdgesShaderSource} from "./emphasis/EmphasisEdgesShaderSource.js";
 import {EmphasisFillShaderSource} from "./emphasis/EmphasisFillShaderSource.js";
-import {PickMeshRenderer} from "./pick/PickMeshRenderer.js";
 import {PickMeshShaderSource} from "./pick/PickMeshShaderSource.js";
-import {PickTriangleRenderer} from "./pick/PickTriangleRenderer.js";
 import {PickTriangleShaderSource} from "./pick/PickTriangleShaderSource.js";
-import {OcclusionRenderer} from "./occlusion/OcclusionRenderer.js";
 import {OcclusionShaderSource} from "./occlusion/OcclusionShaderSource.js";
-import {ShadowRenderer} from "./shadow/ShadowRenderer.js";
 import {ShadowShaderSource} from "./shadow/ShadowShaderSource.js";
 
 import {geometryCompressionUtils} from '../math/geometryCompressionUtils.js';
@@ -278,7 +273,7 @@ class Mesh extends Component {
 
         const material = cfg.material ? this._checkComponent2(["PhongMaterial", "MetallicMaterial", "SpecularMaterial", "LambertMaterial"], cfg.material) : this.scene.material;
 
-        const wrapRenderer = (mtlKey, rendererClass, programSetupClass) => {
+        const wrapRenderer = (mtlKey, programSetupClass) => {
             let instance = null;
             const ensureInstance = () => {
                 if (! instance) {
@@ -291,7 +286,7 @@ class Mesh extends Component {
                         mesh.scene._sectionPlanesState.getHash()
                     ].concat(programSetupClass.getHash(mesh)).join(";");
                     if (! (hash in renderersCache[mtlKey])) {
-                        const renderer = rendererClass.instantiate(programSetupClass(mesh), mesh);
+                        const renderer = instantiateMeshRenderer(mesh, programSetupClass(mesh));
                         if (renderer.errors) {
                             console.log(renderer.errors.join("\n"));
                             return;
@@ -327,13 +322,13 @@ class Mesh extends Component {
         };
 
         this._renderers = {
-            _drawRenderer:          wrapRenderer("Draw",          DrawRenderer,         (material.type === "LambertMaterial") ? LambertShaderSource : DrawShaderSource),
-            _shadowRenderer:        wrapRenderer("Shadow",        ShadowRenderer,       ShadowShaderSource),
-            _emphasisFillRenderer:  wrapRenderer("EmphasisFill",  EmphasisRenderer,     EmphasisFillShaderSource),
-            _emphasisEdgesRenderer: wrapRenderer("EmphasisEdges", EmphasisRenderer,     EmphasisEdgesShaderSource),
-            _pickMeshRenderer:      wrapRenderer("PickMesh",      PickMeshRenderer,     PickMeshShaderSource),
-            _pickTriangleRenderer:  wrapRenderer("PickTriangle",  PickTriangleRenderer, PickTriangleShaderSource),
-            _occlusionRenderer:     wrapRenderer("Occlusion",     OcclusionRenderer,    OcclusionShaderSource)
+            _drawRenderer:          wrapRenderer("Draw",          (material.type === "LambertMaterial") ? LambertShaderSource : DrawShaderSource),
+            _shadowRenderer:        wrapRenderer("Shadow",        ShadowShaderSource),
+            _emphasisFillRenderer:  wrapRenderer("EmphasisFill",  EmphasisFillShaderSource),
+            _emphasisEdgesRenderer: wrapRenderer("EmphasisEdges", EmphasisEdgesShaderSource),
+            _pickMeshRenderer:      wrapRenderer("PickMesh",      PickMeshShaderSource),
+            _pickTriangleRenderer:  wrapRenderer("PickTriangle",  PickTriangleShaderSource),
+            _occlusionRenderer:     wrapRenderer("Occlusion",     OcclusionShaderSource)
         };
 
         this._geometry = cfg.geometry ? this._checkComponent2(["ReadableGeometry", "VBOGeometry"], cfg.geometry) : this.scene.geometry;
