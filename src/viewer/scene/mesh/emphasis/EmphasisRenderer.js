@@ -41,7 +41,6 @@ export const EmphasisRenderer = {
             const uViewNormalMatrix = useNormals && program.getLocation("viewNormalMatrix");
             const uProjMatrix = program.getLocation("projMatrix");
 
-            const aPosition = program.getAttribute("position");
             const aNormal = useNormals && program.getAttribute("normal");
 
             const uOffset = program.getLocation("offset");
@@ -111,12 +110,8 @@ export const EmphasisRenderer = {
                     // Bind VBOs
                     if (isFill) {
                         if (geometryState.id !== lastGeometryId) {
-                            setGeometryInputsState(geometryState);
+                            setGeometryInputsState(geometryState, () => frameCtx.bindArray++);
 
-                            if (aPosition) {
-                                aPosition.bindArrayBuffer(geometryState.positionsBuf);
-                                frameCtx.bindArray++;
-                            }
                             if (aNormal) {
                                 aNormal.bindArrayBuffer(geometryState.normalsBuf);
                                 frameCtx.bindArray++;
@@ -150,12 +145,8 @@ export const EmphasisRenderer = {
 
                         if (indicesBuf) {
                             if (geometryState.id !== lastGeometryId) {
-                                setGeometryInputsState(geometryState);
+                                setGeometryInputsState(geometryState, () => frameCtx.bindArray++);
 
-                                if (aPosition) {
-                                    aPosition.bindArrayBuffer(geometryState.positionsBuf);
-                                    frameCtx.bindArray++;
-                                }
                                 indicesBuf.bind();
                                 frameCtx.bindArray++;
                                 lastGeometryId = geometryState.id;
