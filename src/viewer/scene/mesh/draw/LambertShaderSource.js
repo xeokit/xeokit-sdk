@@ -60,7 +60,6 @@ export const LambertShaderSource = function(mesh) {
 };
 
 LambertShaderSource.getHash = (mesh) => [
-    mesh._geometry._state.hash,
     mesh._state.drawHash,
     mesh.scene.gammaOutput ? "go" : "",
     mesh.scene._lightsState.getHash(),

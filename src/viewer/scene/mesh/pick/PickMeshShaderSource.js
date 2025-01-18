@@ -33,6 +33,5 @@ export const PickMeshShaderSource = function(mesh) {
 };
 
 PickMeshShaderSource.getHash = (mesh) => [
-    mesh._geometry._state.hash,
     mesh._state.hash
 ];

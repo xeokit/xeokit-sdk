@@ -281,7 +281,8 @@ class Mesh extends Component {
                     const hash = [
                         programSetupClass.name,
                         mesh.scene.canvas.canvas.id,
-                        mesh.scene._sectionPlanesState.getHash()
+                        mesh.scene._sectionPlanesState.getHash(),
+                        mesh._geometry._state.hash
                     ].concat(programSetupClass.getHash(mesh)).join(";");
                     if (! (hash in renderersCache)) {
                         const renderer = instantiateMeshRenderer(mesh, programSetupClass(mesh));
