@@ -40,62 +40,55 @@ export const DrawRenderer = {
             return {
                 destroy: () => program.destroy(),
                 drawMesh: (frameCtx, mesh) => {
-                    const scene = mesh.scene;
                     const material = mesh._material;
-                    const gl = scene.canvas.gl;
+                    const materialState = material._state;
                     const meshState = mesh._state;
-                    const materialState = mesh._material._state;
-                    const geometryState = mesh._geometry._state;
-                    const camera = scene.camera;
+                    const geometry = mesh._geometry;
+                    const geometryState = geometry._state;
                     const origin = mesh.origin;
-                    const background = meshState.background;
+                    const camera = scene.camera;
                     const project = camera.project;
+                    const actsAsBackground = programSetup.canActAsBackground && meshState.background;
+
+                    if (programSetup.skipIfTransparent && (materialState.alpha < 1.0)) {
+                        return;
+                    }
 
                     if (frameCtx.lastProgramId !== program.id) {
                         frameCtx.lastProgramId = program.id;
-                        if (background) {
-                            gl.depthFunc(gl.LEQUAL);
-                        }
-
-                        const gl = scene.canvas.gl;
-                        const lightsState = scene._lightsState;
-                        let light;
-
                         program.bind();
-
                         frameCtx.useProgram++;
-
                         lastMaterialId = null;
                         lastGeometryId = null;
-
                         setLightInputState && setLightInputState();
+                        if (actsAsBackground) {
+                            gl.depthFunc(gl.LEQUAL);
+                        }
                     }
 
                     setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, meshState.clippable, scene._sectionPlanesState);
 
                     if (materialState.id !== lastMaterialId) {
-
-                        const backfaces = materialState.backfaces;
-                        if (frameCtx.backfaces !== backfaces) {
-                            if (backfaces) {
+                        if (frameCtx.backfaces !== materialState.backfaces) {
+                            if (materialState.backfaces) {
                                 gl.disable(gl.CULL_FACE);
                             } else {
                                 gl.enable(gl.CULL_FACE);
                             }
-                            frameCtx.backfaces = backfaces;
+                            frameCtx.backfaces = materialState.backfaces;
                         }
 
-                        const frontface = materialState.frontface;
-                        if (frameCtx.frontface !== frontface) {
-                            if (frontface) {
-                                gl.frontFace(gl.CCW);
-                            } else {
-                                gl.frontFace(gl.CW);
-                            }
-                            frameCtx.frontface = frontface;
+                        if (programSetup.setsFrontFace && (frameCtx.frontface !== materialState.frontface)) {
+                            gl.frontFace(materialState.frontface ? gl.CCW : gl.CW);
+                            frameCtx.frontface = materialState.frontface;
                         }
 
-                        if (frameCtx.lineWidth !== materialState.lineWidth) {
+                        if (programSetup.setsEdgeWidth && (frameCtx.lineWidth !== materialState.edgeWidth)) {
+                            gl.lineWidth(materialState.edgeWidth);
+                            frameCtx.lineWidth = materialState.edgeWidth;
+                        }
+
+                        if (programSetup.setsLineWidth && (frameCtx.lineWidth !== materialState.lineWidth)) {
                             gl.lineWidth(materialState.lineWidth);
                             frameCtx.lineWidth = materialState.lineWidth;
                         }
@@ -106,33 +99,57 @@ export const DrawRenderer = {
                         lastMaterialId = materialState.id;
                     }
 
+                    setInputsState && setInputsState(frameCtx, meshState);
+
                     setMeshInputsState(mesh, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix, camera.viewNormalMatrix, project.matrix, project.far);
 
-                    setInputsState && setInputsState(frameCtx, mesh._state);
+                    if (programSetup.trianglePick) {
+                        const positionsBuf = geometry._getPickTrianglePositions();
+                        if (geometryState.id !== lastGeometryId) {
+                            setGeometryInputsState(geometryState, () => frameCtx.bindArray++, { positionsBuf: positionsBuf, pickColorsBuf: geometry._getPickTriangleColors() });
+                            lastGeometryId = geometryState.id;
+                        }
 
-                    // Bind VBOs
+                        gl.drawArrays(geometryState.primitive, 0, positionsBuf.numItems / 3);
+                    } else if (programSetup.setsEdgeWidth) {
+                        const indicesBuf = ((geometryState.primitive === gl.TRIANGLES)
+                                            ? geometry._getEdgeIndices()
+                                            : ((geometryState.primitive === gl.LINES) && geometryState.indicesBuf));
 
-                    if (geometryState.id !== lastGeometryId) {
-                        setGeometryInputsState(geometryState, () => frameCtx.bindArray++);
+                        if (indicesBuf) {
+                            if (geometryState.id !== lastGeometryId) {
+                                setGeometryInputsState(geometryState, () => frameCtx.bindArray++);
+
+                                indicesBuf.bind();
+                                frameCtx.bindArray++;
+                                lastGeometryId = geometryState.id;
+                            }
+
+                            gl.drawElements(gl.LINES, indicesBuf.numItems, indicesBuf.itemType, 0);
+
+                            frameCtx.drawElements++;
+                        }
+                    } else {
+                        if (geometryState.id !== lastGeometryId) {
+                            setGeometryInputsState(geometryState, () => frameCtx.bindArray++);
+
+                            if (geometryState.indicesBuf) {
+                                geometryState.indicesBuf.bind();
+                                frameCtx.bindArray++;
+                            }
+                            lastGeometryId = geometryState.id;
+                        }
 
                         if (geometryState.indicesBuf) {
-                            geometryState.indicesBuf.bind();
-                            frameCtx.bindArray++;
+                            gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
+                            frameCtx.drawElements++;
+                        } else if (geometryState.positionsBuf) {
+                            gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
+                            frameCtx.drawArrays++;
                         }
-                        lastGeometryId = geometryState.id;
                     }
 
-                    // Draw (indices bound in prev step)
-
-                    if (geometryState.indicesBuf) {
-                        gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
-                        frameCtx.drawElements++;
-                    } else if (geometryState.positionsBuf) {
-                        gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
-                        frameCtx.drawArrays++;
-                    }
-
-                    if (background) {
+                    if (actsAsBackground) {
                         gl.depthFunc(gl.LESS);
                     }
                 }
