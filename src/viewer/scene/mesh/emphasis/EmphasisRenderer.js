@@ -41,8 +41,6 @@ export const EmphasisRenderer = {
             const uViewNormalMatrix = useNormals && program.getLocation("viewNormalMatrix");
             const uProjMatrix = program.getLocation("projMatrix");
 
-            const aNormal = useNormals && program.getAttribute("normal");
-
             const uOffset = program.getLocation("offset");
             const uLogDepthBufFC = scene.logarithmicDepthBufferEnabled && program.getLocation("logDepthBufFC");
 
@@ -112,10 +110,6 @@ export const EmphasisRenderer = {
                         if (geometryState.id !== lastGeometryId) {
                             setGeometryInputsState(geometryState, () => frameCtx.bindArray++);
 
-                            if (aNormal) {
-                                aNormal.bindArrayBuffer(geometryState.normalsBuf);
-                                frameCtx.bindArray++;
-                            }
                             if (geometryState.indicesBuf) {
                                 geometryState.indicesBuf.bind();
                                 frameCtx.bindArray++;
