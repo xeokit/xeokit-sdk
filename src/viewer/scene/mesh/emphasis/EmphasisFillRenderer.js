@@ -161,7 +161,7 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
             // gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
             // frameCtx.drawElements++;
         } else if (geometryState.positionsBuf) {
-            // gl.drawArrays(gl.TRIANGLES, 0, geometryState.positions.numItems);
+            // gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
             //  frameCtx.drawArrays++;
         }
         this._lastGeometryId = geometryState.id;

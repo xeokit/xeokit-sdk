@@ -168,8 +168,8 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
         if (geometryState.indicesBuf) {
             gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
             frame.drawElements++;
-        } else if (geometryState.positions) {
-            gl.drawArrays(gl.TRIANGLES, 0, geometryState.positions.numItems);
+        } else if (geometryState.positionsBuf) {
+            gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
             frame.drawArrays++;
         }
     }
