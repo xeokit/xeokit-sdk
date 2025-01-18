@@ -706,8 +706,7 @@ DrawRenderer.prototype._allocate = function (mesh) {
     }
 
     this._uSectionPlanes = [];
-    const sectionPlanes = sectionPlanesState.sectionPlanes;
-    for (var i = 0, len = sectionPlanes.length; i < len; i++) {
+    for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
         this._uSectionPlanes.push({
             active: program.getLocation("sectionPlaneActive" + i),
             pos: program.getLocation("sectionPlanePos" + i),
