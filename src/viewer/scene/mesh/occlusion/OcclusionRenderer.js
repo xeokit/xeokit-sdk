@@ -28,9 +28,9 @@ export const OcclusionRenderer = {
             const setInputsState = programSetup.setupInputs && programSetup.setupInputs(getInputSetter);
             const setMaterialInputsState = programSetup.setupMaterialInputs && programSetup.setupMaterialInputs(getInputSetter);
             const setLightInputState = programSetup.setupLightInputs && programSetup.setupLightInputs(getInputSetter);
+            const setGeometryInputsState = meshRenderer.setupGeometryInputs(getInputSetter);
             const setSectionPlanesInputsState = meshRenderer.setupSectionPlanesInputs(getInputSetter);
 
-            const uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
             const uModelMatrix = program.getLocation("modelMatrix");
             const uModelNormalMatrix = useNormals && program.getLocation("modelNormalMatrix");
             const uViewMatrix = program.getLocation("viewMatrix");
@@ -113,7 +113,7 @@ export const OcclusionRenderer = {
                     setInputsState && setInputsState();
 
                     if (geometryState.id !== lastGeometryId) {
-                        uPositionsDecodeMatrix && gl.uniformMatrix4fv(uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
+                        setGeometryInputsState(geometryState);
 
                         if (aPosition) {
                             aPosition.bindArrayBuffer(geometryState.positionsBuf);
