@@ -1,4 +1,4 @@
-export const ShadowShaderSource = function(mesh) {
+export const ShadowShaderSource = function() {
     return {
         programName: "Shadow",
         setsFrontFace: true,
