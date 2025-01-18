@@ -31,7 +31,6 @@ export const PickTriangleRenderer = {
             const uViewMatrix = program.getLocation("viewMatrix");
             const uProjMatrix = program.getLocation("projMatrix");
 
-            const aPosition = program.getAttribute("position");
             const pickColor = program.getAttribute("pickColor");
 
             const uOffset = program.getLocation("offset");
@@ -88,8 +87,7 @@ export const PickTriangleRenderer = {
 
                     gl.uniform3fv(uOffset, mesh._state.offset);
 
-                    setGeometryInputsState(geometryState);
-                    aPosition.bindArrayBuffer(positionsBuf);
+                    setGeometryInputsState(geometryState, () => frameCtx.bindArray++, { positionsBuf: positionsBuf });
 
                     setInputsState && setInputsState(frameCtx, mesh._state);
 
