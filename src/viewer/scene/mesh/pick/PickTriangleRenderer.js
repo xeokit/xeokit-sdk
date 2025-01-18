@@ -3,7 +3,6 @@
  */
 
 import {MeshRenderer} from "../MeshRenderer.js";
-import {PickTriangleShaderSource} from "./PickTriangleShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 
@@ -12,10 +11,9 @@ export const PickTriangleRenderer = {
         mesh._geometry._state.compressGeometry ? "cp" : "",
         mesh._state.hash
     ],
-    instantiate: (mesh) => {
+    instantiate: (programSetup, mesh) => {
         const scene = mesh.scene;
         const gl = scene.canvas.gl;
-        const programSetup = PickTriangleShaderSource(mesh);
         const meshRenderer = MeshRenderer(programSetup, mesh);
         const program = new Program(gl, { vertex: meshRenderer.vertex, fragment: meshRenderer.fragment });
         if (program.errors) {
