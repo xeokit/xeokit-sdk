@@ -1,7 +1,7 @@
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
-export const PickMeshShaderSource = function(mesh) {
+export const PickMeshShaderSource = function() {
     return {
         programName: "PickMesh",
         setsFrontFace: true,
