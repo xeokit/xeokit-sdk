@@ -5,6 +5,7 @@ export const PickMeshShaderSource = function(mesh) {
     return {
         programName: "PickMesh",
         setsFrontFace: true,
+        usePickView: true,
         dontBillboardAnything: true,
         transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * ${clipPos}.w, ${clipPos}.zw)`,
         appendVertexDefinitions: (src) => src.push("uniform vec2 pickClipPos;"),
