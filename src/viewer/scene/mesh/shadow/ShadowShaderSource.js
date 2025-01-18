@@ -19,3 +19,8 @@ export const ShadowShaderSource = function(mesh) {
         appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push(`outColor = encodeFloat(${gl_FragCoord}.z);`)
     };
 };
+
+ShadowShaderSource.getHash = (mesh) => [
+    mesh._geometry._state.hash,
+    mesh._state.hash
+];

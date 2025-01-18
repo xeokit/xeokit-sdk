@@ -3,10 +3,6 @@ import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
 
 export const ShadowRenderer = {
-    getHash: (mesh) => [
-        mesh._geometry._state.hash,
-        mesh._state.hash
-    ],
     instantiate: (programSetup, mesh) => {
         const scene = mesh.scene;
         const gl = scene.canvas.gl;

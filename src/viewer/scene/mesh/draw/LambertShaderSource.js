@@ -58,3 +58,11 @@ export const LambertShaderSource = function(mesh) {
         setupLightInputs: lightSetup && lightSetup.setupInputs
     };
 };
+
+LambertShaderSource.getHash = (mesh) => [
+    mesh._geometry._state.hash,
+    mesh._state.drawHash,
+    mesh.scene.gammaOutput ? "go" : "",
+    mesh.scene._lightsState.getHash(),
+    mesh._material._state.hash
+];
