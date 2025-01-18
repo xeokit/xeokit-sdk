@@ -39,8 +39,7 @@ export const EmphasisRenderer = {
 
             return {
                 destroy: () => program.destroy(),
-                drawMesh: (frameCtx, mesh, mode) => {
-                    const material = (mode === 0) ? mesh._xrayMaterial : ((mode === 1) ? mesh._highlightMaterial : ((mode === 2) ? mesh._selectedMaterial : mesh._edgeMaterial));
+                drawMesh: (frameCtx, mesh, material) => {
                     const materialState = material._state;
                     const meshState = mesh._state;
                     const geometry = mesh._geometry;
@@ -101,7 +100,13 @@ export const EmphasisRenderer = {
 
                     setInputsState && setInputsState(frameCtx, meshState);
 
-                    setMeshInputsState(mesh, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix, camera.viewNormalMatrix, project.matrix, project.far);
+                    if (programSetup.usePickView) {
+                        setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, camera.viewNormalMatrix, frameCtx.pickProjMatrix, project.far);
+                    } else if (programSetup.useShadowView) {
+                        setMeshInputsState(mesh, frameCtx.shadowViewMatrix, camera.viewNormalMatrix, frameCtx.shadowProjMatrix, camera.project.far);
+                    } else {
+                        setMeshInputsState(mesh, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix, camera.viewNormalMatrix, project.matrix, project.far);
+                    }
 
                     if (programSetup.trianglePick) {
                         const positionsBuf = geometry._getPickTrianglePositions();
