@@ -16,8 +16,6 @@ const tempVec3a = math.vec3();
  * @private
  */
 export const EmphasisRenderer = function(mesh, isFill) {
-    const useNormals = isFill;
-
     const scene = mesh.scene;
     const gl = scene.canvas.gl;
     const programSetup = isFill ? EmphasisFillShaderSource(mesh) : EmphasisEdgesShaderSource(mesh);
@@ -26,6 +24,9 @@ export const EmphasisRenderer = function(mesh, isFill) {
         this.errors = program.errors;
     } else {
         this._isFill = isFill;
+        const useNormals = isFill;
+        this._useNormals = useNormals;
+
         this._scene = scene;
         this._program = program;
 
@@ -70,6 +71,10 @@ EmphasisRenderer.getHash = (mesh, isFill) => [
 ];
 
 EmphasisRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
+    const isFill = this._isFill;
+    const material = (mode === 0) ? mesh._xrayMaterial : ((mode === 1) ? mesh._highlightMaterial : ((mode === 2) ? mesh._selectedMaterial : mesh._edgeMaterial));
+
+    const useNormals = this._useNormals;
     const scene = this._scene;
     const camera = scene.camera;
     const gl = scene.canvas.gl;
@@ -77,12 +82,12 @@ EmphasisRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     const geometry = mesh._geometry;
     const geometryState = geometry._state;
     const origin = mesh.origin;
-    const isFill = this._isFill;
+    const materialState = material._state;
 
-    if (frameCtx.lastProgramId !== this._program.id) {
-        frameCtx.lastProgramId = this._program.id;
+    const program = this._program;
+    if (frameCtx.lastProgramId !== program.id) {
+        frameCtx.lastProgramId = program.id;
         const project = camera.project;
-        const program = this._program;
         program.bind();
         frameCtx.useProgram++;
         this._lastMaterialId = null;
@@ -97,7 +102,7 @@ EmphasisRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     }
 
     gl.uniformMatrix4fv(this._uViewMatrix, false, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
-    isFill && gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
+    useNormals && gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
     if (meshState.clippable) {
         const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
@@ -129,10 +134,6 @@ EmphasisRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
         }
     }
 
-    const material = (mode === 0) ? mesh._xrayMaterial : ((mode === 1) ? mesh._highlightMaterial : ((mode === 2) ? mesh._selectedMaterial : mesh._edgeMaterial));
-
-    const materialState = material._state;
-
     if (materialState.id !== this._lastMaterialId) {
         const backfaces = materialState.backfaces;
         if (frameCtx.backfaces !== backfaces) {
@@ -152,7 +153,7 @@ EmphasisRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     }
 
     gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, mesh.worldMatrix);
-    if (isFill && this._uModelNormalMatrix) {
+    if (useNormals && this._uModelNormalMatrix) {
         gl.uniformMatrix4fv(this._uModelNormalMatrix, gl.FALSE, mesh.worldNormalMatrix);
     }
 
