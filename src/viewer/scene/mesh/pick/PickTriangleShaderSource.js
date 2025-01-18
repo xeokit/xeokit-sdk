@@ -1,4 +1,4 @@
-export const PickTriangleShaderSource = function(mesh) {
+export const PickTriangleShaderSource = function() {
     return {
         programName: "PickTriangle",
         setsFrontFace: true,
