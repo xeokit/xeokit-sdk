@@ -21,6 +21,5 @@ export const ShadowShaderSource = function(mesh) {
 };
 
 ShadowShaderSource.getHash = (mesh) => [
-    mesh._geometry._state.hash,
     mesh._state.hash
 ];

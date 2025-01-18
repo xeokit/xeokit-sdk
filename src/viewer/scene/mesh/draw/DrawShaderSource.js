@@ -913,7 +913,6 @@ export const DrawShaderSource = function(mesh) {
 };
 
 DrawShaderSource.getHash = (mesh) => [
-    mesh._geometry._state.hash,
     mesh._state.drawHash,
     mesh.scene.gammaOutput ? "go" : "",
     mesh.scene._lightsState.getHash(),
