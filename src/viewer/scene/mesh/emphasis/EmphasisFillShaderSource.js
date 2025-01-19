@@ -18,8 +18,8 @@ export const EmphasisFillShaderSource = function(mesh) {
         },
         appendVertexOutputs: (src, color, pickColor, uv, worldNormal, viewNormal) => {
             src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-            lightSetup && lightSetup.getDirectionalLights("viewMatrix2", "viewPosition").forEach(light => {
-                src.push(`reflectedColor += max(dot(-${viewNormal}, ${light.direction}), 0.0) * ${light.color};`);
+            lightSetup && lightSetup.directionalLights.forEach(light => {
+                src.push(`reflectedColor += max(dot(${viewNormal}, ${light.getDirection("viewMatrix2", "viewPosition")}), 0.0) * ${light.getColor()};`);
             });
             // TODO: A blending mode for emphasis materials, to select add/multiply/mix
             //src.push("vColor = vec4((mix(reflectedColor, fillColor.rgb, 0.7)), fillColor.a);");
