@@ -32,7 +32,7 @@ DrawRenderer.get = function (mesh) {
     const scene = mesh.scene;
     const hash = [
         scene.canvas.canvas.id,
-        (scene.gammaInput ? "gi;" : ";") + (scene.gammaOutput ? "go" : ""),
+        scene.gammaOutput ? "go" : "",
         scene._lightsState.getHash(),
         scene._sectionPlanesState.getHash(),
         mesh._geometry._state.hash,
