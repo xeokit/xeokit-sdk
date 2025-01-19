@@ -2,6 +2,10 @@ import {math} from "../math/math.js";
 import {getPlaneRTCPos} from "../math/rtcCoords.js";
 import {Program} from "../webgl/Program.js";
 import {makeInputSetters} from "../webgl/WebGLRenderer.js";
+import {LinearEncoding, sRGBEncoding} from "../constants/constants.js";
+
+const TEXTURE_DECODE_FUNCS = {};
+TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
 
 const tempVec3a = math.vec3();
 const tempVec4 = math.vec4();
@@ -503,8 +507,47 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
     }
 };
 
-export const createLightSetup = function(lightsState) {
-    const lights = lightsState.lights;
+export const setupTexture = (name, type, getValue, initValue) => {
+    return initValue && (function() {
+        const map    = name + "Map";
+        const matrix = initValue._state.matrix && (name + "MapMatrix");
+        const swizzle = (type === "samplerCube") ? "xyz" : "xy";
+        const getTexCoordExpression = texPos => (matrix ? `(${matrix} * ${texPos}).${swizzle}` : `${texPos}.${swizzle}`);
+        return {
+            appendDefinitions: (src) => {
+                src.push(`uniform ${type} ${map};`);
+                if (initValue._state.matrix) {
+                    src.push(`uniform mat4 ${matrix};`);
+                }
+            },
+            getTexCoordExpression: getTexCoordExpression,
+            getValueExpression: (texturePos, bias) => {
+                const texel = (bias
+                               ? `texture(${map}, ${getTexCoordExpression(texturePos)}, ${bias})`
+                               : `texture(${map}, ${getTexCoordExpression(texturePos)})`);
+                const enc = initValue.encoding;
+                return (enc !== LinearEncoding) ? `${TEXTURE_DECODE_FUNCS[enc]}(${texel})` : texel;
+            },
+            setupInputs: (getInputSetter) => {
+                const uMap    = getInputSetter(map);
+                const uMatrix = matrix && getInputSetter(matrix);
+                return (...args) => {
+                    const value = getValue(...args);
+                    const tex = value._state.texture;
+                    if (tex) {
+                        uMap(tex);
+                        let matrix = value._state.matrix;
+                        if (matrix) {
+                            uMatrix(matrix);
+                        }
+                    }
+                };
+            }
+        };
+    })();
+};
+
+export const createLightSetup = function(lightsState, setupCubes) {
     const lazyShaderUniform = function(name, type, getUniformValue) {
         const variable = {
             definition: `uniform ${type} ${name};`,
@@ -521,6 +564,8 @@ export const createLightSetup = function(lightsState) {
     };
 
     const lightAmbient = lazyShaderUniform("lightAmbient", "vec4", () => lightsState.getAmbientColorAndIntensity());
+
+    const lights = lightsState.lights;
     const directionals = lights.map((light, i) => {
         const lightUniforms = {
             color: lazyShaderUniform(`lightColor${i}`, "vec4", () => {
@@ -581,19 +626,35 @@ export const createLightSetup = function(lightsState) {
         }
     }).filter(v => v);
 
-    return {
+    const setupCubeTexture = (name, getMaps) => {
+        const getValue = () => { const m = getMaps(); return (m.length > 0) && { encoding: m[0].encoding, _state: { texture: m[0].texture } }; };
+        return setupTexture(name, "samplerCube", getValue, getValue());
+    };
+
+    const lightMap      = setupCubes && setupCubeTexture("light",      () => lightsState.lightMaps);
+    const reflectionMap = setupCubes && setupCubeTexture("reflection", () => lightsState.reflectionMaps);
+
+    return ((lights.length > 0) || lightMap || reflectionMap) && {
         appendDefinitions: (src) => {
             lightAmbient.needed && src.push(lightAmbient.definition);
             directionals.forEach(light => light.appendDefinitions(src));
+            lightMap && lightMap.appendDefinitions(src);
+            reflectionMap && reflectionMap.appendDefinitions(src);
         },
         getAmbientColor: () => `${lightAmbient}.rgb * ${lightAmbient}.a`,
         directionalLights: directionals.map(light => light.glslLight),
+        lightMap:      lightMap      && { getValueExpression: lightMap.getValueExpression },
+        reflectionMap: reflectionMap && { getValueExpression: reflectionMap.getValueExpression },
         setupInputs: (getUniformSetter) => {
             const setAmbientInputState = lightAmbient.setupInputs(getUniformSetter);
             const setDirectionalsInputStates = directionals.map(light => light.setupInputs(getUniformSetter));
+            const uLightMap      = lightMap && lightMap.setupInputs(getUniformSetter);
+            const uReflectionMap = reflectionMap && reflectionMap.setupInputs(getUniformSetter);
             return () => {
                 setAmbientInputState && setAmbientInputState();
                 setDirectionalsInputStates.forEach(setState => setState());
+                uLightMap      && uLightMap();
+                uReflectionMap && uReflectionMap();
             };
         }
     };
