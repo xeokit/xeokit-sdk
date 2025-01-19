@@ -1393,7 +1393,7 @@ class Mesh extends Component {
         const scene = this.scene;
         const hash = [
             scene.canvas.canvas.id,
-            (scene.gammaInput ? "gi;" : ";") + (scene.gammaOutput ? "go" : ""),
+            scene.gammaOutput ? "go" : "",
             scene._lightsState.getHash(),
             scene._sectionPlanesState.getHash()
         ];
