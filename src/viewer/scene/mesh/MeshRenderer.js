@@ -505,6 +505,20 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
 
 export const createLightSetup = function(lightsState) {
     const lights = lightsState.lights;
+    const lazyShaderUniform = function(name, type) {
+        const variable = {
+            definition: `uniform ${type} ${name};`,
+            name: name,
+            toString: () => {
+                variable.needed = true;
+                return name;
+            }
+        };
+        return variable;
+    };
+
+    const uAmbient = lazyShaderUniform("lightAmbient", "vec4");
+
     return {
         appendDefinitions: (src) => {
             src.push("uniform vec4 lightAmbient;");
