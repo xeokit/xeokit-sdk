@@ -505,10 +505,13 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
 
 export const createLightSetup = function(lightsState) {
     const lights = lightsState.lights;
-    const lazyShaderUniform = function(name, type) {
+    const lazyShaderUniform = function(name, type, getUniformValue) {
         const variable = {
             definition: `uniform ${type} ${name};`,
-            name: name,
+            setupInputs: (getUniformSetter) => {
+                const setUniform = variable.needed && getUniformSetter(name);
+                return setUniform && (() => setUniform(getUniformValue()));
+            },
             toString: () => {
                 variable.needed = true;
                 return name;
@@ -517,121 +520,80 @@ export const createLightSetup = function(lightsState) {
         return variable;
     };
 
-    const uAmbient = lazyShaderUniform("lightAmbient", "vec4");
+    const lightAmbient = lazyShaderUniform("lightAmbient", "vec4", () => lightsState.getAmbientColorAndIntensity());
+    const directionals = lights.map((light, i) => {
+        const lightUniforms = {
+            color: lazyShaderUniform(`lightColor${i}`, "vec4", () => {
+                const light = lights[i]; // in case it changed
+                tempVec4[0] = light.color[0];
+                tempVec4[1] = light.color[1];
+                tempVec4[2] = light.color[2];
+                tempVec4[3] = light.intensity;
+                return tempVec4;
+            }),
+            position:  lazyShaderUniform(`lightPos${i}`, "vec3", () => lights[i].pos),
+            direction: lazyShaderUniform(`lightDir${i}`, "vec3", () => lights[i].dir),
+
+            shadowProjMatrix: lazyShaderUniform(`shadowProjMatrix${i}`, "mat4", () => lights[i].getShadowViewMatrix()),
+            shadowViewMatrix: lazyShaderUniform(`shadowViewMatrix${i}`, "mat4", () => lights[i].getShadowViewMatrix()),
+            shadowMap:        lazyShaderUniform(`shadowMap${i}`,   "sampler2D", () => {
+                const shadowRenderBuf = lights[i].getShadowRenderBuf();
+                return shadowRenderBuf && shadowRenderBuf.getTexture();
+            })
+        };
+
+        const withViewLightDir = getDirection => {
+            return {
+                appendDefinitions: (src) => Object.values(lightUniforms).forEach(u => u.needed && src.push(u.definition)),
+                glslLight: {
+                    isWorldSpace: light.space === "world",
+                    getColor: () => `${lightUniforms.color}.rgb * ${lightUniforms.color}.a`,
+                    getDirection: (viewMatrix, viewPosition) => `normalize(${getDirection(viewMatrix, viewPosition)})`,
+                    shadowParameters: light.castsShadow && {
+                        getShadowProjMatrix: () => lightUniforms.shadowProjMatrix,
+                        getShadowViewMatrix: () => lightUniforms.shadowViewMatrix,
+                        getShadowMap:        () => lightUniforms.shadowMap
+                    }
+                },
+                setupInputs: (getUniformSetter) => {
+                    const setters = Object.values(lightUniforms).map(u => u.setupInputs(getUniformSetter)).filter(v => v);
+                    return () => setters.forEach(setState => setState());
+                }
+            };
+        };
+
+        if (light.type === "dir") {
+            if (light.space === "view") {
+                return withViewLightDir((viewMatrix, viewPosition) => `-${lightUniforms.direction}`);
+            } else {
+                // If normal mapping, the fragment->light vector will be in tangent space
+                return withViewLightDir((viewMatrix, viewPosition) => `-(${viewMatrix} * vec4(${lightUniforms.direction}, 0.0)).xyz`);
+            }
+        } else if (light.type === "point") {
+            if (light.space === "view") {
+                return withViewLightDir((viewMatrix, viewPosition) => `${lightUniforms.position} - ${viewPosition}`);
+            } else {
+                // If normal mapping, the fragment->light vector will be in tangent space
+                return withViewLightDir((viewMatrix, viewPosition) => `(${viewMatrix} * vec4(${lightUniforms.position}, 1.0)).xyz - ${viewPosition}`);
+            }
+        } else {
+            return null;
+        }
+    }).filter(v => v);
 
     return {
         appendDefinitions: (src) => {
-            src.push("uniform vec4 lightAmbient;");
-            for (let i = 0, len = lights.length; i < len; i++) {
-                const light = lights[i];
-                if (light.type === "ambient") {
-                    continue;
-                }
-                src.push("uniform vec4 lightColor" + i + ";");
-                if (light.type === "dir") {
-                    src.push("uniform vec3 lightDir" + i + ";");
-                }
-                if (light.type === "point") {
-                    src.push("uniform vec3 lightPos" + i + ";");
-                }
-                if (light.type === "spot") { // not used
-                    src.push("uniform vec3 lightPos" + i + ";");
-                    src.push("uniform vec3 lightDir" + i + ";");
-                }
-            }
+            lightAmbient.needed && src.push(lightAmbient.definition);
+            directionals.forEach(light => light.appendDefinitions(src));
         },
-        getAmbientColor: () => "lightAmbient.rgb * lightAmbient.a",
-        getDirectionalLights: (viewMatrix, viewPosition) => {
-            return lights.map((light, i) => {
-                const withViewLightDir = direction => ({
-                    color: `lightColor${i}.rgb * lightColor${i}.a`,
-                    direction: `normalize(${direction})`
-                });
-                if (light.type === "dir") {
-                    if (light.space === "view") {
-                        return withViewLightDir(`lightDir${i}`);
-                    } else {
-                        return withViewLightDir(`(${viewMatrix} * vec4(lightDir${i}, 0.0)).xyz`);
-                    }
-                } else if (light.type === "point") {
-                    if (light.space === "view") {
-                        return withViewLightDir(`lightPos${i} - ${viewPosition}.xyz`);
-                    } else {
-                        return withViewLightDir(`(${viewMatrix} * vec4(lightPos${i}, 0.0)).xyz)`);
-                    }
-                } else {
-                    return null;
-                }
-            }).filter(v => v);
-        },
+        getAmbientColor: () => `${lightAmbient}.rgb * ${lightAmbient}.a`,
+        directionalLights: directionals.map(light => light.glslLight),
         setupInputs: (getUniformSetter) => {
-            const uLightAmbient = getUniformSetter("lightAmbient");
-
-            const uLightColor = [];
-            const uLightDir = [];
-            const uLightPos = [];
-
-            const uShadowViewMatrix = [];
-            const uShadowProjMatrix = [];
-            const uShadowMap        = [];
-
-            for (let i = 0, len = lights.length; i < len; i++) {
-                const light = lights[i];
-                switch (light.type) {
-                case "dir":
-                    uLightColor[i] = getUniformSetter("lightColor" + i);
-                    uLightPos[i] = null;
-                    uLightDir[i] = getUniformSetter("lightDir" + i);
-                    break;
-                case "point":
-                    uLightColor[i] = getUniformSetter("lightColor" + i);
-                    uLightPos[i] = getUniformSetter("lightPos" + i);
-                    uLightDir[i] = null;
-                    break;
-                case "spot":
-                    uLightColor[i] = getUniformSetter("lightColor" + i);
-                    uLightPos[i] = getUniformSetter("lightPos" + i);
-                    uLightDir[i] = getUniformSetter("lightDir" + i);
-                    break;
-                }
-
-                if (light.castsShadow) {
-                    uShadowViewMatrix[i] = getUniformSetter("shadowViewMatrix" + i);
-                    uShadowProjMatrix[i] = getUniformSetter("shadowProjMatrix" + i);
-                    uShadowMap[i]        = getUniformSetter("shadowMap" + i);
-                }
-            }
-
+            const setAmbientInputState = lightAmbient.setupInputs(getUniformSetter);
+            const setDirectionalsInputStates = directionals.map(light => light.setupInputs(getUniformSetter));
             return () => {
-                uLightAmbient(lightsState.getAmbientColorAndIntensity());
-                for (let i = 0, len = lights.length; i < len; i++) {
-                    const light = lights[i];
-                    if (uLightColor[i]) {
-                        tempVec4[0] = light.color[0];
-                        tempVec4[1] = light.color[1];
-                        tempVec4[2] = light.color[2];
-                        tempVec4[3] = light.intensity;
-                        uLightColor[i](tempVec4);
-                    }
-                    if (uLightPos[i]) {
-                        uLightPos[i](light.pos);
-                    }
-                    if (uLightDir[i]) {
-                        uLightDir[i](light.dir);
-                    }
-                    if (light.castsShadow) {
-                        if (uShadowViewMatrix[i]) {
-                            uShadowViewMatrix[i](light.getShadowViewMatrix());
-                        }
-                        if (uShadowProjMatrix[i]) {
-                            uShadowProjMatrix[i](light.getShadowProjMatrix());
-                        }
-                        const shadowRenderBuf = uShadowMap[i] && light.getShadowRenderBuf();
-                        if (shadowRenderBuf) {
-                            uShadowMap[i](shadowRenderBuf.getTexture());
-                        }
-                    }
-                }
+                setAmbientInputState && setAmbientInputState();
+                setDirectionalsInputStates.forEach(setState => setState());
             };
         }
     };
