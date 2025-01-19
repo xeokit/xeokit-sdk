@@ -224,13 +224,6 @@ export const DrawShaderSource = function(mesh) {
 
                 src.push("#define saturate(a) clamp( a, 0.0, 1.0 )");
 
-                // STRUCTURES
-                src.push("struct Geometry {");
-                src.push("   vec3 position;");
-                src.push("   vec3 viewNormal;");
-                src.push("   vec3 viewEyeDir;");
-                src.push("};");
-
                 src.push("struct Material {");
                 src.push("   vec3    diffuseColor;");
                 src.push("   float   specularRoughness;");
@@ -269,12 +262,12 @@ export const DrawShaderSource = function(mesh) {
                     src.push("   return RECIPROCAL_PI * a2 / ( denom * denom);");
                     src.push("}");
 
-                    src.push("vec3 BRDF_Specular_GGX(const in vec3 incidentLightDirection, const in Geometry geometry, const in vec3 specularColor, const in float roughness) {");
+                    src.push("vec3 BRDF_Specular_GGX(const in vec3 incidentLightDirection, const in vec3 viewNormal, const in vec3 viewEyeDir, const in vec3 specularColor, const in float roughness) {");
                     src.push("   float alpha = ( roughness * roughness );");
-                    src.push("   vec3 halfDir = normalize( incidentLightDirection + geometry.viewEyeDir );");
-                    src.push("   float dotNL = saturate( dot( geometry.viewNormal, incidentLightDirection ) );");
-                    src.push("   float dotNV = saturate( dot( geometry.viewNormal, geometry.viewEyeDir ) );");
-                    src.push("   float dotNH = saturate( dot( geometry.viewNormal, halfDir ) );");
+                    src.push("   vec3 halfDir = normalize( incidentLightDirection + viewEyeDir );");
+                    src.push("   float dotNL = saturate( dot( viewNormal, incidentLightDirection ) );");
+                    src.push("   float dotNV = saturate( dot( viewNormal, viewEyeDir ) );");
+                    src.push("   float dotNH = saturate( dot( viewNormal, halfDir ) );");
                     src.push("   float dotLH = saturate( dot( incidentLightDirection, halfDir ) );");
                     src.push("   vec3  F = F_Schlick( specularColor, dotLH );");
                     src.push("   float G = G_GGX_SmithCorrelated( alpha, dotNL, dotNV );");
@@ -282,8 +275,8 @@ export const DrawShaderSource = function(mesh) {
                     src.push("   return F * (G * D);");
                     src.push("}");
 
-                    src.push("vec3 BRDF_Specular_GGX_Environment(const in Geometry geometry, const in vec3 specularColor, const in float roughness) {");
-                    src.push("   float dotNV = saturate(dot(geometry.viewNormal, geometry.viewEyeDir));");
+                    src.push("vec3 BRDF_Specular_GGX_Environment(const in vec3 viewNormal, const in vec3 viewEyeDir, const in vec3 specularColor, const in float roughness) {");
+                    src.push("   float dotNV = saturate(dot(viewNormal, viewEyeDir));");
                     src.push("   const vec4 c0 = vec4( -1, -0.0275, -0.572,  0.022);");
                     src.push("   const vec4 c1 = vec4(  1,  0.0425,   1.04, -0.04);");
                     src.push("   vec4 r = roughness * c0 + c1;");
@@ -482,7 +475,6 @@ export const DrawShaderSource = function(mesh) {
 
                 // PREPARE INPUTS FOR SHADER FUNCTIONS
                 src.push("Material       material;");
-                src.push("Geometry       geometry;");
 
                 if (phongMaterial) {
                     src.push("material.diffuseColor      = diffuseColor;");
@@ -504,10 +496,6 @@ export const DrawShaderSource = function(mesh) {
                     src.push("material.specularColor     = mix(vec3(dielectricSpecular), diffuseColor, metallic);");
                 }
 
-                src.push("geometry.position      = vViewPosition;");
-                src.push("geometry.viewNormal    = viewNormal;");
-                src.push("geometry.viewEyeDir    = viewEyeDir;");
-
                 // ENVIRONMENT AND REFLECTION MAP SHADING
 
                 if (phongMaterial || metallicMaterial || specularMaterial) {
@@ -519,12 +507,12 @@ export const DrawShaderSource = function(mesh) {
                         src.push(`reflDiff += material.diffuseColor * ${irradiance};`);
                     }
                     if (lightSetup.reflectionMap) {
-                        const reflectVec = `reflect(-geometry.viewEyeDir, geometry.viewNormal)`;
+                        const reflectVec = `reflect(-viewEyeDir, viewNormal)`;
                         const spec = (phongMaterial
                                       ? `0.2 * PI * ${lightSetup.reflectionMap.getValueExpression(reflectVec)}.rgb`
                                       : (function() {
                                           const blinnExpFromRoughness = `2.0 / pow(material.specularRoughness + 0.0001, 2.0) - 2.0`;
-                                          const specularBRDFContrib = "BRDF_Specular_GGX_Environment(geometry, material.specularColor, material.specularRoughness)";
+                                          const specularBRDFContrib = "BRDF_Specular_GGX_Environment(viewNormal, viewEyeDir, material.specularColor, material.specularRoughness)";
 
                                           const viewReflectVec = `normalize((vec4(${reflectVec}, 0.0) * viewMatrix).xyz)`;
                                           const maxMIPLevelScalar = "4.0";
@@ -559,12 +547,12 @@ export const DrawShaderSource = function(mesh) {
                         }
                         src.push(`vec3 lightColor${i} = ${light.getColor()}${light.shadowParameters ? (" * " + "shadow") : ""};`);
                         src.push(`vec3 lightDirection${i} = ${light.isWorldSpace ? `vViewLightReverseDir${i}` : light.getDirection(null, "vViewPosition")};`);
-                        const dotNL = `saturate(dot(geometry.viewNormal, lightDirection${i}))`;
+                        const dotNL = `saturate(dot(viewNormal, lightDirection${i}))`;
                         src.push(`vec3 irradiance${i} = ${dotNL} * lightColor${i} * PI;`);
                         src.push(`reflDiff += irradiance${i} * (RECIPROCAL_PI * material.diffuseColor);`);
                         const spec = (phongMaterial
-                                      ? `lightColor${i} * material.specularColor * pow(max(dot(reflect(-lightDirection${i}, -geometry.viewNormal), geometry.viewEyeDir), 0.0), material.shine)`
-                                      : `irradiance${i} * BRDF_Specular_GGX(lightDirection${i}, geometry, material.specularColor, material.specularRoughness)`);
+                                      ? `lightColor${i} * material.specularColor * pow(max(dot(reflect(-lightDirection${i}, -viewNormal), viewEyeDir), 0.0), material.shine)`
+                                      : `irradiance${i} * BRDF_Specular_GGX(lightDirection${i}, viewNormal, viewEyeDir, material.specularColor, material.specularRoughness)`);
                         src.push(`reflSpec += ${spec};`);
                     });
                 }
