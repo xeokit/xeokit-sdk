@@ -507,18 +507,31 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
     }
 };
 
+const lazyShaderUniform = function(name, type, getUniformValue) {
+    const variable = {
+        appendDefinitions: (src) => variable.needed && src.push(`uniform ${type} ${name};`),
+        toString: () => {
+            variable.needed = true;
+            return name;
+        },
+        setupInputs: (getUniformSetter) => {
+            const setUniform = variable.needed && getUniformSetter(name);
+            return setUniform && ((...args) => setUniform(getUniformValue(...args)));
+        }
+    };
+    return variable;
+};
+
 export const setupTexture = (name, type, getValue, initValue) => {
     return initValue && (function() {
-        const map    = name + "Map";
-        const matrix = initValue._state.matrix && (name + "MapMatrix");
+        const map    = lazyShaderUniform(name + "Map", type, v => v);
+        const matrix = initValue._state.matrix && lazyShaderUniform(name + "MapMatrix", "mat4", v => v);
         const swizzle = (type === "samplerCube") ? "xyz" : "xy";
         const getTexCoordExpression = texPos => (matrix ? `(${matrix} * ${texPos}).${swizzle}` : `${texPos}.${swizzle}`);
         return {
             appendDefinitions: (src) => {
-                src.push(`uniform ${type} ${map};`);
-                if (initValue._state.matrix) {
-                    src.push(`uniform mat4 ${matrix};`);
-                }
+                map.appendDefinitions(src);
+                matrix && matrix.appendDefinitions(src);
             },
             getTexCoordExpression: getTexCoordExpression,
             getValueExpression: (texturePos, bias) => {
@@ -529,16 +542,16 @@ export const setupTexture = (name, type, getValue, initValue) => {
                 return (enc !== LinearEncoding) ? `${TEXTURE_DECODE_FUNCS[enc]}(${texel})` : texel;
             },
             setupInputs: (getInputSetter) => {
-                const uMap    = getInputSetter(map);
-                const uMatrix = matrix && getInputSetter(matrix);
-                return (...args) => {
+                const setMap    = map.setupInputs(getInputSetter);
+                const setMatrix = matrix && matrix.setupInputs(getInputSetter);
+                return setMap && function(...args) {
                     const value = getValue(...args);
                     const tex = value._state.texture;
                     if (tex) {
-                        uMap(tex);
-                        let matrix = value._state.matrix;
-                        if (matrix) {
-                            uMatrix(matrix);
+                        setMap(tex);
+                        const mtx = setMatrix && value._state.matrix;
+                        if (mtx) {
+                            setMatrix(mtx);
                         }
                     }
                 };
@@ -548,21 +561,6 @@ export const setupTexture = (name, type, getValue, initValue) => {
 };
 
 export const createLightSetup = function(lightsState, setupCubes) {
-    const lazyShaderUniform = function(name, type, getUniformValue) {
-        const variable = {
-            appendDefinitions: (src) => variable.needed && src.push(`uniform ${type} ${name};`),
-            toString: () => {
-                variable.needed = true;
-                return name;
-            },
-            setupInputs: (getUniformSetter) => {
-                const setUniform = variable.needed && getUniformSetter(name);
-                return setUniform && (() => setUniform(getUniformValue()));
-            }
-        };
-        return variable;
-    };
-
     const lightAmbient = lazyShaderUniform("lightAmbient", "vec4", () => lightsState.getAmbientColorAndIntensity());
 
     const lights = lightsState.lights;
