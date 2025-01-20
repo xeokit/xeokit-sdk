@@ -5,7 +5,8 @@ const tmpVec4 = math.vec4();
 export const EmphasisFillShaderSource = function(mesh) {
     const geometryState = mesh._geometry._state;
     const primitive = geometryState.primitiveName;
-    const lightSetup = (geometryState.autoVertexNormals || geometryState.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan") && createLightSetup(mesh.scene._lightsState);
+    const normals = (geometryState.autoVertexNormals || geometryState.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan");
+    const lightSetup = createLightSetup(mesh.scene._lightsState);
 
     return {
         programName: "EmphasisFill",
@@ -13,18 +14,17 @@ export const EmphasisFillShaderSource = function(mesh) {
         useGammaOutput: true,
         appendVertexDefinitions: (src) => {
             src.push("uniform vec4 fillColor;");
-            lightSetup && lightSetup.appendDefinitions(src);
+            lightSetup.appendDefinitions(src);
             src.push("out vec4 vColor;");
         },
         appendVertexOutputs: (src, color, pickColor, uv, worldNormal, viewNormal) => {
             src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-            lightSetup && lightSetup.directionalLights.forEach(light => {
+            normals && lightSetup.directionalLights.forEach(light => {
                 src.push(`reflectedColor += max(dot(${viewNormal}, ${light.getDirection("viewMatrix2", "viewPosition")}), 0.0) * ${light.getColor()};`);
             });
             // TODO: A blending mode for emphasis materials, to select add/multiply/mix
             //src.push("vColor = vec4((mix(reflectedColor, fillColor.rgb, 0.7)), fillColor.a);");
-            const ambientComponent = lightSetup ? (lightSetup.getAmbientColor() + " + ") : "";
-            src.push(`vColor = vec4((${ambientComponent}reflectedColor) * fillColor.rgb, fillColor.a);`);
+            src.push(`vColor = vec4((${lightSetup.getAmbientColor()} + reflectedColor) * fillColor.rgb, fillColor.a);`);
             //src.push("vColor = vec4(reflectedColor + fillColor.rgb, fillColor.a);");
         },
         appendFragmentDefinitions: (src) => {
@@ -40,7 +40,7 @@ export const EmphasisFillShaderSource = function(mesh) {
                 fillColor(tmpVec4);
             };
         },
-        setupLightInputs: lightSetup && lightSetup.setupInputs
+        setupLightInputs: lightSetup.setupInputs
     };
 };
 
