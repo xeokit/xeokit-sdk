@@ -497,7 +497,7 @@ class VBOInstancingLinesLayer {
 
         let pickFlag = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
 
-        const clippableFlag = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
+        const clippableFlag = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 1 : 0;
 
         let vertFlag = 0;
         vertFlag |= colorFlag;
