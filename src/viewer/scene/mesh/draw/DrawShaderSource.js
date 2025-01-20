@@ -16,8 +16,8 @@ export const DrawShaderSource = function(mesh) {
     const metallicMaterial = (materialState.type === "MetallicMaterial");
     const specularMaterial = (materialState.type === "SpecularMaterial");
 
-    const lightSetup = normals && createLightSetup(scene._lightsState, !!uvs);
-    const hasNonAmbientLighting = (lightSetup.directionalLights.length > 0) || lightSetup.lightMap || lightSetup.reflectionMap;
+    const lightSetup = createLightSetup(scene._lightsState, !!uvs);
+    const hasNonAmbientLighting = normals && ((lightSetup.directionalLights.length > 0) || lightSetup.lightMap || lightSetup.reflectionMap);
 
     const setupFresnel = (name, colorSwizzle, getMaterialValue) => {
         const edgeBias    = name + "FresnelEdgeBias";
@@ -151,11 +151,9 @@ export const DrawShaderSource = function(mesh) {
         transformClipPos: clipPos => background ? `${clipPos}.xyww` : clipPos,
         appendVertexDefinitions: (src) => {
             src.push("out vec3 vViewPosition;");
+            lightSetup.appendDefinitions(src);
             if (normals) {
                 src.push("out vec3 vViewNormal;");
-            }
-            if (lightSetup) {
-                lightSetup.appendDefinitions(src);
                 lightSetup.directionalLights.forEach((light, i) => {
                     if (light.isWorldSpace) {
                         src.push(`out vec3 vViewLightReverseDir${i};`);
@@ -176,29 +174,29 @@ export const DrawShaderSource = function(mesh) {
             }
         },
         appendVertexOutputs: (src, color, pickColor, uv, worldNormal, viewNormal) => {
-            if (normals) {
-                src.push(`vViewNormal = ${viewNormal};`);
-            }
-            if (lightSetup && lightSetup.lightMap) {
-                src.push(`vWorldNormal = ${worldNormal};`);
-            }
             if (texturePosNeeded) {
                 src.push(`vUV = ${uv};`);
             }
             if (geometryState.colors) {
                 src.push(`vColor = ${color};`);
             }
-            src.push("   vViewPosition = viewPosition.xyz;");
-            if (lightSetup) {
-                src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
-                lightSetup.directionalLights.forEach((light, i) => {
-                    if (light.isWorldSpace) {
-                        src.push(`vViewLightReverseDir${i} = ${light.getDirection("viewMatrix2", null)};`);
-                    }
-                    if (light.shadowParameters) {
-                        src.push(`vShadowPosFromLight${i} = (texUnitConverter * ${light.shadowParameters.getShadowProjMatrix()} * (${light.shadowParameters.getShadowViewMatrix()} * worldPosition)).xyz;`);
-                    }
-                });
+            src.push("vViewPosition = viewPosition.xyz;");
+            if (normals) {
+                src.push(`vViewNormal = ${viewNormal};`);
+                if (lightSetup.lightMap) {
+                    src.push(`vWorldNormal = ${worldNormal};`);
+                }
+                if (lightSetup.directionalLights.length > 0) {
+                    src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
+                    lightSetup.directionalLights.forEach((light, i) => {
+                        if (light.isWorldSpace) {
+                            src.push(`vViewLightReverseDir${i} = ${light.getDirection("viewMatrix2", null)};`);
+                        }
+                        if (light.shadowParameters) {
+                            src.push(`vShadowPosFromLight${i} = (texUnitConverter * ${light.shadowParameters.getShadowProjMatrix()} * (${light.shadowParameters.getShadowViewMatrix()} * worldPosition)).xyz;`);
+                        }
+                    });
+                }
             }
         },
         appendFragmentDefinitions: (src) => {
@@ -206,11 +204,11 @@ export const DrawShaderSource = function(mesh) {
             src.push("  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );");
             src.push("}");
 
-            if (lightSetup && lightSetup.reflectionMap) {
-                src.push("uniform mat4 viewMatrix;");
-            }
-
             if (normals) {
+                if (lightSetup.reflectionMap) {
+                    src.push("uniform mat4 viewMatrix;");
+                }
+
                 //--------------------------------------------------------------------------------
                 // SHADING FUNCTIONS
                 //--------------------------------------------------------------------------------
@@ -305,9 +303,9 @@ export const DrawShaderSource = function(mesh) {
 
             if (normals) {
                 src.push("in vec3 vViewNormal;");
-            }
-            if (lightSetup && lightSetup.lightMap) {
-                src.push("in vec3 vWorldNormal;");
+                if (lightSetup.lightMap) {
+                    src.push("in vec3 vWorldNormal;");
+                }
             }
 
             //--------------------------------------------------------------------------------
@@ -356,17 +354,15 @@ export const DrawShaderSource = function(mesh) {
             // LIGHT SOURCES
             //--------------------------------------------------------------------------------
 
-            if (lightSetup) {
-                lightSetup.appendDefinitions(src);
-                lightSetup.directionalLights.forEach((light, i) => {
-                    if (light.isWorldSpace) {
-                        src.push(`in vec3 vViewLightReverseDir${i};`);
-                    }
-                    if (light.shadowParameters) {
-                        src.push(`in vec3 vShadowPosFromLight${i};`);
-                    }
-                });
-            }
+            lightSetup.appendDefinitions(src);
+            normals && lightSetup.directionalLights.forEach((light, i) => {
+                if (light.isWorldSpace) {
+                    src.push(`in vec3 vViewLightReverseDir${i};`);
+                }
+                if (light.shadowParameters) {
+                    src.push(`in vec3 vShadowPosFromLight${i};`);
+                }
+            });
 
             src.push("uniform vec4 colorize;");
 
@@ -547,7 +543,7 @@ export const DrawShaderSource = function(mesh) {
             } else {
                 src.push(`vec3 ambientColor = ${materialAmbient ? materialAmbient.getValueExpression() : "vec3(1.0)"};`);
                 ambientMap && src.push(`ambientColor *= ${ambientMap.getValueExpression("texturePos")}.rgb;`);
-                lightSetup && src.push(`ambientColor *= ${lightSetup.getAmbientColor()};`);
+                src.push(`ambientColor *= ${lightSetup.getAmbientColor()};`);
                 src.push("vec3 outgoingLight = emissiveColor + ambientColor;");
             }
 
@@ -563,7 +559,7 @@ export const DrawShaderSource = function(mesh) {
             const binders = activeFresnels.concat(activeTextureMaps).concat(activeUniforms).map(f => f && f.setupInputs(getInputSetter));
             return (binders.length > 0) && (mtl => binders.forEach(bind => bind(mtl)));
         },
-        setupLightInputs: lightSetup && lightSetup.setupInputs
+        setupLightInputs: lightSetup.setupInputs
     };
 };
 
