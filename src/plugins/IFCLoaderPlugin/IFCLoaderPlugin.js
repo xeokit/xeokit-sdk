@@ -1,21 +1,14 @@
-import { utils } from "../../viewer/scene/utils.js"
-import { SceneModel } from "../../viewer/scene/model/index.js";
 import { Plugin } from "../../viewer/Plugin.js";
 import { XktConverter } from "../../../.vscode/dist/index.mjs"
 import { XKTLoaderPlugin } from "../../../dist/xeokit-sdk.es.js";
 
-async function fetchFileContent(url) {
+async function fetchFile(url) {
     try {
         const response = await fetch(url);
-
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
-        const content = await response.text(); // Use .text() for plain text files
-        //console.log(content);
-
-        return content;
+        return response.text();
     } catch (error) {
         console.error('Error fetching file:', error);
     }
@@ -54,17 +47,9 @@ class IFCLoaderPlugin extends Plugin {
         this.XKTs.push(xkt);
     }
     async load(params = {}) {
-
-        const sceneModel = new SceneModel(this.viewer.scene, utils.apply(params, {
-            isModel: true
-        }));
-
-        if (!params.src && !params.ifc) {
-            this.error("load() param expected: src or IFC");
-            return sceneModel; // Return new empty model
+        if (!params.src) {
+            this.error("load() param expected: src");            
         }
-
-        //stuff       
 
         const xktConverter = await XktConverter.create();         
         xktConverter.registerAllReadyCallback(this.loadAllToViewer.bind(this));        
@@ -73,8 +58,7 @@ class IFCLoaderPlugin extends Plugin {
         xktConverter.registerProgressCallback(this.progressCallback.bind(this));
         xktConverter.registerProgressTextCallback(this.progressTextCallback.bind(this));
         
-        const data = await fetchFileContent(params.src);
-        // const data = await fetchFileContent("../../assets/6-Maschinen.ifc");
+        const data = await fetchFile(params.src);        
         xktConverter.ifcToXKTs(data);
     }
 }
