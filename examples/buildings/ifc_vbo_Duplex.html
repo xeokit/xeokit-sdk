@@ -174,31 +174,24 @@
         </ul>
     </div>
     <div style="position:absolute; left:45%; top:0;">
-        <div id="progressPercentage"></div>
-        <div id="progressText"></div>
+        <table>
+            <tr>
+                <td><b>Progress:</b></td>
+                <td id="progressPercentage"></td>
+            </tr>
+            <tr>
+                <td><b>Progress text:</b></td>
+                <td id="progressText"></td>
+            </tr>
+        </table>
     </div>
 </body>
 
 <script type="module">
-    async function fetchFileContent(url) {
-        try {
-            const response = await fetch(url);
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const content = await response.text(); // Use .text() for plain text files
-            //console.log(content);
-
-            return content;
-        } catch (error) {
-            console.error('Error fetching file:', error);
-        }
-    }
-
-    import { XKTLoaderPlugin, Viewer, NavCubePlugin, TreeViewPlugin } from "../../dist/xeokit-sdk.es.js";
+    import { XKTLoaderPlugin, Viewer, NavCubePlugin, TreeViewPlugin, SceneModel } from "../../dist/xeokit-sdk.es.js";
     import { XktConverter } from "../../.vscode/dist/index.mjs"
+    import { IFCLoaderPlugin } from "../../src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -223,51 +216,21 @@
         autoExpandDepth: 3 // Initially expand the root tree node
     });
 
-    var metaDataGlobal = {};
-    const XKTs = [];
-    const xktLoader = new XKTLoaderPlugin(viewer);
-
-    const xktConverter = await XktConverter.create();
-
-    async function allGltfsCompleted() {
-        loadAllToViewer();
-    }
-    xktConverter.registerAllReadyCallback(allGltfsCompleted);
-    async function handleMetaData(metaData) {
-        metaDataGlobal = metaData;
-    }
-    xktConverter.registerMetaDataCallback(handleMetaData);
-    async function handleXKT(xkt) {
-        XKTs.push(xkt);
-    }
-    xktConverter.registerXKTCallback(handleXKT);
-
-    function progressCallback(progress) {
-        const progressPercentage = document.getElementById("progressPercentage");
-        progressPercentage.innerText = progress.toFixed(1) + "%";
-    }
-    xktConverter.registerProgressCallback(progressCallback);
-
-    function progressTextCallback(progressText) {
-        const progressTextElement = document.getElementById("progressText");
-        progressTextElement.innerText = progressText;
-    }
-    xktConverter.registerProgressTextCallback(progressTextCallback);
-
-    async function loadAllToViewer() {
-        for (let idx = 0; idx < XKTs.length; idx++) {
-            const currentXKT = XKTs[idx];
-            if (idx == XKTs.length - 1) {
-                await xktLoader.load({ xkt: currentXKT, metaModelData: metaDataGlobal });
-                viewer.cameraFlight.flyTo(currentXKT);
-            }
-            else {
-                await xktLoader.load({ xkt: currentXKT });
-            }
+    const ifcLoaderPlugin = new IFCLoaderPlugin(viewer);
+    ifcLoaderPlugin.registerProgressCallback(
+        (progress) => {
+            const progressPercentage = document.getElementById("progressPercentage");
+            progressPercentage.innerText = progress.toFixed(1) + "%";
         }
-    }
-    const data = await fetchFileContent("../../assets/models/ifc/Duplex.ifc");
-    await xktConverter.ifcToXKTs(data);
+    )
+    ifcLoaderPlugin.registerProgressTextCallback(
+        (progressText) => {
+            const progressTextElement = document.getElementById("progressText");
+            progressTextElement.innerText = progressText;
+        }
+    )  
+
+    ifcLoaderPlugin.load({ src: "../../assets/models/ifc/Duplex.ifc" });
 
 
 </script>
