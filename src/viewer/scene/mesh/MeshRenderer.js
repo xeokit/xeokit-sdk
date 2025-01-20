@@ -43,11 +43,11 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
 
     const lazyShaderAttribute = function(name, type) {
         const variable = {
+            appendDefinitions: (src) => variable.needed && src.push(`in ${type} ${name};`),
             toString: () => {
                 variable.needed = true;
                 return name;
-            },
-            definition: `in ${type} ${name};`
+            }
         };
         return variable;
     };
@@ -139,7 +139,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         const src = [];
         src.push("#version 300 es");
         src.push("// " + programSetup.programName + " vertex shader");
-        Object.values(attributes).forEach(a => a.needed && src.push(a.definition));
+        Object.values(attributes).forEach(a => a.appendDefinitions(src));
         src.push("uniform mat4 modelMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
@@ -550,14 +550,14 @@ export const setupTexture = (name, type, getValue, initValue) => {
 export const createLightSetup = function(lightsState, setupCubes) {
     const lazyShaderUniform = function(name, type, getUniformValue) {
         const variable = {
-            definition: `uniform ${type} ${name};`,
-            setupInputs: (getUniformSetter) => {
-                const setUniform = variable.needed && getUniformSetter(name);
-                return setUniform && (() => setUniform(getUniformValue()));
-            },
+            appendDefinitions: (src) => variable.needed && src.push(`uniform ${type} ${name};`),
             toString: () => {
                 variable.needed = true;
                 return name;
+            },
+            setupInputs: (getUniformSetter) => {
+                const setUniform = variable.needed && getUniformSetter(name);
+                return setUniform && (() => setUniform(getUniformValue()));
             }
         };
         return variable;
@@ -589,7 +589,7 @@ export const createLightSetup = function(lightsState, setupCubes) {
 
         const withViewLightDir = getDirection => {
             return {
-                appendDefinitions: (src) => Object.values(lightUniforms).forEach(u => u.needed && src.push(u.definition)),
+                appendDefinitions: (src) => Object.values(lightUniforms).forEach(u => u.appendDefinitions(src)),
                 glslLight: {
                     isWorldSpace: light.space === "world",
                     getColor: () => `${lightUniforms.color}.rgb * ${lightUniforms.color}.a`,
@@ -636,7 +636,7 @@ export const createLightSetup = function(lightsState, setupCubes) {
 
     return {
         appendDefinitions: (src) => {
-            lightAmbient.needed && src.push(lightAmbient.definition);
+            lightAmbient.appendDefinitions(src);
             directionals.forEach(light => light.appendDefinitions(src));
             lightMap && lightMap.appendDefinitions(src);
             reflectionMap && reflectionMap.appendDefinitions(src);
