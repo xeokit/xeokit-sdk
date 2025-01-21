@@ -257,19 +257,23 @@ export class PointerLens {
     get snapped() {
         return this._snapped;
     }
-    
+
+    _updateActiveVisible() {
+        this._lensContainer.style.visibility = (this._active && this._visible) ? "visible" : "hidden";
+        if (!this._active || !this._visible) {
+            this._lensCursorDiv.style.marginLeft = `-100px`;
+            this._lensCursorDiv.style.marginTop = `-100px`;
+        }
+        this.update();
+    }
+
     /**
      * Sets if this PointerLens is active.
      * @param active
      */
     set active(active) {
         this._active = active;
-        this._lensContainer.style.visibility = (active && this._visible) ? "visible" : "hidden";
-        if (!active || !this._visible ) {
-            this._lensCursorDiv.style.marginLeft = `-100px`;
-            this._lensCursorDiv.style.marginTop = `-100px`;
-        }
-        this.update();
+        this._updateActiveVisible();
     }
 
     /**
@@ -288,12 +292,7 @@ export class PointerLens {
      */
     set visible(visible) {
         this._visible = visible;
-        this._lensContainer.style.visibility = (visible && this._active) ? "visible" : "hidden";
-        if (!visible || !this._active) {
-            this._lensCursorDiv.style.marginLeft = `-100px`;
-            this._lensCursorDiv.style.marginTop = `-100px`;
-        }
-        this.update();
+        this._updateActiveVisible();
     }
 
     /**
