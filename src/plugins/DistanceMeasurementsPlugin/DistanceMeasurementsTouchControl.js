@@ -13,6 +13,8 @@ const WAITING_FOR_TARGET_LONG_TOUCH_END = 5;
 
 const TOUCH_CANCELING = 7;
 
+const tmpVec2 = math.vec2();
+
 /**
  * Creates {@link DistanceMeasurement}s from touch input.
  *
@@ -166,6 +168,12 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
             return dst;
         };
 
+        const toBodyPos = (pos, dst) => {
+            dst.set(pos);
+            transformToNode(canvas, canvas.ownerDocument.documentElement, dst);
+            return dst;
+        };
+
         canvas.addEventListener("touchstart", this._onCanvasTouchStart = (event) => {
 
             const currentNumTouches = event.touches.length;
@@ -196,7 +204,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                     });
                     if (snapPickResult && snapPickResult.snapped) {
                         pointerWorldPos.set(snapPickResult.worldPos);
-                        this.pointerCircle.start(snapPickResult.snappedCanvasPos);
+                        this.pointerCircle.start(toBodyPos(snapPickResult.snappedCanvasPos, tmpVec2));
                     } else {
                         const pickResult = scene.pick({
                             canvasPos: touchMoveCanvasPos,
@@ -204,7 +212,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                         })
                         if (pickResult && pickResult.worldPos) {
                             pointerWorldPos.set(pickResult.worldPos);
-                            this.pointerCircle.start(pickResult.canvasPos);
+                            this.pointerCircle.start(toBodyPos(pickResult.canvasPos, tmpVec2));
                         } else {
                             return;
                         }
@@ -308,7 +316,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                                     this.pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
                                     this.pointerLens.snapped = true;
                                 }
-                                this.pointerCircle.start(snapPickResult.snappedCanvasPos);
+                                this.pointerCircle.start(toBodyPos(snapPickResult.snappedCanvasPos, tmpVec2));
                                 pointerWorldPos.set(snapPickResult.worldPos);
                                 this._currentDistanceMeasurement.target.worldPos = snapPickResult.worldPos;
                                 this._currentDistanceMeasurement.target.entity = snapPickResult.entity;
@@ -326,7 +334,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                                         this.pointerLens.cursorPos = pickResult.canvasPos;
                                         this.pointerLens.snapped = false;
                                     }
-                                    this.pointerCircle.start(pickResult.canvasPos);
+                                    this.pointerCircle.start(toBodyPos(pickResult.canvasPos, tmpVec2));
                                     pointerWorldPos.set(pickResult.worldPos);
                                     this._currentDistanceMeasurement.target.worldPos = pickResult.worldPos;
                                     this._currentDistanceMeasurement.target.entity = pickResult.entity;

@@ -17,6 +17,8 @@ const WAITING_FOR_TARGET_LONG_TOUCH_END = 8;
 
 const TOUCH_CANCELING = 7;
 
+const tmpVec2 = math.vec2();
+
 /**
  * Creates {@link AngleMeasurement}s from touch input.
  *
@@ -162,6 +164,12 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
             return dst;
         };
 
+        const toBodyPos = (pos, dst) => {
+            dst.set(pos);
+            transformToNode(canvas, canvas.ownerDocument.documentElement, dst);
+            return dst;
+        };
+
         canvas.addEventListener("touchstart", this._onCanvasTouchStart = (event) => {
 
             const currentNumTouches = event.touches.length;
@@ -192,7 +200,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                     });
                     if (snapPickResult && snapPickResult.snapped) {
                         pointerWorldPos.set(snapPickResult.worldPos);
-                        this.pointerCircle.start(snapPickResult.snappedCanvasPos);
+                        this.pointerCircle.start(toBodyPos(snapPickResult.snappedCanvasPos, tmpVec2));
                     } else {
                         const pickResult = scene.pick({
                             canvasPos: touchMoveCanvasPos,
@@ -200,7 +208,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                         })
                         if (pickResult && pickResult.worldPos) {
                             pointerWorldPos.set(pickResult.worldPos);
-                            this.pointerCircle.start(pickResult.canvasPos);
+                            this.pointerCircle.start(toBodyPos(pickResult.canvasPos, tmpVec2));
                         } else {
                             return;
                         }
@@ -307,7 +315,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                                     this.pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
                                     this.pointerLens.snapped = true;
                                 }
-                                this.pointerCircle.start(snapPickResult.snappedCanvasPos);
+                                this.pointerCircle.start(toBodyPos(snapPickResult.snappedCanvasPos, tmpVec2));
                                 pointerWorldPos.set(snapPickResult.worldPos);
                                 this._currentAngleMeasurement.corner.worldPos = snapPickResult.worldPos;
                                 this._currentAngleMeasurement.corner.entity = snapPickResult.entity;
@@ -329,7 +337,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                                         this.pointerLens.cursorPos = pickResult.canvasPos;
                                         this.pointerLens.snapped = false;
                                     }
-                                    this.pointerCircle.start(pickResult.canvasPos);
+                                    this.pointerCircle.start(toBodyPos(pickResult.canvasPos, tmpVec2));
                                     pointerWorldPos.set(pickResult.worldPos);
                                     this._currentAngleMeasurement.corner.worldPos = pickResult.worldPos;
                                     this._currentAngleMeasurement.corner.entity = pickResult.entity;
@@ -400,7 +408,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                                     this.pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
                                     this.pointerLens.snapped = true;
                                 }
-                                this.pointerCircle.start(snapPickResult.snappedCanvasPos);
+                                this.pointerCircle.start(toBodyPos(snapPickResult.snappedCanvasPos, tmpVec2));
                                 pointerWorldPos.set(snapPickResult.worldPos);
                                 this._currentAngleMeasurement.target.worldPos = snapPickResult.worldPos;
                                 this._currentAngleMeasurement.target.entity = snapPickResult.entity;
@@ -422,7 +430,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                                         this.pointerLens.cursorPos = pickResult.canvasPos;
                                         this.pointerLens.snapped = false;
                                     }
-                                    this.pointerCircle.start(pickResult.canvasPos);
+                                    this.pointerCircle.start(toBodyPos(pickResult.canvasPos, tmpVec2));
                                     pointerWorldPos.set(pickResult.worldPos);
                                     this._currentAngleMeasurement.target.worldPos = pickResult.worldPos;
                                     this._currentAngleMeasurement.target.entity = pickResult.entity;
