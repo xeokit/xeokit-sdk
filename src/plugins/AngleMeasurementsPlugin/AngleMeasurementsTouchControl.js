@@ -1,7 +1,7 @@
 import {math} from "../../viewer/scene/math/math.js";
 import {PointerCircle} from "../../extras/PointerCircle/PointerCircle.js";
 import {AngleMeasurementsControl} from "./AngleMeasurementsControl.js";
-
+import {transformToNode} from "../lib/ui/index.js";
 
 const WAITING_FOR_ORIGIN_TOUCH_START = 0;
 const WAITING_FOR_ORIGIN_QUICK_TOUCH_END = 1;
@@ -155,6 +155,13 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
             this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
         }
 
+        const copyCanvasPos = (event, dst) => {
+            dst[0] = event.clientX;
+            dst[1] = event.clientY;
+            transformToNode(canvas.ownerDocument.documentElement, canvas, dst);
+            return dst;
+        };
+
         canvas.addEventListener("touchstart", this._onCanvasTouchStart = (event) => {
 
             const currentNumTouches = event.touches.length;
@@ -168,11 +175,8 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
             }
 
             const touch = event.touches[0];
-            const touchX = touch.clientX;
-            const touchY = touch.clientY;
-
-            touchStartCanvasPos.set([touchX, touchY]);
-            touchMoveCanvasPos.set([touchX, touchY]);
+            copyCanvasPos(touch, touchStartCanvasPos);
+            touchMoveCanvasPos.set(touchStartCanvasPos);
 
             switch (this._touchState) {
 
@@ -482,14 +486,11 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
             }
 
             const touch = event.touches[0];
-            const touchX = touch.clientX;
-            const touchY = touch.clientY;
-
             if (touch.identifier !== touchId) {
                 return;
             }
 
-            touchMoveCanvasPos.set([touchX, touchY]);
+            copyCanvasPos(touch, touchMoveCanvasPos);
 
             let snapPickResult;
             let pickResult;
@@ -662,9 +663,6 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
             }
 
             const touch = event.changedTouches[0];
-            const touchX = touch.clientX;
-            const touchY = touch.clientY;
-
             if (touch.identifier !== touchId) {
                 return;
             }
@@ -674,7 +672,10 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                 longTouchTimeout = null;
             }
 
-            touchEndCanvasPos.set([touchX, touchY]);
+            copyCanvasPos(touch, touchEndCanvasPos);
+
+            const touchX = touchEndCanvasPos[0];
+            const touchY = touchEndCanvasPos[1];
 
             switch (this._touchState) {
 

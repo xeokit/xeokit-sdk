@@ -1,7 +1,7 @@
 import {math} from "../../viewer/scene/math/math.js";
 import {PointerCircle} from "../../extras/PointerCircle/PointerCircle.js";
 import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
-
+import {transformToNode} from "../lib/ui/index.js";
 
 const WAITING_FOR_ORIGIN_TOUCH_START = 0;
 const WAITING_FOR_ORIGIN_QUICK_TOUCH_END = 1;
@@ -159,6 +159,13 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
             this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
         }
 
+        const copyCanvasPos = (event, dst) => {
+            dst[0] = event.clientX;
+            dst[1] = event.clientY;
+            transformToNode(canvas.ownerDocument.documentElement, canvas, dst);
+            return dst;
+        };
+
         canvas.addEventListener("touchstart", this._onCanvasTouchStart = (event) => {
 
             const currentNumTouches = event.touches.length;
@@ -172,16 +179,8 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
             }
 
             const touch = event.touches[0];
-
-            // Get the canvas's bounding rectangle
-            const rect = canvas.getBoundingClientRect();
-
-            // Calculate the touch position relative to the canvas
-            const touchX = touch.clientX - rect.left;
-            const touchY = touch.clientY - rect.top;
-
-            touchStartCanvasPos.set([touchX, touchY]);
-            touchMoveCanvasPos.set([touchX, touchY]);
+            copyCanvasPos(touch, touchStartCanvasPos);
+            touchMoveCanvasPos.set(touchStartCanvasPos);
 
             switch (this._touchState) {
 
@@ -386,19 +385,11 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
             }
 
             const touch = event.touches[0];
-
-            // Get the canvas's bounding rectangle
-            const rect = canvas.getBoundingClientRect();
-
-            // Calculate the touch position relative to the canvas
-            const touchX = touch.clientX - rect.left;
-            const touchY = touch.clientY - rect.top;
-            
             if (touch.identifier !== touchId) {
                 return;
             }
 
-            touchMoveCanvasPos.set([touchX, touchY]);
+            copyCanvasPos(touch, touchMoveCanvasPos);
 
             let snapPickResult;
             let pickResult;
@@ -563,14 +554,6 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
             }
 
             const touch = event.changedTouches[0];
-
-            // Get the canvas's bounding rectangle
-            const rect = canvas.getBoundingClientRect();
-
-            // Calculate the touch position relative to the canvas
-            const touchX = touch.clientX - rect.left;
-            const touchY = touch.clientY - rect.top;
-
             if (touch.identifier !== touchId) {
                 return;
             }
@@ -580,7 +563,10 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                 longTouchTimeout = null;
             }
 
-            touchEndCanvasPos.set([touchX, touchY]);
+            copyCanvasPos(touch, touchEndCanvasPos);
+
+            const touchX = touchEndCanvasPos[0];
+            const touchY = touchEndCanvasPos[1];
 
             switch (this._touchState) {
 
