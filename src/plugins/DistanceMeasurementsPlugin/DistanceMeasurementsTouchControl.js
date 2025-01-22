@@ -1,7 +1,7 @@
 import {math} from "../../viewer/scene/math/math.js";
 import {PointerCircle} from "../../extras/PointerCircle/PointerCircle.js";
 import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
-
+import {transformToNode} from "../lib/ui/index.js";
 
 const WAITING_FOR_ORIGIN_TOUCH_START = 0;
 const WAITING_FOR_ORIGIN_QUICK_TOUCH_END = 1;
@@ -12,6 +12,8 @@ const WAITING_FOR_TARGET_QUICK_TOUCH_END = 4;
 const WAITING_FOR_TARGET_LONG_TOUCH_END = 5;
 
 const TOUCH_CANCELING = 7;
+
+const tmpVec2 = math.vec2();
 
 /**
  * Creates {@link DistanceMeasurement}s from touch input.
@@ -159,6 +161,19 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
             this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
         }
 
+        const copyCanvasPos = (event, dst) => {
+            dst[0] = event.clientX;
+            dst[1] = event.clientY;
+            transformToNode(canvas.ownerDocument.documentElement, canvas, dst);
+            return dst;
+        };
+
+        const toBodyPos = (pos, dst) => {
+            dst.set(pos);
+            transformToNode(canvas, canvas.ownerDocument.documentElement, dst);
+            return dst;
+        };
+
         canvas.addEventListener("touchstart", this._onCanvasTouchStart = (event) => {
 
             const currentNumTouches = event.touches.length;
@@ -172,16 +187,8 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
             }
 
             const touch = event.touches[0];
-
-            // Get the canvas's bounding rectangle
-            const rect = canvas.getBoundingClientRect();
-
-            // Calculate the touch position relative to the canvas
-            const touchX = touch.clientX - rect.left;
-            const touchY = touch.clientY - rect.top;
-
-            touchStartCanvasPos.set([touchX, touchY]);
-            touchMoveCanvasPos.set([touchX, touchY]);
+            copyCanvasPos(touch, touchStartCanvasPos);
+            touchMoveCanvasPos.set(touchStartCanvasPos);
 
             switch (this._touchState) {
 
@@ -197,7 +204,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                     });
                     if (snapPickResult && snapPickResult.snapped) {
                         pointerWorldPos.set(snapPickResult.worldPos);
-                        this.pointerCircle.start(snapPickResult.snappedCanvasPos);
+                        this.pointerCircle.start(toBodyPos(snapPickResult.snappedCanvasPos, tmpVec2));
                     } else {
                         const pickResult = scene.pick({
                             canvasPos: touchMoveCanvasPos,
@@ -205,7 +212,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                         })
                         if (pickResult && pickResult.worldPos) {
                             pointerWorldPos.set(pickResult.worldPos);
-                            this.pointerCircle.start(pickResult.canvasPos);
+                            this.pointerCircle.start(toBodyPos(pickResult.canvasPos, tmpVec2));
                         } else {
                             return;
                         }
@@ -309,7 +316,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                                     this.pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
                                     this.pointerLens.snapped = true;
                                 }
-                                this.pointerCircle.start(snapPickResult.snappedCanvasPos);
+                                this.pointerCircle.start(toBodyPos(snapPickResult.snappedCanvasPos, tmpVec2));
                                 pointerWorldPos.set(snapPickResult.worldPos);
                                 this._currentDistanceMeasurement.target.worldPos = snapPickResult.worldPos;
                                 this._currentDistanceMeasurement.target.entity = snapPickResult.entity;
@@ -327,7 +334,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                                         this.pointerLens.cursorPos = pickResult.canvasPos;
                                         this.pointerLens.snapped = false;
                                     }
-                                    this.pointerCircle.start(pickResult.canvasPos);
+                                    this.pointerCircle.start(toBodyPos(pickResult.canvasPos, tmpVec2));
                                     pointerWorldPos.set(pickResult.worldPos);
                                     this._currentDistanceMeasurement.target.worldPos = pickResult.worldPos;
                                     this._currentDistanceMeasurement.target.entity = pickResult.entity;
@@ -386,19 +393,11 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
             }
 
             const touch = event.touches[0];
-
-            // Get the canvas's bounding rectangle
-            const rect = canvas.getBoundingClientRect();
-
-            // Calculate the touch position relative to the canvas
-            const touchX = touch.clientX - rect.left;
-            const touchY = touch.clientY - rect.top;
-            
             if (touch.identifier !== touchId) {
                 return;
             }
 
-            touchMoveCanvasPos.set([touchX, touchY]);
+            copyCanvasPos(touch, touchMoveCanvasPos);
 
             let snapPickResult;
             let pickResult;
@@ -563,14 +562,6 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
             }
 
             const touch = event.changedTouches[0];
-
-            // Get the canvas's bounding rectangle
-            const rect = canvas.getBoundingClientRect();
-
-            // Calculate the touch position relative to the canvas
-            const touchX = touch.clientX - rect.left;
-            const touchY = touch.clientY - rect.top;
-
             if (touch.identifier !== touchId) {
                 return;
             }
@@ -580,7 +571,10 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                 longTouchTimeout = null;
             }
 
-            touchEndCanvasPos.set([touchX, touchY]);
+            copyCanvasPos(touch, touchEndCanvasPos);
+
+            const touchX = touchEndCanvasPos[0];
+            const touchY = touchEndCanvasPos[1];
 
             switch (this._touchState) {
 

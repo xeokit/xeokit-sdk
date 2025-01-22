@@ -53,13 +53,10 @@ export class PointerLens {
         this.scene = this.viewer.scene;
 
         this._lensCursorDiv = document.createElement('div');
-        this.viewer.scene.canvas.canvas.parentNode.insertBefore(this._lensCursorDiv, this.viewer.scene.canvas.canvas);
-        this._lensCursorDiv.style.background = "pink";
-        this._lensCursorDiv.style.border = "2px solid red";
-        this._lensCursorDiv.style.borderRadius = "20px";
-        this._lensCursorDiv.style.width = "10px";
-        this._lensCursorDiv.style.height = "10px";
-        this._lensCursorDiv.style.margin = "-200px -200px";
+        this._lensParams = { canvasSize: 300, cursorBorder: 2, cursorSize: 10 };
+        this._lensCursorDiv.style.borderRadius = "50%";
+        this._lensCursorDiv.style.width  = this._lensParams.cursorSize + "px";
+        this._lensCursorDiv.style.height = this._lensParams.cursorSize + "px";
         this._lensCursorDiv.style.zIndex = "100000";
         this._lensCursorDiv.style.position = "absolute";
         this._lensCursorDiv.style.pointerEvents = "none";
@@ -72,8 +69,8 @@ export class PointerLens {
         this._lensContainer.style.background = "white";
     //    this._lensContainer.style.opacity = "0";
         this._lensContainer.style.borderRadius = "50%";
-        this._lensContainer.style.width = "300px";
-        this._lensContainer.style.height = "300px";
+        this._lensContainer.style.width  = this._lensParams.canvasSize + "px";
+        this._lensContainer.style.height = this._lensParams.canvasSize + "px";
         
         this._lensContainer.style.zIndex = "15000";
         this._lensContainer.style.position = "absolute";
@@ -85,13 +82,14 @@ export class PointerLens {
         // this._lensCanvas.style.background = "darkblue";
         this._lensCanvas.style.borderRadius = "50%";
 
-        this._lensCanvas.style.width = "300px";
-        this._lensCanvas.style.height = "300px";
+        this._lensCanvas.style.width  = this._lensParams.canvasSize + "px";
+        this._lensCanvas.style.height = this._lensParams.canvasSize + "px";
         this._lensCanvas.style.zIndex = "15000";
         this._lensCanvas.style.pointerEvents = "none";
 
         document.body.appendChild(this._lensContainer);
         this._lensContainer.appendChild(this._lensCanvas);
+        this._lensContainer.appendChild(this._lensCursorDiv);
 
         this._lensCanvasContext = this._lensCanvas.getContext('2d');
         this._canvasElement = this.viewer.scene.canvas.canvas;
@@ -109,7 +107,7 @@ export class PointerLens {
 
         this._active = (cfg.active !== false);
         this._visible = false;
-        this._snapped = false;
+        this.snapped = false;
 
         this._onViewerRendering = this.viewer.scene.on("rendering", () => {
             if (this._active && this._visible) {
@@ -156,21 +154,13 @@ export class PointerLens {
             this._lensCanvas.height // destination height
         );
 
-        const centerLensCanvas = [
-            (lensRect.left + lensRect.right) / 2 - canvasRect.left,
-            (lensRect.top + lensRect.bottom) / 2 - canvasRect.top
-        ];
+        const middle = this._lensParams.canvasSize / 2 - this._lensParams.cursorSize / 2 - this._lensParams.cursorBorder;
 
-        if (this._snappedCanvasPos) {
-            const deltaX = this._snappedCanvasPos[0] - this._canvasPos[0];
-            const deltaY = this._snappedCanvasPos[1] - this._canvasPos[1];
+        const deltaX = this._snappedCanvasPos ? (this._snappedCanvasPos[0] - this._canvasPos[0]) : 0;
+        const deltaY = this._snappedCanvasPos ? (this._snappedCanvasPos[1] - this._canvasPos[1]) : 0;
 
-            this._lensCursorDiv.style.marginLeft = `${centerLensCanvas[0] + deltaX * this._zoomLevel - 10}px`;
-            this._lensCursorDiv.style.marginTop = `${centerLensCanvas[1] + deltaY * this._zoomLevel - 10}px`;
-        } else {
-            this._lensCursorDiv.style.marginLeft = `${centerLensCanvas[0] - 10}px`;
-            this._lensCursorDiv.style.marginTop = `${centerLensCanvas[1] - 10}px`;
-        }
+        this._lensCursorDiv.style.left = `${middle + deltaX * this._zoomLevel}px`;
+        this._lensCursorDiv.style.top  = `${middle + deltaY * this._zoomLevel}px`;
     }
 
 
@@ -238,14 +228,10 @@ export class PointerLens {
      * @private
      */
     set snapped(snapped) {
-     this._snapped = snapped;
-        if (snapped) {
-            this._lensCursorDiv.style.background = "greenyellow";
-            this._lensCursorDiv.style.border = "2px solid green";
-        } else {
-            this._lensCursorDiv.style.background = "pink";
-            this._lensCursorDiv.style.border = "2px solid red";
-        }
+        this._snapped = snapped;
+        const [ bg, border ] = snapped ? [ "greenyellow", "green" ] : [ "pink", "red" ];
+        this._lensCursorDiv.style.background = bg;
+        this._lensCursorDiv.style.border = this._lensParams.cursorBorder + "px solid " + border;
     }
 
     /**
@@ -257,19 +243,19 @@ export class PointerLens {
     get snapped() {
         return this._snapped;
     }
-    
+
+    _updateActiveVisible() {
+        this._lensContainer.style.visibility = (this._active && this._visible) ? "visible" : "hidden";
+        this.update();
+    }
+
     /**
      * Sets if this PointerLens is active.
      * @param active
      */
     set active(active) {
         this._active = active;
-        this._lensContainer.style.visibility = (active && this._visible) ? "visible" : "hidden";
-        if (!active || !this._visible ) {
-            this._lensCursorDiv.style.marginLeft = `-100px`;
-            this._lensCursorDiv.style.marginTop = `-100px`;
-        }
-        this.update();
+        this._updateActiveVisible();
     }
 
     /**
@@ -288,12 +274,7 @@ export class PointerLens {
      */
     set visible(visible) {
         this._visible = visible;
-        this._lensContainer.style.visibility = (visible && this._active) ? "visible" : "hidden";
-        if (!visible || !this._active) {
-            this._lensCursorDiv.style.marginLeft = `-100px`;
-            this._lensCursorDiv.style.marginTop = `-100px`;
-        }
-        this.update();
+        this._updateActiveVisible();
     }
 
     /**
