@@ -132,15 +132,13 @@ class Control {
         });
 
         const handlers = { };
-        const addAxis = (rgb, axisDirection, hoopDirection) => {
+        const addAxis = (rgb, hoopRot) => {
+            const axisDirection = math.mulVec3Scalar(rgb, -1, math.vec3());
             const material = colorMaterial(rgb);
 
-            const rotateToHorizontal = math.rotationMat4v(270 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-            const hoopRotation = math.quaternionToRotationMat4(math.vec3PairToQuaternion([ 0, 1, 0 ], hoopDirection), math.identityMat4());
-            const hoopMatrix = math.mulMat4(hoopRotation, rotateToHorizontal, math.identityMat4());
-
+            const hoopMatrix = math.quaternionToRotationMat4(hoopRot, math.identityMat4());
+            math.mulMat4(math.rotationMat4v(Math.PI, [0,1,0], math.mat4()), hoopMatrix, hoopMatrix);
             const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
-
             const scaledArrowMatrix = (t, matR) => {
                 const matT = math.translateMat4v(t, math.identityMat4());
                 const ret = math.identityMat4();
@@ -209,7 +207,8 @@ class Control {
             }), NO_STATE_INHERIT);
 
 
-            const axisRotation = math.quaternionToRotationMat4(math.vec3PairToQuaternion([ 0, 1, 0 ], axisDirection), math.identityMat4());
+            const axisRotation = math.quaternionToRotationMat4(math.vec3PairToQuaternion([ 0, 1, 0 ], rgb), math.identityMat4());
+            math.mulMat4(math.rotationMat4v(Math.PI, [0,1,0], math.mat4()), axisRotation, axisRotation);
 
             const translatedAxisMatrix = (yOffset) => math.mulMat4(axisRotation, math.translateMat4c(0, yOffset, 0, math.identityMat4()), math.identityMat4());
             const arrowMatrix = translatedAxisMatrix(arrowLength + .1);
@@ -452,9 +451,9 @@ class Control {
             //
             //----------------------------------------------------------------------------------------------------------
 
-            addAxis([1,0,0], [ 1,  0,  0 ], [ 1, 0,  0 ]),
-            addAxis([0,1,0], [ 0, -1,  0 ], [ 0, 1,  0 ]),
-            addAxis([0,0,1], [ 0,  0, -1 ], [ 0, 0, -1 ])
+            addAxis([1,0,0], math.vec3PairToQuaternion([1,0,0], [0,0,1])),
+            addAxis([0,1,0], math.eulerToQuaternion([90,0,0], "XYZ")),
+            addAxis([0,0,1], math.identityQuaternion())
         ];
 
         const cleanups = [ ];
