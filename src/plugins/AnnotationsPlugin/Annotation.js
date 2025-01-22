@@ -173,6 +173,9 @@ class Annotation extends Marker {
             addContextMenuListener(this._marker, e => {
                 e.preventDefault();
                 this.plugin.fire("contextmenu", this);
+            }, e => {
+                e.preventDefault();
+                this.plugin.fire("markerClicked", this);
             })
             this._marker.addEventListener("mouseenter", () => {
                 this.plugin.fire("markerMouseEnter", this);
