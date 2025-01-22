@@ -1,6 +1,7 @@
 import { os } from "../../../viewer/utils/os.js";
 
-export function addContextMenuListener(elem, callback) {
+//failCallback will be called when the press is not long enough to considered a long press
+export function addContextMenuListener(elem, callback, failCallback = () => {}) {
     if (!elem || !callback) return;
 
     let timeout = null;
@@ -54,6 +55,7 @@ export function addContextMenuListener(elem, callback) {
     const touchEndHandler = (event) => {
         event.preventDefault();
         if (timeout) {
+            failCallback(event);
             clearTimeout(timeout);
             timeout = null;
         }
