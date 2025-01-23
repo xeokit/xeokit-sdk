@@ -337,7 +337,7 @@ class Control {
                         rootNode.rotate(rgb, (rotation - lastRotation) * 180 / Math.PI);
                         if (this._sectionPlane) {
                             ignoreNextSectionPlaneDirUpdate = true;
-                            this._sectionPlane.dir = math.vec3ApplyQuaternion(rootNode.quaternion, [0, 0, 1], tempVec3);
+                            this._sectionPlane.quaternion = rootNode.quaternion;
                         }
                         lastRotation = rotation;
                     };
@@ -591,7 +591,7 @@ class Control {
             this.id = sectionPlane.id;
             this._sectionPlane = sectionPlane;
             const setPosFromSectionPlane = () => setPos(sectionPlane.pos);
-            const setDirFromSectionPlane = () => rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, sectionPlane.dir, quat);
+            const setDirFromSectionPlane = () => rootNode.quaternion = sectionPlane.quaternion;
             setPosFromSectionPlane();
             setDirFromSectionPlane();
             const onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
