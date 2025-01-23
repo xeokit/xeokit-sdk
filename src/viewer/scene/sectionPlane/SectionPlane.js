@@ -173,6 +173,29 @@ class SectionPlane extends Component {
     }
 
     /**
+     * Sets the roll of this SectionPlane's plane.
+     *
+     * Default value is ````0````.
+     *
+     * @param {Number[]} value New roll.
+     */
+    set roll(value) {
+        this._state.roll = value || 0;
+        this._onDirRollUpdated();
+    }
+
+    /**
+     * Gets the roll of this SectionPlane's plane.
+     *
+     * Default value is ````0````.
+     *
+     * @returns {Number[]} value Current roll.
+     */
+    get roll() {
+        return this._state.roll;
+    }
+
+    /**
      * Sets the direction of this SectionPlane's plane.
      *
      * Default value is ````[0, 0, -1]````.
@@ -181,6 +204,10 @@ class SectionPlane extends Component {
      */
     set dir(value) {
         this._state.dir.set(value || front);
+        this._onDirRollUpdated();
+    }
+
+    _onDirRollUpdated() {
         math.vec3PairToQuaternion(back, this._state.dir, this._state.quaternion);
 
         tempVec4a[0] = 0;
