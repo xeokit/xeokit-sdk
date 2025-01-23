@@ -935,6 +935,9 @@ const Renderer = function (scene, options) {
                 pickProjMatrix = scene.camera.projMatrix;
                 projection     = scene.camera.projection;
 
+                nearAndFar[0] = scene.camera.project.near;
+                nearAndFar[1] = scene.camera.project.far;
+
                 pickResult.canvasPos = params.canvasPos;
 
             } else {
@@ -947,6 +950,9 @@ const Renderer = function (scene, options) {
                     pickViewMatrix = params.matrix;
                     pickProjMatrix = scene.camera.projMatrix;
                     projection     = scene.camera.projection;
+
+                    nearAndFar[0] = scene.camera.project.near;
+                    nearAndFar[1] = scene.camera.project.far;
 
                 } else {
 
@@ -966,6 +972,9 @@ const Renderer = function (scene, options) {
                     //    pickProjMatrix = scene.camera.projMatrix;
                     pickProjMatrix = scene.camera.ortho.matrix;
                     projection     = "ortho";
+
+                    nearAndFar[0] = scene.camera.ortho.near;
+                    nearAndFar[1] = scene.camera.ortho.far;
 
                     pickResult.origin = worldRayOrigin;
                     pickResult.direction = worldRayDir;
@@ -1020,9 +1029,6 @@ const Renderer = function (scene, options) {
                 } else {
 
                     if (pickable.canPickWorldPos && pickable.canPickWorldPos()) {
-
-                        nearAndFar[0] = scene.camera.project.near;
-                        nearAndFar[1] = scene.camera.project.far;
 
                         gpuPickWorldPos(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult);
 
