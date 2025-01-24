@@ -90,12 +90,26 @@
 
     viewer.cameraControl.followPointer = true;
 
+    viewer.scene.pointsMaterial.pointSize = 2;
+    viewer.scene.pointsMaterial.roundPoints = false;
+    viewer.scene.pointsMaterial.perspectivePoints = true;
+    viewer.scene.pointsMaterial.minPerspectivePointSize = 2;
+    viewer.scene.pointsMaterial.maxPerspectivePointSize = 4;
+    viewer.scene.pointsMaterial.filterIntensity = true;
+    viewer.scene.pointsMaterial.minIntensity = 0;
+    viewer.scene.pointsMaterial.maxIntensity = 1;
+
 
     //------------------------------------------------------------------------------------------------------------------
     // Add a XKTModelsPlugin - we'll use this to load the model geometry
     //------------------------------------------------------------------------------------------------------------------
 
     const xktLoader = new XKTLoaderPlugin(viewer);
+    const lasLoader = new LASLoaderPlugin(viewer, {
+        skip: 10, // Load every 10th point
+        fp64: false, // Positions expected in 32-bit floats instead of 64-bit
+        colorDepth: "auto" // Whether colors encoded using 8 or 16 bits - accepted values are "auto", 8 and 16
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Add a SectionPlanesPlugin - we'll use this to create cross-section planes
@@ -110,12 +124,23 @@
     // Load the .xkt model and IFC metadata
     //------------------------------------------------------------------------------------------------------------------
 
-    const sceneModel = xktLoader.load({
+    // const sceneModel = xktLoader.load({
+    //     id: "myModel",
+    //     src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt", // Creates a MetaObject instances in scene.metaScene.metaObjects
+    //     edges: true,
+    //     backfaces: true // Sometimes it's best to show backfaces, so that sliced objects look less odd
+    // });
+
+    const sceneModel = lasLoader.load({
         id: "myModel",
-        src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt", // Creates a MetaObject instances in scene.metaScene.metaObjects
-        edges: true,
-        backfaces: true // Sometimes it's best to show backfaces, so that sliced objects look less odd
+        // src: "../../assets/models/las/autzen.laz",
+        src: "../../assets/models/las/example-no-1.laz",
+        rotation: [-90, 0, 0]
     });
+
+    sceneModel.on("loaded", () => {
+        console.log('sceneModel: ', sceneModel);
+    })
 
 
     //------------------------------------------------------------------------------------------------------------------
@@ -139,14 +164,68 @@
                 }
             }
 
-            const sectionPlane = sectionPlanes.createSectionPlane({
-                pos: pickResult.worldPos,
-                dir: math.mulVec3Scalar(pickResult.worldNormal, -1)
-            });
+            //picked object is not a point cloud
+            if(!isNaN(pickResult.worldNormal[0])) {
 
-            sectionPlanes.showControl(sectionPlane.id);
+                const sectionPlane = sectionPlanes.createSectionPlane({
+                    pos: pickResult.worldPos,
+                    dir: math.mulVec3Scalar(pickResult.worldNormal, -1)
+                });
 
-            i++;
+                sectionPlanes.showControl(sectionPlane.id);
+
+                i++;
+
+            } else {
+
+                const lasPickResult = viewer.scene.pick({
+                    canvasPos: coords
+                })
+
+                if(lasPickResult && lasPickResult.entity) {
+                    const camera = viewer.camera;
+                    const aabb = lasPickResult.entity.aabb;
+                    const center = [
+                        (aabb[0] + aabb[3]) * 0.5,
+                        (aabb[1] + aabb[4]) * 0.5,
+                        (aabb[2] + aabb[5]) * 0.5
+                    ]
+
+                    const dir = {
+                        x: camera.look[0] - camera.eye[0],
+                        y: camera.look[1] - camera.eye[1],
+                        z: camera.look[2] - camera.eye[2]
+                    };
+                    
+                    const length = Math.sqrt(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
+                    dir.x /= length;
+                    dir.y /= length;
+                    dir.z /= length;
+
+                    // Determine vertical angle based on worldUp
+                    const verticalAngle = Math.acos(dir.y);
+                    const threshold = Math.PI / 4;
+
+                    let planeDir;
+
+                    if(verticalAngle < threshold)
+                        planeDir = [0, 1, 0]
+                    else if(verticalAngle < 3 * threshold)
+                        planeDir = [dir.x, 0, dir.z]
+                    else planeDir = [0, -1, 0]
+
+                    const sectionPlane = sectionPlanes.createSectionPlane({
+                        pos: center,
+                        dir: math.normalizeVec3(planeDir)
+                    })
+
+                    sectionPlanes.showControl(sectionPlane.id);
+
+                    i++;
+                }
+
+            }
+            
         }
     });
 
