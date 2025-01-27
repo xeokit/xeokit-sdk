@@ -87,7 +87,7 @@ export class PointerCircle {
     }
 
     /**
-     * Stop the shricking circle and hide it.
+     * Stop the shrinking circle and hide it.
      */
     stop() {
         if (this._destroyed) {
