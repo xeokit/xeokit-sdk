@@ -207,6 +207,11 @@ export class SceneModelMesh {
         this.layer.setOffset(this.portionId, offset);
     }
 
+    _testNewPosition(matrixNewPosition, pivot) {
+        this.layer.testNewPosition(matrixNewPosition, pivot);
+        // this.layer.destroy()
+    }
+
     _setHighlighted(entityFlags) {
         this.layer.setHighlighted(this.portionId, entityFlags, this._transparent);
     }
@@ -371,12 +376,9 @@ export class SceneModelMesh {
     }
 
     set aabb(aabb) { // Called by SceneModel
-        console.log('AABB IN MESH', aabb);
         this._aabbLocal = aabb;
         if (this.origin) {
-            console.log('HAS ORIGIN', this.origin);
             this._aabbLocal = aabb.slice(0);
-            console.log('AABB LOCAL', this._aabbLocal);
             const origin = this.origin;
             this._aabbLocal[0] += origin[0];
             this._aabbLocal[1] += origin[1];
@@ -404,6 +406,11 @@ export class SceneModelMesh {
             this._aabbWorldDirty = false;
         }
         return this._aabbWorld;
+    }
+
+    destroy() {
+        this.model.scene._renderer.putPickID(this.pickId);
+        this.layer.destroy();
     }
 
     /**
