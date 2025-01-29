@@ -1,6 +1,6 @@
 import { Plugin } from "../../viewer/Plugin.js";
-import { XktConverter } from "../../../.vscode/dist/index.mjs"
-import { XKTLoaderPlugin } from "../../../dist/xeokit-sdk.es.js";
+import { XKTLoaderPlugin } from "./../XKTLoaderPlugin/XKTLoaderPlugin.js";
+import { XktConverter } from "@jakub.lewandowski/cx-ifcconverter-wasm";
 
 async function fetchFile(url) {
     try {
