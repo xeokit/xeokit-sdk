@@ -19,6 +19,7 @@ export * from "./ViewCullPlugin";
 export * from "./XKTLoaderPlugin";
 export * from "./WebIFCLoaderPlugin";
 export * from "./XML3DLoaderPlugin";
+export * from "./lib/ui";
 
 export declare type ModelStats = {
   sourceFormat: string;
