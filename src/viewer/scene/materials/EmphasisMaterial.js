@@ -224,7 +224,7 @@ class EmphasisMaterial extends Material {
      * @param {Number[]} [cfg.edgeColor=[0.2,0.2,0.2]]  RGB color of xray edges.
      * @param {Number} [cfg.edgeAlpha=0.5] Transparency of xray edges. A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
      * @param {Number} [cfg.edgeWidth=1] Width of xray edges, in pixels.
-     * @param {String} [cfg.preset] Selects a preset EmphasisMaterial configuration - see {@link EmphasisMaterial#presets}.
+     * @param {String} [cfg.preset] Deprecated - will be removed in future releases - Selects a preset EmphasisMaterial configuration - see {@link EmphasisMaterial#presets}.
      * @param {Boolean} [cfg.backfaces=false] Whether to render geometry backfaces when emphasising.
      * @param {Boolean} [cfg.glowThrough=true] Whether to make the emphasized object appear to float on top of other objects, as if it were "glowing through" them.
      */
@@ -563,6 +563,7 @@ class EmphasisMaterial extends Material {
     }
 
     /**
+     * @deprecated
      * Selects a preset EmphasisMaterial configuration.
      *
      * Default value is "default".
@@ -570,6 +571,7 @@ class EmphasisMaterial extends Material {
      * @type {String}
      */
     set preset(value) {
+        console.warn("EmphasisMaterial.preset is deprecated and will be removed in future versions.");
         value = value || "default";
         if (this._preset === value) {
             return;
@@ -591,6 +593,7 @@ class EmphasisMaterial extends Material {
     }
 
     /**
+     * @deprecated
      * Gets the current preset EmphasisMaterial configuration.
      *
      * Default value is "default".
@@ -598,6 +601,7 @@ class EmphasisMaterial extends Material {
      * @type {String}
      */
     get preset() {
+        console.warn("EmphasisMaterial.preset is deprecated and will be removed in future versions.");
         return this._preset;
     }
 

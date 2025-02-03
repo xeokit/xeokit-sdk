@@ -1994,7 +1994,13 @@ class Scene extends Component {
     get xrayMaterial() {
         return this.components["default.xrayMaterial"] || new EmphasisMaterial(this, {
             id: "default.xrayMaterial",
-            preset: "sepia",
+            fill: true,
+            fillColor: [0.970588207244873, 0.7965892553329468, 0.6660899519920349],
+            fillAlpha: 0.4,
+            edges: true,
+            edgeColor: [0.529411792755127, 0.4577854573726654, 0.4100345969200134],
+            edgeAlpha: 1.0,
+            edgeWidth: 1,
             dontClear: true
         });
     }
@@ -2013,7 +2019,13 @@ class Scene extends Component {
     get highlightMaterial() {
         return this.components["default.highlightMaterial"] || new EmphasisMaterial(this, {
             id: "default.highlightMaterial",
-            preset: "yellowHighlight",
+            fill: true,
+            fillColor: [1.0, 1.0, 0.0],
+            fillAlpha: 0.5,
+            edges: true,
+            edgeColor: [1.0, 1.0, 1.0],
+            edgeAlpha: 1.0,
+            edgeWidth: 1,
             dontClear: true
         });
     }
@@ -2032,7 +2044,13 @@ class Scene extends Component {
     get selectedMaterial() {
         return this.components["default.selectedMaterial"] || new EmphasisMaterial(this, {
             id: "default.selectedMaterial",
-            preset: "greenSelected",
+            fill: true,
+            fillColor: [0.0, 1.0, 0.0],
+            fillAlpha: 0.5,
+            edges: true,
+            edgeColor: [1.0, 1.0, 1.0],
+            edgeAlpha: 1.0,
+            edgeWidth: 1,
             dontClear: true
         });
     }
@@ -2051,7 +2069,10 @@ class Scene extends Component {
     get edgeMaterial() {
         return this.components["default.edgeMaterial"] || new EdgeMaterial(this, {
             id: "default.edgeMaterial",
-            preset: "default",
+            fill: true,
+            fillColor: [0.4, 0.4, 0.4],
+            fillAlpha: 0.2,
+            edges: true,
             edgeColor: [0.0, 0.0, 0.0],
             edgeAlpha: 1.0,
             edgeWidth: 1,
@@ -2067,7 +2088,13 @@ class Scene extends Component {
     get pointsMaterial() {
         return this.components["default.pointsMaterial"] || new PointsMaterial(this, {
             id: "default.pointsMaterial",
-            preset: "default",
+            fill: true,
+            fillColor: [0.4, 0.4, 0.4],
+            fillAlpha: 0.2,
+            edges: true,
+            edgeColor: [0.2, 0.2, 0.2],
+            edgeAlpha: 0.5,
+            edgeWidth: 1,
             dontClear: true
         });
     }
@@ -2080,7 +2107,13 @@ class Scene extends Component {
     get linesMaterial() {
         return this.components["default.linesMaterial"] || new LinesMaterial(this, {
             id: "default.linesMaterial",
-            preset: "default",
+            fill: true,
+            fillColor: [0.4, 0.4, 0.4],
+            fillAlpha: 0.2,
+            edges: true,
+            edgeColor: [0.2, 0.2, 0.2],
+            edgeAlpha: 0.5,
+            edgeWidth: 1,
             dontClear: true
         });
     }
