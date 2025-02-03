@@ -132,15 +132,13 @@ class Control {
         });
 
         const handlers = { };
-        const addAxis = (rgb, axisDirection, hoopDirection) => {
+        const addAxis = (rgb, hoopRot) => {
+            const axisDirection = math.mulVec3Scalar(rgb, -1, math.vec3());
             const material = colorMaterial(rgb);
 
-            const rotateToHorizontal = math.rotationMat4v(270 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
-            const hoopRotation = math.quaternionToRotationMat4(math.vec3PairToQuaternion([ 0, 1, 0 ], hoopDirection), math.identityMat4());
-            const hoopMatrix = math.mulMat4(hoopRotation, rotateToHorizontal, math.identityMat4());
-
+            const hoopMatrix = math.quaternionToRotationMat4(hoopRot, math.identityMat4());
+            math.mulMat4(math.rotationMat4v(Math.PI, [0,1,0], math.mat4()), hoopMatrix, hoopMatrix);
             const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
-
             const scaledArrowMatrix = (t, matR) => {
                 const matT = math.translateMat4v(t, math.identityMat4());
                 const ret = math.identityMat4();
@@ -209,7 +207,8 @@ class Control {
             }), NO_STATE_INHERIT);
 
 
-            const axisRotation = math.quaternionToRotationMat4(math.vec3PairToQuaternion([ 0, 1, 0 ], axisDirection), math.identityMat4());
+            const axisRotation = math.quaternionToRotationMat4(math.vec3PairToQuaternion([ 0, 1, 0 ], rgb), math.identityMat4());
+            math.mulMat4(math.rotationMat4v(Math.PI, [0,1,0], math.mat4()), axisRotation, axisRotation);
 
             const translatedAxisMatrix = (yOffset) => math.mulMat4(axisRotation, math.translateMat4c(0, yOffset, 0, math.identityMat4()), math.identityMat4());
             const arrowMatrix = translatedAxisMatrix(arrowLength + .1);
@@ -270,8 +269,10 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT);
 
+            const localToWorldVec = (localVec, worldVec) => math.vec3ApplyQuaternion(rootNode.quaternion, localVec, worldVec);
+
             const closestPointOnAxis = (function() {
-                const worldAxis = math.vec4();
+                const worldAxis = math.vec3();
                 const org = math.vec3();
                 const dir = math.vec3();
                 return (canvasPos, dst) => {
@@ -306,22 +307,39 @@ class Control {
                         if (closestPointOnAxis(canvasPos, tempVec3)) {
                             math.subVec3(tempVec3, initOffset, tempVec3);
                             setPos(tempVec3);
-                            if (self._sectionPlane) {
-                                self._sectionPlane.pos = tempVec3;
+                            if (this._sectionPlane) {
+                                this._sectionPlane.pos = tempVec3;
                             }
                         }
                     });
                 }
             };
 
-            const lastCanvasPos = math.vec2();
             handlers[rotateHandle.id] = {
                 setActivated: a => hoop.visible = a,
                 initDragAction: (initCanvasPos) => {
-                    lastCanvasPos.set(initCanvasPos);
+                    const rotationFromCanvasPos = (function() {
+                        const planeCanvasPos = camera.projectWorldPos(pos);
+                        localToWorldVec(rgb, tempVec3);
+                        math.transformVec3(camera.normalMatrix, tempVec3, tempVec3);
+                        const axisCoeff = Math.sign(tempVec3[2]);
+                        return (canvasPos) => {
+                            const dx = canvasPos[0] - planeCanvasPos[0];
+                            const dy = canvasPos[1] - planeCanvasPos[1];
+                            return axisCoeff * Math.atan2(-dy, dx);
+                        };
+                    })();
+
+                    let lastRotation = rotationFromCanvasPos(initCanvasPos);
+
                     return canvasPos => {
-                        dragRotateSectionPlane(rgb, lastCanvasPos, canvasPos);
-                        lastCanvasPos.set(canvasPos);
+                        const rotation = rotationFromCanvasPos(canvasPos);
+                        rootNode.rotate(rgb, (rotation - lastRotation) * 180 / Math.PI);
+                        if (this._sectionPlane) {
+                            ignoreNextSectionPlaneDirUpdate = true;
+                            this._sectionPlane.quaternion = rootNode.quaternion;
+                        }
+                        lastRotation = rotation;
                     };
                 }
             };
@@ -433,9 +451,9 @@ class Control {
             //
             //----------------------------------------------------------------------------------------------------------
 
-            addAxis([1,0,0], [ 1,  0,  0 ], [ 1, 0,  0 ]),
-            addAxis([0,1,0], [ 0, -1,  0 ], [ 0, 1,  0 ]),
-            addAxis([0,0,1], [ 0,  0, -1 ], [ 0, 0, -1 ])
+            addAxis([1,0,0], math.vec3PairToQuaternion([1,0,0], [0,0,1])),
+            addAxis([0,1,0], math.eulerToQuaternion([90,0,0], "XYZ")),
+            addAxis([0,0,1], math.identityQuaternion())
         ];
 
         const cleanups = [ ];
@@ -456,114 +474,6 @@ class Control {
             });
             cleanups.push(() => scene.off(onSceneTick));
         }
-
-        const getClickCoordsWithinElement = (event, canvasPos) => {
-            if (!event) {
-                event = window.event;
-                canvasPos[0] = event.x;
-                canvasPos[1] = event.y;
-            } else {
-                const element = event.target;
-                const rect = element.getBoundingClientRect();
-                canvasPos[0] = event.clientX - rect.left;
-                canvasPos[1] = event.clientY - rect.top;
-            }
-        };
-
-        const localToWorldVec = (function () {
-            const mat = math.mat4();
-            return function (localVec, worldVec) {
-                math.quaternionToMat4(rootNode.quaternion, mat);
-                math.transformVec3(mat, localVec, worldVec);
-                math.normalizeVec3(worldVec);
-                return worldVec;
-            };
-        })();
-
-        const getTranslationPlane = (worldAxis, planeNormal) => {
-            const absX = Math.abs(worldAxis[0]);
-            if (absX > Math.abs(worldAxis[1]) && absX > Math.abs(worldAxis[2])) {
-                math.cross3Vec3(worldAxis, [0, 1, 0], planeNormal);
-            } else {
-                math.cross3Vec3(worldAxis, [1, 0, 0], planeNormal);
-            }
-            math.cross3Vec3(planeNormal, worldAxis, planeNormal);
-            math.normalizeVec3(planeNormal);
-        };
-
-        const self = this;
-        var dragRotateSectionPlane = (function () {
-            const p1 = math.vec4();
-            const p2 = math.vec4();
-            const c = math.vec4();
-            const worldAxis = math.vec4();
-            const dir = math.vec3();
-            const mat = math.mat4();
-            const planeNormal = math.vec3();
-            return function (baseAxis, fromMouse, toMouse) {
-                localToWorldVec(baseAxis, worldAxis);
-                const hasData = getPointerPlaneIntersect(fromMouse, worldAxis, p1) && getPointerPlaneIntersect(toMouse, worldAxis, p2);
-                if (!hasData) { // Find intersections with view plane and project down to origin
-                    getTranslationPlane(worldAxis, planeNormal);
-                    getPointerPlaneIntersect(fromMouse, planeNormal, p1, 1); // Ensure plane moves closer to camera so angles become workable
-                    getPointerPlaneIntersect(toMouse, planeNormal, p2, 1);
-                    var dot = math.dotVec3(p1, worldAxis);
-                    p1[0] -= dot * worldAxis[0];
-                    p1[1] -= dot * worldAxis[1];
-                    p1[2] -= dot * worldAxis[2];
-                    dot = math.dotVec3(p2, worldAxis);
-                    p2[0] -= dot * worldAxis[0];
-                    p2[1] -= dot * worldAxis[1];
-                    p2[2] -= dot * worldAxis[2];
-                }
-                math.normalizeVec3(p1);
-                math.normalizeVec3(p2);
-                dot = math.dotVec3(p1, p2);
-                dot = math.clamp(dot, -1.0, 1.0); // Rounding errors cause dot to exceed allowed range
-                var incDegrees = Math.acos(dot) * math.RADTODEG;
-                math.cross3Vec3(p1, p2, c);
-                if (math.dotVec3(c, worldAxis) < 0.0) {
-                    incDegrees = -incDegrees;
-                }
-                rootNode.rotate(baseAxis, incDegrees);
-
-                if (self._sectionPlane) {
-                    math.quaternionToMat4(rootNode.quaternion, mat);  // << ---
-                    math.transformVec3(mat, [0, 0, 1], dir);
-                    ignoreNextSectionPlaneDirUpdate = true;
-                    self._sectionPlane.dir = dir;
-                }
-            };
-        })();
-
-        var getPointerPlaneIntersect = (function () {
-            const dir = math.vec4([0, 0, 0, 1]);
-            const matrix = math.mat4();
-            return function (mouse, axis, dest, offset) {
-                offset = offset || 0;
-                dir[0] = mouse[0] / canvas.width * 2.0 - 1.0;
-                dir[1] = -(mouse[1] / canvas.height * 2.0 - 1.0);
-                dir[2] = 0.0;
-                dir[3] = 1.0;
-                math.mulMat4(camera.projMatrix, camera.viewMatrix, matrix); // Unproject norm device coords to view coords
-                math.inverseMat4(matrix);
-                math.transformVec4(matrix, dir, dir);
-                math.mulVec4Scalar(dir, 1.0 / dir[3]); // This is now point A on the ray in world space
-                var rayO = camera.eye; // The direction
-                math.subVec4(dir, rayO, dir);
-                const origin = self._sectionPlane.pos; // Plane origin:
-                var d = -math.dotVec3(origin, axis) - offset;
-                var dot = math.dotVec3(axis, dir);
-                if (Math.abs(dot) > 0.005) {
-                    var t = -(math.dotVec3(axis, rayO) + d) / dot;
-                    math.mulVec3Scalar(dir, t, dest);
-                    math.addVec3(dest, rayO);
-                    math.subVec3(dest, origin, dest);
-                    return true;
-                }
-                return false;
-            };
-        })();
 
         {
             let deactivateActive = null;
@@ -681,7 +591,7 @@ class Control {
             this.id = sectionPlane.id;
             this._sectionPlane = sectionPlane;
             const setPosFromSectionPlane = () => setPos(sectionPlane.pos);
-            const setDirFromSectionPlane = () => rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, sectionPlane.dir, quat);
+            const setDirFromSectionPlane = () => rootNode.quaternion = sectionPlane.quaternion;
             setPosFromSectionPlane();
             setDirFromSectionPlane();
             const onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);

@@ -3,6 +3,11 @@ import {RenderState} from '../webgl/RenderState.js';
 import {math} from "../math/math.js";
 
 const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec4a = math.vec4();
+const front = math.vec3([0,  0, -1]);
+const back  = math.vec3([0,  0,  1]);
+const up    = math.vec3([0,  1,  0]);
 
 /**
  *  @desc An arbitrarily-aligned World-space clipping plane.
@@ -74,6 +79,8 @@ class SectionPlane extends Component {
         this._state = new RenderState({
             active: true,
             pos: math.vec3(),
+            quaternion: math.vec4(),
+            roll: 0,
             dir: math.vec3(),
             dist: 0
         });
@@ -136,6 +143,59 @@ class SectionPlane extends Component {
     }
 
     /**
+     * Sets the quaternion of this SectionPlane's plane.
+     *
+     * Default value is ````[0, -1, 0, 0]````.
+     *
+     * @param {Number[]} value New quaternion.
+     */
+    set quaternion(value) {
+        this._state.quaternion.set(value || [0, 0, 0, -1]);
+        math.vec3ApplyQuaternion(this._state.quaternion, back, this._state.dir);
+        const quatUp = math.vec3ApplyQuaternion(this._state.quaternion, up, tempVec3a);
+        const dirOnlyQ = math.vec3PairToQuaternion(back, this._state.dir, tempVec4a);
+        const dirOnlyUp = math.vec3ApplyQuaternion(dirOnlyQ, up, tempVec3b);
+        const angle = Math.acos(Math.min(1, math.dotVec3(quatUp, dirOnlyUp)));
+        const sign = Math.sign(math.dotVec3(this._state.dir, math.cross3Vec3(quatUp, dirOnlyUp, tempVec3b)));
+        this._state.roll = sign * angle;
+        this._onDirUpdated();
+    }
+
+    /**
+     * Gets the quaternion of this SectionPlane's plane.
+     *
+     * Default value is ````[0, -1, 0, 0]````.
+     *
+     * @returns {Number[]} value Current quaternion.
+     */
+    get quaternion() {
+        return this._state.quaternion;
+    }
+
+    /**
+     * Sets the roll of this SectionPlane's plane.
+     *
+     * Default value is ````0````.
+     *
+     * @param {Number[]} value New roll.
+     */
+    set roll(value) {
+        this._state.roll = value || 0;
+        this._onDirRollUpdated();
+    }
+
+    /**
+     * Gets the roll of this SectionPlane's plane.
+     *
+     * Default value is ````0````.
+     *
+     * @returns {Number[]} value Current roll.
+     */
+    get roll() {
+        return this._state.roll;
+    }
+
+    /**
      * Sets the direction of this SectionPlane's plane.
      *
      * Default value is ````[0, 0, -1]````.
@@ -143,7 +203,25 @@ class SectionPlane extends Component {
      * @param {Number[]} value New direction.
      */
     set dir(value) {
-        this._state.dir.set(value || [0, 0, -1]);
+        this._state.dir.set(value || front);
+        this._onDirRollUpdated();
+    }
+
+    _onDirRollUpdated() {
+        math.vec3PairToQuaternion(back, this._state.dir, this._state.quaternion);
+
+        tempVec4a[0] = 0;
+        tempVec4a[1] = 0;
+        tempVec4a[2] = -1;
+        tempVec4a[3] = this._state.roll;
+        math.angleAxisToQuaternion(tempVec4a, tempVec4a);
+
+        math.mulQuaternions(this._state.quaternion, tempVec4a, this._state.quaternion);
+
+        this._onDirUpdated();
+    }
+
+    _onDirUpdated() {
         this._state.dist = (-math.dotVec3(this._state.pos, this._state.dir));
         this.glRedraw();
         this.fire("dir", this._state.dir);

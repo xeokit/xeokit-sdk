@@ -1563,6 +1563,7 @@ export class SceneModel extends Component {
     set matrix(value) {
         this._matrix.set(value || DEFAULT_MATRIX);
         math.decomposeMat4(this._matrix, this._position, this._quaternion, this._scale);
+        math.quaternionToEuler(this._quaternion, "XYZ", this._rotation);
         this._matrixDirty = false;
         this._setWorldMatrixDirty();
         this._sceneModelDirty();

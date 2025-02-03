@@ -1,5 +1,159 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.65](https://github.com/xeokit/xeokit-sdk/compare/v2.6.64...v2.6.65)
+
+### 22 January 2025
+
+-  Fix/XV-574: markerClicked event is not fired on ios safari - [#1784](https://github.com/xeokit/xeokit-sdk/pull/1784)
+-  Fixes for touch Angle- and DistanceMeasurement creation. - [#1782](https://github.com/xeokit/xeokit-sdk/pull/1782)
+-  XEOK-185: Lines are not clipped by SectionPlanes - [#1781](https://github.com/xeokit/xeokit-sdk/pull/1781)
+-  XCD-231 Change rotation gizmo to rely on 2D canvas pos-&gt;point angle - [#1780](https://github.com/xeokit/xeokit-sdk/pull/1780)
+-  Add AngleMeasurementsTouchControl to index.d.ts - [#1779](https://github.com/xeokit/xeokit-sdk/pull/1779)
+-  Optional sorting functions - [#1776](https://github.com/xeokit/xeokit-sdk/pull/1776)
+-  Updated typings - [#1774](https://github.com/xeokit/xeokit-sdk/pull/1774)
+-  XEOK-191 Fix math.transformPoint4 call - [#1773](https://github.com/xeokit/xeokit-sdk/pull/1773)
+
+# [v2.6.64](https://github.com/xeokit/xeokit-sdk/compare/v2.6.63...v2.6.64)
+
+### 9 January 2025
+
+-  XCD-176 IPad Cut Mode - [#1770](https://github.com/xeokit/xeokit-sdk/pull/1770)
+
+# [v2.6.63](https://github.com/xeokit/xeokit-sdk/compare/v2.6.62...v2.6.63)
+
+### 9 January 2025
+
+-  [FIX] SceneModel robustness for invalid tri mesh edgeIndices - [#1772](https://github.com/xeokit/xeokit-sdk/pull/1772)
+-  XEOK-171: CameraControl stops reacting when using system shortcuts - [#1771](https://github.com/xeokit/xeokit-sdk/pull/1771)
+
+# [v2.6.62](https://github.com/xeokit/xeokit-sdk/compare/v2.6.61...v2.6.62)
+
+### 30 December 2024
+
+-  XCD-196 Render Zones ordered by camera distance - [#1769](https://github.com/xeokit/xeokit-sdk/pull/1769)
+-  Context menu appears after each zoom or pan - [#1768](https://github.com/xeokit/xeokit-sdk/pull/1768)
+-  Submenu is not visible/usable when there is not enough space on the sides - [#1767](https://github.com/xeokit/xeokit-sdk/pull/1767)
+-  XCD-210: First pick does not work with doublePickFlyTo enabled - [#1766](https://github.com/xeokit/xeokit-sdk/pull/1766)
+-  Implement missing cross section from dtx renderer - [#1765](https://github.com/xeokit/xeokit-sdk/pull/1765)
+-  XCD-224: Annotations cannot be deleted - [#1764](https://github.com/xeokit/xeokit-sdk/pull/1764)
+-  XCD-223: Adapt the change of metaModels from array to object - [#1763](https://github.com/xeokit/xeokit-sdk/pull/1763)
+
+# [v2.6.61](https://github.com/xeokit/xeokit-sdk/compare/v2.6.60...v2.6.61)
+
+### 11 December 2024
+
+-  XCD-208 Make FastNavPlugin revert to the original canvas resolutionScale on switchToHighQuality - [#1760](https://github.com/xeokit/xeokit-sdk/pull/1760)
+-  [FEATURE] Add optional IfcProject root node to TreeViewPlugin "storeys" hierarchy - [#1759](https://github.com/xeokit/xeokit-sdk/pull/1759)
+
+# [v2.6.60](https://github.com/xeokit/xeokit-sdk/compare/v2.6.59...v2.6.60)
+
+### 6 December 2024
+
+-  [FIX] Add missing types for MarqueePicker and ObjectsKdTree3 - [#1758](https://github.com/xeokit/xeokit-sdk/pull/1758)
+
+# [v2.6.59](https://github.com/xeokit/xeokit-sdk/compare/v2.6.58...v2.6.59)
+
+### 5 December 2024
+
+-  [FIX] Fix deletion from MetaScene.rootMetaObjects - [#1755](https://github.com/xeokit/xeokit-sdk/pull/1755)
+-  XCD-212 Fix toClipSpace to transform its argument after view/proj matrices stabilize - [#1754](https://github.com/xeokit/xeokit-sdk/pull/1754)
+
+# [v2.6.58](https://github.com/xeokit/xeokit-sdk/compare/v2.6.57...v2.6.58)
+
+### 3 December 2024
+
+-  [FIX] Fix missing MetaObject-&gt;metaModels links - [#1753](https://github.com/xeokit/xeokit-sdk/pull/1753)
+
+# [v2.6.57](https://github.com/xeokit/xeokit-sdk/compare/v2.6.55...v2.6.57)
+
+### 2 December 2024
+
+-  StoreyViewsPlugin::Remove unit conversion to meters - [#1752](https://github.com/xeokit/xeokit-sdk/pull/1752)
+-  Import os in context menu example - [#1751](https://github.com/xeokit/xeokit-sdk/pull/1751)
+-  Fix context menus on mobile devices - [#1747](https://github.com/xeokit/xeokit-sdk/pull/1747)
+-  [EXAMPLES] Fix picking examples - [#1749](https://github.com/xeokit/xeokit-sdk/pull/1749)
+-  XCD-144 Fix shaking measurement - [#1719](https://github.com/xeokit/xeokit-sdk/pull/1719)
+-  XEOK-169 Fix undefined this._entity.model - [#1748](https://github.com/xeokit/xeokit-sdk/pull/1748)
+-  XEOK-160 Fix AngleMeasurementsMouseControl's red dot position - [#1746](https://github.com/xeokit/xeokit-sdk/pull/1746)
+-  [EXAMPLE] Add 2 new cards for 3D zoning and 2D overlay - [#1742](https://github.com/xeokit/xeokit-sdk/pull/1742)
+-  Use elevation property to clip overlapping bounding boxes - [#1741](https://github.com/xeokit/xeokit-sdk/pull/1741)
+-  fix: hide pivot element on touchend - [#1740](https://github.com/xeokit/xeokit-sdk/pull/1740)
+-  XEOK-146 Use isSceneModelEntity instead of instanceOf SceneModelEntity - [#1739](https://github.com/xeokit/xeokit-sdk/pull/1739)
+-  Expose the link to floorPlan_example from examples/scenegraph category - [#1738](https://github.com/xeokit/xeokit-sdk/pull/1738)
+-  XEOK-151 Fix label's text offset in an html2canvas capture - [#1736](https://github.com/xeokit/xeokit-sdk/pull/1736)
+-  Fix when manifestSrc contains a Shared Access Key - [#1735](https://github.com/xeokit/xeokit-sdk/pull/1735)
+-  Add ability to capture whole models::StoreyViewsPlugin - [#1733](https://github.com/xeokit/xeokit-sdk/pull/1733)
+-  Updated typings - [#1732](https://github.com/xeokit/xeokit-sdk/pull/1732)
+-  XCD-197 Fix planView panning in CameraControls - [#1731](https://github.com/xeokit/xeokit-sdk/pull/1731)
+
+# [v2.6.55](https://github.com/xeokit/xeokit-sdk/compare/v2.6.54...v2.6.55)
+
+### 11 November 2024
+
+-  Implement custom cursors for camera movement - [#1730](https://github.com/xeokit/xeokit-sdk/pull/1730)
+-  [FIX] Robustness for VBOs and edgeIndices - [#1729](https://github.com/xeokit/xeokit-sdk/pull/1729)
+
+# [v2.6.54](https://github.com/xeokit/xeokit-sdk/compare/v2.6.53...v2.6.54)
+
+### 7 November 2024
+
+-  Add support for model ids when there are multiple models on the scene - [#1728](https://github.com/xeokit/xeokit-sdk/pull/1728)
+-  Fix/pan right click - [#1727](https://github.com/xeokit/xeokit-sdk/pull/1727)
+-  XCD-153 Reset snapshotCanvas transformation applied by html2canvas - [#1722](https://github.com/xeokit/xeokit-sdk/pull/1722)
+-  [FIX] Fix IfcBuildingStorey elevation sort - [#1721](https://github.com/xeokit/xeokit-sdk/pull/1721)
+-  Fix regression caused by camera controls mapping feature - [#1720](https://github.com/xeokit/xeokit-sdk/pull/1720)
+-  Add option to configure camera control using keymaps in CameraControl - [#1718](https://github.com/xeokit/xeokit-sdk/pull/1718)
+-  [FIX] Adding a shallow copy of worldPos for _lastClickedWorldPos - [#1716](https://github.com/xeokit/xeokit-sdk/pull/1716)
+-  [FEATURE] Rotate around previous pivot when clicking on background - [#1713](https://github.com/xeokit/xeokit-sdk/pull/1713)
+-  [FIX] Fixes examples using libs/dat.gui.min.js - [#1712](https://github.com/xeokit/xeokit-sdk/pull/1712)
+
+# [v2.6.53](https://github.com/xeokit/xeokit-sdk/compare/v2.6.52...v2.6.53)
+
+### 25 October 2024
+
+-  [FIX] TreeViewPlugin sortNodes fix - [#1711](https://github.com/xeokit/xeokit-sdk/pull/1711)
+
+# [v2.6.52](https://github.com/xeokit/xeokit-sdk/compare/v2.6.51...v2.6.52)
+
+### 24 October 2024
+
+-  [FEATURE] StoreyViewsPlugin sort on IfcBuildingStorey elevation - [#1710](https://github.com/xeokit/xeokit-sdk/pull/1710)
+-  Update ObjectsMemento::StoreyViewsPlugin to restore only visibility - [#1709](https://github.com/xeokit/xeokit-sdk/pull/1709)
+
+# [v2.6.51](https://github.com/xeokit/xeokit-sdk/compare/v2.6.50...v2.6.51)
+
+### 22 October 2024
+
+-  Update typings: setCheckbox method signature to include optional indeterminate… - [#1708](https://github.com/xeokit/xeokit-sdk/pull/1708)
+-  Updated typings: setCheckbox method signature to include indeterminate parameter - [#1707](https://github.com/xeokit/xeokit-sdk/pull/1707)
+-  XCD-175 Fix {Angle,Distance}MeasurementsMouseControl green/red marker's misplacement - [#1703](https://github.com/xeokit/xeokit-sdk/pull/1703)
+-  Fix rootnames showing as 'na' in TreeViewPlugin - [#1702](https://github.com/xeokit/xeokit-sdk/pull/1702)
+-  [FIX] Regression for name of root object of TreeViewPlugin (XCD-174) - [#1700](https://github.com/xeokit/xeokit-sdk/pull/1700)
+-  Make SceneModel::matrix setter decompose to other transformation properties - [#1699](https://github.com/xeokit/xeokit-sdk/pull/1699)
+-  XEOK-50 Adjust example code for an upcoming 2D Overlay tutorial - [#1697](https://github.com/xeokit/xeokit-sdk/pull/1697)
+
+# [v2.6.50](https://github.com/xeokit/xeokit-sdk/compare/v2.6.49...v2.6.50)
+
+### 15 October 2024
+
+-  StoreyViewsPlugin storeysList - [#1698](https://github.com/xeokit/xeokit-sdk/pull/1698)
+-  Fix model not scaling when loading using XKTLoaderPlugin - [#1696](https://github.com/xeokit/xeokit-sdk/pull/1696)
+
+# [v2.6.49](https://github.com/xeokit/xeokit-sdk/compare/v2.6.48...v2.6.49)
+
+### 15 October 2024
+
+-  [EXAMPLE] Fixes and adds an example of Section + FastNavPlugin - [#1695](https://github.com/xeokit/xeokit-sdk/pull/1695)
+-  XCD-153 Compensate canvas offset when snapshotting a plugin - [#1694](https://github.com/xeokit/xeokit-sdk/pull/1694)
+-  XCD-136 Fix SectionPlane interaction with translated SceneModel - [#1692](https://github.com/xeokit/xeokit-sdk/pull/1692)
+-  Define point size when using gl.Points::VBOBatchingPointsSnapInitRenderer - [#1691](https://github.com/xeokit/xeokit-sdk/pull/1691)
+
+# [v2.6.47](https://github.com/xeokit/xeokit-sdk/compare/v2.6.46...v2.6.47)
+
+### 6 October 2024
+
+-  [FIX] Change MetaScene.metaObjects from array to object - [#1689](https://github.com/xeokit/xeokit-sdk/pull/1689)
+
 # [v2.6.46](https://github.com/xeokit/xeokit-sdk/compare/v2.6.45...v2.6.46)
 
 ### 2 October 2024
