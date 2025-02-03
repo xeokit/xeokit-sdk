@@ -1965,7 +1965,7 @@ const math = {
      * @param {Number[]} mat The 4x4 matrix.
      * @param {String} order Desired Euler angle order: "XYZ", "YXZ", "ZXY" etc.
      * @param {Number[]} [dest] Destination Euler angles, created by default.
-     * @returns {Number[]} The Euler angles.
+     * @returns {Number[]} The Euler angles (in degrees).
      */
     mat4ToEuler(mat, order, dest = math.vec4()) {
         const clamp = math.clamp;
@@ -2056,6 +2056,10 @@ const math = {
                 dest[1] = 0;
             }
         }
+
+        dest[0] *= math.RADTODEG;
+        dest[1] *= math.RADTODEG;
+        dest[2] *= math.RADTODEG;
 
         return dest;
     },
@@ -2866,7 +2870,7 @@ const math = {
     /**
      * Initializes a quaternion from Euler angles.
      *
-     * @param {Number[]} euler The Euler angles.
+     * @param {Number[]} euler The Euler angles (in degrees).
      * @param {String} order Euler angle order: "XYZ", "YXZ", "ZXY" etc.
      * @param {Number[]} [dest] Destination quaternion, created by default.
      * @returns {Number[]} The quaternion.
