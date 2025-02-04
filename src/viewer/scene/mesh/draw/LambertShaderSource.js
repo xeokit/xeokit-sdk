@@ -19,7 +19,6 @@ export const LambertShaderSource = function(mesh) {
         canActAsBackground: true,
         discardPoints: true,
         setupPointSize: true,
-        setsFrontFace: true,
         setsLineWidth: true,
         useGammaOutput: true,
         appendVertexDefinitions: (src) => {

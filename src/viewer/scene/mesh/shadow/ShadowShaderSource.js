@@ -2,7 +2,6 @@ export const ShadowShaderSource = function(mesh) {
     return {
         getHash: () => [ mesh._state.hash ],
         programName: "Shadow",
-        setsFrontFace: true,
         setsLineWidth: true,
         useShadowView: true,
         dontBillboardAnything: true,
