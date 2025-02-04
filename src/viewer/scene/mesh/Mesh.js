@@ -278,14 +278,15 @@ class Mesh extends Component {
             const ensureInstance = () => {
                 if (! instance) {
                     const mesh = this;
+                    const programSetup = programSetupClass(mesh);
                     const hash = [
                         programSetupClass.name,
                         mesh.scene.canvas.canvas.id,
                         mesh.scene._sectionPlanesState.getHash(),
                         mesh._geometry._state.hash
-                    ].concat(programSetupClass.getHash(mesh)).join(";");
+                    ].concat(programSetup.getHash()).join(";");
                     if (! (hash in renderersCache)) {
-                        const renderer = instantiateMeshRenderer(mesh, programSetupClass(mesh));
+                        const renderer = instantiateMeshRenderer(mesh, programSetup);
                         if (renderer.errors) {
                             console.log(renderer.errors.join("\n"));
                             return;
