@@ -1,5 +1,6 @@
-export const PickTriangleShaderSource = function() {
+export const PickTriangleShaderSource = function(mesh) {
     return {
+        getHash: () => [ mesh._state.hash ],
         programName: "PickTriangle",
         setsFrontFace: true,
         usePickView: true,
@@ -22,7 +23,3 @@ export const PickTriangleShaderSource = function() {
         }
     };
 };
-
-PickTriangleShaderSource.getHash = (mesh) => [
-    mesh._state.hash
-];
