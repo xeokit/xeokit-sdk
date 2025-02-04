@@ -140,6 +140,12 @@ export const DrawShaderSource = function(mesh) {
     ].filter(u => u);
 
     return {
+        getHash: () => [
+            mesh._state.drawHash,
+            mesh.scene.gammaOutput ? "go" : "",
+            mesh.scene._lightsState.getHash(),
+            mesh._material._state.hash
+        ],
         programName: "Draw",
         canActAsBackground: true,
         discardPoints: true,
@@ -562,10 +568,3 @@ export const DrawShaderSource = function(mesh) {
         setupLightInputs: lightSetup.setupInputs
     };
 };
-
-DrawShaderSource.getHash = (mesh) => [
-    mesh._state.drawHash,
-    mesh.scene.gammaOutput ? "go" : "",
-    mesh.scene._lightsState.getHash(),
-    mesh._material._state.hash
-];
