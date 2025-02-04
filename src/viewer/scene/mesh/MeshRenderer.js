@@ -425,7 +425,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                         frameCtx.frontface = materialState.frontface;
                     }
 
-                    if (programSetup.setsEdgeWidth && (frameCtx.lineWidth !== materialState.edgeWidth)) {
+                    if (programSetup.drawEdges && (frameCtx.lineWidth !== materialState.edgeWidth)) {
                         gl.lineWidth(materialState.edgeWidth);
                         frameCtx.lineWidth = materialState.edgeWidth;
                     }
@@ -461,7 +461,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                     }
 
                     gl.drawArrays(geometryState.primitive, 0, positionsBuf.numItems / 3);
-                } else if (programSetup.setsEdgeWidth) {
+                } else if (programSetup.drawEdges) {
                     const indicesBuf = ((geometryState.primitive === gl.TRIANGLES)
                                         ? geometry._getEdgeIndices()
                                         : ((geometryState.primitive === gl.LINES) && geometryState.indicesBuf));
