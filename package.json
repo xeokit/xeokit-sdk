@@ -56,7 +56,7 @@
   },
   "homepage": "https://xeokit.io",
   "dependencies": {
-    "@jakub.lewandowski/cx-ifcconverter-wasm": "^0.1.4",
+    "@jakub.lewandowski/cx-ifcconverter-wasm": "^0.1.5",
     "@loaders.gl/core": "^3.2.6",
     "@loaders.gl/gltf": "^3.2.6",
     "@loaders.gl/las": "^3.2.6",
