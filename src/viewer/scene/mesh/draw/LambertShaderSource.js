@@ -9,6 +9,12 @@ export const LambertShaderSource = function(mesh) {
     const lightSetup = createLightSetup(mesh.scene._lightsState);
 
     return {
+        getHash: () => [
+            mesh._state.drawHash,
+            mesh.scene.gammaOutput ? "go" : "",
+            mesh.scene._lightsState.getHash(),
+            mesh._material._state.hash
+        ],
         programName: "Lambert",
         canActAsBackground: true,
         discardPoints: true,
@@ -52,10 +58,3 @@ export const LambertShaderSource = function(mesh) {
         setupLightInputs: lightSetup.setupInputs
     };
 };
-
-LambertShaderSource.getHash = (mesh) => [
-    mesh._state.drawHash,
-    mesh.scene.gammaOutput ? "go" : "",
-    mesh.scene._lightsState.getHash(),
-    mesh._material._state.hash
-];
