@@ -1,8 +1,12 @@
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
-export const EmphasisEdgesShaderSource = function() {
+export const EmphasisEdgesShaderSource = function(mesh) {
     return {
+        getHash: () => [
+            mesh._state.hash,
+            mesh.scene.gammaOutput ? "go" : "" // Gamma input not needed
+        ],
         programName: "EmphasisEdges",
         setsEdgeWidth: true,
         useGammaOutput: true,
@@ -26,8 +30,3 @@ export const EmphasisEdgesShaderSource = function() {
         }
     };
 };
-
-EmphasisEdgesShaderSource.getHash = (mesh) => [
-    mesh._state.hash,
-    mesh.scene.gammaOutput ? "go" : "" // Gamma input not needed
-];
