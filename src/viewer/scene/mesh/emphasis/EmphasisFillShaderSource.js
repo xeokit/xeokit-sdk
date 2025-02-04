@@ -3,9 +3,6 @@ import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
 export const EmphasisFillShaderSource = function(mesh) {
-    const geometryState = mesh._geometry._state;
-    const primitive = geometryState.primitiveName;
-    const normals = (geometryState.autoVertexNormals || geometryState.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan");
     const lightSetup = createLightSetup(mesh.scene._lightsState);
 
     return {
@@ -25,9 +22,13 @@ export const EmphasisFillShaderSource = function(mesh) {
         },
         appendVertexOutputs: (src, color, pickColor, uv, worldNormal, viewNormal) => {
             src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-            normals && lightSetup.directionalLights.forEach(light => {
-                src.push(`reflectedColor += max(dot(${viewNormal}, ${light.getDirection("viewMatrix2", "viewPosition")}), 0.0) * ${light.getColor()};`);
-            });
+            const geometry = mesh._geometry;
+            const geometryState = geometry._state;
+            if ((geometryState.autoVertexNormals || geometryState.normalsBuf) && [ "triangles", "triangle-strip", "triangle-fan" ].includes(geometry.primitive)) {
+                lightSetup.directionalLights.forEach(light => {
+                    src.push(`reflectedColor += max(dot(${viewNormal}, ${light.getDirection("viewMatrix2", "viewPosition")}), 0.0) * ${light.getColor()};`);
+                });
+            }
             // TODO: A blending mode for emphasis materials, to select add/multiply/mix
             //src.push("vColor = vec4((mix(reflectedColor, fillColor.rgb, 0.7)), fillColor.a);");
             src.push(`vColor = vec4((${lightSetup.getAmbientColor()} + reflectedColor) * fillColor.rgb, fillColor.a);`);
