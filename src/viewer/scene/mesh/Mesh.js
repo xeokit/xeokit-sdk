@@ -273,14 +273,15 @@ class Mesh extends Component {
 
         const material = cfg.material ? this._checkComponent2(["PhongMaterial", "MetallicMaterial", "SpecularMaterial", "LambertMaterial"], cfg.material) : this.scene.material;
 
-        const wrapRenderer = (programSetupClass) => {
+        const mesh = this;
+
+        const wrapRenderer = (getProgramSetup) => {
             let instance = null;
             const ensureInstance = () => {
                 if (! instance) {
-                    const mesh = this;
-                    const programSetup = programSetupClass(mesh);
+                    const programSetup = getProgramSetup();
                     const hash = [
-                        programSetupClass.name,
+                        programSetup.programName,
                         mesh.scene.canvas.canvas.id,
                         mesh.scene._sectionPlanesState.getHash(),
                         mesh._geometry._state.hash
@@ -322,13 +323,13 @@ class Mesh extends Component {
         };
 
         this._renderers = {
-            _drawRenderer:          wrapRenderer((material.type === "LambertMaterial") ? LambertShaderSource : DrawShaderSource),
-            _shadowRenderer:        wrapRenderer(ShadowShaderSource),
-            _emphasisFillRenderer:  wrapRenderer(EmphasisFillShaderSource),
-            _emphasisEdgesRenderer: wrapRenderer(EmphasisEdgesShaderSource),
-            _pickMeshRenderer:      wrapRenderer(PickMeshShaderSource),
-            _pickTriangleRenderer:  wrapRenderer(PickTriangleShaderSource),
-            _occlusionRenderer:     wrapRenderer(OcclusionShaderSource)
+            _drawRenderer:          wrapRenderer(() => (material.type === "LambertMaterial") ? LambertShaderSource(mesh) : DrawShaderSource(mesh)),
+            _shadowRenderer:        wrapRenderer(() => ShadowShaderSource(mesh)),
+            _emphasisFillRenderer:  wrapRenderer(() => EmphasisFillShaderSource(mesh)),
+            _emphasisEdgesRenderer: wrapRenderer(() => EmphasisEdgesShaderSource(mesh)),
+            _pickMeshRenderer:      wrapRenderer(() => PickMeshShaderSource(mesh)),
+            _pickTriangleRenderer:  wrapRenderer(() => PickTriangleShaderSource(mesh)),
+            _occlusionRenderer:     wrapRenderer(() => OcclusionShaderSource(mesh))
         };
 
         this._geometry = cfg.geometry ? this._checkComponent2(["ReadableGeometry", "VBOGeometry"], cfg.geometry) : this.scene.geometry;
