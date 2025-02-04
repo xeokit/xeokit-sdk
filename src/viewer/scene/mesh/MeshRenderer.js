@@ -420,7 +420,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                         frameCtx.backfaces = materialState.backfaces;
                     }
 
-                    if (programSetup.setsFrontFace && (frameCtx.frontface !== materialState.frontface)) {
+                    if ((! programSetup.dontSetFrontFace) && (frameCtx.frontface !== materialState.frontface)) {
                         gl.frontFace(materialState.frontface ? gl.CCW : gl.CW);
                         frameCtx.frontface = materialState.frontface;
                     }
