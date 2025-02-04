@@ -11,8 +11,7 @@ import {RenderState} from '../webgl/RenderState.js';
 import {instantiateMeshRenderer} from "./MeshRenderer.js";
 import {DrawShaderSource} from "./draw/DrawShaderSource.js";
 import {LambertShaderSource} from "./draw/LambertShaderSource.js";
-import {EmphasisEdgesShaderSource} from "./emphasis/EmphasisEdgesShaderSource.js";
-import {EmphasisFillShaderSource} from "./emphasis/EmphasisFillShaderSource.js";
+import {EmphasisShaderSource} from "./emphasis/EmphasisShaderSource.js";
 import {PickMeshShaderSource} from "./pick/PickMeshShaderSource.js";
 import {PickTriangleShaderSource} from "./pick/PickTriangleShaderSource.js";
 import {OcclusionShaderSource} from "./occlusion/OcclusionShaderSource.js";
@@ -325,8 +324,8 @@ class Mesh extends Component {
         this._renderers = {
             _drawRenderer:          wrapRenderer(() => (material.type === "LambertMaterial") ? LambertShaderSource(mesh) : DrawShaderSource(mesh)),
             _shadowRenderer:        wrapRenderer(() => ShadowShaderSource(mesh)),
-            _emphasisFillRenderer:  wrapRenderer(() => EmphasisFillShaderSource(mesh)),
-            _emphasisEdgesRenderer: wrapRenderer(() => EmphasisEdgesShaderSource(mesh)),
+            _emphasisEdgesRenderer: wrapRenderer(() => EmphasisShaderSource(mesh, false)),
+            _emphasisFillRenderer:  wrapRenderer(() => EmphasisShaderSource(mesh, true)),
             _pickMeshRenderer:      wrapRenderer(() => PickMeshShaderSource(mesh)),
             _pickTriangleRenderer:  wrapRenderer(() => PickTriangleShaderSource(mesh)),
             _occlusionRenderer:     wrapRenderer(() => OcclusionShaderSource(mesh))
