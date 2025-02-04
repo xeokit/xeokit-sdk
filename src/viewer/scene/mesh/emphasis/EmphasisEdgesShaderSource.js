@@ -8,6 +8,7 @@ export const EmphasisEdgesShaderSource = function(mesh) {
             mesh.scene.gammaOutput ? "go" : "" // Gamma input not needed
         ],
         programName: "EmphasisEdges",
+        dontSetFrontFace: true,
         setsEdgeWidth: true,
         useGammaOutput: true,
         appendVertexDefinitions: (src) => {
