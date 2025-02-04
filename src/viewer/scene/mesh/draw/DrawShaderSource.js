@@ -150,7 +150,6 @@ export const DrawShaderSource = function(mesh) {
         canActAsBackground: true,
         discardPoints: true,
         setupPointSize: true,
-        setsFrontFace: true,
         setsLineWidth: true,
         useGammaOutput: true,
         meshStateBackground: background,
