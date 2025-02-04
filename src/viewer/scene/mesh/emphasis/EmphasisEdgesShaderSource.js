@@ -9,7 +9,7 @@ export const EmphasisEdgesShaderSource = function(mesh) {
         ],
         programName: "EmphasisEdges",
         dontSetFrontFace: true,
-        setsEdgeWidth: true,
+        drawEdges: true,
         useGammaOutput: true,
         appendVertexDefinitions: (src) => {
             src.push("uniform vec4 edgeColor;");
