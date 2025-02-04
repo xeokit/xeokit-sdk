@@ -9,6 +9,11 @@ export const EmphasisFillShaderSource = function(mesh) {
     const lightSetup = createLightSetup(mesh.scene._lightsState);
 
     return {
+        getHash: () => [
+            mesh._state.hash,
+            mesh.scene.gammaOutput ? "go" : "", // Gamma input not needed
+            mesh.scene._lightsState.getHash()
+        ],
         programName: "EmphasisFill",
         discardPoints: true,
         useGammaOutput: true,
@@ -43,9 +48,3 @@ export const EmphasisFillShaderSource = function(mesh) {
         setupLightInputs: lightSetup.setupInputs
     };
 };
-
-EmphasisFillShaderSource.getHash = (mesh) => [
-    mesh._state.hash,
-    mesh.scene.gammaOutput ? "go" : "", // Gamma input not needed
-    mesh.scene._lightsState.getHash()
-];
