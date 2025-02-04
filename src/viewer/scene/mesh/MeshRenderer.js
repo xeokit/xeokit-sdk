@@ -81,9 +81,9 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
     programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color, attributes.pickColor, uvDecoded, worldNormal, viewNormal);
 
     const buildVertexShader = () => {
-        const billboard = mesh._state.billboard;
+        const billboard = mesh.billboard;
         const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
-        const stationary = mesh._state.stationary;
+        const stationary = mesh.stationary;
 
         const viewNormalLines = viewNormal.needed && [
             "mat4 viewNormalMatrix2 = viewNormalMatrix;",
@@ -408,7 +408,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                     }
                 }
 
-                setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, meshState.clippable, scene._sectionPlanesState);
+                setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, mesh.clippable, scene._sectionPlanesState);
 
                 if (materialState.id !== lastMaterialId) {
                     if (frameCtx.backfaces !== materialState.backfaces) {
