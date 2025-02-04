@@ -383,6 +383,10 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         return {
             destroy: () => program.destroy(),
             drawMesh: (frameCtx, mesh, material) => {
+                if (programSetup.skipIfTransparent && (material.alpha < 1.0)) {
+                    return;
+                }
+
                 const materialState = material._state;
                 const meshState = mesh._state;
                 const geometry = mesh._geometry;
@@ -391,10 +395,6 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                 const camera = scene.camera;
                 const project = camera.project;
                 const actsAsBackground = programSetup.canActAsBackground && meshState.background;
-
-                if (programSetup.skipIfTransparent && (materialState.alpha < 1.0)) {
-                    return;
-                }
 
                 if (frameCtx.lastProgramId !== program.id) {
                     frameCtx.lastProgramId = program.id;
