@@ -1,8 +1,9 @@
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
-export const PickMeshShaderSource = function() {
+export const PickMeshShaderSource = function(mesh) {
     return {
+        getHash: () => [ mesh._state.hash ],
         programName: "PickMesh",
         setsFrontFace: true,
         usePickView: true,
@@ -32,7 +33,3 @@ export const PickMeshShaderSource = function() {
         }
     };
 };
-
-PickMeshShaderSource.getHash = (mesh) => [
-    mesh._state.hash
-];
