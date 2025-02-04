@@ -1,5 +1,6 @@
-export const ShadowShaderSource = function() {
+export const ShadowShaderSource = function(mesh) {
     return {
+        getHash: () => [ mesh._state.hash ],
         programName: "Shadow",
         setsFrontFace: true,
         setsLineWidth: true,
@@ -19,7 +20,3 @@ export const ShadowShaderSource = function() {
         appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => src.push(`outColor = encodeFloat(${gl_FragCoord}.z);`)
     };
 };
-
-ShadowShaderSource.getHash = (mesh) => [
-    mesh._state.hash
-];
