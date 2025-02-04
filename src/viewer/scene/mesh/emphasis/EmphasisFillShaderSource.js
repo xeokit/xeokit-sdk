@@ -15,6 +15,7 @@ export const EmphasisFillShaderSource = function(mesh) {
             mesh.scene._lightsState.getHash()
         ],
         programName: "EmphasisFill",
+        dontSetFrontFace: true,
         discardPoints: true,
         useGammaOutput: true,
         appendVertexDefinitions: (src) => {
