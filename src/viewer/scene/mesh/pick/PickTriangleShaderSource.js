@@ -2,7 +2,6 @@ export const PickTriangleShaderSource = function(mesh) {
     return {
         getHash: () => [ mesh._state.hash ],
         programName: "PickTriangle",
-        setsFrontFace: true,
         usePickView: true,
         trianglePick: true,
         dontBillboardAnything: true,
