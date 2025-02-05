@@ -10,10 +10,57 @@ TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
 const tempVec3a = math.vec3();
 const tempVec4 = math.vec4();
 
+const iota = function(n) {
+    const ret = [ ];
+    for (let i = 0; i < n; ++i) ret.push(i);
+    return ret;
+};
+
 export const instantiateMeshRenderer = (mesh, programSetup) => {
     const scene = mesh.scene;
-    const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
-    const clipping = numAllocatedSectionPlanes > 0;
+    const clipping = (function() {
+        const sectionPlanesState = scene._sectionPlanesState;
+        const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
+
+        return (numAllocatedSectionPlanes > 0) && {
+            appendDefinitions: (src) => {
+                for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
+                    src.push("uniform bool sectionPlaneActive" + i + ";");
+                    src.push("uniform vec3 sectionPlanePos" + i + ";");
+                    src.push("uniform vec3 sectionPlaneDir" + i + ";");
+                }
+            },
+            getDistance: (worldPosition) => {
+                return iota(numAllocatedSectionPlanes).map(i => `(sectionPlaneActive${i} ? clamp(dot(-sectionPlaneDir${i}, ${worldPosition} - sectionPlanePos${i}), 0.0, 1000.0) : 0.0)`).join(" + ");
+            },
+            setupInputs: (getUniformSetter) => {
+                const uSectionPlanes = iota(numAllocatedSectionPlanes).map(i => ({
+                    active: getUniformSetter("sectionPlaneActive" + i),
+                    pos:    getUniformSetter("sectionPlanePos" + i),
+                    dir:    getUniformSetter("sectionPlaneDir" + i)
+                }));
+                return (rtcOrigin, sectionPlanesActivePerLayer) => {
+                    const sectionPlanes = sectionPlanesState.sectionPlanes;
+                    const numSectionPlanes = sectionPlanes.length;
+                    for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
+                        const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
+                        const active = (sectionPlaneIndex < numSectionPlanes) && sectionPlanesActivePerLayer[sectionPlaneIndex];
+                        sectionPlaneUniforms.active(active ? 1 : 0);
+                        if (active) {
+                            const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                            if (rtcOrigin) {
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcOrigin, tempVec3a);
+                                sectionPlaneUniforms.pos(rtcSectionPlanePos);
+                            } else {
+                                sectionPlaneUniforms.pos(sectionPlane.pos);
+                            }
+                            sectionPlaneUniforms.dir(sectionPlane.dir);
+                        }
+                    }
+                };
+            }
+        };
+    })();
     const getLogDepth = (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled;
     const geometryState = mesh._geometry._state;
     const quantizedGeometry = geometryState.compressGeometry;
@@ -169,7 +216,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             src.push("out float isPerspective;");
         }
         if (clipping) {
-            src.push("out vec4 vWorldPosition;");
+            src.push("out vec3 vWorldPosition;");
         }
         if (isBillboard) {
             src.push("void billboard(inout mat4 mat) {");
@@ -203,7 +250,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             src.push("gl_PointSize = pointSize;");
         }
         if (clipping) {
-            src.push("vWorldPosition = worldPosition;");
+            src.push("vWorldPosition = worldPosition.xyz;");
         }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (getLogDepth) {
@@ -232,25 +279,16 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             src.push("in float vFragDepth;");
         }
         if (clipping) {
-            src.push("in vec4 vWorldPosition;");
+            src.push("in vec3 vWorldPosition;");
             src.push("uniform bool clippable;");
-            for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
-                src.push("uniform bool sectionPlaneActive" + i + ";");
-                src.push("uniform vec3 sectionPlanePos" + i + ";");
-                src.push("uniform vec3 sectionPlaneDir" + i + ";");
-            }
+            clipping.appendDefinitions(src);
         }
         gammaOutputSetup && gammaOutputSetup.appendDefinitions(src);
         programSetup.appendFragmentDefinitions(src);
         src.push("void main(void) {");
         if (clipping) {
             src.push("if (clippable) {");
-            src.push("  float dist = 0.0;");
-            for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
-                src.push("if (sectionPlaneActive" + i + ") {");
-                src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
-                src.push("}");
-            }
+            src.push("  float dist = " + clipping.getDistance("vWorldPosition") + ";");
             src.push("  if (dist > 0.0) { discard; }");
             src.push("}");
         }
@@ -334,47 +372,15 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                 uLogDepthBufFC && uLogDepthBufFC(2.0 / (Math.log(far + 1.0) / Math.LN2));
             };
         })();
-        const setSectionPlanesInputsState = (function() {
-            return clipping && (function() {
-                const uClippable = getInputSetter("clippable");
-                const uSectionPlanes = [];
-                for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
-                    uSectionPlanes.push({
-                        active: getInputSetter("sectionPlaneActive" + i),
-                        pos:    getInputSetter("sectionPlanePos" + i),
-                        dir:    getInputSetter("sectionPlaneDir" + i)
-                    });
+        const setSectionPlanesInputsState = clipping && (function() {
+            const uClippable = getInputSetter("clippable");
+            const setClippingState = clipping.setupInputs(getInputSetter);
+            return (rtcOrigin, renderFlags, clippable) => {
+                uClippable(clippable);
+                if (clippable) {
+                    setClippingState(rtcOrigin, renderFlags.sectionPlanesActivePerLayer);
                 }
-
-                return (origin, renderFlags, clippable, sectionPlanesState) => {
-                    uClippable(clippable);
-
-                    if (clippable) {
-                        const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
-                        const sectionPlanes = sectionPlanesState.sectionPlanes;
-                        const numSectionPlanes = sectionPlanes.length;
-                        if (numAllocatedSectionPlanes > 0) {
-                            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
-                                const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
-                                if (sectionPlaneUniforms) {
-                                    const active = (sectionPlaneIndex < numSectionPlanes) && renderFlags.sectionPlanesActivePerLayer[sectionPlaneIndex];
-                                    sectionPlaneUniforms.active(active ? 1 : 0);
-                                    if (active) {
-                                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                                        if (origin) {
-                                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
-                                            sectionPlaneUniforms.pos(rtcSectionPlanePos);
-                                        } else {
-                                            sectionPlaneUniforms.pos(sectionPlane.pos);
-                                        }
-                                        sectionPlaneUniforms.dir(sectionPlane.dir);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                };
-            })();
+            };
         })();
 
         let lastMaterialId = null;
@@ -408,7 +414,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                     }
                 }
 
-                setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, mesh.clippable, scene._sectionPlanesState);
+                setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, mesh.clippable);
 
                 if (materialState.id !== lastMaterialId) {
                     if (frameCtx.backfaces !== materialState.backfaces) {
