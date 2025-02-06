@@ -146,11 +146,11 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
         const stationary = mesh.stationary;
 
+        const billboardIfApplicable = v => isBillboard ? `billboard(${v})` : v;
+
         const viewNormalLines = viewNormal.needed && [
-            "mat4 viewNormalMatrix2 = viewNormalMatrix;",
-            isBillboard && "billboard(viewNormalMatrix2);",
-            `vec3 ${viewNormal} = normalize((viewNormalMatrix2 * vec4(${worldNormal}, 0.0)).xyz);`
-        ].filter(line => line);
+            `vec3 ${viewNormal} = normalize((${billboardIfApplicable("viewNormalMatrix")} * vec4(${worldNormal}, 0.0)).xyz);`
+        ];
 
         const mainVertexOutputs = (function() {
             const src = [ ];
@@ -163,25 +163,19 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                 src.push("worldPosition.xyz = worldPosition.xyz + offset;");
                 src.push("vec4 viewPosition = viewMatrix * worldPosition;");
             } else {
-                src.push("mat4 viewMatrix2 = viewMatrix;");
-                src.push("mat4 modelMatrix2 = modelMatrix;");
+                src.push("mat4 viewMatrix1 = viewMatrix;");
                 if (stationary) {
-                    src.push("viewMatrix2[3][0] = viewMatrix2[3][1] = viewMatrix2[3][2] = 0.0;");
+                    src.push("viewMatrix1[3][0] = viewMatrix1[3][1] = viewMatrix1[3][2] = 0.0;");
                 } else if (programSetup.meshStateBackground) {
-                    src.push("viewMatrix2[3] = vec4(0.0, 0.0, 0.0 ,1.0);");
+                    src.push("viewMatrix1[3] = vec4(0.0, 0.0, 0.0, 1.0);");
                 }
-                if (isBillboard) {
-                    src.push("mat4 modelViewMatrix = viewMatrix2 * modelMatrix2;");
-                    src.push("billboard(modelMatrix2);");
-                    src.push("billboard(viewMatrix2);");
-                }
-                src.push("vec4 worldPosition = modelMatrix2 * localPosition;");
+                src.push(`vec4 worldPosition = ${billboardIfApplicable("modelMatrix")} * localPosition;`);
                 src.push("worldPosition.xyz = worldPosition.xyz + offset;");
+                src.push(`mat4 viewMatrix2 = ${billboardIfApplicable("viewMatrix1")};`);
                 if (isBillboard) {
-                    src.push("billboard(modelViewMatrix);");
-                    src.push("vec4 viewPosition = modelViewMatrix * localPosition;");
+                    src.push(`vec4 viewPosition = ${billboardIfApplicable("viewMatrix1 * modelMatrix")} * localPosition;`);
                 } else {
-                    src.push("vec4 viewPosition = viewMatrix2 * worldPosition;");
+                    src.push(`vec4 viewPosition = viewMatrix2 * worldPosition;`);
                 }
             }
             if (uvDecoded.needed) {
@@ -189,9 +183,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             }
             if (worldNormal.needed) {
                 src.push(`vec3 localNormal = ${quantizedGeometry ? `octDecode(${attributes.normal}.xy)` : attributes.normal};`);
-                src.push("mat4 modelNormalMatrix2 = modelNormalMatrix;");
-                isBillboard && src.push("billboard(modelNormalMatrix2);");
-                src.push(`vec3 ${worldNormal} = (modelNormalMatrix2 * vec4(localNormal, 0.0)).xyz;`);
+                src.push(`vec3 ${worldNormal} = (${billboardIfApplicable("modelNormalMatrix")} * vec4(localNormal, 0.0)).xyz;`);
             }
             viewNormalLines && viewNormalLines.forEach(line => src.push(line));
             return src;
@@ -231,18 +223,14 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             src.push("out vec3 vWorldPosition;");
         }
         if (isBillboard) {
-            src.push("void billboard(inout mat4 mat) {");
-            src.push("   mat[0][0] = scale[0];");
-            src.push("   mat[0][1] = 0.0;");
-            src.push("   mat[0][2] = 0.0;");
+            src.push("mat4 billboard(in mat4 matIn) {");
+            src.push("   mat4 mat = matIn;");
+            src.push("   mat[0].xyz = vec3(scale[0], 0.0, 0.0);");
             if (billboard === "spherical") {
-                src.push("   mat[1][0] = 0.0;");
-                src.push("   mat[1][1] = scale[1];");
-                src.push("   mat[1][2] = 0.0;");
+                src.push("   mat[1].xyz = vec3(0.0, scale[1], 0.0);");
             }
-            src.push("   mat[2][0] = 0.0;");
-            src.push("   mat[2][1] = 0.0;");
-            src.push("   mat[2][2] =1.0;");
+            src.push("   mat[2].xyz = vec3(0.0, 0.0, 1.0);");
+            src.push("   return mat;");
             src.push("}");
         }
         if (setupPointSize) {
