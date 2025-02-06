@@ -130,7 +130,11 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         return variable;
     };
 
-    const uvDecodeMatrix = lazyShaderUniform("uvDecodeMatrix", "mat3");
+    const positionsDecodeMatrix = lazyShaderUniform("positionsDecodeMatrix", "mat4");
+    const uvDecodeMatrix        = lazyShaderUniform("uvDecodeMatrix",        "mat3");
+    const modelNormalMatrix     = lazyShaderUniform("modelNormalMatrix",     "mat4");
+    const viewNormalMatrix      = lazyShaderUniform("viewNormalMatrix",      "mat4");
+
     const uvDecoded   = lazyShaderVariable("uvDecoded");
     const worldNormal = lazyShaderVariable("worldNormal");
     const viewNormal  = lazyShaderVariable("viewNormal");
@@ -148,44 +152,38 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
 
         const billboardIfApplicable = v => isBillboard ? `billboard(${v})` : v;
 
-        const viewNormalLines = viewNormal.needed && [
-            `vec3 ${viewNormal} = normalize((${billboardIfApplicable("viewNormalMatrix")} * vec4(${worldNormal}, 0.0)).xyz);`
-        ];
+        const viewNormalDefinition = viewNormal.needed && `vec3 ${viewNormal} = normalize((${billboardIfApplicable(viewNormalMatrix)} * vec4(${worldNormal}, 0.0)).xyz);`;
 
         const mainVertexOutputs = (function() {
             const src = [ ];
             src.push(`vec4 localPosition = vec4(${attributes.position}, 1.0);`);
             if (quantizedGeometry) {
-                src.push("localPosition = positionsDecodeMatrix * localPosition;");
+                src.push(`localPosition = ${positionsDecodeMatrix} * localPosition;`);
             }
+            src.push(`vec4 worldPosition = ${billboardIfApplicable("modelMatrix")} * localPosition;`);
+            src.push("worldPosition.xyz = worldPosition.xyz + offset;");
             if (programSetup.dontBillboardAnything) {
-                src.push("vec4 worldPosition = modelMatrix * localPosition;");
-                src.push("worldPosition.xyz = worldPosition.xyz + offset;");
                 src.push("vec4 viewPosition = viewMatrix * worldPosition;");
             } else {
                 src.push("mat4 viewMatrix1 = viewMatrix;");
                 if (stationary) {
-                    src.push("viewMatrix1[3][0] = viewMatrix1[3][1] = viewMatrix1[3][2] = 0.0;");
+                    src.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
                 } else if (programSetup.meshStateBackground) {
-                    src.push("viewMatrix1[3] = vec4(0.0, 0.0, 0.0, 1.0);");
+                    src.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
                 }
-                src.push(`vec4 worldPosition = ${billboardIfApplicable("modelMatrix")} * localPosition;`);
-                src.push("worldPosition.xyz = worldPosition.xyz + offset;");
                 src.push(`mat4 viewMatrix2 = ${billboardIfApplicable("viewMatrix1")};`);
-                if (isBillboard) {
-                    src.push(`vec4 viewPosition = ${billboardIfApplicable("viewMatrix1 * modelMatrix")} * localPosition;`);
-                } else {
-                    src.push(`vec4 viewPosition = viewMatrix2 * worldPosition;`);
-                }
+                src.push(`vec4 viewPosition = ${(isBillboard
+                                                 ? `${billboardIfApplicable("viewMatrix1 * modelMatrix")} * localPosition`
+                                                 : "viewMatrix2 * worldPosition")};`);
             }
             if (uvDecoded.needed) {
                 src.push(`vec2 uvDecoded = ${quantizedGeometry ? `(${uvDecodeMatrix} * vec3(${attributes.uv}, 1.0)).xy` : attributes.uv};`);
             }
             if (worldNormal.needed) {
                 const localNormal = quantizedGeometry ? `octDecode(${attributes.normal}.xy)` : attributes.normal;
-                src.push(`vec3 ${worldNormal} = (${billboardIfApplicable("modelNormalMatrix")} * vec4(${localNormal}, 0.0)).xyz;`);
+                src.push(`vec3 ${worldNormal} = (${billboardIfApplicable(modelNormalMatrix)} * vec4(${localNormal}, 0.0)).xyz;`);
             }
-            viewNormalLines && viewNormalLines.forEach(line => src.push(line));
+            viewNormalDefinition && src.push(viewNormalDefinition);
             return src;
         })();
 
@@ -198,9 +196,9 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         src.push("uniform mat4 projMatrix;");
         src.push("uniform vec3 offset;");
         src.push("uniform vec3 scale;");
+        positionsDecodeMatrix.appendDefinitions(src);
         uvDecodeMatrix.appendDefinitions(src);
         if (quantizedGeometry) {
-            src.push("uniform mat4 positionsDecodeMatrix;");
             if (worldNormal.needed) {
                 src.push("vec3 octDecode(vec2 oct) {");
                 src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
@@ -236,12 +234,8 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         if (setupPointSize) {
             src.push("uniform float pointSize;");
         }
-        if (worldNormal.needed) {
-            src.push("uniform mat4 modelNormalMatrix;");
-        }
-        if (viewNormal.needed) {
-            src.push("uniform mat4 viewNormalMatrix;");
-        }
+        modelNormalMatrix.appendDefinitions(src);
+        viewNormalMatrix.appendDefinitions(src);
         programSetup.appendVertexDefinitions && programSetup.appendVertexDefinitions(src);
         src.push("void main(void) {");
         mainVertexOutputs.forEach(line => src.push(line));
@@ -319,7 +313,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         const setMaterialInputsState = programSetup.setupMaterialInputs && programSetup.setupMaterialInputs(getInputSetter);
         const setLightInputState = programSetup.setupLightInputs && programSetup.setupLightInputs(getInputSetter);
         const setGeometryInputsState = (function() {
-            const uPositionsDecodeMatrix = quantizedGeometry && getInputSetter("positionsDecodeMatrix");
+            const setPositionsDecodeMatrix = positionsDecodeMatrix.setupInputs(getInputSetter);
             const setUvDecodeMatrix = uvDecodeMatrix.setupInputs(getInputSetter);
             const setPosition  = attributes.position.setupInputs(getInputSetter);
             const setNormal    = attributes.normal.setupInputs(getInputSetter);
@@ -336,7 +330,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             });
 
             return (geometryState, onBindAttribute, triangleGeometry) => {
-                uPositionsDecodeMatrix && uPositionsDecodeMatrix(geometryState.positionsDecodeMatrix);
+                setPositionsDecodeMatrix && setPositionsDecodeMatrix(geometryState.positionsDecodeMatrix);
                 setUvDecodeMatrix && setUvDecodeMatrix(geometryState.uvDecodeMatrix);
 
                 setPosition(binder((triangleGeometry || geometryState).positionsBuf, onBindAttribute));
@@ -352,9 +346,9 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         })();
         const setMeshInputsState = (function() {
             const uModelMatrix = getInputSetter("modelMatrix");
-            const uModelNormalMatrix = worldNormal.needed && getInputSetter("modelNormalMatrix");
+            const setModelNormalMatrix = modelNormalMatrix.setupInputs(getInputSetter);
             const uViewMatrix = getInputSetter("viewMatrix");
-            const uViewNormalMatrix = viewNormal.needed && getInputSetter("viewNormalMatrix");
+            const setViewNormalMatrix = viewNormalMatrix.setupInputs(getInputSetter);
             const uProjMatrix = getInputSetter("projMatrix");
 
             const uOffset = getInputSetter("offset");
@@ -363,9 +357,9 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
 
             return (mesh, viewMatrix, viewNormalMatrix, projMatrix, far) => {
                 uModelMatrix(mesh.worldMatrix);
-                uModelNormalMatrix && uModelNormalMatrix(mesh.worldNormalMatrix);
+                setModelNormalMatrix && setModelNormalMatrix(mesh.worldNormalMatrix);
                 uViewMatrix(viewMatrix);
-                uViewNormalMatrix && uViewNormalMatrix(viewNormalMatrix);
+                setViewNormalMatrix && setViewNormalMatrix(viewNormalMatrix);
                 uProjMatrix(projMatrix);
                 uOffset(mesh.offset);
                 uScale(mesh.scale);
