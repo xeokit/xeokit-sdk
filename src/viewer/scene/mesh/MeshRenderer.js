@@ -514,7 +514,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
     }
 };
 
-const lazyShaderUniform = function(name, type, getUniformValue) {
+const lazyShaderUniform = function(name, type) {
     let needed = false;
     return {
         appendDefinitions: (src) => needed && src.push(`uniform ${type} ${name};`),
@@ -522,17 +522,14 @@ const lazyShaderUniform = function(name, type, getUniformValue) {
             needed = true;
             return name;
         },
-        setupInputs: (getUniformSetter) => {
-            const setUniform = needed && getUniformSetter(name);
-            return setUniform && ((...args) => setUniform(getUniformValue(...args)));
-        }
+        setupInputs: (getUniformSetter) => needed && getUniformSetter(name)
     };
 };
 
 export const setupTexture = (name, type, getValue, initValue) => {
     return initValue && (function() {
-        const map    = lazyShaderUniform(name + "Map", type, v => v);
-        const matrix = initValue._state.matrix && lazyShaderUniform(name + "MapMatrix", "mat4", v => v);
+        const map    = lazyShaderUniform(name + "Map", type);
+        const matrix = initValue._state.matrix && lazyShaderUniform(name + "MapMatrix", "mat4");
         const swizzle = (type === "samplerCube") ? "xyz" : "xy";
         const getTexCoordExpression = texPos => (matrix ? `(${matrix} * ${texPos}).${swizzle}` : `${texPos}.${swizzle}`);
         return {
@@ -568,12 +565,24 @@ export const setupTexture = (name, type, getValue, initValue) => {
 };
 
 export const createLightSetup = function(lightsState, setupCubes) {
-    const lightAmbient = lazyShaderUniform("lightAmbient", "vec4", () => lightsState.getAmbientColorAndIntensity());
+    const lightsStateUniform = (name, type, getUniformValue) => {
+        const uniform = lazyShaderUniform(name, type);
+        return {
+            appendDefinitions: uniform.appendDefinitions,
+            toString: uniform.toString,
+            setupLightsInputs: (getUniformSetter) => {
+                const setUniform = uniform.setupInputs(getUniformSetter);
+                return setUniform && (() => setUniform(getUniformValue()));
+            }
+        };
+    };
+
+    const lightAmbient = lightsStateUniform("lightAmbient", "vec4", () => lightsState.getAmbientColorAndIntensity());
 
     const lights = lightsState.lights;
     const directionals = lights.map((light, i) => {
         const lightUniforms = {
-            color: lazyShaderUniform(`lightColor${i}`, "vec4", () => {
+            color: lightsStateUniform(`lightColor${i}`, "vec4", () => {
                 const light = lights[i]; // in case it changed
                 tempVec4[0] = light.color[0];
                 tempVec4[1] = light.color[1];
@@ -581,12 +590,12 @@ export const createLightSetup = function(lightsState, setupCubes) {
                 tempVec4[3] = light.intensity;
                 return tempVec4;
             }),
-            position:  lazyShaderUniform(`lightPos${i}`, "vec3", () => lights[i].pos),
-            direction: lazyShaderUniform(`lightDir${i}`, "vec3", () => lights[i].dir),
+            position:  lightsStateUniform(`lightPos${i}`, "vec3", () => lights[i].pos),
+            direction: lightsStateUniform(`lightDir${i}`, "vec3", () => lights[i].dir),
 
-            shadowProjMatrix: lazyShaderUniform(`shadowProjMatrix${i}`, "mat4", () => lights[i].getShadowViewMatrix()),
-            shadowViewMatrix: lazyShaderUniform(`shadowViewMatrix${i}`, "mat4", () => lights[i].getShadowViewMatrix()),
-            shadowMap:        lazyShaderUniform(`shadowMap${i}`,   "sampler2D", () => {
+            shadowProjMatrix: lightsStateUniform(`shadowProjMatrix${i}`, "mat4", () => lights[i].getShadowViewMatrix()),
+            shadowViewMatrix: lightsStateUniform(`shadowViewMatrix${i}`, "mat4", () => lights[i].getShadowViewMatrix()),
+            shadowMap:        lightsStateUniform(`shadowMap${i}`,   "sampler2D", () => {
                 const shadowRenderBuf = lights[i].getShadowRenderBuf();
                 return shadowRenderBuf && shadowRenderBuf.getTexture();
             })
@@ -605,8 +614,8 @@ export const createLightSetup = function(lightsState, setupCubes) {
                         getShadowMap:        () => lightUniforms.shadowMap
                     }
                 },
-                setupInputs: (getUniformSetter) => {
-                    const setters = Object.values(lightUniforms).map(u => u.setupInputs(getUniformSetter)).filter(v => v);
+                setupLightsInputs: (getUniformSetter) => {
+                    const setters = Object.values(lightUniforms).map(u => u.setupLightsInputs(getUniformSetter)).filter(v => v);
                     return () => setters.forEach(setState => setState());
                 }
             };
@@ -651,8 +660,8 @@ export const createLightSetup = function(lightsState, setupCubes) {
         lightMap:      lightMap      && { getValueExpression: lightMap.getValueExpression },
         reflectionMap: reflectionMap && { getValueExpression: reflectionMap.getValueExpression },
         setupInputs: (getUniformSetter) => {
-            const setAmbientInputState = lightAmbient.setupInputs(getUniformSetter);
-            const setDirectionalsInputStates = directionals.map(light => light.setupInputs(getUniformSetter));
+            const setAmbientInputState = lightAmbient.setupLightsInputs(getUniformSetter);
+            const setDirectionalsInputStates = directionals.map(light => light.setupLightsInputs(getUniformSetter));
             const uLightMap      = lightMap && lightMap.setupInputs(getUniformSetter);
             const uReflectionMap = reflectionMap && reflectionMap.setupInputs(getUniformSetter);
             return () => {
