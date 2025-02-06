@@ -40,6 +40,8 @@ class Annotation extends Marker {
         }
 
         this._htmlDirty = false;
+        this._curMarkerWidth = undefined;
+        this._curLabelWidth = 0;
 
         if (cfg.markerElement) {
             this._marker = cfg.markerElement;
@@ -210,23 +212,63 @@ class Annotation extends Marker {
     /**
      * @private
      */
-    _updatePosition() {
+    _updateWithCurWidths() {
         const px = x => x + "px";
         const boundary = this.scene.canvas.boundary;
         const left = boundary[0] + this.canvasPos[0];
         const top  = boundary[1] + this.canvasPos[1];
-        const markerWidth = this._marker.getBoundingClientRect().width;
+        const markerWidth = this._curMarkerWidth;
         const markerDir = (this._markerAlign === "right") ? -1 : ((this._markerAlign === "center") ? 0 : 1);
         const markerCenter = left + markerDir * (markerWidth / 2 - 12);
         this._marker.style.left = px(markerCenter - markerWidth / 2);
         this._marker.style.top  = px(top - 12);
         this._marker.style["z-index"] = 90005 + Math.floor(this._viewPos[2]) + 1;
 
-        const labelWidth = this._label.getBoundingClientRect().width;
+        const labelWidth = this._curLabelWidth;
         const labelDir = Math.sign(this._labelPosition);
         this._label.style.left = px(markerCenter + labelDir * (markerWidth / 2 + Math.abs(this._labelPosition) + labelWidth / 2) - labelWidth / 2);
         this._label.style.top  = px(top - 17);
         this._label.style["z-index"] = 90005 + Math.floor(this._viewPos[2]) + 1;
+    }
+
+    /**
+     * @private
+     */
+    _updateIfWidthsChanged() {
+        let needsUpdate = false;
+        const markerWidth = this._marker.getBoundingClientRect().width;
+        if (this._curMarkerWidth !== markerWidth) {
+            this._curMarkerWidth = markerWidth;
+            needsUpdate = true;
+        }
+        const labelDir = Math.sign(this._labelPosition);
+        // if (labelDir === 1) then don't perform relatively expensive label.getBoundingClientRect call
+        if (labelDir !== 1) {
+            const labelWidth = this._label.getBoundingClientRect().width;
+            if (this._curLabelWidth !== labelWidth) {
+                this._curLabelWidth = labelWidth;
+                needsUpdate = true;
+            }
+        }
+        if (needsUpdate) {
+            this._updateWithCurWidths();
+        }
+    }
+
+    /**
+     * @private
+     */
+    _updatePosition() {
+        if (this._curMarkerWidth === undefined) {
+            this._updateIfWidthsChanged();
+        } else {
+            // Update position with cached width values
+            // and postpone expensive Annotation's getBoundingClientRect calls
+            // so they don't interfere with e.g. interactive scene manipulation
+            this._updateWithCurWidths();
+            window.clearTimeout(this._widthTimeout);
+            this._widthTimeout = window.setTimeout(() => this._updateIfWidthsChanged(), 500);
+        }
     }
 
     /**
