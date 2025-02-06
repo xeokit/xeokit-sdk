@@ -16,6 +16,18 @@ const iota = function(n) {
     return ret;
 };
 
+const lazyShaderUniform = function(name, type) {
+    let needed = false;
+    return {
+        appendDefinitions: (src) => needed && src.push(`uniform ${type} ${name};`),
+        toString: () => {
+            needed = true;
+            return name;
+        },
+        setupInputs: (getUniformSetter) => needed && getUniformSetter(name)
+    };
+};
+
 export const instantiateMeshRenderer = (mesh, programSetup) => {
     const scene = mesh.scene;
     const clipping = (function() {
@@ -118,6 +130,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         return variable;
     };
 
+    const uvDecodeMatrix = lazyShaderUniform("uvDecodeMatrix", "mat3");
     const uvDecoded   = lazyShaderVariable("uvDecoded");
     const worldNormal = lazyShaderVariable("worldNormal");
     const viewNormal  = lazyShaderVariable("viewNormal");
@@ -172,7 +185,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                 }
             }
             if (uvDecoded.needed) {
-                src.push(`vec2 uvDecoded = ${quantizedGeometry ? `(uvDecodeMatrix * vec3(${attributes.uv}, 1.0)).xy` : attributes.uv};`);
+                src.push(`vec2 uvDecoded = ${quantizedGeometry ? `(${uvDecodeMatrix} * vec3(${attributes.uv}, 1.0)).xy` : attributes.uv};`);
             }
             if (worldNormal.needed) {
                 src.push(`vec3 localNormal = ${quantizedGeometry ? `octDecode(${attributes.normal}.xy)` : attributes.normal};`);
@@ -193,11 +206,9 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         src.push("uniform mat4 projMatrix;");
         src.push("uniform vec3 offset;");
         src.push("uniform vec3 scale;");
+        uvDecodeMatrix.appendDefinitions(src);
         if (quantizedGeometry) {
             src.push("uniform mat4 positionsDecodeMatrix;");
-            if (uvDecoded.needed) {
-                src.push("uniform mat3 uvDecodeMatrix;");
-            }
             if (worldNormal.needed) {
                 src.push("vec3 octDecode(vec2 oct) {");
                 src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
@@ -321,7 +332,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         const setLightInputState = programSetup.setupLightInputs && programSetup.setupLightInputs(getInputSetter);
         const setGeometryInputsState = (function() {
             const uPositionsDecodeMatrix = quantizedGeometry && getInputSetter("positionsDecodeMatrix");
-            const uvDecodeMatrix = uvDecoded.needed && quantizedGeometry && getInputSetter("uvDecodeMatrix");
+            const setUvDecodeMatrix = uvDecodeMatrix.setupInputs(getInputSetter);
             const setPosition  = attributes.position.setupInputs(getInputSetter);
             const setNormal    = attributes.normal.setupInputs(getInputSetter);
             const setUV        = attributes.uv.setupInputs(getInputSetter);
@@ -338,7 +349,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
 
             return (geometryState, onBindAttribute, triangleGeometry) => {
                 uPositionsDecodeMatrix && uPositionsDecodeMatrix(geometryState.positionsDecodeMatrix);
-                uvDecodeMatrix && uvDecodeMatrix(geometryState.uvDecodeMatrix);
+                setUvDecodeMatrix && setUvDecodeMatrix(geometryState.uvDecodeMatrix);
 
                 setPosition(binder((triangleGeometry || geometryState).positionsBuf, onBindAttribute));
                 setNormal && setNormal(binder(geometryState.normalsBuf, onBindAttribute));
@@ -512,18 +523,6 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             }
         };
     }
-};
-
-const lazyShaderUniform = function(name, type) {
-    let needed = false;
-    return {
-        appendDefinitions: (src) => needed && src.push(`uniform ${type} ${name};`),
-        toString: () => {
-            needed = true;
-            return name;
-        },
-        setupInputs: (getUniformSetter) => needed && getUniformSetter(name)
-    };
 };
 
 export const setupTexture = (name, type, getValue, initValue) => {
