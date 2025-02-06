@@ -212,12 +212,8 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             }
         }
         if (getLogDepth) {
-            src.push("uniform float logDepthBufFC;");
-            src.push("out float vFragDepth;");
-            src.push("bool isPerspectiveMatrix(mat4 m) {");
-            src.push("    return (m[2][3] == - 1.0);");
-            src.push("}");
             src.push("out float isPerspective;");
+            src.push("out float vFragDepth;");
         }
         if (clipping) {
             src.push("out vec3 vWorldPosition;");
@@ -245,8 +241,8 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (getLogDepth) {
+            src.push(`isPerspective = (projMatrix[2][3] == -1.0) ? 1.0 : 0.0;`);
             src.push("vFragDepth = 1.0 + clipPos.w;");
-            src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = " + (programSetup.transformClipPos ? programSetup.transformClipPos("clipPos") : "clipPos") + ";");
         src.push("}");
@@ -265,8 +261,8 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         src.push("precision mediump int;");
         src.push("#endif");
         if (getLogDepth) {
-            src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
+            src.push("in float isPerspective;");
             src.push("in float vFragDepth;");
         }
         if (clipping) {
