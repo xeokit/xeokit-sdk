@@ -215,16 +215,14 @@ class Annotation extends Marker {
         const boundary = this.scene.canvas.boundary;
         const left = boundary[0] + this.canvasPos[0];
         const top  = boundary[1] + this.canvasPos[1];
-        const markerRect = this._marker.getBoundingClientRect();
-        const markerWidth = markerRect.width;
+        const markerWidth = this._marker.getBoundingClientRect().width;
         const markerDir = (this._markerAlign === "right") ? -1 : ((this._markerAlign === "center") ? 0 : 1);
         const markerCenter = left + markerDir * (markerWidth / 2 - 12);
         this._marker.style.left = px(markerCenter - markerWidth / 2);
         this._marker.style.top  = px(top - 12);
         this._marker.style["z-index"] = 90005 + Math.floor(this._viewPos[2]) + 1;
 
-        const labelRect = this._label.getBoundingClientRect();
-        const labelWidth = labelRect.width;
+        const labelWidth = this._label.getBoundingClientRect().width;
         const labelDir = Math.sign(this._labelPosition);
         this._label.style.left = px(markerCenter + labelDir * (markerWidth / 2 + Math.abs(this._labelPosition) + labelWidth / 2) - labelWidth / 2);
         this._label.style.top  = px(top - 17);
