@@ -182,8 +182,8 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                 src.push(`vec2 uvDecoded = ${quantizedGeometry ? `(${uvDecodeMatrix} * vec3(${attributes.uv}, 1.0)).xy` : attributes.uv};`);
             }
             if (worldNormal.needed) {
-                src.push(`vec3 localNormal = ${quantizedGeometry ? `octDecode(${attributes.normal}.xy)` : attributes.normal};`);
-                src.push(`vec3 ${worldNormal} = (${billboardIfApplicable("modelNormalMatrix")} * vec4(localNormal, 0.0)).xyz;`);
+                const localNormal = quantizedGeometry ? `octDecode(${attributes.normal}.xy)` : attributes.normal;
+                src.push(`vec3 ${worldNormal} = (${billboardIfApplicable("modelNormalMatrix")} * vec4(${localNormal}, 0.0)).xyz;`);
             }
             viewNormalLines && viewNormalLines.forEach(line => src.push(line));
             return src;
