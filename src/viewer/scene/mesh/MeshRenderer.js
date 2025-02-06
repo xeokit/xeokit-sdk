@@ -130,6 +130,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         return variable;
     };
 
+    const pointSize             = lazyShaderUniform("pointSize",             "float");
     const positionsDecodeMatrix = lazyShaderUniform("positionsDecodeMatrix", "mat4");
     const uvDecodeMatrix        = lazyShaderUniform("uvDecodeMatrix",        "mat3");
     const modelNormalMatrix     = lazyShaderUniform("modelNormalMatrix",     "mat4");
@@ -184,6 +185,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                 src.push(`vec3 ${worldNormal} = (${billboardIfApplicable(modelNormalMatrix)} * vec4(${localNormal}, 0.0)).xyz;`);
             }
             viewNormalDefinition && src.push(viewNormalDefinition);
+            setupPointSize && src.push(`gl_PointSize = ${pointSize};`);
             return src;
         })();
 
@@ -231,18 +233,13 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             src.push("   return mat;");
             src.push("}");
         }
-        if (setupPointSize) {
-            src.push("uniform float pointSize;");
-        }
+        pointSize.appendDefinitions(src);
         modelNormalMatrix.appendDefinitions(src);
         viewNormalMatrix.appendDefinitions(src);
         programSetup.appendVertexDefinitions && programSetup.appendVertexDefinitions(src);
         src.push("void main(void) {");
         mainVertexOutputs.forEach(line => src.push(line));
         programVertexOutputs.forEach(line => src.push(line));
-        if (setupPointSize) {
-            src.push("gl_PointSize = pointSize;");
-        }
         if (clipping) {
             src.push("vWorldPosition = worldPosition.xyz;");
         }
@@ -340,10 +337,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                 setPickColor && setPickColor(binder(triangleGeometry.pickColorsBuf, onBindAttribute));
             };
         })();
-        const setGeneralMaterialInputsState = setupPointSize && (function() {
-            const pointSize = getInputSetter("pointSize");
-            return (mtl) => pointSize(mtl.pointSize);
-        })();
+        const setPointSize = pointSize.setupInputs(getInputSetter);
         const setMeshInputsState = (function() {
             const uModelMatrix = getInputSetter("modelMatrix");
             const setModelNormalMatrix = modelNormalMatrix.setupInputs(getInputSetter);
@@ -436,7 +430,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                     }
 
                     setMaterialInputsState && setMaterialInputsState(material);
-                    setGeneralMaterialInputsState && setGeneralMaterialInputsState(material);
+                    setPointSize && setPointSize(material.pointSize);
 
                     lastMaterialId = materialState.id;
                 }
