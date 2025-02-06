@@ -89,14 +89,15 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
     })();
 
     const lazyShaderAttribute = function(name, type) {
-        const variable = {
-            appendDefinitions: (src) => variable.needed && src.push(`in ${type} ${name};`),
+        let needed = false;
+        return {
+            appendDefinitions: (src) => needed && src.push(`in ${type} ${name};`),
             toString: () => {
-                variable.needed = true;
+                needed = true;
                 return name;
-            }
+            },
+            setupInputs: (getInputSetter) => needed && getInputSetter(name)
         };
-        return variable;
     };
 
     const attributes = {
@@ -321,11 +322,11 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         const setGeometryInputsState = (function() {
             const uPositionsDecodeMatrix = quantizedGeometry && getInputSetter("positionsDecodeMatrix");
             const uvDecodeMatrix = uvDecoded.needed && quantizedGeometry && getInputSetter("uvDecodeMatrix");
-            const aPosition = getInputSetter("position");
-            const aNormal = attributes.normal.needed && getInputSetter("normal");
-            const aUV = attributes.uv.needed && getInputSetter("uv");
-            const aColor = attributes.color.needed && getInputSetter("color");
-            const aPickColor = attributes.pickColor.needed && getInputSetter("pickColor");
+            const setPosition  = attributes.position.setupInputs(getInputSetter);
+            const setNormal    = attributes.normal.setupInputs(getInputSetter);
+            const setUV        = attributes.uv.setupInputs(getInputSetter);
+            const setColor     = attributes.color.setupInputs(getInputSetter);
+            const setPickColor = attributes.pickColor.setupInputs(getInputSetter);
 
             const binder = (arrayBuf, onBindAttribute) => ({ // see ArrayBuf.js and Attribute.js
                 bindAtLocation: location => {
@@ -339,11 +340,11 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                 uPositionsDecodeMatrix && uPositionsDecodeMatrix(geometryState.positionsDecodeMatrix);
                 uvDecodeMatrix && uvDecodeMatrix(geometryState.uvDecodeMatrix);
 
-                aPosition(binder((triangleGeometry || geometryState).positionsBuf, onBindAttribute));
-                aNormal && aNormal(binder(geometryState.normalsBuf, onBindAttribute));
-                aUV && aUV(binder(geometryState.uvBuf, onBindAttribute));
-                aColor && aColor(binder(geometryState.colorsBuf, onBindAttribute));
-                aPickColor && aPickColor(binder(triangleGeometry.pickColorsBuf, onBindAttribute));
+                setPosition(binder((triangleGeometry || geometryState).positionsBuf, onBindAttribute));
+                setNormal && setNormal(binder(geometryState.normalsBuf, onBindAttribute));
+                setUV && setUV(binder(geometryState.uvBuf, onBindAttribute));
+                setColor && setColor(binder(geometryState.colorsBuf, onBindAttribute));
+                setPickColor && setPickColor(binder(triangleGeometry.pickColorsBuf, onBindAttribute));
             };
         })();
         const setGeneralMaterialInputsState = setupPointSize && (function() {
@@ -514,18 +515,18 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
 };
 
 const lazyShaderUniform = function(name, type, getUniformValue) {
-    const variable = {
-        appendDefinitions: (src) => variable.needed && src.push(`uniform ${type} ${name};`),
+    let needed = false;
+    return {
+        appendDefinitions: (src) => needed && src.push(`uniform ${type} ${name};`),
         toString: () => {
-            variable.needed = true;
+            needed = true;
             return name;
         },
         setupInputs: (getUniformSetter) => {
-            const setUniform = variable.needed && getUniformSetter(name);
+            const setUniform = needed && getUniformSetter(name);
             return setUniform && ((...args) => setUniform(getUniformValue(...args)));
         }
     };
-    return variable;
 };
 
 export const setupTexture = (name, type, getValue, initValue) => {
