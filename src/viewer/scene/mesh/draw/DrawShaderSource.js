@@ -157,6 +157,8 @@ export const DrawShaderSource = function(mesh) {
         materialAlphaModeCutoff
     ].filter(u => u);
 
+    const colorize = lazyShaderUniform("colorize", "vec4");
+
     return {
         getHash: () => [
             mesh._state.drawHash,
@@ -383,7 +385,7 @@ export const DrawShaderSource = function(mesh) {
                 }
             });
 
-            src.push("uniform vec4 colorize;");
+            colorize.appendDefinitions(src);
 
             //================================================================================
             // MAIN
@@ -561,13 +563,13 @@ export const DrawShaderSource = function(mesh) {
                 src.push("vec3 outgoingLight = emissiveColor + ambientColor;");
             }
 
-            src.push("vec4 fragColor = vec4(outgoingLight, alpha) * colorize;");
+            src.push(`vec4 fragColor = ${colorize} * vec4(outgoingLight, alpha);`);
 
             src.push(`outColor = ${getGammaOutputExpression ? getGammaOutputExpression("fragColor") : "fragColor"};`);
         },
         setupMeshInputs: (getInputSetter) => {
-            const colorize = getInputSetter("colorize");
-            return (mesh) => colorize(mesh.colorize);
+            const setColorize = colorize.setupInputs(getInputSetter);
+            return (mesh) => setColorize(mesh.colorize);
         },
         setupMaterialInputs: (getInputSetter) => {
             const binders = activeFresnels.concat(activeTextureMaps).concat(activeUniforms).map(f => f && f.setupInputs(getInputSetter));
