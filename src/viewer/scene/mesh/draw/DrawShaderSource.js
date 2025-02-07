@@ -171,7 +171,6 @@ export const DrawShaderSource = function(mesh) {
         setsLineWidth: true,
         useGammaOutput: true,
         meshStateBackground: background,
-        transformClipPos: clipPos => background ? `${clipPos}.xyww` : clipPos,
         appendVertexDefinitions: (src) => {
             src.push("out vec3 vViewPosition;");
             lightSetup.appendDefinitions(src);
