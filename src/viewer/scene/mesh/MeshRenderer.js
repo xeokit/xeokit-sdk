@@ -497,42 +497,36 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
     }
 };
 
-export const setupTexture = (name, type, getValue, initValue) => {
-    return initValue && (function() {
-        const map    = lazyShaderUniform(name + "Map", type);
-        const matrix = initValue._state.matrix && lazyShaderUniform(name + "MapMatrix", "mat4");
-        const swizzle = (type === "samplerCube") ? "xyz" : "xy";
-        const getTexCoordExpression = texPos => (matrix ? `(${matrix} * ${texPos}).${swizzle}` : `${texPos}.${swizzle}`);
-        return {
-            appendDefinitions: (src) => {
-                map.appendDefinitions(src);
-                matrix && matrix.appendDefinitions(src);
-            },
-            getTexCoordExpression: getTexCoordExpression,
-            getValueExpression: (texturePos, bias) => {
-                const texel = (bias
-                               ? `texture(${map}, ${getTexCoordExpression(texturePos)}, ${bias})`
-                               : `texture(${map}, ${getTexCoordExpression(texturePos)})`);
-                const enc = initValue.encoding;
-                return (enc !== LinearEncoding) ? `${TEXTURE_DECODE_FUNCS[enc]}(${texel})` : texel;
-            },
-            setupInputs: (getInputSetter) => {
-                const setMap    = map.setupInputs(getInputSetter);
-                const setMatrix = matrix && matrix.setupInputs(getInputSetter);
-                return setMap && function(...args) {
-                    const value = getValue(...args);
-                    const tex = value._state.texture;
-                    if (tex) {
-                        setMap(tex);
-                        const mtx = setMatrix && value._state.matrix;
-                        if (mtx) {
-                            setMatrix(mtx);
-                        }
+export const setupTexture = (name, type, encoding, hasMatrix) => {
+    const map    = lazyShaderUniform(name + "Map", type);
+    const matrix = hasMatrix && lazyShaderUniform(name + "MapMatrix", "mat4");
+    const swizzle = (type === "samplerCube") ? "xyz" : "xy";
+    const getTexCoordExpression = texPos => (matrix ? `(${matrix} * ${texPos}).${swizzle}` : `${texPos}.${swizzle}`);
+    return {
+        appendDefinitions: (src) => {
+            map.appendDefinitions(src);
+            matrix && matrix.appendDefinitions(src);
+        },
+        getTexCoordExpression: getTexCoordExpression,
+        getValueExpression: (texturePos, bias) => {
+            const texel = (bias
+                           ? `texture(${map}, ${getTexCoordExpression(texturePos)}, ${bias})`
+                           : `texture(${map}, ${getTexCoordExpression(texturePos)})`);
+            return (encoding !== LinearEncoding) ? `${TEXTURE_DECODE_FUNCS[encoding]}(${texel})` : texel;
+        },
+        setupInputs: (getInputSetter) => {
+            const setMap    = map.setupInputs(getInputSetter);
+            const setMatrix = matrix && matrix.setupInputs(getInputSetter);
+            return setMap && function(tex, mtx) {
+                if (tex) {
+                    setMap(tex);
+                    if (mtx && setMatrix) {
+                        setMatrix(mtx);
                     }
-                };
-            }
-        };
-    })();
+                }
+            };
+        }
+    };
 };
 
 export const createLightSetup = function(lightsState, setupCubes) {
@@ -612,8 +606,18 @@ export const createLightSetup = function(lightsState, setupCubes) {
     }).filter(v => v);
 
     const setupCubeTexture = (name, getMaps) => {
-        const getValue = () => { const m = getMaps(); return (m.length > 0) && { encoding: m[0].encoding, _state: { texture: m[0].texture } }; };
-        return setupTexture(name, "samplerCube", getValue, getValue());
+        const getValue = () => { const m = getMaps(); return (m.length > 0) && m[0]; };
+        const initMap = getValue();
+        const tex = initMap && setupTexture(name, "samplerCube", initMap.encoding, false);
+        return tex && {
+            appendDefinitions:     tex.appendDefinitions,
+            getTexCoordExpression: tex.getTexCoordExpression,
+            getValueExpression:    tex.getValueExpression,
+            setupInputs:           (getInputSetter) => {
+                const setInputsState = tex.setupInputs(getInputSetter);
+                return setInputsState && (() => setInputsState(getValue().texture, null));
+            }
+        };
     };
 
     const lightMap      = setupCubes && setupCubeTexture("light",      () => lightsState.lightMaps);
