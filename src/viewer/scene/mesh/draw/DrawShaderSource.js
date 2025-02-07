@@ -9,7 +9,6 @@ export const DrawShaderSource = function(mesh) {
     const geometryState = mesh._geometry._state;
     const primitive = geometryState.primitiveName;
     const normals = (geometryState.autoVertexNormals || geometryState.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan");
-    const background = meshState.background;
     const materialState = material._state;
     const uvs = geometryState.uvBuf;
     const phongMaterial    = (materialState.type === "PhongMaterial");
@@ -170,7 +169,6 @@ export const DrawShaderSource = function(mesh) {
         setupPointSize: true,
         setsLineWidth: true,
         useGammaOutput: true,
-        meshStateBackground: background,
         appendVertexDefinitions: (src) => {
             src.push("out vec3 vViewPosition;");
             lightSetup.appendDefinitions(src);
