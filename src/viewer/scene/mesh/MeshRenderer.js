@@ -16,7 +16,7 @@ const iota = function(n) {
     return ret;
 };
 
-const lazyShaderUniform = function(name, type) {
+export const lazyShaderUniform = function(name, type) {
     let needed = false;
     return {
         appendDefinitions: (src) => needed && src.push(`uniform ${type} ${name};`),
