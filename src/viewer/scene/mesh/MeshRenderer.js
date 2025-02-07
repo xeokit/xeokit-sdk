@@ -40,6 +40,7 @@ export const lazyShaderVariable = function(name) {
 
 export const instantiateMeshRenderer = (mesh, programSetup) => {
     const scene = mesh.scene;
+    const meshStateBackground = mesh._state.background;
     const clipping = (function() {
         const sectionPlanesState = scene._sectionPlanesState;
         const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
@@ -173,7 +174,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                 src.push("mat4 viewMatrix1 = viewMatrix;");
                 if (stationary) {
                     src.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
-                } else if (programSetup.meshStateBackground) {
+                } else if (meshStateBackground) {
                     src.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
                 }
                 src.push(`mat4 viewMatrix2 = ${billboardIfApplicable("viewMatrix1")};`);
@@ -193,7 +194,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             return src;
         })();
 
-        const gl_Position = (programSetup.meshStateBackground
+        const gl_Position = (meshStateBackground
                              ? "clipPos.xyww"
                              : (programSetup.isPick
                                 ? `vec4((clipPos.xy / clipPos.w - ${pickClipPos}) * clipPos.w, clipPos.zw)`
@@ -402,7 +403,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                 const origin = mesh.origin;
                 const camera = scene.camera;
                 const project = camera.project;
-                const actsAsBackground = programSetup.canActAsBackground && meshState.background;
+                const actsAsBackground = programSetup.canActAsBackground && meshStateBackground;
 
                 if (frameCtx.lastProgramId !== program.id) {
                     frameCtx.lastProgramId = program.id;
