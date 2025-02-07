@@ -68,7 +68,24 @@ export const DrawShaderSource = function(mesh) {
     const m = metallicMaterial;
     const s = specularMaterial;
 
-    const setup2dTexture = (name, getMaterialValue) => uvs && setupTexture(name, "sampler2D", getMaterialValue, getMaterialValue(material));
+    const setup2dTexture = (name, getMaterialValue) => {
+        return uvs && (function() {
+            const initTex = getMaterialValue(material);
+            const tex = initTex && setupTexture(name, "sampler2D", initTex.encoding, !!initTex._state.matrix);
+            return tex && {
+                appendDefinitions:     tex.appendDefinitions,
+                getTexCoordExpression: tex.getTexCoordExpression,
+                getValueExpression:    tex.getValueExpression,
+                setupInputs:           (getInputSetter) => {
+                    const setInputsState = tex.setupInputs(getInputSetter);
+                    return setInputsState && ((mtl) => {
+                        const value = getMaterialValue(mtl);
+                        setInputsState(value._state.texture, value._state.matrix);
+                    });
+                }
+            };
+        })();
+    };
 
     const ambientMap   = (p          ) && setup2dTexture("ambient",   mtl => mtl._ambientMap);
     const baseColorMap = (     m     ) && setup2dTexture("baseColor", mtl => mtl._baseColorMap);
