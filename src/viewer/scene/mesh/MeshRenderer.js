@@ -145,7 +145,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
     programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord", fragmentViewMatrix);
 
     const programVertexOutputs = [ ];
-    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color, attributes.pickColor, uvDecoded, worldNormal, viewNormal);
+    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color, attributes.pickColor, uvDecoded, worldNormal, { viewNormal: viewNormal, viewMatrix: "viewMatrix2", viewPosition: "viewPosition" });
 
     const buildVertexShader = () => {
         const billboard = mesh.billboard;
