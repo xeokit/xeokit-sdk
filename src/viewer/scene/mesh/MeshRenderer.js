@@ -124,7 +124,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
 
     const attributes = {
         position:  lazyShaderAttribute("position",  "vec3"),
-        color:     lazyShaderAttribute("color",     "vec4"),
+        color:     geometryState.colorsBuf && lazyShaderAttribute("color", "vec4"),
         pickColor: lazyShaderAttribute("pickColor", "vec4"),
         uv:        lazyShaderAttribute("uv",        "vec2"),
         normal:    lazyShaderAttribute("normal",    "vec3")
@@ -140,12 +140,14 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
     const worldNormal = lazyShaderVariable("worldNormal");
     const viewNormal  = lazyShaderVariable("viewNormal");
     const fragmentViewMatrix = lazyShaderVariable("viewMatrix");
+    const fragmentColor = attributes.color && lazyShaderVariable("fragmentColor");
+    const fragmentPickColor = lazyShaderVariable("fragmentPickColor");
 
     const programFragmentOutputs = [ ];
-    programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord", fragmentViewMatrix);
+    programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord", fragmentViewMatrix, { color: fragmentColor, pickColor: fragmentPickColor });
 
     const programVertexOutputs = [ ];
-    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color, attributes.pickColor, uvDecoded, { worldPosition: "worldPosition", worldNormal: worldNormal }, { viewNormal: viewNormal, viewMatrix: "viewMatrix2", viewPosition: "viewPosition" });
+    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, uvDecoded, { worldPosition: "worldPosition", worldNormal: worldNormal }, { viewNormal: viewNormal, viewMatrix: "viewMatrix2", viewPosition: "viewPosition" });
 
     const buildVertexShader = () => {
         const billboard = mesh.billboard;
@@ -187,13 +189,15 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             }
             viewNormalDefinition && src.push(viewNormalDefinition);
             setupPointSize && src.push(`gl_PointSize = ${pointSize};`);
+            fragmentColor && fragmentColor.needed && src.push(`${fragmentColor} = ${attributes.color};`);
+            fragmentPickColor.needed && src.push(`${fragmentPickColor} = ${attributes.pickColor};`);
             return src;
         })();
 
         const src = [];
         src.push("#version 300 es");
         src.push("// " + programSetup.programName + " vertex shader");
-        Object.values(attributes).forEach(a => a.appendDefinitions(src));
+        Object.values(attributes).forEach(a => a && a.appendDefinitions(src));
         src.push("uniform mat4 modelMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
@@ -230,6 +234,8 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             src.push("   return mat;");
             src.push("}");
         }
+        fragmentColor && fragmentColor.needed && src.push(`out vec4 ${fragmentColor};`);
+        fragmentPickColor.needed && src.push(`out vec4 ${fragmentPickColor};`);
         pointSize.appendDefinitions(src);
         modelNormalMatrix.appendDefinitions(src);
         viewNormalMatrix.appendDefinitions(src);
@@ -272,6 +278,8 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             src.push("uniform bool clippable;");
             clipping.appendDefinitions(src);
         }
+        fragmentColor && fragmentColor.needed && src.push(`in vec4 ${fragmentColor};`);
+        fragmentPickColor.needed && src.push(`in vec4 ${fragmentPickColor};`);
         gammaOutputSetup && gammaOutputSetup.appendDefinitions(src);
         programSetup.appendFragmentDefinitions(src);
         src.push("void main(void) {");
@@ -313,7 +321,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             const setPosition  = attributes.position.setupInputs(getInputSetter);
             const setNormal    = attributes.normal.setupInputs(getInputSetter);
             const setUV        = attributes.uv.setupInputs(getInputSetter);
-            const setColor     = attributes.color.setupInputs(getInputSetter);
+            const setColor     = attributes.color && attributes.color.setupInputs(getInputSetter);
             const setPickColor = attributes.pickColor.setupInputs(getInputSetter);
 
             const binder = (arrayBuf, onBindAttribute) => ({ // see ArrayBuf.js and Attribute.js
