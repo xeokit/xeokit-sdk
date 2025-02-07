@@ -31,7 +31,7 @@ export const LambertShaderSource = function(mesh) {
             lightSetup.appendDefinitions(src);
             src.push("out vec4 vColor;");
         },
-        appendVertexOutputs: (src, color, pickColor, uv, world, view) => {
+        appendVertexOutputs: (src, uv, world, view) => {
             src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
             normals && lightSetup.directionalLights.forEach(light => {
                 src.push(`reflectedColor += max(dot(${view.viewNormal}, ${light.getDirection(view.viewMatrix, view.viewPosition)}), 0.0) * ${light.getColor()};`);
