@@ -1,4 +1,4 @@
-import {createLightSetup, setupTexture} from "../MeshRenderer.js";
+import {createLightSetup, lazyShaderUniform, setupTexture} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tempVec4 = math.vec4();
 
@@ -20,37 +20,37 @@ export const DrawShaderSource = function(mesh) {
     const hasNonAmbientLighting = normals && ((lightSetup.directionalLights.length > 0) || lightSetup.lightMap || lightSetup.reflectionMap);
 
     const setupFresnel = (name, colorSwizzle, getMaterialValue) => {
-        const edgeBias    = name + "FresnelEdgeBias";
-        const centerBias  = name + "FresnelCenterBias";
-        const power       = name + "FresnelPower";
-        const edgeColor   = name + "FresnelEdgeColor";
-        const centerColor = name + "FresnelCenterColor";
+        const edgeBias    = lazyShaderUniform(name + "FresnelEdgeBias",   "float");
+        const centerBias  = lazyShaderUniform(name + "FresnelCenterBias", "float");
+        const power       = lazyShaderUniform(name + "FresnelPower",      "float");
+        const edgeColor   = lazyShaderUniform(name + "FresnelEdgeColor",   "vec3");
+        const centerColor = lazyShaderUniform(name + "FresnelCenterColor", "vec3");
 
         return normals && getMaterialValue(material) && {
             appendDefinitions: (src) => {
-                src.push(`uniform float ${edgeBias};`);
-                src.push(`uniform float ${centerBias};`);
-                src.push(`uniform float ${power};`);
-                src.push(`uniform vec3  ${edgeColor};`);
-                src.push(`uniform vec3  ${centerColor};`);
+                edgeBias.appendDefinitions(src);
+                centerBias.appendDefinitions(src);
+                power.appendDefinitions(src);
+                edgeColor.appendDefinitions(src);
+                centerColor.appendDefinitions(src);
             },
             getValueExpression: (viewEyeDir, viewNormal) => {
                 const fresnel = `fresnel(${viewEyeDir}, ${viewNormal}, ${edgeBias}, ${centerBias}, ${power})`;
                 return `mix(${edgeColor + colorSwizzle}, ${centerColor + colorSwizzle}, ${fresnel})`;
             },
             setupInputs: (getInputSetter) => {
-                const uEdgeBias    = getInputSetter(edgeBias);
-                const uCenterBias  = getInputSetter(centerBias);
-                const uPower       = getInputSetter(power);
-                const uEdgeColor   = getInputSetter(edgeColor);
-                const uCenterColor = getInputSetter(centerColor);
+                const setEdgeBias    = edgeBias.setupInputs(getInputSetter);
+                const setCenterBias  = centerBias.setupInputs(getInputSetter);
+                const setPower       = power.setupInputs(getInputSetter);
+                const setEdgeColor   = edgeColor.setupInputs(getInputSetter);
+                const setCenterColor = centerColor.setupInputs(getInputSetter);
                 return (mtl) => {
                     const value = getMaterialValue(mtl);
-                    uEdgeBias   (value.edgeBias);
-                    uCenterBias (value.centerBias);
-                    uPower      (value.power);
-                    uEdgeColor  (value.edgeColor);
-                    uCenterColor(value.centerColor);
+                    setEdgeBias   (value.edgeBias);
+                    setCenterBias (value.centerBias);
+                    setPower      (value.power);
+                    setEdgeColor  (value.edgeColor);
+                    setCenterColor(value.centerColor);
                 };
             }
         };
@@ -116,12 +116,13 @@ export const DrawShaderSource = function(mesh) {
     const setupUniform = (name, type, getMaterialValue) => {
         const initValue = getMaterialValue(material);
         const isDefined = (type === "float") ? ((initValue !== undefined) && (initValue !== null)) : initValue;
+        const uniform = lazyShaderUniform(name, type);
         return isDefined && {
-            appendDefinitions: (src) => src.push(`uniform ${type} ${name};`),
-            getValueExpression: () => name,
+            appendDefinitions: uniform.appendDefinitions,
+            toString: uniform.toString,
             setupInputs: (getInputSetter) => {
-                const setUniform = getInputSetter(name);
-                return (mtl) => setUniform(getMaterialValue(mtl));
+                const setUniform = uniform.setupInputs(getInputSetter);
+                return setUniform && ((mtl) => setUniform(getMaterialValue(mtl)));
             }
         };
     };
@@ -398,14 +399,9 @@ export const DrawShaderSource = function(mesh) {
                 src.push("vec4 texturePos = vec4(vUV.s, vUV.t, 1.0, 1.0);");
             }
 
-            const diffuseColor = (materialDiffuse
-                                  ? materialDiffuse.getValueExpression()
-                                  : (materialBaseColor
-                                     ? materialBaseColor.getValueExpression()
-                                     : "vec3(1.0)"));
-            src.push(`vec3 diffuseColor = ${diffuseColor};`);
+            src.push(`vec3 diffuseColor = ${materialDiffuse || materialBaseColor || "vec3(1.0)"};`);
 
-            src.push(`vec4 alphaModeCutoff = ${materialAlphaModeCutoff ? materialAlphaModeCutoff.getValueExpression() : "vec4(1.0, 0.0, 0.0, 0.0)"};`);
+            src.push(`vec4 alphaModeCutoff = ${materialAlphaModeCutoff || "vec4(1.0, 0.0, 0.0, 0.0)"};`);
             src.push("float alpha = alphaModeCutoff[0];");
             alphaMap && src.push(`alpha *= ${alphaMap.getValueExpression("texturePos")}.r;`);
 
@@ -424,17 +420,17 @@ export const DrawShaderSource = function(mesh) {
                 src.push("alpha *= diffuseTexel.a;");
             }
 
-            src.push(`vec3 emissiveColor = ${materialEmissive ? materialEmissive.getValueExpression() : "vec3(0.0)"};`);
+            src.push(`vec3 emissiveColor = ${materialEmissive || "vec3(0.0)"};`);
             emissiveMap && src.push(`emissiveColor = ${emissiveMap.getValueExpression("texturePos")}.rgb;`);
 
             if (hasNonAmbientLighting) {
 
-                src.push(`vec3 specular    = ${materialSpecular   ? materialSpecular.getValueExpression()   : "vec3(1.0)"};`);
-                src.push(`float glossiness = ${materialGlossiness ? materialGlossiness.getValueExpression() : "1.0"};`);
-                src.push(`float metallic   = ${materialMetallic   ? materialMetallic.getValueExpression()   : "1.0"};`);
-                src.push(`float roughness  = ${materialRoughness  ? materialRoughness.getValueExpression()  : "1.0"};`);
-                src.push(`float shininess  = ${materialShininess  ? materialShininess.getValueExpression()  : "1.0"};`);
-                src.push(`float specularF0 = ${materialSpecularF0 ? materialSpecularF0.getValueExpression() : "1.0"};`);
+                src.push(`vec3 specular    = ${materialSpecular   || "vec3(1.0)"};`);
+                src.push(`float glossiness = ${materialGlossiness || "1.0"};`);
+                src.push(`float metallic   = ${materialMetallic   || "1.0"};`);
+                src.push(`float roughness  = ${materialRoughness  || "1.0"};`);
+                src.push(`float shininess  = ${materialShininess  || "1.0"};`);
+                src.push(`float specularF0 = ${materialSpecularF0 || "1.0"};`);
                 src.push(`float occlusion  = ${occlusionMap ? `${occlusionMap.getValueExpression("texturePos")}.r` : "1.0"};`);
 
                 //--------------------------------------------------------------------------------
@@ -563,7 +559,7 @@ export const DrawShaderSource = function(mesh) {
                 const ambient = phongMaterial && `${lightSetup.getAmbientColor()} * diffuseColor`;
                 src.push("vec3 outgoingLight = emissiveColor + occlusion * (reflDiff + reflSpec)" + (ambient ? (" + " + ambient) : "") + ";");
             } else {
-                src.push(`vec3 ambientColor = ${materialAmbient ? materialAmbient.getValueExpression() : "vec3(1.0)"};`);
+                src.push(`vec3 ambientColor = ${materialAmbient || "vec3(1.0)"};`);
                 ambientMap && src.push(`ambientColor *= ${ambientMap.getValueExpression("texturePos")}.rgb;`);
                 src.push(`ambientColor *= ${lightSetup.getAmbientColor()};`);
                 src.push("vec3 outgoingLight = emissiveColor + ambientColor;");
