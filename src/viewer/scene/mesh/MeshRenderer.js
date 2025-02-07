@@ -139,9 +139,10 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
     const uvDecoded   = lazyShaderVariable("uvDecoded");
     const worldNormal = lazyShaderVariable("worldNormal");
     const viewNormal  = lazyShaderVariable("viewNormal");
+    const fragmentViewMatrix = lazyShaderVariable("viewMatrix");
 
     const programFragmentOutputs = [ ];
-    programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord");
+    programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord", fragmentViewMatrix);
 
     const programVertexOutputs = [ ];
     programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, attributes.color, attributes.pickColor, uvDecoded, worldNormal, viewNormal);
@@ -260,6 +261,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
+        fragmentViewMatrix.needed && src.push("uniform mat4 viewMatrix;");
         if (getLogDepth) {
             src.push("uniform float logDepthBufFC;");
             src.push("in float isPerspective;");
