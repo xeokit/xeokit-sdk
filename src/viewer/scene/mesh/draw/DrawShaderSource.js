@@ -196,16 +196,16 @@ export const DrawShaderSource = function(mesh) {
                 src.push("out vec4 vColor;");
             }
         },
-        appendVertexOutputs: (src, color, pickColor, uv, worldNormal, viewNormal) => {
+        appendVertexOutputs: (src, color, pickColor, uv, worldNormal, view) => {
             if (texturePosNeeded) {
                 src.push(`vUV = ${uv};`);
             }
             if (geometryState.colors) {
                 src.push(`vColor = ${color};`);
             }
-            src.push("vViewPosition = viewPosition.xyz;");
+            src.push(`vViewPosition = ${view.viewPosition}.xyz;`);
             if (normals) {
-                src.push(`vViewNormal = ${viewNormal};`);
+                src.push(`vViewNormal = ${view.viewNormal};`);
                 if (lightSetup.lightMap) {
                     src.push(`vWorldNormal = ${worldNormal};`);
                 }
@@ -213,7 +213,7 @@ export const DrawShaderSource = function(mesh) {
                     src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
                     lightSetup.directionalLights.forEach((light, i) => {
                         if (light.isWorldSpace) {
-                            src.push(`vViewLightReverseDir${i} = ${light.getDirection("viewMatrix2", null)};`);
+                            src.push(`vViewLightReverseDir${i} = ${light.getDirection(view.viewMatrix, null)};`);
                         }
                         if (light.shadowParameters) {
                             src.push(`vShadowPosFromLight${i} = (texUnitConverter * ${light.shadowParameters.getShadowProjMatrix()} * (${light.shadowParameters.getShadowViewMatrix()} * worldPosition)).xyz;`);
