@@ -20,7 +20,7 @@ export const EmphasisShaderSource = function(mesh, isFill) {
             src.push("uniform vec4 uColor;");
             src.push("out vec4 vColor;");
         },
-        appendVertexOutputs: (src, color, pickColor, uv, world, view) => {
+        appendVertexOutputs: (src, uv, world, view) => {
             if (lightSetup) {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
                 const geometry = mesh._geometry;
