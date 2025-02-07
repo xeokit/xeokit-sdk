@@ -1,4 +1,4 @@
-import {createLightSetup, lazyShaderUniform, setupTexture} from "../MeshRenderer.js";
+import {createLightSetup, lazyShaderUniform, lazyShaderVariable, setupTexture} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tempVec4 = math.vec4();
 
@@ -111,8 +111,6 @@ export const DrawShaderSource = function(mesh) {
         normalMap
     ].filter(t => t);
 
-    const texturePosNeeded = activeTextureMaps.length > 0;
-
     const setupUniform = (name, type, getMaterialValue) => {
         const initValue = getMaterialValue(material);
         const isDefined = (type === "float") ? ((initValue !== undefined) && (initValue !== null)) : initValue;
@@ -158,6 +156,7 @@ export const DrawShaderSource = function(mesh) {
     ].filter(u => u);
 
     const colorize = lazyShaderUniform("colorize", "vec4");
+    const texturePos = lazyShaderVariable("texturePos");
 
     return {
         getHash: () => [
@@ -191,16 +190,16 @@ export const DrawShaderSource = function(mesh) {
                     src.push("out vec3 vWorldNormal;");
                 }
             }
-            if (texturePosNeeded) {
-                src.push("out vec2 vUV;");
+            if (texturePos.needed) {
+                src.push(`out vec4 ${texturePos};`);
             }
             if (geometryState.colors) {
                 src.push("out vec4 vColor;");
             }
         },
         appendVertexOutputs: (src, color, pickColor, uv, world, view) => {
-            if (texturePosNeeded) {
-                src.push(`vUV = ${uv};`);
+            if (texturePos.needed) {
+                src.push(`${texturePos} = vec4(${uv}, 1.0, 1.0);`);
             }
             if (geometryState.colors) {
                 src.push(`vColor = ${color};`);
@@ -318,8 +317,8 @@ export const DrawShaderSource = function(mesh) {
                 src.push("in vec4 vColor;");
             }
 
-            if (texturePosNeeded) {
-                src.push("in vec2 vUV;");
+            if (texturePos.needed) {
+                src.push(`in vec4 ${texturePos};`);
             }
 
             if (normals) {
@@ -393,33 +392,29 @@ export const DrawShaderSource = function(mesh) {
             src.push("out vec4 outColor;");
         },
         appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord, viewMatrix) => {
-            if (texturePosNeeded) {
-                src.push("vec4 texturePos = vec4(vUV.s, vUV.t, 1.0, 1.0);");
-            }
-
             src.push(`vec3 diffuseColor = ${materialDiffuse || materialBaseColor || "vec3(1.0)"};`);
 
             src.push(`vec4 alphaModeCutoff = ${materialAlphaModeCutoff || "vec4(1.0, 0.0, 0.0, 0.0)"};`);
             src.push("float alpha = alphaModeCutoff[0];");
-            alphaMap && src.push(`alpha *= ${alphaMap.getValueExpression("texturePos")}.r;`);
+            alphaMap && src.push(`alpha *= ${alphaMap.getValueExpression(texturePos)}.r;`);
 
             if (geometryState.colors) {
                 src.push("diffuseColor *= vColor.rgb;");
                 src.push("alpha *= vColor.a;");
             }
             if (baseColorMap) {
-                src.push("vec4 baseColorTexel = " + baseColorMap.getValueExpression("texturePos") + ";");
+                src.push("vec4 baseColorTexel = " + baseColorMap.getValueExpression(texturePos) + ";");
                 src.push("diffuseColor *= baseColorTexel.rgb;");
                 src.push("alpha *= baseColorTexel.a;");
             }
             if (diffuseMap) {
-                src.push("vec4 diffuseTexel = " + diffuseMap.getValueExpression("texturePos") + ";");
+                src.push("vec4 diffuseTexel = " + diffuseMap.getValueExpression(texturePos) + ";");
                 src.push("diffuseColor *= diffuseTexel.rgb;");
                 src.push("alpha *= diffuseTexel.a;");
             }
 
             src.push(`vec3 emissiveColor = ${materialEmissive || "vec3(0.0)"};`);
-            emissiveMap && src.push(`emissiveColor = ${emissiveMap.getValueExpression("texturePos")}.rgb;`);
+            emissiveMap && src.push(`emissiveColor = ${emissiveMap.getValueExpression(texturePos)}.rgb;`);
 
             if (hasNonAmbientLighting) {
 
@@ -429,33 +424,33 @@ export const DrawShaderSource = function(mesh) {
                 src.push(`float roughness  = ${materialRoughness  || "1.0"};`);
                 src.push(`float shininess  = ${materialShininess  || "1.0"};`);
                 src.push(`float specularF0 = ${materialSpecularF0 || "1.0"};`);
-                src.push(`float occlusion  = ${occlusionMap ? `${occlusionMap.getValueExpression("texturePos")}.r` : "1.0"};`);
+                src.push(`float occlusion  = ${occlusionMap ? `${occlusionMap.getValueExpression(texturePos)}.r` : "1.0"};`);
 
                 //--------------------------------------------------------------------------------
                 // SHADING
                 //--------------------------------------------------------------------------------
 
-                metallicMap  && src.push(`metallic  *= ${metallicMap.getValueExpression("texturePos")}.r;`);
-                roughnessMap && src.push(`roughness *= ${roughnessMap.getValueExpression("texturePos")}.r;`);
+                metallicMap  && src.push(`metallic  *= ${metallicMap.getValueExpression(texturePos)}.r;`);
+                roughnessMap && src.push(`roughness *= ${roughnessMap.getValueExpression(texturePos)}.r;`);
 
                 if (metallicRoughnessMap) {
-                    src.push("vec4 metalRoughTexel = " + metallicRoughnessMap.getValueExpression("texturePos") + ";");
+                    src.push("vec4 metalRoughTexel = " + metallicRoughnessMap.getValueExpression(texturePos) + ";");
                     src.push("metallic  *= metalRoughTexel.b;");
                     src.push("roughness *= metalRoughTexel.g;");
                 }
 
-                specularMap   && src.push(`specular *= ${specularMap.getValueExpression("texturePos")}.rgb;`);
-                glossinessMap && src.push(`glossiness *= ${glossinessMap.getValueExpression("texturePos")}.r;`);
+                specularMap   && src.push(`specular *= ${specularMap.getValueExpression(texturePos)}.rgb;`);
+                glossinessMap && src.push(`glossiness *= ${glossinessMap.getValueExpression(texturePos)}.r;`);
 
                 if (specularGlossinessMap) {
-                    src.push("vec4 specGlossTexel = " + specularGlossinessMap.getValueExpression("texturePos") + ";"); // TODO: what if only RGB texture?
+                    src.push("vec4 specGlossTexel = " + specularGlossinessMap.getValueExpression(texturePos) + ";"); // TODO: what if only RGB texture?
                     src.push("specular   *= specGlossTexel.rgb;");
                     src.push("glossiness *= specGlossTexel.a;");
                 }
 
                 const vViewNormalized = "normalize(vViewNormal)";
                 const viewNormal = (normalMap
-                                    ? `perturbNormal2Arb(vViewPosition, ${vViewNormalized}, ${normalMap.getTexCoordExpression("texturePos")}, ${normalMap.getValueExpression("texturePos")})`
+                                    ? `perturbNormal2Arb(vViewPosition, ${vViewNormalized}, ${normalMap.getTexCoordExpression(texturePos)}, ${normalMap.getValueExpression(texturePos)})`
                                     : vViewNormalized);
                 src.push(`vec3 viewNormal = ${viewNormal};`);
 
@@ -558,7 +553,7 @@ export const DrawShaderSource = function(mesh) {
                 src.push("vec3 outgoingLight = emissiveColor + occlusion * (reflDiff + reflSpec)" + (ambient ? (" + " + ambient) : "") + ";");
             } else {
                 src.push(`vec3 ambientColor = ${materialAmbient || "vec3(1.0)"};`);
-                ambientMap && src.push(`ambientColor *= ${ambientMap.getValueExpression("texturePos")}.rgb;`);
+                ambientMap && src.push(`ambientColor *= ${ambientMap.getValueExpression(texturePos)}.rgb;`);
                 src.push(`ambientColor *= ${lightSetup.getAmbientColor()};`);
                 src.push("vec3 outgoingLight = emissiveColor + ambientColor;");
             }
