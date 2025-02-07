@@ -28,6 +28,16 @@ export const lazyShaderUniform = function(name, type) {
     };
 };
 
+export const lazyShaderVariable = function(name) {
+    const variable = {
+        toString: () => {
+            variable.needed = true;
+            return name;
+        }
+    };
+    return variable;
+};
+
 export const instantiateMeshRenderer = (mesh, programSetup) => {
     const scene = mesh.scene;
     const clipping = (function() {
@@ -118,16 +128,6 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         pickColor: lazyShaderAttribute("pickColor", "vec4"),
         uv:        lazyShaderAttribute("uv",        "vec2"),
         normal:    lazyShaderAttribute("normal",    "vec3")
-    };
-
-    const lazyShaderVariable = function(name) {
-        const variable = {
-            toString: () => {
-                variable.needed = true;
-                return name;
-            }
-        };
-        return variable;
     };
 
     const pointSize             = lazyShaderUniform("pointSize",             "float");
