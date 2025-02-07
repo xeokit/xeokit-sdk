@@ -228,10 +228,6 @@ export const DrawShaderSource = function(mesh) {
             src.push("}");
 
             if (normals) {
-                if (lightSetup.reflectionMap) {
-                    src.push("uniform mat4 viewMatrix;");
-                }
-
                 //--------------------------------------------------------------------------------
                 // SHADING FUNCTIONS
                 //--------------------------------------------------------------------------------
@@ -394,7 +390,7 @@ export const DrawShaderSource = function(mesh) {
             //================================================================================
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src, getGammaOutputExpression) => {
+        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord, viewMatrix) => {
             if (texturePosNeeded) {
                 src.push("vec4 texturePos = vec4(vUV.s, vUV.t, 1.0, 1.0);");
             }
@@ -513,7 +509,7 @@ export const DrawShaderSource = function(mesh) {
                                           const blinnExpFromRoughness = `2.0 / pow(material.specularRoughness + 0.0001, 2.0) - 2.0`;
                                           const specularBRDFContrib = "BRDF_Specular_GGX_Environment(viewNormal, viewEyeDir, material.specularColor, material.specularRoughness)";
 
-                                          const viewReflectVec = `normalize((vec4(${reflectVec}, 0.0) * viewMatrix).xyz)`;
+                                          const viewReflectVec = `normalize((vec4(${reflectVec}, 0.0) * ${viewMatrix}).xyz)`;
                                           const maxMIPLevelScalar = "4.0";
                                           const desiredMIPLevel = `${maxMIPLevelScalar} - 0.39624 - 0.25 * log2(pow(${blinnExpFromRoughness}, 2.0) + 1.0)`;
                                           const mipLevel = `clamp(${desiredMIPLevel}, 0.0, ${maxMIPLevelScalar})`; //TODO: a random factor - fix this
