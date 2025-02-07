@@ -193,16 +193,10 @@ export const DrawShaderSource = function(mesh) {
             if (texturePos.needed) {
                 src.push(`out vec4 ${texturePos};`);
             }
-            if (geometryState.colors) {
-                src.push("out vec4 vColor;");
-            }
         },
-        appendVertexOutputs: (src, color, pickColor, uv, world, view) => {
+        appendVertexOutputs: (src, uv, world, view) => {
             if (texturePos.needed) {
                 src.push(`${texturePos} = vec4(${uv}, 1.0, 1.0);`);
-            }
-            if (geometryState.colors) {
-                src.push(`vColor = ${color};`);
             }
             src.push(`vViewPosition = ${view.viewPosition}.xyz;`);
             if (normals) {
@@ -313,10 +307,6 @@ export const DrawShaderSource = function(mesh) {
 
             src.push("in vec3 vViewPosition;");
 
-            if (geometryState.colors) {
-                src.push("in vec4 vColor;");
-            }
-
             if (texturePos.needed) {
                 src.push(`in vec4 ${texturePos};`);
             }
@@ -391,16 +381,16 @@ export const DrawShaderSource = function(mesh) {
             //================================================================================
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord, viewMatrix) => {
+        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord, viewMatrix, attributes) => {
             src.push(`vec3 diffuseColor = ${materialDiffuse || materialBaseColor || "vec3(1.0)"};`);
 
             src.push(`vec4 alphaModeCutoff = ${materialAlphaModeCutoff || "vec4(1.0, 0.0, 0.0, 0.0)"};`);
             src.push("float alpha = alphaModeCutoff[0];");
             alphaMap && src.push(`alpha *= ${alphaMap.getValueExpression(texturePos)}.r;`);
 
-            if (geometryState.colors) {
-                src.push("diffuseColor *= vColor.rgb;");
-                src.push("alpha *= vColor.a;");
+            if (attributes.color) {
+                src.push(`diffuseColor *= ${attributes.color}.rgb;`);
+                src.push(`alpha *= ${attributes.color}.a;`);
             }
             if (baseColorMap) {
                 src.push("vec4 baseColorTexel = " + baseColorMap.getValueExpression(texturePos) + ";");
