@@ -1,0 +1,281 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+
+    <style>
+
+        #myCanvas {
+            background: lightblue;
+        }
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+        .xeokit-camera-pivot-marker {
+            color: #ffffff;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 15px;
+            border: 2px solid #ebebeb;
+            background: black;
+            visibility: hidden;
+            box-shadow: 5px 5px 15px 1px #000000;
+            z-index: 10000;
+            pointer-events: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<canvas id="myNavCubeCanvas"></canvas>
+<div class="slideout-sidebar">
+    <h1>Info</h1>
+    <p>Scene graph with double-precision geometry, rendered <b>with</b> logarithmic depth buffer enabled</p>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/nodes/Node.js~Node.html"
+               target="_other">Node</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+               target="_other">PhongMaterial</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {
+        Viewer,
+        NavCubePlugin,
+        PhongMaterial,
+        Mesh,
+        Node,
+        ReadableGeometry,
+        buildBoxGeometry,
+        math
+    } from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer with a logarithmic depth buffer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        logarithmicDepthBufferEnabled: false // <<--- Disable logarithmic depth buffer (default)
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Configure Camera
+    //
+    // Since our viewer has a logarithmic depth buffer,
+    // we can set a huge distance for the Camera's far clipping plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.camera.eye = [1841341.4943041557, 2435.7015793568917, -5182009.256037191];
+    viewer.camera.look = [1842215.561857325, -98.53293939639616, -5177009.767748618];
+    viewer.camera.up = [0.07693555158566205, 0.8946686100264034, 0.4400556773132614];
+
+    viewer.camera.perspective.near = 1.0;
+    viewer.camera.perspective.far = 100000000; // 1000000km
+
+    viewer.camera.ortho.near = 1.0;
+    viewer.camera.ortho.far = 100000000; // 1000000km
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Configure CameraControl
+    //
+    // Show a dot about the pivot point, whenever we orbit the Camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.cameraControl.followPointer = true;
+
+    const pivotElement = document.createRange().createContextualFragment("<div class='xeokit-camera-pivot-marker'></div>").firstChild;
+    document.body.appendChild(pivotElement);
+    viewer.cameraControl.pivotElement = pivotElement;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Tweak edges color
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.edgeMaterial.edgeColor = [.3, .3, .3];
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Add a NavCube
+    //----------------------------------------------------------------------------------------------------------------------
+
+    new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
+        visible: true,           // Initially visible (default)
+        size: 250,               // NavCube size in pixels (default is 200)
+        alignment: "topRight",   // Align NavCube to top-left of Viewer canvas
+        topMargin: 170,          // 170 pixels margin from top of Viewer canvas
+        cameraFly: true,       // Fly camera to each selected axis/diagonal
+        cameraFitFOV: 45,        // How much field-of-view the scene takes once camera has fitted it to view
+        cameraFlyDuration: 0.5 // How long (in seconds) camera takes to fly to each new axis/diagonal
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Mouse over Entities to highlight them
+    //------------------------------------------------------------------------------------------------------------------
+
+    let lastPickedEntity = null;
+    viewer.scene.input.on("mousemove", function (coords) {
+        const hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+        if (hit) {
+            if (!lastPickedEntity || hit.entity.id !== lastPickedEntity.id) {
+                if (lastPickedEntity) {
+                    lastPickedEntity.highlighted = false;
+                }
+                lastPickedEntity = hit.entity;
+                hit.entity.highlighted = true;
+            }
+        } else {
+            if (lastPickedEntity) {
+                lastPickedEntity.highlighted = false;
+                lastPickedEntity = null;
+            }
+        }
+    });
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Programmatically build a scene graph
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const OFFSET = 500000.0;
+
+    for (let x = -OFFSET; x < OFFSET; x += 250000.0) {
+        for (let z = -OFFSET; z < OFFSET; z += 250000.0) {
+            buildTable([x, 0, z], 10000);
+        }
+    }
+
+    viewer.cameraFlight.jumpTo(viewer.scene);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Creates a simple table-shaped model from Nodes and Meshes, and centered at the given origin
+    //------------------------------------------------------------------------------------------------------------------
+
+    function buildTable(origin, size = 1) {
+
+        let modelId = math.createUUID();
+
+        const boxGeometry = new ReadableGeometry(viewer.scene, buildBoxGeometry({
+            xSize: 1,
+            ySize: 1,
+            zSize: 1
+        }));
+
+        const model = new Node(viewer.scene, {
+            id: modelId,
+            isModel: true, // <--------------------- Node represents a model
+            rotation: [0, 0, 0],
+            position: [0, 0, 0],
+            scale: [size, size, size],
+            edges: true,
+
+            children: [
+
+                new Mesh(viewer.scene, { // Red table leg
+                    isObject: true, // <---------- Node represents an object
+                    origin: origin, // <---- This mesh's positions and transforms are relative to the origin
+                    position: [-4, -6, -4],
+                    scale: [1, 3, 1],
+                    rotation: [0, 0, 0],
+                    geometry: boxGeometry,
+                    material: new PhongMaterial(viewer.scene, {
+                        diffuse: [1, 0.3, 0.3]
+                    })
+                }),
+
+                new Mesh(viewer.scene, { // Green table leg
+                    isObject: true, // <---------- Node represents an object
+                    origin: origin, // <---- This mesh's positions and transforms are relative to the origin
+                    position: [4, -6, -4],
+                    scale: [1, 3, 1],
+                    rotation: [0, 0, 0],
+                    geometry: boxGeometry,
+                    material: new PhongMaterial(viewer.scene, {
+                        diffuse: [0.3, 1.0, 0.3]
+                    })
+                }),
+
+                new Mesh(viewer.scene, {// Blue table leg
+                    isObject: true, // <---------- Node represents an object
+                    origin: origin, // <---- This mesh's positions and transforms are relative to the origin
+                    position: [4, -6, 4],
+                    scale: [1, 3, 1],
+                    rotation: [0, 0, 0],
+                    geometry: boxGeometry,
+                    material: new PhongMaterial(viewer.scene, {
+                        diffuse: [0.3, 0.3, 1.0]
+                    })
+                }),
+
+                new Mesh(viewer.scene, {  // Yellow table leg
+                    isObject: true, // <---------- Node represents an object
+                    origin: origin, // <---- This mesh's positions and transforms are relative to the origin
+                    position: [-4, -6, 4],
+                    scale: [1, 3, 1],
+                    rotation: [0, 0, 0],
+                    geometry: boxGeometry,
+                    material: new PhongMaterial(viewer.scene, {
+                        diffuse: [1.0, 1.0, 0.0]
+                    })
+                }),
+
+                new Mesh(viewer.scene, { // Purple table top
+                    isObject: true, // <---------- Node represents an object
+                    origin: origin, // <---- This mesh's positions and transforms are relative to the origin
+                    position: [0, -3, 0],
+                    scale: [6, 0.5, 6],
+                    rotation: [0, 0, 0],
+                    geometry: boxGeometry,
+                    material: new PhongMaterial(viewer.scene, {
+                        diffuse: [1.0, 0.3, 1.0]
+                    })
+                })
+            ]
+        });
+
+        model.edges = true;
+    }
+
+</script>
+</html>

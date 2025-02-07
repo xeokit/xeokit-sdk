@@ -1,0 +1,189 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/performance_model_icon.png"/>
+    <h1>SceneModel</h1>
+    <h2>Non-realistic rendering, geometry reuse, triangle primitives</h2>
+    <p>
+        <a href="../../docs/class/src/viewer/scene/model/SceneModel.js~SceneModel.html"
+           target="_other">SceneModel</a> is a WebGL2-based <a
+            href="../../docs/class/src/viewer/scene/model/SceneModel.js~SceneModel.html"
+            target="_other">SceneModel</a> implementation that stores model geometry as data textures on the GPU.
+    </p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/model/SceneModel.js~SceneModel.html"
+               target="_other">SceneModel</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    import {Viewer, SceneModel} from "../../dist/xeokit-sdk.min.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
+    viewer.scene.camera.look = [0, -5.75, 0];
+    viewer.scene.camera.up = [0.37, 0.91, -0.11];
+
+    const sceneModel = new SceneModel(viewer.scene, {
+        id: "table",
+        position: [0, 0, 0],
+        scale: [1, 1, 1],
+        rotation: [0, 0, 0],
+        edges: true
+    });
+
+    sceneModel.createGeometry({
+        id: "myBoxGeometry",
+        primitive: "triangles",
+        positions: [
+            1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
+            -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
+            -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
+        ],
+        normals: [
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,// v0-v1-v2-v3 front
+            1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,// v0-v3-v4-v5 right
+            0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,// v0-v5-v6-v1 top
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0,// v1-v6-v7-v2 left
+            0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,// v7-v4-v3-v2 bottom
+            0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1// v4-v7-v6-v5 back
+        ],
+        uv: [
+            1, 0, 0, 0, 0, 1, 1, 1,// v0-v1-v2-v3 front
+            0, 0, 0, 1, 1, 1, 1, 0,// v0-v3-v4-v1 right
+            1, 1, 1, 0, 0, 0, 0, 1,// v0-v1-v6-v1 top
+            1, 0, 0, 0, 0, 1, 1, 1,// v1-v6-v7-v2 left
+            0, 1, 1, 1, 1, 0, 0, 0,// v7-v4-v3-v2 bottom
+            0, 1, 1, 1, 1, 0, 0, 0 // v4-v7-v6-v1 back
+        ],
+        indices: [
+            0, 1, 2, 0, 2, 3,            // front
+            4, 5, 6, 4, 6, 7,            // right
+            8, 9, 10, 8, 10, 11,         // top
+            12, 13, 14, 12, 14, 15,      // left
+            16, 17, 18, 16, 18, 19,      // bottom
+            20, 21, 22, 20, 22, 23
+        ]
+    });
+
+    sceneModel.createTexture({
+        id: "myColorTexture",
+        src: "../../assets/textures/diffuse/uvGrid2.jpg"
+    });
+
+    sceneModel.createTexture({
+        id: "myMetallicRoughnessTexture",
+        src: "../../assets/textures/alpha/crosshatchAlphaMap.jpg"
+    });
+
+    sceneModel.createTextureSet({
+        id: "myTextureSet",
+        colorTextureId: "myColorTexture",
+        metallicRoughnessTextureId: "myMetallicRoughnessTexture"
+    });
+
+    sceneModel.createMesh({
+        id: "redLegMesh",
+        geometryId: "myBoxGeometry",
+        textureSetId: "myTextureSet",
+        position: [-4, -6, -4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [1, 0.3, 0.3]
+    });
+
+    sceneModel.createEntity({
+        id: "redLeg",
+        meshIds: ["redLegMesh"]
+    });
+
+    sceneModel.createMesh({
+        id: "greenLegMesh",
+        geometryId: "myBoxGeometry",
+        textureSetId: "myTextureSet",
+        position: [4, -6, -4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [0.3, 1.0, 0.3]
+    });
+
+    sceneModel.createEntity({
+        id: "greenLeg",
+        meshIds: ["greenLegMesh"]
+    });
+
+    sceneModel.createMesh({
+        id: "blueLegMesh",
+        geometryId: "myBoxGeometry",
+        textureSetId: "myTextureSet",
+        position: [4, -6, 4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [0.3, 0.3, 1.0]
+    });
+
+    sceneModel.createEntity({
+        id: "blueLeg",
+        meshIds: ["blueLegMesh"]
+    });
+
+    sceneModel.createMesh({
+        id: "yellowLegMesh",
+        geometryId: "myBoxGeometry",
+        textureSetId: "myTextureSet",
+        position: [-4, -6, 4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [1.0, 1.0, 0.0]
+    });
+
+    sceneModel.createEntity({
+        id: "yellowLeg",
+        meshIds: ["yellowLegMesh"]
+    });
+
+    sceneModel.createMesh({
+        id: "purpleTableTopMesh",
+        geometryId: "myBoxGeometry",
+        textureSetId: "myTextureSet",
+        position: [0, -3, 0],
+        scale: [6, 0.5, 6],
+        rotation: [0, 0, 0],
+        color: [1.0, 0.3, 1.0]
+    });
+
+    sceneModel.createEntity({
+        id: "purpleTableTop",
+        meshIds: ["purpleTableTopMesh"]
+    });
+
+    sceneModel.finalize();
+
+</script>
+</html>
+
