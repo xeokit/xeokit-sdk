@@ -198,7 +198,7 @@ export const DrawShaderSource = function(mesh) {
                 src.push("out vec4 vColor;");
             }
         },
-        appendVertexOutputs: (src, color, pickColor, uv, worldNormal, view) => {
+        appendVertexOutputs: (src, color, pickColor, uv, world, view) => {
             if (texturePosNeeded) {
                 src.push(`vUV = ${uv};`);
             }
@@ -209,7 +209,7 @@ export const DrawShaderSource = function(mesh) {
             if (normals) {
                 src.push(`vViewNormal = ${view.viewNormal};`);
                 if (lightSetup.lightMap) {
-                    src.push(`vWorldNormal = ${worldNormal};`);
+                    src.push(`vWorldNormal = ${world.worldNormal};`);
                 }
                 if (lightSetup.directionalLights.length > 0) {
                     src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
@@ -218,7 +218,7 @@ export const DrawShaderSource = function(mesh) {
                             src.push(`vViewLightReverseDir${i} = ${light.getDirection(view.viewMatrix, null)};`);
                         }
                         if (light.shadowParameters) {
-                            src.push(`vShadowPosFromLight${i} = (texUnitConverter * ${light.shadowParameters.getShadowProjMatrix()} * (${light.shadowParameters.getShadowViewMatrix()} * worldPosition)).xyz;`);
+                            src.push(`vShadowPosFromLight${i} = (texUnitConverter * ${light.shadowParameters.getShadowProjMatrix()} * (${light.shadowParameters.getShadowViewMatrix()} * ${world.worldPosition})).xyz;`);
                         }
                     });
                 }
