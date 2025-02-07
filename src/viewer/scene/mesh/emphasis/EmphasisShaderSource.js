@@ -20,14 +20,14 @@ export const EmphasisShaderSource = function(mesh, isFill) {
             src.push("uniform vec4 uColor;");
             src.push("out vec4 vColor;");
         },
-        appendVertexOutputs: (src, color, pickColor, uv, worldNormal, viewNormal) => {
+        appendVertexOutputs: (src, color, pickColor, uv, worldNormal, view) => {
             if (lightSetup) {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
                 const geometry = mesh._geometry;
                 const geometryState = geometry._state;
                 if ((geometryState.autoVertexNormals || geometryState.normalsBuf) && [ "triangles", "triangle-strip", "triangle-fan" ].includes(geometry.primitive)) {
                     lightSetup.directionalLights.forEach(light => {
-                        src.push(`reflectedColor += max(dot(${viewNormal}, ${light.getDirection("viewMatrix2", "viewPosition")}), 0.0) * ${light.getColor()};`);
+                        src.push(`reflectedColor += max(dot(${view.viewNormal}, ${light.getDirection(view.viewMatrix, view.viewPosition)}), 0.0) * ${light.getColor()};`);
                     });
                 }
                 // TODO: A blending mode for emphasis materials, to select add/multiply/mix
