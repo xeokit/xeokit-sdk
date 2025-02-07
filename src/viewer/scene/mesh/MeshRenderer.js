@@ -135,6 +135,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
     const uvDecodeMatrix        = lazyShaderUniform("uvDecodeMatrix",        "mat3");
     const modelNormalMatrix     = lazyShaderUniform("modelNormalMatrix",     "mat4");
     const viewNormalMatrix      = lazyShaderUniform("viewNormalMatrix",      "mat4");
+    const pickClipPos           = lazyShaderUniform("pickClipPos",           "vec2");
 
     const worldNormal = lazyShaderVariable("worldNormal");
     const viewNormal  = lazyShaderVariable("viewNormal");
@@ -192,6 +193,12 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             return src;
         })();
 
+        const gl_Position = (programSetup.meshStateBackground
+                             ? "clipPos.xyww"
+                             : (programSetup.isPick
+                                ? `vec4((clipPos.xy / clipPos.w - ${pickClipPos}) * clipPos.w, clipPos.zw)`
+                                : "clipPos"));
+
         const src = [];
         src.push("#version 300 es");
         src.push("// " + programSetup.programName + " vertex shader");
@@ -238,6 +245,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         pointSize.appendDefinitions(src);
         modelNormalMatrix.appendDefinitions(src);
         viewNormalMatrix.appendDefinitions(src);
+        pickClipPos.appendDefinitions(src);
         programSetup.appendVertexDefinitions && programSetup.appendVertexDefinitions(src);
         src.push("void main(void) {");
         mainVertexOutputs.forEach(line => src.push(line));
@@ -250,7 +258,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             src.push(`isPerspective = (projMatrix[2][3] == -1.0) ? 1.0 : 0.0;`);
             src.push("vFragDepth = 1.0 + clipPos.w;");
         }
-        src.push("gl_Position = " + (programSetup.transformClipPos ? programSetup.transformClipPos("clipPos") : "clipPos") + ";");
+        src.push(`gl_Position = ${gl_Position};`);
         src.push("}");
         return src;
     };
@@ -310,7 +318,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         return { errors: program.errors };
     } else {
         const getInputSetter = makeInputSetters(gl, program.handle, true);
-        const setPickClipPosState = programSetup.setupPickClipPosInputs && programSetup.setupPickClipPosInputs(getInputSetter);
+        const setPickClipPosState = pickClipPos.setupInputs(getInputSetter);
         const setProgramMeshInputsState = programSetup.setupMeshInputs && programSetup.setupMeshInputs(getInputSetter);
         const setGammaOutput = gammaOutputSetup && gammaOutputSetup.setupInputs(getInputSetter);
         const setMaterialInputsState = programSetup.setupMaterialInputs && programSetup.setupMaterialInputs(getInputSetter);
@@ -445,7 +453,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                 setProgramMeshInputsState && setProgramMeshInputsState(mesh);
                 setGammaOutput && setGammaOutput();
 
-                if (programSetup.usePickView) {
+                if (programSetup.isPick) {
                     setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, camera.viewNormalMatrix, frameCtx.pickProjMatrix, project.far);
                 } else if (programSetup.useShadowView) {
                     setMeshInputsState(mesh, frameCtx.shadowViewMatrix, camera.viewNormalMatrix, frameCtx.shadowProjMatrix, camera.project.far);
