@@ -8,7 +8,7 @@ export const EmphasisShaderSource = function(mesh, isFill) {
         getHash: () => [
             mesh._state.hash,
             mesh.scene.gammaOutput ? "go" : "", // Gamma input not needed
-            isFill && mesh.scene._lightsState.getHash()
+            lightSetup && lightSetup.getHash()
         ],
         programName: isFill ? "EmphasisFill" : "EmphasisEdges",
         dontSetFrontFace: true,
