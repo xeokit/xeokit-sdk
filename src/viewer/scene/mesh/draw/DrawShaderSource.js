@@ -2,11 +2,7 @@ import {createLightSetup, lazyShaderUniform, lazyShaderVariable, setupTexture} f
 import {math} from "../../math/math.js";
 const tempVec4 = math.vec4();
 
-export const DrawShaderSource = function(mesh) {
-    const scene = mesh.scene;
-    const material = mesh._material;
-    const meshState = mesh._state;
-    const geometryState = mesh._geometry._state;
+export const DrawShaderSource = function(meshDrawHash, geometryState, material, scene) {
     const primitive = geometryState.primitiveName;
     const normals = (geometryState.autoVertexNormals || geometryState.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan");
     const materialState = material._state;
@@ -158,10 +154,10 @@ export const DrawShaderSource = function(mesh) {
 
     return {
         getHash: () => [
-            mesh._state.drawHash,
-            mesh.scene.gammaOutput ? "go" : "",
+            meshDrawHash,
+            scene.gammaOutput ? "go" : "",
             lightSetup.getHash(),
-            mesh._material._state.hash
+            material._state.hash
         ],
         programName: "Draw",
         canActAsBackground: true,
