@@ -2,21 +2,20 @@ import {createLightSetup, lazyShaderUniform} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
-export const LambertShaderSource = function(mesh) {
-    const geometryState = mesh._geometry._state;
+export const LambertShaderSource = function(meshDrawHash, geometryState, material, scene) {
     const primitive = geometryState.primitiveName;
     const normals = (geometryState.autoVertexNormals || geometryState.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan");
-    const lightSetup = createLightSetup(mesh.scene._lightsState);
+    const lightSetup = createLightSetup(scene._lightsState);
     const colorize         = lazyShaderUniform("colorize",         "vec4");
     const materialColor    = lazyShaderUniform("materialColor",    "vec4");
     const materialEmissive = lazyShaderUniform("materialEmissive", "vec3");
 
     return {
         getHash: () => [
-            mesh._state.drawHash,
-            mesh.scene.gammaOutput ? "go" : "",
+            meshDrawHash,
+            scene.gammaOutput ? "go" : "",
             lightSetup.getHash(),
-            mesh._material._state.hash
+            material._state.hash
         ],
         programName: "Lambert",
         canActAsBackground: true,
