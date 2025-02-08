@@ -2,12 +2,14 @@ import {createLightSetup} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
-export const EmphasisShaderSource = function(mesh, isFill) {
-    const lightSetup = isFill && createLightSetup(mesh.scene._lightsState);
+export const EmphasisShaderSource = function(meshHash, geometryState, scene, isFill) {
+    const primitive = geometryState.primitiveName;
+    const normals = (geometryState.autoVertexNormals || geometryState.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan");
+    const lightSetup = isFill && createLightSetup(scene._lightsState);
     return {
         getHash: () => [
-            mesh._state.hash,
-            mesh.scene.gammaOutput ? "go" : "", // Gamma input not needed
+            meshHash,
+            scene.gammaOutput ? "go" : "", // Gamma input not needed
             lightSetup && lightSetup.getHash()
         ],
         programName: isFill ? "EmphasisFill" : "EmphasisEdges",
@@ -23,13 +25,9 @@ export const EmphasisShaderSource = function(mesh, isFill) {
         appendVertexOutputs: (src, world, view) => {
             if (lightSetup) {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-                const geometry = mesh._geometry;
-                const geometryState = geometry._state;
-                if ((geometryState.autoVertexNormals || geometryState.normalsBuf) && [ "triangles", "triangle-strip", "triangle-fan" ].includes(geometry.primitive)) {
-                    lightSetup.directionalLights.forEach(light => {
-                        src.push(`reflectedColor += max(dot(${view.viewNormal}, ${light.getDirection(view.viewMatrix, view.viewPosition)}), 0.0) * ${light.getColor()};`);
-                    });
-                }
+                normals && lightSetup.directionalLights.forEach(light => {
+                    src.push(`reflectedColor += max(dot(${view.viewNormal}, ${light.getDirection(view.viewMatrix, view.viewPosition)}), 0.0) * ${light.getColor()};`);
+                });
                 // TODO: A blending mode for emphasis materials, to select add/multiply/mix
                 //src.push("vColor = vec4((mix(reflectedColor, uColor.rgb, 0.7)), uColor.a);");
                 src.push(`vColor = vec4((${lightSetup.getAmbientColor()} + reflectedColor) * uColor.rgb, uColor.a);`);
