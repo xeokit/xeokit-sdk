@@ -160,7 +160,7 @@ export const DrawShaderSource = function(mesh) {
         getHash: () => [
             mesh._state.drawHash,
             mesh.scene.gammaOutput ? "go" : "",
-            mesh.scene._lightsState.getHash(),
+            lightSetup.getHash(),
             mesh._material._state.hash
         ],
         programName: "Draw",
