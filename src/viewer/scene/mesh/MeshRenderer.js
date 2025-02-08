@@ -643,6 +643,7 @@ export const createLightSetup = function(lightsState, setupCubes) {
     const reflectionMap = setupCubes && setupCubeTexture("reflection", () => lightsState.reflectionMaps);
 
     return {
+        getHash: () => lightsState.getHash(),
         appendDefinitions: (src) => {
             lightAmbient.appendDefinitions(src);
             directionals.forEach(light => light.appendDefinitions(src));
