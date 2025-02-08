@@ -17,8 +17,6 @@ function buildVertex(mesh) {
     const sectionPlanesState = scene._sectionPlanesState;
     const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
     const quantizedGeometry = !!mesh._geometry._state.compressGeometry;
-    const billboard = mesh._state.billboard;
-    const stationary = mesh._state.stationary;
     const src = [];
     src.push('#version 300 es');
     src.push("// Mesh picking vertex shader");
@@ -42,21 +40,6 @@ function buildVertex(mesh) {
         src.push("}");
         src.push("out float isPerspective;");
     }
-    if (billboard === "spherical" || billboard === "cylindrical") {
-        src.push("void billboard(inout mat4 mat) {");
-        src.push("   mat[0][0] = 1.0;");
-        src.push("   mat[0][1] = 0.0;");
-        src.push("   mat[0][2] = 0.0;");
-        if (billboard === "spherical") {
-            src.push("   mat[1][0] = 0.0;");
-            src.push("   mat[1][1] = 1.0;");
-            src.push("   mat[1][2] = 0.0;");
-        }
-        src.push("   mat[2][0] = 0.0;");
-        src.push("   mat[2][1] = 0.0;");
-        src.push("   mat[2][2] =1.0;");
-        src.push("}");
-    }
 
     src.push("uniform vec2 pickClipPos;");
 
@@ -72,19 +55,9 @@ function buildVertex(mesh) {
     if (quantizedGeometry) {
         src.push("localPosition = positionsDecodeMatrix * localPosition;");
     }
-    src.push("mat4 viewMatrix2 = viewMatrix;");
-    src.push("mat4 modelMatrix2 = modelMatrix;");
-    if (stationary) {
-        src.push("viewMatrix2[3][0] = viewMatrix2[3][1] = viewMatrix2[3][2] = 0.0;")
-    }
-    if (billboard === "spherical" || billboard === "cylindrical") {
-        src.push("mat4 modelViewMatrix = viewMatrix2 * modelMatrix2;");
-        src.push("billboard(modelMatrix2);");
-        src.push("billboard(viewMatrix2);");
-    }
-    src.push("   vec4 worldPosition = modelMatrix2 * localPosition;");
+    src.push("   vec4 worldPosition = modelMatrix * localPosition;");
     src.push("   worldPosition.xyz = worldPosition.xyz + offset;");
-    src.push("   vec4 viewPosition = viewMatrix2 * worldPosition;");
+    src.push("   vec4 viewPosition = viewMatrix * worldPosition;");
     if (clipping) {
         src.push("   vWorldPosition = worldPosition;");
     }
