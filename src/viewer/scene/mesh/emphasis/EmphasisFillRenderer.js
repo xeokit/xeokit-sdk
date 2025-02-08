@@ -31,6 +31,7 @@ EmphasisFillRenderer.get = function (mesh) {
     const hash = [
         mesh.scene.id,
         mesh.scene.gammaOutput ? "go" : "", // Gamma input not needed
+        mesh.scene._lightsState.getHash(),
         mesh.scene._sectionPlanesState.getHash(),
         !!mesh._geometry._state.normalsBuf ? "n" : "",
         mesh._geometry._state.compressGeometry ? "cp" : "",
