@@ -1,6 +1,6 @@
-export const ShadowShaderSource = function(mesh) {
+export const ShadowShaderSource = function(meshHash) {
     return {
-        getHash: () => [ mesh._state.hash ],
+        getHash: () => [ meshHash ],
         programName: "Shadow",
         setsLineWidth: true,
         useShadowView: true,
