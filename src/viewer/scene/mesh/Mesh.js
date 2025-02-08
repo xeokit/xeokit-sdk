@@ -322,13 +322,15 @@ class Mesh extends Component {
         };
 
         this._renderers = {
-            _drawRenderer:          wrapRenderer(() => (material.type === "LambertMaterial") ? LambertShaderSource(mesh) : DrawShaderSource(mesh)),
-            _shadowRenderer:        wrapRenderer(() => ShadowShaderSource(mesh)),
-            _emphasisEdgesRenderer: wrapRenderer(() => EmphasisShaderSource(mesh, false)),
-            _emphasisFillRenderer:  wrapRenderer(() => EmphasisShaderSource(mesh, true)),
-            _pickMeshRenderer:      wrapRenderer(() => PickMeshShaderSource(mesh)),
-            _pickTriangleRenderer:  wrapRenderer(() => PickTriangleShaderSource(mesh)),
-            _occlusionRenderer:     wrapRenderer(() => OcclusionShaderSource(mesh))
+            _drawRenderer:          wrapRenderer(() => ((material.type === "LambertMaterial")
+                                                        ? LambertShaderSource(mesh._state.drawHash, mesh._geometry._state, material, mesh.scene)
+                                                        : DrawShaderSource   (mesh._state.drawHash, mesh._geometry._state, material, mesh.scene))),
+            _shadowRenderer:        wrapRenderer(() => ShadowShaderSource(mesh._state.hash)),
+            _emphasisEdgesRenderer: wrapRenderer(() => EmphasisShaderSource(mesh._state.hash, mesh._geometry._state, mesh.scene, false)),
+            _emphasisFillRenderer:  wrapRenderer(() => EmphasisShaderSource(mesh._state.hash, mesh._geometry._state, mesh.scene, true)),
+            _pickMeshRenderer:      wrapRenderer(() => PickMeshShaderSource(mesh._state.hash)),
+            _pickTriangleRenderer:  wrapRenderer(() => PickTriangleShaderSource(mesh._state.hash)),
+            _occlusionRenderer:     wrapRenderer(() => OcclusionShaderSource(mesh._state.pickOcclusionHash))
         };
 
         this._geometry = cfg.geometry ? this._checkComponent2(["ReadableGeometry", "VBOGeometry"], cfg.geometry) : this.scene.geometry;
