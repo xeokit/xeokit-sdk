@@ -38,5 +38,6 @@ jobs:
         run: |
           echo "$DOT_ENV" > .env 
           npm run test
+          npx playwright install --with-deps chromium
         env:
           DOT_ENV: ${{ secrets.PERCY_ENV }}
