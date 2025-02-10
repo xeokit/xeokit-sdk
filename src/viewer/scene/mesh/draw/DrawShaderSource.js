@@ -2,7 +2,8 @@ import {createLightSetup, lazyShaderUniform, lazyShaderVariable, setupTexture} f
 import {math} from "../../math/math.js";
 const tempVec4 = math.vec4();
 
-export const DrawShaderSource = function(meshDrawHash, attributes, material, scene) {
+export const DrawShaderSource = function(meshDrawHash, geometry, material, scene) {
+    const attributes = geometry.attributes;
     const normals = !!attributes.normal;
     const materialState = material._state;
     const uvs = !!attributes.uv;
@@ -184,7 +185,7 @@ export const DrawShaderSource = function(meshDrawHash, attributes, material, sce
                 }
             }
         },
-        appendVertexOutputs: (src, viewMatrix) => {
+        appendVertexOutputs: (src) => {
             src.push(`vViewPosition = ${attributes.position.view}.xyz;`);
             attributes.uv && src.push(`texturePos = vec4(${attributes.uv}, 1.0, 1.0);`);
             attributes.color && src.push(`vColor = ${attributes.color};`);
@@ -197,7 +198,7 @@ export const DrawShaderSource = function(meshDrawHash, attributes, material, sce
                     src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
                     lightSetup.directionalLights.forEach((light, i) => {
                         if (light.isWorldSpace) {
-                            src.push(`vViewLightReverseDir${i} = ${light.getDirection(viewMatrix, null)};`);
+                            src.push(`vViewLightReverseDir${i} = ${light.getDirection(geometry.viewMatrix, null)};`);
                         }
                         if (light.shadowParameters) {
                             src.push(`vShadowPosFromLight${i} = (texUnitConverter * ${light.shadowParameters.getShadowProjMatrix()} * (${light.shadowParameters.getShadowViewMatrix()} * ${attributes.position.world})).xyz;`);
@@ -368,7 +369,7 @@ export const DrawShaderSource = function(meshDrawHash, attributes, material, sce
             //================================================================================
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord, viewMatrix) => {
+        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => {
             src.push(`vec3 diffuseColor = ${materialDiffuse || materialBaseColor || "vec3(1.0)"};`);
             src.push(`vec4 alphaModeCutoff = ${materialAlphaModeCutoff || "vec4(1.0, 0.0, 0.0, 0.0)"};`);
             src.push("float alpha = alphaModeCutoff[0];");
@@ -482,7 +483,7 @@ export const DrawShaderSource = function(meshDrawHash, attributes, material, sce
                                           const blinnExpFromRoughness = `2.0 / pow(material.specularRoughness + 0.0001, 2.0) - 2.0`;
                                           const specularBRDFContrib = "BRDF_Specular_GGX_Environment(viewNormal, viewEyeDir, material.specularColor, material.specularRoughness)";
 
-                                          const viewReflectVec = `normalize((vec4(${reflectVec}, 0.0) * ${viewMatrix}).xyz)`;
+                                          const viewReflectVec = `normalize((vec4(${reflectVec}, 0.0) * ${geometry.viewMatrix}).xyz)`;
                                           const maxMIPLevelScalar = "4.0";
                                           const desiredMIPLevel = `${maxMIPLevelScalar} - 0.39624 - 0.25 * log2(pow(${blinnExpFromRoughness}, 2.0) + 1.0)`;
                                           const mipLevel = `clamp(${desiredMIPLevel}, 0.0, ${maxMIPLevelScalar})`; //TODO: a random factor - fix this
