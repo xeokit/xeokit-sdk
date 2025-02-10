@@ -8,7 +8,7 @@ import {math} from '../math/math.js';
 import {createRTCViewMat} from '../math/rtcCoords.js';
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
-import {instantiateMeshRenderer} from "./MeshRenderer.js";
+import {instantiateMeshRenderer, lazyShaderVariable} from "./MeshRenderer.js";
 import {DrawShaderSource} from "./draw/DrawShaderSource.js";
 import {LambertShaderSource} from "./draw/LambertShaderSource.js";
 import {EmphasisShaderSource} from "./emphasis/EmphasisShaderSource.js";
@@ -278,7 +278,35 @@ class Mesh extends Component {
             let instance = null;
             const ensureInstance = () => {
                 if (! instance) {
-                    const programSetup = getProgramSetup();
+                    const lazyShaderAttribute = function(name, type) {
+                        let needed = false;
+                        return {
+                            appendDefinitions: (src) => needed && src.push(`in ${type} ${name};`),
+                            toString: () => {
+                                needed = true;
+                                return name;
+                            },
+                            setupInputs: (getInputSetter) => needed && getInputSetter(name)
+                        };
+                    };
+
+                    const geometryState = mesh._geometry._state;
+                    const attributes = {
+                        position:  lazyShaderAttribute("position",  "vec3"),
+                        color:     geometryState.colorsBuf && lazyShaderAttribute("color", "vec4"),
+                        pickColor: lazyShaderAttribute("pickColor", "vec4"),
+                        uv:        geometryState.uvBuf && lazyShaderAttribute("uv", "vec2"),
+                        normal:    (geometryState.autoVertexNormals || geometryState.normalsBuf) && [ "triangles", "triangle-strip", "triangle-fan" ].includes(geometryState.primitiveName) && lazyShaderAttribute("normal", "vec3")
+                    };
+                    const decodedUv = attributes.uv && lazyShaderVariable("decodedUv");
+
+                    const programSetup = getProgramSetup({
+                        position:  attributes.position,
+                        color:     attributes.color,
+                        pickColor: attributes.pickColor,
+                        uv:        decodedUv,
+                        normal:    attributes.normal
+                    });
                     const hash = [
                         programSetup.programName,
                         mesh.scene.canvas.canvas.id,
@@ -286,7 +314,7 @@ class Mesh extends Component {
                         mesh._geometry._state.hash
                     ].concat(programSetup.getHash()).join(";");
                     if (! (hash in renderersCache)) {
-                        const renderer = instantiateMeshRenderer(mesh, programSetup);
+                        const renderer = instantiateMeshRenderer(mesh, attributes, decodedUv, programSetup);
                         if (renderer.errors) {
                             console.log(renderer.errors.join("\n"));
                             return;
@@ -321,15 +349,16 @@ class Mesh extends Component {
             };
         };
 
+        const scene = mesh.scene;
         this._renderers = {
-            _drawRenderer:          wrapRenderer(() => ((material.type === "LambertMaterial")
-                                                        ? LambertShaderSource(mesh._state.drawHash, mesh._geometry._state, material, mesh.scene)
-                                                        : DrawShaderSource   (mesh._state.drawHash, mesh._geometry._state, material, mesh.scene))),
+            _drawRenderer:          wrapRenderer((attrs) => ((material.type === "LambertMaterial")
+                                                             ? LambertShaderSource(mesh._state.drawHash, attrs, material, scene)
+                                                             : DrawShaderSource   (mesh._state.drawHash, attrs, material, scene))),
             _shadowRenderer:        wrapRenderer(() => ShadowShaderSource(mesh._state.hash)),
-            _emphasisEdgesRenderer: wrapRenderer(() => EmphasisShaderSource(mesh._state.hash, mesh._geometry._state, mesh.scene, false)),
-            _emphasisFillRenderer:  wrapRenderer(() => EmphasisShaderSource(mesh._state.hash, mesh._geometry._state, mesh.scene, true)),
+            _emphasisEdgesRenderer: wrapRenderer((attrs) => EmphasisShaderSource(mesh._state.hash, attrs, scene, false)),
+            _emphasisFillRenderer:  wrapRenderer((attrs) => EmphasisShaderSource(mesh._state.hash, attrs, scene, true)),
             _pickMeshRenderer:      wrapRenderer(() => PickMeshShaderSource(mesh._state.hash)),
-            _pickTriangleRenderer:  wrapRenderer(() => PickTriangleShaderSource(mesh._state.hash)),
+            _pickTriangleRenderer:  wrapRenderer((attrs) => PickTriangleShaderSource(mesh._state.hash, attrs)),
             _occlusionRenderer:     wrapRenderer(() => OcclusionShaderSource(mesh._state.pickOcclusionHash))
         };
 
