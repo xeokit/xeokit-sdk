@@ -122,10 +122,10 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     const pickClipPos           = lazyShaderUniform("pickClipPos",           "vec2");
 
     const programFragmentOutputs = [ ];
-    programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord", "viewMatrix2");
+    programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord");
 
     const programVertexOutputs = [ ];
-    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, "viewMatrix2");
+    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs);
 
     const billboard = mesh.billboard;
     const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
