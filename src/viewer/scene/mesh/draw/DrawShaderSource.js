@@ -185,7 +185,7 @@ export const DrawShaderSource = function(meshDrawHash, attributes, material, sce
             }
         },
         appendVertexOutputs: (src, world, view) => {
-            src.push(`vViewPosition = ${view.viewPosition}.xyz;`);
+            src.push(`vViewPosition = ${attributes.position.view}.xyz;`);
             attributes.uv && src.push(`texturePos = vec4(${attributes.uv}, 1.0, 1.0);`);
             attributes.color && src.push(`vColor = ${attributes.color};`);
             if (normals) {
@@ -200,7 +200,7 @@ export const DrawShaderSource = function(meshDrawHash, attributes, material, sce
                             src.push(`vViewLightReverseDir${i} = ${light.getDirection(view.viewMatrix, null)};`);
                         }
                         if (light.shadowParameters) {
-                            src.push(`vShadowPosFromLight${i} = (texUnitConverter * ${light.shadowParameters.getShadowProjMatrix()} * (${light.shadowParameters.getShadowViewMatrix()} * ${world.worldPosition})).xyz;`);
+                            src.push(`vShadowPosFromLight${i} = (texUnitConverter * ${light.shadowParameters.getShadowProjMatrix()} * (${light.shadowParameters.getShadowViewMatrix()} * ${attributes.position.world})).xyz;`);
                         }
                     });
                 }
