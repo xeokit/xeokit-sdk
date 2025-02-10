@@ -2,7 +2,7 @@ import {createLightSetup} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
-export const EmphasisShaderSource = function(meshHash, attributes, scene, isFill) {
+export const EmphasisShaderSource = function(meshHash, geometry, scene, isFill) {
     const lightSetup = isFill && createLightSetup(scene._lightsState);
     return {
         getHash: () => [
@@ -20,11 +20,12 @@ export const EmphasisShaderSource = function(meshHash, attributes, scene, isFill
             src.push("uniform vec4 uColor;");
             src.push("out vec4 vColor;");
         },
-        appendVertexOutputs: (src, viewMatrix) => {
+        appendVertexOutputs: (src) => {
             if (lightSetup) {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
+                const attributes = geometry.attributes;
                 attributes.normal && lightSetup.directionalLights.forEach(light => {
-                    src.push(`reflectedColor += max(dot(${attributes.normal.view}, ${light.getDirection(viewMatrix, attributes.position.view)}), 0.0) * ${light.getColor()};`);
+                    src.push(`reflectedColor += max(dot(${attributes.normal.view}, ${light.getDirection(geometry.viewMatrix, attributes.position.view)}), 0.0) * ${light.getColor()};`);
                 });
                 // TODO: A blending mode for emphasis materials, to select add/multiply/mix
                 //src.push("vColor = vec4((mix(reflectedColor, uColor.rgb, 0.7)), uColor.a);");
