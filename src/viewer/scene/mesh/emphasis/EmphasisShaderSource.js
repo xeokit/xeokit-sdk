@@ -2,9 +2,7 @@ import {createLightSetup} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
-export const EmphasisShaderSource = function(meshHash, geometryState, scene, isFill) {
-    const primitive = geometryState.primitiveName;
-    const normals = (geometryState.autoVertexNormals || geometryState.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan");
+export const EmphasisShaderSource = function(meshHash, attributes, scene, isFill) {
     const lightSetup = isFill && createLightSetup(scene._lightsState);
     return {
         getHash: () => [
@@ -25,7 +23,7 @@ export const EmphasisShaderSource = function(meshHash, geometryState, scene, isF
         appendVertexOutputs: (src, world, view) => {
             if (lightSetup) {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-                normals && lightSetup.directionalLights.forEach(light => {
+                attributes.normal && lightSetup.directionalLights.forEach(light => {
                     src.push(`reflectedColor += max(dot(${view.viewNormal}, ${light.getDirection(view.viewMatrix, view.viewPosition)}), 0.0) * ${light.getColor()};`);
                 });
                 // TODO: A blending mode for emphasis materials, to select add/multiply/mix
