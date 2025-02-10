@@ -38,7 +38,7 @@ export const lazyShaderVariable = function(name) {
     return variable;
 };
 
-export const instantiateMeshRenderer = (mesh, programSetup) => {
+export const instantiateMeshRenderer = (mesh, attributes, decodedUv, programSetup) => {
     const scene = mesh.scene;
     const meshStateBackground = mesh._state.background;
     const clipping = (function() {
@@ -111,26 +111,6 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
         };
     })();
 
-    const lazyShaderAttribute = function(name, type) {
-        let needed = false;
-        return {
-            appendDefinitions: (src) => needed && src.push(`in ${type} ${name};`),
-            toString: () => {
-                needed = true;
-                return name;
-            },
-            setupInputs: (getInputSetter) => needed && getInputSetter(name)
-        };
-    };
-
-    const attributes = {
-        position:  lazyShaderAttribute("position",  "vec3"),
-        color:     geometryState.colorsBuf && lazyShaderAttribute("color", "vec4"),
-        pickColor: lazyShaderAttribute("pickColor", "vec4"),
-        uv:        geometryState.uvBuf && lazyShaderAttribute("uv", "vec2"),
-        normal:    lazyShaderAttribute("normal",    "vec3")
-    };
-
     const pointSize             = lazyShaderUniform("pointSize",             "float");
     const positionsDecodeMatrix = lazyShaderUniform("positionsDecodeMatrix", "mat4");
     const uvDecodeMatrix        = lazyShaderUniform("uvDecodeMatrix",        "mat3");
@@ -141,12 +121,9 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
     const worldNormal = lazyShaderVariable("worldNormal");
     const viewNormal  = lazyShaderVariable("viewNormal");
     const fragmentViewMatrix = lazyShaderVariable("viewMatrix");
-    const fragmentColor = attributes.color && lazyShaderVariable("fragmentColor");
-    const fragmentPickColor = lazyShaderVariable("fragmentPickColor");
-    const fragmentUv = attributes.uv && lazyShaderVariable("fragmentUv");
 
     const programFragmentOutputs = [ ];
-    programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord", fragmentViewMatrix, { color: fragmentColor, pickColor: fragmentPickColor, uv: fragmentUv });
+    programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord", fragmentViewMatrix);
 
     const programVertexOutputs = [ ];
     programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, { worldPosition: "worldPosition", worldNormal: worldNormal }, { viewNormal: viewNormal, viewMatrix: "viewMatrix2", viewPosition: "viewPosition" });
@@ -182,15 +159,13 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
                                                  ? `${billboardIfApplicable("viewMatrix1 * modelMatrix")} * localPosition`
                                                  : "viewMatrix2 * worldPosition")};`);
             }
-            fragmentUv && fragmentUv.needed && src.push(`${fragmentUv} = ${quantizedGeometry ? `(${uvDecodeMatrix} * vec3(${attributes.uv}, 1.0)).xy` : attributes.uv};`);
+            decodedUv && decodedUv.needed && src.push(`vec2 ${decodedUv} = ${quantizedGeometry ? `(${uvDecodeMatrix} * vec3(${attributes.uv}, 1.0)).xy` : attributes.uv};`);
             if (worldNormal.needed) {
                 const localNormal = quantizedGeometry ? `octDecode(${attributes.normal}.xy)` : attributes.normal;
                 src.push(`vec3 ${worldNormal} = (${billboardIfApplicable(modelNormalMatrix)} * vec4(${localNormal}, 0.0)).xyz;`);
             }
             viewNormalDefinition && src.push(viewNormalDefinition);
             setupPointSize && src.push(`gl_PointSize = ${pointSize};`);
-            fragmentColor && fragmentColor.needed && src.push(`${fragmentColor} = ${attributes.color};`);
-            fragmentPickColor.needed && src.push(`${fragmentPickColor} = ${attributes.pickColor};`);
             return src;
         })();
 
@@ -240,9 +215,6 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             src.push("   return mat;");
             src.push("}");
         }
-        fragmentColor && fragmentColor.needed && src.push(`out vec4 ${fragmentColor};`);
-        fragmentPickColor.needed && src.push(`out vec4 ${fragmentPickColor};`);
-        fragmentUv && fragmentUv.needed && src.push(`out vec2 ${fragmentUv};`);
         pointSize.appendDefinitions(src);
         modelNormalMatrix.appendDefinitions(src);
         viewNormalMatrix.appendDefinitions(src);
@@ -286,9 +258,6 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             src.push("uniform bool clippable;");
             clipping.appendDefinitions(src);
         }
-        fragmentColor && fragmentColor.needed && src.push(`in vec4 ${fragmentColor};`);
-        fragmentPickColor.needed && src.push(`in vec4 ${fragmentPickColor};`);
-        fragmentUv && fragmentUv.needed && src.push(`in vec2 ${fragmentUv};`);
         gammaOutputSetup && gammaOutputSetup.appendDefinitions(src);
         programSetup.appendFragmentDefinitions(src);
         src.push("void main(void) {");
@@ -328,7 +297,7 @@ export const instantiateMeshRenderer = (mesh, programSetup) => {
             const setPositionsDecodeMatrix = positionsDecodeMatrix.setupInputs(getInputSetter);
             const setUvDecodeMatrix = uvDecodeMatrix.setupInputs(getInputSetter);
             const setPosition  = attributes.position.setupInputs(getInputSetter);
-            const setNormal    = attributes.normal.setupInputs(getInputSetter);
+            const setNormal    = attributes.normal && attributes.normal.setupInputs(getInputSetter);
             const setUV        = attributes.uv && attributes.uv.setupInputs(getInputSetter);
             const setColor     = attributes.color && attributes.color.setupInputs(getInputSetter);
             const setPickColor = attributes.pickColor.setupInputs(getInputSetter);
