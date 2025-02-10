@@ -3,16 +3,19 @@ import {math} from "../../math/math.js";
 const tempVec4 = math.vec4();
 
 export const DrawShaderSource = function(meshDrawHash, geometry, material, scene) {
-    const attributes = geometry.attributes;
-    const normals = !!attributes.normal;
     const materialState = material._state;
-    const uvs = !!attributes.uv;
     const phongMaterial    = (materialState.type === "PhongMaterial");
     const metallicMaterial = (materialState.type === "MetallicMaterial");
     const specularMaterial = (materialState.type === "SpecularMaterial");
 
-    const lightSetup = createLightSetup(scene._lightsState, uvs);
-    const hasNonAmbientLighting = normals && ((lightSetup.directionalLights.length > 0) || lightSetup.lightMap || lightSetup.reflectionMap);
+    const attributes = geometry.attributes;
+    const hasNormals = !!attributes.normal;
+    const lightSetup = createLightSetup(scene._lightsState, !!attributes.uv);
+
+    const colorize = lazyShaderUniform("colorize", "vec4");
+
+    const perturbNormal2Arb = lazyShaderVariable("perturbNormal2Arb");
+    const fresnel = lazyShaderVariable("fresnel");
 
     const setupFresnel = (name, colorSwizzle, getMaterialValue) => {
         const edgeBias    = lazyShaderUniform(name + "FresnelEdgeBias",   "float");
@@ -21,7 +24,7 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
         const edgeColor   = lazyShaderUniform(name + "FresnelEdgeColor",   "vec3");
         const centerColor = lazyShaderUniform(name + "FresnelCenterColor", "vec3");
 
-        return normals && getMaterialValue(material) && {
+        return getMaterialValue(material) && {
             appendDefinitions: (src) => {
                 edgeBias.appendDefinitions(src);
                 centerBias.appendDefinitions(src);
@@ -30,8 +33,8 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
                 centerColor.appendDefinitions(src);
             },
             getValueExpression: (viewEyeDir, viewNormal) => {
-                const fresnel = `fresnel(${viewEyeDir}, ${viewNormal}, ${edgeBias}, ${centerBias}, ${power})`;
-                return `mix(${edgeColor + colorSwizzle}, ${centerColor + colorSwizzle}, ${fresnel})`;
+                const f = `${fresnel}(${viewEyeDir}, ${viewNormal}, ${edgeBias}, ${centerBias}, ${power})`;
+                return `mix(${edgeColor + colorSwizzle}, ${centerColor + colorSwizzle}, ${f})`;
             },
             setupInputs: (getInputSetter) => {
                 const setEdgeBias    = edgeBias.setupInputs(getInputSetter);
@@ -53,18 +56,12 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
 
     const diffuseFresnel  = setupFresnel("diffuse",  "",   mtl => mtl._diffuseFresnel);
     const specularFresnel = setupFresnel("specular", "",   mtl => mtl._specularFresnel);
-    const alphaFresnel    = setupFresnel("alpha",    ".r", mtl => mtl._alphaFresnel);
     const emissiveFresnel = setupFresnel("emissive", "",   mtl => mtl._emissiveFresnel);
+    const alphaFresnel    = setupFresnel("alpha",    ".r", mtl => mtl._alphaFresnel);
 
-    const activeFresnels = [ diffuseFresnel, specularFresnel, alphaFresnel, emissiveFresnel ].filter(f => f);
-
-
-    const p = phongMaterial;
-    const m = metallicMaterial;
-    const s = specularMaterial;
 
     const setup2dTexture = (name, getMaterialValue) => {
-        return uvs && (function() {
+        return attributes.uv && (function() {
             const initTex = getMaterialValue(material);
             const tex = initTex && setupTexture(name, "sampler2D", initTex.encoding, !!initTex._state.matrix);
             return tex && {
@@ -82,29 +79,20 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
         })();
     };
 
-    const ambientMap   = (p          ) && setup2dTexture("ambient",   mtl => mtl._ambientMap);
-    const baseColorMap = (     m     ) && setup2dTexture("baseColor", mtl => mtl._baseColorMap);
-    const diffuseMap   = (p ||      s) && setup2dTexture("diffuse",   mtl => mtl._diffuseMap);
-    const emissiveMap  = (p || m || s) && setup2dTexture("emissive",  mtl => mtl._emissiveMap);
-    const occlusionMap = (p || m || s) && setup2dTexture("occlusion", mtl => mtl._occlusionMap);
-    const alphaMap     = (p || m || s) && setup2dTexture("alpha",     mtl => mtl._alphaMap);
+    const ambientMap            = setup2dTexture("ambient",            mtl => mtl._ambientMap);
+    const baseColorMap          = setup2dTexture("baseColor",          mtl => mtl._baseColorMap);
+    const diffuseMap            = setup2dTexture("diffuse",            mtl => mtl._diffuseMap);
+    const emissiveMap           = setup2dTexture("emissive",           mtl => mtl._emissiveMap);
+    const occlusionMap          = setup2dTexture("occlusion",          mtl => mtl._occlusionMap);
+    const alphaMap              = setup2dTexture("alpha",              mtl => mtl._alphaMap);
+    const metallicMap           = setup2dTexture("metallic",           mtl => mtl._metallicMap);
+    const roughnessMap          = setup2dTexture("roughness",          mtl => mtl._roughnessMap);
+    const metallicRoughnessMap  = setup2dTexture("metallicRoughness",  mtl => mtl._metallicRoughnessMap);
+    const specularMap           = setup2dTexture("specular",           mtl => mtl._specularMap);
+    const glossinessMap         = setup2dTexture("glossiness",         mtl => mtl._glossinessMap);
+    const specularGlossinessMap = setup2dTexture("specularGlossiness", mtl => mtl._specularGlossinessMap);
+    const normalMap             = setup2dTexture("normal",             mtl => mtl._normalMap);
 
-    const metallicMap           = m && normals && setup2dTexture("metallic",           mtl => mtl._metallicMap);
-    const roughnessMap          = m && normals && setup2dTexture("roughness",          mtl => mtl._roughnessMap);
-    const metallicRoughnessMap  = m && normals && setup2dTexture("metallicRoughness",  mtl => mtl._metallicRoughnessMap);
-
-    const specularMap           = (p || s) && normals && setup2dTexture("specular",           mtl => mtl._specularMap);
-    const glossinessMap         = (     s) && normals && setup2dTexture("glossiness",         mtl => mtl._glossinessMap);
-    const specularGlossinessMap = (     s) && normals && setup2dTexture("specularGlossiness", mtl => mtl._specularGlossinessMap);
-
-    const normalMap             = (p || m || s) && normals && setup2dTexture("normal", mtl => mtl._normalMap);
-
-    const activeTextureMaps = [
-        ambientMap, baseColorMap, diffuseMap, emissiveMap, occlusionMap, alphaMap,
-        metallicMap, roughnessMap, metallicRoughnessMap,
-        specularMap, glossinessMap, specularGlossinessMap,
-        normalMap
-    ].filter(t => t);
 
     const setupUniform = (name, type, getMaterialValue) => {
         const initValue = getMaterialValue(material);
@@ -120,19 +108,17 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
         };
     };
 
-    const l = hasNonAmbientLighting;
-
-    const materialAmbient         = (p          ) && (!l) && setupUniform("materialAmbient", "vec3",  mtl => mtl.ambient);
-    const materialDiffuse         = (p ||      s) &&   l  && setupUniform("materialDiffuse", "vec3",  mtl => mtl.diffuse);
-    const materialBaseColor       = (     m     ) && setupUniform("materialBaseColor",       "vec3",  mtl => mtl.baseColor);
-    const materialEmissive        = (p || m || s) && setupUniform("materialEmissive",        "vec3",  mtl => mtl.emissive);
-    const materialSpecular        = (p ||      s) &&   l && setupUniform("materialSpecular", "vec3",  mtl => mtl.specular);
-    const materialGlossiness      = (          s) && setupUniform("materialGlossiness",      "float", mtl => mtl.glossiness);
-    const materialMetallic        = (     m     ) && setupUniform("materialMetallic",        "float", mtl => mtl.metallic);
-    const materialRoughness       = (     m || s) && setupUniform("materialRoughness",       "float", mtl => mtl.roughness);
-    const materialShininess       = (p          ) && l && setupUniform("materialShininess",  "float", mtl => mtl.shininess);
-    const materialSpecularF0      = (     m     ) && setupUniform("materialSpecularF0",      "float", mtl => mtl.specularF0);
-    const materialAlphaModeCutoff = (p || m || s) && setupUniform("materialAlphaModeCutoff", "vec4",  mtl => {
+    const materialAmbient         = setupUniform("materialAmbient",    "vec3",  mtl => mtl.ambient);
+    const materialDiffuse         = setupUniform("materialDiffuse",    "vec3",  mtl => mtl.diffuse);
+    const materialBaseColor       = setupUniform("materialBaseColor",  "vec3",  mtl => mtl.baseColor);
+    const materialEmissive        = setupUniform("materialEmissive",   "vec3",  mtl => mtl.emissive);
+    const materialSpecular        = setupUniform("materialSpecular",   "vec3",  mtl => mtl.specular);
+    const materialGlossiness      = setupUniform("materialGlossiness", "float", mtl => mtl.glossiness);
+    const materialMetallic        = setupUniform("materialMetallic",   "float", mtl => mtl.metallic);
+    const materialRoughness       = setupUniform("materialRoughness",  "float", mtl => mtl.roughness);
+    const materialShininess       = setupUniform("materialShininess",  "float", mtl => mtl.shininess);
+    const materialSpecularF0      = setupUniform("materialSpecularF0", "float", mtl => mtl.specularF0);
+    const materialAlphaModeCutoff = setupUniform("materialAlphaModeCutoff", "vec4",  mtl => {
         const alpha = mtl.alpha;
         if ((alpha !== undefined) && (alpha !== null)) {
             tempVec4[0] = alpha;
@@ -144,13 +130,18 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
         }
     });
 
-    const activeUniforms = [
+    const materialInputs = [
+        diffuseFresnel, specularFresnel, emissiveFresnel, alphaFresnel,
+
+        ambientMap, baseColorMap, diffuseMap, emissiveMap, occlusionMap, alphaMap,
+        metallicMap, roughnessMap, metallicRoughnessMap,
+        specularMap, glossinessMap, specularGlossinessMap,
+        normalMap,
+
         materialAmbient, materialDiffuse, materialBaseColor, materialEmissive, materialSpecular,
         materialGlossiness, materialMetallic, materialRoughness, materialShininess, materialSpecularF0,
         materialAlphaModeCutoff
-    ].filter(u => u);
-
-    const colorize = lazyShaderUniform("colorize", "vec4");
+        ].filter(i => i);
 
     return {
         getHash: () => [
@@ -170,7 +161,7 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
             attributes.uv && src.push("out vec4 texturePos;");
             attributes.color && src.push("out vec4 vColor;");
             lightSetup.appendDefinitions(src);
-            if (normals) {
+            if (hasNormals) {
                 src.push("out vec3 vViewNormal;");
                 lightSetup.directionalLights.forEach((light, i) => {
                     if (light.isWorldSpace) {
@@ -189,7 +180,7 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
             src.push(`vViewPosition = ${attributes.position.view}.xyz;`);
             attributes.uv && src.push(`texturePos = vec4(${attributes.uv}, 1.0, 1.0);`);
             attributes.color && src.push(`vColor = ${attributes.color};`);
-            if (normals) {
+            if (hasNormals) {
                 src.push(`vViewNormal = ${attributes.normal.view};`);
                 if (lightSetup.lightMap) {
                     src.push(`vWorldNormal = ${attributes.normal.world};`);
@@ -214,7 +205,7 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
             src.push("  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );");
             src.push("}");
 
-            if (normals) {
+            if (hasNormals) {
                 //--------------------------------------------------------------------------------
                 // SHADING FUNCTIONS
                 //--------------------------------------------------------------------------------
@@ -299,27 +290,17 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
 
             src.push("in vec3 vViewPosition;");
 
-            if (normals) {
+            if (hasNormals) {
                 src.push("in vec3 vViewNormal;");
                 if (lightSetup.lightMap) {
                     src.push("in vec3 vWorldNormal;");
                 }
             }
 
-            //--------------------------------------------------------------------------------
-            // MATERIAL CHANNEL INPUTS
-            //--------------------------------------------------------------------------------
+            materialInputs.forEach(i => i.appendDefinitions(src));
 
-            activeUniforms.forEach(u => u.appendDefinitions(src));
-
-            //--------------------------------------------------------------------------------
-            // MATERIAL TEXTURE INPUTS
-            //--------------------------------------------------------------------------------
-
-            activeTextureMaps.forEach(t => t.appendDefinitions(src));
-
-            if (normalMap) {
-                src.push("vec3 perturbNormal2Arb( vec3 eye_pos, vec3 surf_norm, vec2 uv, vec4 texel ) {");
+            if (perturbNormal2Arb.needed) {
+                src.push(`vec3 ${perturbNormal2Arb}( vec3 eye_pos, vec3 surf_norm, vec2 uv, vec4 texel ) {`);
                 src.push("      vec3 q0 = vec3( dFdx( eye_pos.x ), dFdx( eye_pos.y ), dFdx( eye_pos.z ) );");
                 src.push("      vec3 q1 = vec3( dFdy( eye_pos.x ), dFdy( eye_pos.y ), dFdy( eye_pos.z ) );");
                 src.push("      vec2 st0 = dFdx( uv.st );");
@@ -338,14 +319,12 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
             // MATERIAL FRESNEL INPUTS
             //--------------------------------------------------------------------------------
 
-            if (activeFresnels.length > 0) {
-                src.push("float fresnel(vec3 eyeDir, vec3 normal, float edgeBias, float centerBias, float power) {");
+            if (fresnel.needed) {
+                src.push(`float ${fresnel}(vec3 eyeDir, vec3 normal, float edgeBias, float centerBias, float power) {`);
                 src.push("    float fr = abs(dot(eyeDir, normal));");
                 src.push("    float finalFr = clamp((fr - edgeBias) / (centerBias - edgeBias), 0.0, 1.0);");
                 src.push("    return pow(finalFr, power);");
                 src.push("}");
-
-                activeFresnels.forEach(f => f.appendDefinitions(src));
             }
 
             //--------------------------------------------------------------------------------
@@ -353,7 +332,7 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
             //--------------------------------------------------------------------------------
 
             lightSetup.appendDefinitions(src);
-            normals && lightSetup.directionalLights.forEach((light, i) => {
+            hasNormals && lightSetup.directionalLights.forEach((light, i) => {
                 if (light.isWorldSpace) {
                     src.push(`in vec3 vViewLightReverseDir${i};`);
                 }
@@ -370,64 +349,65 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
             src.push("out vec4 outColor;");
         },
         appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => {
-            src.push(`vec3 diffuseColor = ${materialDiffuse || materialBaseColor || "vec3(1.0)"};`);
-            src.push(`vec4 alphaModeCutoff = ${materialAlphaModeCutoff || "vec4(1.0, 0.0, 0.0, 0.0)"};`);
+            const hasNonAmbientLighting = hasNormals && ((lightSetup.directionalLights.length > 0) || lightSetup.lightMap || lightSetup.reflectionMap);
+            src.push(`vec3 diffuseColor = ${(hasNonAmbientLighting && (phongMaterial || specularMaterial) && materialDiffuse) || (metallicMaterial && materialBaseColor) || "vec3(1.0)"};`);
+            src.push(`vec4 alphaModeCutoff = ${((phongMaterial || metallicMaterial || specularMaterial) && materialAlphaModeCutoff) || "vec4(1.0, 0.0, 0.0, 0.0)"};`);
             src.push("float alpha = alphaModeCutoff[0];");
-            alphaMap && src.push(`alpha *= ${alphaMap.getValueExpression("texturePos")}.r;`);
+            (phongMaterial || metallicMaterial || specularMaterial) && alphaMap && src.push(`alpha *= ${alphaMap.getValueExpression("texturePos")}.r;`);
 
             if (attributes.color) {
                 src.push("diffuseColor *= vColor.rgb;");
                 src.push("alpha *= vColor.a;");
             }
-            if (baseColorMap) {
+            if (metallicMaterial && baseColorMap) {
                 src.push("vec4 baseColorTexel = " + baseColorMap.getValueExpression("texturePos") + ";");
                 src.push("diffuseColor *= baseColorTexel.rgb;");
                 src.push("alpha *= baseColorTexel.a;");
             }
-            if (diffuseMap) {
+            if ((phongMaterial || specularMaterial) && diffuseMap) {
                 src.push("vec4 diffuseTexel = " + diffuseMap.getValueExpression("texturePos") + ";");
                 src.push("diffuseColor *= diffuseTexel.rgb;");
                 src.push("alpha *= diffuseTexel.a;");
             }
 
-            src.push(`vec3 emissiveColor = ${materialEmissive || "vec3(0.0)"};`);
-            emissiveMap && src.push(`emissiveColor = ${emissiveMap.getValueExpression("texturePos")}.rgb;`);
+            src.push(`vec3 emissiveColor = ${((phongMaterial || metallicMaterial || specularMaterial) && materialEmissive) || "vec3(0.0)"};`);
+            (phongMaterial || metallicMaterial || specularMaterial) && emissiveMap && src.push(`emissiveColor = ${emissiveMap.getValueExpression("texturePos")}.rgb;`);
 
             if (hasNonAmbientLighting) {
 
-                src.push(`vec3 specular    = ${materialSpecular   || "vec3(1.0)"};`);
-                src.push(`float glossiness = ${materialGlossiness || "1.0"};`);
-                src.push(`float metallic   = ${materialMetallic   || "1.0"};`);
-                src.push(`float roughness  = ${materialRoughness  || "1.0"};`);
-                src.push(`float shininess  = ${materialShininess  || "1.0"};`);
-                src.push(`float specularF0 = ${materialSpecularF0 || "1.0"};`);
-                src.push(`float occlusion  = ${occlusionMap ? `${occlusionMap.getValueExpression("texturePos")}.r` : "1.0"};`);
+                src.push(`vec3 specular    = ${((phongMaterial || specularMaterial) && materialSpecular)   || "vec3(1.0)"};`);
+                src.push(`float glossiness = ${(specularMaterial && materialGlossiness) || "1.0"};`);
+                src.push(`float metallic   = ${(metallicMaterial && materialMetallic)   || "1.0"};`);
+                src.push(`float roughness  = ${((metallicMaterial || specularMaterial) && materialRoughness)  || "1.0"};`);
+                src.push(`float shininess  = ${(phongMaterial && materialShininess)|| "1.0"};`);
+                src.push(`float specularF0 = ${(metallicMaterial && materialSpecularF0) || "1.0"};`);
+                src.push(`float occlusion  = ${((phongMaterial || metallicMaterial || specularMaterial) && occlusionMap) ? `${occlusionMap.getValueExpression("texturePos")}.r` : "1.0"};`);
 
                 //--------------------------------------------------------------------------------
                 // SHADING
                 //--------------------------------------------------------------------------------
 
-                metallicMap  && src.push(`metallic  *= ${metallicMap.getValueExpression("texturePos")}.r;`);
-                roughnessMap && src.push(`roughness *= ${roughnessMap.getValueExpression("texturePos")}.r;`);
+                metallicMaterial && metallicMap  && src.push(`metallic  *= ${metallicMap.getValueExpression("texturePos")}.r;`);
+                metallicMaterial && roughnessMap && src.push(`roughness *= ${roughnessMap.getValueExpression("texturePos")}.r;`);
 
-                if (metallicRoughnessMap) {
+                if (metallicMaterial && metallicRoughnessMap) {
                     src.push("vec4 metalRoughTexel = " + metallicRoughnessMap.getValueExpression("texturePos") + ";");
                     src.push("metallic  *= metalRoughTexel.b;");
                     src.push("roughness *= metalRoughTexel.g;");
                 }
 
-                specularMap   && src.push(`specular *= ${specularMap.getValueExpression("texturePos")}.rgb;`);
-                glossinessMap && src.push(`glossiness *= ${glossinessMap.getValueExpression("texturePos")}.r;`);
+                (phongMaterial || specularMaterial) && specularMap && src.push(`specular *= ${specularMap.getValueExpression("texturePos")}.rgb;`);
+                specularMaterial && glossinessMap && src.push(`glossiness *= ${glossinessMap.getValueExpression("texturePos")}.r;`);
 
-                if (specularGlossinessMap) {
+                if (specularMaterial && specularGlossinessMap) {
                     src.push("vec4 specGlossTexel = " + specularGlossinessMap.getValueExpression("texturePos") + ";"); // TODO: what if only RGB texture?
                     src.push("specular   *= specGlossTexel.rgb;");
                     src.push("glossiness *= specGlossTexel.a;");
                 }
 
                 const vViewNormalized = "normalize(vViewNormal)";
-                const viewNormal = (normalMap
-                                    ? `perturbNormal2Arb(vViewPosition, ${vViewNormalized}, ${normalMap.getTexCoordExpression("texturePos")}, ${normalMap.getValueExpression("texturePos")})`
+                const viewNormal = (((phongMaterial || metallicMaterial || specularMaterial) && normalMap)
+                                    ? `${perturbNormal2Arb}(vViewPosition, ${vViewNormalized}, ${normalMap.getTexCoordExpression("texturePos")}, ${normalMap.getValueExpression("texturePos")})`
                                     : vViewNormalized);
                 src.push(`vec3 viewNormal = ${viewNormal};`);
 
@@ -435,8 +415,8 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
 
                 diffuseFresnel  && src.push(`diffuseColor  *= ${diffuseFresnel.getValueExpression ("viewEyeDir", "viewNormal")};`);
                 specularFresnel && src.push(`specular      *= ${specularFresnel.getValueExpression("viewEyeDir", "viewNormal")};`);
-                alphaFresnel    && src.push(`alpha         *= ${alphaFresnel.getValueExpression   ("viewEyeDir", "viewNormal")};`);
                 emissiveFresnel && src.push(`emissiveColor *= ${emissiveFresnel.getValueExpression("viewEyeDir", "viewNormal")};`);
+                alphaFresnel    && src.push(`alpha         *= ${alphaFresnel.getValueExpression   ("viewEyeDir", "viewNormal")};`);
 
                 src.push("if (alphaModeCutoff[1] == 1.0 && alpha < alphaModeCutoff[2]) {"); // ie. (alphaMode == "mask" && alpha < alphaCutoff)
                 src.push("   discard;"); // TODO: Discard earlier within this shader?
@@ -529,8 +509,8 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
                 const ambient = phongMaterial && `${lightSetup.getAmbientColor()} * diffuseColor`;
                 src.push("vec3 outgoingLight = emissiveColor + occlusion * (reflDiff + reflSpec)" + (ambient ? (" + " + ambient) : "") + ";");
             } else {
-                src.push(`vec3 ambientColor = ${materialAmbient || "vec3(1.0)"};`);
-                ambientMap && src.push(`ambientColor *= ${ambientMap.getValueExpression("texturePos")}.rgb;`);
+                src.push(`vec3 ambientColor = ${(phongMaterial && materialAmbient) || "vec3(1.0)"};`);
+                phongMaterial && ambientMap && src.push(`ambientColor *= ${ambientMap.getValueExpression("texturePos")}.rgb;`);
                 src.push(`ambientColor *= ${lightSetup.getAmbientColor()};`);
                 src.push("vec3 outgoingLight = emissiveColor + ambientColor;");
             }
@@ -544,7 +524,7 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
             return (mesh) => setColorize(mesh.colorize);
         },
         setupMaterialInputs: (getInputSetter) => {
-            const binders = activeFresnels.concat(activeTextureMaps).concat(activeUniforms).map(f => f && f.setupInputs(getInputSetter));
+            const binders = materialInputs.map(f => f.setupInputs(getInputSetter)).filter(b => b);
             return (binders.length > 0) && (mtl => binders.forEach(bind => bind(mtl)));
         },
         setupLightInputs: lightSetup.setupInputs
