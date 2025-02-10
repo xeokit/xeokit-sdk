@@ -121,21 +121,19 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     const viewNormalMatrix      = lazyShaderUniform("viewNormalMatrix",      "mat4");
     const pickClipPos           = lazyShaderUniform("pickClipPos",           "vec2");
 
-    const fragmentViewMatrix = lazyShaderVariable("viewMatrix");
-
     const programFragmentOutputs = [ ];
-    programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord", fragmentViewMatrix);
+    programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord", "viewMatrix2");
 
     const programVertexOutputs = [ ];
     programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, "viewMatrix2");
 
+    const billboard = mesh.billboard;
+    const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
+    const stationary = mesh.stationary;
+
+    const billboardIfApplicable = v => isBillboard ? `billboard(${v})` : v;
+
     const buildVertexShader = () => {
-        const billboard = mesh.billboard;
-        const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
-        const stationary = mesh.stationary;
-
-        const billboardIfApplicable = v => isBillboard ? `billboard(${v})` : v;
-
         const viewNormalDefinition = viewNormal && viewNormal.needed && `vec3 ${viewNormal} = normalize((${billboardIfApplicable(viewNormalMatrix)} * vec4(${worldNormal}, 0.0)).xyz);`;
 
         const mainVertexOutputs = (function() {
@@ -248,7 +246,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-        fragmentViewMatrix.needed && src.push("uniform mat4 viewMatrix;");
+        src.push("uniform mat4 viewMatrix;");
         if (getLogDepth) {
             src.push("uniform float logDepthBufFC;");
             src.push("in float isPerspective;");
@@ -258,6 +256,17 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
             src.push("in vec3 vWorldPosition;");
             src.push("uniform bool clippable;");
             clipping.appendDefinitions(src);
+        }
+        if (isBillboard) {
+            src.push("mat4 billboard(in mat4 matIn) {");
+            src.push("   mat4 mat = matIn;");
+            src.push("   mat[0].xyz = vec3(scale[0], 0.0, 0.0);");
+            if (billboard === "spherical") {
+                src.push("   mat[1].xyz = vec3(0.0, scale[1], 0.0);");
+            }
+            src.push("   mat[2].xyz = vec3(0.0, 0.0, 1.0);");
+            src.push("   return mat;");
+            src.push("}");
         }
         gammaOutputSetup && gammaOutputSetup.appendDefinitions(src);
         programSetup.appendFragmentDefinitions(src);
@@ -274,6 +283,17 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
             src.push("if (r > 1.0) {");
             src.push("   discard;");
             src.push("}");
+        }
+        if (programSetup.dontBillboardAnything) {
+            src.push("mat4 viewMatrix2 = viewMatrix;");
+        } else {
+            src.push("mat4 viewMatrix1 = viewMatrix;");
+            if (stationary) {
+                src.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
+            } else if (meshStateBackground) {
+                src.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
+            }
+            src.push(`mat4 viewMatrix2 = ${billboardIfApplicable("viewMatrix1")};`);
         }
         programFragmentOutputs.forEach(line => src.push(line));
         if (getLogDepth) {
