@@ -1,4 +1,4 @@
-export const PickTriangleShaderSource = function(meshHash, attributes) {
+export const PickTriangleShaderSource = function(meshHash, geometry) {
     return {
         getHash: () => [ meshHash ],
         programName: "PickTriangle",
@@ -6,11 +6,11 @@ export const PickTriangleShaderSource = function(meshHash, attributes) {
         trianglePick: true,
         dontBillboardAnything: true,
         appendVertexDefinitions: (src) => src.push("out vec4 vColor;"),
-        appendVertexOutputs: (src) => src.push(`vColor = ${attributes.pickColor};`),
+        appendVertexOutputs: (src) => src.push(`vColor = ${geometry.attributes.pickColor};`),
         appendFragmentDefinitions: (src) => {
             src.push("out vec4 outColor;");
             src.push("in vec4 vColor;");
         },
-        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord, viewMatrix) => src.push(`outColor = vColor;`)
+        appendFragmentOutputs: (src) => src.push(`outColor = vColor;`)
     };
 };
