@@ -301,7 +301,10 @@ class Mesh extends Component {
                     const decodedUv = attributes.uv && lazyShaderVariable("decodedUv");
 
                     const programSetup = getProgramSetup({
-                        position:  attributes.position,
+                        position:  {
+                            world: "worldPosition",
+                            view:  "viewPosition"
+                        },
                         color:     attributes.color,
                         pickColor: attributes.pickColor,
                         uv:        decodedUv,
