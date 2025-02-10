@@ -2,9 +2,7 @@ import {createLightSetup, lazyShaderUniform} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
-export const LambertShaderSource = function(meshDrawHash, geometryState, material, scene) {
-    const primitive = geometryState.primitiveName;
-    const normals = (geometryState.autoVertexNormals || geometryState.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan");
+export const LambertShaderSource = function(meshDrawHash, attributes, material, scene) {
     const lightSetup = createLightSetup(scene._lightsState);
     const colorize         = lazyShaderUniform("colorize",         "vec4");
     const materialColor    = lazyShaderUniform("materialColor",    "vec4");
@@ -32,7 +30,7 @@ export const LambertShaderSource = function(meshDrawHash, geometryState, materia
         },
         appendVertexOutputs: (src, world, view) => {
             src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-            normals && lightSetup.directionalLights.forEach(light => {
+            attributes.normal && lightSetup.directionalLights.forEach(light => {
                 src.push(`reflectedColor += max(dot(${view.viewNormal}, ${light.getDirection(view.viewMatrix, view.viewPosition)}), 0.0) * ${light.getColor()};`);
             });
             src.push(`vColor = ${colorize} * vec4((${lightSetup.getAmbientColor()} + reflectedColor) * ${materialColor}.rgb + ${materialEmissive}, ${materialColor}.a);`); // TODO: How to have ambient bright enough for canvas BG but not too bright for scene?
