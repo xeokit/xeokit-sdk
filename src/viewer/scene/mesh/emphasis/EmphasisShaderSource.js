@@ -20,11 +20,11 @@ export const EmphasisShaderSource = function(meshHash, attributes, scene, isFill
             src.push("uniform vec4 uColor;");
             src.push("out vec4 vColor;");
         },
-        appendVertexOutputs: (src, world, view) => {
+        appendVertexOutputs: (src, viewMatrix) => {
             if (lightSetup) {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
                 attributes.normal && lightSetup.directionalLights.forEach(light => {
-                    src.push(`reflectedColor += max(dot(${view.viewNormal}, ${light.getDirection(view.viewMatrix, view.viewPosition)}), 0.0) * ${light.getColor()};`);
+                    src.push(`reflectedColor += max(dot(${attributes.normal.view}, ${light.getDirection(viewMatrix, attributes.position.view)}), 0.0) * ${light.getColor()};`);
                 });
                 // TODO: A blending mode for emphasis materials, to select add/multiply/mix
                 //src.push("vColor = vec4((mix(reflectedColor, uColor.rgb, 0.7)), uColor.a);");
