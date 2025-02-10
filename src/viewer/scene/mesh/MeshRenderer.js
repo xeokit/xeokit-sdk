@@ -118,15 +118,15 @@ export const instantiateMeshRenderer = (mesh, attributes, decodedUv, programSetu
     const viewNormalMatrix      = lazyShaderUniform("viewNormalMatrix",      "mat4");
     const pickClipPos           = lazyShaderUniform("pickClipPos",           "vec2");
 
-    const worldNormal = lazyShaderVariable("worldNormal");
-    const viewNormal  = lazyShaderVariable("viewNormal");
+    const worldNormal = attributes.normal && lazyShaderVariable("worldNormal");
+    const viewNormal  = worldNormal && lazyShaderVariable("viewNormal");
     const fragmentViewMatrix = lazyShaderVariable("viewMatrix");
 
     const programFragmentOutputs = [ ];
     programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord", fragmentViewMatrix);
 
     const programVertexOutputs = [ ];
-    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, { worldPosition: "worldPosition", worldNormal: worldNormal }, { viewNormal: viewNormal, viewMatrix: "viewMatrix2", viewPosition: "viewPosition" });
+    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, { worldNormal: worldNormal }, { viewNormal: viewNormal, viewMatrix: "viewMatrix2" });
 
     const buildVertexShader = () => {
         const billboard = mesh.billboard;
