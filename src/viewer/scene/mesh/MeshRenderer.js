@@ -38,7 +38,10 @@ export const lazyShaderVariable = function(name) {
     return variable;
 };
 
-export const instantiateMeshRenderer = (mesh, attributes, decodedUv, programSetup) => {
+export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup) => {
+    const decodedUv   = auxVariables.decodedUv;
+    const worldNormal = auxVariables.worldNormal;
+    const viewNormal  = auxVariables.viewNormal;
     const scene = mesh.scene;
     const meshStateBackground = mesh._state.background;
     const clipping = (function() {
@@ -118,15 +121,13 @@ export const instantiateMeshRenderer = (mesh, attributes, decodedUv, programSetu
     const viewNormalMatrix      = lazyShaderUniform("viewNormalMatrix",      "mat4");
     const pickClipPos           = lazyShaderUniform("pickClipPos",           "vec2");
 
-    const worldNormal = attributes.normal && lazyShaderVariable("worldNormal");
-    const viewNormal  = worldNormal && lazyShaderVariable("viewNormal");
     const fragmentViewMatrix = lazyShaderVariable("viewMatrix");
 
     const programFragmentOutputs = [ ];
     programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord", fragmentViewMatrix);
 
     const programVertexOutputs = [ ];
-    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, { worldNormal: worldNormal }, { viewNormal: viewNormal, viewMatrix: "viewMatrix2" });
+    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs, "viewMatrix2");
 
     const buildVertexShader = () => {
         const billboard = mesh.billboard;
@@ -135,7 +136,7 @@ export const instantiateMeshRenderer = (mesh, attributes, decodedUv, programSetu
 
         const billboardIfApplicable = v => isBillboard ? `billboard(${v})` : v;
 
-        const viewNormalDefinition = viewNormal.needed && `vec3 ${viewNormal} = normalize((${billboardIfApplicable(viewNormalMatrix)} * vec4(${worldNormal}, 0.0)).xyz);`;
+        const viewNormalDefinition = viewNormal && viewNormal.needed && `vec3 ${viewNormal} = normalize((${billboardIfApplicable(viewNormalMatrix)} * vec4(${worldNormal}, 0.0)).xyz);`;
 
         const mainVertexOutputs = (function() {
             const src = [ ];
@@ -160,7 +161,7 @@ export const instantiateMeshRenderer = (mesh, attributes, decodedUv, programSetu
                                                  : "viewMatrix2 * worldPosition")};`);
             }
             decodedUv && decodedUv.needed && src.push(`vec2 ${decodedUv} = ${quantizedGeometry ? `(${uvDecodeMatrix} * vec3(${attributes.uv}, 1.0)).xy` : attributes.uv};`);
-            if (worldNormal.needed) {
+            if (worldNormal && worldNormal.needed) {
                 const localNormal = quantizedGeometry ? `octDecode(${attributes.normal}.xy)` : attributes.normal;
                 src.push(`vec3 ${worldNormal} = (${billboardIfApplicable(modelNormalMatrix)} * vec4(${localNormal}, 0.0)).xyz;`);
             }
@@ -187,7 +188,7 @@ export const instantiateMeshRenderer = (mesh, attributes, decodedUv, programSetu
         positionsDecodeMatrix.appendDefinitions(src);
         uvDecodeMatrix.appendDefinitions(src);
         if (quantizedGeometry) {
-            if (worldNormal.needed) {
+            if (worldNormal && worldNormal.needed) {
                 src.push("vec3 octDecode(vec2 oct) {");
                 src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
                 src.push("    if (v.z < 0.0) {");
