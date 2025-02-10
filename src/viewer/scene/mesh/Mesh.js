@@ -303,17 +303,20 @@ class Mesh extends Component {
                     const decodedUv = attributes.uv && lazyShaderVariable("decodedUv");
 
                     const programSetup = getProgramSetup({
-                        position:  {
-                            world: "worldPosition",
-                            view:  "viewPosition"
+                        attributes: {
+                            position:  {
+                                world: "worldPosition",
+                                view:  "viewPosition"
+                            },
+                            color:     attributes.color,
+                            pickColor: attributes.pickColor,
+                            uv:        decodedUv,
+                            normal:    attributes.normal && {
+                                world: worldNormal,
+                                view:  viewNormal
+                            }
                         },
-                        color:     attributes.color,
-                        pickColor: attributes.pickColor,
-                        uv:        decodedUv,
-                        normal:    attributes.normal && {
-                            world: worldNormal,
-                            view:  viewNormal
-                        }
+                        viewMatrix: "viewMatrix2"
                     });
                     const hash = [
                         programSetup.programName,
@@ -359,14 +362,14 @@ class Mesh extends Component {
 
         const scene = mesh.scene;
         this._renderers = {
-            _drawRenderer:          wrapRenderer((attrs) => ((material.type === "LambertMaterial")
-                                                             ? LambertShaderSource(mesh._state.drawHash, attrs, material, scene)
-                                                             : DrawShaderSource   (mesh._state.drawHash, attrs, material, scene))),
+            _drawRenderer:          wrapRenderer((geo) => ((material.type === "LambertMaterial")
+                                                           ? LambertShaderSource(mesh._state.drawHash, geo, material, scene)
+                                                           : DrawShaderSource   (mesh._state.drawHash, geo, material, scene))),
             _shadowRenderer:        wrapRenderer(() => ShadowShaderSource(mesh._state.hash)),
-            _emphasisEdgesRenderer: wrapRenderer((attrs) => EmphasisShaderSource(mesh._state.hash, attrs, scene, false)),
-            _emphasisFillRenderer:  wrapRenderer((attrs) => EmphasisShaderSource(mesh._state.hash, attrs, scene, true)),
+            _emphasisEdgesRenderer: wrapRenderer((geo) => EmphasisShaderSource(mesh._state.hash, geo, scene, false)),
+            _emphasisFillRenderer:  wrapRenderer((geo) => EmphasisShaderSource(mesh._state.hash, geo, scene, true)),
             _pickMeshRenderer:      wrapRenderer(() => PickMeshShaderSource(mesh._state.hash)),
-            _pickTriangleRenderer:  wrapRenderer((attrs) => PickTriangleShaderSource(mesh._state.hash, attrs)),
+            _pickTriangleRenderer:  wrapRenderer((geo) => PickTriangleShaderSource(mesh._state.hash, geo)),
             _occlusionRenderer:     wrapRenderer(() => OcclusionShaderSource(mesh._state.pickOcclusionHash))
         };
 
