@@ -298,6 +298,8 @@ class Mesh extends Component {
                         uv:        geometryState.uvBuf && lazyShaderAttribute("uv", "vec2"),
                         normal:    (geometryState.autoVertexNormals || geometryState.normalsBuf) && [ "triangles", "triangle-strip", "triangle-fan" ].includes(geometryState.primitiveName) && lazyShaderAttribute("normal", "vec3")
                     };
+                    const worldNormal = attributes.normal && lazyShaderVariable("worldNormal");
+                    const viewNormal  = worldNormal && lazyShaderVariable("viewNormal");
                     const decodedUv = attributes.uv && lazyShaderVariable("decodedUv");
 
                     const programSetup = getProgramSetup({
@@ -308,7 +310,10 @@ class Mesh extends Component {
                         color:     attributes.color,
                         pickColor: attributes.pickColor,
                         uv:        decodedUv,
-                        normal:    attributes.normal
+                        normal:    attributes.normal && {
+                            world: worldNormal,
+                            view:  viewNormal
+                        }
                     });
                     const hash = [
                         programSetup.programName,
@@ -317,7 +322,7 @@ class Mesh extends Component {
                         mesh._geometry._state.hash
                     ].concat(programSetup.getHash()).join(";");
                     if (! (hash in renderersCache)) {
-                        const renderer = instantiateMeshRenderer(mesh, attributes, decodedUv, programSetup);
+                        const renderer = instantiateMeshRenderer(mesh, attributes, { decodedUv: decodedUv, worldNormal: worldNormal, viewNormal: viewNormal }, programSetup);
                         if (renderer.errors) {
                             console.log(renderer.errors.join("\n"));
                             return;
