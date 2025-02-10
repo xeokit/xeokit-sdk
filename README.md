@@ -17,7 +17,12 @@ high-detail, full-precision 3D engineering and BIM models in the browser.
 * [Changelog](https://github.com/xeokit/xeokit-sdk/blob/master/CHANGELOG.md)
 * [FAQ](https://xeokit.io/index.html?foo=1#faq)
 * [License](https://xeokit.io/index.html#pricing)
+
+---
+If you are interested in a **ready-to-use 3D/BIM Viewing Ecosystem for Your Own Solution**, be sure to also check out:
 * [xeoVision - view your models now!](https://xeo.vision/)
+* [xeoServices](https://docs.xeo.vision/)
+---
 
 ## Installing
 
