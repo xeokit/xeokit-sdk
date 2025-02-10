@@ -2,21 +2,19 @@ name: Build
 on:
   push:
     branches:
-      - master     # Build on every push to main
+      - master
   pull_request:
     branches:
       - master
     types: [labeled]
  
 jobs:
-  # -------------------------------------
-  # 1. Build job (for pushes to main)
-  # -------------------------------------
   build:
-    # Only run this job when *not* publishing a tag
+    # Run this job on push to master when *not* publishing a tag 
+    # and on 'percy' labeled pull requests
     if: |
-      startsWith(github.ref, 'refs/tags/') != true &&
-      ${{ github.event.label.name == 'percy' }}
+      (${{ github.event_name == 'push' }} && startsWith(github.ref, 'refs/tags/') != true) || 
+      (${{ github.event_name == 'pull_request' }} && ${{ github.event.label.name == 'percy' }})
     runs-on: ubuntu-latest
 
     steps:
