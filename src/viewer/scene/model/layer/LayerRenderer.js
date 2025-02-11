@@ -2,6 +2,7 @@ import {isPerspectiveMatrix} from "./Layer.js";
 import {createRTCViewMat, getPlaneRTCPos, math} from "../../math/index.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
+import {WEBGL_INFO} from "../../webglInfo.js";
 
 const tempVec2 = math.vec2();
 const tempVec3 = math.vec3();
@@ -13,6 +14,23 @@ const iota = function(n) {
     const ret = [ ];
     for (let i = 0; i < n; ++i) ret.push(i);
     return ret;
+};
+
+export const setup2dTexture = (name, getTexturesetValue) => {
+    return {
+        appendDefinitions: (src) => src.push(`uniform sampler2D ${name};`),
+        getValueExpression: (texturePos) => `texture(${name}, ${texturePos})`,
+        setupInputs: (getUniformSetter) => {
+            const setMap = getUniformSetter(name);
+            return (textureSet, frameCtx) => {
+                const texture = getTexturesetValue(textureSet);
+                if (texture) {
+                    setMap(texture.texture, frameCtx.textureUnit);
+                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
+                }
+            };
+        }
+    };
 };
 
 export class LayerRenderer {
