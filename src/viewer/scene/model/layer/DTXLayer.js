@@ -771,17 +771,9 @@ const makeDTXRenderingAttributes = function(gl, subGeometry) {
         return variable;
     };
 
-    const params = {
-        colorA:             lazyShaderVariable("colorA"),
-        pickColorA:         lazyShaderVariable("pickColor"),
-        uvA:                null,
-        metallicRoughnessA: null,
-        viewMatrix:         "viewMatrix",
-        viewNormal:         lazyShaderVariable("viewNormal"),
-        worldNormal:        null,
-        worldPosition:      "worldPosition",
-        getFlag:            renderPassFlag => `int(flags[${renderPassFlag}])`
-    };
+    const colorA     = lazyShaderVariable("colorA");
+    const pickColorA = lazyShaderVariable("pickColor");
+    const viewNormal = lazyShaderVariable("viewNormal");
 
     const isTriangle = ! subGeometry;
 
@@ -789,7 +781,25 @@ const makeDTXRenderingAttributes = function(gl, subGeometry) {
         isVBO: false,
         signature: "DTX",
 
-        parameters: params,
+        geometryParameters: {
+            attributes: {
+                color:             colorA,
+                metallicRoughness: null,
+                normal:            {
+                    view:  viewNormal,
+                    world: null
+                },
+                pickColor:         pickColorA,
+                position:          {
+                    view:  "viewPosition",
+                    world: "worldPosition"
+                },
+                uv:                null
+            },
+            viewMatrix: "viewMatrix"
+        },
+
+        getFlag: renderPassFlag => `int(flags[${renderPassFlag}])`,
 
         getClippable: () => "float(flags2.r)",
 
@@ -824,8 +834,8 @@ const makeDTXRenderingAttributes = function(gl, subGeometry) {
             src.push("uvec4 flags = texelFetch (uTexPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
             src.push("uvec4 flags2 = texelFetch (uTexPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
 
-            if (params.colorA.needed) {
-                src.push(`vec4 ${params.colorA} = vec4(texelFetch (uTexPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0)) / 255.0;`);
+            if (colorA.needed) {
+                src.push(`vec4 ${colorA} = vec4(texelFetch (uTexPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0)) / 255.0;`);
             }
 
             afterFlagsColorLines.forEach(line => src.push(line));
@@ -853,7 +863,7 @@ const makeDTXRenderingAttributes = function(gl, subGeometry) {
                 src.push("  vec3(texelFetch(uTexPerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0)));");
                 src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
                 src.push("vec3 position = positions[gl_VertexID % 3];");
-                if (params.viewNormal.needed) {
+                if (viewNormal.needed) {
                     src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
                 }
                 // when the geometry is not solid, if needed, flip the triangle winding
@@ -862,17 +872,17 @@ const makeDTXRenderingAttributes = function(gl, subGeometry) {
                 src.push("      vec3 uCameraEyeRtcInQuantizedSpace = (inverse(sceneModelMatrix * objectDecodeAndInstanceMatrix) * vec4(uCameraEyeRtc, 1)).xyz;");
                 src.push("      if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
                 src.push("          position = positions[2 - (gl_VertexID % 3)];");
-                if (params.viewNormal.needed) {
+                if (viewNormal.needed) {
                     src.push("          viewNormal = -viewNormal;");
                 }
                 src.push("      }");
                 src.push("  } else {");
-                if (!params.viewNormal.needed) {
+                if (!viewNormal.needed) {
                     src.push("      vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
                 }
                 src.push("      if (viewNormal.z < 0.0) {");
                 src.push("          position = positions[2 - (gl_VertexID % 3)];");
-                if (params.viewNormal.needed) {
+                if (viewNormal.needed) {
                     src.push("          viewNormal = -viewNormal;");
                 }
                 src.push("      }");
@@ -884,7 +894,7 @@ const makeDTXRenderingAttributes = function(gl, subGeometry) {
                 src.push("vec3 position = vec3(texelFetch(uTexPerVertexIdCoordinates, ivec2(indexPositionH, indexPositionV), 0));");
             }
 
-            if (params.pickColorA.needed) {
+            if (pickColorA.needed) {
                 // TODO: Normalize color "/ 255.0"?
                 src.push("vec4 pickColor = vec4(texelFetch(uTexPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
             }
