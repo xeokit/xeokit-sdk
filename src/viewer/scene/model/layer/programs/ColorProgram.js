@@ -26,7 +26,7 @@ export const ColorProgram = function(geometryParameters, logarithmicDepthBufferE
             src.push("in vec4 vColor;");
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
+        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr) => {
             if ((primitive === "points") || (primitive === "lines")) {
                 src.push("outColor = vColor;");
             } else {
