@@ -339,14 +339,16 @@ export const getRenderers = (function() {
 
             const wrapRenderer = function(createProgramSetup, subGeometry, isEager) {
                 const instantiate = function() {
+                    const renderingAttributes = makeRenderingAttributes(subGeometry);
                     return createProgramSetup(
+                        renderingAttributes.geometryParameters,
                         function(programSetup) {
                             return new LayerRenderer(
                                 scene,
                                 primitive,
                                 programSetup,
                                 subGeometry,
-                                makeRenderingAttributes(subGeometry));
+                                renderingAttributes);
                         });
                 };
                 let renderer = isEager && instantiate();
@@ -373,35 +375,35 @@ export const getRenderers = (function() {
 
             const gl = scene.canvas.gl;
 
-            const makeColorProgram = (lights, sao) => ColorProgram(scene.logarithmicDepthBufferEnabled, lights, sao, primitive);
+            const makeColorProgram = (geo, lights, sao) => ColorProgram(geo, scene.logarithmicDepthBufferEnabled, lights, sao, primitive);
 
-            const makePickDepthProgram   = (isPoints) => PickDepthProgram(scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 1), isPoints);
-            const makePickMeshProgram    = (isPoints) => PickMeshProgram(scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 1), isPoints);
-            const makePickNormalsProgram = (isFlat)   => PickNormalsProgram(scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 3), isFlat);
+            const makePickDepthProgram   = (geo, isPoints) => PickDepthProgram(geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 1), isPoints);
+            const makePickMeshProgram    = (geo, isPoints) => PickMeshProgram(geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 1), isPoints);
+            const makePickNormalsProgram = (geo, isFlat)   => PickNormalsProgram(geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 3), isFlat);
 
-            const makeSnapProgram = (isSnapInit, isPoints) => SnapProgram(isSnapInit, isPoints);
+            const makeSnapProgram = (geo, isSnapInit, isPoints) => SnapProgram(geo, isSnapInit, isPoints);
 
             if (primitive === "points") {
                 cache[sceneId] = {
-                    colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((c) => c(makeColorProgram(null, null))) } } },
-                    occlusionRenderer:  lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
-                    pickDepthRenderer:  lazy((c) => c(makePickDepthProgram(true))),
-                    pickMeshRenderer:   lazy((c) => c(makePickMeshProgram(true))),
+                    colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((geo, c) => c(makeColorProgram(geo, null, null))) } } },
+                    occlusionRenderer:  lazy((geo, c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
+                    pickDepthRenderer:  lazy((geo, c) => c(makePickDepthProgram(geo, true))),
+                    pickMeshRenderer:   lazy((geo, c) => c(makePickMeshProgram(geo, true))),
                     // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
                     // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
                     // drawShadow has been nop in VBO point layers
-                    // shadowRenderer:     instancing && lazy((c) => c(ShadowProgram(scene.logarithmicDepthBufferEnabled))),
-                    silhouetteRenderer: lazy((c) => c(SilhouetteProgram(scene.logarithmicDepthBufferEnabled, true))),
-                    snapInitRenderer:   lazy((c) => c(makeSnapProgram(true,  true))),
-                    snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, true)), { vertices: true })
+                    // shadowRenderer:     instancing && lazy((geo, c) => c(ShadowProgram(scene.logarithmicDepthBufferEnabled))),
+                    silhouetteRenderer: lazy((geo, c) => c(SilhouetteProgram(geo, scene.logarithmicDepthBufferEnabled, true))),
+                    snapInitRenderer:   lazy((geo, c) => c(makeSnapProgram(geo, true,  true))),
+                    snapVertexRenderer: lazy((geo, c) => c(makeSnapProgram(geo, false, true)), { vertices: true })
                 };
             } else if (primitive === "lines") {
                 cache[sceneId] = {
-                    colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((c) => c(makeColorProgram(null, null))) } } },
-                    silhouetteRenderer: lazy((c) => c(SilhouetteProgram(scene.logarithmicDepthBufferEnabled, true))),
-                    snapInitRenderer:   lazy((c) => c(makeSnapProgram(true,  false))),
-                    snapEdgeRenderer:   lazy((c) => c(makeSnapProgram(false, false)), { vertices: false }),
-                    snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, false)), { vertices: true })
+                    colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((geo, c) => c(makeColorProgram(geo, null, null))) } } },
+                    silhouetteRenderer: lazy((geo, c) => c(SilhouetteProgram(geo, scene.logarithmicDepthBufferEnabled, true))),
+                    snapInitRenderer:   lazy((geo, c) => c(makeSnapProgram(geo, true,  false))),
+                    snapEdgeRenderer:   lazy((geo, c) => c(makeSnapProgram(geo, false, false)), { vertices: false }),
+                    snapVertexRenderer: lazy((geo, c) => c(makeSnapProgram(geo, false, false)), { vertices: true })
                 };
             } else {
                 cache[sceneId] = {
@@ -409,41 +411,41 @@ export const getRenderers = (function() {
                         // WARNING: Changing `useMaps' to `true' for DTX might have unexpected consequences while binding textures, as the DTX texture binding mechanism doesn't rely on `frameCtx.textureUnit` the way VBO does (see setSAORenderState);
                         const lights = createLightSetup(scene._lightsState, false);
                         const saoRenderers = function(sao) {
-                            const makeColorTextureProgram = (useAlphaCutoff) => ColorTextureProgram(scene, lights, sao, useAlphaCutoff, scene.gammaOutput); // If gammaOutput set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
+                            const makeColorTextureProgram = (geo, useAlphaCutoff) => ColorTextureProgram(geo, scene, lights, sao, useAlphaCutoff, scene.gammaOutput); // If gammaOutput set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
                             return (isVBO
                                     ? {
-                                        "PBR": lazy((c) => c(PBRProgram(scene, createLightSetup(scene._lightsState, true), sao))),
+                                        "PBR": lazy((geo, c) => c(PBRProgram(geo, scene, createLightSetup(scene._lightsState, true), sao))),
                                         "texture": {
-                                            "alphaCutoff-": lazy((c) => c(makeColorTextureProgram(false))),
-                                            "alphaCutoff+": lazy((c) => c(makeColorTextureProgram(true)))
+                                            "alphaCutoff-": lazy((geo, c) => c(makeColorTextureProgram(geo, false))),
+                                            "alphaCutoff+": lazy((geo, c) => c(makeColorTextureProgram(geo, true)))
                                         },
                                         "vertex": {
-                                            "flat-": lazy((c) => c(makeColorProgram(lights, sao))),
-                                            "flat+": lazy((c) => c(FlatColorProgram(scene.logarithmicDepthBufferEnabled, lights, sao)))
+                                            "flat-": lazy((geo, c) => c(makeColorProgram(geo, lights, sao))),
+                                            "flat+": lazy((geo, c) => c(FlatColorProgram(geo, scene.logarithmicDepthBufferEnabled, lights, sao)))
                                         }
                                     }
-                                    : { "vertex": { "flat-": lazy((c) => c(makeColorProgram(lights, sao))) } });
+                                    : { "vertex": { "flat-": lazy((geo, c) => c(makeColorProgram(geo, lights, sao))) } });
                         };
                         return {
                             "sao-": saoRenderers(null),
                             "sao+": saoRenderers(createSAOSetup(gl, scene.sao, isVBO ? undefined : 10))
                         };
                     })(),
-                    depthRenderer:           lazy((c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
+                    depthRenderer:           lazy((geo, c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
                     edgesRenderers: {
-                        uniform: lazy((c) => c(EdgesProgram(scene.logarithmicDepthBufferEnabled, true)),  { vertices: false }),
-                        vertex:  lazy((c) => c(EdgesProgram(scene.logarithmicDepthBufferEnabled, false)), { vertices: false })
+                        uniform: lazy((geo, c) => c(EdgesProgram(geo, scene.logarithmicDepthBufferEnabled, true)),  { vertices: false }),
+                        vertex:  lazy((geo, c) => c(EdgesProgram(geo, scene.logarithmicDepthBufferEnabled, false)), { vertices: false })
                     },
-                    occlusionRenderer:       lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
-                    pickDepthRenderer:       eager((c) => c(makePickDepthProgram(false))),
-                    pickMeshRenderer:        eager((c) => c(makePickMeshProgram(false))),
-                    pickNormalsFlatRenderer: eager((c) => c(makePickNormalsProgram(true))),
-                    pickNormalsRenderer:     isVBO && eager((c) => c(makePickNormalsProgram(false))),
-                    shadowRenderer:          isVBO && lazy((c) => c(ShadowProgram(scene))),
-                    silhouetteRenderer:      eager((c) => c(SilhouetteProgram(scene.logarithmicDepthBufferEnabled, false))),
-                    snapInitRenderer:        eager((c) => c(makeSnapProgram(true,  false))),
-                    snapEdgeRenderer:        eager((c) => c(makeSnapProgram(false, false)), { vertices: false }),
-                    snapVertexRenderer:      eager((c) => c(makeSnapProgram(false, false)), { vertices: true })
+                    occlusionRenderer:       lazy((geo, c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
+                    pickDepthRenderer:       eager((geo, c) => c(makePickDepthProgram(geo, false))),
+                    pickMeshRenderer:        eager((geo, c) => c(makePickMeshProgram(geo, false))),
+                    pickNormalsFlatRenderer: eager((geo, c) => c(makePickNormalsProgram(geo, true))),
+                    pickNormalsRenderer:     isVBO && eager((geo, c) => c(makePickNormalsProgram(geo, false))),
+                    shadowRenderer:          isVBO && lazy((geo, c) => c(ShadowProgram(scene))),
+                    silhouetteRenderer:      eager((geo, c) => c(SilhouetteProgram(geo, scene.logarithmicDepthBufferEnabled, false))),
+                    snapInitRenderer:        eager((geo, c) => c(makeSnapProgram(geo, true,  false))),
+                    snapEdgeRenderer:        eager((geo, c) => c(makeSnapProgram(geo, false, false)), { vertices: false }),
+                    snapVertexRenderer:      eager((geo, c) => c(makeSnapProgram(geo, false, false)), { vertices: true })
                 };
             }
 
