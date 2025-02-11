@@ -16,6 +16,28 @@ const iota = function(n) {
     return ret;
 };
 
+export const lazyShaderUniform = function(name, type) {
+    let needed = false;
+    return {
+        appendDefinitions: (src) => needed && src.push(`uniform ${type} ${name};`),
+        toString: () => {
+            needed = true;
+            return name;
+        },
+        setupInputs: (getUniformSetter) => needed && getUniformSetter(name)
+    };
+};
+
+export const lazyShaderVariable = function(name) {
+    const variable = {
+        toString: () => {
+            variable.needed = true;
+            return name;
+        }
+    };
+    return variable;
+};
+
 export const setup2dTexture = (name, getTexturesetValue) => {
     return {
         appendDefinitions: (src) => src.push(`uniform sampler2D ${name};`),
@@ -105,16 +127,6 @@ export class LayerRenderer {
                 }
             };
         })();
-
-        const lazyShaderVariable = function(name) {
-            const variable = {
-                toString: () => {
-                    variable.needed = true;
-                    return name;
-                }
-            };
-            return variable;
-        };
 
         const vWorldPosition = lazyShaderVariable("vWorldPosition");
         const sliceColorOr   = (clipping
