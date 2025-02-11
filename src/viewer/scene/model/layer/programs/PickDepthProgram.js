@@ -28,7 +28,7 @@ export const PickDepthProgram = function(geometryParameters, logarithmicDepthBuf
             src.push("}");
             src.push("out vec4 outPackedDepth;");
         },
-        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
+        appendFragmentOutputs: (src) => {
             src.push("float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));");
             src.push("outPackedDepth = packDepth(zNormalizedDepth);"); // Must be linear depth
             // try: src.push("    outPackedDepth = vec4(zNormalizedDepth, fract(zNormalizedDepth * vec3(256.0, 256.0*256.0, 256.0*256.0*256.0)));");
