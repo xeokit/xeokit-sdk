@@ -16,6 +16,18 @@ const iota = function(n) {
     return ret;
 };
 
+export const lazyShaderAttribute = function(name, type) {
+    let needed = false;
+    return {
+        appendDefinitions: (src) => needed && src.push(`in ${type} ${name};`),
+        toString: () => {
+            needed = true;
+            return name;
+        },
+        setupInputs: (getInputSetter) => needed && getInputSetter(name)
+    };
+};
+
 export const lazyShaderUniform = function(name, type) {
     let needed = false;
     return {
