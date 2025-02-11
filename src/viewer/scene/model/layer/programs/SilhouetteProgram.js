@@ -1,4 +1,7 @@
+import {lazyShaderUniform} from "../LayerRenderer.js";
+
 export const SilhouetteProgram = function(geometryParameters, logarithmicDepthBufferEnabled, isPointsOrLines) {
+    const silhouetteColor = lazyShaderUniform("silhouetteColor", "vec4");
     return {
         programName: "Silhouette",
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -11,20 +14,20 @@ export const SilhouetteProgram = function(geometryParameters, logarithmicDepthBu
             if (! isPointsOrLines) {
                 src.push("in float vAlpha;");
             }
-            src.push("uniform vec4 silhouetteColor;");
+            silhouetteColor.appendDefinitions(src);
             src.push("out vec4 outColor;");
         },
         appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr) => {
             if (isPointsOrLines) {
-                src.push("outColor = silhouetteColor;");
+                src.push(`outColor = ${silhouetteColor};`);
             } else {
-                src.push("vec4 fragColor = vec4(silhouetteColor.rgb, min(silhouetteColor.a, vAlpha));");
+                src.push(`vec4 fragColor = vec4(${silhouetteColor}.rgb, min(${silhouetteColor}.a, vAlpha));`);
                 src.push(`outColor = ${sliceColorOr("fragColor")};`);
             }
         },
         setupInputs: (getUniformSetter) => {
-            const silhouetteColor = getUniformSetter("silhouetteColor");
-            return (frameCtx, textureSet) => silhouetteColor(frameCtx.programColor);
+            const setSilhouetteColor = silhouetteColor.setupInputs(getUniformSetter);
+            return (frameCtx, textureSet) => setSilhouetteColor(frameCtx.programColor);
         }
     };
 };
