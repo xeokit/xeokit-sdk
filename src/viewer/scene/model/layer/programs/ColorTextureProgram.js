@@ -1,10 +1,13 @@
-import {setup2dTexture} from "../LayerRenderer.js";
+import {lazyShaderUniform, setup2dTexture} from "../LayerRenderer.js";
 
 export const ColorTextureProgram = function(geometryParameters, scene, lightSetup, sao, useAlphaCutoff, gammaOutput) {
     const colorTexture = setup2dTexture("uColorMap", textureSet => textureSet.colorTexture);
+    const gammaFactor = gammaOutput && lazyShaderUniform("gammaFactor", "float");
+    const materialAlphaCutoff = useAlphaCutoff && lazyShaderUniform("materialAlphaCutoff", "float");
+
     return {
         programName: "ColorTexture",
-        getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", gammaOutput, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
+        getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", !!gammaFactor, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
         getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 0,      // COLOR_OPAQUE | COLOR_TRANSPARENT
         appendVertexDefinitions: (src) => {
@@ -18,24 +21,18 @@ export const ColorTextureProgram = function(geometryParameters, scene, lightSetu
             src.push(`vColor = ${geometryParameters.attributes.color};`);
         },
         appendFragmentDefinitions: (src) => {
-            colorTexture.appendDefinitions(src);
-
             src.push("vec4 sRGBToLinear( in vec4 value ) {");
             src.push("  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );");
             src.push("}");
-            if (gammaOutput) {
-                src.push("uniform float gammaFactor;");
-                src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
-                src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
-                src.push("}");
-            }
+            src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
+            src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
+            src.push("}");
 
+            colorTexture.appendDefinitions(src);
+            gammaFactor && gammaFactor.appendDefinitions(src);
+            materialAlphaCutoff && materialAlphaCutoff.appendDefinitions(src);
             lightSetup.appendDefinitions(src);
             sao && sao.appendDefinitions(src);
-
-            if (useAlphaCutoff) {
-                src.push("uniform float materialAlphaCutoff;");
-            }
 
             src.push("in vec4 vViewPosition;");
             src.push("in vec2 vUV;");
@@ -53,30 +50,30 @@ export const ColorTextureProgram = function(geometryParameters, scene, lightSetu
 
             src.push(`vec4 sampleColor = sRGBToLinear(${colorTexture.getValueExpression("vUV")});`);
 
-            if (useAlphaCutoff) {
-                src.push("if (sampleColor.a < materialAlphaCutoff) { discard; }");
+            if (materialAlphaCutoff) {
+                src.push(`if (sampleColor.a < ${materialAlphaCutoff}) { discard; }`);
             }
 
             src.push("vec4 colorTexel = color * sampleColor;");
             src.push("outColor = vec4(colorTexel.rgb" + (sao ? (" * " + sao.getAmbient(gl_FragCoord)) : "") + ", color.a);");
 
-            if (gammaOutput) {
-                src.push("outColor = linearToGamma(outColor, gammaFactor);");
+            if (gammaFactor) {
+                src.push(`outColor = linearToGamma(outColor, ${gammaFactor});`);
             }
         },
         setupInputs: (getUniformSetter) => {
             const setColorMap          = colorTexture.setupInputs(getUniformSetter);
-            const uGammaFactor         = gammaOutput && getUniformSetter("gammaFactor");
+            const setGammaFactor       = gammaFactor && gammaFactor.setupInputs(getUniformSetter);
             const setLightsRenderState = lightSetup.setupInputs(getUniformSetter);
             const setSAOState          = sao && sao.setupInputs(getUniformSetter);
-            const materialAlphaCutoff  = useAlphaCutoff && getUniformSetter("materialAlphaCutoff");
+            const setAlphaCutoff       = materialAlphaCutoff && materialAlphaCutoff.setupInputs(getUniformSetter);
 
             return (frameCtx, textureSet) => {
                 setColorMap(textureSet, frameCtx);
-                uGammaFactor && uGammaFactor(scene.gammaFactor);
+                setGammaFactor && setGammaFactor(scene.gammaFactor);
                 setLightsRenderState(frameCtx);
                 setSAOState && setSAOState(frameCtx);
-                materialAlphaCutoff && materialAlphaCutoff(textureSet.alphaCutoff);
+                setAlphaCutoff && setAlphaCutoff(textureSet.alphaCutoff);
             };
         },
 
