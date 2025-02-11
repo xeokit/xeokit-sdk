@@ -1,6 +1,6 @@
 import {WEBGL_INFO} from "../../../webglInfo.js";
 
-export const ColorTextureProgram = function(scene, lightSetup, sao, useAlphaCutoff, gammaOutput) {
+export const ColorTextureProgram = function(geometryParameters, scene, lightSetup, sao, useAlphaCutoff, gammaOutput) {
     const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
     return {
         programName: "ColorTexture",
@@ -12,10 +12,10 @@ export const ColorTextureProgram = function(scene, lightSetup, sao, useAlphaCuto
             src.push("out vec2 vUV;");
             src.push("out vec4 vColor;");
         },
-        appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
-            src.push(`vViewPosition = ${view.viewPosition};`);
-            src.push(`vUV = ${uv};`);
-            src.push(`vColor = ${color};`);
+        appendVertexOutputs: (src) => {
+            src.push(`vViewPosition = ${geometryParameters.attributes.position.view};`);
+            src.push(`vUV = ${geometryParameters.attributes.uv};`);
+            src.push(`vColor = ${geometryParameters.attributes.color};`);
         },
         appendFragmentDefinitions: (src) => {
             src.push("uniform sampler2D uColorMap;");

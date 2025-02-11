@@ -109,7 +109,7 @@ export class LayerRenderer {
                                 })()
                                 : (color => color));
 
-        const geoParams = renderingAttributes.parameters;
+        const geoParams = renderingAttributes.geometryParameters;
 
         const fragmentOutputs = [ ];
         appendFragmentOutputs(fragmentOutputs, vWorldPosition, "gl_FragCoord", sliceColorOr, geoParams.viewMatrix);
@@ -144,20 +144,15 @@ export class LayerRenderer {
             return src;
         })();
 
-        const colorA = geoParams.colorA;
-        const viewParams = {
-            viewPosition: "viewPosition",
-            viewMatrix:   geoParams.viewMatrix,
-            viewNormal:   geoParams.viewNormal
-        };
-        const worldPosition = geoParams.worldPosition;
+        const colorA = geoParams.attributes.color;
+        const worldPosition = geoParams.attributes.position.world;
 
         const vertexOutputs = [ ];
-        appendVertexOutputs && appendVertexOutputs(vertexOutputs, colorA, geoParams.pickColorA, geoParams.uvA, geoParams.metallicRoughnessA, "gl_Position", viewParams, geoParams.worldNormal, worldPosition); // worldPosition not used by appendVertexOutputs?
+        appendVertexOutputs && appendVertexOutputs(vertexOutputs, "gl_Position");
 
         const flagTest = (isShadowProgram
-                          ? `(${geoParams.getFlag(renderPassFlag)} <= 0) || (${colorA}.a < 1.0)`
-                          : `${geoParams.getFlag(renderPassFlag)} != renderPass`);
+                          ? `(${renderingAttributes.getFlag(renderPassFlag)} <= 0) || (${colorA}.a < 1.0)`
+                          : `${renderingAttributes.getFlag(renderPassFlag)} != renderPass`);
 
         const afterFlagsColorLines = [
             `if (${flagTest}) {`,
@@ -230,7 +225,7 @@ export class LayerRenderer {
 
             vertexData.forEach(line => src.push(line));
 
-            src.push(`vec4 viewPosition = ${viewParams.viewMatrix} * ${worldPosition};`);
+            src.push(`vec4 viewPosition = ${geoParams.viewMatrix} * ${worldPosition};`);
 
             src.push("vec4 clipPos = projMatrix * viewPosition;");
             if (getLogDepth) {
