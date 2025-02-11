@@ -1,6 +1,12 @@
 import {math} from "../../../math/math.js";
+import {lazyShaderUniform} from "../LayerRenderer.js";
 
 export const SnapProgram = function(geometryParameters, isSnapInit, isPoints) {
+    const snapVectorA      = lazyShaderUniform("snapVectorA",     "vec2");
+    const snapInvVectorAB  = lazyShaderUniform("snapInvVectorAB", "vec2");
+    const layerNumber      = lazyShaderUniform("layerNumber",      "int");
+    const coordinateScaler = lazyShaderUniform("coordinateScaler", "vec3");
+
     return {
         programName: isSnapInit ? "SnapInit" : "Snap",
         // Improves occlusion accuracy at distance
@@ -8,17 +14,17 @@ export const SnapProgram = function(geometryParameters, isSnapInit, isPoints) {
         renderPassFlag: 3,  // PICK
         usePickParams: true,
         appendVertexDefinitions: (src) => {
-            src.push("uniform vec2 snapVectorA;");
-            src.push("uniform vec2 snapInvVectorAB;");
+            snapVectorA.appendDefinitions(src);
+            snapInvVectorAB.appendDefinitions(src);
             if (isSnapInit) {
                 src.push("flat out vec4 vPickColor;");
             }
         },
-        transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - snapVectorA) * snapInvVectorAB * ${clipPos}.w, ${clipPos}.zw)`,
+        transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - ${snapVectorA}) * ${snapInvVectorAB} * ${clipPos}.w, ${clipPos}.zw)`,
         appendVertexOutputs: isSnapInit && ((src) => src.push(`vPickColor = ${geometryParameters.attributes.pickColor};`)),
         appendFragmentDefinitions: (src) => {
-            src.push("uniform int uLayerNumber;");
-            src.push("uniform vec3 uCoordinateScaler;");
+            layerNumber.appendDefinitions(src);
+            coordinateScaler.appendDefinitions(src);
             if (isSnapInit) {
                 src.push("flat in vec4 vPickColor;");
                 src.push("layout(location = 0) out highp ivec4 outCoords;");
@@ -30,22 +36,22 @@ export const SnapProgram = function(geometryParameters, isSnapInit, isPoints) {
         },
         vertexCullX: (!isSnapInit) && "2.0",
         appendFragmentOutputs: (src, vWorldPosition) => {
-            src.push(`outCoords = ivec4(${vWorldPosition} * uCoordinateScaler.xyz, ${isSnapInit ? "-" : ""}uLayerNumber);`);
+            src.push(`outCoords = ivec4(${vWorldPosition} * ${coordinateScaler}.xyz, ${isSnapInit ? "-" : ""}${layerNumber});`);
             if (isSnapInit) {
                 src.push(`outNormal = ${isPoints ? "ivec4(1.0)" : `ivec4(normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition}))) * float(${math.MAX_INT}), 1.0)`};`);
                 src.push("outPickColor = uvec4(vPickColor);");
             }
         },
         setupInputs: (getUniformSetter) => {
-            const uSnapVectorA      = getUniformSetter("snapVectorA");
-            const uSnapInvVectorAB  = getUniformSetter("snapInvVectorAB");
-            const uLayerNumber      = getUniformSetter("uLayerNumber");
-            const uCoordinateScaler = getUniformSetter("uCoordinateScaler");
+            const setSnapVectorA      = snapVectorA.setupInputs(getUniformSetter);
+            const setSnapInvVectorAB  = snapInvVectorAB.setupInputs(getUniformSetter);
+            const setLayerNumber      = layerNumber.setupInputs(getUniformSetter);
+            const setCoordinateScaler = coordinateScaler.setupInputs(getUniformSetter);
             return (frameCtx, textureSet) => {
-                uSnapVectorA(frameCtx.snapVectorA);
-                uSnapInvVectorAB(frameCtx.snapInvVectorAB);
-                uLayerNumber(frameCtx.snapPickLayerNumber);
-                uCoordinateScaler(frameCtx.snapPickCoordinateScale);
+                setSnapVectorA(frameCtx.snapVectorA);
+                setSnapInvVectorAB(frameCtx.snapInvVectorAB);
+                setLayerNumber(frameCtx.snapPickLayerNumber);
+                setCoordinateScaler(frameCtx.snapPickCoordinateScale);
             };
         },
 
