@@ -337,28 +337,30 @@ export const getRenderers = (function() {
         const sceneId = scene.id;
         if (! (sceneId in cache)) {
 
-            const createRenderer = (programSetup, subGeometry) => {
-                return new LayerRenderer(
-                    scene,
-                    primitive,
-                    programSetup,
-                    subGeometry,
-                    makeRenderingAttributes(subGeometry));
-            };
-
-            const wrapRenderer = function(createProgramSetup, isEager) {
-                let renderer = isEager && createProgramSetup(createRenderer);
+            const wrapRenderer = function(createProgramSetup, subGeometry, isEager) {
+                const instantiate = function() {
+                    return createProgramSetup(
+                        function(programSetup) {
+                            return new LayerRenderer(
+                                scene,
+                                primitive,
+                                programSetup,
+                                subGeometry,
+                                makeRenderingAttributes(subGeometry));
+                        });
+                };
+                let renderer = isEager && instantiate();
                 return {
                     drawLayer: (frameCtx, layer, renderPass) => {
                         if (! renderer) {
-                            renderer = createProgramSetup(createRenderer);
+                            renderer = instantiate();
                         }
                         renderer.drawLayer(frameCtx, layer, renderPass);
                     },
                     revalidate: force => {
                         if (renderer && (force || (! renderer.getValid()))) {
                             renderer.destroy();
-                            renderer = isEager && createProgramSetup(createRenderer);
+                            renderer = isEager && instantiate();
                         }
                     }
                 };
@@ -366,8 +368,8 @@ export const getRenderers = (function() {
 
             // Pre-initialize certain renderers that would otherwise be lazy-initialised on user interaction,
             // such as picking or emphasis, so that there is no delay when user first begins interacting with the viewer.
-            const eager = createProgramSetup => wrapRenderer(createProgramSetup, true);
-            const lazy  = createProgramSetup => wrapRenderer(createProgramSetup, false);
+            const eager = (createProgramSetup, subGeometry) => wrapRenderer(createProgramSetup, subGeometry, true);
+            const lazy  = (createProgramSetup, subGeometry) => wrapRenderer(createProgramSetup, subGeometry, false);
 
             const gl = scene.canvas.gl;
 
@@ -391,15 +393,15 @@ export const getRenderers = (function() {
                     // shadowRenderer:     instancing && lazy((c) => c(ShadowProgram(scene.logarithmicDepthBufferEnabled))),
                     silhouetteRenderer: lazy((c) => c(SilhouetteProgram(scene.logarithmicDepthBufferEnabled, true))),
                     snapInitRenderer:   lazy((c) => c(makeSnapProgram(true,  true))),
-                    snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, true), { vertices: true }))
+                    snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, true)), { vertices: true })
                 };
             } else if (primitive === "lines") {
                 cache[sceneId] = {
                     colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((c) => c(makeColorProgram(null, null))) } } },
                     silhouetteRenderer: lazy((c) => c(SilhouetteProgram(scene.logarithmicDepthBufferEnabled, true))),
                     snapInitRenderer:   lazy((c) => c(makeSnapProgram(true,  false))),
-                    snapEdgeRenderer:   lazy((c) => c(makeSnapProgram(false, false), { vertices: false })),
-                    snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, false), { vertices: true }))
+                    snapEdgeRenderer:   lazy((c) => c(makeSnapProgram(false, false)), { vertices: false }),
+                    snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, false)), { vertices: true })
                 };
             } else {
                 cache[sceneId] = {
@@ -429,8 +431,8 @@ export const getRenderers = (function() {
                     })(),
                     depthRenderer:           lazy((c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
                     edgesRenderers: {
-                        uniform: lazy((c) => c(EdgesProgram(scene.logarithmicDepthBufferEnabled, true),  { vertices: false })),
-                        vertex:  lazy((c) => c(EdgesProgram(scene.logarithmicDepthBufferEnabled, false), { vertices: false }))
+                        uniform: lazy((c) => c(EdgesProgram(scene.logarithmicDepthBufferEnabled, true)),  { vertices: false }),
+                        vertex:  lazy((c) => c(EdgesProgram(scene.logarithmicDepthBufferEnabled, false)), { vertices: false })
                     },
                     occlusionRenderer:       lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
                     pickDepthRenderer:       eager((c) => c(makePickDepthProgram(false))),
@@ -440,8 +442,8 @@ export const getRenderers = (function() {
                     shadowRenderer:          isVBO && lazy((c) => c(ShadowProgram(scene))),
                     silhouetteRenderer:      eager((c) => c(SilhouetteProgram(scene.logarithmicDepthBufferEnabled, false))),
                     snapInitRenderer:        eager((c) => c(makeSnapProgram(true,  false))),
-                    snapEdgeRenderer:        eager((c) => c(makeSnapProgram(false, false), { vertices: false })),
-                    snapVertexRenderer:      eager((c) => c(makeSnapProgram(false, false), { vertices: true }))
+                    snapEdgeRenderer:        eager((c) => c(makeSnapProgram(false, false)), { vertices: false }),
+                    snapVertexRenderer:      eager((c) => c(makeSnapProgram(false, false)), { vertices: true })
                 };
             }
 
