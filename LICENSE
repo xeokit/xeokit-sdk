@@ -619,6 +619,25 @@ copy of the Program in return for a fee.
                      END OF TERMS AND CONDITIONS
 
 ---
+xeokit also contains the following components with MIT and GNU Lesser
+General Public License v3.0:
+
+Canvas2Image v0.1
+Copyright (c) 2008 Jacob Seidelin, cupboy@gmail.com
+MIT License [http://www.opensource.org/licenses/mit-license.php]
+
+K3D.js V1.0
+Copyright (c) 2012 Ivan Kuckir
+MIT License [http://www.opensource.org/licenses/mit-license.php]
+
+web-ifc
+Copyright (c) 2020-2021 web-ifc contributors
+Mozilla Public License Version 2.0 [https://www.mozilla.org/en-US/MPL/2.0/]
+
+Pako
+Copyright (C) 2014-2017 by Vitaly Puzrin and Andrei Tuputcyn
+MIT License [http://www.opensource.org/licenses/mit-license.php]
+---
 
 ## 📜 Licensing & Commercial Use
 
