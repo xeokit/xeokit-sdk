@@ -211,6 +211,8 @@ export class LayerRenderer {
         renderingAttributes.appendVertexData(vertexData, afterFlagsColorLines);
 
         const buildVertexShader = () => {
+            const gl_Position = transformClipPos ? transformClipPos("clipPos") : "clipPos";
+
             const src = [];
 
             if (! isShadowProgram) {
@@ -274,7 +276,7 @@ export class LayerRenderer {
                 }
             }
 
-            src.push("gl_Position = " + (transformClipPos ? transformClipPos("clipPos") : "clipPos") + ";");
+            src.push(`gl_Position = ${gl_Position};`);
 
             if (setupPoints) {
                 if (pointsMaterial.perspectivePoints) {
