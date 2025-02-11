@@ -1170,7 +1170,7 @@ export class DTXTrianglesLayer {
     }
 
     _updateBackfaceCull(renderFlags, frameCtx) {
-        const backfaces = this.model.backfaces || renderFlags.sectioned;
+        const backfaces = true; // See XCD-230
         if (frameCtx.backfaces !== backfaces) {
             const gl = frameCtx.gl;
             if (backfaces) {

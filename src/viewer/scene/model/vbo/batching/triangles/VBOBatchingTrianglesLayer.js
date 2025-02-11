@@ -929,7 +929,7 @@ export class VBOBatchingTrianglesLayer {
     }
 
     _updateBackfaceCull(renderFlags, frameCtx) {
-        const backfaces = this.model.backfaces || (!this.solid) || renderFlags.sectioned;
+        const backfaces = true; // See XCD-230
         if (frameCtx.backfaces !== backfaces) {
             const gl = frameCtx.gl;
             if (backfaces) {
