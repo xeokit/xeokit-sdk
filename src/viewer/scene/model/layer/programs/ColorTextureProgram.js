@@ -1,7 +1,7 @@
-import {WEBGL_INFO} from "../../../webglInfo.js";
+import {setup2dTexture} from "../LayerRenderer.js";
 
 export const ColorTextureProgram = function(geometryParameters, scene, lightSetup, sao, useAlphaCutoff, gammaOutput) {
-    const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
+    const colorTexture = setup2dTexture("uColorMap", textureSet => textureSet.colorTexture);
     return {
         programName: "ColorTexture",
         getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", gammaOutput, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
@@ -18,7 +18,7 @@ export const ColorTextureProgram = function(geometryParameters, scene, lightSetu
             src.push(`vColor = ${geometryParameters.attributes.color};`);
         },
         appendFragmentDefinitions: (src) => {
-            src.push("uniform sampler2D uColorMap;");
+            colorTexture.appendDefinitions(src);
 
             src.push("vec4 sRGBToLinear( in vec4 value ) {");
             src.push("  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );");
@@ -51,7 +51,7 @@ export const ColorTextureProgram = function(geometryParameters, scene, lightSetu
 
             src.push(`vec4 color = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * ${sliceColorOr("vColor")};`);
 
-            src.push("vec4 sampleColor = sRGBToLinear(texture(uColorMap, vUV));");
+            src.push(`vec4 sampleColor = sRGBToLinear(${colorTexture.getValueExpression("vUV")});`);
 
             if (useAlphaCutoff) {
                 src.push("if (sampleColor.a < materialAlphaCutoff) { discard; }");
@@ -65,18 +65,14 @@ export const ColorTextureProgram = function(geometryParameters, scene, lightSetu
             }
         },
         setupInputs: (getUniformSetter) => {
-            const uColorMap            = getUniformSetter("uColorMap");
+            const setColorMap          = colorTexture.setupInputs(getUniformSetter);
             const uGammaFactor         = gammaOutput && getUniformSetter("gammaFactor");
             const setLightsRenderState = lightSetup.setupInputs(getUniformSetter);
             const setSAOState          = sao && sao.setupInputs(getUniformSetter);
             const materialAlphaCutoff  = useAlphaCutoff && getUniformSetter("materialAlphaCutoff");
 
             return (frameCtx, textureSet) => {
-                const colorTexture = textureSet.colorTexture;
-                if (colorTexture) {
-                    uColorMap(colorTexture.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                }
+                setColorMap(textureSet, frameCtx);
                 uGammaFactor && uGammaFactor(scene.gammaFactor);
                 setLightsRenderState(frameCtx);
                 setSAOState && setSAOState(frameCtx);
