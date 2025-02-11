@@ -15,9 +15,7 @@ export const ShadowProgram = function(logarithmicDepthBufferEnabled) {
             src.push("}");
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
-            src.push(`outColor = encodeFloat(${gl_FragCoord}.z);`);
-        },
+        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push(`outColor = encodeFloat(${gl_FragCoord}.z);`),
 
         isShadowProgram: true
     };

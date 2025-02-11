@@ -179,7 +179,7 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
 
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
+        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr) => {
             src.push("IncidentLight  light;");
             src.push("Material       material;");
             src.push("Geometry       geometry;");
@@ -216,6 +216,7 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
                 src.push(`reflectedLight.diffuse += ${getIrradiance("normalize(vWorldNormal)")} * material.diffuseColor;`);
             }
 
+            const viewMatrix = geometryParameters.viewMatrix;
             if (getReflectionRadiance) {
                 const reflectVec = `inverseTransformDirection(reflect(geometry.viewEyeDir, geometry.viewNormal), ${viewMatrix})`;
                 const radiance = getReflectionRadiance("material.specularRoughness", reflectVec);
