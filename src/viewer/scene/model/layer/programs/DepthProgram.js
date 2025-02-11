@@ -4,7 +4,7 @@ export const DepthProgram = function(logarithmicDepthBufferEnabled) {
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 0,  // COLOR_OPAQUE | COLOR_TRANSPARENT
         appendVertexDefinitions: (src) => src.push("out highp vec2 vHighPrecisionZW;"),
-        appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => src.push(`vHighPrecisionZW = ${gl_Position}.zw;`),
+        appendVertexOutputs: (src, gl_Position) => src.push(`vHighPrecisionZW = ${gl_Position}.zw;`),
         appendFragmentDefinitions: (src) => {
             src.push("in highp vec2 vHighPrecisionZW;");
             src.push("out vec4 outColor;");
