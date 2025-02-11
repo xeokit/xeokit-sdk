@@ -1,9 +1,18 @@
-import {WEBGL_INFO} from "../../../webglInfo.js";
+import {setup2dTexture} from "../LayerRenderer.js";
 
 export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
     const getIrradiance = lightSetup.getIrradiance;
     const getReflectionRadiance = lightSetup.getReflectionRadiance;
     const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
+
+    const colorMap         = setup2dTexture("uColorMap",         textureSet => textureSet.colorTexture);
+    const metallicRoughMap = setup2dTexture("uMetallicRoughMap", textureSet => textureSet.metallicRoughnessTexture);
+    const emissiveMap      = setup2dTexture("uEmissiveMap",      textureSet => textureSet.emissiveTexture);
+    const normalMap        = setup2dTexture("uNormalMap",        textureSet => textureSet.normalsTexture);
+    const aOMap            = setup2dTexture("uAOMap",            textureSet => textureSet.occlusionTexture);
+
+    const textures = [ colorMap, metallicRoughMap, emissiveMap, normalMap, aOMap ];
+
     return {
         programName: "PBR",
         getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", gammaOutput],
@@ -32,11 +41,7 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
             }
         },
         appendFragmentDefinitions: (src) => {
-            src.push("uniform sampler2D uColorMap;");
-            src.push("uniform sampler2D uMetallicRoughMap;");
-            src.push("uniform sampler2D uEmissiveMap;");
-            src.push("uniform sampler2D uNormalMap;");
-            src.push("uniform sampler2D uAOMap;");
+            textures.forEach(t => t.appendDefinitions(src));
             src.push("in vec4 vViewPosition;");
             src.push("in vec3 vViewNormal;");
             src.push("in vec4 vColor;");
@@ -72,7 +77,7 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
             // UTILITY DEFINITIONS
 
             src.push("vec3 perturbNormal2Arb( vec3 eye_pos, vec3 surf_norm, vec2 uv ) {");
-            src.push("       vec3 texel = texture( uNormalMap, uv ).xyz;");
+            src.push(`       vec3 texel = ${normalMap.getValueExpression("uv")}.xyz;`);
             src.push("       if (texel.r == 0.0 && texel.g == 0.0 && texel.b == 0.0) {");
             src.push("              return surf_norm;");
             src.push("       }");
@@ -194,11 +199,11 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
             src.push("float roughness = float(vMetallicRoughness.g) / 255.0;");
             src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
 
-            src.push("vec4 colorTexel = sRGBToLinearPBR(texture(uColorMap, vUV));");
+            src.push(`vec4 colorTexel = sRGBToLinearPBR(${colorMap.getValueExpression("vUV")});`);
             src.push("baseColor *= colorTexel.rgb;");
             // src.push("opacity *=/= colorTexel.a;"); // batching had "*=", instancing had "="
 
-            src.push("vec3 metalRoughTexel = texture(uMetallicRoughMap, vUV).rgb;");
+            src.push(`vec3 metalRoughTexel = ${metallicRoughMap.getValueExpression("vUV")}.rgb;`);
             src.push("metallic *= metalRoughTexel.b;");
             src.push("roughness *= metalRoughTexel.g;");
 
@@ -230,8 +235,8 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
                 src.push("computePBRLighting(light, geometry, material, reflectedLight);");
             });
 
-            src.push("vec3 emissiveColor = sRGBToLinearPBR(texture(uEmissiveMap, vUV)).rgb;"); // TODO: correct gamma function
-            src.push("float aoFactor = texture(uAOMap, vUV).r;");
+            src.push(`vec3 emissiveColor = sRGBToLinearPBR(${emissiveMap.getValueExpression("vUV")}).rgb;`); // TODO: correct gamma function
+            src.push(`float aoFactor = ${aOMap.getValueExpression("vUV")}.r;`);
 
             src.push("vec3 outgoingLight = (" + lightSetup.getAmbientColor() + " * baseColor * opacity * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular) + emissiveColor;");
 
@@ -242,32 +247,12 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
             }
         },
         setupInputs: (getUniformSetter) => {
-            const uColorMap            = getUniformSetter("uColorMap");
-            const uMetallicRoughMap    = getUniformSetter("uMetallicRoughMap");
-            const uEmissiveMap         = getUniformSetter("uEmissiveMap");
-            const uNormalMap           = getUniformSetter("uNormalMap");
-            const uAOMap               = getUniformSetter("uAOMap");
-
+            const textureSetters       = textures.map(t => t.setupInputs(getUniformSetter));
             const uGammaFactor         = gammaOutput && getUniformSetter("gammaFactor");
             const setLightsRenderState = lightSetup.setupInputs(getUniformSetter);
             const setSAOState          = sao && sao.setupInputs(getUniformSetter);
-
             return (frameCtx, textureSet) => {
-                if (textureSet) {
-                    const setSampler = (sampler, texture) => {
-                        if (texture) {
-                            sampler(texture.texture, frameCtx.textureUnit);
-                            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
-                        }
-                    };
-
-                    setSampler(uColorMap,         textureSet.colorTexture);
-                    setSampler(uMetallicRoughMap, textureSet.metallicRoughnessTexture);
-                    setSampler(uEmissiveMap,      textureSet.emissiveTexture);
-                    setSampler(uNormalMap,        textureSet.normalsTexture);
-                    setSampler(uAOMap,  textureSet.occlusionTexture);
-                }
-
+                textureSet && textureSetters.forEach(s => s(textureSet, frameCtx));
                 uGammaFactor && uGammaFactor(scene.gammaFactor);
                 setLightsRenderState(frameCtx);
                 setSAOState && setSAOState(frameCtx);
