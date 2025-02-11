@@ -1,9 +1,9 @@
-import {setup2dTexture} from "../LayerRenderer.js";
+import {lazyShaderUniform, setup2dTexture} from "../LayerRenderer.js";
 
 export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
     const getIrradiance = lightSetup.getIrradiance;
     const getReflectionRadiance = lightSetup.getReflectionRadiance;
-    const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
+    const gammaFactor = scene.gammaOutput && lazyShaderUniform("gammaFactor", "float"); // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
 
     const colorMap         = setup2dTexture("uColorMap",         textureSet => textureSet.colorTexture);
     const metallicRoughMap = setup2dTexture("uMetallicRoughMap", textureSet => textureSet.metallicRoughnessTexture);
@@ -15,7 +15,7 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
 
     return {
         programName: "PBR",
-        getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", gammaOutput],
+        getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", !!gammaFactor],
         getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 0,      // COLOR_OPAQUE | COLOR_TRANSPARENT
         appendVertexDefinitions: (src) => {
@@ -54,16 +54,14 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
 
             lightSetup.appendDefinitions(src);
             sao && sao.appendDefinitions(src);
+            gammaFactor && gammaFactor.appendDefinitions(src);
 
             src.push("vec4 sRGBToLinearPBR( in vec4 value ) {"); // temporary "PBR" postfix while sRGBToLinear is defined for lights
             src.push("  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );");
             src.push("}");
-            if (gammaOutput) {
-                src.push("uniform float gammaFactor;");
-                src.push("vec4 linearToGamma( in vec4 value ) {");
-                src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
-                src.push("}");
-            }
+            src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
+            src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
+            src.push("}");
 
             // CONSTANT DEFINITIONS
 
@@ -242,18 +240,16 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
 
             src.push("outColor = vec4(outgoingLight * aoFactor" + (sao ? ` * ${sao.getAmbient(gl_FragCoord)}` : "") + ", opacity);");
 
-            if (gammaOutput) {
-                src.push("outColor = linearToGamma(outColor);");
-            }
+            gammaFactor && src.push(`outColor = linearToGamma(outColor, ${gammaFactor});`);
         },
         setupInputs: (getUniformSetter) => {
             const textureSetters       = textures.map(t => t.setupInputs(getUniformSetter));
-            const uGammaFactor         = gammaOutput && getUniformSetter("gammaFactor");
+            const setGammaFactor       = gammaFactor && gammaFactor.setupInputs(getUniformSetter);
             const setLightsRenderState = lightSetup.setupInputs(getUniformSetter);
             const setSAOState          = sao && sao.setupInputs(getUniformSetter);
             return (frameCtx, textureSet) => {
                 textureSet && textureSetters.forEach(s => s(textureSet, frameCtx));
-                uGammaFactor && uGammaFactor(scene.gammaFactor);
+                setGammaFactor && setGammaFactor(scene.gammaFactor);
                 setLightsRenderState(frameCtx);
                 setSAOState && setSAOState(frameCtx);
             };
