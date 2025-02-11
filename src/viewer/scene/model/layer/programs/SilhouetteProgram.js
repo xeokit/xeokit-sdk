@@ -14,7 +14,7 @@ export const SilhouetteProgram = function(geometryParameters, logarithmicDepthBu
             src.push("uniform vec4 silhouetteColor;");
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
+        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr) => {
             if (isPointsOrLines) {
                 src.push("outColor = silhouetteColor;");
             } else {
