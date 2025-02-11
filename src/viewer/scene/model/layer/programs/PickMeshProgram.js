@@ -19,9 +19,7 @@ export const PickMeshProgram = function(geometryParameters, logarithmicDepthBuff
             src.push("in vec4 vPickColor;");
             src.push("out vec4 outPickColor;");
         },
-        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
-            src.push("outPickColor = vPickColor;");
-        },
+        appendFragmentOutputs: (src) => src.push("outPickColor = vPickColor;"),
         setupInputs: (getUniformSetter) => {
             const setClipTransformState = clipTransformSetup.setupInputs(getUniformSetter);
             return (frameCtx, textureSet) => setClipTransformState(frameCtx);
