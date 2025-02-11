@@ -1,4 +1,4 @@
-export const ColorProgram = function(logarithmicDepthBufferEnabled, lightSetup, sao, primitive) {
+export const ColorProgram = function(geometryParameters, logarithmicDepthBufferEnabled, lightSetup, sao, primitive) {
     return {
         programName: "Color",
         getHash: () => [lightSetup ? lightSetup.getHash() : "-", sao ? "sao" : "nosao"],
@@ -8,12 +8,13 @@ export const ColorProgram = function(logarithmicDepthBufferEnabled, lightSetup, 
             lightSetup && lightSetup.appendDefinitions(src);
             src.push("out vec4 vColor;");
         },
-        appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
+        appendVertexOutputs: (src) => {
+            const color = geometryParameters.attributes.color;
             const vColor = (primitive === "points") ? `vec4(${color}.rgb, 1.0)` : `${color}`;
             if (lightSetup) {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-                lightSetup.getDirectionalLights(view.viewMatrix, view.viewPosition).forEach(light => {
-                    src.push(`reflectedColor += max(dot(-${view.viewNormal}, ${light.direction}), 0.0) * ${light.color};`);
+                lightSetup.getDirectionalLights(geometryParameters.viewMatrix, geometryParameters.attributes.position.view).forEach(light => {
+                    src.push(`reflectedColor += max(dot(-${geometryParameters.attributes.normal.view}, ${light.direction}), 0.0) * ${light.color};`);
                 });
                 src.push(`vColor = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * ${vColor};`);
             } else {
