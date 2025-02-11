@@ -1,5 +1,6 @@
 import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
 import {getColSilhEdgePickFlags, getRenderers, Layer} from "./Layer.js";
+import {lazyShaderAttribute, lazyShaderUniform} from "./LayerRenderer.js";
 
 import {math} from "../../math/math.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../compression.js";
@@ -21,6 +22,12 @@ const tempVec3f = math.vec3();
 const tempVec3g = math.vec3();
 
 const tempUint8Array4 = new Uint8Array(4);
+
+const iota = function(n) {
+    const ret = [ ];
+    for (let i = 0; i < n; ++i) ret.push(i);
+    return ret;
+};
 
 // fills the whole dst array with src copies
 const fillArray = function(dst, src) {
@@ -765,13 +772,8 @@ export class VBOLayer extends Layer {
 
                         const bindAttribute = (a, b, setDivisor) => b && a(b, setDivisor && 1);
 
-                        if (inputs.matrices) {
-                            modelMatrixColBufs.forEach((b, i) => bindAttribute(inputs.matrices.aModelMatrixCol[i], b, true));
-                            const aModelNormalMatrixCol = inputs.matrices.aModelNormalMatrixCol;
-                            if (aModelNormalMatrixCol) {
-                                modelNormalMatrixColBufs.forEach((b, i) => bindAttribute(aModelNormalMatrixCol[i], b, true));
-                            }
-                        }
+                        modelMatrixColBufs       && modelMatrixColBufs.forEach(      (b, i) => inputs.aModelMatrixCol[i]       && bindAttribute(inputs.aModelMatrixCol[i],       b, true));
+                        modelNormalMatrixColBufs && modelNormalMatrixColBufs.forEach((b, i) => inputs.aModelNormalMatrixCol[i] && bindAttribute(inputs.aModelNormalMatrixCol[i], b, true));
 
                         const a = inputs.attributes;
                         bindAttribute(a.position, positionsBuf);
@@ -875,6 +877,9 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
     const uvA = lazyShaderVariable("aUv");
     const viewNormal = lazyShaderVariable("viewNormal");
     const worldNormal = lazyShaderVariable("worldNormal");
+    const uvDecodeMatrix = lazyShaderUniform("uvDecodeMatrix", "mat3");
+    const modelMatrixCol       = iota(3).map(i => lazyShaderAttribute("modelMatrixCol"       + i, "vec4"));
+    const modelNormalMatrixCol = iota(3).map(i => lazyShaderAttribute("modelNormalMatrixCol" + i, "vec4"));
 
     const matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
 
@@ -920,19 +925,9 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
         appendVertexDefinitions: (src) => {
             Object.values(attributes).forEach(a => a.needed && src.push(a.definition));
 
-            uvA.needed && src.push("uniform mat3 uvDecodeMatrix;");
-
-            if (instancing) {
-                src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
-                src.push("in vec4 modelMatrixCol1;");
-                src.push("in vec4 modelMatrixCol2;");
-                if (needNormal()) {
-                    src.push("in vec4 modelNormalMatrixCol0;");
-                    src.push("in vec4 modelNormalMatrixCol1;");
-                    src.push("in vec4 modelNormalMatrixCol2;");
-                }
-            }
-
+            uvDecodeMatrix.appendDefinitions(src);
+            modelMatrixCol.forEach(u => u.appendDefinitions(src));
+            modelNormalMatrixCol.forEach(u => u.appendDefinitions(src));
             matricesUniformBlockLines().forEach(line => src.push(line));
 
             if (needNormal()) {
@@ -952,7 +947,7 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
             if (needNormal()) {
                 src.push(`vec4 modelNormal = vec4(octDecode(${attributes.normal}.xy), 0.0);`);
                 if (instancing) {
-                    src.push("modelNormal = vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
+                    src.push(`modelNormal = vec4(dot(modelNormal, ${modelNormalMatrixCol[0]}), dot(modelNormal, ${modelNormalMatrixCol[1]}), dot(modelNormal, ${modelNormalMatrixCol[2]}), 0.0);`);
                 }
                 src.push(`vec3 ${worldNormal} = (worldNormalMatrix * modelNormal).xyz;`);
                 if (viewNormal.needed) {
@@ -960,9 +955,9 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
                 }
             }
 
-            uvA.needed && src.push(`vec2 ${uvA} = (uvDecodeMatrix * vec3(${attributes.uV}, 1.0)).xy;`);
+            uvA.needed && src.push(`vec2 ${uvA} = (${uvDecodeMatrix} * vec3(${attributes.uV}, 1.0)).xy;`);
 
-            const modelMatrixTransposed = instancing && "mat4(modelMatrixCol0, modelMatrixCol1, modelMatrixCol2, vec4(0.0,0.0,0.0,1.0))";
+            const modelMatrixTransposed = instancing && `mat4(${modelMatrixCol[0]}, ${modelMatrixCol[1]}, ${modelMatrixCol[2]}, vec4(0.0,0.0,0.0,1.0))`;
             src.push(`vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(${attributes.position}, 1.0)${modelMatrixTransposed ? (" * " + modelMatrixTransposed) : ""});`);
 
             scene.entityOffsetsEnabled && src.push(`worldPosition.xyz = worldPosition.xyz + ${attributes.offset};`);
@@ -972,25 +967,14 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
 
         makeDrawCall: function(getInputSetter) {
             const uMatricesBlock  = getInputSetter("Matrices");
-            const uUVDecodeMatrix = uvA.needed && getInputSetter("uvDecodeMatrix");
+            const setUVDecodeMatrix = uvDecodeMatrix.setupInputs(getInputSetter);
 
             const attributeSetters = { };
             Object.keys(attributes).forEach(k => { const a = attributes[k]; if (a.needed) { attributeSetters[k] = getInputSetter(a.toString()); } });
             const inputs = {
-                attributes: attributeSetters,
-
-                matrices: instancing && {
-                    aModelMatrixCol: [
-                        getInputSetter("modelMatrixCol0"),
-                        getInputSetter("modelMatrixCol1"),
-                        getInputSetter("modelMatrixCol2")
-                    ],
-                    aModelNormalMatrixCol: needNormal() && [
-                        getInputSetter("modelNormalMatrixCol0"),
-                        getInputSetter("modelNormalMatrixCol1"),
-                        getInputSetter("modelNormalMatrixCol2")
-                    ]
-                }
+                attributes:            attributeSetters,
+                aModelMatrixCol:       modelMatrixCol.map(u => u.setupInputs(getInputSetter)),
+                aModelNormalMatrixCol: modelNormalMatrixCol.map(u => u.setupInputs(getInputSetter))
             };
 
             inputs.attributesHash = JSON.stringify((function() {
@@ -1013,7 +997,7 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
                     matricesUniformBlockBufferData.set(scene.camera.viewNormalMatrix, offset += mat4Size);
                 }
                 uMatricesBlock(matricesUniformBlockBufferData);
-                uUVDecodeMatrix && uUVDecodeMatrix(layerDrawState.uvDecodeMatrix);
+                setUVDecodeMatrix && setUVDecodeMatrix(layerDrawState.uvDecodeMatrix);
 
                 layerDrawState.drawCall(inputs, subGeometry);
             };
