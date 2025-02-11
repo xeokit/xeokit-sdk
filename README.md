@@ -2,6 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk.svg)](https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk)
 [![](https://data.jsdelivr.com/v1/package/npm/@xeokit/xeokit-sdk/badge)](https://www.jsdelivr.com/package/npm/@xeokit/xeokit-sdk)
+[![@xeokit/xeokit-sdk](https://snyk.io/advisor/npm-package/@xeokit/xeokit-sdk/badge.svg)](/advisor/npm-package/@xeokit/xeokit-sdk)
 [![CodeSee](https://github.com/xeokit/xeokit-sdk/actions/workflows/codesee-arch-diagram.yml/badge.svg)](https://github.com/xeokit/xeokit-sdk/actions/workflows/codesee-arch-diagram.yml)
 
 [xeokit](http://xeokit.io) is a JavaScript software development kit created by [xeolabs](http://xeolabs.com) and supported by [Creoox AG](https://creoox.com) for viewing
