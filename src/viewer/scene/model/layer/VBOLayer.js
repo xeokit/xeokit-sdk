@@ -864,14 +864,14 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
     };
 
     const attributes = {
-        position:          lazyShaderVariable("positionA",         "vec3"),
-        normal:            lazyShaderVariable("normalA",           "vec3"),
-        color:             lazyShaderVariable("colorA",            "vec4"),
-        pickColor:         lazyShaderVariable("pickColor",         "vec4"),
-        uV:                lazyShaderVariable("uvApremul",         "vec2"),
-        metallicRoughness: lazyShaderVariable("metallicRoughness", "vec2"),
-        flags:             lazyShaderVariable("flagsA",            "float"),
-        offset:            lazyShaderVariable("offset",            "vec3")
+        position:          lazyShaderAttribute("positionA",         "vec3"),
+        normal:            lazyShaderAttribute("normalA",           "vec3"),
+        color:             lazyShaderAttribute("colorA",            "vec4"),
+        pickColor:         lazyShaderAttribute("pickColor",         "vec4"),
+        uV:                lazyShaderAttribute("uvApremul",         "vec2"),
+        metallicRoughness: lazyShaderAttribute("metallicRoughness", "vec2"),
+        flags:             lazyShaderAttribute("flagsA",            "float"),
+        offset:            lazyShaderAttribute("offset",            "vec3")
     };
 
     const uvA = lazyShaderVariable("aUv");
@@ -923,7 +923,7 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
         getClippable: () => `((int(${attributes.flags}) >> 16 & 0xF) == 1) ? 1.0 : 0.0`,
 
         appendVertexDefinitions: (src) => {
-            Object.values(attributes).forEach(a => a.needed && src.push(a.definition));
+            Object.values(attributes).forEach(a => a.appendDefinitions(src));
 
             uvDecodeMatrix.appendDefinitions(src);
             modelMatrixCol.forEach(u => u.appendDefinitions(src));
@@ -970,7 +970,7 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
             const setUVDecodeMatrix = uvDecodeMatrix.setupInputs(getInputSetter);
 
             const attributeSetters = { };
-            Object.keys(attributes).forEach(k => { const a = attributes[k]; if (a.needed) { attributeSetters[k] = getInputSetter(a.toString()); } });
+            Object.keys(attributes).forEach(k => { attributeSetters[k] = attributes[k].setupInputs(getInputSetter); });
             const inputs = {
                 attributes:            attributeSetters,
                 aModelMatrixCol:       modelMatrixCol.map(u => u.setupInputs(getInputSetter)),
