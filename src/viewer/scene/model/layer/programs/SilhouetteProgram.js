@@ -1,4 +1,4 @@
-export const SilhouetteProgram = function(logarithmicDepthBufferEnabled, isPointsOrLines) {
+export const SilhouetteProgram = function(geometryParameters, logarithmicDepthBufferEnabled, isPointsOrLines) {
     return {
         programName: "Silhouette",
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -6,9 +6,7 @@ export const SilhouetteProgram = function(logarithmicDepthBufferEnabled, isPoint
         appendVertexDefinitions: (! isPointsOrLines) && ((src) => {
             src.push("out float vAlpha;");
         }),
-        appendVertexOutputs: (! isPointsOrLines) && ((src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
-            src.push(`vAlpha = ${color}.a;`);
-        }),
+        appendVertexOutputs: (! isPointsOrLines) && ((src) => src.push(`vAlpha = ${geometryParameters.attributes.color}.a;`)),
         appendFragmentDefinitions: (src) => {
             if (! isPointsOrLines) {
                 src.push("in float vAlpha;");
