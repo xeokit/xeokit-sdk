@@ -1,6 +1,6 @@
 import {WEBGL_INFO} from "../../../webglInfo.js";
 
-export const PBRProgram = function(scene, lightSetup, sao) {
+export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
     const getIrradiance = lightSetup.getIrradiance;
     const getReflectionRadiance = lightSetup.getReflectionRadiance;
     const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
@@ -20,15 +20,15 @@ export const PBRProgram = function(scene, lightSetup, sao) {
                 src.push("out vec3 vWorldNormal;");
             }
         },
-        appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
-            src.push(`vViewPosition = ${view.viewPosition};`);
-            src.push(`vViewNormal = ${view.viewNormal};`);
-            src.push(`vColor = ${color};`);
-            src.push(`vUV = ${uv};`);
-            src.push(`vMetallicRoughness = ${metallicRoughness};`);
+        appendVertexOutputs: (src) => {
+            src.push(`vViewPosition = ${geometryParameters.attributes.position.view};`);
+            src.push(`vViewNormal = ${geometryParameters.attributes.normal.view};`);
+            src.push(`vColor = ${geometryParameters.attributes.color};`);
+            src.push(`vUV = ${geometryParameters.attributes.uv};`);
+            src.push(`vMetallicRoughness = ${geometryParameters.attributes.metallicRoughness};`);
 
             if (getIrradiance) {
-                src.push(`vWorldNormal = ${worldNormal}.xyz;`);
+                src.push(`vWorldNormal = ${geometryParameters.attributes.normal.world}.xyz;`);
             }
         },
         appendFragmentDefinitions: (src) => {
