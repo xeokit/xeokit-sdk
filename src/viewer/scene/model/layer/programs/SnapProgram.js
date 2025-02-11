@@ -1,6 +1,6 @@
 import {math} from "../../../math/math.js";
 
-export const SnapProgram = function(isSnapInit, isPoints) {
+export const SnapProgram = function(geometryParameters, isSnapInit, isPoints) {
     return {
         programName: isSnapInit ? "SnapInit" : "Snap",
         // Improves occlusion accuracy at distance
@@ -15,11 +15,7 @@ export const SnapProgram = function(isSnapInit, isPoints) {
             }
         },
         transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - snapVectorA) * snapInvVectorAB * ${clipPos}.w, ${clipPos}.zw)`,
-        appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
-            if (isSnapInit) {
-                src.push(`vPickColor = ${pickColor};`);
-            }
-        },
+        appendVertexOutputs: isSnapInit && ((src) => src.push(`vPickColor = ${geometryParameters.attributes.pickColor};`)),
         appendFragmentDefinitions: (src) => {
             src.push("uniform int uLayerNumber;");
             src.push("uniform vec3 uCoordinateScaler;");

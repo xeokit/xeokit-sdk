@@ -1,4 +1,4 @@
-export const EdgesProgram = function(logarithmicDepthBufferEnabled, colorUniform) {
+export const EdgesProgram = function(geometryParameters, logarithmicDepthBufferEnabled, colorUniform) {
     return {
         programName: colorUniform ? "Edges" : "EdgesColor",
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -8,8 +8,9 @@ export const EdgesProgram = function(logarithmicDepthBufferEnabled, colorUniform
                 src.push("out vec4 vColor;");
             }
         },
-        appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
+        appendVertexOutputs: (src) => {
             if (! colorUniform) {
+                const color = geometryParameters.attributes.color;
                 src.push(`vColor = vec4(${color}.rgb * 0.5, ${color}.a);`);
             }
         },
