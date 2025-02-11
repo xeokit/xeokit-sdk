@@ -1,6 +1,6 @@
 import {math} from "../../../math/math.js";
 
-export const PickNormalsProgram = function(logarithmicDepthBufferEnabled, clipTransformSetup, isFlat) {
+export const PickNormalsProgram = function(geometryParameters, logarithmicDepthBufferEnabled, clipTransformSetup, isFlat) {
     return {
         programName: isFlat ? "PickNormalsFlat" : "PickNormals",
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -13,9 +13,9 @@ export const PickNormalsProgram = function(logarithmicDepthBufferEnabled, clipTr
             clipTransformSetup.appendDefinitions(src);
         },
         transformClipPos: clipTransformSetup.transformClipPos,
-        appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
+        appendVertexOutputs: (src) => {
             if (! isFlat) {
-                src.push(`vWorldNormal = ${worldNormal};`);
+                src.push(`vWorldNormal = ${geometryParameters.attributes.normal.world};`);
             }
         },
         appendFragmentDefinitions: (src) => {
