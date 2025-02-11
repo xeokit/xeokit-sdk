@@ -107,11 +107,11 @@ and [OBJ](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/OBJLoaderPl
 </script>
 </html>
 ````
+---
+## 📜 Licensing & Commercial Use
 
+xeokit SDK is licensed under **AGPLv3**, which requires that any modifications or integrations of xeokit SDK into a project must also be open-sourced under AGPLv3.
 
+🪧 **Need a commercial license?** If your company requires xeokit SDK under a different licensing model for **proprietary or closed-source** applications, we offer **flexible commercial licensing options**.
 
-
-
-
-
-
+📩 **Contact us** at [contact@creoox.com](mailto:contact@creoox.com) or visit [xeokit.io](https://xeokit.io/index.html#pricing) for more information.
