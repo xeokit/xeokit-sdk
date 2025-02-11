@@ -22,9 +22,7 @@ export const EdgesProgram = function(geometryParameters, logarithmicDepthBufferE
             }
             src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
-            src.push("outColor = " + (colorUniform ? "edgeColor" : "vColor") + ";");
-        },
+        appendFragmentOutputs: (src) => src.push("outColor = " + (colorUniform ? "edgeColor" : "vColor") + ";"),
         setupInputs: colorUniform && ((getUniformSetter) => {
             const edgeColor = getUniformSetter("edgeColor");
             return (frameCtx, textureSet) => edgeColor(frameCtx.programColor);
