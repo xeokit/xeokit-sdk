@@ -24,7 +24,7 @@ export const PickNormalsProgram = function(geometryParameters, logarithmicDepthB
             }
             src.push("out highp ivec4 outNormal;");
         },
-        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
+        appendFragmentOutputs: (src, vWorldPosition) => {
             const worldNormal = (isFlat
                                  ? `normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition})))`
                                  : "vWorldNormal");
