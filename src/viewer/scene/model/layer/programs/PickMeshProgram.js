@@ -1,4 +1,4 @@
-export const PickMeshProgram = function(logarithmicDepthBufferEnabled, clipTransformSetup, isPoints) {
+export const PickMeshProgram = function(geometryParameters, logarithmicDepthBufferEnabled, clipTransformSetup, isPoints) {
     return {
         programName: "PickMesh",
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -9,8 +9,8 @@ export const PickMeshProgram = function(logarithmicDepthBufferEnabled, clipTrans
             clipTransformSetup.appendDefinitions(src);
         },
         transformClipPos: clipTransformSetup.transformClipPos,
-        appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
-            src.push(`vPickColor = ${pickColor} / 255.0;`);
+        appendVertexOutputs: (src) => {
+            src.push(`vPickColor = ${geometryParameters.attributes.pickColor} / 255.0;`);
             if (isPoints) {
                 src.push("gl_PointSize += 10.0;");
             }

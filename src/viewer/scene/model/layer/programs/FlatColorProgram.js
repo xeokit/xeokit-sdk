@@ -1,4 +1,4 @@
-export const FlatColorProgram = function(logarithmicDepthBufferEnabled, lightSetup, sao) {
+export const FlatColorProgram = function(geometryParameters, logarithmicDepthBufferEnabled, lightSetup, sao) {
     return {
         programName: "FlatColor",
         getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao"],
@@ -8,9 +8,9 @@ export const FlatColorProgram = function(logarithmicDepthBufferEnabled, lightSet
             src.push("out vec4 vViewPosition;");
             src.push("out vec4 vColor;");
         },
-        appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
-            src.push(`vViewPosition = ${view.viewPosition};`);
-            src.push(`vColor = ${color};`);
+        appendVertexOutputs: (src) => {
+            src.push(`vViewPosition = ${geometryParameters.attributes.position.view};`);
+            src.push(`vColor = ${geometryParameters.attributes.color};`);
         },
         appendFragmentDefinitions: (src) => {
             lightSetup.appendDefinitions(src);

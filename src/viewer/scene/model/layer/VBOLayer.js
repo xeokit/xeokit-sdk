@@ -872,21 +872,13 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
         offset:            lazyShaderVariable("offset",            "vec3")
     };
 
-    const params = {
-        colorA:             attributes.color,
-        pickColorA:         attributes.pickColor,
-        uvA:                lazyShaderVariable("aUv"),
-        metallicRoughnessA: attributes.metallicRoughness,
-        viewMatrix:         "viewMatrix",
-        viewNormal:         lazyShaderVariable("viewNormal"),
-        worldNormal:        lazyShaderVariable("worldNormal"),
-        worldPosition:      "worldPosition",
-        getFlag:            renderPassFlag => `(int(${attributes.flags}) >> ${renderPassFlag * 4} & 0xF)`
-    };
+    const uvA = lazyShaderVariable("aUv");
+    const viewNormal = lazyShaderVariable("viewNormal");
+    const worldNormal = lazyShaderVariable("worldNormal");
 
     const matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
 
-    const needNormal = () => (params.viewNormal.needed || params.worldNormal.needed);
+    const needNormal = () => (viewNormal.needed || worldNormal.needed);
 
     const matricesUniformBlockLines = () => [
         "uniform Matrices {",
@@ -903,14 +895,32 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
         isVBO: true,
         signature: instancing ? "instancing" : "batching",
 
-        parameters: params,
+        geometryParameters: {
+            attributes: {
+                color:             attributes.color,
+                metallicRoughness: attributes.metallicRoughness,
+                normal:            {
+                    view:  viewNormal,
+                    world: worldNormal
+                },
+                pickColor:         attributes.pickColor,
+                position:          {
+                    view:  "viewPosition",
+                    world: "worldPosition"
+                },
+                uv:                uvA
+            },
+            viewMatrix: "viewMatrix"
+        },
+
+        getFlag: renderPassFlag => `(int(${attributes.flags}) >> ${renderPassFlag * 4} & 0xF)`,
 
         getClippable: () => `((int(${attributes.flags}) >> 16 & 0xF) == 1) ? 1.0 : 0.0`,
 
         appendVertexDefinitions: (src) => {
             Object.values(attributes).forEach(a => a.needed && src.push(a.definition));
 
-            params.uvA.needed && src.push("uniform mat3 uvDecodeMatrix;");
+            uvA.needed && src.push("uniform mat3 uvDecodeMatrix;");
 
             if (instancing) {
                 src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
@@ -944,13 +954,13 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
                 if (instancing) {
                     src.push("modelNormal = vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
                 }
-                src.push(`vec3 ${params.worldNormal} = (worldNormalMatrix * modelNormal).xyz;`);
-                if (params.viewNormal.needed) {
-                    src.push(`vec3 ${params.viewNormal} = normalize((viewNormalMatrix * vec4(${params.worldNormal}, 0.0)).xyz);`);
+                src.push(`vec3 ${worldNormal} = (worldNormalMatrix * modelNormal).xyz;`);
+                if (viewNormal.needed) {
+                    src.push(`vec3 ${viewNormal} = normalize((viewNormalMatrix * vec4(${worldNormal}, 0.0)).xyz);`);
                 }
             }
 
-            params.uvA.needed && src.push(`vec2 ${params.uvA} = (uvDecodeMatrix * vec3(${attributes.uV}, 1.0)).xy;`);
+            uvA.needed && src.push(`vec2 ${uvA} = (uvDecodeMatrix * vec3(${attributes.uV}, 1.0)).xy;`);
 
             const modelMatrixTransposed = instancing && "mat4(modelMatrixCol0, modelMatrixCol1, modelMatrixCol2, vec4(0.0,0.0,0.0,1.0))";
             src.push(`vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(${attributes.position}, 1.0)${modelMatrixTransposed ? (" * " + modelMatrixTransposed) : ""});`);
@@ -962,7 +972,7 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
 
         makeDrawCall: function(getInputSetter) {
             const uMatricesBlock  = getInputSetter("Matrices");
-            const uUVDecodeMatrix = params.uvA.needed && getInputSetter("uvDecodeMatrix");
+            const uUVDecodeMatrix = uvA.needed && getInputSetter("uvDecodeMatrix");
 
             const attributeSetters = { };
             Object.keys(attributes).forEach(k => { const a = attributes[k]; if (a.needed) { attributeSetters[k] = getInputSetter(a.toString()); } });
