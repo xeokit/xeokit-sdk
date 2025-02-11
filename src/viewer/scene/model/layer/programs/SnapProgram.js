@@ -28,7 +28,7 @@ export const SnapProgram = function(geometryParameters, isSnapInit, isPoints) {
                 src.push("out highp ivec4 outCoords;");
             }
         },
-        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
+        appendFragmentOutputs: (src, vWorldPosition) => {
             src.push(`outCoords = ivec4(${vWorldPosition} * uCoordinateScaler.xyz, ${isSnapInit ? "-" : ""}uLayerNumber);`);
             if (isSnapInit) {
                 src.push(`outNormal = ${isPoints ? "ivec4(1.0)" : `ivec4(normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition}))) * float(${math.MAX_INT}), 1.0)`};`);
