@@ -2,8 +2,11 @@ import {createLightSetup} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
-export const EmphasisShaderSource = function(meshHash, geometry, scene, isFill) {
-    const lightSetup = isFill && createLightSetup(scene._lightsState);
+export const EmphasisShaderSource = function(meshHash, programVariables, geometry, scene, isFill) {
+    const lightSetup = isFill && createLightSetup(programVariables, scene._lightsState, false);
+    const uColor = programVariables.createUniform("vec4", "uColor");
+    const vColor = programVariables.createVarying("vec4", "vColor");
+    const outColor = programVariables.createOutput("vec4", "outColor");
     return {
         getHash: () => [
             meshHash,
@@ -15,11 +18,6 @@ export const EmphasisShaderSource = function(meshHash, geometry, scene, isFill) 
         discardPoints: isFill,
         drawEdges: ! isFill,
         useGammaOutput: true,
-        appendVertexDefinitions: (src) => {
-            lightSetup && lightSetup.appendDefinitions(src);
-            src.push("uniform vec4 uColor;");
-            src.push("out vec4 vColor;");
-        },
         appendVertexOutputs: (src) => {
             if (lightSetup) {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
@@ -28,20 +26,16 @@ export const EmphasisShaderSource = function(meshHash, geometry, scene, isFill) 
                     src.push(`reflectedColor += max(dot(${attributes.normal.view}, ${light.getDirection(geometry.viewMatrix, attributes.position.view)}), 0.0) * ${light.getColor()};`);
                 });
                 // TODO: A blending mode for emphasis materials, to select add/multiply/mix
-                //src.push("vColor = vec4((mix(reflectedColor, uColor.rgb, 0.7)), uColor.a);");
-                src.push(`vColor = vec4((${lightSetup.getAmbientColor()} + reflectedColor) * uColor.rgb, uColor.a);`);
-                //src.push("vColor = vec4(reflectedColor + uColor.rgb, uColor.a);");
+                //src.push(`${vColor} = vec4((mix(reflectedColor, ${uColor}.rgb, 0.7)), ${uColor}.a);`);
+                src.push(`${vColor} = vec4((${lightSetup.getAmbientColor()} + reflectedColor) * ${uColor}.rgb, ${uColor}.a);`);
+                //src.push(`${vColor} = vec4(reflectedColor + ${uColor}.rgb, ${uColor}.a);`);
             } else {
-                src.push("vColor = uColor;");
+                src.push(`${vColor} = ${uColor};`);
             }
         },
-        appendFragmentDefinitions: (src) => {
-            src.push("in vec4 vColor;");
-            src.push("out vec4 outColor;");
-        },
-        appendFragmentOutputs: (src, getGammaOutputExpression) => src.push(`outColor = ${getGammaOutputExpression ? getGammaOutputExpression("vColor") : "vColor"};`),
+        appendFragmentOutputs: (src, getGammaOutputExpression) => src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression(vColor) : vColor};`),
         setupMaterialInputs: (getInputSetter) => {
-            const uColor = getInputSetter("uColor");
+            const setColor = uColor.setupInputs(getInputSetter);
             return (mtl) => {
                 if (isFill) {
                     tmpVec4.set(mtl.fillColor);
@@ -50,7 +44,7 @@ export const EmphasisShaderSource = function(meshHash, geometry, scene, isFill) 
                     tmpVec4.set(mtl.edgeColor);
                     tmpVec4[3] = mtl.edgeAlpha;
                 }
-                uColor(tmpVec4);
+                setColor(tmpVec4);
             };
         },
         setupLightInputs: lightSetup && lightSetup.setupInputs
