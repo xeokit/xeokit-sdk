@@ -643,7 +643,7 @@ export const createLightSetup = function(lightsState, setupCubes) {
         getAmbientColor: () => `${lightAmbient}.rgb * ${lightAmbient}.a`,
         directionalLights: directionals.map(light => light.glslLight),
         getIrradiance: lightMap      && ((worldNormal) => `${lightMap.getValueExpression(worldNormal)}.rgb`),
-        reflectionMap: reflectionMap && { getValueExpression: reflectionMap.getValueExpression },
+        getReflection: reflectionMap && ((reflectVec, mipLevel) => `${reflectionMap.getValueExpression(reflectVec, mipLevel)}.rgb`),
         setupInputs: (getUniformSetter) => {
             const setAmbientInputState = lightAmbient.setupLightsInputs(getUniformSetter);
             const setDirectionalsInputStates = directionals.map(light => light.setupLightsInputs(getUniformSetter));
