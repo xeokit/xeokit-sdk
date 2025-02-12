@@ -2,7 +2,6 @@ import {lazyShaderUniform, setup2dTexture} from "../LayerRenderer.js";
 
 export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
     const getIrradiance = lightSetup.getIrradiance;
-    const getReflectionRadiance = lightSetup.getReflectionRadiance;
     const gammaFactor = scene.gammaOutput && lazyShaderUniform("gammaFactor", "float"); // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
 
     const colorMap         = setup2dTexture("uColorMap",         textureSet => textureSet.colorTexture);
@@ -220,9 +219,14 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
             }
 
             const viewMatrix = geometryParameters.viewMatrix;
+            const getReflectionRadiance = lightSetup.getReflectionRadiance;
             if (getReflectionRadiance) {
                 const reflectVec = `inverseTransformDirection(reflect(geometry.viewEyeDir, geometry.viewNormal), ${viewMatrix})`;
-                const radiance = getReflectionRadiance("material.specularRoughness", reflectVec);
+                const maxMIPLevel = "8.0";
+                const blinnExpFromRoughness = `(2.0 / pow(material.specularRoughness + 0.0001, 2.0) - 2.0)`;
+                const desiredMIPLevel = `${maxMIPLevel} - 0.79248 - 0.5 * log2(pow(${blinnExpFromRoughness}, 2.0) + 1.0)`;
+                const specularMIPLevel = `clamp(${desiredMIPLevel}, 0.0, ${maxMIPLevel})`;
+                const radiance = getReflectionRadiance(reflectVec, specularMIPLevel);
                 const specularBRDFContrib = "BRDF_Specular_GGX_Environment(geometry, material.specularColor, material.specularRoughness)";
                 src.push(`reflectedLight.specular += ${radiance} * ${specularBRDFContrib};`);
             }
