@@ -76,23 +76,12 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     const isPoints = geometryState.primitiveName === "points";
     const setupPointSize = programSetup.setupPointSize && isPoints;
     const gammaOutputSetup = programSetup.useGammaOutput && scene.gammaOutput && (function() {
-        let needed = false;
+        const gammaFactor = programVariables.createUniform("float", "gammaFactor");
         return {
-            appendDefinitions: (src) => {
-                if (needed) {
-                    src.push("uniform float gammaFactor;");
-                    src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
-                    src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
-                    src.push("}");
-                }
-            },
-            getValueExpression: (color) => {
-                needed = true;
-                return `linearToGamma(${color}, gammaFactor)`;
-            },
+            getValueExpression: (color) => `linearToGamma(${color}, ${gammaFactor})`,
             setupInputs: (getInputSetter) => {
-                const gammaFactor = needed && getInputSetter("gammaFactor");
-                return () => gammaFactor && gammaFactor(scene.gammaFactor);
+                const setGammaFactor = gammaFactor.setupInputs(getInputSetter);
+                return setGammaFactor && (() => setGammaFactor(scene.gammaFactor));
             }
         };
     })();
@@ -266,9 +255,12 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
             src.push("   return mat;");
             src.push("}");
         }
-        gammaOutputSetup && gammaOutputSetup.appendDefinitions(src);
         programSetup.appendFragmentDefinitions && programSetup.appendFragmentDefinitions(src);
         programVariablesState.appendFragmentDefinitions(src);
+
+        src.push("vec4 linearToGamma(in vec4 value, in float gammaFactor) {");
+        src.push("  return vec4(pow(value.xyz, vec3(1.0 / gammaFactor)), value.w);");
+        src.push("}");
 
         src.push("vec4 sRGBToLinear(in vec4 value) {");
         src.push("  return vec4(mix(pow(value.rgb * 0.9478672986 + 0.0521327014, vec3(2.4)), value.rgb * 0.0773993808, vec3(lessThanEqual(value.rgb, vec3(0.04045)))), value.w);");
