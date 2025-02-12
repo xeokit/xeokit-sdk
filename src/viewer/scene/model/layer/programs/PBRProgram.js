@@ -231,9 +231,9 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
                 src.push(`reflectedLight.specular += ${radiance} * ${specularBRDFContrib};`);
             }
 
-            lightSetup.getDirectionalLights(viewMatrix, "vViewPosition").forEach(light => {
-                src.push(`light.direction = ${light.direction};`);
-                src.push(`light.color = ${light.color};`);
+            lightSetup.directionalLights.forEach(light => {
+                src.push(`light.direction = ${light.getDirection(viewMatrix, "vViewPosition")};`);
+                src.push(`light.color = ${light.getColor()};`);
                 src.push("computePBRLighting(light, geometry, material, reflectedLight);");
             });
 

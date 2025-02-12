@@ -42,8 +42,8 @@ export const ColorTextureProgram = function(geometryParameters, scene, lightSetu
         appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr) => {
             src.push("vec3 viewNormal = normalize(cross(dFdx(vViewPosition.xyz), dFdy(vViewPosition.xyz)));");
             src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-            lightSetup.getDirectionalLights(geometryParameters.viewMatrix, "vViewPosition").forEach(light => {
-                src.push(`reflectedColor += max(dot(-viewNormal, ${light.direction}), 0.0) * ${light.color};`);
+            lightSetup.directionalLights.forEach(light => {
+                src.push(`reflectedColor += max(dot(-viewNormal, ${light.getDirection(geometryParameters.viewMatrix, "vViewPosition")}), 0.0) * ${light.getColor()};`);
             });
 
             src.push(`vec4 color = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * ${sliceColorOr("vColor")};`);
