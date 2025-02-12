@@ -451,7 +451,7 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
                     src.push("vec3 reflDiff = vec3(0.0);");
                     src.push("vec3 reflSpec = vec3(0.0);");
 
-                    lightSetup.getIrradiance && src.push(`reflDiff += material.diffuseColor * ${lightSetup.getIrradiance("normalize(vWorldNormal)")};`);
+                    lightSetup.getIrradiance && src.push(`reflDiff += ${lightSetup.getIrradiance("normalize(vWorldNormal)")};`);
 
                     if (lightSetup.reflectionMap) {
                         const reflectVec = `reflect(-viewEyeDir, viewNormal)`;
@@ -495,17 +495,17 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
                         src.push(`vec3 lightColor${i} = ${light.getColor()}${light.shadowParameters ? (" * " + "shadow") : ""};`);
                         src.push(`vec3 lightDirection${i} = ${light.isWorldSpace ? `vViewLightReverseDir${i}` : light.getDirection(null, "vViewPosition")};`);
                         const dotNL = `saturate(dot(viewNormal, lightDirection${i}))`;
-                        src.push(`vec3 irradiance${i} = ${dotNL} * lightColor${i} * PI;`);
-                        src.push(`reflDiff += irradiance${i} * (RECIPROCAL_PI * material.diffuseColor);`);
+                        src.push(`vec3 irradiance${i} = ${dotNL} * lightColor${i};`);
+                        src.push(`reflDiff += irradiance${i};`);
                         const spec = (phongMaterial
                                       ? `lightColor${i} * material.specularColor * pow(max(dot(reflect(-lightDirection${i}, -viewNormal), viewEyeDir), 0.0), material.shine)`
-                                      : `irradiance${i} * BRDF_Specular_GGX(lightDirection${i}, viewNormal, viewEyeDir, material.specularColor, material.specularRoughness)`);
+                                      : `irradiance${i} * PI * BRDF_Specular_GGX(lightDirection${i}, viewNormal, viewEyeDir, material.specularColor, material.specularRoughness)`);
                         src.push(`reflSpec += ${spec};`);
                     });
                 }
 
                 const ambient = phongMaterial && `${lightSetup.getAmbientColor()} * diffuseColor`;
-                src.push("vec3 outgoingLight = emissiveColor + occlusion * (reflDiff + reflSpec)" + (ambient ? (" + " + ambient) : "") + ";");
+                src.push("vec3 outgoingLight = emissiveColor + occlusion * (reflDiff * material.diffuseColor + reflSpec)" + (ambient ? (" + " + ambient) : "") + ";");
             } else {
                 src.push(`vec3 ambientColor = ${(phongMaterial && materialAmbient) || "vec3(1.0)"};`);
                 phongMaterial && ambientMap && src.push(`ambientColor *= ${ambientMap.getValueExpression("texturePos")}.rgb;`);
