@@ -123,13 +123,9 @@ const createLightSetup = function(lightsState, useMaps) {
             const decode = TEXTURE_DECODE_FUNCS[lightMap.encoding];
             return `${decode(`texture(lightMap, ${worldNormal})`)}.rgb`;
         }),
-        getReflectionRadiance: useMaps && reflectionMap && ((specularRoughness, reflectVec) => {
-            const maxMIPLevel = "8.0";
-            const blinnExpFromRoughness = `(2.0 / pow(${specularRoughness} + 0.0001, 2.0) - 2.0)`;
-            const desiredMIPLevel = `${maxMIPLevel} - 0.79248 - 0.5 * log2(pow(${blinnExpFromRoughness}, 2.0) + 1.0)`;
-            const specularMIPLevel = `clamp(${desiredMIPLevel}, 0.0, ${maxMIPLevel})`;
+        getReflectionRadiance: useMaps && reflectionMap && ((reflectVec, mipLevel) => {
             const decode = TEXTURE_DECODE_FUNCS[reflectionMap.encoding];
-            return `${decode(`texture(reflectionMap, ${reflectVec}, 0.5 * ${specularMIPLevel})`)}.rgb`; //TODO: a random factor - fix this
+            return `${decode(`texture(reflectionMap, ${reflectVec}, 0.5 * ${mipLevel})`)}.rgb`; //TODO: a random factor - fix this
         }),
         setupInputs: (getUniformSetter) => {
             const uLightAmbient = getUniformSetter("lightAmbient");
