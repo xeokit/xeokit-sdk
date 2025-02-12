@@ -55,9 +55,6 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
             sao && sao.appendDefinitions(src);
             gammaFactor && gammaFactor.appendDefinitions(src);
 
-            src.push("vec4 sRGBToLinearPBR( in vec4 value ) {"); // temporary "PBR" postfix while sRGBToLinear is defined for lights
-            src.push("  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );");
-            src.push("}");
             src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
             src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
             src.push("}");
@@ -196,7 +193,7 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
             src.push("float roughness = float(vMetallicRoughness.g) / 255.0;");
             src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
 
-            src.push(`vec4 colorTexel = sRGBToLinearPBR(${colorMap.getValueExpression("vUV")});`);
+            src.push(`vec4 colorTexel = sRGBToLinear(${colorMap.getValueExpression("vUV")});`);
             src.push("baseColor *= colorTexel.rgb;");
             // src.push("opacity *=/= colorTexel.a;"); // batching had "*=", instancing had "="
 
@@ -225,7 +222,7 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
                 const maxMIPLevel = "8.0";
                 const blinnExpFromRoughness = `(2.0 / pow(material.specularRoughness + 0.0001, 2.0) - 2.0)`;
                 const desiredMIPLevel = `${maxMIPLevel} - 0.79248 - 0.5 * log2(pow(${blinnExpFromRoughness}, 2.0) + 1.0)`;
-                const specularMIPLevel = `clamp(${desiredMIPLevel}, 0.0, ${maxMIPLevel})`;
+                const specularMIPLevel = `0.5 * clamp(${desiredMIPLevel}, 0.0, ${maxMIPLevel})`; // TODO: a random factor - fix this
                 const radiance = getReflectionRadiance(reflectVec, specularMIPLevel);
                 const specularBRDFContrib = "BRDF_Specular_GGX_Environment(geometry, material.specularColor, material.specularRoughness)";
                 src.push(`reflectedLight.specular += ${radiance} * ${specularBRDFContrib};`);
@@ -237,7 +234,7 @@ export const PBRProgram = function(geometryParameters, scene, lightSetup, sao) {
                 src.push("computePBRLighting(light, geometry, material, reflectedLight);");
             });
 
-            src.push(`vec3 emissiveColor = sRGBToLinearPBR(${emissiveMap.getValueExpression("vUV")}).rgb;`); // TODO: correct gamma function
+            src.push(`vec3 emissiveColor = sRGBToLinear(${emissiveMap.getValueExpression("vUV")}).rgb;`); // TODO: correct gamma function
             src.push(`float aoFactor = ${aOMap.getValueExpression("vUV")}.r;`);
 
             src.push("vec3 outgoingLight = (" + lightSetup.getAmbientColor() + " * baseColor * opacity * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular) + emissiveColor;");
