@@ -86,6 +86,14 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         };
     })();
 
+    const modelMatrix = programVariables.createUniform("mat4", "modelMatrix");
+    const viewMatrix  = programVariables.createUniform("mat4", "viewMatrix");
+    const projMatrix  = programVariables.createUniform("mat4", "projMatrix");
+    const offset      = programVariables.createUniform("vec3", "offset");
+    const scale       = programVariables.createUniform("vec3", "scale");
+    const clippable   = programVariables.createUniform("bool", "clippable");
+
+    const logDepthBufFC         = programVariables.createUniform("float", "logDepthBufFC");
     const pointSize             = programVariables.createUniform("float", "pointSize");
     const positionsDecodeMatrix = programVariables.createUniform("mat4",  "positionsDecodeMatrix");
     const uvDecodeMatrix        = programVariables.createUniform("mat3",  "uvDecodeMatrix");
@@ -100,7 +108,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
 
     const programFragmentOutputs = [ ];
     if (clipping) {
-        programFragmentOutputs.push("if (clippable) {");
+        programFragmentOutputs.push(`if (${clippable}) {`);
         programFragmentOutputs.push("  float dist = " + clipping.getDistance("vWorldPosition") + ";");
         programFragmentOutputs.push("  if (dist > 0.0) { discard; }");
         programFragmentOutputs.push("}");
@@ -113,9 +121,9 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         programFragmentOutputs.push("}");
     }
     if (programSetup.dontBillboardAnything) {
-        programFragmentOutputs.push("mat4 viewMatrix2 = viewMatrix;");
+        programFragmentOutputs.push(`mat4 viewMatrix2 = ${viewMatrix};`);
     } else {
-        programFragmentOutputs.push("mat4 viewMatrix1 = viewMatrix;");
+        programFragmentOutputs.push(`mat4 viewMatrix1 = ${viewMatrix};`);
         if (stationary) {
             programFragmentOutputs.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
         } else if (meshStateBackground) {
@@ -137,12 +145,12 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
             if (quantizedGeometry) {
                 src.push(`localPosition = ${positionsDecodeMatrix} * localPosition;`);
             }
-            src.push(`vec4 worldPosition = ${billboardIfApplicable("modelMatrix")} * localPosition;`);
-            src.push("worldPosition.xyz = worldPosition.xyz + offset;");
+            src.push(`vec4 worldPosition = ${billboardIfApplicable(modelMatrix)} * localPosition;`);
+            src.push(`worldPosition.xyz = worldPosition.xyz + ${offset};`);
             if (programSetup.dontBillboardAnything) {
-                src.push("vec4 viewPosition = viewMatrix * worldPosition;");
+                src.push(`vec4 viewPosition = ${viewMatrix} * worldPosition;`);
             } else {
-                src.push("mat4 viewMatrix1 = viewMatrix;");
+                src.push(`mat4 viewMatrix1 = ${viewMatrix};`);
                 if (stationary) {
                     src.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
                 } else if (meshStateBackground) {
@@ -150,7 +158,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
                 }
                 src.push(`mat4 viewMatrix2 = ${billboardIfApplicable("viewMatrix1")};`);
                 src.push(`vec4 viewPosition = ${(isBillboard
-                                                 ? `${billboardIfApplicable("viewMatrix1 * modelMatrix")} * localPosition`
+                                                 ? `${billboardIfApplicable(`viewMatrix1 * ${modelMatrix}`)} * localPosition`
                                                  : "viewMatrix2 * worldPosition")};`);
             }
             decodedUv && decodedUv.needed && src.push(`vec2 ${decodedUv} = ${quantizedGeometry ? `(${uvDecodeMatrix} * vec3(${attributes.uv}, 1.0)).xy` : attributes.uv};`);
@@ -163,20 +171,24 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
             return src;
         })();
 
+        if (clipping) {
+            programVertexOutputs.push("vWorldPosition = worldPosition.xyz;");
+        }
+        programVertexOutputs.push(`vec4 clipPos = ${projMatrix} * viewPosition;`);
+        if (getLogDepth) {
+            programVertexOutputs.push(`isPerspective = (${projMatrix}[2][3] == -1.0) ? 1.0 : 0.0;`);
+            programVertexOutputs.push("vFragDepth = 1.0 + clipPos.w;");
+        }
         const gl_Position = (meshStateBackground
                              ? "clipPos.xyww"
                              : (programSetup.isPick
                                 ? `vec4((clipPos.xy / clipPos.w - ${pickClipPos}) * clipPos.w, clipPos.zw)`
                                 : "clipPos"));
+        programVertexOutputs.push(`gl_Position = ${gl_Position};`);
 
         const src = [];
         src.push("#version 300 es");
         src.push("// " + programSetup.programName + " vertex shader");
-        src.push("uniform mat4 modelMatrix;");
-        src.push("uniform mat4 viewMatrix;");
-        src.push("uniform mat4 projMatrix;");
-        src.push("uniform vec3 offset;");
-        src.push("uniform vec3 scale;");
         if (quantizedGeometry) {
             if (worldNormal && worldNormal.needed) {
                 src.push("vec3 octDecode(vec2 oct) {");
@@ -198,9 +210,9 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         if (isBillboard) {
             src.push("mat4 billboard(in mat4 matIn) {");
             src.push("   mat4 mat = matIn;");
-            src.push("   mat[0].xyz = vec3(scale[0], 0.0, 0.0);");
+            src.push(`   mat[0].xyz = vec3(${scale}[0], 0.0, 0.0);`);
             if (billboard === "spherical") {
-                src.push("   mat[1].xyz = vec3(0.0, scale[1], 0.0);");
+                src.push(`   mat[1].xyz = vec3(0.0, ${scale}[1], 0.0);`);
             }
             src.push("   mat[2].xyz = vec3(0.0, 0.0, 1.0);");
             src.push("   return mat;");
@@ -210,15 +222,6 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         src.push("void main(void) {");
         mainVertexOutputs.forEach(line => src.push(line));
         programVertexOutputs.forEach(line => src.push(line));
-        if (clipping) {
-            src.push("vWorldPosition = worldPosition.xyz;");
-        }
-        src.push("vec4 clipPos = projMatrix * viewPosition;");
-        if (getLogDepth) {
-            src.push(`isPerspective = (projMatrix[2][3] == -1.0) ? 1.0 : 0.0;`);
-            src.push("vFragDepth = 1.0 + clipPos.w;");
-        }
-        src.push(`gl_Position = ${gl_Position};`);
         src.push("}");
         return src;
     };
@@ -234,22 +237,19 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-        src.push("uniform mat4 viewMatrix;");
         if (getLogDepth) {
-            src.push("uniform float logDepthBufFC;");
             src.push("in float isPerspective;");
             src.push("in float vFragDepth;");
         }
         if (clipping) {
             src.push("in vec3 vWorldPosition;");
-            src.push("uniform bool clippable;");
         }
         if (isBillboard) {
             src.push("mat4 billboard(in mat4 matIn) {");
             src.push("   mat4 mat = matIn;");
-            src.push("   mat[0].xyz = vec3(scale[0], 0.0, 0.0);");
+            src.push(`   mat[0].xyz = vec3(${scale}[0], 0.0, 0.0);`);
             if (billboard === "spherical") {
-                src.push("   mat[1].xyz = vec3(0.0, scale[1], 0.0);");
+                src.push(`   mat[1].xyz = vec3(0.0, ${scale}[1], 0.0);`);
             }
             src.push("   mat[2].xyz = vec3(0.0, 0.0, 1.0);");
             src.push("   return mat;");
@@ -269,7 +269,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         src.push("void main(void) {");
         programFragmentOutputs.forEach(line => src.push(line));
         if (getLogDepth) {
-            src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push(`gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * ${logDepthBufFC} * 0.5;`);
         }
         src.push("}");
         return src;
@@ -316,32 +316,31 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         })();
         const setPointSize = pointSize.setupInputs(getInputSetter);
         const setMeshInputsState = (function() {
-            const uModelMatrix = getInputSetter("modelMatrix");
+            const setModelMatrix = modelMatrix.setupInputs(getInputSetter);
             const setModelNormalMatrix = modelNormalMatrix.setupInputs(getInputSetter);
-            const uViewMatrix = getInputSetter("viewMatrix");
+            const setViewMatrix = viewMatrix.setupInputs(getInputSetter);
             const setViewNormalMatrix = viewNormalMatrix.setupInputs(getInputSetter);
-            const uProjMatrix = getInputSetter("projMatrix");
-
-            const uOffset = getInputSetter("offset");
-            const uScale = getInputSetter("scale");
-            const uLogDepthBufFC = getLogDepth && getInputSetter("logDepthBufFC");
+            const setProjMatrix = projMatrix.setupInputs(getInputSetter);
+            const setOffset = offset.setupInputs(getInputSetter);
+            const setScale = getInputSetter("scale");
+            const setLogDepthBufFC = logDepthBufFC.setupInputs(getInputSetter);
 
             return (mesh, viewMatrix, viewNormalMatrix, projMatrix, far) => {
-                uModelMatrix(mesh.worldMatrix);
+                setModelMatrix(mesh.worldMatrix);
                 setModelNormalMatrix && setModelNormalMatrix(mesh.worldNormalMatrix);
-                uViewMatrix(viewMatrix);
+                setViewMatrix(viewMatrix);
                 setViewNormalMatrix && setViewNormalMatrix(viewNormalMatrix);
-                uProjMatrix(projMatrix);
-                uOffset(mesh.offset);
-                uScale(mesh.scale);
-                uLogDepthBufFC && uLogDepthBufFC(2.0 / (Math.log(far + 1.0) / Math.LN2));
+                setProjMatrix(projMatrix);
+                setOffset(mesh.offset);
+                setScale(mesh.scale);
+                setLogDepthBufFC && setLogDepthBufFC(2.0 / (Math.log(far + 1.0) / Math.LN2));
             };
         })();
         const setSectionPlanesInputsState = clipping && (function() {
-            const uClippable = getInputSetter("clippable");
+            const setClippable = clippable.setupInputs(getInputSetter);
             const setClippingState = clipping.setupInputs(getInputSetter);
             return (rtcOrigin, renderFlags, clippable) => {
-                uClippable(clippable);
+                setClippable(clippable);
                 if (clippable) {
                     setClippingState(rtcOrigin, renderFlags.sectionPlanesActivePerLayer);
                 }
