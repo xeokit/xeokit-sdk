@@ -171,7 +171,7 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
                         src.push(`out vec3 vShadowPosFromLight${i};`);
                     }
                 });
-                if (lightSetup.lightMap) {
+                if (lightSetup.getIrradiance) {
                     src.push("out vec3 vWorldNormal;");
                 }
             }
@@ -182,7 +182,7 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
             attributes.color && src.push(`vColor = ${attributes.color};`);
             if (hasNormals) {
                 src.push(`vViewNormal = ${attributes.normal.view};`);
-                if (lightSetup.lightMap) {
+                if (lightSetup.getIrradiance) {
                     src.push(`vWorldNormal = ${attributes.normal.world};`);
                 }
                 if (lightSetup.directionalLights.length > 0) {
@@ -292,7 +292,7 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
 
             if (hasNormals) {
                 src.push("in vec3 vViewNormal;");
-                if (lightSetup.lightMap) {
+                if (lightSetup.getIrradiance) {
                     src.push("in vec3 vWorldNormal;");
                 }
             }
@@ -349,7 +349,7 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
             src.push("out vec4 outColor;");
         },
         appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => {
-            const hasNonAmbientLighting = hasNormals && ((lightSetup.directionalLights.length > 0) || lightSetup.lightMap || lightSetup.reflectionMap);
+            const hasNonAmbientLighting = hasNormals && ((lightSetup.directionalLights.length > 0) || lightSetup.getIrradiance || lightSetup.reflectionMap);
             src.push(`vec3 diffuseColor = ${(hasNonAmbientLighting && (phongMaterial || specularMaterial) && materialDiffuse) || (metallicMaterial && materialBaseColor) || "vec3(1.0)"};`);
             src.push(`vec4 alphaModeCutoff = ${((phongMaterial || metallicMaterial || specularMaterial) && materialAlphaModeCutoff) || "vec4(1.0, 0.0, 0.0, 0.0)"};`);
             src.push("float alpha = alphaModeCutoff[0];");
@@ -451,10 +451,8 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
                     src.push("vec3 reflDiff = vec3(0.0);");
                     src.push("vec3 reflSpec = vec3(0.0);");
 
-                    if (lightSetup.lightMap) {
-                        const irradiance = `${lightSetup.lightMap.getValueExpression("normalize(vWorldNormal)")}.rgb`;
-                        src.push(`reflDiff += material.diffuseColor * ${irradiance};`);
-                    }
+                    lightSetup.getIrradiance && src.push(`reflDiff += material.diffuseColor * ${lightSetup.getIrradiance("normalize(vWorldNormal)")};`);
+
                     if (lightSetup.reflectionMap) {
                         const reflectVec = `reflect(-viewEyeDir, viewNormal)`;
                         const spec = (phongMaterial
