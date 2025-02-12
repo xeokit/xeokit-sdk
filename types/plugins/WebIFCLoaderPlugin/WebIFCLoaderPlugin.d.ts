@@ -21,12 +21,13 @@ import { ModelStats } from "../index";
 
 export declare type WebIFCLoaderPluginConfiguration = {
   id?: string;
-  wasmPath: string;
   objectDefaults?: any;
   dataSource?: IWebIFCDefaultDataSource;
   includeTypes?: string[];
   excludeTypes?: string[];
   excludeUnclassifiedObjects?: boolean;
+  WebIFC: any;
+  IfcAPI: any;
 };
 
 export declare type LoadWebIFCModel = {
