@@ -1,4 +1,5 @@
-export const ShadowShaderSource = function(meshHash) {
+export const ShadowShaderSource = function(meshHash, programVariables) {
+    const outColor = programVariables.createOutput("vec4", "outColor");
     return {
         getHash: () => [ meshHash ],
         programName: "Shadow",
@@ -14,8 +15,7 @@ export const ShadowShaderSource = function(meshHash) {
             src.push("  comp -= comp.xxyz * bitMask;");
             src.push("  return comp;");
             src.push("}");
-            src.push("out vec4 outColor;");
         },
-        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => src.push(`outColor = encodeFloat(${gl_FragCoord}.z);`)
+        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => src.push(`${outColor} = encodeFloat(${gl_FragCoord}.z);`)
     };
 };

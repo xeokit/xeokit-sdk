@@ -278,46 +278,97 @@ class Mesh extends Component {
             let instance = null;
             const ensureInstance = () => {
                 if (! instance) {
-                    const lazyShaderAttribute = function(name, type) {
-                        let needed = false;
+                    const programVariablesState = (function() {
+                        const attribs  = [ ];
+                        const outputs  = [ ];
+                        const uniforms = [ ];
+                        const varyings = [ ];
                         return {
-                            appendDefinitions: (src) => needed && src.push(`in ${type} ${name};`),
-                            toString: () => {
-                                needed = true;
-                                return name;
+                            programVariables: {
+                                createAttribute: function(type, name) {
+                                    let needed = false;
+                                    attribs.push({ appendDefinitions: (src) => needed && src.push(`in ${type} ${name};`) });
+                                    return {
+                                        toString: () => {
+                                            needed = true;
+                                            return name;
+                                        },
+                                        setupInputs: (getInputSetter) => needed && getInputSetter(name)
+                                    };
+                                },
+                                createOutput: (type, name) => {
+                                    outputs.push({ appendDefinitions: (src) => src.push(`out ${type} ${name};`) });
+                                    return { toString: () => name };
+                                },
+                                createUniform: (type, name) => {
+                                    let needed = false;
+                                    uniforms.push({ appendDefinitions: (src) => needed && src.push(`uniform ${type} ${name};`) });
+                                    return {
+                                        toString: () => {
+                                            needed = true;
+                                            return name;
+                                        },
+                                        setupInputs: (getUniformSetter) => needed && getUniformSetter(name)
+                                    };
+                                },
+                                createVarying: (type, name) => {
+                                    const v = {
+                                        toString: () => {
+                                            v.needed = true;
+                                            return name;
+                                        }
+                                    };
+                                    varyings.push({
+                                        appendVertexDefinitions:   (src) => v.needed && src.push(`out ${type} ${name};`),
+                                        appendFragmentDefinitions: (src) => v.needed && src.push(`in  ${type} ${name};`)
+                                    });
+                                    return v;
+                                }
                             },
-                            setupInputs: (getInputSetter) => needed && getInputSetter(name)
+                            appendVertexDefinitions:   (src) => {
+                                attribs.forEach(a => a.appendDefinitions(src));
+                                uniforms.forEach(u => u.appendDefinitions(src));
+                                varyings.forEach(v => v.appendVertexDefinitions(src));
+                            },
+                            appendFragmentDefinitions: (src) => {
+                                uniforms.forEach(u => u.appendDefinitions(src));
+                                varyings.forEach(v => v.appendFragmentDefinitions(src));
+                                outputs.forEach(v => v.appendDefinitions(src));
+                            }
                         };
-                    };
+                    })();
 
                     const geometryState = mesh._geometry._state;
+                    const createAttribute = programVariablesState.programVariables.createAttribute;
                     const attributes = {
-                        position:  lazyShaderAttribute("position",  "vec3"),
-                        color:     geometryState.colorsBuf && lazyShaderAttribute("color", "vec4"),
-                        pickColor: lazyShaderAttribute("pickColor", "vec4"),
-                        uv:        geometryState.uvBuf && lazyShaderAttribute("uv", "vec2"),
-                        normal:    (geometryState.autoVertexNormals || geometryState.normalsBuf) && [ "triangles", "triangle-strip", "triangle-fan" ].includes(geometryState.primitiveName) && lazyShaderAttribute("normal", "vec3")
+                        position:  createAttribute("vec3", "position"),
+                        color:     geometryState.colorsBuf && createAttribute("vec4", "color"),
+                        pickColor: createAttribute("vec4", "pickColor"),
+                        uv:        geometryState.uvBuf && createAttribute("vec2", "uv"),
+                        normal:    (geometryState.autoVertexNormals || geometryState.normalsBuf) && [ "triangles", "triangle-strip", "triangle-fan" ].includes(geometryState.primitiveName) && createAttribute("vec3", "normal")
                     };
                     const worldNormal = attributes.normal && lazyShaderVariable("worldNormal");
                     const viewNormal  = worldNormal && lazyShaderVariable("viewNormal");
                     const decodedUv = attributes.uv && lazyShaderVariable("decodedUv");
 
-                    const programSetup = getProgramSetup({
-                        attributes: {
-                            position:  {
-                                world: "worldPosition",
-                                view:  "viewPosition"
+                    const programSetup = getProgramSetup(
+                        programVariablesState.programVariables,
+                        {
+                            attributes: {
+                                position:  {
+                                    world: "worldPosition",
+                                    view:  "viewPosition"
+                                },
+                                color:     attributes.color,
+                                pickColor: attributes.pickColor,
+                                uv:        decodedUv,
+                                normal:    attributes.normal && {
+                                    world: worldNormal,
+                                    view:  viewNormal
+                                }
                             },
-                            color:     attributes.color,
-                            pickColor: attributes.pickColor,
-                            uv:        decodedUv,
-                            normal:    attributes.normal && {
-                                world: worldNormal,
-                                view:  viewNormal
-                            }
-                        },
-                        viewMatrix: "viewMatrix2"
-                    });
+                            viewMatrix: "viewMatrix2"
+                        });
                     const hash = [
                         programSetup.programName,
                         mesh.scene.canvas.canvas.id,
@@ -325,7 +376,7 @@ class Mesh extends Component {
                         mesh._geometry._state.hash
                     ].concat(programSetup.getHash()).join(";");
                     if (! (hash in renderersCache)) {
-                        const renderer = instantiateMeshRenderer(mesh, attributes, { decodedUv: decodedUv, worldNormal: worldNormal, viewNormal: viewNormal }, programSetup);
+                        const renderer = instantiateMeshRenderer(mesh, attributes, { decodedUv: decodedUv, worldNormal: worldNormal, viewNormal: viewNormal }, programSetup, programVariablesState);
                         if (renderer.errors) {
                             console.log(renderer.errors.join("\n"));
                             return;
@@ -361,16 +412,17 @@ class Mesh extends Component {
         };
 
         const scene = mesh.scene;
+        const emphasisShaderSourceMaker = isFill => (vars, geo) => EmphasisShaderSource(mesh._state.hash, vars, geo, scene, isFill);
         this._renderers = {
-            _drawRenderer:          wrapRenderer((geo) => ((material.type === "LambertMaterial")
-                                                           ? LambertShaderSource(mesh._state.drawHash, geo, material, scene)
-                                                           : DrawShaderSource   (mesh._state.drawHash, geo, material, scene))),
-            _shadowRenderer:        wrapRenderer(() => ShadowShaderSource(mesh._state.hash)),
-            _emphasisEdgesRenderer: wrapRenderer((geo) => EmphasisShaderSource(mesh._state.hash, geo, scene, false)),
-            _emphasisFillRenderer:  wrapRenderer((geo) => EmphasisShaderSource(mesh._state.hash, geo, scene, true)),
-            _pickMeshRenderer:      wrapRenderer(() => PickMeshShaderSource(mesh._state.hash)),
-            _pickTriangleRenderer:  wrapRenderer((geo) => PickTriangleShaderSource(mesh._state.hash, geo)),
-            _occlusionRenderer:     wrapRenderer(() => OcclusionShaderSource(mesh._state.pickOcclusionHash))
+            _drawRenderer:          wrapRenderer((vars, geo) => ((material.type === "LambertMaterial")
+                                                                 ? LambertShaderSource(mesh._state.drawHash, vars, geo, material, scene)
+                                                                 : DrawShaderSource   (mesh._state.drawHash, vars, geo, material, scene))),
+            _shadowRenderer:        wrapRenderer((vars) => ShadowShaderSource(mesh._state.hash, vars)),
+            _emphasisEdgesRenderer: wrapRenderer(emphasisShaderSourceMaker(false)),
+            _emphasisFillRenderer:  wrapRenderer(emphasisShaderSourceMaker(true)),
+            _pickMeshRenderer:      wrapRenderer((vars) => PickMeshShaderSource(mesh._state.hash, vars)),
+            _pickTriangleRenderer:  wrapRenderer((vars, geo) => PickTriangleShaderSource(mesh._state.hash, vars, geo)),
+            _occlusionRenderer:     wrapRenderer((vars) => OcclusionShaderSource(mesh._state.pickOcclusionHash, vars))
         };
 
         this._geometry = cfg.geometry ? this._checkComponent2(["ReadableGeometry", "VBOGeometry"], cfg.geometry) : this.scene.geometry;
