@@ -1,19 +1,17 @@
 import {math} from "../../math/math.js";
 const tmpVec4 = math.vec4();
 
-export const PickMeshShaderSource = function(meshHash) {
+export const PickMeshShaderSource = function(meshHash, programVariables) {
+    const pickColor = programVariables.createUniform("vec4", "pickColor");
+    const outColor = programVariables.createOutput("vec4", "outColor");
     return {
         getHash: () => [ meshHash ],
         programName: "PickMesh",
         isPick: true,
         dontBillboardAnything: true,
-        appendFragmentDefinitions: (src) => {
-            src.push("uniform vec4 pickColor;");
-            src.push("out vec4 outColor;");
-        },
-        appendFragmentOutputs: (src) => src.push("outColor = pickColor;"),
+        appendFragmentOutputs: (src) => src.push(`${outColor} = ${pickColor};`),
         setupMeshInputs: (getInputSetter) => {
-            const pickColor = getInputSetter("pickColor");
+            const setPickColor = pickColor.setupInputs(getInputSetter);
             return (mesh) => {
                 var pickID = mesh._state.pickID; // Mesh-indexed color
                 tmpVec4[0] = pickID       & 0xFF;
@@ -21,7 +19,7 @@ export const PickMeshShaderSource = function(meshHash) {
                 tmpVec4[2] = pickID >> 16 & 0xFF;
                 tmpVec4[3] = pickID >> 24 & 0xFF;
                 math.mulVec4Scalar(tmpVec4, 1 / 255, tmpVec4);
-                pickColor(tmpVec4);
+                setPickColor(tmpVec4);
             };
         }
     };

@@ -1,8 +1,8 @@
-import {createLightSetup, lazyShaderUniform, lazyShaderVariable, setupTexture} from "../MeshRenderer.js";
+import {createLightSetup, lazyShaderVariable, setupTexture} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tempVec4 = math.vec4();
 
-export const DrawShaderSource = function(meshDrawHash, geometry, material, scene) {
+export const DrawShaderSource = function(meshDrawHash, programVariables, geometry, material, scene) {
     const materialState = material._state;
     const phongMaterial    = (materialState.type === "PhongMaterial");
     const metallicMaterial = (materialState.type === "MetallicMaterial");
@@ -10,28 +10,21 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
 
     const attributes = geometry.attributes;
     const hasNormals = !!attributes.normal;
-    const lightSetup = createLightSetup(scene._lightsState, !!attributes.uv);
+    const lightSetup = createLightSetup(programVariables, scene._lightsState, !!attributes.uv);
 
-    const colorize = lazyShaderUniform("colorize", "vec4");
+    const colorize = programVariables.createUniform("vec4", "colorize");
 
     const perturbNormal2Arb = lazyShaderVariable("perturbNormal2Arb");
     const fresnel = lazyShaderVariable("fresnel");
 
     const setupFresnel = (name, colorSwizzle, getMaterialValue) => {
-        const edgeBias    = lazyShaderUniform(name + "FresnelEdgeBias",   "float");
-        const centerBias  = lazyShaderUniform(name + "FresnelCenterBias", "float");
-        const power       = lazyShaderUniform(name + "FresnelPower",      "float");
-        const edgeColor   = lazyShaderUniform(name + "FresnelEdgeColor",   "vec3");
-        const centerColor = lazyShaderUniform(name + "FresnelCenterColor", "vec3");
+        const edgeBias    = programVariables.createUniform("float", name + "FresnelEdgeBias");
+        const centerBias  = programVariables.createUniform("float", name + "FresnelCenterBias");
+        const power       = programVariables.createUniform("float", name + "FresnelPower");
+        const edgeColor   = programVariables.createUniform("vec3",  name + "FresnelEdgeColor");
+        const centerColor = programVariables.createUniform("vec3",  name + "FresnelCenterColor");
 
         return getMaterialValue(material) && {
-            appendDefinitions: (src) => {
-                edgeBias.appendDefinitions(src);
-                centerBias.appendDefinitions(src);
-                power.appendDefinitions(src);
-                edgeColor.appendDefinitions(src);
-                centerColor.appendDefinitions(src);
-            },
             getValueExpression: (viewEyeDir, viewNormal) => {
                 const f = `${fresnel}(${viewEyeDir}, ${viewNormal}, ${edgeBias}, ${centerBias}, ${power})`;
                 return `mix(${edgeColor + colorSwizzle}, ${centerColor + colorSwizzle}, ${f})`;
@@ -63,9 +56,8 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
     const setup2dTexture = (name, getMaterialValue) => {
         return attributes.uv && (function() {
             const initTex = getMaterialValue(material);
-            const tex = initTex && setupTexture(name, "sampler2D", initTex.encoding, !!initTex._state.matrix);
+            const tex = initTex && setupTexture(programVariables, "sampler2D", name, initTex.encoding, !!initTex._state.matrix);
             return tex && {
-                appendDefinitions:     tex.appendDefinitions,
                 getTexCoordExpression: tex.getTexCoordExpression,
                 getValueExpression:    tex.getValueExpression,
                 setupInputs:           (getInputSetter) => {
@@ -97,9 +89,8 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
     const setupUniform = (name, type, getMaterialValue) => {
         const initValue = getMaterialValue(material);
         const isDefined = (type === "float") ? ((initValue !== undefined) && (initValue !== null)) : initValue;
-        const uniform = lazyShaderUniform(name, type);
+        const uniform = programVariables.createUniform(type, name);
         return isDefined && {
-            appendDefinitions: uniform.appendDefinitions,
             toString: uniform.toString,
             setupInputs: (getInputSetter) => {
                 const setUniform = uniform.setupInputs(getInputSetter);
@@ -143,6 +134,19 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
         materialAlphaModeCutoff
         ].filter(i => i);
 
+    const vViewPosition = programVariables.createVarying("vec3", "vViewPosition");
+    const texturePos = programVariables.createVarying("vec4", "texturePos");
+    const vColor = attributes.color && programVariables.createVarying("vec4", "vColor");
+
+    const vViewNormal = programVariables.createVarying("vec3", "vViewNormal");
+    const vDirectionals = lightSetup.directionalLights.map((light, i) => ({
+        vViewLightReverseDir: programVariables.createVarying("vec3", `vViewLightReverseDir${i}`),
+        vShadowPosFromLight:  programVariables.createVarying("vec3", `vShadowPosFromLight${i}`)
+    }));
+    const vWorldNormal = programVariables.createVarying("vec3", "vWorldNormal");
+
+    const outColor = programVariables.createOutput("vec4", "outColor");
+
     return {
         getHash: () => [
             meshDrawHash,
@@ -156,55 +160,20 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
         setupPointSize: true,
         setsLineWidth: true,
         useGammaOutput: true,
-        appendVertexDefinitions: (src) => {
-            src.push("out vec3 vViewPosition;");
-            attributes.uv && src.push("out vec4 texturePos;");
-            attributes.color && src.push("out vec4 vColor;");
-            lightSetup.appendDefinitions(src);
-            if (hasNormals) {
-                src.push("out vec3 vViewNormal;");
-                lightSetup.directionalLights.forEach((light, i) => {
-                    if (light.isWorldSpace) {
-                        src.push(`out vec3 vViewLightReverseDir${i};`);
-                    }
-                    if (light.shadowParameters) {
-                        src.push(`out vec3 vShadowPosFromLight${i};`);
-                    }
-                });
-                if (lightSetup.getIrradiance) {
-                    src.push("out vec3 vWorldNormal;");
-                }
-            }
-        },
         appendVertexOutputs: (src) => {
-            src.push(`vViewPosition = ${attributes.position.view}.xyz;`);
-            attributes.uv && src.push(`texturePos = vec4(${attributes.uv}, 1.0, 1.0);`);
-            attributes.color && src.push(`vColor = ${attributes.color};`);
-            if (hasNormals) {
-                src.push(`vViewNormal = ${attributes.normal.view};`);
-                if (lightSetup.getIrradiance) {
-                    src.push(`vWorldNormal = ${attributes.normal.world};`);
-                }
-                if (lightSetup.directionalLights.length > 0) {
-                    src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
-                    lightSetup.directionalLights.forEach((light, i) => {
-                        if (light.isWorldSpace) {
-                            src.push(`vViewLightReverseDir${i} = ${light.getDirection(geometry.viewMatrix, null)};`);
-                        }
-                        if (light.shadowParameters) {
-                            src.push(`vShadowPosFromLight${i} = (texUnitConverter * ${light.shadowParameters.getShadowProjMatrix()} * (${light.shadowParameters.getShadowViewMatrix()} * ${attributes.position.world})).xyz;`);
-                        }
-                    });
-                }
-            }
+            src.push(`${vViewPosition} = ${attributes.position.view}.xyz;`);
+            texturePos.needed && src.push(`${texturePos} = vec4(${attributes.uv}, 1.0, 1.0);`);
+            vColor && src.push(`${vColor} = ${attributes.color};`);
+            vViewNormal.needed && src.push(`${vViewNormal} = ${attributes.normal.view};`);
+            vWorldNormal.needed && src.push(`${vWorldNormal} = ${attributes.normal.world};`);
+            src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
+            vDirectionals.forEach((vDir, i) => {
+                const light = lightSetup.directionalLights[i];
+                vDir.vViewLightReverseDir.needed && src.push(`${vDir.vViewLightReverseDir} = ${light.getDirection(geometry.viewMatrix, null)};`);
+                vDir.vShadowPosFromLight.needed  && src.push(`${vDir.vShadowPosFromLight}  = (texUnitConverter * ${light.shadowParameters.getShadowProjMatrix()} * (${light.shadowParameters.getShadowViewMatrix()} * ${attributes.position.world})).xyz;`);
+            });
         },
         appendFragmentDefinitions: (src) => {
-            attributes.uv && src.push("in vec4 texturePos;");
-            attributes.color && src.push("in vec4 vColor;");
-            src.push("vec4 sRGBToLinear( in vec4 value ) {");
-            src.push("  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );");
-            src.push("}");
-
             if (hasNormals) {
                 //--------------------------------------------------------------------------------
                 // SHADING FUNCTIONS
@@ -284,21 +253,6 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
 
             } // geometry.normals
 
-            //--------------------------------------------------------------------------------
-            // GEOMETRY INPUTS
-            //--------------------------------------------------------------------------------
-
-            src.push("in vec3 vViewPosition;");
-
-            if (hasNormals) {
-                src.push("in vec3 vViewNormal;");
-                if (lightSetup.getIrradiance) {
-                    src.push("in vec3 vWorldNormal;");
-                }
-            }
-
-            materialInputs.forEach(i => i.appendDefinitions(src));
-
             if (perturbNormal2Arb.needed) {
                 src.push(`vec3 ${perturbNormal2Arb}( vec3 eye_pos, vec3 surf_norm, vec2 uv, vec4 texel ) {`);
                 src.push("      vec3 q0 = vec3( dFdx( eye_pos.x ), dFdx( eye_pos.y ), dFdx( eye_pos.z ) );");
@@ -326,52 +280,31 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
                 src.push("    return pow(finalFr, power);");
                 src.push("}");
             }
-
-            //--------------------------------------------------------------------------------
-            // LIGHT SOURCES
-            //--------------------------------------------------------------------------------
-
-            lightSetup.appendDefinitions(src);
-            hasNormals && lightSetup.directionalLights.forEach((light, i) => {
-                if (light.isWorldSpace) {
-                    src.push(`in vec3 vViewLightReverseDir${i};`);
-                }
-                if (light.shadowParameters) {
-                    src.push(`in vec3 vShadowPosFromLight${i};`);
-                }
-            });
-
-            colorize.appendDefinitions(src);
-
-            //================================================================================
-            // MAIN
-            //================================================================================
-            src.push("out vec4 outColor;");
         },
         appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => {
             const hasNonAmbientLighting = hasNormals && ((lightSetup.directionalLights.length > 0) || lightSetup.getIrradiance || lightSetup.getReflection);
             src.push(`vec3 diffuseColor = ${(hasNonAmbientLighting && (phongMaterial || specularMaterial) && materialDiffuse) || (metallicMaterial && materialBaseColor) || "vec3(1.0)"};`);
             src.push(`vec4 alphaModeCutoff = ${((phongMaterial || metallicMaterial || specularMaterial) && materialAlphaModeCutoff) || "vec4(1.0, 0.0, 0.0, 0.0)"};`);
             src.push("float alpha = alphaModeCutoff[0];");
-            (phongMaterial || metallicMaterial || specularMaterial) && alphaMap && src.push(`alpha *= ${alphaMap.getValueExpression("texturePos")}.r;`);
+            (phongMaterial || metallicMaterial || specularMaterial) && alphaMap && src.push(`alpha *= ${alphaMap.getValueExpression(texturePos)}.r;`);
 
-            if (attributes.color) {
-                src.push("diffuseColor *= vColor.rgb;");
-                src.push("alpha *= vColor.a;");
+            if (vColor) {
+                src.push(`diffuseColor *= ${vColor}.rgb;`);
+                src.push(`alpha *= ${vColor}.a;`);
             }
             if (metallicMaterial && baseColorMap) {
-                src.push("vec4 baseColorTexel = " + baseColorMap.getValueExpression("texturePos") + ";");
+                src.push("vec4 baseColorTexel = " + baseColorMap.getValueExpression(texturePos) + ";");
                 src.push("diffuseColor *= baseColorTexel.rgb;");
                 src.push("alpha *= baseColorTexel.a;");
             }
             if ((phongMaterial || specularMaterial) && diffuseMap) {
-                src.push("vec4 diffuseTexel = " + diffuseMap.getValueExpression("texturePos") + ";");
+                src.push("vec4 diffuseTexel = " + diffuseMap.getValueExpression(texturePos) + ";");
                 src.push("diffuseColor *= diffuseTexel.rgb;");
                 src.push("alpha *= diffuseTexel.a;");
             }
 
             src.push(`vec3 emissiveColor = ${((phongMaterial || metallicMaterial || specularMaterial) && materialEmissive) || "vec3(0.0)"};`);
-            (phongMaterial || metallicMaterial || specularMaterial) && emissiveMap && src.push(`emissiveColor = ${emissiveMap.getValueExpression("texturePos")}.rgb;`);
+            (phongMaterial || metallicMaterial || specularMaterial) && emissiveMap && src.push(`emissiveColor = ${emissiveMap.getValueExpression(texturePos)}.rgb;`);
 
             if (hasNonAmbientLighting) {
 
@@ -381,37 +314,37 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
                 src.push(`float roughness  = ${((metallicMaterial || specularMaterial) && materialRoughness)  || "1.0"};`);
                 src.push(`float shininess  = ${(phongMaterial && materialShininess)|| "1.0"};`);
                 src.push(`float specularF0 = ${(metallicMaterial && materialSpecularF0) || "1.0"};`);
-                src.push(`float occlusion  = ${((phongMaterial || metallicMaterial || specularMaterial) && occlusionMap) ? `${occlusionMap.getValueExpression("texturePos")}.r` : "1.0"};`);
+                src.push(`float occlusion  = ${((phongMaterial || metallicMaterial || specularMaterial) && occlusionMap) ? `${occlusionMap.getValueExpression(texturePos)}.r` : "1.0"};`);
 
                 //--------------------------------------------------------------------------------
                 // SHADING
                 //--------------------------------------------------------------------------------
 
-                metallicMaterial && metallicMap  && src.push(`metallic  *= ${metallicMap.getValueExpression("texturePos")}.r;`);
-                metallicMaterial && roughnessMap && src.push(`roughness *= ${roughnessMap.getValueExpression("texturePos")}.r;`);
+                metallicMaterial && metallicMap  && src.push(`metallic  *= ${metallicMap.getValueExpression(texturePos)}.r;`);
+                metallicMaterial && roughnessMap && src.push(`roughness *= ${roughnessMap.getValueExpression(texturePos)}.r;`);
 
                 if (metallicMaterial && metallicRoughnessMap) {
-                    src.push("vec4 metalRoughTexel = " + metallicRoughnessMap.getValueExpression("texturePos") + ";");
+                    src.push("vec4 metalRoughTexel = " + metallicRoughnessMap.getValueExpression(texturePos) + ";");
                     src.push("metallic  *= metalRoughTexel.b;");
                     src.push("roughness *= metalRoughTexel.g;");
                 }
 
-                (phongMaterial || specularMaterial) && specularMap && src.push(`specular *= ${specularMap.getValueExpression("texturePos")}.rgb;`);
-                specularMaterial && glossinessMap && src.push(`glossiness *= ${glossinessMap.getValueExpression("texturePos")}.r;`);
+                (phongMaterial || specularMaterial) && specularMap && src.push(`specular *= ${specularMap.getValueExpression(texturePos)}.rgb;`);
+                specularMaterial && glossinessMap && src.push(`glossiness *= ${glossinessMap.getValueExpression(texturePos)}.r;`);
 
                 if (specularMaterial && specularGlossinessMap) {
-                    src.push("vec4 specGlossTexel = " + specularGlossinessMap.getValueExpression("texturePos") + ";"); // TODO: what if only RGB texture?
+                    src.push("vec4 specGlossTexel = " + specularGlossinessMap.getValueExpression(texturePos) + ";"); // TODO: what if only RGB texture?
                     src.push("specular   *= specGlossTexel.rgb;");
                     src.push("glossiness *= specGlossTexel.a;");
                 }
 
-                const vViewNormalized = "normalize(vViewNormal)";
+                const vViewNormalized = `normalize(${vViewNormal})`;
                 const viewNormal = (((phongMaterial || metallicMaterial || specularMaterial) && normalMap)
-                                    ? `${perturbNormal2Arb}(vViewPosition, ${vViewNormalized}, ${normalMap.getTexCoordExpression("texturePos")}, ${normalMap.getValueExpression("texturePos")})`
+                                    ? `${perturbNormal2Arb}(${vViewPosition}, ${vViewNormalized}, ${normalMap.getTexCoordExpression(texturePos)}, ${normalMap.getValueExpression(texturePos)})`
                                     : vViewNormalized);
                 src.push(`vec3 viewNormal = ${viewNormal};`);
 
-                src.push("vec3 viewEyeDir = normalize(-vViewPosition);");
+                src.push(`vec3 viewEyeDir = normalize(-${vViewPosition});`);
 
                 diffuseFresnel  && src.push(`diffuseColor  *= ${diffuseFresnel.getValueExpression ("viewEyeDir", "viewNormal")};`);
                 specularFresnel && src.push(`specular      *= ${specularFresnel.getValueExpression("viewEyeDir", "viewNormal")};`);
@@ -451,7 +384,7 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
                     src.push("vec3 reflDiff = vec3(0.0);");
                     src.push("vec3 reflSpec = vec3(0.0);");
 
-                    lightSetup.getIrradiance && src.push(`reflDiff += ${lightSetup.getIrradiance("normalize(vWorldNormal)")};`);
+                    lightSetup.getIrradiance && src.push(`reflDiff += ${lightSetup.getIrradiance(`normalize(${vWorldNormal})`)};`);
 
                     if (lightSetup.getReflection) {
                         const reflectVec = `reflect(-viewEyeDir, viewNormal)`;
@@ -478,11 +411,11 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
                     lightSetup.directionalLights.forEach((light, i) => {
                         if (light.shadowParameters) {
                             const shadowAcneRemover = "0.007";
-                            src.push(`fragmentDepth = vShadowPosFromLight${i}.z - ${shadowAcneRemover};`);
+                            src.push(`fragmentDepth = ${vDirectionals[i].vShadowPosFromLight}.z - ${shadowAcneRemover};`);
                             src.push("shadow = 0.0;");
                             src.push("for (int x = -3; x <= 3; x++) {");
                             src.push("  for (int y = -3; y <= 3; y++) {");
-                            src.push(`      float texelDepth = dot(texture(${light.getShadowMap()}, vShadowPosFromLight${i}.xy + vec2(x, y) * texelSize), bitShift);`);
+                            src.push(`      float texelDepth = dot(texture(${light.getShadowMap()}, ${vDirectionals[i].vShadowPosFromLight}.xy + vec2(x, y) * texelSize), bitShift);`);
                             src.push(`      if (fragmentDepth < texelDepth) {`);
                             src.push("          shadow += 1.0;");
                             src.push("      }");
@@ -491,7 +424,7 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
                             src.push("shadow /= 9.0;");
                         }
                         src.push(`vec3 lightColor${i} = ${light.getColor()}${light.shadowParameters ? (" * " + "shadow") : ""};`);
-                        src.push(`vec3 lightDirection${i} = ${light.isWorldSpace ? `vViewLightReverseDir${i}` : light.getDirection(null, "vViewPosition")};`);
+                        src.push(`vec3 lightDirection${i} = ${light.isWorldSpace ? vDirectionals[i].vViewLightReverseDir : light.getDirection(null, vViewPosition)};`);
                         const dotNL = `saturate(dot(viewNormal, lightDirection${i}))`;
                         src.push(`vec3 irradiance${i} = ${dotNL} * lightColor${i};`);
                         src.push(`reflDiff += irradiance${i};`);
@@ -506,14 +439,14 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
                 src.push("vec3 outgoingLight = emissiveColor + occlusion * (reflDiff * material.diffuseColor + reflSpec)" + (ambient ? (" + " + ambient) : "") + ";");
             } else {
                 src.push(`vec3 ambientColor = ${(phongMaterial && materialAmbient) || "vec3(1.0)"};`);
-                phongMaterial && ambientMap && src.push(`ambientColor *= ${ambientMap.getValueExpression("texturePos")}.rgb;`);
+                phongMaterial && ambientMap && src.push(`ambientColor *= ${ambientMap.getValueExpression(texturePos)}.rgb;`);
                 src.push(`ambientColor *= ${lightSetup.getAmbientColor()};`);
                 src.push("vec3 outgoingLight = emissiveColor + ambientColor;");
             }
 
             src.push(`vec4 fragColor = ${colorize} * vec4(outgoingLight, alpha);`);
 
-            src.push(`outColor = ${getGammaOutputExpression ? getGammaOutputExpression("fragColor") : "fragColor"};`);
+            src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression("fragColor") : "fragColor"};`);
         },
         setupMeshInputs: (getInputSetter) => {
             const setColorize = colorize.setupInputs(getInputSetter);
