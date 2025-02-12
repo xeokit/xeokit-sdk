@@ -16,18 +16,6 @@ const iota = function(n) {
     return ret;
 };
 
-export const lazyShaderUniform = function(name, type) {
-    let needed = false;
-    return {
-        appendDefinitions: (src) => needed && src.push(`uniform ${type} ${name};`),
-        toString: () => {
-            needed = true;
-            return name;
-        },
-        setupInputs: (getUniformSetter) => needed && getUniformSetter(name)
-    };
-};
-
 export const lazyShaderVariable = function(name) {
     const variable = {
         toString: () => {
@@ -38,7 +26,8 @@ export const lazyShaderVariable = function(name) {
     return variable;
 };
 
-export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup) => {
+export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, programVariablesState) => {
+    const programVariables = programVariablesState.programVariables;
     const decodedUv   = auxVariables.decodedUv;
     const worldNormal = auxVariables.worldNormal;
     const viewNormal  = auxVariables.viewNormal;
@@ -114,12 +103,12 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         };
     })();
 
-    const pointSize             = lazyShaderUniform("pointSize",             "float");
-    const positionsDecodeMatrix = lazyShaderUniform("positionsDecodeMatrix", "mat4");
-    const uvDecodeMatrix        = lazyShaderUniform("uvDecodeMatrix",        "mat3");
-    const modelNormalMatrix     = lazyShaderUniform("modelNormalMatrix",     "mat4");
-    const viewNormalMatrix      = lazyShaderUniform("viewNormalMatrix",      "mat4");
-    const pickClipPos           = lazyShaderUniform("pickClipPos",           "vec2");
+    const pointSize             = programVariables.createUniform("float", "pointSize");
+    const positionsDecodeMatrix = programVariables.createUniform("mat4",  "positionsDecodeMatrix");
+    const uvDecodeMatrix        = programVariables.createUniform("mat3",  "uvDecodeMatrix");
+    const modelNormalMatrix     = programVariables.createUniform("mat4",  "modelNormalMatrix");
+    const viewNormalMatrix      = programVariables.createUniform("mat4",  "viewNormalMatrix");
+    const pickClipPos           = programVariables.createUniform("vec2",  "pickClipPos");
 
     const programFragmentOutputs = [ ];
     programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord");
@@ -177,14 +166,11 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         const src = [];
         src.push("#version 300 es");
         src.push("// " + programSetup.programName + " vertex shader");
-        Object.values(attributes).forEach(a => a && a.appendDefinitions(src));
         src.push("uniform mat4 modelMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
         src.push("uniform vec3 offset;");
         src.push("uniform vec3 scale;");
-        positionsDecodeMatrix.appendDefinitions(src);
-        uvDecodeMatrix.appendDefinitions(src);
         if (quantizedGeometry) {
             if (worldNormal && worldNormal.needed) {
                 src.push("vec3 octDecode(vec2 oct) {");
@@ -214,11 +200,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
             src.push("   return mat;");
             src.push("}");
         }
-        pointSize.appendDefinitions(src);
-        modelNormalMatrix.appendDefinitions(src);
-        viewNormalMatrix.appendDefinitions(src);
-        pickClipPos.appendDefinitions(src);
-        programSetup.appendVertexDefinitions && programSetup.appendVertexDefinitions(src);
+        programVariablesState.appendVertexDefinitions(src);
         src.push("void main(void) {");
         mainVertexOutputs.forEach(line => src.push(line));
         programVertexOutputs.forEach(line => src.push(line));
@@ -269,7 +251,13 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
             src.push("}");
         }
         gammaOutputSetup && gammaOutputSetup.appendDefinitions(src);
-        programSetup.appendFragmentDefinitions(src);
+        programSetup.appendFragmentDefinitions && programSetup.appendFragmentDefinitions(src);
+        programVariablesState.appendFragmentDefinitions(src);
+
+        src.push("vec4 sRGBToLinear(in vec4 value) {");
+        src.push("  return vec4(mix(pow(value.rgb * 0.9478672986 + 0.0521327014, vec3(2.4)), value.rgb * 0.0773993808, vec3(lessThanEqual(value.rgb, vec3(0.04045)))), value.w);");
+        src.push("}");
+
         src.push("void main(void) {");
         if (clipping) {
             src.push("if (clippable) {");
@@ -506,16 +494,12 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     }
 };
 
-export const setupTexture = (name, type, encoding, hasMatrix) => {
-    const map    = lazyShaderUniform(name + "Map", type);
-    const matrix = hasMatrix && lazyShaderUniform(name + "MapMatrix", "mat4");
+export const setupTexture = (programVariables, type, name, encoding, hasMatrix) => {
+    const map    = programVariables.createUniform(type, name + "Map");
+    const matrix = hasMatrix && programVariables.createUniform("mat4", name + "MapMatrix");
     const swizzle = (type === "samplerCube") ? "xyz" : "xy";
     const getTexCoordExpression = texPos => (matrix ? `(${matrix} * ${texPos}).${swizzle}` : `${texPos}.${swizzle}`);
     return {
-        appendDefinitions: (src) => {
-            map.appendDefinitions(src);
-            matrix && matrix.appendDefinitions(src);
-        },
         getTexCoordExpression: getTexCoordExpression,
         getValueExpression: (texturePos, bias) => {
             const texel = (bias
@@ -538,11 +522,10 @@ export const setupTexture = (name, type, encoding, hasMatrix) => {
     };
 };
 
-export const createLightSetup = function(lightsState, setupCubes) {
-    const lightsStateUniform = (name, type, getUniformValue) => {
-        const uniform = lazyShaderUniform(name, type);
+export const createLightSetup = function(programVariables, lightsState, setupCubes) {
+    const lightsStateUniform = (type, name, getUniformValue) => {
+        const uniform = programVariables.createUniform(type, name);
         return {
-            appendDefinitions: uniform.appendDefinitions,
             toString: uniform.toString,
             setupLightsInputs: (getUniformSetter) => {
                 const setUniform = uniform.setupInputs(getUniformSetter);
@@ -551,12 +534,12 @@ export const createLightSetup = function(lightsState, setupCubes) {
         };
     };
 
-    const lightAmbient = lightsStateUniform("lightAmbient", "vec4", () => lightsState.getAmbientColorAndIntensity());
+    const lightAmbient = lightsStateUniform("vec4", "lightAmbient", () => lightsState.getAmbientColorAndIntensity());
 
     const lights = lightsState.lights;
     const directionals = lights.map((light, i) => {
         const lightUniforms = {
-            color: lightsStateUniform(`lightColor${i}`, "vec4", () => {
+            color: lightsStateUniform("vec4", `lightColor${i}`, () => {
                 const light = lights[i]; // in case it changed
                 tempVec4[0] = light.color[0];
                 tempVec4[1] = light.color[1];
@@ -564,12 +547,12 @@ export const createLightSetup = function(lightsState, setupCubes) {
                 tempVec4[3] = light.intensity;
                 return tempVec4;
             }),
-            position:  lightsStateUniform(`lightPos${i}`, "vec3", () => lights[i].pos),
-            direction: lightsStateUniform(`lightDir${i}`, "vec3", () => lights[i].dir),
+            position:  lightsStateUniform("vec3", `lightPos${i}`, () => lights[i].pos),
+            direction: lightsStateUniform("vec3", `lightDir${i}`, () => lights[i].dir),
 
-            shadowProjMatrix: lightsStateUniform(`shadowProjMatrix${i}`, "mat4", () => lights[i].getShadowViewMatrix()),
-            shadowViewMatrix: lightsStateUniform(`shadowViewMatrix${i}`, "mat4", () => lights[i].getShadowViewMatrix()),
-            shadowMap:        lightsStateUniform(`shadowMap${i}`,   "sampler2D", () => {
+            shadowProjMatrix: lightsStateUniform("mat4", `shadowProjMatrix${i}`, () => lights[i].getShadowViewMatrix()),
+            shadowViewMatrix: lightsStateUniform("mat4", `shadowViewMatrix${i}`, () => lights[i].getShadowViewMatrix()),
+            shadowMap:        lightsStateUniform("sampler2D", `shadowMap${i}`, () => {
                 const shadowRenderBuf = lights[i].getShadowRenderBuf();
                 return shadowRenderBuf && shadowRenderBuf.getTexture();
             })
@@ -577,7 +560,6 @@ export const createLightSetup = function(lightsState, setupCubes) {
 
         const withViewLightDir = getDirection => {
             return {
-                appendDefinitions: (src) => Object.values(lightUniforms).forEach(u => u.appendDefinitions(src)),
                 glslLight: {
                     isWorldSpace: light.space === "world",
                     getColor: () => `${lightUniforms.color}.rgb * ${lightUniforms.color}.a`,
@@ -617,9 +599,8 @@ export const createLightSetup = function(lightsState, setupCubes) {
     const setupCubeTexture = (name, getMaps) => {
         const getValue = () => { const m = getMaps(); return (m.length > 0) && m[0]; };
         const initMap = getValue();
-        const tex = initMap && setupTexture(name, "samplerCube", initMap.encoding, false);
+        const tex = initMap && setupTexture(programVariables, "samplerCube", name, initMap.encoding, false);
         return tex && {
-            appendDefinitions:     tex.appendDefinitions,
             getTexCoordExpression: tex.getTexCoordExpression,
             getValueExpression:    tex.getValueExpression,
             setupInputs:           (getInputSetter) => {
@@ -634,12 +615,6 @@ export const createLightSetup = function(lightsState, setupCubes) {
 
     return {
         getHash: () => lightsState.getHash(),
-        appendDefinitions: (src) => {
-            lightAmbient.appendDefinitions(src);
-            directionals.forEach(light => light.appendDefinitions(src));
-            lightMap && lightMap.appendDefinitions(src);
-            reflectionMap && reflectionMap.appendDefinitions(src);
-        },
         getAmbientColor: () => `${lightAmbient}.rgb * ${lightAmbient}.a`,
         directionalLights: directionals.map(light => light.glslLight),
         getIrradiance: lightMap      && ((worldNormal) => `${lightMap.getValueExpression(worldNormal)}.rgb`),
