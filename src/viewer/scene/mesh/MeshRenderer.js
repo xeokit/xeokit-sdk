@@ -101,6 +101,10 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     const viewNormalMatrix      = programVariables.createUniform("mat4",  "viewNormalMatrix");
     const pickClipPos           = programVariables.createUniform("vec2",  "pickClipPos");
 
+    const vWorldPosition = programVariables.createVarying("vec3",  "vWorldPosition");
+    const isPerspective  = programVariables.createVarying("float", "isPerspective");
+    const vFragDepth     = programVariables.createVarying("float", "vFragDepth");
+
     const billboard = mesh.billboard;
     const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
     const stationary = mesh.stationary;
@@ -109,7 +113,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     const programFragmentOutputs = [ ];
     if (clipping) {
         programFragmentOutputs.push(`if (${clippable}) {`);
-        programFragmentOutputs.push("  float dist = " + clipping.getDistance("vWorldPosition") + ";");
+        programFragmentOutputs.push(`  float dist = ${clipping.getDistance(vWorldPosition)};`);
         programFragmentOutputs.push("  if (dist > 0.0) { discard; }");
         programFragmentOutputs.push("}");
     }
@@ -130,6 +134,9 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
             programFragmentOutputs.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
         }
         programFragmentOutputs.push(`mat4 viewMatrix2 = ${billboardIfApplicable("viewMatrix1")};`);
+    }
+    if (getLogDepth) {
+        programFragmentOutputs.push(`gl_FragDepth = ${isPerspective} == 0.0 ? gl_FragCoord.z : log2(${vFragDepth}) * ${logDepthBufFC} * 0.5;`);
     }
     programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord");
 
@@ -171,14 +178,12 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
             return src;
         })();
 
-        if (clipping) {
-            programVertexOutputs.push("vWorldPosition = worldPosition.xyz;");
-        }
+        vWorldPosition.needed && programVertexOutputs.push(`${vWorldPosition} = worldPosition.xyz;`);
+
         programVertexOutputs.push(`vec4 clipPos = ${projMatrix} * viewPosition;`);
-        if (getLogDepth) {
-            programVertexOutputs.push(`isPerspective = (${projMatrix}[2][3] == -1.0) ? 1.0 : 0.0;`);
-            programVertexOutputs.push("vFragDepth = 1.0 + clipPos.w;");
-        }
+        isPerspective.needed && programVertexOutputs.push(`${isPerspective} = (${projMatrix}[2][3] == -1.0) ? 1.0 : 0.0;`);
+        vFragDepth.needed && programVertexOutputs.push(`${vFragDepth} = 1.0 + clipPos.w;`);
+
         const gl_Position = (meshStateBackground
                              ? "clipPos.xyww"
                              : (programSetup.isPick
@@ -189,24 +194,14 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         const src = [];
         src.push("#version 300 es");
         src.push("// " + programSetup.programName + " vertex shader");
-        if (quantizedGeometry) {
-            if (worldNormal && worldNormal.needed) {
-                src.push("vec3 octDecode(vec2 oct) {");
-                src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
-                src.push("    if (v.z < 0.0) {");
-                src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
-                src.push("    }");
-                src.push("    return normalize(v);");
-                src.push("}");
-            }
-        }
-        if (getLogDepth) {
-            src.push("out float isPerspective;");
-            src.push("out float vFragDepth;");
-        }
-        if (clipping) {
-            src.push("out vec3 vWorldPosition;");
-        }
+        src.push(`vec3 octDecode(vec2 oct) {`);
+        src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
+        src.push("    if (v.z < 0.0) {");
+        src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
+        src.push("    }");
+        src.push("    return normalize(v);");
+        src.push("}");
+
         if (isBillboard) {
             src.push("mat4 billboard(in mat4 matIn) {");
             src.push("   mat4 mat = matIn;");
@@ -237,13 +232,6 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-        if (getLogDepth) {
-            src.push("in float isPerspective;");
-            src.push("in float vFragDepth;");
-        }
-        if (clipping) {
-            src.push("in vec3 vWorldPosition;");
-        }
         if (isBillboard) {
             src.push("mat4 billboard(in mat4 matIn) {");
             src.push("   mat4 mat = matIn;");
@@ -268,9 +256,6 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
 
         src.push("void main(void) {");
         programFragmentOutputs.forEach(line => src.push(line));
-        if (getLogDepth) {
-            src.push(`gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * ${logDepthBufFC} * 0.5;`);
-        }
         src.push("}");
         return src;
     };
