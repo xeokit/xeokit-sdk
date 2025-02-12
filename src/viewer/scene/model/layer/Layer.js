@@ -3,7 +3,7 @@ import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
 import {LinearEncoding, sRGBEncoding} from "../../constants/constants.js";
 import {WEBGL_INFO} from "../../webglInfo.js";
 
-import {LayerRenderer} from "./LayerRenderer.js";
+import {LayerRenderer, lazyShaderUniform} from "./LayerRenderer.js";
 
 import { ColorProgram        } from "./programs/ColorProgram.js";
 import { ColorTextureProgram } from "./programs/ColorTextureProgram.js";
@@ -57,31 +57,74 @@ const createLightSetup = function(lightsState, useMaps) {
         [sRGBEncoding]:   value => `sRGBToLinear(${value})`
     };
 
+    const lightsStateUniform = (name, type, getUniformValue) => {
+        const uniform = lazyShaderUniform(name, type);
+        return {
+            appendDefinitions: uniform.appendDefinitions,
+            toString: uniform.toString,
+            setupLightsInputs: (getUniformSetter) => {
+                const setUniform = uniform.setupInputs(getUniformSetter);
+                return setUniform && (() => setUniform(getUniformValue()));
+            }
+        };
+    };
+
+    const lightAmbient = lightsStateUniform("lightAmbient", "vec4", () => lightsState.getAmbientColorAndIntensity());
+
     const lights = lightsState.lights;
+    const directionals = lights.map((light, i) => {
+        const lightUniforms = {
+            color: lightsStateUniform(`lightColor${i}`, "vec4", () => {
+                const light = lights[i]; // in case it changed
+                tempVec4[0] = light.color[0];
+                tempVec4[1] = light.color[1];
+                tempVec4[2] = light.color[2];
+                tempVec4[3] = light.intensity;
+                return tempVec4;
+            }),
+            position:  lightsStateUniform(`lightPos${i}`, "vec3", () => lights[i].pos),
+            direction: lightsStateUniform(`lightDir${i}`, "vec3", () => lights[i].dir),
+        };
+
+        const withViewLightDir = getDirection => {
+            return {
+                appendDefinitions: (src) => Object.values(lightUniforms).forEach(u => u.appendDefinitions(src)),
+                glslLight: {
+                    getColor: () => `${lightUniforms.color}.rgb * ${lightUniforms.color}.a`,
+                    getDirection: (viewMatrix, viewPosition) => `normalize(${getDirection(viewMatrix, viewPosition)})`
+                },
+                setupLightsInputs: (getUniformSetter) => {
+                    const setters = Object.values(lightUniforms).map(u => u.setupLightsInputs(getUniformSetter)).filter(v => v);
+                    return () => setters.forEach(setState => setState());
+                }
+            };
+        };
+
+        if ((light.type === "dir") || (light.type === "spot")) {
+            if (light.space === "view") {
+                return withViewLightDir((viewMatrix, viewPosition) => lightUniforms.direction);
+            } else {
+                return withViewLightDir((viewMatrix, viewPosition) => `(${viewMatrix} * vec4(${lightUniforms.direction}, 0.0)).xyz`);
+            }
+        } else if (light.type === "point") {
+            if (light.space === "view") {
+                return withViewLightDir((viewMatrix, viewPosition) => `${viewPosition}.xyz - ${lightUniforms.position}`);
+            } else {
+                return withViewLightDir((viewMatrix, viewPosition) => `(${viewMatrix} * vec4(-${lightUniforms.position}, 0.0)).xyz`);
+            }
+        } else {
+            return null;
+        }
+    }).filter(v => v);
+
     const lightMap      = useMaps && (lightsState.lightMaps.length      > 0) && lightsState.lightMaps[0];
     const reflectionMap = useMaps && (lightsState.reflectionMaps.length > 0) && lightsState.reflectionMaps[0];
 
     return {
         getHash: () => lightsState.getHash(),
         appendDefinitions: (src) => {
-            src.push("uniform vec4 lightAmbient;");
-            for (let i = 0, len = lights.length; i < len; i++) {
-                const light = lights[i];
-                if (light.type === "ambient") {
-                    continue;
-                }
-                src.push("uniform vec4 lightColor" + i + ";");
-                if (light.type === "dir") {
-                    src.push("uniform vec3 lightDir" + i + ";");
-                }
-                if (light.type === "point") {
-                    src.push("uniform vec3 lightPos" + i + ";");
-                }
-                if (light.type === "spot") {
-                    src.push("uniform vec3 lightPos" + i + ";"); // not referenced
-                    src.push("uniform vec3 lightDir" + i + ";");
-                }
-            }
+            lightAmbient.appendDefinitions(src);
+            directionals.forEach(light => light.appendDefinitions(src));
 
             if (lightMap) {
                 src.push("uniform samplerCube lightMap;");
@@ -95,30 +138,8 @@ const createLightSetup = function(lightsState, useMaps) {
                 src.push("}");
             }
         },
-        getAmbientColor: () => "lightAmbient.rgb * lightAmbient.a",
-        getDirectionalLights: (viewMatrix, viewPosition) => {
-            return lights.map((light, i) => {
-                const withViewLightDir = direction => ({
-                    color: `lightColor${i}.rgb * lightColor${i}.a`,
-                    direction: `normalize(${direction})`
-                });
-                if ((light.type === "dir") || (light.type === "spot")) {
-                    if (light.space === "view") {
-                        return withViewLightDir(`lightDir${i}`);
-                    } else {
-                        return withViewLightDir(`(${viewMatrix} * vec4(lightDir${i}, 0.0)).xyz`);
-                    }
-                } else if (light.type === "point") {
-                    if (light.space === "view") {
-                        return withViewLightDir(`${viewPosition}.xyz - lightPos${i}`);
-                    } else {
-                        return withViewLightDir(`(${viewMatrix} * vec4(-lightPos${i}, 0.0)).xyz`);
-                    }
-                } else {        // "ambient"
-                    return null;
-                }
-            }).filter(v => v);
-        },
+        getAmbientColor: () => `${lightAmbient}.rgb * ${lightAmbient}.a`,
+        directionalLights: directionals.map(light => light.glslLight),
         getIrradiance: useMaps && lightMap && ((worldNormal) => {
             const decode = TEXTURE_DECODE_FUNCS[lightMap.encoding];
             return `${decode(`texture(lightMap, ${worldNormal})`)}.rgb`;
@@ -128,55 +149,13 @@ const createLightSetup = function(lightsState, useMaps) {
             return `${decode(`texture(reflectionMap, ${reflectVec}, 0.5 * ${mipLevel})`)}.rgb`; //TODO: a random factor - fix this
         }),
         setupInputs: (getUniformSetter) => {
-            const uLightAmbient = getUniformSetter("lightAmbient");
-            const uLightColor = [];
-            const uLightDir = [];
-            const uLightPos = [];
-
-            for (let i = 0, len = lights.length; i < len; i++) {
-                const light = lights[i];
-                switch (light.type) {
-                case "dir":
-                    uLightColor[i] = getUniformSetter("lightColor" + i);
-                    uLightPos[i] = null;
-                    uLightDir[i] = getUniformSetter("lightDir" + i);
-                    break;
-                case "point":
-                    uLightColor[i] = getUniformSetter("lightColor" + i);
-                    uLightPos[i] = getUniformSetter("lightPos" + i);
-                    uLightDir[i] = null;
-                    break;
-                case "spot":
-                    uLightColor[i] = getUniformSetter("lightColor" + i);
-                    uLightPos[i] = getUniformSetter("lightPos" + i);
-                    uLightDir[i] = getUniformSetter("lightDir" + i);
-                    break;
-                }
-            }
-
+            const setAmbientInputState = lightAmbient.setupLightsInputs(getUniformSetter);
+            const setDirectionalsInputStates = directionals.map(light => light.setupLightsInputs(getUniformSetter));
             const uLightMap      = useMaps && lightMap      && getUniformSetter("lightMap");
             const uReflectionMap = useMaps && reflectionMap && getUniformSetter("reflectionMap");
-
             return function(frameCtx) {
-                uLightAmbient(lightsState.getAmbientColorAndIntensity());
-
-                for (let i = 0, len = lights.length; i < len; i++) {
-                    const light = lights[i];
-                    if (uLightColor[i]) {
-                        tempVec4[0] = light.color[0];
-                        tempVec4[1] = light.color[1];
-                        tempVec4[2] = light.color[2];
-                        tempVec4[3] = light.intensity;
-                        uLightColor[i](tempVec4);
-                    }
-                    if (uLightPos[i]) {
-                        uLightPos[i](light.pos);
-                    }
-                    if (uLightDir[i]) {
-                        uLightDir[i](light.dir);
-                    }
-                }
-
+                setAmbientInputState && setAmbientInputState();
+                setDirectionalsInputStates.forEach(setState => setState());
                 const setSampler = (sampler, texture) => {
                     if (sampler && texture.texture) {
                         sampler(texture.texture, frameCtx.textureUnit);
@@ -184,7 +163,6 @@ const createLightSetup = function(lightsState, useMaps) {
                         frameCtx.bindTexture++;
                     }
                 };
-
                 setSampler(uLightMap,      lightMap);
                 setSampler(uReflectionMap, reflectionMap);
             };
