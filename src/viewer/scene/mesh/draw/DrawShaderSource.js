@@ -349,7 +349,7 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
             src.push("out vec4 outColor;");
         },
         appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => {
-            const hasNonAmbientLighting = hasNormals && ((lightSetup.directionalLights.length > 0) || lightSetup.getIrradiance || lightSetup.reflectionMap);
+            const hasNonAmbientLighting = hasNormals && ((lightSetup.directionalLights.length > 0) || lightSetup.getIrradiance || lightSetup.getReflection);
             src.push(`vec3 diffuseColor = ${(hasNonAmbientLighting && (phongMaterial || specularMaterial) && materialDiffuse) || (metallicMaterial && materialBaseColor) || "vec3(1.0)"};`);
             src.push(`vec4 alphaModeCutoff = ${((phongMaterial || metallicMaterial || specularMaterial) && materialAlphaModeCutoff) || "vec4(1.0, 0.0, 0.0, 0.0)"};`);
             src.push("float alpha = alphaModeCutoff[0];");
@@ -453,10 +453,10 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
 
                     lightSetup.getIrradiance && src.push(`reflDiff += ${lightSetup.getIrradiance("normalize(vWorldNormal)")};`);
 
-                    if (lightSetup.reflectionMap) {
+                    if (lightSetup.getReflection) {
                         const reflectVec = `reflect(-viewEyeDir, viewNormal)`;
                         const spec = (phongMaterial
-                                      ? `0.2 * PI * ${lightSetup.reflectionMap.getValueExpression(reflectVec)}.rgb`
+                                      ? `0.2 * PI * ${lightSetup.getReflection(reflectVec)}`
                                       : (function() {
                                           const blinnExpFromRoughness = `2.0 / pow(material.specularRoughness + 0.0001, 2.0) - 2.0`;
                                           const specularBRDFContrib = "BRDF_Specular_GGX_Environment(viewNormal, viewEyeDir, material.specularColor, material.specularRoughness)";
@@ -465,9 +465,7 @@ export const DrawShaderSource = function(meshDrawHash, geometry, material, scene
                                           const maxMIPLevelScalar = "4.0";
                                           const desiredMIPLevel = `${maxMIPLevelScalar} - 0.39624 - 0.25 * log2(pow(${blinnExpFromRoughness}, 2.0) + 1.0)`;
                                           const mipLevel = `clamp(${desiredMIPLevel}, 0.0, ${maxMIPLevelScalar})`; //TODO: a random factor - fix this
-                                          const indirectRadiance = `${lightSetup.reflectionMap.getValueExpression(viewReflectVec, mipLevel)}.rgb`;
-
-                                          return `${specularBRDFContrib} * ${indirectRadiance}`;
+                                          return `${specularBRDFContrib} * ${lightSetup.getReflection(viewReflectVec, mipLevel)}`;
                                       })());
                         src.push(`reflSpec += ${spec};`);
                     }
