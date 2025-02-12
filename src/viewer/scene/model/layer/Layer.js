@@ -1,9 +1,8 @@
 import {math} from "../../math/index.js";
 import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
-import {LinearEncoding, sRGBEncoding} from "../../constants/constants.js";
 import {WEBGL_INFO} from "../../webglInfo.js";
 
-import {LayerRenderer, lazyShaderUniform} from "./LayerRenderer.js";
+import {LayerRenderer, lazyShaderUniform, setupTexture} from "./LayerRenderer.js";
 
 import { ColorProgram        } from "./programs/ColorProgram.js";
 import { ColorTextureProgram } from "./programs/ColorTextureProgram.js";
@@ -51,12 +50,7 @@ const safeInvVec3 = v => [ math.safeInv(v[0]), math.safeInv(v[1]), math.safeInv(
 
 export const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
 
-const createLightSetup = function(lightsState, useMaps) {
-    const TEXTURE_DECODE_FUNCS = {
-        [LinearEncoding]: value => value,
-        [sRGBEncoding]:   value => `sRGBToLinear(${value})`
-    };
-
+const createLightSetup = function(lightsState, setupCubes) {
     const lightsStateUniform = (name, type, getUniformValue) => {
         const uniform = lazyShaderUniform(name, type);
         return {
@@ -117,54 +111,46 @@ const createLightSetup = function(lightsState, useMaps) {
         }
     }).filter(v => v);
 
-    const lightMap      = useMaps && (lightsState.lightMaps.length      > 0) && lightsState.lightMaps[0];
-    const reflectionMap = useMaps && (lightsState.reflectionMaps.length > 0) && lightsState.reflectionMaps[0];
+    const setupCubeTexture = (name, getMaps) => {
+        const getValue = () => { const m = getMaps(); return (m.length > 0) && m[0]; };
+        const initMap = getValue();
+        const tex = initMap && setupTexture(name, "samplerCube", initMap.encoding, false);
+        return tex && {
+            appendDefinitions:     tex.appendDefinitions,
+            getTexCoordExpression: tex.getTexCoordExpression,
+            getValueExpression:    tex.getValueExpression,
+            setupInputs:           (getInputSetter) => {
+                const setInputsState = tex.setupInputs(getInputSetter);
+                return setInputsState && ((frameCtx) => setInputsState(getValue().texture, null, frameCtx));
+            }
+        };
+    };
+
+    const lightMap      = setupCubes && setupCubeTexture("light",      () => lightsState.lightMaps);
+    const reflectionMap = setupCubes && setupCubeTexture("reflection", () => lightsState.reflectionMaps);
 
     return {
         getHash: () => lightsState.getHash(),
         appendDefinitions: (src) => {
             lightAmbient.appendDefinitions(src);
             directionals.forEach(light => light.appendDefinitions(src));
-
-            if (lightMap) {
-                src.push("uniform samplerCube lightMap;");
-            }
-            if (reflectionMap) {
-                src.push("uniform samplerCube reflectionMap;");
-            }
-            if (lightMap || reflectionMap) {
-                src.push("vec4 sRGBToLinear(in vec4 value) {");
-                src.push("  return vec4(mix(pow(value.rgb * 0.9478672986 + 0.0521327014, vec3(2.4)), value.rgb * 0.0773993808, vec3(lessThanEqual(value.rgb, vec3(0.04045)))), value.w);");
-                src.push("}");
-            }
+            lightMap && lightMap.appendDefinitions(src);
+            reflectionMap && reflectionMap.appendDefinitions(src);
         },
         getAmbientColor: () => `${lightAmbient}.rgb * ${lightAmbient}.a`,
         directionalLights: directionals.map(light => light.glslLight),
-        getIrradiance: useMaps && lightMap && ((worldNormal) => {
-            const decode = TEXTURE_DECODE_FUNCS[lightMap.encoding];
-            return `${decode(`texture(lightMap, ${worldNormal})`)}.rgb`;
-        }),
-        getReflectionRadiance: useMaps && reflectionMap && ((reflectVec, mipLevel) => {
-            const decode = TEXTURE_DECODE_FUNCS[reflectionMap.encoding];
-            return `${decode(`texture(reflectionMap, ${reflectVec}, 0.5 * ${mipLevel})`)}.rgb`; //TODO: a random factor - fix this
-        }),
+        getIrradiance: lightMap && ((worldNormal) => `${lightMap.getValueExpression(worldNormal)}.rgb`),
+        getReflectionRadiance: reflectionMap && ((reflectVec, mipLevel) => `${reflectionMap.getValueExpression(reflectVec, mipLevel)}.rgb`),
         setupInputs: (getUniformSetter) => {
             const setAmbientInputState = lightAmbient.setupLightsInputs(getUniformSetter);
             const setDirectionalsInputStates = directionals.map(light => light.setupLightsInputs(getUniformSetter));
-            const uLightMap      = useMaps && lightMap      && getUniformSetter("lightMap");
-            const uReflectionMap = useMaps && reflectionMap && getUniformSetter("reflectionMap");
+            const uLightMap      = lightMap && lightMap.setupInputs(getUniformSetter);
+            const uReflectionMap = reflectionMap && reflectionMap.setupInputs(getUniformSetter);
             return function(frameCtx) {
                 setAmbientInputState && setAmbientInputState();
                 setDirectionalsInputStates.forEach(setState => setState());
-                const setSampler = (sampler, texture) => {
-                    if (sampler && texture.texture) {
-                        sampler(texture.texture, frameCtx.textureUnit);
-                        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
-                        frameCtx.bindTexture++;
-                    }
-                };
-                setSampler(uLightMap,      lightMap);
-                setSampler(uReflectionMap, reflectionMap);
+                uLightMap && uLightMap(frameCtx);
+                uReflectionMap && uReflectionMap(frameCtx);
             };
         }
     };
