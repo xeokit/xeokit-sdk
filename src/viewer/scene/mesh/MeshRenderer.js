@@ -35,30 +35,24 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     const meshStateBackground = mesh._state.background;
     const clipping = (function() {
         const sectionPlanesState = scene._sectionPlanesState;
-        const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
-
-        return (numAllocatedSectionPlanes > 0) && {
-            appendDefinitions: (src) => {
-                for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
-                    src.push("uniform bool sectionPlaneActive" + i + ";");
-                    src.push("uniform vec3 sectionPlanePos" + i + ";");
-                    src.push("uniform vec3 sectionPlaneDir" + i + ";");
-                }
-            },
-            getDistance: (worldPosition) => {
-                return iota(numAllocatedSectionPlanes).map(i => `(sectionPlaneActive${i} ? clamp(dot(-sectionPlaneDir${i}, ${worldPosition} - sectionPlanePos${i}), 0.0, 1000.0) : 0.0)`).join(" + ");
-            },
+        const allocatedUniforms = iota(sectionPlanesState.getNumAllocatedSectionPlanes()).map(i => ({
+            sectionPlaneActive: programVariables.createUniform("bool", `sectionPlaneActive${i}`),
+            sectionPlanePos:    programVariables.createUniform("vec3", `sectionPlanePos${i}`),
+            sectionPlaneDir:    programVariables.createUniform("vec3", `sectionPlaneDir${i}`)
+        }));
+        return (allocatedUniforms.length > 0) && {
+            getDistance: (worldPosition) => allocatedUniforms.map(a => `(${a.sectionPlaneActive} ? clamp(dot(-${a.sectionPlaneDir}, ${worldPosition} - ${a.sectionPlanePos}), 0.0, 1000.0) : 0.0)`).join(" + "),
             setupInputs: (getUniformSetter) => {
-                const uSectionPlanes = iota(numAllocatedSectionPlanes).map(i => ({
-                    active: getUniformSetter("sectionPlaneActive" + i),
-                    pos:    getUniformSetter("sectionPlanePos" + i),
-                    dir:    getUniformSetter("sectionPlaneDir" + i)
+                const setSectionPlanes = allocatedUniforms.map(a => ({
+                    active: a.sectionPlaneActive.setupInputs(getUniformSetter),
+                    pos:    a.sectionPlanePos.setupInputs(getUniformSetter),
+                    dir:    a.sectionPlaneDir.setupInputs(getUniformSetter)
                 }));
                 return (rtcOrigin, sectionPlanesActivePerLayer) => {
                     const sectionPlanes = sectionPlanesState.sectionPlanes;
                     const numSectionPlanes = sectionPlanes.length;
-                    for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
-                        const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
+                    for (let sectionPlaneIndex = 0; sectionPlaneIndex < allocatedUniforms.length; sectionPlaneIndex++) {
+                        const sectionPlaneUniforms = setSectionPlanes[sectionPlaneIndex];
                         const active = (sectionPlaneIndex < numSectionPlanes) && sectionPlanesActivePerLayer[sectionPlaneIndex];
                         sectionPlaneUniforms.active(active ? 1 : 0);
                         if (active) {
@@ -110,17 +104,40 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     const viewNormalMatrix      = programVariables.createUniform("mat4",  "viewNormalMatrix");
     const pickClipPos           = programVariables.createUniform("vec2",  "pickClipPos");
 
+    const billboard = mesh.billboard;
+    const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
+    const stationary = mesh.stationary;
+    const billboardIfApplicable = v => isBillboard ? `billboard(${v})` : v;
+
     const programFragmentOutputs = [ ];
+    if (clipping) {
+        programFragmentOutputs.push("if (clippable) {");
+        programFragmentOutputs.push("  float dist = " + clipping.getDistance("vWorldPosition") + ";");
+        programFragmentOutputs.push("  if (dist > 0.0) { discard; }");
+        programFragmentOutputs.push("}");
+    }
+    if (isPoints && programSetup.discardPoints) {
+        programFragmentOutputs.push("vec2 cxy = 2.0 * gl_PointCoord - 1.0;");
+        programFragmentOutputs.push("float r = dot(cxy, cxy);");
+        programFragmentOutputs.push("if (r > 1.0) {");
+        programFragmentOutputs.push("   discard;");
+        programFragmentOutputs.push("}");
+    }
+    if (programSetup.dontBillboardAnything) {
+        programFragmentOutputs.push("mat4 viewMatrix2 = viewMatrix;");
+    } else {
+        programFragmentOutputs.push("mat4 viewMatrix1 = viewMatrix;");
+        if (stationary) {
+            programFragmentOutputs.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
+        } else if (meshStateBackground) {
+            programFragmentOutputs.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
+        }
+        programFragmentOutputs.push(`mat4 viewMatrix2 = ${billboardIfApplicable("viewMatrix1")};`);
+    }
     programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord");
 
     const programVertexOutputs = [ ];
     programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs);
-
-    const billboard = mesh.billboard;
-    const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
-    const stationary = mesh.stationary;
-
-    const billboardIfApplicable = v => isBillboard ? `billboard(${v})` : v;
 
     const buildVertexShader = () => {
         const viewNormalDefinition = viewNormal && viewNormal.needed && `vec3 ${viewNormal} = normalize((${billboardIfApplicable(viewNormalMatrix)} * vec4(${worldNormal}, 0.0)).xyz);`;
@@ -237,7 +254,6 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         if (clipping) {
             src.push("in vec3 vWorldPosition;");
             src.push("uniform bool clippable;");
-            clipping.appendDefinitions(src);
         }
         if (isBillboard) {
             src.push("mat4 billboard(in mat4 matIn) {");
@@ -259,30 +275,6 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         src.push("}");
 
         src.push("void main(void) {");
-        if (clipping) {
-            src.push("if (clippable) {");
-            src.push("  float dist = " + clipping.getDistance("vWorldPosition") + ";");
-            src.push("  if (dist > 0.0) { discard; }");
-            src.push("}");
-        }
-        if (isPoints && programSetup.discardPoints) {
-            src.push("vec2 cxy = 2.0 * gl_PointCoord - 1.0;");
-            src.push("float r = dot(cxy, cxy);");
-            src.push("if (r > 1.0) {");
-            src.push("   discard;");
-            src.push("}");
-        }
-        if (programSetup.dontBillboardAnything) {
-            src.push("mat4 viewMatrix2 = viewMatrix;");
-        } else {
-            src.push("mat4 viewMatrix1 = viewMatrix;");
-            if (stationary) {
-                src.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
-            } else if (meshStateBackground) {
-                src.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
-            }
-            src.push(`mat4 viewMatrix2 = ${billboardIfApplicable("viewMatrix1")};`);
-        }
         programFragmentOutputs.forEach(line => src.push(line));
         if (getLogDepth) {
             src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
