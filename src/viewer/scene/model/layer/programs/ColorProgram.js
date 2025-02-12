@@ -13,8 +13,8 @@ export const ColorProgram = function(geometryParameters, logarithmicDepthBufferE
             const vColor = (primitive === "points") ? `vec4(${color}.rgb, 1.0)` : `${color}`;
             if (lightSetup) {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-                lightSetup.getDirectionalLights(geometryParameters.viewMatrix, geometryParameters.attributes.position.view).forEach(light => {
-                    src.push(`reflectedColor += max(dot(-${geometryParameters.attributes.normal.view}, ${light.direction}), 0.0) * ${light.color};`);
+                lightSetup.directionalLights.forEach(light => {
+                    src.push(`reflectedColor += max(dot(-${geometryParameters.attributes.normal.view}, ${light.getDirection(geometryParameters.viewMatrix, geometryParameters.attributes.position.view)}), 0.0) * ${light.getColor()};`);
                 });
                 src.push(`vColor = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * ${vColor};`);
             } else {
