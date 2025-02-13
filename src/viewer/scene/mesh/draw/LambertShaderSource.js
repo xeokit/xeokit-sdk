@@ -30,20 +30,22 @@ export const LambertShaderSource = function(meshDrawHash, programVariables, geom
         discardPoints: true,
         setupPointSize: true,
         setsLineWidth: true,
-        appendFragmentOutputs: (src, getGammaOutputExpression) => src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression(vColor) : vColor};`),
-        setupProgramInputs: () => {
-            const setColorize = colorize.setupInputs();
-            const setMaterialAlpha = materialAlpha.setupInputs();
-            const setMaterialColor = materialColor.setupInputs();
-            const setMaterialEmissive = materialEmissive.setupInputs();
-            return {
-                setLightStateValues: lightSetup.setupInputs(),
-                setMeshStateValues: (mesh) => setColorize(mesh.colorize),
-                setMaterialStateValues: (mtl) => {
-                    setMaterialAlpha(mtl.alpha);
-                    setMaterialColor(mtl.color);
-                    setMaterialEmissive(mtl.emissive);
-                }
+        appendFragmentOutputs: (src, getGammaOutputExpression) => {
+            src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression(vColor) : vColor};`);
+            return () => {
+                const setColorize = colorize.setupInputs();
+                const setMaterialAlpha = materialAlpha.setupInputs();
+                const setMaterialColor = materialColor.setupInputs();
+                const setMaterialEmissive = materialEmissive.setupInputs();
+                return {
+                    setLightStateValues: lightSetup.setupInputs(),
+                    setMeshStateValues: (mesh) => setColorize(mesh.colorize),
+                    setMaterialStateValues: (mtl) => {
+                        setMaterialAlpha(mtl.alpha);
+                        setMaterialColor(mtl.color);
+                        setMaterialEmissive(mtl.emissive);
+                    }
+                };
             };
         }
     };
