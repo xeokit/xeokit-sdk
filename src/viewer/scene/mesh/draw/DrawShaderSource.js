@@ -159,7 +159,6 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
         discardPoints: true,
         setupPointSize: true,
         setsLineWidth: true,
-        useGammaOutput: true,
         appendVertexOutputs: (src) => {
             src.push(`${vViewPosition} = ${attributes.position.view}.xyz;`);
             texturePos.needed && src.push(`${texturePos} = vec4(${attributes.uv}, 1.0, 1.0);`);
