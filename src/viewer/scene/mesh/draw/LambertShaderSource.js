@@ -6,8 +6,17 @@ export const LambertShaderSource = function(meshDrawHash, programVariables, geom
     const materialAlpha    = programVariables.createUniform("float", "materialAlpha");
     const materialColor    = programVariables.createUniform("vec3", "materialColor");
     const materialEmissive = programVariables.createUniform("vec3", "materialEmissive");
-    const vColor           = programVariables.createVarying("vec4", "vColor");
-    const outColor         = programVariables.createOutput("vec4", "outColor");
+    const vColor           = programVariables.createVarying("vec4", "vColor", () => {
+        const attributes = geometry.attributes;
+        const lightComponents = [
+            lightSetup.getAmbientColor()
+        ].concat(attributes.normal
+                 ? lightSetup.directionalLights.map(
+                     light => `(max(dot(${attributes.normal.view}, ${light.getDirection(geometry.viewMatrix, attributes.position.view)}), 0.0) * ${light.getColor()})`)
+                 : [ ]);
+        return `${colorize} * vec4((${lightComponents.join(" + ")}) * ${materialColor} + ${materialEmissive}, ${materialAlpha});`; // TODO: How to have ambient bright enough for canvas BG but not too bright for scene?
+    });
+    const outColor = programVariables.createOutput("vec4", "outColor");
 
     return {
         getHash: () => [
@@ -21,14 +30,6 @@ export const LambertShaderSource = function(meshDrawHash, programVariables, geom
         discardPoints: true,
         setupPointSize: true,
         setsLineWidth: true,
-        appendVertexOutputs: (src) => {
-            src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-            const attributes = geometry.attributes;
-            attributes.normal && lightSetup.directionalLights.forEach(light => {
-                src.push(`reflectedColor += max(dot(${attributes.normal.view}, ${light.getDirection(geometry.viewMatrix, attributes.position.view)}), 0.0) * ${light.getColor()};`);
-            });
-            src.push(`${vColor} = ${colorize} * vec4((${lightSetup.getAmbientColor()} + reflectedColor) * ${materialColor} + ${materialEmissive}, ${materialAlpha});`); // TODO: How to have ambient bright enough for canvas BG but not too bright for scene?
-        },
         appendFragmentOutputs: (src, getGammaOutputExpression) => src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression(vColor) : vColor};`),
         setupProgramInputs: () => {
             const setColorize = colorize.setupInputs();
