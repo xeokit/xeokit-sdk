@@ -279,15 +279,13 @@ class Mesh extends Component {
             const ensureInstance = () => {
                 if (! instance) {
                     const programVariablesState = (function() {
-                        const attribs  = [ ];
-                        const outputs  = [ ];
-                        const uniforms = [ ];
-                        const varyings = [ ];
+                        const vertAppenders = [ ];
+                        const fragAppenders = [ ];
                         return {
                             programVariables: {
                                 createAttribute: function(type, name) {
                                     let needed = false;
-                                    attribs.push({ appendDefinitions: (src) => needed && src.push(`in ${type} ${name};`) });
+                                    vertAppenders.push((src) => needed && src.push(`in ${type} ${name};`));
                                     return {
                                         toString: () => {
                                             needed = true;
@@ -297,12 +295,14 @@ class Mesh extends Component {
                                     };
                                 },
                                 createOutput: (type, name) => {
-                                    outputs.push({ appendDefinitions: (src) => src.push(`out ${type} ${name};`) });
+                                    fragAppenders.push((src) => src.push(`out ${type} ${name};`));
                                     return { toString: () => name };
                                 },
                                 createUniform: (type, name) => {
                                     let needed = false;
-                                    uniforms.push({ appendDefinitions: (src) => needed && src.push(`uniform ${type} ${name};`) });
+                                    const append = (src) => needed && src.push(`uniform ${type} ${name};`);
+                                    vertAppenders.push(append);
+                                    fragAppenders.push(append);
                                     return {
                                         toString: () => {
                                             needed = true;
@@ -318,23 +318,13 @@ class Mesh extends Component {
                                             return name;
                                         }
                                     };
-                                    varyings.push({
-                                        appendVertexDefinitions:   (src) => v.needed && src.push(`out ${type} ${name};`),
-                                        appendFragmentDefinitions: (src) => v.needed && src.push(`in  ${type} ${name};`)
-                                    });
+                                    vertAppenders.push((src) => v.needed && src.push(`out ${type} ${name};`));
+                                    fragAppenders.push((src) => v.needed && src.push(`in  ${type} ${name};`));
                                     return v;
                                 }
                             },
-                            appendVertexDefinitions:   (src) => {
-                                attribs.forEach(a => a.appendDefinitions(src));
-                                uniforms.forEach(u => u.appendDefinitions(src));
-                                varyings.forEach(v => v.appendVertexDefinitions(src));
-                            },
-                            appendFragmentDefinitions: (src) => {
-                                uniforms.forEach(u => u.appendDefinitions(src));
-                                varyings.forEach(v => v.appendFragmentDefinitions(src));
-                                outputs.forEach(v => v.appendDefinitions(src));
-                            }
+                            appendVertexDefinitions:   (src) => vertAppenders.forEach(a => a(src)),
+                            appendFragmentDefinitions: (src) => fragAppenders.forEach(a => a(src))
                         };
                     })();
 
