@@ -369,21 +369,9 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
         // Iterate over each tile's entities
 
         for (let tileEntityIndex = firstTileEntityIndex; tileEntityIndex <= lastTileEntityIndex; tileEntityIndex++) {
-
-            applyTransform = false;
-
             const xktEntityId = eachEntityId[tileEntityIndex];
 
-            // if (xktEntityId === '3m7na0bKKHxfOIbCQH2QFp' && !alreadyAppliedTransform) {
-            //     console.log('FOOORRRR',{ xktEntityId, tileIndex, firstTileEntityIndex, lastTileEntityIndex });
-            //     applyTransform = true;
-            //     alreadyAppliedTransform = true;
-            //     tileEntityIndex = tileEntityIndex === 0 ? tileEntityIndex : tileEntityIndex - 1;
-            //     console.log({ tileEntityIndex, applyTransform, alreadyAppliedTransform });
-            // }
-
             const entityId = options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId;
-
 
             const finalTileEntityIndex = (numEntities - 1);
             const atLastTileEntity = (tileEntityIndex === finalTileEntityIndex);
@@ -395,7 +383,6 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
             const metaObject = viewer.metaScene.metaObjects[entityId];
             const entityDefaults = {};
             const meshDefaults = {};
-
 
             if (metaObject) {
 

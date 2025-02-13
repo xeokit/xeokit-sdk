@@ -607,9 +607,6 @@ class XKTLoaderPlugin extends Plugin {
      * textures within the XKT. Only required when the XKT is version 10 or later, and contains KTX2 textures.
      */
     constructor(viewer, cfg = {}) {
-
-        console.log("PASA POR AQUI ==== XKTLoaderPlugin");
-
         super("XKTLoader", viewer, cfg);
 
         this._maxGeometryBatchSize = cfg.maxGeometryBatchSize;
@@ -937,8 +934,6 @@ class XKTLoaderPlugin extends Plugin {
             dtxEnabled: params.dtxEnabled,
             renderOrder: params.renderOrder
         }));
-
-        console.log("PASA POR AQUI ==== XKTLoaderPlugin.load, crea sceneModel");
 
         const modelId = sceneModel.id;  // In case ID was auto-generated
 

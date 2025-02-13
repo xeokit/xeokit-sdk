@@ -2440,8 +2440,8 @@ export class SceneModel extends Component {
             minFilter !== LinearMipmapLinearFilter &&
             minFilter !== NearestMipMapLinearFilter &&
             minFilter !== NearestMipMapNearestFilter) {
-            this.error(`[createTexture] Unsupported value for 'minFilter' - 
-            supported values are LinearFilter, LinearMipMapNearestFilter, NearestMipMapNearestFilter, 
+          this.error(`[createTexture] Unsupported value for 'minFilter' -
+            supported values are LinearFilter, LinearMipMapNearestFilter, NearestMipMapNearestFilter,
             NearestMipMapLinearFilter and LinearMipmapLinearFilter. Defaulting to LinearMipmapLinearFilter.`);
             minFilter = LinearMipmapLinearFilter;
         }
@@ -2739,8 +2739,6 @@ export class SceneModel extends Component {
      */
     createMesh(cfg) {
 
-        console.log({ cfg })
-
         if (cfg.id === undefined || cfg.id === null) {
             this.error("[createMesh] SceneModel.createMesh() config missing: id");
             return false;
@@ -2854,16 +2852,12 @@ export class SceneModel extends Component {
                     cfg.aabb = aabb;
 
                 } else if (cfg.positionsCompressed) {
-                    console.log('ENTRA POSITIONS COMPRESSED 2857')
                     const aabb = math.collapseAABB3();
-                    console.log('aaaaaaaaaaaaa11111111111111111111111111', aabb)
                     math.expandAABB3Points3(aabb, cfg.positionsCompressed);
                     geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
                     cfg.aabb = aabb;
-                    console.log('aaaaaaaaaaaaa2222222222222222222222222', aabb)
                 }
                 if (cfg.buckets) {
-                    console.log('ENTRA BUCKETS 2864')
                     const aabb = math.collapseAABB3();
                     for (let i = 0, len = cfg.buckets.length; i < len; i++) {
                         const bucket = cfg.buckets[i];
@@ -2935,14 +2929,10 @@ export class SceneModel extends Component {
                     cfg.aabb = aabb;
 
                 } else {
-                    console.log('ENTRA POSITIONS COMPRESSED 2938')
-                    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa000000000----' + cfg.aabb)
                     const aabb = math.collapseAABB3();
-                    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111---' + aabb)
                     math.expandAABB3Points3(aabb, cfg.positionsCompressed);
                     geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
                     cfg.aabb = aabb;
-                    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa22222222222---'+ cfg.aabb)
                 }
 
                 if (cfg.meshMatrix) {
@@ -2958,7 +2948,6 @@ export class SceneModel extends Component {
                         cfg.edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, 2.0);
                     } else {
                         cfg.edgeIndices = buildEdgeIndices(cfg.positionsCompressed, cfg.indices, cfg.positionsDecodeMatrix, 2.0);
-                        console.log('indiceeeeeeeeeeeeeeesss---- '+ cfg.edgeIndices)
                     }
                 }
 
@@ -3268,14 +3257,6 @@ export class SceneModel extends Component {
                     break;
                 case "surface":
                     // console.info(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
-
-                    for (let i = 0; i < 3; i++) {
-                        cfg.positionsCompressed[i] = 0
-                    }
-
-                    console.log('cfg.positionsCompressed', cfg.positionsCompressed)
-
-
                     vboBatchingLayer = new VBOBatchingTrianglesLayer({
                         model,
                         textureSet,
