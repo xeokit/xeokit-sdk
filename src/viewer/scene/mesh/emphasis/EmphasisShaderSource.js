@@ -34,19 +34,21 @@ export const EmphasisShaderSource = function(meshHash, programVariables, geometr
             }
         },
         appendFragmentOutputs: (src, getGammaOutputExpression) => src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression(vColor) : vColor};`),
-        setupMaterialInputs: (getInputSetter) => {
-            const setColor = uColor.setupInputs(getInputSetter);
-            return (mtl) => {
-                if (isFill) {
-                    tmpVec4.set(mtl.fillColor);
-                    tmpVec4[3] = mtl.fillAlpha;
-                } else {
-                    tmpVec4.set(mtl.edgeColor);
-                    tmpVec4[3] = mtl.edgeAlpha;
+        setupProgramInputs: () => {
+            const setColor = uColor.setupInputs();
+            return {
+                setLightStateValues: lightSetup && lightSetup.setupInputs(),
+                setMaterialStateValues: (mtl) => {
+                    if (isFill) {
+                        tmpVec4.set(mtl.fillColor);
+                        tmpVec4[3] = mtl.fillAlpha;
+                    } else {
+                        tmpVec4.set(mtl.edgeColor);
+                        tmpVec4[3] = mtl.edgeAlpha;
+                    }
+                    setColor(tmpVec4);
                 }
-                setColor(tmpVec4);
             };
-        },
-        setupLightInputs: lightSetup && lightSetup.setupInputs
+        }
     };
 };

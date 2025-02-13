@@ -280,6 +280,7 @@ class Mesh extends Component {
                     const programVariablesState = (function() {
                         const vertAppenders = [ ];
                         const fragAppenders = [ ];
+                        let _getInputSetter = null;
                         return {
                             programVariables: {
                                 createAttribute: function(type, name) {
@@ -290,7 +291,7 @@ class Mesh extends Component {
                                             needed = true;
                                             return name;
                                         },
-                                        setupInputs: (getInputSetter) => needed && getInputSetter(name)
+                                        setupInputs: () => needed && _getInputSetter(name)
                                     };
                                 },
                                 createOutput: (type, name) => {
@@ -307,7 +308,7 @@ class Mesh extends Component {
                                             needed = true;
                                             return name;
                                         },
-                                        setupInputs: (getUniformSetter) => needed && getUniformSetter(name)
+                                        setupInputs: () => needed && _getInputSetter(name)
                                     };
                                 },
                                 createVarying: (type, name) => {
@@ -323,7 +324,8 @@ class Mesh extends Component {
                                 }
                             },
                             appendVertexDefinitions:   (src) => vertAppenders.forEach(a => a(src)),
-                            appendFragmentDefinitions: (src) => fragAppenders.forEach(a => a(src))
+                            appendFragmentDefinitions: (src) => fragAppenders.forEach(a => a(src)),
+                            setGetInputSetter: (getInputSetter) => { _getInputSetter = getInputSetter; }
                         };
                     })();
 

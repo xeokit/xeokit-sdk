@@ -29,12 +29,12 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
                 const f = `${fresnel}(${viewEyeDir}, ${viewNormal}, ${edgeBias}, ${centerBias}, ${power})`;
                 return `mix(${edgeColor + colorSwizzle}, ${centerColor + colorSwizzle}, ${f})`;
             },
-            setupInputs: (getInputSetter) => {
-                const setEdgeBias    = edgeBias.setupInputs(getInputSetter);
-                const setCenterBias  = centerBias.setupInputs(getInputSetter);
-                const setPower       = power.setupInputs(getInputSetter);
-                const setEdgeColor   = edgeColor.setupInputs(getInputSetter);
-                const setCenterColor = centerColor.setupInputs(getInputSetter);
+            setupInputs: () => {
+                const setEdgeBias    = edgeBias.setupInputs();
+                const setCenterBias  = centerBias.setupInputs();
+                const setPower       = power.setupInputs();
+                const setEdgeColor   = edgeColor.setupInputs();
+                const setCenterColor = centerColor.setupInputs();
                 return (mtl) => {
                     const value = getMaterialValue(mtl);
                     setEdgeBias   (value.edgeBias);
@@ -60,8 +60,8 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
             return tex && {
                 getTexCoordExpression: tex.getTexCoordExpression,
                 getValueExpression:    tex.getValueExpression,
-                setupInputs:           (getInputSetter) => {
-                    const setInputsState = tex.setupInputs(getInputSetter);
+                setupInputs:           () => {
+                    const setInputsState = tex.setupInputs();
                     return setInputsState && ((mtl) => {
                         const value = getMaterialValue(mtl);
                         setInputsState(value._state.texture, value._state.matrix);
@@ -92,8 +92,8 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
         const uniform = programVariables.createUniform(type, name);
         return isDefined && {
             toString: uniform.toString,
-            setupInputs: (getInputSetter) => {
-                const setUniform = uniform.setupInputs(getInputSetter);
+            setupInputs: () => {
+                const setUniform = uniform.setupInputs();
                 return setUniform && ((mtl) => setUniform(getMaterialValue(mtl)));
             }
         };
@@ -448,14 +448,14 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
 
             src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression("fragColor") : "fragColor"};`);
         },
-        setupMeshInputs: (getInputSetter) => {
-            const setColorize = colorize.setupInputs(getInputSetter);
-            return (mesh) => setColorize(mesh.colorize);
-        },
-        setupMaterialInputs: (getInputSetter) => {
-            const binders = materialInputs.map(f => f.setupInputs(getInputSetter)).filter(b => b);
-            return (binders.length > 0) && (mtl => binders.forEach(bind => bind(mtl)));
-        },
-        setupLightInputs: lightSetup.setupInputs
+        setupProgramInputs: () => {
+            const setColorize = colorize.setupInputs();
+            const materialBinders = materialInputs.map(f => f.setupInputs()).filter(b => b);
+            return {
+                setLightStateValues: lightSetup.setupInputs(),
+                setMeshStateValues: (mesh) => setColorize(mesh.colorize),
+                setMaterialStateValues: (materialBinders.length > 0) && (mtl => materialBinders.forEach(bind => bind(mtl)))
+            };
+        }
     };
 };
