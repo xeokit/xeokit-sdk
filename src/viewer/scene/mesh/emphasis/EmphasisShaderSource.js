@@ -1,10 +1,9 @@
 import {createLightSetup} from "../MeshRenderer.js";
-import {math} from "../../math/math.js";
-const tmpVec4 = math.vec4();
 
 export const EmphasisShaderSource = function(meshHash, programVariables, geometry, scene, isFill) {
     const lightSetup = isFill && createLightSetup(programVariables, scene._lightsState, false);
-    const uColor = programVariables.createUniform("vec4", "uColor");
+    const uColor = programVariables.createUniform("vec3", "uColor");
+    const uAlpha = programVariables.createUniform("float", "uAlpha");
     const vColor = programVariables.createVarying("vec4", "vColor");
     const outColor = programVariables.createOutput("vec4", "outColor");
     return {
@@ -25,27 +24,27 @@ export const EmphasisShaderSource = function(meshHash, programVariables, geometr
                     src.push(`reflectedColor += max(dot(${attributes.normal.view}, ${light.getDirection(geometry.viewMatrix, attributes.position.view)}), 0.0) * ${light.getColor()};`);
                 });
                 // TODO: A blending mode for emphasis materials, to select add/multiply/mix
-                //src.push(`${vColor} = vec4((mix(reflectedColor, ${uColor}.rgb, 0.7)), ${uColor}.a);`);
-                src.push(`${vColor} = vec4((${lightSetup.getAmbientColor()} + reflectedColor) * ${uColor}.rgb, ${uColor}.a);`);
-                //src.push(`${vColor} = vec4(reflectedColor + ${uColor}.rgb, ${uColor}.a);`);
+                //src.push(`${vColor} = vec4((mix(reflectedColor, ${uColor}, 0.7)), ${uAlpha});`);
+                src.push(`${vColor} = vec4((${lightSetup.getAmbientColor()} + reflectedColor) * ${uColor}, ${uAlpha});`);
+                //src.push(`${vColor} = vec4(reflectedColor + ${uColor}, ${uAlpha});`);
             } else {
-                src.push(`${vColor} = ${uColor};`);
+                src.push(`${vColor} = vec4(${uColor}, ${uAlpha});`);
             }
         },
         appendFragmentOutputs: (src, getGammaOutputExpression) => src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression(vColor) : vColor};`),
         setupProgramInputs: () => {
             const setColor = uColor.setupInputs();
+            const setAlpha = uAlpha.setupInputs();
             return {
                 setLightStateValues: lightSetup && lightSetup.setupInputs(),
                 setMaterialStateValues: (mtl) => {
                     if (isFill) {
-                        tmpVec4.set(mtl.fillColor);
-                        tmpVec4[3] = mtl.fillAlpha;
+                        setColor(mtl.fillColor);
+                        setAlpha(mtl.fillAlpha);
                     } else {
-                        tmpVec4.set(mtl.edgeColor);
-                        tmpVec4[3] = mtl.edgeAlpha;
+                        setColor(mtl.edgeColor);
+                        setAlpha(mtl.edgeAlpha);
                     }
-                    setColor(tmpVec4);
                 }
             };
         }
