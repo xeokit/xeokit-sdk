@@ -876,6 +876,31 @@ export class VBOBatchingTrianglesLayer {
         this._setFlags(portionId, flags, transparent);
     }
 
+    translate(translationDelta) {
+      let positionsDecodeMatrix = math.transformMatrix({
+        matrix: this._state.positionsDecodeMatrix,
+        translation: translationDelta,
+      });
+
+      this._state.positionsDecodeMatrix = positionsDecodeMatrix;
+    }
+
+    rotate(radians, pivot) {
+      if (!this._finalized) {
+        throw 'Not finalized';
+      }
+
+      if (this._state && this._state.positionsDecodeMatrix) {
+        let positionsDecodeMatrix = math.transformMatrix({
+          matrix: this._state.positionsDecodeMatrix,
+          rotation: radians,
+          rotationPivot: pivot,
+        });
+
+        this._state.positionsDecodeMatrix = positionsDecodeMatrix;
+      }
+    }
+
     /**
      * flags are 4bits values encoded on a 32bit base. color flag on the first 4 bits, silhouette flag on the next 4 bits and so on for edge, pick and clippable.
      */
