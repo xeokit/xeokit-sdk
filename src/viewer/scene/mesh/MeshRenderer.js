@@ -137,7 +137,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     if (getLogDepth) {
         programFragmentOutputs.push(`gl_FragDepth = ${isPerspective} == 0.0 ? gl_FragCoord.z : log2(${vFragDepth}) * ${logDepthBufFC} * 0.5;`);
     }
-    programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord");
+    const setupProgramInputs = programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord");
 
     const programVertexOutputs = [ ];
     programVariablesState.appendVertexOutputs(programVertexOutputs);
@@ -262,7 +262,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     } else {
         programVariablesState.setGetInputSetter(makeInputSetters(gl, program.handle, true));
 
-        const programInputSetters       = programSetup.setupProgramInputs && programSetup.setupProgramInputs();
+        const programInputSetters       = setupProgramInputs && setupProgramInputs();
         const setLightInputState        = programInputSetters && programInputSetters.setLightStateValues;
         const setMaterialInputsState    = programInputSetters && programInputSetters.setMaterialStateValues;
         const setProgramMeshInputsState = programInputSetters && programInputSetters.setMeshStateValues;
