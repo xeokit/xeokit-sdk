@@ -1045,47 +1045,6 @@ export class VBOBatchingTrianglesLayer {
         }
     }
 
-    testNewPosition(position, pivot) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-
-        const radianes = position.map(x => x * Math.PI / 180);
-
-        if (this._state && this._state.positionsDecodeMatrix) {
-
-            // setKeyVal(key, val) {
-            //     if (this.hasOwnProperty(key)) {
-            //         this[key] = val;
-            //     } else {
-            //         console.error('RenderState.setKeyVal: key not found: ', key);
-            //     }
-            // }
-
-            // const center = math.getAABB3Center(this._modelAABB);
-
-            // const newAABB = this._modelAABB.map((x, i) => x - center[i]);
-
-            console.log({ positionsDecodeMatrix: this._state.positionsDecodeMatrix });
-
-            const positionsDecodeMatrix = applyTransformation(this._state.positionsDecodeMatrix, pivot, radianes);
-
-
-            console.log({ positionsDecodeMatrix });
-            // this._state.setKeyVal('origin', newAABB);
-
-            this._state.setKeyVal('positionsDecodeMatrix', positionsDecodeMatrix);
-
-            // console.log(`center: ${center}`);
-            // console.log(`newAABB: ${newAABB}`);
-
-            console.log({ currentState: this._state });
-
-
-            // this._state = {...previousState, positionsDecodeMatrix: math.mat4(positionsDecodeMatrix)};
-        }
-    }
-
     getEachVertex(portionId, callback) {
         if (!this.model.scene.readableGeometryEnabled) {
             return;
