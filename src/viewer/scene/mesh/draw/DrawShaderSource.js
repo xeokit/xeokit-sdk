@@ -134,16 +134,17 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
         materialAlphaModeCutoff
         ].filter(i => i);
 
-    const vViewPosition = programVariables.createVarying("vec3", "vViewPosition");
-    const texturePos = programVariables.createVarying("vec4", "texturePos");
-    const vColor = attributes.color && programVariables.createVarying("vec4", "vColor");
+    const vViewPosition = programVariables.createVarying("vec3", "vViewPosition", () => `${attributes.position.view}.xyz`);
+    const texturePos = programVariables.createVarying("vec4", "texturePos", () => `vec4(${attributes.uv}, 1.0, 1.0)`);
+    const vColor = attributes.color && programVariables.createVarying("vec4", "vColor", () => attributes.color);
 
-    const vViewNormal = programVariables.createVarying("vec3", "vViewNormal");
+    const vViewNormal = programVariables.createVarying("vec3", "vViewNormal", () => attributes.normal.view);
+    const texUnitConverter = `mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0)`;
     const vDirectionals = lightSetup.directionalLights.map((light, i) => ({
-        vViewLightReverseDir: programVariables.createVarying("vec3", `vViewLightReverseDir${i}`),
-        vShadowPosFromLight:  programVariables.createVarying("vec3", `vShadowPosFromLight${i}`)
+        vViewLightReverseDir: programVariables.createVarying("vec3", `vViewLightReverseDir${i}`, () => light.getDirection(geometry.viewMatrix, null)),
+        vShadowPosFromLight:  programVariables.createVarying("vec3", `vShadowPosFromLight${i}`, () => `(${texUnitConverter} * ${light.shadowParameters.getShadowProjMatrix()} * (${light.shadowParameters.getShadowViewMatrix()} * ${attributes.position.world})).xyz`)
     }));
-    const vWorldNormal = programVariables.createVarying("vec3", "vWorldNormal");
+    const vWorldNormal = programVariables.createVarying("vec3", "vWorldNormal", () => attributes.normal.world);
 
     const outColor = programVariables.createOutput("vec4", "outColor");
 
@@ -159,19 +160,6 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
         discardPoints: true,
         setupPointSize: true,
         setsLineWidth: true,
-        appendVertexOutputs: (src) => {
-            src.push(`${vViewPosition} = ${attributes.position.view}.xyz;`);
-            texturePos.needed && src.push(`${texturePos} = vec4(${attributes.uv}, 1.0, 1.0);`);
-            vColor && src.push(`${vColor} = ${attributes.color};`);
-            vViewNormal.needed && src.push(`${vViewNormal} = ${attributes.normal.view};`);
-            vWorldNormal.needed && src.push(`${vWorldNormal} = ${attributes.normal.world};`);
-            src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
-            vDirectionals.forEach((vDir, i) => {
-                const light = lightSetup.directionalLights[i];
-                vDir.vViewLightReverseDir.needed && src.push(`${vDir.vViewLightReverseDir} = ${light.getDirection(geometry.viewMatrix, null)};`);
-                vDir.vShadowPosFromLight.needed  && src.push(`${vDir.vShadowPosFromLight}  = (texUnitConverter * ${light.shadowParameters.getShadowProjMatrix()} * (${light.shadowParameters.getShadowViewMatrix()} * ${attributes.position.world})).xyz;`);
-            });
-        },
         appendFragmentDefinitions: (src) => {
             if (hasNormals) {
                 //--------------------------------------------------------------------------------
