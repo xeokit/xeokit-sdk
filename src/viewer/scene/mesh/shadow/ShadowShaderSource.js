@@ -16,6 +16,9 @@ export const ShadowShaderSource = function(meshHash, programVariables) {
             src.push("  return comp;");
             src.push("}");
         },
-        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => src.push(`${outColor} = encodeFloat(${gl_FragCoord}.z);`)
+        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => {
+            src.push(`${outColor} = encodeFloat(${gl_FragCoord}.z);`);
+            return null;
+        }
     };
 };
