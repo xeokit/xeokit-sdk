@@ -17,7 +17,6 @@ export const EmphasisShaderSource = function(meshHash, programVariables, geometr
         dontSetFrontFace: true,
         discardPoints: isFill,
         drawEdges: ! isFill,
-        useGammaOutput: true,
         appendVertexOutputs: (src) => {
             if (lightSetup) {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
