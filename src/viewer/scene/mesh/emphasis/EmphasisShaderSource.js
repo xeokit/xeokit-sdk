@@ -29,21 +29,23 @@ export const EmphasisShaderSource = function(meshHash, programVariables, geometr
         dontSetFrontFace: true,
         discardPoints: isFill,
         drawEdges: ! isFill,
-        appendFragmentOutputs: (src, getGammaOutputExpression) => src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression(vColor) : vColor};`),
-        setupProgramInputs: () => {
-            const setColor = uColor.setupInputs();
-            const setAlpha = uAlpha.setupInputs();
-            return {
-                setLightStateValues: lightSetup && lightSetup.setupInputs(),
-                setMaterialStateValues: (mtl) => {
-                    if (isFill) {
-                        setColor(mtl.fillColor);
-                        setAlpha(mtl.fillAlpha);
-                    } else {
-                        setColor(mtl.edgeColor);
-                        setAlpha(mtl.edgeAlpha);
+        appendFragmentOutputs: (src, getGammaOutputExpression) => {
+            src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression(vColor) : vColor};`);
+            return () => {
+                const setColor = uColor.setupInputs();
+                const setAlpha = uAlpha.setupInputs();
+                return {
+                    setLightStateValues: lightSetup && lightSetup.setupInputs(),
+                    setMaterialStateValues: (mtl) => {
+                        if (isFill) {
+                            setColor(mtl.fillColor);
+                            setAlpha(mtl.fillAlpha);
+                        } else {
+                            setColor(mtl.edgeColor);
+                            setAlpha(mtl.edgeAlpha);
+                        }
                     }
-                }
+                };
             };
         }
     };
