@@ -32,20 +32,20 @@ export const LambertShaderSource = function(meshDrawHash, programVariables, geom
             src.push(`${vColor} = ${colorize} * vec4((${lightSetup.getAmbientColor()} + reflectedColor) * ${materialColor}.rgb + ${materialEmissive}, ${materialColor}.a);`); // TODO: How to have ambient bright enough for canvas BG but not too bright for scene?
         },
         appendFragmentOutputs: (src, getGammaOutputExpression) => src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression(vColor) : vColor};`),
-        setupMeshInputs: (getInputSetter) => {
-            const setColorize = colorize.setupInputs(getInputSetter);
-            return (mesh) => setColorize(mesh.colorize);
-        },
-        setupMaterialInputs: (getInputSetter) => {
-            const setMaterialColor = materialColor.setupInputs(getInputSetter);
-            const setMaterialEmissive = materialEmissive.setupInputs(getInputSetter);
-            return (mtl) => {
-                tmpVec4.set(mtl.color);
-                tmpVec4[3] = mtl.alpha;
-                setMaterialColor(tmpVec4);
-                setMaterialEmissive(mtl.emissive);
+        setupProgramInputs: () => {
+            const setColorize = colorize.setupInputs();
+            const setMaterialColor = materialColor.setupInputs();
+            const setMaterialEmissive = materialEmissive.setupInputs();
+            return {
+                setLightStateValues: lightSetup.setupInputs(),
+                setMeshStateValues: (mesh) => setColorize(mesh.colorize),
+                setMaterialStateValues: (mtl) => {
+                    tmpVec4.set(mtl.color);
+                    tmpVec4[3] = mtl.alpha;
+                    setMaterialColor(tmpVec4);
+                    setMaterialEmissive(mtl.emissive);
+                }
             };
-        },
-        setupLightInputs: lightSetup.setupInputs
+        }
     };
 };
