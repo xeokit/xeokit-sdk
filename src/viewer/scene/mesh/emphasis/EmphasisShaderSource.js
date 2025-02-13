@@ -4,7 +4,20 @@ export const EmphasisShaderSource = function(meshHash, programVariables, geometr
     const lightSetup = isFill && createLightSetup(programVariables, scene._lightsState, false);
     const uColor = programVariables.createUniform("vec3", "uColor");
     const uAlpha = programVariables.createUniform("float", "uAlpha");
-    const vColor = programVariables.createVarying("vec4", "vColor");
+    const vColor = programVariables.createVarying("vec4", "vColor", () => {
+        const attributes = geometry.attributes;
+        const lightComponents = isFill && [
+            lightSetup.getAmbientColor()
+        ].concat(attributes.normal
+                 ? lightSetup.directionalLights.map(
+                     light => `(max(dot(${attributes.normal.view}, ${light.getDirection(geometry.viewMatrix, attributes.position.view)}), 0.0) * ${light.getColor()})`)
+                 : [ ]);
+        // TODO: A blending mode for emphasis materials, to select add/multiply/mix
+        // `vec4((mix(reflectedColor, ${uColor}, 0.7)), ${uAlpha})`
+        return `vec4(${uColor}${lightComponents ? ` * (${lightComponents.join(" + ")})` : ""}, ${uAlpha})`;
+        // `${vColor} = vec4(reflectedColor + ${uColor}, ${uAlpha})`
+    });
+
     const outColor = programVariables.createOutput("vec4", "outColor");
     return {
         getHash: () => [
@@ -16,21 +29,6 @@ export const EmphasisShaderSource = function(meshHash, programVariables, geometr
         dontSetFrontFace: true,
         discardPoints: isFill,
         drawEdges: ! isFill,
-        appendVertexOutputs: (src) => {
-            if (lightSetup) {
-                src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-                const attributes = geometry.attributes;
-                attributes.normal && lightSetup.directionalLights.forEach(light => {
-                    src.push(`reflectedColor += max(dot(${attributes.normal.view}, ${light.getDirection(geometry.viewMatrix, attributes.position.view)}), 0.0) * ${light.getColor()};`);
-                });
-                // TODO: A blending mode for emphasis materials, to select add/multiply/mix
-                //src.push(`${vColor} = vec4((mix(reflectedColor, ${uColor}, 0.7)), ${uAlpha});`);
-                src.push(`${vColor} = vec4((${lightSetup.getAmbientColor()} + reflectedColor) * ${uColor}, ${uAlpha});`);
-                //src.push(`${vColor} = vec4(reflectedColor + ${uColor}, ${uAlpha});`);
-            } else {
-                src.push(`${vColor} = vec4(${uColor}, ${uAlpha});`);
-            }
-        },
         appendFragmentOutputs: (src, getGammaOutputExpression) => src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression(vColor) : vColor};`),
         setupProgramInputs: () => {
             const setColor = uColor.setupInputs();

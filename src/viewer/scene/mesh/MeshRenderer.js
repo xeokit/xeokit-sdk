@@ -100,9 +100,9 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     const viewNormalMatrix      = programVariables.createUniform("mat4",  "viewNormalMatrix");
     const pickClipPos           = programVariables.createUniform("vec2",  "pickClipPos");
 
-    const vWorldPosition = programVariables.createVarying("vec3",  "vWorldPosition");
-    const isPerspective  = programVariables.createVarying("float", "isPerspective");
-    const vFragDepth     = programVariables.createVarying("float", "vFragDepth");
+    const vWorldPosition = programVariables.createVarying("vec3",  "vWorldPosition", () => "worldPosition.xyz");
+    const isPerspective  = programVariables.createVarying("float", "isPerspective",  () => `(${projMatrix}[2][3] == -1.0) ? 1.0 : 0.0`);
+    const vFragDepth     = programVariables.createVarying("float", "vFragDepth",     () => "1.0 + clipPos.w");
 
     const billboard = mesh.billboard;
     const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
@@ -140,7 +140,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord");
 
     const programVertexOutputs = [ ];
-    programSetup.appendVertexOutputs && programSetup.appendVertexOutputs(programVertexOutputs);
+    programVariablesState.appendVertexOutputs(programVertexOutputs);
 
     const buildVertexShader = () => {
         const viewNormalDefinition = viewNormal && viewNormal.needed && `vec3 ${viewNormal} = normalize((${billboardIfApplicable(viewNormalMatrix)} * vec4(${worldNormal}, 0.0)).xyz);`;
@@ -177,11 +177,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
             return src;
         })();
 
-        vWorldPosition.needed && programVertexOutputs.push(`${vWorldPosition} = worldPosition.xyz;`);
-
-        programVertexOutputs.push(`vec4 clipPos = ${projMatrix} * viewPosition;`);
-        isPerspective.needed && programVertexOutputs.push(`${isPerspective} = (${projMatrix}[2][3] == -1.0) ? 1.0 : 0.0;`);
-        vFragDepth.needed && programVertexOutputs.push(`${vFragDepth} = 1.0 + clipPos.w;`);
+        programVertexOutputs.unshift(`vec4 clipPos = ${projMatrix} * viewPosition;`);
 
         const gl_Position = (meshStateBackground
                              ? "clipPos.xyww"
