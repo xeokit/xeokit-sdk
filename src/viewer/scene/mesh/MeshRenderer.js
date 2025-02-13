@@ -74,7 +74,6 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     const geometryState = mesh._geometry._state;
     const quantizedGeometry = geometryState.compressGeometry;
     const isPoints = geometryState.primitiveName === "points";
-    const setupPointSize = programSetup.setupPointSize && isPoints;
     const gammaOutputSetup = scene.gammaOutput && (function() {
         const gammaFactor = programVariables.createUniform("float", "gammaFactor");
         return {
@@ -174,7 +173,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
                 src.push(`vec3 ${worldNormal} = (${billboardIfApplicable(modelNormalMatrix)} * vec4(${localNormal}, 0.0)).xyz;`);
             }
             viewNormalDefinition && src.push(viewNormalDefinition);
-            setupPointSize && src.push(`gl_PointSize = ${pointSize};`);
+            programSetup.setupPointSize && isPoints && src.push(`gl_PointSize = ${pointSize};`);
             return src;
         })();
 
