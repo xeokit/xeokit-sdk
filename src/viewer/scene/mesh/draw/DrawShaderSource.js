@@ -434,14 +434,15 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
             src.push(`vec4 fragColor = ${colorize} * vec4(outgoingLight, alpha);`);
 
             src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression("fragColor") : "fragColor"};`);
-        },
-        setupProgramInputs: () => {
-            const setColorize = colorize.setupInputs();
-            const materialBinders = materialInputs.map(f => f.setupInputs()).filter(b => b);
-            return {
-                setLightStateValues: lightSetup.setupInputs(),
-                setMeshStateValues: (mesh) => setColorize(mesh.colorize),
-                setMaterialStateValues: (materialBinders.length > 0) && (mtl => materialBinders.forEach(bind => bind(mtl)))
+
+            return () => {
+                const setColorize = colorize.setupInputs();
+                const materialBinders = materialInputs.map(f => f.setupInputs()).filter(b => b);
+                return {
+                    setLightStateValues: lightSetup.setupInputs(),
+                    setMeshStateValues: (mesh) => setColorize(mesh.colorize),
+                    setMaterialStateValues: (materialBinders.length > 0) && (mtl => materialBinders.forEach(bind => bind(mtl)))
+                };
             };
         }
     };
