@@ -7,6 +7,6 @@ export const PickTriangleShaderSource = function(meshHash, programVariables, geo
         isPick: true,
         trianglePick: true,
         dontBillboardAnything: true,
-        appendFragmentOutputs: (src) => src.push(`${outColor} = ${vColor};`)
+        appendFragmentOutputs: (src) => { src.push(`${outColor} = ${vColor};`); return null; }
     };
 };
