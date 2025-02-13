@@ -22,7 +22,6 @@ export const LambertShaderSource = function(meshDrawHash, programVariables, geom
         discardPoints: true,
         setupPointSize: true,
         setsLineWidth: true,
-        useGammaOutput: true,
         appendVertexOutputs: (src) => {
             src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
             const attributes = geometry.attributes;
