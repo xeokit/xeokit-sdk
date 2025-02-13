@@ -75,7 +75,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     const quantizedGeometry = geometryState.compressGeometry;
     const isPoints = geometryState.primitiveName === "points";
     const setupPointSize = programSetup.setupPointSize && isPoints;
-    const gammaOutputSetup = programSetup.useGammaOutput && scene.gammaOutput && (function() {
+    const gammaOutputSetup = scene.gammaOutput && (function() {
         const gammaFactor = programVariables.createUniform("float", "gammaFactor");
         return {
             getValueExpression: (color) => `linearToGamma(${color}, ${gammaFactor})`,
