@@ -408,6 +408,14 @@ export class SceneModelMesh {
         return this._aabbWorld;
     }
 
+    rotate(radians, pivot) {
+      this.layer.rotate(radians, pivot);
+    }
+
+    translate(translationDelta) {
+      this.layer.translate(translationDelta);
+    }
+
     destroy() {
         this.model.scene._renderer.putPickID(this.pickId);
         this.layer.destroy();
