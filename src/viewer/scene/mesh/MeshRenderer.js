@@ -42,11 +42,11 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         }));
         return (allocatedUniforms.length > 0) && {
             getDistance: (worldPosition) => allocatedUniforms.map(a => `(${a.sectionPlaneActive} ? clamp(dot(-${a.sectionPlaneDir}, ${worldPosition} - ${a.sectionPlanePos}), 0.0, 1000.0) : 0.0)`).join(" + "),
-            setupInputs: (getUniformSetter) => {
+            setupInputs: () => {
                 const setSectionPlanes = allocatedUniforms.map(a => ({
-                    active: a.sectionPlaneActive.setupInputs(getUniformSetter),
-                    pos:    a.sectionPlanePos.setupInputs(getUniformSetter),
-                    dir:    a.sectionPlaneDir.setupInputs(getUniformSetter)
+                    active: a.sectionPlaneActive.setupInputs(),
+                    pos:    a.sectionPlanePos.setupInputs(),
+                    dir:    a.sectionPlaneDir.setupInputs()
                 }));
                 return (rtcOrigin, sectionPlanesActivePerLayer) => {
                     const sectionPlanes = sectionPlanesState.sectionPlanes;
@@ -79,8 +79,8 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         const gammaFactor = programVariables.createUniform("float", "gammaFactor");
         return {
             getValueExpression: (color) => `linearToGamma(${color}, ${gammaFactor})`,
-            setupInputs: (getInputSetter) => {
-                const setGammaFactor = gammaFactor.setupInputs(getInputSetter);
+            setupInputs: () => {
+                const setGammaFactor = gammaFactor.setupInputs();
                 return setGammaFactor && (() => setGammaFactor(scene.gammaFactor));
             }
         };
@@ -265,20 +265,23 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     if (program.errors) {
         return { errors: program.errors };
     } else {
-        const getInputSetter = makeInputSetters(gl, program.handle, true);
-        const setPickClipPosState = pickClipPos.setupInputs(getInputSetter);
-        const setProgramMeshInputsState = programSetup.setupMeshInputs && programSetup.setupMeshInputs(getInputSetter);
-        const setGammaOutput = gammaOutputSetup && gammaOutputSetup.setupInputs(getInputSetter);
-        const setMaterialInputsState = programSetup.setupMaterialInputs && programSetup.setupMaterialInputs(getInputSetter);
-        const setLightInputState = programSetup.setupLightInputs && programSetup.setupLightInputs(getInputSetter);
+        programVariablesState.setGetInputSetter(makeInputSetters(gl, program.handle, true));
+
+        const programInputSetters       = programSetup.setupProgramInputs && programSetup.setupProgramInputs();
+        const setLightInputState        = programInputSetters && programInputSetters.setLightStateValues;
+        const setMaterialInputsState    = programInputSetters && programInputSetters.setMaterialStateValues;
+        const setProgramMeshInputsState = programInputSetters && programInputSetters.setMeshStateValues;
+
+        const setPickClipPosState = pickClipPos.setupInputs();
+        const setGammaOutput = gammaOutputSetup && gammaOutputSetup.setupInputs();
         const setGeometryInputsState = (function() {
-            const setPositionsDecodeMatrix = positionsDecodeMatrix.setupInputs(getInputSetter);
-            const setUvDecodeMatrix = uvDecodeMatrix.setupInputs(getInputSetter);
-            const setPosition  = attributes.position.setupInputs(getInputSetter);
-            const setNormal    = attributes.normal && attributes.normal.setupInputs(getInputSetter);
-            const setUV        = attributes.uv && attributes.uv.setupInputs(getInputSetter);
-            const setColor     = attributes.color && attributes.color.setupInputs(getInputSetter);
-            const setPickColor = attributes.pickColor.setupInputs(getInputSetter);
+            const setPositionsDecodeMatrix = positionsDecodeMatrix.setupInputs();
+            const setUvDecodeMatrix = uvDecodeMatrix.setupInputs();
+            const setPosition  = attributes.position.setupInputs();
+            const setNormal    = attributes.normal && attributes.normal.setupInputs();
+            const setUV        = attributes.uv && attributes.uv.setupInputs();
+            const setColor     = attributes.color && attributes.color.setupInputs();
+            const setPickColor = attributes.pickColor.setupInputs();
 
             const binder = (arrayBuf, onBindAttribute) => ({ // see ArrayBuf.js and Attribute.js
                 bindAtLocation: location => {
@@ -299,16 +302,16 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
                 setPickColor && setPickColor(binder(triangleGeometry.pickColorsBuf, onBindAttribute));
             };
         })();
-        const setPointSize = pointSize.setupInputs(getInputSetter);
+        const setPointSize = pointSize.setupInputs();
         const setMeshInputsState = (function() {
-            const setModelMatrix = modelMatrix.setupInputs(getInputSetter);
-            const setModelNormalMatrix = modelNormalMatrix.setupInputs(getInputSetter);
-            const setViewMatrix = viewMatrix.setupInputs(getInputSetter);
-            const setViewNormalMatrix = viewNormalMatrix.setupInputs(getInputSetter);
-            const setProjMatrix = projMatrix.setupInputs(getInputSetter);
-            const setOffset = offset.setupInputs(getInputSetter);
-            const setScale = getInputSetter("scale");
-            const setLogDepthBufFC = logDepthBufFC.setupInputs(getInputSetter);
+            const setModelMatrix = modelMatrix.setupInputs();
+            const setModelNormalMatrix = modelNormalMatrix.setupInputs();
+            const setViewMatrix = viewMatrix.setupInputs();
+            const setViewNormalMatrix = viewNormalMatrix.setupInputs();
+            const setProjMatrix = projMatrix.setupInputs();
+            const setOffset = offset.setupInputs();
+            const setScale = scale.setupInputs();
+            const setLogDepthBufFC = logDepthBufFC.setupInputs();
 
             return (mesh, viewMatrix, viewNormalMatrix, projMatrix, far) => {
                 setModelMatrix(mesh.worldMatrix);
@@ -322,8 +325,8 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
             };
         })();
         const setSectionPlanesInputsState = clipping && (function() {
-            const setClippable = clippable.setupInputs(getInputSetter);
-            const setClippingState = clipping.setupInputs(getInputSetter);
+            const setClippable = clippable.setupInputs();
+            const setClippingState = clipping.setupInputs();
             return (rtcOrigin, renderFlags, clippable) => {
                 setClippable(clippable);
                 if (clippable) {
@@ -475,9 +478,9 @@ export const setupTexture = (programVariables, type, name, encoding, hasMatrix) 
                            : `texture(${map}, ${getTexCoordExpression(texturePos)})`);
             return (encoding !== LinearEncoding) ? `${TEXTURE_DECODE_FUNCS[encoding]}(${texel})` : texel;
         },
-        setupInputs: (getInputSetter) => {
-            const setMap    = map.setupInputs(getInputSetter);
-            const setMatrix = matrix && matrix.setupInputs(getInputSetter);
+        setupInputs: () => {
+            const setMap    = map.setupInputs();
+            const setMatrix = matrix && matrix.setupInputs();
             return setMap && function(tex, mtx) {
                 if (tex) {
                     setMap(tex);
@@ -495,8 +498,8 @@ export const createLightSetup = function(programVariables, lightsState, setupCub
         const uniform = programVariables.createUniform(type, name);
         return {
             toString: uniform.toString,
-            setupLightsInputs: (getUniformSetter) => {
-                const setUniform = uniform.setupInputs(getUniformSetter);
+            setupLightsInputs: () => {
+                const setUniform = uniform.setupInputs();
                 return setUniform && (() => setUniform(getUniformValue()));
             }
         };
@@ -538,8 +541,8 @@ export const createLightSetup = function(programVariables, lightsState, setupCub
                         getShadowMap:        () => lightUniforms.shadowMap
                     }
                 },
-                setupLightsInputs: (getUniformSetter) => {
-                    const setters = Object.values(lightUniforms).map(u => u.setupLightsInputs(getUniformSetter)).filter(v => v);
+                setupLightsInputs: () => {
+                    const setters = Object.values(lightUniforms).map(u => u.setupLightsInputs()).filter(v => v);
                     return () => setters.forEach(setState => setState());
                 }
             };
@@ -571,8 +574,8 @@ export const createLightSetup = function(programVariables, lightsState, setupCub
         return tex && {
             getTexCoordExpression: tex.getTexCoordExpression,
             getValueExpression:    tex.getValueExpression,
-            setupInputs:           (getInputSetter) => {
-                const setInputsState = tex.setupInputs(getInputSetter);
+            setupInputs:           () => {
+                const setInputsState = tex.setupInputs();
                 return setInputsState && (() => setInputsState(getValue().texture, null));
             }
         };
@@ -587,11 +590,11 @@ export const createLightSetup = function(programVariables, lightsState, setupCub
         directionalLights: directionals.map(light => light.glslLight),
         getIrradiance: lightMap      && ((worldNormal) => `${lightMap.getValueExpression(worldNormal)}.rgb`),
         getReflection: reflectionMap && ((reflectVec, mipLevel) => `${reflectionMap.getValueExpression(reflectVec, mipLevel)}.rgb`),
-        setupInputs: (getUniformSetter) => {
-            const setAmbientInputState = lightAmbient.setupLightsInputs(getUniformSetter);
-            const setDirectionalsInputStates = directionals.map(light => light.setupLightsInputs(getUniformSetter));
-            const uLightMap      = lightMap && lightMap.setupInputs(getUniformSetter);
-            const uReflectionMap = reflectionMap && reflectionMap.setupInputs(getUniformSetter);
+        setupInputs: () => {
+            const setAmbientInputState = lightAmbient.setupLightsInputs();
+            const setDirectionalsInputStates = directionals.map(light => light.setupLightsInputs());
+            const uLightMap      = lightMap && lightMap.setupInputs();
+            const uReflectionMap = reflectionMap && reflectionMap.setupInputs();
             return () => {
                 setAmbientInputState && setAmbientInputState();
                 setDirectionalsInputStates.forEach(setState => setState());
