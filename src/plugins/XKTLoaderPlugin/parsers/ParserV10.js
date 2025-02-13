@@ -685,63 +685,29 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                     }
 
                     if (geometryValid) {
-
-
-                        // sceneModel.createMesh(utils.apply(meshDefaults, {
-                        //     id: meshId,
-                        //     textureSetId,
-                        //     origin: tileCenter,
-                        //     // origin: meshIndex % 2 === 0 ? tileCenter : [tileCenter[1], tileCenter[0], tileCenter[2] * 2],
-                        //     primitive: primitiveName,
-                        //     // positionsCompressed: geometryPositions,
-                        //     positions: positions,
-                        //     // rotation: [0, 0, 0],
-                        //     // scala: [1 / 1000, 1/1000, 1/1000],
-                        //     // normalsCompressed: geometryNormals,
-                        //     normals: normals,
-                        //     // uv: geometryUVs && geometryUVs.length > 0 ? geometryUVs : null,
-                        //     uv: geometryUVs && geometryUVs.length > 0 ? uvs : null,
-                        //     colorsCompressed: geometryColors,
-                        //     // indices: geometryIndices,
-                        //     indices: indices,
-                        //     // edgeIndices: geometryEdgeIndices,
-                        //     edgeIndices: edgeIndices,
-                        //     // matrix: [1, 0,0,0, 0,1, 0,0, 0,0,1,0, 0,0,0,1],
-                        //     // positionsDecodeMatrix: [0, 2 / 1000,0,0, 1 / 1000,0, 0,0, 0,0,1 / 1000,0, 0,0,0,1],
-                        //     color: meshColor,
-                        //     metallic: meshMetallic,
-                        //     roughness: meshRoughness,
-                        //     opacity: meshOpacity
-                        // }));
-
-                        const rotation = [90, 0, 0];
-
-                        const radianes = rotation.map(r => r * Math.PI / 180);
-
-
-                        const mesh = sceneModel.createMesh(utils.apply(meshDefaults, {
-                            id: meshId,
-                            textureSetId,
-                            origin: tileCenter,
-                            // origin: meshIndex % 2 === 0 ? tileCenter : [tileCenter[1], tileCenter[0], tileCenter[2] * 2],
-                            primitive: primitiveName,
-                            positionsCompressed: geometryPositions,
-                            normalsCompressed: geometryNormals,
-                            uv: geometryUVs && geometryUVs.length > 0 ? geometryUVs : null,
-                            colorsCompressed: geometryColors,
-                            indices: geometryIndices,
-                            edgeIndices: geometryEdgeIndices,
-                            // positionsDecodeMatrix: tileDecodeMatrix,
-                            // positionsDecodeMatrix: applyTransformation(tileDecodeMatrix, radianes),
-                            positionsDecodeMatrix: applyTransform ? applyTransformation(tileDecodeMatrix, radianes) : tileDecodeMatrix,
-                            color: meshColor,
-                            metallic: meshMetallic,
-                            roughness: meshRoughness,
-                            opacity: meshOpacity
-                        }));
-
-
-                        meshIds.push(meshId);
+                      sceneModel.createMesh(
+                        utils.apply(meshDefaults, {
+                          id: meshId,
+                          textureSetId,
+                          origin: tileCenter,
+                          primitive: primitiveName,
+                          positionsCompressed: geometryPositions,
+                          normalsCompressed: geometryNormals,
+                          uv:
+                            geometryUVs && geometryUVs.length > 0
+                              ? geometryUVs
+                              : null,
+                          colorsCompressed: geometryColors,
+                          indices: geometryIndices,
+                          edgeIndices: geometryEdgeIndices,
+                          positionsDecodeMatrix: tileDecodeMatrix,
+                          color: meshColor,
+                          metallic: meshMetallic,
+                          roughness: meshRoughness,
+                          opacity: meshOpacity,
+                        })
+                      );
+                      meshIds.push(meshId);
                     }
                 }
             }
