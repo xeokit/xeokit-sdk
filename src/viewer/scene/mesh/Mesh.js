@@ -280,6 +280,7 @@ class Mesh extends Component {
                 if (! instance) {
                     const programVariablesState = (function() {
                         const vertAppenders = [ ];
+                        const vOutAppenders = [ ];
                         const fragAppenders = [ ];
                         let _getInputSetter = null;
                         return {
@@ -312,19 +313,21 @@ class Mesh extends Component {
                                         setupInputs: () => needed && _getInputSetter(name)
                                     };
                                 },
-                                createVarying: (type, name) => {
-                                    const v = {
+                                createVarying: (type, name, genValueCode) => {
+                                    let needed = false;
+                                    vertAppenders.push((src) => needed && src.push(`out ${type} ${name};`));
+                                    vOutAppenders.push((src) => needed && src.push(`${name} = ${genValueCode()};`));
+                                    fragAppenders.push((src) => needed && src.push(`in  ${type} ${name};`));
+                                    return {
                                         toString: () => {
-                                            v.needed = true;
+                                            needed = true;
                                             return name;
                                         }
                                     };
-                                    vertAppenders.push((src) => v.needed && src.push(`out ${type} ${name};`));
-                                    fragAppenders.push((src) => v.needed && src.push(`in  ${type} ${name};`));
-                                    return v;
                                 }
                             },
                             appendVertexDefinitions:   (src) => vertAppenders.forEach(a => a(src)),
+                            appendVertexOutputs:       (src) => vOutAppenders.forEach(a => a(src)),
                             appendFragmentDefinitions: (src) => fragAppenders.forEach(a => a(src)),
                             setGetInputSetter: (getInputSetter) => { _getInputSetter = getInputSetter; }
                         };
