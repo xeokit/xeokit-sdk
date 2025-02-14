@@ -12,37 +12,25 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
     const hasNormals = !!attributes.normal;
     const lightSetup = createLightSetup(programVariables, scene._lightsState, !!attributes.uv);
 
-    const colorize = programVariables.createUniform("vec4", "colorize");
+    const colorize = programVariables.createUniform("vec4", "colorize", (set, state) => set(state.mesh.colorize));
 
     const perturbNormal2Arb = lazyShaderVariable("perturbNormal2Arb");
     const fresnel = lazyShaderVariable("fresnel");
 
     const setupFresnel = (name, colorSwizzle, getMaterialValue) => {
-        const edgeBias    = programVariables.createUniform("float", name + "FresnelEdgeBias");
-        const centerBias  = programVariables.createUniform("float", name + "FresnelCenterBias");
-        const power       = programVariables.createUniform("float", name + "FresnelPower");
-        const edgeColor   = programVariables.createUniform("vec3",  name + "FresnelEdgeColor");
-        const centerColor = programVariables.createUniform("vec3",  name + "FresnelCenterColor");
+        const fresnelUniform = (type, namePostfix, getParameterValue) => {
+            return programVariables.createUniform(type, name + "Fresnel" + namePostfix, (set, state) => set(getParameterValue(getMaterialValue(state.material))));
+        };
+        const edgeBias    = fresnelUniform("float", "EdgeBias",    (fresnelValue => fresnelValue.edgeBias));
+        const centerBias  = fresnelUniform("float", "CenterBias",  (fresnelValue => fresnelValue.centerBias));
+        const power       = fresnelUniform("float", "Power",       (fresnelValue => fresnelValue.power));
+        const edgeColor   = fresnelUniform("vec3",  "EdgeColor",   (fresnelValue => fresnelValue.edgeColor));
+        const centerColor = fresnelUniform("vec3",  "CenterColor", (fresnelValue => fresnelValue.centerColor));
 
         return getMaterialValue(material) && {
             getValueExpression: (viewEyeDir, viewNormal) => {
                 const f = `${fresnel}(${viewEyeDir}, ${viewNormal}, ${edgeBias}, ${centerBias}, ${power})`;
                 return `mix(${edgeColor + colorSwizzle}, ${centerColor + colorSwizzle}, ${f})`;
-            },
-            setupInputs: () => {
-                const setEdgeBias    = edgeBias.setupInputs();
-                const setCenterBias  = centerBias.setupInputs();
-                const setPower       = power.setupInputs();
-                const setEdgeColor   = edgeColor.setupInputs();
-                const setCenterColor = centerColor.setupInputs();
-                return (mtl) => {
-                    const value = getMaterialValue(mtl);
-                    setEdgeBias   (value.edgeBias);
-                    setCenterBias (value.centerBias);
-                    setPower      (value.power);
-                    setEdgeColor  (value.edgeColor);
-                    setCenterColor(value.centerColor);
-                };
             }
         };
     };
@@ -56,18 +44,13 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
     const setup2dTexture = (name, getMaterialValue) => {
         return attributes.uv && (function() {
             const initTex = getMaterialValue(material);
-            const tex = initTex && setupTexture(programVariables, "sampler2D", name, initTex.encoding, !!initTex._state.matrix);
-            return tex && {
-                getTexCoordExpression: tex.getTexCoordExpression,
-                getValueExpression:    tex.getValueExpression,
-                setupInputs:           () => {
-                    const setInputsState = tex.setupInputs();
-                    return setInputsState && ((mtl) => {
-                        const value = getMaterialValue(mtl);
-                        setInputsState(value._state.texture, value._state.matrix);
-                    });
-                }
-            };
+            return initTex && setupTexture(
+                programVariables,
+                "sampler2D",
+                name,
+                initTex.encoding,
+                (set, state) => set(getMaterialValue(state.material)._state.texture),
+                initTex._state.matrix && ((set, state) => set(getMaterialValue(state.material)._state.matrix)));
         })();
     };
 
@@ -89,14 +72,7 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
     const setupUniform = (name, type, getMaterialValue) => {
         const initValue = getMaterialValue(material);
         const isDefined = (type === "float") ? ((initValue !== undefined) && (initValue !== null)) : initValue;
-        const uniform = programVariables.createUniform(type, name);
-        return isDefined && {
-            toString: uniform.toString,
-            setupInputs: () => {
-                const setUniform = uniform.setupInputs();
-                return setUniform && ((mtl) => setUniform(getMaterialValue(mtl)));
-            }
-        };
+        return isDefined && programVariables.createUniform(type, name, (set, state) => set(getMaterialValue(state.material)));
     };
 
     const materialAmbient         = setupUniform("materialAmbient",    "vec3",  mtl => mtl.ambient);
@@ -120,19 +96,6 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
             return null;
         }
     });
-
-    const materialInputs = [
-        diffuseFresnel, specularFresnel, emissiveFresnel, alphaFresnel,
-
-        ambientMap, baseColorMap, diffuseMap, emissiveMap, occlusionMap, alphaMap,
-        metallicMap, roughnessMap, metallicRoughnessMap,
-        specularMap, glossinessMap, specularGlossinessMap,
-        normalMap,
-
-        materialAmbient, materialDiffuse, materialBaseColor, materialEmissive, materialSpecular,
-        materialGlossiness, materialMetallic, materialRoughness, materialShininess, materialSpecularF0,
-        materialAlphaModeCutoff
-        ].filter(i => i);
 
     const vViewPosition = programVariables.createVarying("vec3", "vViewPosition", () => `${attributes.position.view}.xyz`);
     const texturePos = programVariables.createVarying("vec4", "texturePos", () => `vec4(${attributes.uv}, 1.0, 1.0)`);
@@ -434,16 +397,6 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
             src.push(`vec4 fragColor = ${colorize} * vec4(outgoingLight, alpha);`);
 
             src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression("fragColor") : "fragColor"};`);
-
-            return () => {
-                const setColorize = colorize.setupInputs();
-                const materialBinders = materialInputs.map(f => f.setupInputs()).filter(b => b);
-                return {
-                    setLightStateValues: lightSetup.setupInputs(),
-                    setMeshStateValues: (mesh) => setColorize(mesh.colorize),
-                    setMaterialStateValues: (materialBinders.length > 0) && (mtl => materialBinders.forEach(bind => bind(mtl)))
-                };
-            };
         }
     };
 };
