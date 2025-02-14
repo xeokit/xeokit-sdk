@@ -385,15 +385,14 @@ export const setupTexture = (programVariables, type, name, encoding, getTexture,
     const matrix = getMatrix && programVariables.createUniform("mat4", name + "MapMatrix", getMatrix);
     const swizzle = (type === "samplerCube") ? "xyz" : "xy";
     const getTexCoordExpression = texPos => (matrix ? `(${matrix} * ${texPos}).${swizzle}` : `${texPos}.${swizzle}`);
-    return {
-        getTexCoordExpression: getTexCoordExpression,
-        getValueExpression: (texturePos, bias) => {
-            const texel = (bias
-                           ? `texture(${map}, ${getTexCoordExpression(texturePos)}, ${bias})`
-                           : `texture(${map}, ${getTexCoordExpression(texturePos)})`);
-            return (encoding !== LinearEncoding) ? `${TEXTURE_DECODE_FUNCS[encoding]}(${texel})` : texel;
-        }
+    const sample = (texturePos, bias) => {
+        const texel = (bias
+                       ? `texture(${map}, ${getTexCoordExpression(texturePos)}, ${bias})`
+                       : `texture(${map}, ${getTexCoordExpression(texturePos)})`);
+        return (encoding !== LinearEncoding) ? `${TEXTURE_DECODE_FUNCS[encoding]}(${texel})` : texel;
     };
+    sample.getTexCoordExpression = getTexCoordExpression;
+    return sample;
 };
 
 export const createLightSetup = function(programVariables, lightsState, setupCubes) {
@@ -462,11 +461,7 @@ export const createLightSetup = function(programVariables, lightsState, setupCub
     const setupCubeTexture = (name, getMaps) => {
         const getValue = () => { const m = getMaps(); return (m.length > 0) && m[0]; };
         const initMap = getValue();
-        const tex = initMap && setupTexture(programVariables, "samplerCube", name, initMap.encoding, (set) => { const v = getValue(); v && set(v.texture); });
-        return tex && {
-            getTexCoordExpression: tex.getTexCoordExpression,
-            getValueExpression:    tex.getValueExpression
-        };
+        return initMap && setupTexture(programVariables, "samplerCube", name, initMap.encoding, (set) => { const v = getValue(); v && set(v.texture); });
     };
 
     const lightMap      = setupCubes && setupCubeTexture("light",      () => lightsState.lightMaps);
@@ -476,7 +471,7 @@ export const createLightSetup = function(programVariables, lightsState, setupCub
         getHash: () => lightsState.getHash(),
         getAmbientColor: () => `${lightAmbient}.rgb * ${lightAmbient}.a`,
         directionalLights: directionals.map(light => light.glslLight),
-        getIrradiance: lightMap      && ((worldNormal) => `${lightMap.getValueExpression(worldNormal)}.rgb`),
-        getReflection: reflectionMap && ((reflectVec, mipLevel) => `${reflectionMap.getValueExpression(reflectVec, mipLevel)}.rgb`)
+        getIrradiance: lightMap      && ((worldNormal) => `${lightMap(worldNormal)}.rgb`),
+        getReflection: reflectionMap && ((reflectVec, mipLevel) => `${reflectionMap(reflectVec, mipLevel)}.rgb`)
     };
 };
