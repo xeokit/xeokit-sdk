@@ -300,6 +300,11 @@ class Mesh extends Component {
                                         }
                                     };
                                 },
+                                createFragmentDefinition: (name, appendDefinition) => {
+                                    const v = lazyShaderVariable(name);
+                                    fragAppenders.push((src) => v.needed && appendDefinition(name, src));
+                                    return v;
+                                },
                                 createOutput: (type, name) => {
                                     fragAppenders.push((src) => src.push(`out ${type} ${name};`));
                                     return { toString: () => name };
