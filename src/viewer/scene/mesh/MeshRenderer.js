@@ -355,13 +355,10 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
                     frameCtx.useProgram++;
                     lastMaterialId = null;
                     lastGeometryId = null;
-                    setLightInputState && setLightInputState();
                     if (actsAsBackground) {
                         gl.depthFunc(gl.LEQUAL);
                     }
                 }
-
-                setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, mesh.clippable);
 
                 if (materialState.id !== lastMaterialId) {
                     if (frameCtx.backfaces !== materialState.backfaces) {
@@ -388,15 +385,16 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
                         frameCtx.lineWidth = materialState.lineWidth;
                     }
 
-                    setMaterialInputsState && setMaterialInputsState(material);
-                    setPointSize && setPointSize(material.pointSize);
-
                     lastMaterialId = materialState.id;
                 }
 
-                setPickClipPosState && setPickClipPosState(frameCtx.pickClipPos);
+                setLightInputState && setLightInputState();
+                setMaterialInputsState && setMaterialInputsState(material);
                 setProgramMeshInputsState && setProgramMeshInputsState(mesh);
+                setPickClipPosState && setPickClipPosState(frameCtx.pickClipPos);
                 setGammaOutput && setGammaOutput();
+                setPointSize && setPointSize(material.pointSize);
+                setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, mesh.clippable);
 
                 if (programSetup.isPick) {
                     setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, camera.viewNormalMatrix, frameCtx.pickProjMatrix, project.far);
