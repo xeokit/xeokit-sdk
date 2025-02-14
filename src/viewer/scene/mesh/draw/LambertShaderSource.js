@@ -2,10 +2,10 @@ import {createLightSetup} from "../MeshRenderer.js";
 
 export const LambertShaderSource = function(meshDrawHash, programVariables, geometry, material, scene) {
     const lightSetup       = createLightSetup(programVariables, scene._lightsState, false);
-    const colorize         = programVariables.createUniform("vec4", "colorize");
-    const materialAlpha    = programVariables.createUniform("float", "materialAlpha");
-    const materialColor    = programVariables.createUniform("vec3", "materialColor");
-    const materialEmissive = programVariables.createUniform("vec3", "materialEmissive");
+    const colorize         = programVariables.createUniform("vec4",  "colorize",         (set, state) => set(state.mesh.colorize));
+    const materialAlpha    = programVariables.createUniform("float", "materialAlpha",    (set, state) => set(state.material.alpha));
+    const materialColor    = programVariables.createUniform("vec3",  "materialColor",    (set, state) => set(state.material.color));
+    const materialEmissive = programVariables.createUniform("vec3",  "materialEmissive", (set, state) => set(state.material.emissive));
     const vColor           = programVariables.createVarying("vec4", "vColor", () => {
         const attributes = geometry.attributes;
         const lightComponents = [
@@ -30,23 +30,6 @@ export const LambertShaderSource = function(meshDrawHash, programVariables, geom
         discardPoints: true,
         setupPointSize: true,
         setsLineWidth: true,
-        appendFragmentOutputs: (src, getGammaOutputExpression) => {
-            src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression(vColor) : vColor};`);
-            return () => {
-                const setColorize = colorize.setupInputs();
-                const setMaterialAlpha = materialAlpha.setupInputs();
-                const setMaterialColor = materialColor.setupInputs();
-                const setMaterialEmissive = materialEmissive.setupInputs();
-                return {
-                    setLightStateValues: lightSetup.setupInputs(),
-                    setMeshStateValues: (mesh) => setColorize(mesh.colorize),
-                    setMaterialStateValues: (mtl) => {
-                        setMaterialAlpha(mtl.alpha);
-                        setMaterialColor(mtl.color);
-                        setMaterialEmissive(mtl.emissive);
-                    }
-                };
-            };
-        }
+        appendFragmentOutputs: (src, getGammaOutputExpression) => src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression(vColor) : vColor};`)
     };
 };
