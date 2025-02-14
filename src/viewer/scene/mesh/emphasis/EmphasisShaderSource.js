@@ -2,8 +2,8 @@ import {createLightSetup} from "../MeshRenderer.js";
 
 export const EmphasisShaderSource = function(meshHash, programVariables, geometry, scene, isFill) {
     const lightSetup = isFill && createLightSetup(programVariables, scene._lightsState, false);
-    const uColor = programVariables.createUniform("vec3", "uColor");
-    const uAlpha = programVariables.createUniform("float", "uAlpha");
+    const uColor = programVariables.createUniform("vec3",  "uColor", (set, state) => set(isFill ? state.material.fillColor : state.material.edgeColor));
+    const uAlpha = programVariables.createUniform("float", "uAlpha", (set, state) => set(isFill ? state.material.fillAlpha : state.material.edgeAlpha));
     const vColor = programVariables.createVarying("vec4", "vColor", () => {
         const attributes = geometry.attributes;
         const lightComponents = isFill && [
@@ -29,24 +29,6 @@ export const EmphasisShaderSource = function(meshHash, programVariables, geometr
         dontSetFrontFace: true,
         discardPoints: isFill,
         drawEdges: ! isFill,
-        appendFragmentOutputs: (src, getGammaOutputExpression) => {
-            src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression(vColor) : vColor};`);
-            return () => {
-                const setColor = uColor.setupInputs();
-                const setAlpha = uAlpha.setupInputs();
-                return {
-                    setLightStateValues: lightSetup && lightSetup.setupInputs(),
-                    setMaterialStateValues: (mtl) => {
-                        if (isFill) {
-                            setColor(mtl.fillColor);
-                            setAlpha(mtl.fillAlpha);
-                        } else {
-                            setColor(mtl.edgeColor);
-                            setAlpha(mtl.edgeAlpha);
-                        }
-                    }
-                };
-            };
-        }
+        appendFragmentOutputs: (src, getGammaOutputExpression) => src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression(vColor) : vColor};`)
     };
 };
