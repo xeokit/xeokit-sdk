@@ -1,4 +1,4 @@
-import {createLightSetup, lazyShaderVariable, setupTexture} from "../MeshRenderer.js";
+import {createLightSetup, setupTexture} from "../MeshRenderer.js";
 import {math} from "../../math/math.js";
 const tempVec4 = math.vec4();
 
@@ -14,8 +14,15 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
 
     const colorize = programVariables.createUniform("vec4", "colorize", (set, state) => set(state.mesh.colorize));
 
-    const perturbNormal2Arb = lazyShaderVariable("perturbNormal2Arb");
-    const fresnel = lazyShaderVariable("fresnel");
+    const fresnel = programVariables.createFragmentDefinition(
+        "fresnel",
+        (name, src) => {
+            src.push(`float ${name}(vec3 eyeDir, vec3 normal, float edgeBias, float centerBias, float power) {`);
+            src.push("    float fr = abs(dot(eyeDir, normal));");
+            src.push("    float finalFr = clamp((fr - edgeBias) / (centerBias - edgeBias), 0.0, 1.0);");
+            src.push("    return pow(finalFr, power);");
+            src.push("}");
+        });
 
     const setupFresnel = (name, colorSwizzle, getMaterialValue) => {
         const fresnelUniform = (type, namePostfix, getParameterValue) => {
@@ -109,6 +116,80 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
 
     const outColor = programVariables.createOutput("vec4", "outColor");
 
+    const BRDF_Specular_GGX = programVariables.createFragmentDefinition(
+        "BRDF_Specular_GGX",
+        (name, src) => {
+            src.push("vec3 F_Schlick(const in vec3 specularColor, const in float dotLH) {");
+            src.push("   float fresnel = exp2( ( -5.55473 * dotLH - 6.98316 ) * dotLH );");
+            src.push("   return ( 1.0 - specularColor ) * fresnel + specularColor;");
+            src.push("}");
+
+            src.push("float G_GGX_Smith(const in float alpha, const in float dotNL, const in float dotNV) {");
+            src.push("   float a2 = ( alpha * alpha );");
+            src.push("   float gl = dotNL + sqrt( a2 + ( 1.0 - a2 ) * ( dotNL * dotNL ) );");
+            src.push("   float gv = dotNV + sqrt( a2 + ( 1.0 - a2 ) * ( dotNV * dotNV ) );");
+            src.push("   return 1.0 / ( gl * gv );");
+            src.push("}");
+
+            src.push("float G_GGX_SmithCorrelated(const in float alpha, const in float dotNL, const in float dotNV) {");
+            src.push("   float a2 = ( alpha * alpha );");
+            src.push("   float gv = dotNL * sqrt( a2 + ( 1.0 - a2 ) * ( dotNV * dotNV ) );");
+            src.push("   float gl = dotNV * sqrt( a2 + ( 1.0 - a2 ) * ( dotNL * dotNL ) );");
+            src.push("   return 0.5 / max( gv + gl, EPSILON );");
+            src.push("}");
+
+            src.push("float D_GGX(const in float alpha, const in float dotNH) {");
+            src.push("   float a2 = ( alpha * alpha );");
+            src.push("   float denom = ( dotNH * dotNH) * ( a2 - 1.0 ) + 1.0;");
+            src.push("   return RECIPROCAL_PI * a2 / ( denom * denom);");
+            src.push("}");
+
+            src.push(`vec3 ${name}(const in vec3 incidentLightDirection, const in vec3 viewNormal, const in vec3 viewEyeDir, const in vec3 specularColor, const in float roughness) {`);
+            src.push("   float alpha = ( roughness * roughness );");
+            src.push("   vec3 halfDir = normalize( incidentLightDirection + viewEyeDir );");
+            src.push("   float dotNL = saturate( dot( viewNormal, incidentLightDirection ) );");
+            src.push("   float dotNV = saturate( dot( viewNormal, viewEyeDir ) );");
+            src.push("   float dotNH = saturate( dot( viewNormal, halfDir ) );");
+            src.push("   float dotLH = saturate( dot( incidentLightDirection, halfDir ) );");
+            src.push("   vec3  F = F_Schlick( specularColor, dotLH );");
+            src.push("   float G = G_GGX_SmithCorrelated( alpha, dotNL, dotNV );");
+            src.push("   float D = D_GGX( alpha, dotNH );");
+            src.push("   return F * (G * D);");
+            src.push("}");
+        });
+
+    const BRDF_Specular_GGX_Environment = programVariables.createFragmentDefinition(
+        "BRDF_Specular_GGX_Environment",
+        (name, src) => {
+            src.push(`vec3 ${name}(const in vec3 viewNormal, const in vec3 viewEyeDir, const in vec3 specularColor, const in float roughness) {`);
+            src.push("   float dotNV = saturate(dot(viewNormal, viewEyeDir));");
+            src.push("   const vec4 c0 = vec4( -1, -0.0275, -0.572,  0.022);");
+            src.push("   const vec4 c1 = vec4(  1,  0.0425,   1.04, -0.04);");
+            src.push("   vec4 r = roughness * c0 + c1;");
+            src.push("   float a004 = min(r.x * r.x, exp2(-9.28 * dotNV)) * r.x + r.y;");
+            src.push("   vec2 AB    = vec2(-1.04, 1.04) * a004 + r.zw;");
+            src.push("   return specularColor * AB.x + AB.y;");
+            src.push("}");
+        });
+
+    const perturbNormal2Arb = programVariables.createFragmentDefinition(
+        "perturbNormal2Arb",
+        (name, src) => {
+            src.push(`vec3 ${name}( vec3 eye_pos, vec3 surf_norm, vec2 uv, vec4 texel ) {`);
+            src.push("      vec3 q0 = vec3( dFdx( eye_pos.x ), dFdx( eye_pos.y ), dFdx( eye_pos.z ) );");
+            src.push("      vec3 q1 = vec3( dFdy( eye_pos.x ), dFdy( eye_pos.y ), dFdy( eye_pos.z ) );");
+            src.push("      vec2 st0 = dFdx( uv.st );");
+            src.push("      vec2 st1 = dFdy( uv.st );");
+            src.push("      vec3 S = normalize( q0 * st1.t - q1 * st0.t );");
+            src.push("      vec3 T = normalize( -q0 * st1.s + q1 * st0.s );");
+            src.push("      vec3 N = normalize( surf_norm );");
+            src.push("      vec3 mapN = texel.xyz * 2.0 - 1.0;");
+            src.push("      mat3 tsn = mat3( S, T, N );");
+            //     src.push("      mapN *= 3.0;");
+            src.push("      return normalize( tsn * mapN );");
+            src.push("}");
+        });
+
     return {
         getHash: () => [
             meshDrawHash,
@@ -142,92 +223,7 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
                 src.push("   vec3    specularColor;");
                 src.push("   float   shine;"); // Only used for Phong
                 src.push("};");
-
-                // COMMON UTILS
-
-                if (metallicMaterial || specularMaterial) {
-
-                    // SPECULAR BRDF EVALUATION
-
-                    src.push("vec3 F_Schlick(const in vec3 specularColor, const in float dotLH) {");
-                    src.push("   float fresnel = exp2( ( -5.55473 * dotLH - 6.98316 ) * dotLH );");
-                    src.push("   return ( 1.0 - specularColor ) * fresnel + specularColor;");
-                    src.push("}");
-
-                    src.push("float G_GGX_Smith(const in float alpha, const in float dotNL, const in float dotNV) {");
-                    src.push("   float a2 = ( alpha * alpha );");
-                    src.push("   float gl = dotNL + sqrt( a2 + ( 1.0 - a2 ) * ( dotNL * dotNL ) );");
-                    src.push("   float gv = dotNV + sqrt( a2 + ( 1.0 - a2 ) * ( dotNV * dotNV ) );");
-                    src.push("   return 1.0 / ( gl * gv );");
-                    src.push("}");
-
-                    src.push("float G_GGX_SmithCorrelated(const in float alpha, const in float dotNL, const in float dotNV) {");
-                    src.push("   float a2 = ( alpha * alpha );");
-                    src.push("   float gv = dotNL * sqrt( a2 + ( 1.0 - a2 ) * ( dotNV * dotNV ) );");
-                    src.push("   float gl = dotNV * sqrt( a2 + ( 1.0 - a2 ) * ( dotNL * dotNL ) );");
-                    src.push("   return 0.5 / max( gv + gl, EPSILON );");
-                    src.push("}");
-
-                    src.push("float D_GGX(const in float alpha, const in float dotNH) {");
-                    src.push("   float a2 = ( alpha * alpha );");
-                    src.push("   float denom = ( dotNH * dotNH) * ( a2 - 1.0 ) + 1.0;");
-                    src.push("   return RECIPROCAL_PI * a2 / ( denom * denom);");
-                    src.push("}");
-
-                    src.push("vec3 BRDF_Specular_GGX(const in vec3 incidentLightDirection, const in vec3 viewNormal, const in vec3 viewEyeDir, const in vec3 specularColor, const in float roughness) {");
-                    src.push("   float alpha = ( roughness * roughness );");
-                    src.push("   vec3 halfDir = normalize( incidentLightDirection + viewEyeDir );");
-                    src.push("   float dotNL = saturate( dot( viewNormal, incidentLightDirection ) );");
-                    src.push("   float dotNV = saturate( dot( viewNormal, viewEyeDir ) );");
-                    src.push("   float dotNH = saturate( dot( viewNormal, halfDir ) );");
-                    src.push("   float dotLH = saturate( dot( incidentLightDirection, halfDir ) );");
-                    src.push("   vec3  F = F_Schlick( specularColor, dotLH );");
-                    src.push("   float G = G_GGX_SmithCorrelated( alpha, dotNL, dotNV );");
-                    src.push("   float D = D_GGX( alpha, dotNH );");
-                    src.push("   return F * (G * D);");
-                    src.push("}");
-
-                    src.push("vec3 BRDF_Specular_GGX_Environment(const in vec3 viewNormal, const in vec3 viewEyeDir, const in vec3 specularColor, const in float roughness) {");
-                    src.push("   float dotNV = saturate(dot(viewNormal, viewEyeDir));");
-                    src.push("   const vec4 c0 = vec4( -1, -0.0275, -0.572,  0.022);");
-                    src.push("   const vec4 c1 = vec4(  1,  0.0425,   1.04, -0.04);");
-                    src.push("   vec4 r = roughness * c0 + c1;");
-                    src.push("   float a004 = min(r.x * r.x, exp2(-9.28 * dotNV)) * r.x + r.y;");
-                    src.push("   vec2 AB    = vec2(-1.04, 1.04) * a004 + r.zw;");
-                    src.push("   return specularColor * AB.x + AB.y;");
-                    src.push("}");
-
-                } // (metallicMaterial || specularMaterial)
-
             } // geometry.normals
-
-            if (perturbNormal2Arb.needed) {
-                src.push(`vec3 ${perturbNormal2Arb}( vec3 eye_pos, vec3 surf_norm, vec2 uv, vec4 texel ) {`);
-                src.push("      vec3 q0 = vec3( dFdx( eye_pos.x ), dFdx( eye_pos.y ), dFdx( eye_pos.z ) );");
-                src.push("      vec3 q1 = vec3( dFdy( eye_pos.x ), dFdy( eye_pos.y ), dFdy( eye_pos.z ) );");
-                src.push("      vec2 st0 = dFdx( uv.st );");
-                src.push("      vec2 st1 = dFdy( uv.st );");
-                src.push("      vec3 S = normalize( q0 * st1.t - q1 * st0.t );");
-                src.push("      vec3 T = normalize( -q0 * st1.s + q1 * st0.s );");
-                src.push("      vec3 N = normalize( surf_norm );");
-                src.push("      vec3 mapN = texel.xyz * 2.0 - 1.0;");
-                src.push("      mat3 tsn = mat3( S, T, N );");
-                //     src.push("      mapN *= 3.0;");
-                src.push("      return normalize( tsn * mapN );");
-                src.push("}");
-            }
-
-            //--------------------------------------------------------------------------------
-            // MATERIAL FRESNEL INPUTS
-            //--------------------------------------------------------------------------------
-
-            if (fresnel.needed) {
-                src.push(`float ${fresnel}(vec3 eyeDir, vec3 normal, float edgeBias, float centerBias, float power) {`);
-                src.push("    float fr = abs(dot(eyeDir, normal));");
-                src.push("    float finalFr = clamp((fr - edgeBias) / (centerBias - edgeBias), 0.0, 1.0);");
-                src.push("    return pow(finalFr, power);");
-                src.push("}");
-            }
         },
         appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => {
             const hasNonAmbientLighting = hasNormals && ((lightSetup.directionalLights.length > 0) || lightSetup.getIrradiance || lightSetup.getReflection);
@@ -340,7 +336,7 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
                                       ? `0.2 * PI * ${lightSetup.getReflection(reflectVec)}`
                                       : (function() {
                                           const blinnExpFromRoughness = `2.0 / pow(material.specularRoughness + 0.0001, 2.0) - 2.0`;
-                                          const specularBRDFContrib = "BRDF_Specular_GGX_Environment(viewNormal, viewEyeDir, material.specularColor, material.specularRoughness)";
+                                          const specularBRDFContrib = `${BRDF_Specular_GGX_Environment}(viewNormal, viewEyeDir, material.specularColor, material.specularRoughness)`;
 
                                           const viewReflectVec = `normalize((vec4(${reflectVec}, 0.0) * ${geometry.viewMatrix}).xyz)`;
                                           const maxMIPLevelScalar = "4.0";
@@ -378,7 +374,7 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
                         src.push(`reflDiff += irradiance${i};`);
                         const spec = (phongMaterial
                                       ? `lightColor${i} * material.specularColor * pow(max(dot(reflect(-lightDirection${i}, -viewNormal), viewEyeDir), 0.0), material.shine)`
-                                      : `irradiance${i} * PI * BRDF_Specular_GGX(lightDirection${i}, viewNormal, viewEyeDir, material.specularColor, material.specularRoughness)`);
+                                      : `irradiance${i} * PI * ${BRDF_Specular_GGX}(lightDirection${i}, viewNormal, viewEyeDir, material.specularColor, material.specularRoughness)`);
                         src.push(`reflSpec += ${spec};`);
                     });
                 }
