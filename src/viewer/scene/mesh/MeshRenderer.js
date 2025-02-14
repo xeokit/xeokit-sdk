@@ -103,7 +103,14 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         programFragmentOutputs.push(`gl_FragDepth = ${isPerspective} == 0.0 ? gl_FragCoord.z : log2(${vFragDepth}) * ${logDepthBufFC} * 0.5;`);
     }
 
-    programSetup.appendFragmentOutputs(programFragmentOutputs, scene.gammaOutput && ((color) => `linearToGamma(${color}, ${gammaFactor})`), "gl_FragCoord");
+    const linearToGamma = programVariables.createFragmentDefinition(
+        "linearToGamma",
+        (name, src) => {
+            src.push(`vec4 ${name}(in vec4 value, in float gammaFactor) {`);
+            src.push("  return vec4(pow(value.xyz, vec3(1.0 / gammaFactor)), value.w);");
+            src.push("}");
+        });
+    programSetup.appendFragmentOutputs(programFragmentOutputs, scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord");
 
     const programVertexOutputs = [ ];
     programVariablesState.appendVertexOutputs(programVertexOutputs);
@@ -135,7 +142,18 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
             }
             decodedUv && decodedUv.needed && src.push(`vec2 ${decodedUv} = ${quantizedGeometry ? `(${uvDecodeMatrix} * vec3(${attributes.uv}, 1.0)).xy` : attributes.uv};`);
             if (worldNormal && worldNormal.needed) {
-                const localNormal = quantizedGeometry ? `octDecode(${attributes.normal}.xy)` : attributes.normal;
+                const octDecode = programVariables.createVertexDefinition(
+                    "octDecode",
+                    (name, src) => {
+                        src.push(`vec3 ${name}(vec2 oct) {`);
+                        src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
+                        src.push("    if (v.z < 0.0) {");
+                        src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
+                        src.push("    }");
+                        src.push("    return normalize(v);");
+                        src.push("}");
+                    });
+                const localNormal = quantizedGeometry ? `${octDecode}(${attributes.normal}.xy)` : attributes.normal;
                 src.push(`vec3 ${worldNormal} = (${billboardIfApplicable(modelNormalMatrix)} * vec4(${localNormal}, 0.0)).xyz;`);
             }
             viewNormalDefinition && src.push(viewNormalDefinition);
@@ -155,13 +173,6 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         const src = [];
         src.push("#version 300 es");
         src.push("// " + programSetup.programName + " vertex shader");
-        src.push(`vec3 octDecode(vec2 oct) {`);
-        src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
-        src.push("    if (v.z < 0.0) {");
-        src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
-        src.push("    }");
-        src.push("    return normalize(v);");
-        src.push("}");
 
         if (isBillboard) {
             src.push("mat4 billboard(in mat4 matIn) {");
@@ -214,10 +225,6 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
         }
 
         programVariablesState.appendFragmentDefinitions(src);
-
-        src.push("vec4 linearToGamma(in vec4 value, in float gammaFactor) {");
-        src.push("  return vec4(pow(value.xyz, vec3(1.0 / gammaFactor)), value.w);");
-        src.push("}");
 
         src.push("vec4 sRGBToLinear(in vec4 value) {");
         src.push("  return vec4(mix(pow(value.rgb * 0.9478672986 + 0.0521327014, vec3(2.4)), value.rgb * 0.0773993808, vec3(lessThanEqual(value.rgb, vec3(0.04045)))), value.w);");
