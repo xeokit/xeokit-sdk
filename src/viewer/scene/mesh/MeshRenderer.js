@@ -35,70 +35,45 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     const meshStateBackground = mesh._state.background;
     const clipping = (function() {
         const sectionPlanesState = scene._sectionPlanesState;
-        const allocatedUniforms = iota(sectionPlanesState.getNumAllocatedSectionPlanes()).map(i => ({
-            sectionPlaneActive: programVariables.createUniform("bool", `sectionPlaneActive${i}`),
-            sectionPlanePos:    programVariables.createUniform("vec3", `sectionPlanePos${i}`),
-            sectionPlaneDir:    programVariables.createUniform("vec3", `sectionPlaneDir${i}`)
-        }));
-        return (allocatedUniforms.length > 0) && {
-            getDistance: (worldPosition) => allocatedUniforms.map(a => `(${a.sectionPlaneActive} ? clamp(dot(-${a.sectionPlaneDir}, ${worldPosition} - ${a.sectionPlanePos}), 0.0, 1000.0) : 0.0)`).join(" + "),
-            setupInputs: () => {
-                const setSectionPlanes = allocatedUniforms.map(a => ({
-                    active: a.sectionPlaneActive.setupInputs(),
-                    pos:    a.sectionPlanePos.setupInputs(),
-                    dir:    a.sectionPlaneDir.setupInputs()
-                }));
-                return (rtcOrigin, sectionPlanesActivePerLayer) => {
+        const allocatedUniforms = iota(sectionPlanesState.getNumAllocatedSectionPlanes()).map(i => {
+            const sectionPlaneUniform = (type, postfix, getValue) => {
+                return programVariables.createUniform(type, `sectionPlane${postfix}${i}`, (set, state) => {
                     const sectionPlanes = sectionPlanesState.sectionPlanes;
-                    const numSectionPlanes = sectionPlanes.length;
-                    for (let sectionPlaneIndex = 0; sectionPlaneIndex < allocatedUniforms.length; sectionPlaneIndex++) {
-                        const sectionPlaneUniforms = setSectionPlanes[sectionPlaneIndex];
-                        const active = (sectionPlaneIndex < numSectionPlanes) && sectionPlanesActivePerLayer[sectionPlaneIndex];
-                        sectionPlaneUniforms.active(active ? 1 : 0);
-                        if (active) {
-                            const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                            if (rtcOrigin) {
-                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcOrigin, tempVec3a);
-                                sectionPlaneUniforms.pos(rtcSectionPlanePos);
-                            } else {
-                                sectionPlaneUniforms.pos(sectionPlane.pos);
-                            }
-                            sectionPlaneUniforms.dir(sectionPlane.dir);
-                        }
-                    }
-                };
-            }
+                    const active = (i < sectionPlanes.length) && state.mesh.renderFlags.sectionPlanesActivePerLayer[i];
+                    return getValue(set, active, sectionPlanes[i], state.mesh.origin);
+                });
+            };
+            return {
+                act: sectionPlaneUniform("bool", "Active", (set, active) => set(active ? 1 : 0)),
+                dir: sectionPlaneUniform("vec3", "Dir",    (set, active, plane) => active && set(plane.dir)),
+                pos: sectionPlaneUniform("vec3", "Pos",    (set, active, plane, orig) => active && set(orig
+                                                                                                       ? getPlaneRTCPos(plane.dist, plane.dir, orig, tempVec3a)
+                                                                                                       : plane.pos))
+            };
+        });
+        return (allocatedUniforms.length > 0) && {
+            getDistance: (worldPosition) => allocatedUniforms.map(a => `(${a.act} ? clamp(dot(-${a.dir}, ${worldPosition} - ${a.pos}), 0.0, 1000.0) : 0.0)`).join(" + ")
         };
     })();
     const getLogDepth = (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled;
     const geometryState = mesh._geometry._state;
     const quantizedGeometry = geometryState.compressGeometry;
     const isPoints = geometryState.primitiveName === "points";
-    const gammaOutputSetup = scene.gammaOutput && (function() {
-        const gammaFactor = programVariables.createUniform("float", "gammaFactor");
-        return {
-            getValueExpression: (color) => `linearToGamma(${color}, ${gammaFactor})`,
-            setupInputs: () => {
-                const setGammaFactor = gammaFactor.setupInputs();
-                return setGammaFactor && (() => setGammaFactor(scene.gammaFactor));
-            }
-        };
-    })();
 
-    const modelMatrix = programVariables.createUniform("mat4", "modelMatrix");
-    const viewMatrix  = programVariables.createUniform("mat4", "viewMatrix");
-    const projMatrix  = programVariables.createUniform("mat4", "projMatrix");
-    const offset      = programVariables.createUniform("vec3", "offset");
-    const scale       = programVariables.createUniform("vec3", "scale");
-    const clippable   = programVariables.createUniform("bool", "clippable");
-
-    const logDepthBufFC         = programVariables.createUniform("float", "logDepthBufFC");
-    const pointSize             = programVariables.createUniform("float", "pointSize");
-    const positionsDecodeMatrix = programVariables.createUniform("mat4",  "positionsDecodeMatrix");
-    const uvDecodeMatrix        = programVariables.createUniform("mat3",  "uvDecodeMatrix");
-    const modelNormalMatrix     = programVariables.createUniform("mat4",  "modelNormalMatrix");
-    const viewNormalMatrix      = programVariables.createUniform("mat4",  "viewNormalMatrix");
-    const pickClipPos           = programVariables.createUniform("vec2",  "pickClipPos");
+    const gammaFactor           = programVariables.createUniform("float", "gammaFactor",           (set) => set(scene.gammaFactor));
+    const pointSize             = programVariables.createUniform("float", "pointSize",             (set, state) => set(state.material.pointSize));
+    const modelMatrix           = programVariables.createUniform("mat4",  "modelMatrix",           (set, state) => set(state.mesh.worldMatrix));
+    const modelNormalMatrix     = programVariables.createUniform("mat4",  "modelNormalMatrix",     (set, state) => set(state.mesh.worldNormalMatrix));
+    const offset                = programVariables.createUniform("vec3",  "offset",                (set, state) => set(state.mesh.offset));
+    const scale                 = programVariables.createUniform("vec3",  "scale",                 (set, state) => set(state.mesh.scale));
+    const clippable             = programVariables.createUniform("bool",  "clippable",             (set, state) => set(state.mesh.clippable));
+    const positionsDecodeMatrix = programVariables.createUniform("mat4",  "positionsDecodeMatrix", (set, state) => set(state.mesh._geometry._state.positionsDecodeMatrix));
+    const uvDecodeMatrix        = programVariables.createUniform("mat3",  "uvDecodeMatrix",        (set, state) => set(state.mesh._geometry._state.uvDecodeMatrix));
+    const viewMatrix            = programVariables.createUniform("mat4",  "viewMatrix",            (set, state) => set(state.view.viewMatrix));
+    const viewNormalMatrix      = programVariables.createUniform("mat4",  "viewNormalMatrix",      (set, state) => set(state.view.viewNormalMatrix));
+    const projMatrix            = programVariables.createUniform("mat4",  "projMatrix",            (set, state) => set(state.view.projMatrix));
+    const logDepthBufFC         = programVariables.createUniform("float", "logDepthBufFC",         (set, state) => set(2.0 / (Math.log(state.view.far + 1.0) / Math.LN2)));
+    const pickClipPos           = programVariables.createUniform("vec2",  "pickClipPos",           (set, state) => set(state.view.pickClipPos));
 
     const vWorldPosition = programVariables.createVarying("vec3",  "vWorldPosition", () => "worldPosition.xyz");
     const isPerspective  = programVariables.createVarying("float", "isPerspective",  () => `(${projMatrix}[2][3] == -1.0) ? 1.0 : 0.0`);
@@ -137,7 +112,8 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     if (getLogDepth) {
         programFragmentOutputs.push(`gl_FragDepth = ${isPerspective} == 0.0 ? gl_FragCoord.z : log2(${vFragDepth}) * ${logDepthBufFC} * 0.5;`);
     }
-    const setupProgramInputs = programSetup.appendFragmentOutputs(programFragmentOutputs, gammaOutputSetup && gammaOutputSetup.getValueExpression, "gl_FragCoord");
+
+    programSetup.appendFragmentOutputs(programFragmentOutputs, scene.gammaOutput && ((color) => `linearToGamma(${color}, ${gammaFactor})`), "gl_FragCoord");
 
     const programVertexOutputs = [ ];
     programVariablesState.appendVertexOutputs(programVertexOutputs);
@@ -260,75 +236,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     if (program.errors) {
         return { errors: program.errors };
     } else {
-        programVariablesState.setGetInputSetter(makeInputSetters(gl, program.handle, true));
-
-        const programInputSetters       = setupProgramInputs && setupProgramInputs();
-        const setLightInputState        = programInputSetters && programInputSetters.setLightStateValues;
-        const setMaterialInputsState    = programInputSetters && programInputSetters.setMaterialStateValues;
-        const setProgramMeshInputsState = programInputSetters && programInputSetters.setMeshStateValues;
-
-        const setPickClipPosState = pickClipPos.setupInputs();
-        const setGammaOutput = gammaOutputSetup && gammaOutputSetup.setupInputs();
-        const setGeometryInputsState = (function() {
-            const setPositionsDecodeMatrix = positionsDecodeMatrix.setupInputs();
-            const setUvDecodeMatrix = uvDecodeMatrix.setupInputs();
-            const setPosition  = attributes.position.setupInputs();
-            const setNormal    = attributes.normal && attributes.normal.setupInputs();
-            const setUV        = attributes.uv && attributes.uv.setupInputs();
-            const setColor     = attributes.color && attributes.color.setupInputs();
-            const setPickColor = attributes.pickColor.setupInputs();
-
-            const binder = (arrayBuf, onBindAttribute) => ({ // see ArrayBuf.js and Attribute.js
-                bindAtLocation: location => {
-                    arrayBuf.bind();
-                    gl.vertexAttribPointer(location, arrayBuf.itemSize, arrayBuf.itemType, arrayBuf.normalized, 0, 0);
-                    onBindAttribute();
-                }
-            });
-
-            return (geometryState, onBindAttribute, triangleGeometry) => {
-                setPositionsDecodeMatrix && setPositionsDecodeMatrix(geometryState.positionsDecodeMatrix);
-                setUvDecodeMatrix && setUvDecodeMatrix(geometryState.uvDecodeMatrix);
-
-                setPosition(binder((triangleGeometry || geometryState).positionsBuf, onBindAttribute));
-                setNormal && setNormal(binder(geometryState.normalsBuf, onBindAttribute));
-                setUV && setUV(binder(geometryState.uvBuf, onBindAttribute));
-                setColor && setColor(binder(geometryState.colorsBuf, onBindAttribute));
-                setPickColor && setPickColor(binder(triangleGeometry.pickColorsBuf, onBindAttribute));
-            };
-        })();
-        const setPointSize = pointSize.setupInputs();
-        const setMeshInputsState = (function() {
-            const setModelMatrix = modelMatrix.setupInputs();
-            const setModelNormalMatrix = modelNormalMatrix.setupInputs();
-            const setViewMatrix = viewMatrix.setupInputs();
-            const setViewNormalMatrix = viewNormalMatrix.setupInputs();
-            const setProjMatrix = projMatrix.setupInputs();
-            const setOffset = offset.setupInputs();
-            const setScale = scale.setupInputs();
-            const setLogDepthBufFC = logDepthBufFC.setupInputs();
-
-            return (mesh, viewMatrix, viewNormalMatrix, projMatrix, far) => {
-                setModelMatrix(mesh.worldMatrix);
-                setModelNormalMatrix && setModelNormalMatrix(mesh.worldNormalMatrix);
-                setViewMatrix(viewMatrix);
-                setViewNormalMatrix && setViewNormalMatrix(viewNormalMatrix);
-                setProjMatrix(projMatrix);
-                setOffset(mesh.offset);
-                setScale(mesh.scale);
-                setLogDepthBufFC && setLogDepthBufFC(2.0 / (Math.log(far + 1.0) / Math.LN2));
-            };
-        })();
-        const setSectionPlanesInputsState = clipping && (function() {
-            const setClippable = clippable.setupInputs();
-            const setClippingState = clipping.setupInputs();
-            return (rtcOrigin, renderFlags, clippable) => {
-                setClippable(clippable);
-                if (clippable) {
-                    setClippingState(rtcOrigin, renderFlags.sectionPlanesActivePerLayer);
-                }
-            };
-        })();
+        const inputSetters = programVariablesState.setupInputs(makeInputSetters(gl, program.handle, true));
 
         let lastMaterialId = null;
         let lastGeometryId = null;
@@ -344,7 +252,6 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
                 const meshState = mesh._state;
                 const geometry = mesh._geometry;
                 const geometryState = geometry._state;
-                const origin = mesh.origin;
                 const camera = scene.camera;
                 const project = camera.project;
                 const actsAsBackground = programSetup.canActAsBackground && meshStateBackground;
@@ -388,26 +295,41 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
                     lastMaterialId = materialState.id;
                 }
 
-                setLightInputState && setLightInputState();
-                setMaterialInputsState && setMaterialInputsState(material);
-                setProgramMeshInputsState && setProgramMeshInputsState(mesh);
-                setPickClipPosState && setPickClipPosState(frameCtx.pickClipPos);
-                setGammaOutput && setGammaOutput();
-                setPointSize && setPointSize(material.pointSize);
-                setSectionPlanesInputsState && setSectionPlanesInputsState(mesh.origin, mesh.renderFlags, mesh.clippable);
+                const withViewProjMatrices = (projMatrix, viewMatrix) => {
+                    inputSetters.setUniforms({
+                        material: material,
+                        mesh:     mesh,
+                        view:     {
+                            projMatrix:       projMatrix,
+                            viewMatrix:       viewMatrix,
+                            viewNormalMatrix: camera.viewNormalMatrix,
+                            far:              project.far,
+                            pickClipPos:      frameCtx.pickClipPos
+                        }
+                    });
+                };
 
+                const origin = mesh.origin;
                 if (programSetup.isPick) {
-                    setMeshInputsState(mesh, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix, camera.viewNormalMatrix, frameCtx.pickProjMatrix, project.far);
+                    withViewProjMatrices(frameCtx.pickProjMatrix,   origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix);
                 } else if (programSetup.useShadowView) {
-                    setMeshInputsState(mesh, frameCtx.shadowViewMatrix, camera.viewNormalMatrix, frameCtx.shadowProjMatrix, camera.project.far);
+                    withViewProjMatrices(frameCtx.shadowProjMatrix, frameCtx.shadowViewMatrix);
                 } else {
-                    setMeshInputsState(mesh, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix, camera.viewNormalMatrix, project.matrix, project.far);
+                    withViewProjMatrices(project.matrix,            origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
                 }
+
+                const withTriangleGeometry = (triangleGeometry) => {
+                    inputSetters.setAttributes({
+                        geometryState:    geometryState,
+                        onBindAttribute:  () => frameCtx.bindArray++,
+                        triangleGeometry: triangleGeometry
+                    });
+                };
 
                 if (programSetup.trianglePick) {
                     const positionsBuf = geometry._getPickTrianglePositions();
                     if (geometryState.id !== lastGeometryId) {
-                        setGeometryInputsState(geometryState, () => frameCtx.bindArray++, { positionsBuf: positionsBuf, pickColorsBuf: geometry._getPickTriangleColors() });
+                        withTriangleGeometry({ positionsBuf: positionsBuf, pickColorsBuf: geometry._getPickTriangleColors() });
                         lastGeometryId = geometryState.id;
                     }
 
@@ -419,7 +341,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
 
                     if (indicesBuf) {
                         if (geometryState.id !== lastGeometryId) {
-                            setGeometryInputsState(geometryState, () => frameCtx.bindArray++);
+                            withTriangleGeometry();
 
                             indicesBuf.bind();
                             frameCtx.bindArray++;
@@ -432,7 +354,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
                     }
                 } else {
                     if (geometryState.id !== lastGeometryId) {
-                        setGeometryInputsState(geometryState, () => frameCtx.bindArray++);
+                        withTriangleGeometry();
 
                         if (geometryState.indicesBuf) {
                             geometryState.indicesBuf.bind();
@@ -458,9 +380,9 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     }
 };
 
-export const setupTexture = (programVariables, type, name, encoding, hasMatrix) => {
-    const map    = programVariables.createUniform(type, name + "Map");
-    const matrix = hasMatrix && programVariables.createUniform("mat4", name + "MapMatrix");
+export const setupTexture = (programVariables, type, name, encoding, getTexture, getMatrix) => {
+    const map    = programVariables.createUniform(type, name + "Map", getTexture);
+    const matrix = getMatrix && programVariables.createUniform("mat4", name + "MapMatrix", getMatrix);
     const swizzle = (type === "samplerCube") ? "xyz" : "xy";
     const getTexCoordExpression = texPos => (matrix ? `(${matrix} * ${texPos}).${swizzle}` : `${texPos}.${swizzle}`);
     return {
@@ -470,55 +392,32 @@ export const setupTexture = (programVariables, type, name, encoding, hasMatrix) 
                            ? `texture(${map}, ${getTexCoordExpression(texturePos)}, ${bias})`
                            : `texture(${map}, ${getTexCoordExpression(texturePos)})`);
             return (encoding !== LinearEncoding) ? `${TEXTURE_DECODE_FUNCS[encoding]}(${texel})` : texel;
-        },
-        setupInputs: () => {
-            const setMap    = map.setupInputs();
-            const setMatrix = matrix && matrix.setupInputs();
-            return setMap && function(tex, mtx) {
-                if (tex) {
-                    setMap(tex);
-                    if (mtx && setMatrix) {
-                        setMatrix(mtx);
-                    }
-                }
-            };
         }
     };
 };
 
 export const createLightSetup = function(programVariables, lightsState, setupCubes) {
-    const lightsStateUniform = (type, name, getUniformValue) => {
-        const uniform = programVariables.createUniform(type, name);
-        return {
-            toString: uniform.toString,
-            setupLightsInputs: () => {
-                const setUniform = uniform.setupInputs();
-                return setUniform && (() => setUniform(getUniformValue()));
-            }
-        };
-    };
-
-    const lightAmbient = lightsStateUniform("vec4", "lightAmbient", () => lightsState.getAmbientColorAndIntensity());
+    const lightAmbient = programVariables.createUniform("vec4", "lightAmbient", (set) => set(lightsState.getAmbientColorAndIntensity()));
 
     const lights = lightsState.lights;
     const directionals = lights.map((light, i) => {
         const lightUniforms = {
-            color: lightsStateUniform("vec4", `lightColor${i}`, () => {
+            color: programVariables.createUniform("vec4", `lightColor${i}`, (set) => {
                 const light = lights[i]; // in case it changed
                 tempVec4[0] = light.color[0];
                 tempVec4[1] = light.color[1];
                 tempVec4[2] = light.color[2];
                 tempVec4[3] = light.intensity;
-                return tempVec4;
+                set(tempVec4);
             }),
-            position:  lightsStateUniform("vec3", `lightPos${i}`, () => lights[i].pos),
-            direction: lightsStateUniform("vec3", `lightDir${i}`, () => lights[i].dir),
+            position:  programVariables.createUniform("vec3", `lightPos${i}`, (set) => set(lights[i].pos)),
+            direction: programVariables.createUniform("vec3", `lightDir${i}`, (set) => set(lights[i].dir)),
 
-            shadowProjMatrix: lightsStateUniform("mat4", `shadowProjMatrix${i}`, () => lights[i].getShadowViewMatrix()),
-            shadowViewMatrix: lightsStateUniform("mat4", `shadowViewMatrix${i}`, () => lights[i].getShadowViewMatrix()),
-            shadowMap:        lightsStateUniform("sampler2D", `shadowMap${i}`, () => {
+            shadowProjMatrix: programVariables.createUniform("mat4", `shadowProjMatrix${i}`, (set) => set(lights[i].getShadowViewMatrix())),
+            shadowViewMatrix: programVariables.createUniform("mat4", `shadowViewMatrix${i}`, (set) => set(lights[i].getShadowViewMatrix())),
+            shadowMap:        programVariables.createUniform("sampler2D", `shadowMap${i}`, (set) => {
                 const shadowRenderBuf = lights[i].getShadowRenderBuf();
-                return shadowRenderBuf && shadowRenderBuf.getTexture();
+                set(shadowRenderBuf && shadowRenderBuf.getTexture());
             })
         };
 
@@ -563,14 +462,10 @@ export const createLightSetup = function(programVariables, lightsState, setupCub
     const setupCubeTexture = (name, getMaps) => {
         const getValue = () => { const m = getMaps(); return (m.length > 0) && m[0]; };
         const initMap = getValue();
-        const tex = initMap && setupTexture(programVariables, "samplerCube", name, initMap.encoding, false);
+        const tex = initMap && setupTexture(programVariables, "samplerCube", name, initMap.encoding, (set) => { const v = getValue(); v && set(v.texture); });
         return tex && {
             getTexCoordExpression: tex.getTexCoordExpression,
-            getValueExpression:    tex.getValueExpression,
-            setupInputs:           () => {
-                const setInputsState = tex.setupInputs();
-                return setInputsState && (() => setInputsState(getValue().texture, null));
-            }
+            getValueExpression:    tex.getValueExpression
         };
     };
 
@@ -582,18 +477,6 @@ export const createLightSetup = function(programVariables, lightsState, setupCub
         getAmbientColor: () => `${lightAmbient}.rgb * ${lightAmbient}.a`,
         directionalLights: directionals.map(light => light.glslLight),
         getIrradiance: lightMap      && ((worldNormal) => `${lightMap.getValueExpression(worldNormal)}.rgb`),
-        getReflection: reflectionMap && ((reflectVec, mipLevel) => `${reflectionMap.getValueExpression(reflectVec, mipLevel)}.rgb`),
-        setupInputs: () => {
-            const setAmbientInputState = lightAmbient.setupLightsInputs();
-            const setDirectionalsInputStates = directionals.map(light => light.setupLightsInputs());
-            const uLightMap      = lightMap && lightMap.setupInputs();
-            const uReflectionMap = reflectionMap && reflectionMap.setupInputs();
-            return () => {
-                setAmbientInputState && setAmbientInputState();
-                setDirectionalsInputStates.forEach(setState => setState());
-                uLightMap      && uLightMap();
-                uReflectionMap && uReflectionMap();
-            };
-        }
+        getReflection: reflectionMap && ((reflectVec, mipLevel) => `${reflectionMap.getValueExpression(reflectVec, mipLevel)}.rgb`)
     };
 };
