@@ -346,6 +346,11 @@ class Mesh extends Component {
                                             return name;
                                         }
                                     };
+                                },
+                                createVertexDefinition: (name, appendDefinition) => {
+                                    const v = lazyShaderVariable(name);
+                                    vertAppenders.push((src) => v.needed && appendDefinition(name, src));
+                                    return v;
                                 }
                             },
                             appendVertexDefinitions:   (src) => vertAppenders.forEach(a => a(src)),
