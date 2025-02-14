@@ -9,7 +9,6 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
     const specularMaterial = (materialState.type === "SpecularMaterial");
 
     const attributes = geometry.attributes;
-    const hasNormals = !!attributes.normal;
     const lightSetup = createLightSetup(programVariables, scene._lightsState, !!attributes.uv);
 
     const colorize = programVariables.createUniform("vec4", "colorize", (set, state) => set(state.mesh.colorize));
@@ -202,24 +201,8 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
         discardPoints: true,
         setupPointSize: true,
         setsLineWidth: true,
-        appendFragmentDefinitions: (src) => {
-            if (hasNormals) {
-                //--------------------------------------------------------------------------------
-                // SHADING FUNCTIONS
-                //--------------------------------------------------------------------------------
-
-                // CONSTANT DEFINITIONS
-
-                src.push("#define PI 3.14159265359");
-                src.push("#define RECIPROCAL_PI 0.31830988618");
-                src.push("#define RECIPROCAL_PI2 0.15915494");
-                src.push("#define EPSILON 1e-6");
-
-                src.push("#define saturate(a) clamp( a, 0.0, 1.0 )");
-            } // geometry.normals
-        },
         appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => {
-            const hasNonAmbientLighting = hasNormals && ((lightSetup.directionalLights.length > 0) || lightSetup.getIrradiance || lightSetup.getReflection);
+            const hasNonAmbientLighting = attributes.normal && ((lightSetup.directionalLights.length > 0) || lightSetup.getIrradiance || lightSetup.getReflection);
             src.push(`vec3 diffuseColor = ${(hasNonAmbientLighting && (phongMaterial || specularMaterial) && materialDiffuse) || (metallicMaterial && materialBaseColor) || "vec3(1.0)"};`);
             src.push(`vec4 alphaModeCutoff = ${((phongMaterial || metallicMaterial || specularMaterial) && materialAlphaModeCutoff) || "vec4(1.0, 0.0, 0.0, 0.0)"};`);
             src.push("float alpha = alphaModeCutoff[0];");
