@@ -8,7 +8,7 @@ import {math} from '../math/math.js';
 import {createRTCViewMat} from '../math/rtcCoords.js';
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
-import {instantiateMeshRenderer, lazyShaderVariable} from "./MeshRenderer.js";
+import {instantiateMeshRenderer} from "./MeshRenderer.js";
 import {DrawShaderSource} from "./draw/DrawShaderSource.js";
 import {LambertShaderSource} from "./draw/LambertShaderSource.js";
 import {EmphasisShaderSource} from "./emphasis/EmphasisShaderSource.js";
@@ -278,6 +278,16 @@ class Mesh extends Component {
             let instance = null;
             const ensureInstance = () => {
                 if (! instance) {
+                    const lazyShaderVariable = function(name) {
+                        const variable = {
+                            toString: () => {
+                                variable.needed = true;
+                                return name;
+                            }
+                        };
+                        return variable;
+                    };
+
                     const programVariablesState = (function() {
                         const vertAppenders = [ ];
                         const vOutAppenders = [ ];
