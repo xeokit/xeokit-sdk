@@ -282,35 +282,42 @@ class Mesh extends Component {
                         const vertAppenders = [ ];
                         const vOutAppenders = [ ];
                         const fragAppenders = [ ];
-                        let _getInputSetter = null;
+                        const attrSetters = [ ];
+                        const unifSetters = [ ];
                         return {
                             programVariables: {
-                                createAttribute: function(type, name) {
+                                createAttribute: function(type, name, valueSetter) {
                                     let needed = false;
                                     vertAppenders.push((src) => needed && src.push(`in ${type} ${name};`));
+                                    attrSetters.push((getInputSetter) => {
+                                        const setValue = needed && getInputSetter(name);
+                                        return setValue && ((state) => valueSetter(setValue, state));
+                                    });
                                     return {
                                         toString: () => {
                                             needed = true;
                                             return name;
-                                        },
-                                        setupInputs: () => needed && _getInputSetter(name)
+                                        }
                                     };
                                 },
                                 createOutput: (type, name) => {
                                     fragAppenders.push((src) => src.push(`out ${type} ${name};`));
                                     return { toString: () => name };
                                 },
-                                createUniform: (type, name) => {
+                                createUniform: (type, name, valueSetter) => {
                                     let needed = false;
                                     const append = (src) => needed && src.push(`uniform ${type} ${name};`);
                                     vertAppenders.push(append);
                                     fragAppenders.push(append);
+                                    unifSetters.push((getInputSetter) => {
+                                        const setValue = needed && getInputSetter(name);
+                                        return setValue && ((state) => valueSetter(setValue, state));
+                                    });
                                     return {
                                         toString: () => {
                                             needed = true;
                                             return name;
-                                        },
-                                        setupInputs: () => needed && _getInputSetter(name)
+                                        }
                                     };
                                 },
                                 createVarying: (type, name, genValueCode) => {
@@ -329,18 +336,32 @@ class Mesh extends Component {
                             appendVertexDefinitions:   (src) => vertAppenders.forEach(a => a(src)),
                             appendVertexOutputs:       (src) => vOutAppenders.forEach(a => a(src)),
                             appendFragmentDefinitions: (src) => fragAppenders.forEach(a => a(src)),
-                            setGetInputSetter: (getInputSetter) => { _getInputSetter = getInputSetter; }
+                            setupInputs: (getInputSetter) => {
+                                const aSetters = attrSetters.map(i => i(getInputSetter)).filter(s => s);
+                                const uSetters = unifSetters.map(i => i(getInputSetter)).filter(s => s);
+                                return {
+                                    setAttributes: (state) => aSetters.forEach(s => s(state)),
+                                    setUniforms:   (state) => uSetters.forEach(s => s(state))
+                                };
+                            }
                         };
                     })();
 
                     const geometryState = mesh._geometry._state;
                     const createAttribute = programVariablesState.programVariables.createAttribute;
+                    const binder = (arrayBuf, onBindAttribute) => ({ // see ArrayBuf.js and Attribute.js
+                        bindAtLocation: location => {
+                            arrayBuf.bind();
+                            scene.canvas.gl.vertexAttribPointer(location, arrayBuf.itemSize, arrayBuf.itemType, arrayBuf.normalized, 0, 0);
+                            onBindAttribute();
+                        }
+                    });
                     const attributes = {
-                        position:  createAttribute("vec3", "position"),
-                        color:     geometryState.colorsBuf && createAttribute("vec4", "color"),
-                        pickColor: createAttribute("vec4", "pickColor"),
-                        uv:        geometryState.uvBuf && createAttribute("vec2", "uv"),
-                        normal:    (geometryState.autoVertexNormals || geometryState.normalsBuf) && [ "triangles", "triangle-strip", "triangle-fan" ].includes(geometryState.primitiveName) && createAttribute("vec3", "normal")
+                        position:  createAttribute("vec3", "position", (set, state) => set(binder((state.triangleGeometry || state.geometryState).positionsBuf, state.onBindAttribute))),
+                        color:     geometryState.colorsBuf && createAttribute("vec4", "color", (set, state) => set(binder(state.geometryState.colorsBuf, state.onBindAttribute))),
+                        pickColor: createAttribute("vec4", "pickColor", (set, state) => set(binder(state.triangleGeometry.pickColorsBuf, state.onBindAttribute))),
+                        uv:        geometryState.uvBuf && createAttribute("vec2", "uv", (set, state) => set(binder(state.geometryState.uvBuf, state.onBindAttribute))),
+                        normal:    (geometryState.autoVertexNormals || geometryState.normalsBuf) && [ "triangles", "triangle-strip", "triangle-fan" ].includes(geometryState.primitiveName) && createAttribute("vec3", "normal", (set, state) => set(binder(state.geometryState.normalsBuf, state.onBindAttribute)))
                     };
                     const worldNormal = attributes.normal && lazyShaderVariable("worldNormal");
                     const viewNormal  = worldNormal && lazyShaderVariable("viewNormal");

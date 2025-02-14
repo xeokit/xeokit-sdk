@@ -4,6 +4,6 @@ export const OcclusionShaderSource = function(meshPickOcclusionHash, programVari
         getHash: () => [ meshPickOcclusionHash ],
         programName: "Occlusion",
         skipIfTransparent: true,
-        appendFragmentOutputs: (src) => { src.push(`${outColor} = vec4(0.0, 0.0, 1.0, 1.0);`); return null; }
+        appendFragmentOutputs: (src) => src.push(`${outColor} = vec4(0.0, 0.0, 1.0, 1.0);`)
     };
 };
