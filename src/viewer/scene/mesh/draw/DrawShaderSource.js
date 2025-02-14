@@ -27,12 +27,10 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
         const edgeColor   = fresnelUniform("vec3",  "EdgeColor",   (fresnelValue => fresnelValue.edgeColor));
         const centerColor = fresnelUniform("vec3",  "CenterColor", (fresnelValue => fresnelValue.centerColor));
 
-        return getMaterialValue(material) && {
-            getValueExpression: (viewEyeDir, viewNormal) => {
+        return getMaterialValue(material) && ((viewEyeDir, viewNormal) => {
                 const f = `${fresnel}(${viewEyeDir}, ${viewNormal}, ${edgeBias}, ${centerBias}, ${power})`;
                 return `mix(${edgeColor + colorSwizzle}, ${centerColor + colorSwizzle}, ${f})`;
-            }
-        };
+        });
     };
 
     const diffuseFresnel  = setupFresnel("diffuse",  "",   mtl => mtl._diffuseFresnel);
@@ -236,25 +234,25 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
             src.push(`vec3 diffuseColor = ${(hasNonAmbientLighting && (phongMaterial || specularMaterial) && materialDiffuse) || (metallicMaterial && materialBaseColor) || "vec3(1.0)"};`);
             src.push(`vec4 alphaModeCutoff = ${((phongMaterial || metallicMaterial || specularMaterial) && materialAlphaModeCutoff) || "vec4(1.0, 0.0, 0.0, 0.0)"};`);
             src.push("float alpha = alphaModeCutoff[0];");
-            (phongMaterial || metallicMaterial || specularMaterial) && alphaMap && src.push(`alpha *= ${alphaMap.getValueExpression(texturePos)}.r;`);
+            (phongMaterial || metallicMaterial || specularMaterial) && alphaMap && src.push(`alpha *= ${alphaMap(texturePos)}.r;`);
 
             if (vColor) {
                 src.push(`diffuseColor *= ${vColor}.rgb;`);
                 src.push(`alpha *= ${vColor}.a;`);
             }
             if (metallicMaterial && baseColorMap) {
-                src.push("vec4 baseColorTexel = " + baseColorMap.getValueExpression(texturePos) + ";");
+                src.push("vec4 baseColorTexel = " + baseColorMap(texturePos) + ";");
                 src.push("diffuseColor *= baseColorTexel.rgb;");
                 src.push("alpha *= baseColorTexel.a;");
             }
             if ((phongMaterial || specularMaterial) && diffuseMap) {
-                src.push("vec4 diffuseTexel = " + diffuseMap.getValueExpression(texturePos) + ";");
+                src.push("vec4 diffuseTexel = " + diffuseMap(texturePos) + ";");
                 src.push("diffuseColor *= diffuseTexel.rgb;");
                 src.push("alpha *= diffuseTexel.a;");
             }
 
             src.push(`vec3 emissiveColor = ${((phongMaterial || metallicMaterial || specularMaterial) && materialEmissive) || "vec3(0.0)"};`);
-            (phongMaterial || metallicMaterial || specularMaterial) && emissiveMap && src.push(`emissiveColor = ${emissiveMap.getValueExpression(texturePos)}.rgb;`);
+            (phongMaterial || metallicMaterial || specularMaterial) && emissiveMap && src.push(`emissiveColor = ${emissiveMap(texturePos)}.rgb;`);
 
             if (hasNonAmbientLighting) {
 
@@ -264,42 +262,42 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
                 src.push(`float roughness  = ${((metallicMaterial || specularMaterial) && materialRoughness)  || "1.0"};`);
                 src.push(`float shininess  = ${(phongMaterial && materialShininess)|| "1.0"};`);
                 src.push(`float specularF0 = ${(metallicMaterial && materialSpecularF0) || "1.0"};`);
-                src.push(`float occlusion  = ${((phongMaterial || metallicMaterial || specularMaterial) && occlusionMap) ? `${occlusionMap.getValueExpression(texturePos)}.r` : "1.0"};`);
+                src.push(`float occlusion  = ${((phongMaterial || metallicMaterial || specularMaterial) && occlusionMap) ? `${occlusionMap(texturePos)}.r` : "1.0"};`);
 
                 //--------------------------------------------------------------------------------
                 // SHADING
                 //--------------------------------------------------------------------------------
 
-                metallicMaterial && metallicMap  && src.push(`metallic  *= ${metallicMap.getValueExpression(texturePos)}.r;`);
-                metallicMaterial && roughnessMap && src.push(`roughness *= ${roughnessMap.getValueExpression(texturePos)}.r;`);
+                metallicMaterial && metallicMap  && src.push(`metallic  *= ${metallicMap(texturePos)}.r;`);
+                metallicMaterial && roughnessMap && src.push(`roughness *= ${roughnessMap(texturePos)}.r;`);
 
                 if (metallicMaterial && metallicRoughnessMap) {
-                    src.push("vec4 metalRoughTexel = " + metallicRoughnessMap.getValueExpression(texturePos) + ";");
+                    src.push("vec4 metalRoughTexel = " + metallicRoughnessMap(texturePos) + ";");
                     src.push("metallic  *= metalRoughTexel.b;");
                     src.push("roughness *= metalRoughTexel.g;");
                 }
 
-                (phongMaterial || specularMaterial) && specularMap && src.push(`specular *= ${specularMap.getValueExpression(texturePos)}.rgb;`);
-                specularMaterial && glossinessMap && src.push(`glossiness *= ${glossinessMap.getValueExpression(texturePos)}.r;`);
+                (phongMaterial || specularMaterial) && specularMap && src.push(`specular *= ${specularMap(texturePos)}.rgb;`);
+                specularMaterial && glossinessMap && src.push(`glossiness *= ${glossinessMap(texturePos)}.r;`);
 
                 if (specularMaterial && specularGlossinessMap) {
-                    src.push("vec4 specGlossTexel = " + specularGlossinessMap.getValueExpression(texturePos) + ";"); // TODO: what if only RGB texture?
+                    src.push("vec4 specGlossTexel = " + specularGlossinessMap(texturePos) + ";"); // TODO: what if only RGB texture?
                     src.push("specular   *= specGlossTexel.rgb;");
                     src.push("glossiness *= specGlossTexel.a;");
                 }
 
                 const vViewNormalized = `normalize(${vViewNormal})`;
                 const viewNormal = (((phongMaterial || metallicMaterial || specularMaterial) && normalMap)
-                                    ? `${perturbNormal2Arb}(${vViewPosition}, ${vViewNormalized}, ${normalMap.getTexCoordExpression(texturePos)}, ${normalMap.getValueExpression(texturePos)})`
+                                    ? `${perturbNormal2Arb}(${vViewPosition}, ${vViewNormalized}, ${normalMap.getTexCoordExpression(texturePos)}, ${normalMap(texturePos)})`
                                     : vViewNormalized);
                 src.push(`vec3 viewNormal = ${viewNormal};`);
 
                 src.push(`vec3 viewEyeDir = normalize(-${vViewPosition});`);
 
-                diffuseFresnel  && src.push(`diffuseColor  *= ${diffuseFresnel.getValueExpression ("viewEyeDir", "viewNormal")};`);
-                specularFresnel && src.push(`specular      *= ${specularFresnel.getValueExpression("viewEyeDir", "viewNormal")};`);
-                emissiveFresnel && src.push(`emissiveColor *= ${emissiveFresnel.getValueExpression("viewEyeDir", "viewNormal")};`);
-                alphaFresnel    && src.push(`alpha         *= ${alphaFresnel.getValueExpression   ("viewEyeDir", "viewNormal")};`);
+                diffuseFresnel  && src.push(`diffuseColor  *= ${diffuseFresnel ("viewEyeDir", "viewNormal")};`);
+                specularFresnel && src.push(`specular      *= ${specularFresnel("viewEyeDir", "viewNormal")};`);
+                emissiveFresnel && src.push(`emissiveColor *= ${emissiveFresnel("viewEyeDir", "viewNormal")};`);
+                alphaFresnel    && src.push(`alpha         *= ${alphaFresnel   ("viewEyeDir", "viewNormal")};`);
 
                 src.push("if (alphaModeCutoff[1] == 1.0 && alpha < alphaModeCutoff[2]) {"); // ie. (alphaMode == "mask" && alpha < alphaCutoff)
                 src.push("   discard;"); // TODO: Discard earlier within this shader?
@@ -389,7 +387,7 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
                 src.push("vec3 outgoingLight = emissiveColor + occlusion * (reflDiff * material.diffuseColor + reflSpec)" + (ambient ? (" + " + ambient) : "") + ";");
             } else {
                 src.push(`vec3 ambientColor = ${(phongMaterial && materialAmbient) || "vec3(1.0)"};`);
-                phongMaterial && ambientMap && src.push(`ambientColor *= ${ambientMap.getValueExpression(texturePos)}.rgb;`);
+                phongMaterial && ambientMap && src.push(`ambientColor *= ${ambientMap(texturePos)}.rgb;`);
                 src.push(`ambientColor *= ${lightSetup.getAmbientColor()};`);
                 src.push("vec3 outgoingLight = emissiveColor + ambientColor;");
             }
