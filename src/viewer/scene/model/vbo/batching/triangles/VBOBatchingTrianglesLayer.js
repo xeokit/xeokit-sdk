@@ -21,6 +21,221 @@ const tempVec3e = math.vec3();
 const tempVec3f = math.vec3();
 const tempVec3g = math.vec3();
 
+// function applyTransformation(matrix, rotation = [0, 0, 0], translation = [0, 0, 0], scale = [1, 1, 1]) {
+//     // Ensure matrix is a Float64Array
+//     matrix = Float64Array.from(matrix);
+
+//     // Create translation matrix
+//     const translateToOriginMatrix = new Float64Array([
+//         1, 0, 0, -translation[0],
+//         0, 1, 0, -translation[1],
+//         0, 0, 1, -translation[2],
+//         0, 0, 0, 1
+//     ]);
+
+//     // Calculate rotation cosines and sines
+//     const cosX = Math.cos(rotation[0]);
+//     const sinX = Math.sin(rotation[0]);
+//     const cosY = Math.cos(rotation[1]);
+//     const sinY = Math.sin(rotation[1]);
+//     const cosZ = Math.cos(rotation[2]);
+//     const sinZ = Math.sin(rotation[2]);
+
+//     // Define rotation matrices
+//     const rotationXMatrix = new Float64Array([
+//         1, 0, 0, 0,
+//         0, cosX, -sinX, 0,
+//         0, sinX, cosX, 0,
+//         0, 0, 0, 1
+//     ]);
+
+//     const rotationYMatrix = new Float64Array([
+//         cosY, 0, sinY, 0,
+//         0, 1, 0, 0,
+//         -sinY, 0, cosY, 0,
+//         0, 0, 0, 1
+//     ]);
+
+//     const rotationZMatrix = new Float64Array([
+//         cosZ, -sinZ, 0, 0,
+//         sinZ, cosZ, 0, 0,
+//         0, 0, 1, 0,
+//         0, 0, 0, 1
+//     ]);
+
+//     // Create scaling matrix
+//     const scalingMatrix = new Float64Array([
+//         scale[0], 0, 0, 0,
+//         0, scale[1], 0, 0,
+//         0, 0, scale[2], 0,
+//         0, 0, 0, 1
+//     ]);
+
+//     // Helper function to multiply two 4x4 matrices
+//     const multiplyMatrices = (a, b) => {
+//         const result = new Float64Array(16);
+//         for (let i = 0; i < 4; i++) {
+//             for (let j = 0; j < 4; j++) {
+//                 result[i * 4 + j] = a[i * 4 + 0] * b[0 * 4 + j] +
+//                                     a[i * 4 + 1] * b[1 * 4 + j] +
+//                                     a[i * 4 + 2] * b[2 * 4 + j] +
+//                                     a[i * 4 + 3] * b[3 * 4 + j];
+//             }
+//         }
+//         return result;
+//     };
+
+//     // Extract translation from the original matrix
+//     const originalTranslation = [
+//         matrix[12], // e (translation x)
+//         matrix[13], // f (translation y)
+//         matrix[14]  // g (translation z)
+//     ];
+
+//     // Apply the translation to move the object to the origin
+//     // let transformedMatrix = multiplyMatrices(matrix, translateToOriginMatrix);
+//     let transformedMatrix = matrix;
+//     transformedMatrix[12] = 0;
+//     transformedMatrix[13] = 0;
+//     transformedMatrix[14] = 0;
+
+//     // Apply the transformations: scale -> rotate
+//     transformedMatrix = multiplyMatrices(transformedMatrix, scalingMatrix);
+//     transformedMatrix = multiplyMatrices(transformedMatrix, rotationZMatrix);
+//     transformedMatrix = multiplyMatrices(transformedMatrix, rotationYMatrix);
+//     transformedMatrix = multiplyMatrices(transformedMatrix, rotationXMatrix);
+
+//     // Translate back to the original position
+//     transformedMatrix[12] = originalTranslation[0] + translation[0]; // e
+//     transformedMatrix[13] = originalTranslation[1] + translation[1]; // f
+//     transformedMatrix[14] = originalTranslation[2] + translation[2]; // g
+
+//     return transformedMatrix;
+// }
+
+
+
+function applyTransformation(matrix, pivot = null, rotation = [0, 0, 0], translation = [0, 0, 0], scale = [1, 1, 1]) {
+    // Ensure matrix is a Float64Array
+    matrix = Float64Array.from(matrix);
+
+    // Calculate rotation cosines and sines
+    const cosX = Math.cos(rotation[0]);
+    const sinX = Math.sin(rotation[0]);
+    const cosY = Math.cos(rotation[1]);
+    const sinY = Math.sin(rotation[1]);
+    const cosZ = Math.cos(rotation[2]);
+    const sinZ = Math.sin(rotation[2]);
+
+    // Define rotation matrices
+    const rotationXMatrix = new Float64Array([
+        1, 0, 0, 0,
+        0, cosX, -sinX, 0,
+        0, sinX, cosX, 0,
+        0, 0, 0, 1
+    ]);
+
+    const rotationYMatrix = new Float64Array([
+        cosY, 0, sinY, 0,
+        0, 1, 0, 0,
+        -sinY, 0, cosY, 0,
+        0, 0, 0, 1
+    ]);
+
+    const rotationZMatrix = new Float64Array([
+        cosZ, -sinZ, 0, 0,
+        sinZ, cosZ, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    ]);
+
+    // Create scaling matrix
+    const scalingMatrix = new Float64Array([
+        scale[0], 0, 0, 0,
+        0, scale[1], 0, 0,
+        0, 0, scale[2], 0,
+        0, 0, 0, 1
+    ]);
+
+    // Helper function to multiply two 4x4 matrices
+    const multiplyMatrices = (a, b) => {
+        const result = new Float64Array(16);
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                result[i * 4 + j] = a[i * 4 + 0] * b[0 * 4 + j] +
+                                    a[i * 4 + 1] * b[1 * 4 + j] +
+                                    a[i * 4 + 2] * b[2 * 4 + j] +
+                                    a[i * 4 + 3] * b[3 * 4 + j];
+            }
+        }
+        return result;
+    };
+
+    // Create translation matrix
+    const translateToOriginMatrix = new Float64Array([
+        1, 0, 0, -translation[0],
+        0, 1, 0, -translation[1],
+        0, 0, 1, -translation[2],
+        0, 0, 0, 1
+    ]);
+
+    // Extract translation from the original matrix
+    const translateToPivotMatrix = pivot ? new Float64Array([
+        1, 0, 0, -pivot[0],
+        0, 1, 0, -pivot[1],
+        0, 0, 1, -pivot[2],
+        0, 0, 0, 1
+    ]) : new Float64Array([
+        1, 0, 0, -matrix[12],
+        0, 1, 0, -matrix[13],
+        0, 0, 1, -matrix[14],
+        0, 0, 0, 1
+    ]);
+
+    const originalTranslation = [
+        matrix[12], // e (translation x)
+        matrix[13], // f (translation y)
+        matrix[14]  // g (translation z)
+    ];
+
+    console.log({translateToPivotMatrix});
+
+    // Apply the translation to move the object to the origin
+    // let transformedMatrix = multiplyMatrices(matrix, translateToPivotMatrix);
+    let transformedMatrix = matrix;
+    transformedMatrix[12] = transformedMatrix[12] - translateToPivotMatrix[12];
+    transformedMatrix[13] = transformedMatrix[13] - translateToPivotMatrix[13];
+    transformedMatrix[14] = transformedMatrix[14] - translateToPivotMatrix[14];
+
+
+    console.log('***afterMulply ', {transformedMatrix});
+
+    // Apply the transformations: scale -> rotate
+    transformedMatrix = multiplyMatrices(transformedMatrix, scalingMatrix);
+    transformedMatrix = multiplyMatrices(transformedMatrix, rotationZMatrix);
+    transformedMatrix = multiplyMatrices(transformedMatrix, rotationYMatrix);
+    transformedMatrix = multiplyMatrices(transformedMatrix, rotationXMatrix);
+
+    // Translate back to the original position
+    // transformedMatrix[12] =  translation[0] - transformedMatrix[12]; // e
+    // transformedMatrix[13] =  translation[1] - transformedMatrix[13]; // f
+    // transformedMatrix[14] =  translation[2] - transformedMatrix[14]; // g
+
+    // transformedMatrix = multiplyMatrices(transformedMatrix, translateToOriginMatrix);
+
+    // originalTranslation[12] = -originalTranslation[12];
+    // originalTranslation[13] = -originalTranslation[13];
+    // originalTranslation[14] = -originalTranslation[14];
+
+    // transformedMatrix = multiplyMatrices(transformedMatrix, originalTranslation);
+    transformedMatrix[12] = originalTranslation[0] - translation[0] - translateToPivotMatrix[12] ; // e
+    transformedMatrix[13] = originalTranslation[1] - translation[1] - translateToPivotMatrix[13]; // f
+    transformedMatrix[14] = originalTranslation[2] - translation[2] - translateToPivotMatrix[14]; // g
+
+    return transformedMatrix;
+}
+
+
 /**
  * @private
  */
@@ -661,6 +876,31 @@ export class VBOBatchingTrianglesLayer {
         this._setFlags(portionId, flags, transparent);
     }
 
+    translate(translationDelta) {
+      let positionsDecodeMatrix = math.transformMatrix({
+        matrix: this._state.positionsDecodeMatrix,
+        translation: translationDelta,
+      });
+
+      this._state.positionsDecodeMatrix = positionsDecodeMatrix;
+    }
+
+    rotate(radians, pivot) {
+      if (!this._finalized) {
+        throw 'Not finalized';
+      }
+
+      if (this._state && this._state.positionsDecodeMatrix) {
+        let positionsDecodeMatrix = math.transformMatrix({
+          matrix: this._state.positionsDecodeMatrix,
+          rotation: radians,
+          rotationPivot: pivot,
+        });
+
+        this._state.positionsDecodeMatrix = positionsDecodeMatrix;
+      }
+    }
+
     /**
      * flags are 4bits values encoded on a 32bit base. color flag on the first 4 bits, silhouette flag on the next 4 bits and so on for edge, pick and clippable.
      */
@@ -732,7 +972,7 @@ export class VBOBatchingTrianglesLayer {
 
         let pickFlag = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
 
-        const clippableFlag = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 1 : 0;
+        const clippableFlag = flags & ENTITY_FLAGS.CLIPPABLE ? 1 : 0;
 
         if (deferred) {
             // Avoid zillions of individual WebGL bufferSubData calls - buffer them to apply in one shot

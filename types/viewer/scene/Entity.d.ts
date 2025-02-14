@@ -388,6 +388,26 @@ export declare abstract class Entity {
   get offset(): number[];
 
   /**
+   * Rotate SceneModelEntity according to a pivot.
+   *
+   * Default value is ````{ degrees: [0, 0, 0], pivot: [0, 0, 0] }````.
+   *
+   *
+   * @param {{ radians: number[] , pivot: number[] }}
+   */
+  rotate(arg: { radians: number[]; pivot: number[] }): void;
+
+  /**
+   * Rotate SceneModelEntity according to a pivot.
+   *
+   * Default value is ````{ degrees: [0, 0, 0], pivot: [0, 0, 0] }````.
+   *
+   *
+   * @param {translateDelta: number[]}
+   */
+  translate(translateDelta: number[]): void;
+
+  /**
    * Gets the World, View and Canvas-space positions of each vertex in a callback.
    *
    * @param callback
