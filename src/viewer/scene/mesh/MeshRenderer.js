@@ -16,16 +16,6 @@ const iota = function(n) {
     return ret;
 };
 
-export const lazyShaderVariable = function(name) {
-    const variable = {
-        toString: () => {
-            variable.needed = true;
-            return name;
-        }
-    };
-    return variable;
-};
-
 export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, programVariablesState) => {
     const programVariables = programVariablesState.programVariables;
     const decodedUv   = auxVariables.decodedUv;
