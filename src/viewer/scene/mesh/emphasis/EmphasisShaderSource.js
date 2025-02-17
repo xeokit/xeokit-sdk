@@ -1,4 +1,4 @@
-import {createLightSetup} from "../MeshRenderer.js";
+import {createLightSetup} from "../../webgl/WebGLRenderer.js";
 
 export const EmphasisShaderSource = function(meshHash, programVariables, geometry, scene, isFill) {
     const lightSetup = isFill && createLightSetup(programVariables, scene._lightsState);
