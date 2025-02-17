@@ -8,6 +8,7 @@ import {math} from '../math/math.js';
 import {createRTCViewMat} from '../math/rtcCoords.js';
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
+import {createProgramVariablesState} from '../webgl/WebGLRenderer.js';
 import {instantiateMeshRenderer} from "./MeshRenderer.js";
 import {DrawShaderSource} from "./draw/DrawShaderSource.js";
 import {LambertShaderSource} from "./draw/LambertShaderSource.js";
@@ -278,94 +279,7 @@ class Mesh extends Component {
             let instance = null;
             const ensureInstance = () => {
                 if (! instance) {
-                    const programVariablesState = (function() {
-                        const vertAppenders = [ ];
-                        const vOutAppenders = [ ];
-                        const fragAppenders = [ ];
-                        const attrSetters = [ ];
-                        const unifSetters = [ ];
-                        return {
-                            programVariables: {
-                                createAttribute: function(type, name, valueSetter) {
-                                    let needed = false;
-                                    vertAppenders.push((src) => needed && src.push(`in ${type} ${name};`));
-                                    attrSetters.push((getInputSetter) => {
-                                        const setValue = needed && getInputSetter(name);
-                                        return setValue && ((state) => valueSetter(setValue, state));
-                                    });
-                                    return {
-                                        toString: () => {
-                                            needed = true;
-                                            return name;
-                                        }
-                                    };
-                                },
-                                createFragmentDefinition: (name, appendDefinition) => {
-                                    let needed = false;
-                                    fragAppenders.push((src) => needed && appendDefinition(name, src));
-                                    return {
-                                        toString: () => {
-                                            needed = true;
-                                            return name;
-                                        }
-                                    };
-                                },
-                                createOutput: (type, name) => {
-                                    fragAppenders.push((src) => src.push(`out ${type} ${name};`));
-                                    return { toString: () => name };
-                                },
-                                createUniform: (type, name, valueSetter) => {
-                                    let needed = false;
-                                    const append = (src) => needed && src.push(`uniform ${type} ${name};`);
-                                    vertAppenders.push(append);
-                                    fragAppenders.push(append);
-                                    unifSetters.push((getInputSetter) => {
-                                        const setValue = needed && getInputSetter(name);
-                                        return setValue && ((state) => valueSetter(setValue, state));
-                                    });
-                                    return {
-                                        toString: () => {
-                                            needed = true;
-                                            return name;
-                                        }
-                                    };
-                                },
-                                createVarying: (type, name, genValueCode) => {
-                                    let needed = false;
-                                    vertAppenders.push((src) => needed && src.push(`out ${type} ${name};`));
-                                    vOutAppenders.push((src) => needed && src.push(`${name} = ${genValueCode()};`));
-                                    fragAppenders.push((src) => needed && src.push(`in  ${type} ${name};`));
-                                    return {
-                                        toString: () => {
-                                            needed = true;
-                                            return name;
-                                        }
-                                    };
-                                },
-                                createVertexDefinition: (name, appendDefinition) => {
-                                    let needed = false;
-                                    vertAppenders.push((src) => needed && appendDefinition(name, src));
-                                    return {
-                                        toString: () => {
-                                            needed = true;
-                                            return name;
-                                        }
-                                    };
-                                }
-                            },
-                            appendVertexDefinitions:   (src) => vertAppenders.forEach(a => a(src)),
-                            appendVertexOutputs:       (src) => vOutAppenders.forEach(a => a(src)),
-                            appendFragmentDefinitions: (src) => fragAppenders.forEach(a => a(src)),
-                            setupInputs: (getInputSetter) => {
-                                const aSetters = attrSetters.map(i => i(getInputSetter)).filter(s => s);
-                                const uSetters = unifSetters.map(i => i(getInputSetter)).filter(s => s);
-                                return {
-                                    setAttributes: (state) => aSetters.forEach(s => s(state)),
-                                    setUniforms:   (state) => uSetters.forEach(s => s(state))
-                                };
-                            }
-                        };
-                    })();
+                    const programVariablesState = createProgramVariablesState();
 
                     const createAttribute = (type, name, getBuffer) => {
                         return programVariablesState.programVariables.createAttribute(type, name, (set, state) => {
