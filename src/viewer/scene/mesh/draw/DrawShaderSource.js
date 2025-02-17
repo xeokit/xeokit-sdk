@@ -1,4 +1,4 @@
-import {createLightSetup, setupTexture} from "../MeshRenderer.js";
+import {createLightSetup, setupTexture} from "../../webgl/WebGLRenderer.js";
 import {math} from "../../math/math.js";
 const tempVec4 = math.vec4();
 
