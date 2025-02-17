@@ -1,4 +1,4 @@
-import {createLightSetup} from "../MeshRenderer.js";
+import {createLightSetup} from "../../webgl/WebGLRenderer.js";
 
 export const LambertShaderSource = function(meshDrawHash, programVariables, geometry, material, scene) {
     const lightSetup       = createLightSetup(programVariables, scene._lightsState);
