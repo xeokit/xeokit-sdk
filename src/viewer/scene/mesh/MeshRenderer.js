@@ -400,7 +400,7 @@ export const setupTexture = (programVariables, type, name, encoding, getTexture,
     return sample;
 };
 
-export const createLightSetup = function(programVariables, lightsState, setupCubes) {
+export const createLightSetup = function(programVariables, lightsState) {
     const lightAmbient = programVariables.createUniform("vec4", "lightAmbient", (set) => set(lightsState.getAmbientColorAndIntensity()));
 
     const lights = lightsState.lights;
@@ -469,8 +469,8 @@ export const createLightSetup = function(programVariables, lightsState, setupCub
         return initMap && setupTexture(programVariables, "samplerCube", name, initMap.encoding, (set) => { const v = getValue(); v && set(v.texture); });
     };
 
-    const lightMap      = setupCubes && setupCubeTexture("light",      () => lightsState.lightMaps);
-    const reflectionMap = setupCubes && setupCubeTexture("reflection", () => lightsState.reflectionMaps);
+    const lightMap      = setupCubeTexture("light",      () => lightsState.lightMaps);
+    const reflectionMap = setupCubeTexture("reflection", () => lightsState.reflectionMaps);
 
     return {
         getHash: () => lightsState.getHash(),
