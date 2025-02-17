@@ -367,21 +367,25 @@ class Mesh extends Component {
                         };
                     })();
 
+                    const createAttribute = (type, name, getBuffer) => {
+                        return programVariablesState.programVariables.createAttribute(type, name, (set, state) => {
+                            set({
+                                bindAtLocation: location => { // see ArrayBuf.js and Attribute.js
+                                    const arrayBuf = getBuffer(state);
+                                    arrayBuf.bind();
+                                        scene.canvas.gl.vertexAttribPointer(location, arrayBuf.itemSize, arrayBuf.itemType, arrayBuf.normalized, 0, 0);
+                                }
+                                });
+                            state.onBindAttribute();
+                        });
+                    };
                     const geometryState = mesh._geometry._state;
-                    const createAttribute = programVariablesState.programVariables.createAttribute;
-                    const binder = (arrayBuf, onBindAttribute) => ({ // see ArrayBuf.js and Attribute.js
-                        bindAtLocation: location => {
-                            arrayBuf.bind();
-                            scene.canvas.gl.vertexAttribPointer(location, arrayBuf.itemSize, arrayBuf.itemType, arrayBuf.normalized, 0, 0);
-                            onBindAttribute();
-                        }
-                    });
                     const attributes = {
-                        position:  createAttribute("vec3", "position", (set, state) => set(binder((state.triangleGeometry || state.geometryState).positionsBuf, state.onBindAttribute))),
-                        color:     geometryState.colorsBuf && createAttribute("vec4", "color", (set, state) => set(binder(state.geometryState.colorsBuf, state.onBindAttribute))),
-                        pickColor: createAttribute("vec4", "pickColor", (set, state) => set(binder(state.triangleGeometry.pickColorsBuf, state.onBindAttribute))),
-                        uv:        geometryState.uvBuf && createAttribute("vec2", "uv", (set, state) => set(binder(state.geometryState.uvBuf, state.onBindAttribute))),
-                        normal:    (geometryState.autoVertexNormals || geometryState.normalsBuf) && [ "triangles", "triangle-strip", "triangle-fan" ].includes(geometryState.primitiveName) && createAttribute("vec3", "normal", (set, state) => set(binder(state.geometryState.normalsBuf, state.onBindAttribute)))
+                        position:  createAttribute("vec3", "position", (state) => (state.triangleGeometry || state.geometryState).positionsBuf),
+                        color:     geometryState.colorsBuf && createAttribute("vec4", "color", (state) => state.geometryState.colorsBuf),
+                        pickColor: createAttribute("vec4", "pickColor", (state) => state.triangleGeometry.pickColorsBuf),
+                        uv:        geometryState.uvBuf && createAttribute("vec2", "uv", (state) => state.geometryState.uvBuf),
+                        normal:    (geometryState.autoVertexNormals || geometryState.normalsBuf) && [ "triangles", "triangle-strip", "triangle-fan" ].includes(geometryState.primitiveName) && createAttribute("vec3", "normal", (state) => state.geometryState.normalsBuf)
                     };
                     const worldNormal = attributes.normal && lazyShaderVariable("worldNormal");
                     const viewNormal  = worldNormal && lazyShaderVariable("viewNormal");
