@@ -278,16 +278,6 @@ class Mesh extends Component {
             let instance = null;
             const ensureInstance = () => {
                 if (! instance) {
-                    const lazyShaderVariable = function(name) {
-                        const variable = {
-                            toString: () => {
-                                variable.needed = true;
-                                return name;
-                            }
-                        };
-                        return variable;
-                    };
-
                     const programVariablesState = (function() {
                         const vertAppenders = [ ];
                         const vOutAppenders = [ ];
@@ -311,9 +301,14 @@ class Mesh extends Component {
                                     };
                                 },
                                 createFragmentDefinition: (name, appendDefinition) => {
-                                    const v = lazyShaderVariable(name);
-                                    fragAppenders.push((src) => v.needed && appendDefinition(name, src));
-                                    return v;
+                                    let needed = false;
+                                    fragAppenders.push((src) => needed && appendDefinition(name, src));
+                                    return {
+                                        toString: () => {
+                                            needed = true;
+                                            return name;
+                                        }
+                                    };
                                 },
                                 createOutput: (type, name) => {
                                     fragAppenders.push((src) => src.push(`out ${type} ${name};`));
@@ -348,9 +343,14 @@ class Mesh extends Component {
                                     };
                                 },
                                 createVertexDefinition: (name, appendDefinition) => {
-                                    const v = lazyShaderVariable(name);
-                                    vertAppenders.push((src) => v.needed && appendDefinition(name, src));
-                                    return v;
+                                    let needed = false;
+                                    vertAppenders.push((src) => needed && appendDefinition(name, src));
+                                    return {
+                                        toString: () => {
+                                            needed = true;
+                                            return name;
+                                        }
+                                    };
                                 }
                             },
                             appendVertexDefinitions:   (src) => vertAppenders.forEach(a => a(src)),
@@ -386,6 +386,16 @@ class Mesh extends Component {
                         pickColor: createAttribute("vec4", "pickColor", (state) => state.triangleGeometry.pickColorsBuf),
                         uv:        geometryState.uvBuf && createAttribute("vec2", "uv", (state) => state.geometryState.uvBuf),
                         normal:    (geometryState.autoVertexNormals || geometryState.normalsBuf) && [ "triangles", "triangle-strip", "triangle-fan" ].includes(geometryState.primitiveName) && createAttribute("vec3", "normal", (state) => state.geometryState.normalsBuf)
+                    };
+
+                    const lazyShaderVariable = function(name) {
+                        const variable = {
+                            toString: () => {
+                                variable.needed = true;
+                                return name;
+                            }
+                        };
+                        return variable;
                     };
                     const worldNormal = attributes.normal && lazyShaderVariable("worldNormal");
                     const viewNormal  = worldNormal && lazyShaderVariable("viewNormal");
