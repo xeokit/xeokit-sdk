@@ -9,7 +9,7 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
     const specularMaterial = (materialState.type === "SpecularMaterial");
 
     const attributes = geometry.attributes;
-    const lightSetup = createLightSetup(programVariables, scene._lightsState, !!attributes.uv);
+    const lightSetup = createLightSetup(programVariables, scene._lightsState);
 
     const colorize = programVariables.createUniform("vec4", "colorize", (set, state) => set(state.mesh.colorize));
 
