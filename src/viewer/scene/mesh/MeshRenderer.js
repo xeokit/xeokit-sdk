@@ -1,20 +1,5 @@
-import {math} from "../math/math.js";
-import {getPlaneRTCPos} from "../math/rtcCoords.js";
 import {Program} from "../webgl/Program.js";
-import {makeInputSetters} from "../webgl/WebGLRenderer.js";
-import {LinearEncoding, sRGBEncoding} from "../constants/constants.js";
-
-const TEXTURE_DECODE_FUNCS = {};
-TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
-
-const tempVec3a = math.vec3();
-const tempVec4 = math.vec4();
-
-const iota = function(n) {
-    const ret = [ ];
-    for (let i = 0; i < n; ++i) ret.push(i);
-    return ret;
-};
+import {createSectionPlanesSetup, makeInputSetters} from "../webgl/WebGLRenderer.js";
 
 export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, programVariablesState) => {
     const programVariables = programVariablesState.programVariables;
@@ -23,28 +8,7 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
     const viewNormal  = auxVariables.viewNormal;
     const scene = mesh.scene;
     const meshStateBackground = mesh._state.background;
-    const clipping = (function() {
-        const sectionPlanesState = scene._sectionPlanesState;
-        const allocatedUniforms = iota(sectionPlanesState.getNumAllocatedSectionPlanes()).map(i => {
-            const sectionPlaneUniform = (type, postfix, getValue) => {
-                return programVariables.createUniform(type, `sectionPlane${postfix}${i}`, (set, state) => {
-                    const sectionPlanes = sectionPlanesState.sectionPlanes;
-                    const active = (i < sectionPlanes.length) && state.mesh.renderFlags.sectionPlanesActivePerLayer[i];
-                    return getValue(set, active, sectionPlanes[i], state.mesh.origin);
-                });
-            };
-            return {
-                act: sectionPlaneUniform("bool", "Active", (set, active) => set(active ? 1 : 0)),
-                dir: sectionPlaneUniform("vec3", "Dir",    (set, active, plane) => active && set(plane.dir)),
-                pos: sectionPlaneUniform("vec3", "Pos",    (set, active, plane, orig) => active && set(orig
-                                                                                                       ? getPlaneRTCPos(plane.dist, plane.dir, orig, tempVec3a)
-                                                                                                       : plane.pos))
-            };
-        });
-        return (allocatedUniforms.length > 0) && {
-            getDistance: (worldPosition) => allocatedUniforms.map(a => `(${a.act} ? clamp(dot(-${a.dir}, ${worldPosition} - ${a.pos}), 0.0, 1000.0) : 0.0)`).join(" + ")
-        };
-    })();
+    const clipping = createSectionPlanesSetup(programVariables, scene._sectionPlanesState);
     const getLogDepth = (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled;
     const geometryState = mesh._geometry._state;
     const quantizedGeometry = geometryState.compressGeometry;
@@ -383,100 +347,4 @@ export const instantiateMeshRenderer = (mesh, attributes, auxVariables, programS
             }
         };
     }
-};
-
-export const setupTexture = (programVariables, type, name, encoding, getTexture, getMatrix) => {
-    const map    = programVariables.createUniform(type, name + "Map", getTexture);
-    const matrix = getMatrix && programVariables.createUniform("mat4", name + "MapMatrix", getMatrix);
-    const swizzle = (type === "samplerCube") ? "xyz" : "xy";
-    const getTexCoordExpression = texPos => (matrix ? `(${matrix} * ${texPos}).${swizzle}` : `${texPos}.${swizzle}`);
-    const sample = (texturePos, bias) => {
-        const texel = (bias
-                       ? `texture(${map}, ${getTexCoordExpression(texturePos)}, ${bias})`
-                       : `texture(${map}, ${getTexCoordExpression(texturePos)})`);
-        return (encoding !== LinearEncoding) ? `${TEXTURE_DECODE_FUNCS[encoding]}(${texel})` : texel;
-    };
-    sample.getTexCoordExpression = getTexCoordExpression;
-    return sample;
-};
-
-export const createLightSetup = function(programVariables, lightsState) {
-    const lightAmbient = programVariables.createUniform("vec4", "lightAmbient", (set) => set(lightsState.getAmbientColorAndIntensity()));
-
-    const lights = lightsState.lights;
-    const directionals = lights.map((light, i) => {
-        const lightUniforms = {
-            color: programVariables.createUniform("vec4", `lightColor${i}`, (set) => {
-                const light = lights[i]; // in case it changed
-                tempVec4[0] = light.color[0];
-                tempVec4[1] = light.color[1];
-                tempVec4[2] = light.color[2];
-                tempVec4[3] = light.intensity;
-                set(tempVec4);
-            }),
-            position:  programVariables.createUniform("vec3", `lightPos${i}`, (set) => set(lights[i].pos)),
-            direction: programVariables.createUniform("vec3", `lightDir${i}`, (set) => set(lights[i].dir)),
-
-            shadowProjMatrix: programVariables.createUniform("mat4", `shadowProjMatrix${i}`, (set) => set(lights[i].getShadowViewMatrix())),
-            shadowViewMatrix: programVariables.createUniform("mat4", `shadowViewMatrix${i}`, (set) => set(lights[i].getShadowViewMatrix())),
-            shadowMap:        programVariables.createUniform("sampler2D", `shadowMap${i}`, (set) => {
-                const shadowRenderBuf = lights[i].getShadowRenderBuf();
-                set(shadowRenderBuf && shadowRenderBuf.getTexture());
-            })
-        };
-
-        const withViewLightDir = getDirection => {
-            return {
-                glslLight: {
-                    isWorldSpace: light.space === "world",
-                    getColor: () => `${lightUniforms.color}.rgb * ${lightUniforms.color}.a`,
-                    getDirection: (viewMatrix, viewPosition) => `normalize(${getDirection(viewMatrix, viewPosition)})`,
-                    shadowParameters: light.castsShadow && {
-                        getShadowProjMatrix: () => lightUniforms.shadowProjMatrix,
-                        getShadowViewMatrix: () => lightUniforms.shadowViewMatrix,
-                        getShadowMap:        () => lightUniforms.shadowMap
-                    }
-                },
-                setupLightsInputs: () => {
-                    const setters = Object.values(lightUniforms).map(u => u.setupLightsInputs()).filter(v => v);
-                    return () => setters.forEach(setState => setState());
-                }
-            };
-        };
-
-        if (light.type === "dir") {
-            if (light.space === "view") {
-                return withViewLightDir((viewMatrix, viewPosition) => `-${lightUniforms.direction}`);
-            } else {
-                // If normal mapping, the fragment->light vector will be in tangent space
-                return withViewLightDir((viewMatrix, viewPosition) => `-(${viewMatrix} * vec4(${lightUniforms.direction}, 0.0)).xyz`);
-            }
-        } else if (light.type === "point") {
-            if (light.space === "view") {
-                return withViewLightDir((viewMatrix, viewPosition) => `${lightUniforms.position} - ${viewPosition}`);
-            } else {
-                // If normal mapping, the fragment->light vector will be in tangent space
-                return withViewLightDir((viewMatrix, viewPosition) => `(${viewMatrix} * vec4(${lightUniforms.position}, 1.0)).xyz - ${viewPosition}`);
-            }
-        } else {
-            return null;
-        }
-    }).filter(v => v);
-
-    const setupCubeTexture = (name, getMaps) => {
-        const getValue = () => { const m = getMaps(); return (m.length > 0) && m[0]; };
-        const initMap = getValue();
-        return initMap && setupTexture(programVariables, "samplerCube", name, initMap.encoding, (set) => { const v = getValue(); v && set(v.texture); });
-    };
-
-    const lightMap      = setupCubeTexture("light",      () => lightsState.lightMaps);
-    const reflectionMap = setupCubeTexture("reflection", () => lightsState.reflectionMaps);
-
-    return {
-        getHash: () => lightsState.getHash(),
-        getAmbientColor: () => `${lightAmbient}.rgb * ${lightAmbient}.a`,
-        directionalLights: directionals.map(light => light.glslLight),
-        getIrradiance: lightMap      && ((worldNormal) => `${lightMap(worldNormal)}.rgb`),
-        getReflection: reflectionMap && ((reflectVec, mipLevel) => `${reflectionMap(reflectVec, mipLevel)}.rgb`)
-    };
 };
