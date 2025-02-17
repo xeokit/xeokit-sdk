@@ -1,7 +1,7 @@
 import {createLightSetup} from "../MeshRenderer.js";
 
 export const EmphasisShaderSource = function(meshHash, programVariables, geometry, scene, isFill) {
-    const lightSetup = isFill && createLightSetup(programVariables, scene._lightsState, false);
+    const lightSetup = isFill && createLightSetup(programVariables, scene._lightsState);
     const uColor = programVariables.createUniform("vec3",  "uColor", (set, state) => set(isFill ? state.material.fillColor : state.material.edgeColor));
     const uAlpha = programVariables.createUniform("float", "uAlpha", (set, state) => set(isFill ? state.material.fillAlpha : state.material.edgeAlpha));
     const vColor = programVariables.createVarying("vec4", "vColor", () => {
