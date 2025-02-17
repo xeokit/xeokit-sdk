@@ -1,7 +1,7 @@
 import {createLightSetup} from "../MeshRenderer.js";
 
 export const LambertShaderSource = function(meshDrawHash, programVariables, geometry, material, scene) {
-    const lightSetup       = createLightSetup(programVariables, scene._lightsState, false);
+    const lightSetup       = createLightSetup(programVariables, scene._lightsState);
     const colorize         = programVariables.createUniform("vec4",  "colorize",         (set, state) => set(state.mesh.colorize));
     const materialAlpha    = programVariables.createUniform("float", "materialAlpha",    (set, state) => set(state.material.alpha));
     const materialColor    = programVariables.createUniform("vec3",  "materialColor",    (set, state) => set(state.material.color));
