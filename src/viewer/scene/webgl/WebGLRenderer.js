@@ -76,6 +76,31 @@ export const createProgramVariablesState = function() {
                     }
                 };
             },
+            createUniformBlock: (name, types, valueSetter) => {
+                let needed = false;
+                const keys = Object.keys(types);
+                const append = (src) => {
+                    if (needed) {
+                        src.push(`uniform ${name} {`);
+                        keys.forEach(k => src.push(`    ${types[k]} ${k};`));
+                        src.push(`};`);
+                    }
+                };
+                vertAppenders.push(append);
+                fragAppenders.push(append);
+                unifSetters.push((getInputSetter) => {
+                    const setValue = needed && getInputSetter(name);
+                    return setValue && ((state) => valueSetter(setValue, state));
+                });
+                const ret = { };
+                keys.forEach(k => ret[k] = {
+                    toString: () => {
+                        needed = true;
+                        return k;
+                    }
+                });
+                return ret;
+            },
             createVarying: (type, name, genValueCode, interpolationQualifier) => {
                 let needed = false;
                 const intp = interpolationQualifier ? (interpolationQualifier + " ") : "";
