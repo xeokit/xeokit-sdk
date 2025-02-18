@@ -2,8 +2,6 @@ import {isPerspectiveMatrix} from "./Layer.js";
 import {createRTCViewMat, getPlaneRTCPos, math} from "../../math/index.js";
 import {Program} from "../../webgl/Program.js";
 import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
-import {WEBGL_INFO} from "../../webglInfo.js";
-import {LinearEncoding, sRGBEncoding} from "../../constants/constants.js";
 
 const tempVec2 = math.vec2();
 const tempVec3 = math.vec3();
@@ -51,60 +49,9 @@ export const lazyShaderVariable = function(name) {
     return variable;
 };
 
-export const setupTexture = (name, type, encoding, hasMatrix) => {
-    const TEXTURE_DECODE_FUNCS = {
-        [LinearEncoding]: value => value,
-        [sRGBEncoding]:   value => `sRGBToLinear(${value})`
-    };
-
-    const map    = lazyShaderUniform(name + "Map", type);
-    const matrix = hasMatrix && lazyShaderUniform(name + "MapMatrix", "mat4");
-    const swizzle = (type === "samplerCube") ? "xyz" : "xy";
-    const getTexCoordExpression = texPos => (matrix ? `(${matrix} * ${texPos}).${swizzle}` : `${texPos}.${swizzle}`);
-    return {
-        appendDefinitions: (src) => {
-            map.appendDefinitions(src);
-            matrix && matrix.appendDefinitions(src);
-        },
-        getTexCoordExpression: getTexCoordExpression,
-        getValueExpression: (texturePos, bias) => {
-            const texel = (bias
-                           ? `texture(${map}, ${getTexCoordExpression(texturePos)}, ${bias})`
-                           : `texture(${map}, ${getTexCoordExpression(texturePos)})`);
-            return TEXTURE_DECODE_FUNCS[encoding](texel);
-        },
-        setupInputs: (getInputSetter) => {
-            const setMap    = map.setupInputs(getInputSetter);
-            const setMatrix = matrix && matrix.setupInputs(getInputSetter);
-            return setMap && function(tex, mtx) {
-                if (tex) {
-                    setMap(tex);
-                    if (mtx && setMatrix) {
-                        setMatrix(mtx);
-                    }
-                }
-            };
-        }
-    };
-};
-
-export const setup2dTexture = (name, getTexturesetValue) => {
-    return {
-        appendDefinitions: (src) => src.push(`uniform sampler2D ${name};`),
-        getValueExpression: (texturePos) => `texture(${name}, ${texturePos})`,
-        setupInputs: (getUniformSetter) => {
-            const setMap = getUniformSetter(name);
-            return (textureSet) => {
-                const texture = getTexturesetValue(textureSet);
-                texture && setMap(texture.texture);
-            };
-        }
-    };
-};
-
 export class LayerRenderer {
 
-    constructor(scene, primitive, cfg, subGeometry, renderingAttributes) {
+    constructor(scene, primitive, cfg, subGeometry, renderingAttributes, programVariablesState) {
 
         const isVBO = renderingAttributes.isVBO;
         const pointsMaterial = scene.pointsMaterial;
@@ -116,14 +63,11 @@ export class LayerRenderer {
         const renderPassFlag            = cfg.renderPassFlag;
         const usePickParams             = cfg.usePickParams;
         const cullOnAlphaZero           = (!isVBO) && (!cfg.dontCullOnAlphaZero);
-        const appendVertexDefinitions   = cfg.appendVertexDefinitions;
         const filterIntensityRange      = cfg.filterIntensityRange && (primitive === "points") && pointsMaterial.filterIntensity;
         const transformClipPos          = cfg.transformClipPos;
         const isShadowProgram           = cfg.isShadowProgram;
-        const appendVertexOutputs       = cfg.appendVertexOutputs;
-        const appendFragmentDefinitions = cfg.appendFragmentDefinitions;
         const appendFragmentOutputs     = cfg.appendFragmentOutputs;
-        const setupInputs               = cfg.setupInputs;
+        const incPointSizeBy10          = cfg.incPointSizeBy10;
 
         const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || subGeometry;
         const setupPoints = (primitive === "points") && (! subGeometry);
@@ -224,7 +168,7 @@ export class LayerRenderer {
         const worldPosition = geoParams.attributes.position.world;
 
         const vertexOutputs = [ ];
-        appendVertexOutputs && appendVertexOutputs(vertexOutputs, "gl_Position");
+        programVariablesState.appendVertexOutputs(vertexOutputs);
 
         const flagTest = (isShadowProgram
                           ? `(${renderingAttributes.getFlag(renderPassFlag)} <= 0) || (${colorA}.a < 1.0)`
@@ -295,9 +239,8 @@ export class LayerRenderer {
                 src.push("uniform vec2 intensityRange;");
             }
 
-            appendVertexDefinitions && appendVertexDefinitions(src);
-
             renderingAttributes.appendVertexDefinitions(src);
+            programVariablesState.appendVertexDefinitions(src);
 
             src.push("void main(void) {");
 
@@ -337,6 +280,10 @@ export class LayerRenderer {
                 src.push("gl_PointSize = 1.0;");
             }
 
+            if (incPointSizeBy10 && (primitive === "points")) {
+                src.push("gl_PointSize += 10.0;");
+            }
+
             vertexOutputs.forEach(line => src.push(line));
 
             src.push("}");
@@ -345,6 +292,13 @@ export class LayerRenderer {
 
         const buildFragmentShader = () => {
             const src = [];
+
+            // CONSTANT DEFINITIONS
+            src.push("#define PI 3.14159265359");
+            src.push("#define RECIPROCAL_PI 0.31830988618");
+            src.push("#define RECIPROCAL_PI2 0.15915494");
+            src.push("#define EPSILON 1e-6");
+            src.push("#define saturate(a) clamp( a, 0.0, 1.0 )");
 
             if (getLogDepth) {
                 src.push("uniform float logDepthBufFC;");
@@ -370,8 +324,7 @@ export class LayerRenderer {
             }
 
             renderingAttributes.appendFragmentDefinitions(src);
-
-            appendFragmentDefinitions(src);
+            programVariablesState.appendFragmentDefinitions(src);
 
             src.push("vec4 sRGBToLinear(in vec4 value) {");
             src.push("  return vec4(mix(pow(value.rgb * 0.9478672986 + 0.0521327014, vec3(2.4)), value.rgb * 0.0773993808, vec3(lessThanEqual(value.rgb, vec3(0.04045)))), value.w);");
@@ -431,6 +384,7 @@ export class LayerRenderer {
         }
 
         const getInputSetter = makeInputSetters(gl, program.handle);
+        const inputSetters = programVariablesState.setupInputs(getInputSetter);
         const drawCall = renderingAttributes.makeDrawCall(getInputSetter);
 
         const uRenderPass = (! isShadowProgram) && getInputSetter("renderPass");
@@ -445,8 +399,6 @@ export class LayerRenderer {
             nearPlaneHeight: pointsMaterial.perspectivePoints && getInputSetter("nearPlaneHeight")
         };
         const uIntensityRange = filterIntensityRange && getInputSetter("intensityRange");
-
-        const setInputsState = setupInputs && setupInputs(getInputSetter);
 
         this.destroy = () => program.destroy();
         this.drawLayer = (frameCtx, layer, renderPass) => {
@@ -488,9 +440,6 @@ export class LayerRenderer {
                 uIntensityRange(tempVec2);
             }
 
-            const layerDrawState = layer.layerDrawState;
-            setInputsState && setInputsState(frameCtx, layerDrawState.textureSet);
-
             const viewMatrix = (isShadowProgram && frameCtx.shadowViewMatrix) || (usePickParams && frameCtx.pickViewMatrix) || camera.viewMatrix;
             const projMatrix = (isShadowProgram && frameCtx.shadowProjMatrix) || (usePickParams && frameCtx.pickProjMatrix) || camera.projMatrix;
             const eye        = (usePickParams && frameCtx.pickOrigin) || camera.eye;
@@ -507,6 +456,13 @@ export class LayerRenderer {
                 frameCtx.snapPickOrigin[1] = rtcOrigin[1];
                 frameCtx.snapPickOrigin[2] = rtcOrigin[2];
             }
+
+            const layerDrawState = layer.layerDrawState;
+
+            inputSetters.setUniforms({
+                legacyFrameCtx: frameCtx,
+                legacyTextureSet: layerDrawState.textureSet
+            });
 
             drawCall(frameCtx, layerDrawState, model.rotationMatrix, rtcViewMatrix, projMatrix, rtcOrigin, eye);
 
