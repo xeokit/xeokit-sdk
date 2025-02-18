@@ -25,7 +25,13 @@ export const createProgramVariablesState = function() {
                 vertAppenders.push((src) => needed && src.push(`in ${type} ${name};`));
                 attrSetters.push((getInputSetter) => {
                     const setValue = needed && getInputSetter(name);
-                    return setValue && ((state) => valueSetter(setValue, state));
+                    if (setValue) {
+                        const setter = (state) => valueSetter(setValue, state);
+                        setter.attributeHash = setValue.attributeHash;
+                        return setter;
+                    } else {
+                        return null;
+                    }
                 });
                 return {
                     toString: () => {
@@ -101,6 +107,7 @@ export const createProgramVariablesState = function() {
             const aSetters = attrSetters.map(i => i(getInputSetter)).filter(s => s);
             const uSetters = unifSetters.map(i => i(getInputSetter)).filter(s => s);
             return {
+                attributesHash: aSetters.map(a => a.attributeHash).filter(h => h).sort().join(", "),
                 setAttributes: (state) => aSetters.forEach(s => s(state)),
                 setUniforms:   (state) => uSetters.forEach(s => s(state))
             };
@@ -241,7 +248,7 @@ export const makeInputSetters = function(gl, handle) {
                 gl.vertexAttribDivisor(location, divisor);
             }
         };
-        activeInputs[attribute.name].attributeHash = `${attribute.name}:${location}`;
+        activeInputs[attribute.name].attributeHash = `${location.toString().padStart(1+Math.floor(Math.log10(numAttributes)), "0")}:${attribute.name}`;
     }
 
     const numBlocks = gl.getProgramParameter(handle, gl.ACTIVE_UNIFORM_BLOCKS);
