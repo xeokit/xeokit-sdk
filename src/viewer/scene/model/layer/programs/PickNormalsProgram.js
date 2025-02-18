@@ -1,6 +1,7 @@
 import {math} from "../../../math/math.js";
 
 export const PickNormalsProgram = function(programVariables, geometry, logarithmicDepthBufferEnabled, clipTransformSetup, isFlat) {
+    const vWorldPosition = programVariables.createVarying("vec3", "vWorldPosition", () => `${geometry.attributes.position.world}.xyz`);
     const vWorldNormal = programVariables.createVarying("vec3", "vWorldNormal", () => geometry.attributes.normal.world);
     const outNormal = programVariables.createOutput("highp ivec4", "outNormal");
     return {
@@ -9,7 +10,7 @@ export const PickNormalsProgram = function(programVariables, geometry, logarithm
         renderPassFlag: 3,  // PICK
         usePickParams: true,
         transformClipPos: clipTransformSetup.transformClipPos,
-        appendFragmentOutputs: (src, vWorldPosition) => {
+        appendFragmentOutputs: (src) => {
             const worldNormal = (isFlat
                                  ? `normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition})))`
                                  : vWorldNormal);

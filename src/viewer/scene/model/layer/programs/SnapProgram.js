@@ -6,6 +6,7 @@ export const SnapProgram = function(programVariables, geometry, isSnapInit, isPo
     const layerNumber      = programVariables.createUniform("int",  "layerNumber",      (set, state) => set(state.legacyFrameCtx.snapPickLayerNumber));
     const coordinateScaler = programVariables.createUniform("vec3", "coordinateScaler", (set, state) => set(state.legacyFrameCtx.snapPickCoordinateScale));
 
+    const vWorldPosition = programVariables.createVarying("vec3", "vWorldPosition", () => `${geometry.attributes.position.world}.xyz`);
     const vPickColor = programVariables.createVarying("vec4", "vPickColor", () => geometry.attributes.pickColor, "flat");
 
     const outCoords    = programVariables.createOutput("highp ivec4", "outCoords", 0);
@@ -20,7 +21,7 @@ export const SnapProgram = function(programVariables, geometry, isSnapInit, isPo
         usePickParams: true,
         transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - ${snapVectorA}) * ${snapInvVectorAB} * ${clipPos}.w, ${clipPos}.zw)`,
         dontCullOnAlphaZero: !isSnapInit,
-        appendFragmentOutputs: (src, vWorldPosition) => {
+        appendFragmentOutputs: (src) => {
             src.push(`${outCoords} = ivec4(${vWorldPosition} * ${coordinateScaler}.xyz, ${isSnapInit ? "-" : ""}${layerNumber});`);
             if (isSnapInit) {
                 src.push(`${outNormal} = ${isPoints ? "ivec4(1.0)" : `ivec4(normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition}))) * float(${math.MAX_INT}), 1.0)`};`);
