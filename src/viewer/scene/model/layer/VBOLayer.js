@@ -899,6 +899,7 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
                 },
                 pickColor:         attributes.pickColor,
                 position:          {
+                    clip:  "gl_Position",
                     view:  "viewPosition",
                     world: "worldPosition"
                 },
