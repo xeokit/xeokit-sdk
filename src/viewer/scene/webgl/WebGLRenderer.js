@@ -44,9 +44,15 @@ export const createProgramVariablesState = function() {
                     }
                 };
             },
-            createOutput: (type, name) => {
-                fragAppenders.push((src) => src.push(`out ${type} ${name};`));
-                return { toString: () => name };
+            createOutput: (type, name, location) => {
+                let needed = false;
+                fragAppenders.push((src) => needed && src.push(`layout(location = ${location || 0}) out ${type} ${name};`));
+                return {
+                    toString: () => {
+                        needed = true;
+                        return name;
+                    }
+                };
             },
             createUniform: (type, name, valueSetter) => {
                 let needed = false;
