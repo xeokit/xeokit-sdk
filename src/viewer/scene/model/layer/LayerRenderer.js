@@ -15,18 +15,6 @@ const iota = function(n) {
     return ret;
 };
 
-export const lazyShaderUniform = function(name, type) {
-    let needed = false;
-    return {
-        appendDefinitions: (src) => needed && src.push(`uniform ${type} ${name};`),
-        toString: () => {
-            needed = true;
-            return name;
-        },
-        setupInputs: (getUniformSetter) => needed && getUniformSetter(name)
-    };
-};
-
 export const lazyShaderVariable = function(name) {
     const variable = {
         toString: () => {
@@ -439,7 +427,7 @@ export class LayerRenderer {
 
             inputSetters.setUniforms({
                 legacyFrameCtx: frameCtx,
-                legacyTextureSet: layerDrawState.textureSet
+                layerDrawState: layerDrawState
             });
 
             drawCall(frameCtx, layerDrawState, model.rotationMatrix, rtcViewMatrix, projMatrix, rtcOrigin, eye);
