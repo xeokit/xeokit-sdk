@@ -1,8 +1,9 @@
 import {math} from "../../math/index.js";
 import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
-import {WEBGL_INFO} from "../../webglInfo.js";
+import {createLightSetup, createProgramVariablesState, setupTexture} from '../../webgl/WebGLRenderer.js';
+import {LinearEncoding} from "../../constants/constants.js";
 
-import {LayerRenderer, lazyShaderUniform, setupTexture} from "./LayerRenderer.js";
+import {LayerRenderer} from "./LayerRenderer.js";
 
 import { ColorProgram        } from "./programs/ColorProgram.js";
 import { ColorTextureProgram } from "./programs/ColorTextureProgram.js";
@@ -50,168 +51,38 @@ const safeInvVec3 = v => [ math.safeInv(v[0]), math.safeInv(v[1]), math.safeInv(
 
 export const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
 
-const createLightSetup = function(lightsState, setupCubes) {
-    const lightsStateUniform = (name, type, getUniformValue) => {
-        const uniform = lazyShaderUniform(name, type);
-        return {
-            appendDefinitions: uniform.appendDefinitions,
-            toString: uniform.toString,
-            setupLightsInputs: (getUniformSetter) => {
-                const setUniform = uniform.setupInputs(getUniformSetter);
-                return setUniform && (() => setUniform(getUniformValue()));
-            }
-        };
-    };
-
-    const lightAmbient = lightsStateUniform("lightAmbient", "vec4", () => lightsState.getAmbientColorAndIntensity());
-
-    const lights = lightsState.lights;
-    const directionals = lights.map((light, i) => {
-        const lightUniforms = {
-            color: lightsStateUniform(`lightColor${i}`, "vec4", () => {
-                const light = lights[i]; // in case it changed
-                tempVec4[0] = light.color[0];
-                tempVec4[1] = light.color[1];
-                tempVec4[2] = light.color[2];
-                tempVec4[3] = light.intensity;
-                return tempVec4;
-            }),
-            position:  lightsStateUniform(`lightPos${i}`, "vec3", () => lights[i].pos),
-            direction: lightsStateUniform(`lightDir${i}`, "vec3", () => lights[i].dir),
-        };
-
-        const withViewLightDir = getDirection => {
-            return {
-                appendDefinitions: (src) => Object.values(lightUniforms).forEach(u => u.appendDefinitions(src)),
-                glslLight: {
-                    getColor: () => `${lightUniforms.color}.rgb * ${lightUniforms.color}.a`,
-                    getDirection: (viewMatrix, viewPosition) => `normalize(${getDirection(viewMatrix, viewPosition)})`
-                },
-                setupLightsInputs: (getUniformSetter) => {
-                    const setters = Object.values(lightUniforms).map(u => u.setupLightsInputs(getUniformSetter)).filter(v => v);
-                    return () => setters.forEach(setState => setState());
-                }
-            };
-        };
-
-        if ((light.type === "dir") || (light.type === "spot")) {
-            if (light.space === "view") {
-                return withViewLightDir((viewMatrix, viewPosition) => lightUniforms.direction);
-            } else {
-                return withViewLightDir((viewMatrix, viewPosition) => `(${viewMatrix} * vec4(${lightUniforms.direction}, 0.0)).xyz`);
-            }
-        } else if (light.type === "point") {
-            if (light.space === "view") {
-                return withViewLightDir((viewMatrix, viewPosition) => `${viewPosition}.xyz - ${lightUniforms.position}`);
-            } else {
-                return withViewLightDir((viewMatrix, viewPosition) => `(${viewMatrix} * vec4(-${lightUniforms.position}, 0.0)).xyz`);
-            }
-        } else {
-            return null;
-        }
-    }).filter(v => v);
-
-    const setupCubeTexture = (name, getMaps) => {
-        const getValue = () => { const m = getMaps(); return (m.length > 0) && m[0]; };
-        const initMap = getValue();
-        const tex = initMap && setupTexture(name, "samplerCube", initMap.encoding, false);
-        return tex && {
-            appendDefinitions:     tex.appendDefinitions,
-            getTexCoordExpression: tex.getTexCoordExpression,
-            getValueExpression:    tex.getValueExpression,
-            setupInputs:           (getInputSetter) => {
-                const setInputsState = tex.setupInputs(getInputSetter);
-                return setInputsState && (() => setInputsState(getValue().texture));
-            }
-        };
-    };
-
-    const lightMap      = setupCubes && setupCubeTexture("light",      () => lightsState.lightMaps);
-    const reflectionMap = setupCubes && setupCubeTexture("reflection", () => lightsState.reflectionMaps);
-
+const createPickClipTransformSetup = function(programVariables, gl, renderBufferSize) {
+    const pickClipPos = programVariables.createUniform("vec2", "pickClipPos", (set, state) => set(state.legacyFrameCtx.pickClipPos));
+    const drawingBufferSize = programVariables.createUniform("vec2", "drawingBufferSize", (set, state) => {
+        tempVec2[0] = gl.drawingBufferWidth;
+        tempVec2[1] = gl.drawingBufferHeight;
+        set(tempVec2);
+    });
     return {
-        getHash: () => lightsState.getHash(),
-        appendDefinitions: (src) => {
-            lightAmbient.appendDefinitions(src);
-            directionals.forEach(light => light.appendDefinitions(src));
-            lightMap && lightMap.appendDefinitions(src);
-            reflectionMap && reflectionMap.appendDefinitions(src);
-        },
-        getAmbientColor: () => `${lightAmbient}.rgb * ${lightAmbient}.a`,
-        directionalLights: directionals.map(light => light.glslLight),
-        getIrradiance: lightMap && ((worldNormal) => `${lightMap.getValueExpression(worldNormal)}.rgb`),
-        getReflectionRadiance: reflectionMap && ((reflectVec, mipLevel) => `${reflectionMap.getValueExpression(reflectVec, mipLevel)}.rgb`),
-        setupInputs: (getUniformSetter) => {
-            const setAmbientInputState = lightAmbient.setupLightsInputs(getUniformSetter);
-            const setDirectionalsInputStates = directionals.map(light => light.setupLightsInputs(getUniformSetter));
-            const uLightMap      = lightMap && lightMap.setupInputs(getUniformSetter);
-            const uReflectionMap = reflectionMap && reflectionMap.setupInputs(getUniformSetter);
-            return function() {
-                setAmbientInputState && setAmbientInputState();
-                setDirectionalsInputStates.forEach(setState => setState());
-                uLightMap && uLightMap();
-                uReflectionMap && uReflectionMap();
-            };
-        }
+        transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - ${pickClipPos}) * ${drawingBufferSize} / ${renderBufferSize.toFixed(1)} * ${clipPos}.w, ${clipPos}.zw)`
     };
 };
 
-const createPickClipTransformSetup = function(gl, renderBufferSize) {
+const createSAOSetup = (programVariables, gl, sceneSAO) => {
+    const uSAOParams = programVariables.createUniform("vec4", "uSAOParams", (set, state) => {
+        tempVec4[0] = gl.drawingBufferWidth;  // viewportWidth
+        tempVec4[1] = gl.drawingBufferHeight; // viewportHeight
+        tempVec4[2] = sceneSAO.blendCutoff;
+        tempVec4[3] = sceneSAO.blendFactor;
+        set(tempVec4);
+    });
+    const uOcclusionTexture = setupTexture(programVariables, "sampler2D", "uOcclusionTexture", LinearEncoding, (set, state) => set(state.legacyFrameCtx.occlusionTexture));
     return {
-        appendDefinitions: (src) => {
-            src.push("uniform vec2 pickClipPos;");
-            src.push("uniform vec2 drawingBufferSize;");
-        },
-        transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize / ${renderBufferSize.toFixed(1)} * ${clipPos}.w, ${clipPos}.zw)`,
-        setupInputs: (getUniformSetter) => {
-            const uPickClipPos = getUniformSetter("pickClipPos");
-            const uDrawingBufferSize = getUniformSetter("drawingBufferSize");
-            return function(frameCtx) {
-                uPickClipPos(frameCtx.pickClipPos);
-                tempVec2[0] = gl.drawingBufferWidth;
-                tempVec2[1] = gl.drawingBufferHeight;
-                uDrawingBufferSize(tempVec2);
-            };
-        }
-    };
-};
-
-const createSAOSetup = (gl, sceneSAO) => {
-    return {
-        appendDefinitions: (src) => {
-            src.push("uniform sampler2D uOcclusionTexture;");
-            src.push("uniform vec4      uSAOParams;");
-            src.push("const float       unpackDownScale = 255. / 256.;");
-            src.push("const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
-            src.push("const vec4        unPackFactors = unpackDownScale / vec4( packFactors, 1. );");
-            src.push("float unpackRGBToFloat(const in vec4 v) {");
-            src.push("    return dot(v, unPackFactors);");
-            src.push("}");
-        },
         getAmbient: (gl_FragCoord) => {
             // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
             // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
-            const viewportWH  = "uSAOParams.xy";
+            const viewportWH  = `${uSAOParams}.xy`;
             const uv          = `${gl_FragCoord}.xy / ${viewportWH}`;
-            const blendCutoff = "uSAOParams.z";
-            const blendFactor = "uSAOParams.w";
-            return `(smoothstep(${blendCutoff}, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, ${uv}))) * ${blendFactor})`;
-        },
-        setupInputs: (getUniformSetter) => {
-            const uOcclusionTexture = getUniformSetter("uOcclusionTexture");
-            const uSAOParams        = getUniformSetter("uSAOParams");
-
-            return function(frameCtx) {
-                const sao = sceneSAO;
-                if (sao.possible) {
-                    tempVec4[0] = gl.drawingBufferWidth;  // viewportWidth
-                    tempVec4[1] = gl.drawingBufferHeight; // viewportHeight
-                    tempVec4[2] = sao.blendCutoff;
-                    tempVec4[3] = sao.blendFactor;
-                    uSAOParams(tempVec4);
-                    uOcclusionTexture(frameCtx.occlusionTexture);
-                }
-            };
+            const blendCutoff = `${uSAOParams}.z`;
+            const blendFactor = `${uSAOParams}.w`;
+            const unPackFactors = "(255. / 256.) / vec4(256. * 256. * 256., 256. * 256., 256., 1.)";
+            const unpackRGBToFloat = (v) => `dot(${v}, ${unPackFactors})`;
+            return `(smoothstep(${blendCutoff}, 1.0, ${unpackRGBToFloat(uOcclusionTexture(uv))}) * ${blendFactor})`;
         }
     };
 };
@@ -296,7 +167,9 @@ export const getRenderers = (function() {
             const wrapRenderer = function(createProgramSetup, subGeometry, isEager) {
                 const instantiate = function() {
                     const renderingAttributes = makeRenderingAttributes(subGeometry);
+                    const programVariablesState = createProgramVariablesState();
                     return createProgramSetup(
+                        programVariablesState.programVariables,
                         renderingAttributes.geometryParameters,
                         function(programSetup) {
                             return new LayerRenderer(
@@ -304,7 +177,8 @@ export const getRenderers = (function() {
                                 primitive,
                                 programSetup,
                                 subGeometry,
-                                renderingAttributes);
+                                renderingAttributes,
+                                programVariablesState);
                         });
                 };
                 let renderer = isEager && instantiate();
@@ -331,77 +205,78 @@ export const getRenderers = (function() {
 
             const gl = scene.canvas.gl;
 
-            const makeColorProgram = (geo, lights, sao) => ColorProgram(geo, scene.logarithmicDepthBufferEnabled, lights, sao, primitive);
+            const makeColorProgram = (vars, geo, lights, sao) => ColorProgram(vars, geo, scene.logarithmicDepthBufferEnabled, lights, sao, primitive);
 
-            const makePickDepthProgram   = (geo, isPoints) => PickDepthProgram(geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 1), isPoints);
-            const makePickMeshProgram    = (geo, isPoints) => PickMeshProgram(geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 1), isPoints);
-            const makePickNormalsProgram = (geo, isFlat)   => PickNormalsProgram(geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 3), isFlat);
+            const makePickDepthProgram   = (vars, geo) => PickDepthProgram(vars, geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(vars, gl, 1));
+            const makePickMeshProgram    = (vars, geo) => PickMeshProgram(vars, geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(vars, gl, 1));
+            const makePickNormalsProgram = (vars, geo, isFlat) => PickNormalsProgram(vars, geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(vars, gl, 3), isFlat);
 
-            const makeSnapProgram = (geo, isSnapInit, isPoints) => SnapProgram(geo, isSnapInit, isPoints);
+            const makeSnapProgram = (vars, geo, isSnapInit, isPoints) => SnapProgram(vars, geo, isSnapInit, isPoints);
 
             if (primitive === "points") {
                 cache[sceneId] = {
-                    colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((geo, c) => c(makeColorProgram(geo, null, null))) } } },
-                    occlusionRenderer:  lazy((geo, c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
-                    pickDepthRenderer:  lazy((geo, c) => c(makePickDepthProgram(geo, true))),
-                    pickMeshRenderer:   lazy((geo, c) => c(makePickMeshProgram(geo, true))),
+                    colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((vars, geo, c) => c(makeColorProgram(vars, geo, null, null))) } } },
+                    occlusionRenderer:  lazy((vars, geo, c) => c(OcclusionProgram(vars, scene.logarithmicDepthBufferEnabled))),
+                    pickDepthRenderer:  lazy((vars, geo, c) => c(makePickDepthProgram(vars, geo))),
+                    pickMeshRenderer:   lazy((vars, geo, c) => c(makePickMeshProgram(vars, geo))),
                     // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
                     // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
                     // drawShadow has been nop in VBO point layers
-                    // shadowRenderer:     instancing && lazy((geo, c) => c(ShadowProgram(scene.logarithmicDepthBufferEnabled))),
-                    silhouetteRenderer: lazy((geo, c) => c(SilhouetteProgram(geo, scene.logarithmicDepthBufferEnabled, true))),
-                    snapInitRenderer:   lazy((geo, c) => c(makeSnapProgram(geo, true,  true))),
-                    snapVertexRenderer: lazy((geo, c) => c(makeSnapProgram(geo, false, true)), { vertices: true })
+                    // shadowRenderer:     instancing && lazy((vars, geo, c) => c(ShadowProgram(scene.logarithmicDepthBufferEnabled))),
+                    silhouetteRenderer: lazy((vars, geo, c) => c(SilhouetteProgram(vars, geo, scene.logarithmicDepthBufferEnabled, true))),
+                    snapInitRenderer:   lazy((vars, geo, c) => c(makeSnapProgram(vars, geo, true,  true))),
+                    snapVertexRenderer: lazy((vars, geo, c) => c(makeSnapProgram(vars, geo, false, true)), { vertices: true })
                 };
             } else if (primitive === "lines") {
                 cache[sceneId] = {
-                    colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((geo, c) => c(makeColorProgram(geo, null, null))) } } },
-                    silhouetteRenderer: lazy((geo, c) => c(SilhouetteProgram(geo, scene.logarithmicDepthBufferEnabled, true))),
-                    snapInitRenderer:   lazy((geo, c) => c(makeSnapProgram(geo, true,  false))),
-                    snapEdgeRenderer:   lazy((geo, c) => c(makeSnapProgram(geo, false, false)), { vertices: false }),
-                    snapVertexRenderer: lazy((geo, c) => c(makeSnapProgram(geo, false, false)), { vertices: true })
+                    colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((vars, geo, c) => c(makeColorProgram(vars, geo, null, null))) } } },
+                    silhouetteRenderer: lazy((vars, geo, c) => c(SilhouetteProgram(vars, geo, scene.logarithmicDepthBufferEnabled, true))),
+                    snapInitRenderer:   lazy((vars, geo, c) => c(makeSnapProgram(vars, geo, true,  false))),
+                    snapEdgeRenderer:   lazy((vars, geo, c) => c(makeSnapProgram(vars, geo, false, false)), { vertices: false }),
+                    snapVertexRenderer: lazy((vars, geo, c) => c(makeSnapProgram(vars, geo, false, false)), { vertices: true })
                 };
             } else {
                 cache[sceneId] = {
                     colorRenderers: (function() {
                         // WARNING: Changing `useMaps' to `true' for DTX might have unexpected consequences while binding textures, as the DTX texture binding mechanism doesn't rely on `frameCtx.textureUnit` the way VBO does (see setSAORenderState);
-                        const lights = createLightSetup(scene._lightsState, false);
-                        const saoRenderers = function(sao) {
-                            const makeColorTextureProgram = (geo, useAlphaCutoff) => ColorTextureProgram(geo, scene, lights, sao, useAlphaCutoff, scene.gammaOutput); // If gammaOutput set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
+                        const createLights = vars => createLightSetup(vars, scene._lightsState);
+                        const createSAO = vars => createSAOSetup(vars, gl, scene.sao);
+                        const saoRenderers = function(useSao) {
+                            const makeColorTextureProgram = (vars, geo, useAlphaCutoff) => ColorTextureProgram(vars, geo, scene, createLights(vars), useSao && createSAO(vars), useAlphaCutoff, scene.gammaOutput); // If gammaOutput set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
                             return (isVBO
                                     ? {
-                                        "PBR": lazy((geo, c) => c(PBRProgram(geo, scene, createLightSetup(scene._lightsState, true), sao))),
+                                        "PBR": lazy((vars, geo, c) => c(PBRProgram(vars, geo, scene, createLights(vars), useSao && createSAO(vars)))),
                                         "texture": {
-                                            "alphaCutoff-": lazy((geo, c) => c(makeColorTextureProgram(geo, false))),
-                                            "alphaCutoff+": lazy((geo, c) => c(makeColorTextureProgram(geo, true)))
+                                            "alphaCutoff-": lazy((vars, geo, c) => c(makeColorTextureProgram(vars, geo, false))),
+                                            "alphaCutoff+": lazy((vars, geo, c) => c(makeColorTextureProgram(vars, geo, true)))
                                         },
                                         "vertex": {
-                                            "flat-": lazy((geo, c) => c(makeColorProgram(geo, lights, sao))),
-                                            "flat+": lazy((geo, c) => c(FlatColorProgram(geo, scene.logarithmicDepthBufferEnabled, lights, sao)))
+                                            "flat-": lazy((vars, geo, c) => c(makeColorProgram(vars, geo, createLights(vars), useSao && createSAO(vars)))),
+                                            "flat+": lazy((vars, geo, c) => c(FlatColorProgram(vars, geo, scene.logarithmicDepthBufferEnabled, createLights(vars), useSao && createSAO(vars))))
                                         }
                                     }
-                                    : { "vertex": { "flat-": lazy((geo, c) => c(makeColorProgram(geo, lights, sao))) } });
+                                    : { "vertex": { "flat-": lazy((vars, geo, c) => c(makeColorProgram(vars, geo, createLights(vars), useSao && createSAO(vars)))) } });
                         };
                         return {
-                            "sao-": saoRenderers(null),
-                            "sao+": saoRenderers(createSAOSetup(gl, scene.sao))
+                            "sao-": saoRenderers(false),
+                            "sao+": saoRenderers(true)
                         };
                     })(),
-                    depthRenderer:           lazy((geo, c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
+                    depthRenderer:           lazy((vars, geo, c) => c(DepthProgram(vars, geo, scene.logarithmicDepthBufferEnabled))),
                     edgesRenderers: {
-                        uniform: lazy((geo, c) => c(EdgesProgram(geo, scene.logarithmicDepthBufferEnabled, true)),  { vertices: false }),
-                        vertex:  lazy((geo, c) => c(EdgesProgram(geo, scene.logarithmicDepthBufferEnabled, false)), { vertices: false })
+                        uniform: lazy((vars, geo, c) => c(EdgesProgram(vars, geo, scene.logarithmicDepthBufferEnabled, true)),  { vertices: false }),
+                        vertex:  lazy((vars, geo, c) => c(EdgesProgram(vars, geo, scene.logarithmicDepthBufferEnabled, false)), { vertices: false })
                     },
-                    occlusionRenderer:       lazy((geo, c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
-                    pickDepthRenderer:       eager((geo, c) => c(makePickDepthProgram(geo, false))),
-                    pickMeshRenderer:        eager((geo, c) => c(makePickMeshProgram(geo, false))),
-                    pickNormalsFlatRenderer: eager((geo, c) => c(makePickNormalsProgram(geo, true))),
-                    pickNormalsRenderer:     isVBO && eager((geo, c) => c(makePickNormalsProgram(geo, false))),
-                    shadowRenderer:          isVBO && lazy((geo, c) => c(ShadowProgram(scene))),
-                    silhouetteRenderer:      eager((geo, c) => c(SilhouetteProgram(geo, scene.logarithmicDepthBufferEnabled, false))),
-                    snapInitRenderer:        eager((geo, c) => c(makeSnapProgram(geo, true,  false))),
-                    snapEdgeRenderer:        eager((geo, c) => c(makeSnapProgram(geo, false, false)), { vertices: false }),
-                    snapVertexRenderer:      eager((geo, c) => c(makeSnapProgram(geo, false, false)), { vertices: true })
+                    occlusionRenderer:       lazy((vars, geo, c) => c(OcclusionProgram(vars, scene.logarithmicDepthBufferEnabled))),
+                    pickDepthRenderer:       eager((vars, geo, c) => c(makePickDepthProgram(vars, geo))),
+                    pickMeshRenderer:        eager((vars, geo, c) => c(makePickMeshProgram(vars, geo))),
+                    pickNormalsFlatRenderer: eager((vars, geo, c) => c(makePickNormalsProgram(vars, geo, true))),
+                    pickNormalsRenderer:     isVBO && eager((vars, geo, c) => c(makePickNormalsProgram(vars, geo, false))),
+                    shadowRenderer:          isVBO && lazy((vars, geo, c) => c(ShadowProgram(vars, scene))),
+                    silhouetteRenderer:      eager((vars, geo, c) => c(SilhouetteProgram(vars, geo, scene.logarithmicDepthBufferEnabled, false))),
+                    snapInitRenderer:        eager((vars, geo, c) => c(makeSnapProgram(vars, geo, true,  false))),
+                    snapEdgeRenderer:        eager((vars, geo, c) => c(makeSnapProgram(vars, geo, false, false)), { vertices: false }),
+                    snapVertexRenderer:      eager((vars, geo, c) => c(makeSnapProgram(vars, geo, false, false)), { vertices: true })
                 };
             }
 
