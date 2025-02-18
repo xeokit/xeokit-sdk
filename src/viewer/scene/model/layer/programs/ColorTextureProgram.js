@@ -1,77 +1,54 @@
-import {lazyShaderUniform, setup2dTexture} from "../LayerRenderer.js";
+import {LinearEncoding, sRGBEncoding} from "../../../constants/constants.js";
+import {setupTexture} from "../../../webgl/WebGLRenderer.js";
 
-export const ColorTextureProgram = function(geometryParameters, scene, lightSetup, sao, useAlphaCutoff, gammaOutput) {
-    const colorTexture = setup2dTexture("uColorMap", textureSet => textureSet.colorTexture);
-    const gammaFactor = gammaOutput && lazyShaderUniform("gammaFactor", "float");
-    const materialAlphaCutoff = useAlphaCutoff && lazyShaderUniform("materialAlphaCutoff", "float");
+export const ColorTextureProgram = function(programVariables, geometry, scene, lightSetup, sao, useAlphaCutoff, gammaOutput) {
+    const colorTexture = setupTexture(programVariables, "sampler2D", "uColorMap", sRGBEncoding, (set, state) => {
+        const texture = state.legacyTextureSet.colorTexture;
+        texture && set(texture.texture);
+    });
+    const gammaFactor = gammaOutput && programVariables.createUniform("float", "gammaFactor", (set) => set(scene.gammaFactor));
+    const materialAlphaCutoff = useAlphaCutoff && programVariables.createUniform("float", "materialAlphaCutoff", (set, state) => set(state.legacyTextureSet.alphaCutoff));
+
+    const attributes = geometry.attributes;
+    const vViewPosition = programVariables.createVarying("vec3", "vViewPosition", () => `${attributes.position.view}.xyz`);
+    const vUV           = programVariables.createVarying("vec2", "vUV",           () => attributes.uv);
+    const vColor        = programVariables.createVarying("vec4", "vColor",        () => attributes.color);
+
+    const outColor = programVariables.createOutput("vec4", "outColor");
 
     return {
         programName: "ColorTexture",
         getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", !!gammaFactor, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
         getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 0,      // COLOR_OPAQUE | COLOR_TRANSPARENT
-        appendVertexDefinitions: (src) => {
-            src.push("out vec4 vViewPosition;");
-            src.push("out vec2 vUV;");
-            src.push("out vec4 vColor;");
-        },
-        appendVertexOutputs: (src) => {
-            src.push(`vViewPosition = ${geometryParameters.attributes.position.view};`);
-            src.push(`vUV = ${geometryParameters.attributes.uv};`);
-            src.push(`vColor = ${geometryParameters.attributes.color};`);
-        },
-        appendFragmentDefinitions: (src) => {
-            src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
-            src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
-            src.push("}");
-
-            colorTexture.appendDefinitions(src);
-            gammaFactor && gammaFactor.appendDefinitions(src);
-            materialAlphaCutoff && materialAlphaCutoff.appendDefinitions(src);
-            lightSetup.appendDefinitions(src);
-            sao && sao.appendDefinitions(src);
-
-            src.push("in vec4 vViewPosition;");
-            src.push("in vec2 vUV;");
-            src.push("in vec4 vColor;");
-            src.push("out vec4 outColor;");
-        },
         appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr) => {
-            src.push("vec3 viewNormal = normalize(cross(dFdx(vViewPosition.xyz), dFdy(vViewPosition.xyz)));");
+            src.push(`vec3 viewNormal = normalize(cross(dFdx(${vViewPosition}), dFdy(${vViewPosition})));`);
             src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
             lightSetup.directionalLights.forEach(light => {
-                src.push(`reflectedColor += max(dot(-viewNormal, ${light.getDirection(geometryParameters.viewMatrix, "vViewPosition")}), 0.0) * ${light.getColor()};`);
+                src.push(`reflectedColor += max(dot(viewNormal, ${light.getDirection(geometry.viewMatrix, vViewPosition)}), 0.0) * ${light.getColor()};`);
             });
 
-            src.push(`vec4 color = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * ${sliceColorOr("vColor")};`);
+            src.push(`vec4 color = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * ${sliceColorOr(vColor)};`);
 
-            src.push(`vec4 sampleColor = sRGBToLinear(${colorTexture.getValueExpression("vUV")});`);
+            src.push(`vec4 sampleColor = ${colorTexture(vUV)};`);
 
             if (materialAlphaCutoff) {
                 src.push(`if (sampleColor.a < ${materialAlphaCutoff}) { discard; }`);
             }
 
             src.push("vec4 colorTexel = color * sampleColor;");
-            src.push("outColor = vec4(colorTexel.rgb" + (sao ? (" * " + sao.getAmbient(gl_FragCoord)) : "") + ", color.a);");
+            src.push(`${outColor} = vec4(colorTexel.rgb${(sao ? (" * " + sao.getAmbient(gl_FragCoord)) : "")}, color.a);`);
 
             if (gammaFactor) {
-                src.push(`outColor = linearToGamma(outColor, ${gammaFactor});`);
+                const linearToGamma = programVariables.createFragmentDefinition(
+                    "linearToGamma",
+                    (name, src) => {
+                        src.push(`vec4 ${name}(in vec4 value, in float gammaFactor) {`);
+                        src.push("  return vec4(pow(value.xyz, vec3(1.0 / gammaFactor)), value.w);");
+                        src.push("}");
+                    });
+                src.push(`${outColor} = ${linearToGamma}(${outColor}, ${gammaFactor});`);
             }
-        },
-        setupInputs: (getUniformSetter) => {
-            const setColorMap          = colorTexture.setupInputs(getUniformSetter);
-            const setGammaFactor       = gammaFactor && gammaFactor.setupInputs(getUniformSetter);
-            const setLightsRenderState = lightSetup.setupInputs(getUniformSetter);
-            const setSAOState          = sao && sao.setupInputs(getUniformSetter);
-            const setAlphaCutoff       = materialAlphaCutoff && materialAlphaCutoff.setupInputs(getUniformSetter);
-
-            return (frameCtx, textureSet) => {
-                setColorMap(textureSet, frameCtx);
-                setGammaFactor && setGammaFactor(scene.gammaFactor);
-                setLightsRenderState(frameCtx);
-                setSAOState && setSAOState(frameCtx);
-                setAlphaCutoff && setAlphaCutoff(textureSet.alphaCutoff);
-            };
         },
 
         incrementDrawState: true
