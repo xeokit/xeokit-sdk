@@ -1,46 +1,31 @@
-export const ColorProgram = function(geometryParameters, logarithmicDepthBufferEnabled, lightSetup, sao, primitive) {
+export const ColorProgram = function(programVariables, geometry, logarithmicDepthBufferEnabled, lightSetup, sao, primitive) {
+    const vColor = programVariables.createVarying("vec4", "vColor", () => {
+        const attributes = geometry.attributes;
+        const color = (primitive === "points") ? `vec4(${attributes.color}.rgb, 1.0)` : `${attributes.color}`;
+        if (lightSetup) {
+            const lightComponents = [
+                lightSetup.getAmbientColor()
+            ].concat(
+                lightSetup.directionalLights.map(
+                    light => `max(dot(${attributes.normal.view}, ${light.getDirection(geometry.viewMatrix, attributes.position.view)}), 0.0) * ${light.getColor()}`));
+            return `vec4(${lightComponents.join(" + ")}, 1) * ${color}`;
+        } else {
+            return color;
+        }
+    });
+    const outColor = programVariables.createOutput("vec4", "outColor");
     return {
         programName: "Color",
         getHash: () => [lightSetup ? lightSetup.getHash() : "-", sao ? "sao" : "nosao"],
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => ((primitive !== "points") && (primitive !== "lines")) ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth),
         renderPassFlag: 0,  // COLOR_OPAQUE | COLOR_TRANSPARENT
-        appendVertexDefinitions: (src) => {
-            lightSetup && lightSetup.appendDefinitions(src);
-            src.push("out vec4 vColor;");
-        },
-        appendVertexOutputs: (src) => {
-            const color = geometryParameters.attributes.color;
-            const vColor = (primitive === "points") ? `vec4(${color}.rgb, 1.0)` : `${color}`;
-            if (lightSetup) {
-                src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-                lightSetup.directionalLights.forEach(light => {
-                    src.push(`reflectedColor += max(dot(-${geometryParameters.attributes.normal.view}, ${light.getDirection(geometryParameters.viewMatrix, geometryParameters.attributes.position.view)}), 0.0) * ${light.getColor()};`);
-                });
-                src.push(`vColor = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * ${vColor};`);
-            } else {
-                src.push(`vColor = ${vColor};`);
-            }
-        },
-        appendFragmentDefinitions: (src) => {
-            sao && sao.appendDefinitions(src);
-            src.push("in vec4 vColor;");
-            src.push("out vec4 outColor;");
-        },
         appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr) => {
             if ((primitive === "points") || (primitive === "lines")) {
-                src.push("outColor = vColor;");
+                src.push(`${outColor} = ${vColor};`);
             } else {
-                src.push(`vec4 fragColor = ${sliceColorOr("vColor")};`);
-                src.push("outColor = " + (sao ? ("vec4(fragColor.rgb * " + sao.getAmbient(gl_FragCoord) + ", fragColor.a)") : "fragColor") + ";");
+                src.push(`vec4 fragColor = ${sliceColorOr(vColor)};`);
+                src.push(`${outColor} = ${(sao ? (`vec4(fragColor.rgb * ${sao.getAmbient(gl_FragCoord)}, fragColor.a)`) : "fragColor")};`);
             }
-        },
-        setupInputs: (getUniformSetter) => {
-            const setLightsRenderState = lightSetup && lightSetup.setupInputs(getUniformSetter);
-            const setSAORenderState = sao && sao.setupInputs(getUniformSetter);
-            return (frameCtx, textureSet) => {
-                setLightsRenderState && setLightsRenderState(frameCtx);
-                setSAORenderState && setSAORenderState(frameCtx);
-            };
         },
 
         filterIntensityRange: true,
