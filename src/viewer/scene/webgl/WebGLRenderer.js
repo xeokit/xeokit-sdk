@@ -201,7 +201,9 @@ export const createSectionPlanesSetup = function(programVariables, sectionPlanes
         const sectionPlaneUniform = (type, postfix, getValue) => {
             return programVariables.createUniform(type, `sectionPlane${postfix}${i}`, (set, state) => {
                 const sectionPlanes = sectionPlanesState.sectionPlanes;
-                const active = (i < sectionPlanes.length) && state.mesh.renderFlags.sectionPlanesActivePerLayer[i];
+                const numSectionPlanes = sectionPlanes.length;
+                const baseIndex = (state.mesh.layerIndex || 0) * numSectionPlanes;
+                const active = (i < numSectionPlanes) && state.mesh.renderFlags.sectionPlanesActivePerLayer[baseIndex + i];
                 return getValue(set, active, sectionPlanes[i], state.mesh.origin);
             });
         };
