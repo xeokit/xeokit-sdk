@@ -64,11 +64,12 @@ export const createProgramVariablesState = function() {
                     }
                 };
             },
-            createVarying: (type, name, genValueCode) => {
+            createVarying: (type, name, genValueCode, interpolationQualifier) => {
                 let needed = false;
-                vertAppenders.push((src) => needed && src.push(`out ${type} ${name};`));
+                const intp = interpolationQualifier ? (interpolationQualifier + " ") : "";
+                vertAppenders.push((src) => needed && src.push(`${intp}out ${type} ${name};`));
                 vOutAppenders.push((src) => needed && src.push(`${name} = ${genValueCode()};`));
-                fragAppenders.push((src) => needed && src.push(`in  ${type} ${name};`));
+                fragAppenders.push((src) => needed && src.push(`${intp}in  ${type} ${name};`));
                 return {
                     toString: () => {
                         needed = true;
