@@ -176,7 +176,6 @@ export class LayerRenderer {
 
         const buildVertexShader = () => {
             const src = [];
-            renderingAttributes.appendVertexDefinitions(src);
             programVariablesState.appendVertexDefinitions(src);
             src.push("void main(void) {");
             vertexData.forEach(line => src.push(line));
@@ -250,9 +249,7 @@ export class LayerRenderer {
             return;
         }
 
-        const getInputSetter = makeInputSetters(gl, program.handle);
-        const inputSetters = programVariablesState.setupInputs(getInputSetter);
-        const drawCall = renderingAttributes.makeDrawCall(getInputSetter);
+        const inputSetters = programVariablesState.setupInputs(makeInputSetters(gl, program.handle));
 
         this.destroy = () => program.destroy();
         this.drawLayer = (frameCtx, layer, renderPass) => {
@@ -284,7 +281,7 @@ export class LayerRenderer {
 
             const layerDrawState = layer.layerDrawState;
 
-            inputSetters.setUniforms({
+            const state = {
                 legacyFrameCtx: frameCtx,
                 layerDrawState: layerDrawState,
                 mesh: {
@@ -302,9 +299,9 @@ export class LayerRenderer {
                     viewMatrix:       rtcViewMatrix,
                     viewNormalMatrix: camera.viewNormalMatrix
                 }
-            });
+            };
 
-            drawCall(layerDrawState, inputSetters);
+            renderingAttributes.drawCall(layerDrawState, inputSetters, state);
 
             if (incrementDrawState) {
                 frameCtx.drawElements++;
