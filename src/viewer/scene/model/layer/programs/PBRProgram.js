@@ -120,7 +120,7 @@ export const PBRProgram = function(programVariables, geometry, scene, lightSetup
         renderPassFlag: 0,      // COLOR_OPAQUE | COLOR_TRANSPARENT
         clippingCaps: scene._sectionPlanesState.clippingCaps && outColor,
         incrementDrawState: true,
-        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr) => {
+        appendFragmentOutputs: (src, gl_FragCoord) => {
             src.push("vec3 reflDiff = vec3(0.0);");
             src.push("vec3 reflSpec = vec3(0.0);");
 
