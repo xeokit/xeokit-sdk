@@ -52,7 +52,7 @@ const safeInvVec3 = v => [ math.safeInv(v[0]), math.safeInv(v[1]), math.safeInv(
 export const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
 
 const createPickClipTransformSetup = function(programVariables, gl, renderBufferSize) {
-    const pickClipPos = programVariables.createUniform("vec2", "pickClipPos", (set, state) => set(state.legacyFrameCtx.pickClipPos));
+    const pickClipPos = programVariables.createUniform("vec2", "pickClipPos", (set, state) => set(state.view.pickClipPos));
     const drawingBufferSize = programVariables.createUniform("vec2", "drawingBufferSize", (set, state) => {
         tempVec2[0] = gl.drawingBufferWidth;
         tempVec2[1] = gl.drawingBufferHeight;
