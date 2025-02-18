@@ -107,7 +107,10 @@ export class LayerRenderer {
             };
         })();
 
-        const vWorldPosition = lazyShaderVariable("vWorldPosition");
+        const geoParams = renderingAttributes.geometryParameters;
+        const worldPosition = geoParams.attributes.position.world;
+        const vHighpWorldPosition = programVariablesState.programVariables.createVarying("highp vec3", "vHighpWorldPosition", () => `${worldPosition}.xyz`);
+
         const sliceColorOr   = (clipping
                                 ? (function() {
                                     const sliceColorOr = color => {
@@ -118,10 +121,8 @@ export class LayerRenderer {
                                 })()
                                 : (color => color));
 
-        const geoParams = renderingAttributes.geometryParameters;
-
         const fragmentOutputs = [ ];
-        appendFragmentOutputs(fragmentOutputs, vWorldPosition, "gl_FragCoord", sliceColorOr);
+        appendFragmentOutputs(fragmentOutputs, "gl_FragCoord", sliceColorOr);
 
         const fragmentClippingLines = (function() {
             const src = [ ];
@@ -131,7 +132,7 @@ export class LayerRenderer {
                     src.push("  bool sliced = false;");
                 }
                 src.push("  if (vClippable > 0.0) {");
-                src.push("      float dist = " + clipping.getDistance(vWorldPosition) + ";");
+                src.push("      float dist = " + clipping.getDistance(vHighpWorldPosition) + ";");
                 if (clippingCaps) {
                     src.push("  if (dist > (0.002 * vClipPositionW)) { discard; }");
                     src.push("  if (dist > 0.0) { ");
@@ -154,7 +155,6 @@ export class LayerRenderer {
         })();
 
         const colorA = geoParams.attributes.color;
-        const worldPosition = geoParams.attributes.position.world;
 
         const vertexOutputs = [ ];
         programVariablesState.appendVertexOutputs(vertexOutputs);
@@ -213,10 +213,6 @@ export class LayerRenderer {
                 }
             }
 
-            if (vWorldPosition.needed) {
-                src.push(`out highp vec3 ${vWorldPosition};`);
-            }
-
             if (setupPoints) {
                 src.push("uniform float pointSize;");
                 if (pointsMaterial.perspectivePoints) {
@@ -245,9 +241,6 @@ export class LayerRenderer {
                 }
             }
 
-            if (vWorldPosition.needed) {
-                src.push(`${vWorldPosition} = ${worldPosition}.xyz;`);
-            }
             if (clipping) {
                 src.push(`vClippable = ${renderingAttributes.getClippable()};`);
                 if (clippingCaps) {
@@ -297,9 +290,6 @@ export class LayerRenderer {
                 }
             }
 
-            if (vWorldPosition.needed) {
-                src.push(`in highp vec3 ${vWorldPosition};`);
-            }
             if (clipping) {
                 src.push("flat in float vClippable;");
                 if (clippingCaps) {
