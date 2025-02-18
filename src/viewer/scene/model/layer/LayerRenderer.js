@@ -15,18 +15,6 @@ const iota = function(n) {
     return ret;
 };
 
-export const lazyShaderAttribute = function(name, type) {
-    let needed = false;
-    return {
-        appendDefinitions: (src) => needed && src.push(`in ${type} ${name};`),
-        toString: () => {
-            needed = true;
-            return name;
-        },
-        setupInputs: (getInputSetter) => needed && getInputSetter(name)
-    };
-};
-
 export const lazyShaderUniform = function(name, type) {
     let needed = false;
     return {
@@ -385,7 +373,7 @@ export class LayerRenderer {
 
         const getInputSetter = makeInputSetters(gl, program.handle);
         const inputSetters = programVariablesState.setupInputs(getInputSetter);
-        const drawCall = renderingAttributes.makeDrawCall(getInputSetter);
+        const drawCall = renderingAttributes.makeDrawCall(getInputSetter, inputSetters);
 
         const uRenderPass = (! isShadowProgram) && getInputSetter("renderPass");
         const uLogDepthBufFC = getLogDepth && getInputSetter("logDepthBufFC");
