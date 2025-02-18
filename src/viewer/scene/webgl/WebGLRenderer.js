@@ -128,7 +128,8 @@ export const createProgramVariablesState = function() {
         appendVertexDefinitions:   (src) => vertAppenders.forEach(a => a(src)),
         appendVertexOutputs:       (src) => vOutAppenders.forEach(a => a(src)),
         appendFragmentDefinitions: (src) => fragAppenders.forEach(a => a(src)),
-        setupInputs: (getInputSetter) => {
+        setupInputs: (gl, handle) => {
+            const getInputSetter = makeInputSetters(gl, handle);
             const aSetters = attrSetters.map(i => i(getInputSetter)).filter(s => s);
             const uSetters = unifSetters.map(i => i(getInputSetter)).filter(s => s);
             return {
@@ -262,7 +263,7 @@ export const setupTexture = (programVariables, type, name, encoding, getTexture,
     return sample;
 };
 
-export const makeInputSetters = function(gl, handle) {
+const makeInputSetters = function(gl, handle) {
     const activeInputs = { };
 
     const numAttributes = gl.getProgramParameter(handle, gl.ACTIVE_ATTRIBUTES);
