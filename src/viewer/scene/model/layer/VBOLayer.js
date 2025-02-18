@@ -1,6 +1,6 @@
 import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
 import {getColSilhEdgePickFlags, getRenderers, Layer} from "./Layer.js";
-import {lazyShaderUniform, lazyShaderVariable} from "./LayerRenderer.js";
+import {lazyShaderVariable} from "./LayerRenderer.js";
 
 import {math} from "../../math/math.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../compression.js";
@@ -872,7 +872,7 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing,
     const uvA = lazyShaderVariable("aUv");
     const viewNormal = lazyShaderVariable("viewNormal");
     const worldNormal = lazyShaderVariable("worldNormal");
-    const uvDecodeMatrix = lazyShaderUniform("uvDecodeMatrix", "mat3");
+    const uvDecodeMatrix = programVariables.createUniform("mat3", "uvDecodeMatrix", (set, state) => set(state.layerDrawState.uvDecodeMatrix));
 
     const matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
 
@@ -917,7 +917,6 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing,
         getClippable: () => `((int(${attributes.flags}) >> 16 & 0xF) == 1) ? 1.0 : 0.0`,
 
         appendVertexDefinitions: (src) => {
-            uvDecodeMatrix.appendDefinitions(src);
             matricesUniformBlockLines().forEach(line => src.push(line));
 
             if (needNormal()) {
@@ -957,7 +956,6 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing,
 
         makeDrawCall: function(getInputSetter, inputSetters) {
             const uMatricesBlock  = getInputSetter("Matrices");
-            const setUVDecodeMatrix = uvDecodeMatrix.setupInputs(getInputSetter);
             return function(frameCtx, layerDrawState, sceneModelMat, viewMatrix, projMatrix, rtcOrigin, eye) {
                 let offset = 0;
                 const mat4Size = 4 * 4;
@@ -970,8 +968,6 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing,
                     matricesUniformBlockBufferData.set(scene.camera.viewNormalMatrix, offset += mat4Size);
                 }
                 uMatricesBlock(matricesUniformBlockBufferData);
-                setUVDecodeMatrix && setUVDecodeMatrix(layerDrawState.uvDecodeMatrix);
-
                 layerDrawState.drawCall(inputSetters, subGeometry);
             };
         }
