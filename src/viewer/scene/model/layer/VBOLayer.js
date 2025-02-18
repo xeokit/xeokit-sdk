@@ -1,6 +1,6 @@
 import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
 import {getColSilhEdgePickFlags, getRenderers, Layer} from "./Layer.js";
-import {lazyShaderAttribute, lazyShaderUniform, lazyShaderVariable} from "./LayerRenderer.js";
+import {lazyShaderUniform, lazyShaderVariable} from "./LayerRenderer.js";
 
 import {math} from "../../math/math.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../compression.js";
@@ -550,7 +550,7 @@ export class VBOLayer extends Layer {
         const solid = (primitive === "solid");
         return {
             renderers: getRenderers(scene, instancing ? "instancing" : "batching", primitive, true,
-                                    subGeometry => makeVBORenderingAttributes(scene, instancing, primitive, subGeometry)),
+                                    (programVariables, subGeometry) => makeVBORenderingAttributes(programVariables, scene, instancing, primitive, subGeometry)),
             edgesColorOpaqueAllowed: () => true,
             solid: solid,
             sortId: (((primitive === "points") ? "Points" : ((primitive === "lines") ? "Lines" : "Triangles"))
@@ -759,8 +759,8 @@ export class VBOLayer extends Layer {
                 textureSet:            textureSet,
                 colorTextureSupported: uvSetup && textureSet && textureSet.colorTexture,
                 pbrSupported:          uvSetup && textureSet && textureSet.colorTexture && normalsBuf && metallicRoughnessBuf && textureSet.metallicRoughnessTexture,
-                drawCall: (inputs, subGeometry) => {
-                    const hash = inputs.attributesHash;
+                drawCall: (inputSetters, subGeometry) => {
+                    const hash = inputSetters.attributesHash;
                     if (! (hash in drawCallCache)) {
                         drawCallCache[hash] = [ null, null, null ];
                     }
@@ -769,21 +769,18 @@ export class VBOLayer extends Layer {
                     if (! inputsCache[cacheKey]) {
                         const vao = gl.createVertexArray();
                         gl.bindVertexArray(vao);
-
-                        const bindAttribute = (a, b, setDivisor) => b && a(b, setDivisor && 1);
-
-                        modelMatrixColBufs       && modelMatrixColBufs.forEach(      (b, i) => inputs.aModelMatrixCol[i]       && bindAttribute(inputs.aModelMatrixCol[i],       b, true));
-                        modelNormalMatrixColBufs && modelNormalMatrixColBufs.forEach((b, i) => inputs.aModelNormalMatrixCol[i] && bindAttribute(inputs.aModelNormalMatrixCol[i], b, true));
-
-                        const a = inputs.attributes;
-                        bindAttribute(a.position, positionsBuf);
-                        a.uV                && bindAttribute(a.uV,                uvSetup && uvSetup.buf);
-                        a.normal            && bindAttribute(a.normal,            normalsBuf);
-                        a.metallicRoughness && bindAttribute(a.metallicRoughness, metallicRoughnessBuf, instancing);
-                        a.color             && bindAttribute(a.color,             colorsBuf,            instancing && (primitive !== "points"));
-                        a.flags             && bindAttribute(a.flags,             flagsBuf,             instancing);
-                        a.offset            && bindAttribute(a.offset,            offsetsBuf,           instancing);
-                        a.pickColor         && bindAttribute(a.pickColor,         pickColorsBuf,        instancing);
+                        inputSetters.setAttributes({
+                            positionsBuf:             positionsBuf,
+                            normalsBuf:               normalsBuf,
+                            colorsBuf:                colorsBuf,
+                            pickColorsBuf:            pickColorsBuf,
+                            uvBuf:                    uvSetup && uvSetup.buf,
+                            metallicRoughnessBuf:     metallicRoughnessBuf,
+                            flagsBuf:                 flagsBuf,
+                            offsetsBuf:               offsetsBuf,
+                            modelMatrixColBufs:       modelMatrixColBufs,
+                            modelNormalMatrixColBufs: modelNormalMatrixColBufs
+                        });
 
                         const drawer = (function() {
                             // TODO: Use drawElements count and offset to draw only one entity
@@ -851,24 +848,31 @@ export class VBOLayer extends Layer {
     }
 }
 
-const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeometry) {
-    const attributes = {
-        position:          lazyShaderAttribute("positionA",         "vec3"),
-        normal:            lazyShaderAttribute("normalA",           "vec3"),
-        color:             lazyShaderAttribute("colorA",            "vec4"),
-        pickColor:         lazyShaderAttribute("pickColor",         "vec4"),
-        uV:                lazyShaderAttribute("uvApremul",         "vec2"),
-        metallicRoughness: lazyShaderAttribute("metallicRoughness", "vec2"),
-        flags:             lazyShaderAttribute("flagsA",            "float"),
-        offset:            lazyShaderAttribute("offset",            "vec3")
+const makeVBORenderingAttributes = function(programVariables, scene, instancing, primitive, subGeometry) {
+    const createAttribute = (type, name, getBuffer, setDivisor) => {
+        return programVariables.createAttribute(type, name, (set, state) => {
+            const arrayBuf = getBuffer(state);
+            arrayBuf && set(arrayBuf, setDivisor && 1);
+        });
     };
+
+    const attributes = {
+        position:          createAttribute("vec3",  "positionA",         (state) => state.positionsBuf),
+        normal:            createAttribute("vec3",  "normalA",           (state) => state.normalsBuf),
+        color:             createAttribute("vec4",  "colorA",            (state) => state.colorsBuf,            instancing && (primitive !== "points")),
+        pickColor:         createAttribute("vec4",  "pickColor",         (state) => state.pickColorsBuf,        instancing),
+        uV:                createAttribute("vec2",  "uvApremul",         (state) => state.uvBuf),
+        metallicRoughness: createAttribute("vec2",  "metallicRoughness", (state) => state.metallicRoughnessBuf, instancing),
+        flags:             createAttribute("float", "flagsA",            (state) => state.flagsBuf,             instancing),
+        offset:            createAttribute("vec3",  "offset",            (state) => state.offsetsBuf,           instancing)
+    };
+    const modelMatrixCol       = iota(3).map(i => createAttribute("vec4", "modelMatrixCol"       + i, (state) => state.modelMatrixColBufs[i],       true));
+    const modelNormalMatrixCol = iota(3).map(i => createAttribute("vec4", "modelNormalMatrixCol" + i, (state) => state.modelNormalMatrixColBufs[i], true));
 
     const uvA = lazyShaderVariable("aUv");
     const viewNormal = lazyShaderVariable("viewNormal");
     const worldNormal = lazyShaderVariable("worldNormal");
     const uvDecodeMatrix = lazyShaderUniform("uvDecodeMatrix", "mat3");
-    const modelMatrixCol       = iota(3).map(i => lazyShaderAttribute("modelMatrixCol"       + i, "vec4"));
-    const modelNormalMatrixCol = iota(3).map(i => lazyShaderAttribute("modelNormalMatrixCol" + i, "vec4"));
 
     const matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
 
@@ -913,11 +917,7 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
         getClippable: () => `((int(${attributes.flags}) >> 16 & 0xF) == 1) ? 1.0 : 0.0`,
 
         appendVertexDefinitions: (src) => {
-            Object.values(attributes).forEach(a => a.appendDefinitions(src));
-
             uvDecodeMatrix.appendDefinitions(src);
-            modelMatrixCol.forEach(u => u.appendDefinitions(src));
-            modelNormalMatrixCol.forEach(u => u.appendDefinitions(src));
             matricesUniformBlockLines().forEach(line => src.push(line));
 
             if (needNormal()) {
@@ -955,26 +955,9 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
 
         appendFragmentDefinitions: (src) => matricesUniformBlockLines().forEach(line => src.push(line)),
 
-        makeDrawCall: function(getInputSetter) {
+        makeDrawCall: function(getInputSetter, inputSetters) {
             const uMatricesBlock  = getInputSetter("Matrices");
             const setUVDecodeMatrix = uvDecodeMatrix.setupInputs(getInputSetter);
-
-            const attributeSetters = { };
-            Object.keys(attributes).forEach(k => { attributeSetters[k] = attributes[k].setupInputs(getInputSetter); });
-            const inputs = {
-                attributes:            attributeSetters,
-                aModelMatrixCol:       modelMatrixCol.map(u => u.setupInputs(getInputSetter)),
-                aModelNormalMatrixCol: modelNormalMatrixCol.map(u => u.setupInputs(getInputSetter))
-            };
-
-            inputs.attributesHash = JSON.stringify((function() {
-                const attributeHashes = [ ];
-                (function rec(o) {
-                    Object.values(o).forEach(v => { if (v) { const h = v.attributeHash; if (h) attributeHashes.push(h); else rec(v); } });
-                })(inputs);
-                return attributeHashes;
-            })());
-
             return function(frameCtx, layerDrawState, sceneModelMat, viewMatrix, projMatrix, rtcOrigin, eye) {
                 let offset = 0;
                 const mat4Size = 4 * 4;
@@ -989,7 +972,7 @@ const makeVBORenderingAttributes = function(scene, instancing, primitive, subGeo
                 uMatricesBlock(matricesUniformBlockBufferData);
                 setUVDecodeMatrix && setUVDecodeMatrix(layerDrawState.uvDecodeMatrix);
 
-                layerDrawState.drawCall(inputs, subGeometry);
+                layerDrawState.drawCall(inputSetters, subGeometry);
             };
         }
     };
