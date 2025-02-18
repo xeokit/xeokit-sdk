@@ -1,7 +1,7 @@
 import {isPerspectiveMatrix} from "./Layer.js";
 import {createRTCViewMat, math} from "../../math/index.js";
 import {Program} from "../../webgl/Program.js";
-import {createSectionPlanesSetup, makeInputSetters} from "../../webgl/WebGLRenderer.js";
+import {createSectionPlanesSetup} from "../../webgl/WebGLRenderer.js";
 
 const tempVec2 = math.vec2();
 const tempVec3 = math.vec3();
@@ -250,7 +250,7 @@ export class LayerRenderer {
             return;
         }
 
-        const inputSetters = programVariablesState.setupInputs(makeInputSetters(gl, program.handle));
+        const inputSetters = programVariablesState.setupInputs(gl, program.handle);
 
         this.destroy = () => program.destroy();
         this.drawLayer = (frameCtx, layer, renderPass) => {
