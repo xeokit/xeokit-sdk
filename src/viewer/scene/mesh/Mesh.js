@@ -8,7 +8,7 @@ import {math} from '../math/math.js';
 import {createRTCViewMat} from '../math/rtcCoords.js';
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
-import {createProgramVariablesState, createSectionPlanesSetup, makeInputSetters} from '../webgl/WebGLRenderer.js';
+import {createProgramVariablesState, createSectionPlanesSetup} from '../webgl/WebGLRenderer.js';
 import {DrawShaderSource} from "./draw/DrawShaderSource.js";
 import {LambertShaderSource} from "./draw/LambertShaderSource.js";
 import {EmphasisShaderSource} from "./emphasis/EmphasisShaderSource.js";
@@ -2403,7 +2403,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
     if (program.errors) {
         return { errors: program.errors };
     } else {
-        const inputSetters = programVariablesState.setupInputs(makeInputSetters(gl, program.handle));
+        const inputSetters = programVariablesState.setupInputs(gl, program.handle);
 
         let lastMaterialId = null;
         let lastGeometryId = null;
