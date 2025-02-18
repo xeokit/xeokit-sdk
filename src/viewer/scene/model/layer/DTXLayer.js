@@ -1,5 +1,7 @@
 import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
 import {getColSilhEdgePickFlags, getRenderers, isPerspectiveMatrix, Layer} from "./Layer.js";
+import {LinearEncoding, sRGBEncoding} from "../../constants/constants.js";
+import {setupTexture} from "../../webgl/WebGLRenderer.js";
 
 import {math} from "../../math/math.js";
 import {Configs} from "../../../Configs.js";
@@ -646,16 +648,10 @@ export class DTXLayer extends Layer {
             precisionRayPickSurface: (portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) => false,
 
             layerDrawState: {
-                bindCommonTextures: function(
-                    uTexPerObjectPositionsDecodeMatrix,
-                    uTexPerVertexIdCoordinates,
-                    uTexPerObjectColorsAndFlags,
-                    uTexPerObjectMatrix) {
-                    uTexPerObjectPositionsDecodeMatrix(texturePerObjectPositionsDecodeMatrix, 1);
-                    uTexPerVertexIdCoordinates(texturePerVertexIdCoordinates,                 2);
-                    uTexPerObjectColorsAndFlags(texturePerObjectColorsAndFlags,               3);
-                    uTexPerObjectMatrix(texturePerObjectInstanceMatrices,                     4);
-                },
+                texturePerObjectPositionsDecodeMatrix: texturePerObjectPositionsDecodeMatrix,
+                texturePerVertexIdCoordinates:         texturePerVertexIdCoordinates,
+                texturePerObjectColorsAndFlags:        texturePerObjectColorsAndFlags,
+                texturePerObjectInstanceMatrices:      texturePerObjectInstanceMatrices,
 
                 drawTriangles: function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
                     draw8.indices( uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
@@ -761,6 +757,15 @@ const createBindableDataTexture = function(gl, entitiesCnt, entitySize, type, en
 };
 
 const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
+    const setupTex = (type, name, getTexture) => {
+        const tex = setupTexture(programVariables, type, name, LinearEncoding, (set, state) => set(getTexture(state.layerDrawState)));
+        return (P) => tex.texelFetch(P, "0");
+    };
+    const perObjPosDecode = setupTex("highp    sampler2D", "perObjPosDecode", (l) => l.texturePerObjectPositionsDecodeMatrix);
+    const perVertIdCoords = setupTex("mediump usampler2D", "perVertIdCoords", (l) => l.texturePerVertexIdCoordinates);
+    const perObjColsFlags = setupTex("lowp    usampler2D", "perObjColsFlags", (l) => l.texturePerObjectColorsAndFlags);
+    const perObjectMatrix = setupTex("highp    sampler2D", "perObjectMatrix", (l) => l.texturePerObjectInstanceMatrices);
+
     const worldMatrix   = programVariables.createUniform("mat4", "worldMatrix",   (set, state) => set(state.mesh.worldMatrix));
     const viewMatrix    = programVariables.createUniform("mat4", "viewMatrix",    (set, state) => set(state.view.viewMatrix));
     const projMatrix    = programVariables.createUniform("mat4", "projMatrix",    (set, state) => set(state.view.projMatrix));
@@ -811,10 +816,6 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
         getClippable: () => "float(flags2.r)",
 
         appendVertexDefinitions: (src) => {
-            src.push("uniform highp   sampler2D  uTexPerObjectPositionsDecodeMatrix;");
-            src.push("uniform highp   sampler2D  uTexPerObjectMatrix;");
-            src.push("uniform lowp    usampler2D uTexPerObjectColorsAndFlags;");
-            src.push("uniform mediump usampler2D uTexPerVertexIdCoordinates;");
             src.push("uniform highp   usampler2D uTexPerPrimitiveIdIndices;");
             src.push("uniform mediump usampler2D uTexPerPrimitiveIdPortionIds;");
         },
@@ -830,21 +831,24 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
             src.push("int objectIndex = int(texelFetch(uTexPerPrimitiveIdPortionIds, ivec2(h_packed_object_id_index, v_packed_object_id_index), 0).r);");
             src.push("ivec2 objectIndexCoords = ivec2(objectIndex % 512, objectIndex / 512);");
 
-            // get flags & flags2
-            src.push("uvec4 flags = texelFetch (uTexPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
-            src.push("uvec4 flags2 = texelFetch (uTexPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
+            const colorsAndFlags = (offset) => perObjColsFlags(`ivec2(objectIndexCoords.x*8+${offset}, objectIndexCoords.y)`);
 
-            if (colorA.needed) {
-                src.push(`vec4 ${colorA} = vec4(texelFetch (uTexPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0)) / 255.0;`);
-            }
+            // get flags & flags2
+            src.push(`uvec4 flags  = ${colorsAndFlags(2)};`);
+            src.push(`uvec4 flags2 = ${colorsAndFlags(3)};`);
+
+            colorA.needed && src.push(`vec4 ${colorA} = vec4(${colorsAndFlags(0)}) / 255.0;`);
 
             afterFlagsColorLines.forEach(line => src.push(line));
 
-            src.push("mat4 objectInstanceMatrix = mat4 (texelFetch (uTexPerObjectMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uTexPerObjectMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uTexPerObjectMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uTexPerObjectMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
-            src.push("mat4 objectDecodeAndInstanceMatrix = objectInstanceMatrix * mat4 (texelFetch (uTexPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uTexPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uTexPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uTexPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
+            const objMatrix = (offset) => perObjectMatrix(`ivec2(objectIndexCoords.x*4+${offset}, objectIndexCoords.y)`);
+            src.push(`mat4 objectInstanceMatrix = mat4(${objMatrix(0)}, ${objMatrix(1)}, ${objMatrix(2)}, ${objMatrix(3)});`);
 
-            src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));");
-            src.push("ivec4 packedIndexBaseOffset = ivec4(texelFetch (uTexPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+" + (isTriangle ? 5 : 6) + ", objectIndexCoords.y), 0));");
+            const posMatrix = (offset) => perObjPosDecode(`ivec2(objectIndexCoords.x*4+${offset}, objectIndexCoords.y)`);
+            src.push(`mat4 objectDecodeAndInstanceMatrix = objectInstanceMatrix * mat4(${posMatrix(0)}, ${posMatrix(1)}, ${posMatrix(2)}, ${posMatrix(3)});`);
+
+            src.push(`ivec4 packedVertexBase = ivec4(${colorsAndFlags(4)});`);
+            src.push(`ivec4 packedIndexBaseOffset = ivec4(${colorsAndFlags(isTriangle ? 5 : 6)});`);
             src.push("int indexBaseOffset = (packedIndexBaseOffset.r << 24) + (packedIndexBaseOffset.g << 16) + (packedIndexBaseOffset.b << 8) + packedIndexBaseOffset.a;");
 
             src.push("int h_index = (primitiveIndex - indexBaseOffset) & 4095;");
@@ -856,11 +860,9 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
             if (isTriangle) {
                 src.push("ivec3 indexPositionH = uniqueVertexIndexes & 4095;");
                 src.push("ivec3 indexPositionV = uniqueVertexIndexes >> 12;");
-                src.push("uint solid = texelFetch (uTexPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+7, objectIndexCoords.y), 0).r;");
-                src.push("vec3 positions[] = vec3[](");
-                src.push("  vec3(texelFetch(uTexPerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0)),");
-                src.push("  vec3(texelFetch(uTexPerVertexIdCoordinates, ivec2(indexPositionH.g, indexPositionV.g), 0)),");
-                src.push("  vec3(texelFetch(uTexPerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0)));");
+                src.push(`uint solid = ${colorsAndFlags(7)}.r;`);
+                const vertIdCoords = (idx) => `vec3(${perVertIdCoords(`ivec2(indexPositionH[${idx}], indexPositionV[${idx}])`)})`;
+                src.push(`vec3 positions[] = vec3[](${vertIdCoords(0)}, ${vertIdCoords(1)}, ${vertIdCoords(2)});`);
                 src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
                 src.push("vec3 position = positions[gl_VertexID % 3];");
                 if (viewNormal.needed) {
@@ -891,32 +893,18 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
             } else {
                 src.push("int indexPositionH = uniqueVertexIndexes[gl_VertexID % 2] & 4095;");
                 src.push("int indexPositionV = uniqueVertexIndexes[gl_VertexID % 2] >> 12;");
-                src.push("vec3 position = vec3(texelFetch(uTexPerVertexIdCoordinates, ivec2(indexPositionH, indexPositionV), 0));");
+                src.push(`vec3 position = vec3(${perVertIdCoords("ivec2(indexPositionH, indexPositionV)")});`);
             }
 
-            if (pickColorA.needed) {
-                // TODO: Normalize color "/ 255.0"?
-                src.push("vec4 pickColor = vec4(texelFetch(uTexPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
-            }
+            pickColorA.needed && src.push(`vec4 pickColor = vec4(${colorsAndFlags(1)});`); // TODO: Normalize color "/ 255.0"?
 
             src.push(`vec4 worldPosition = ${worldMatrix} * (objectDecodeAndInstanceMatrix * vec4(position, 1.0));`);
         },
 
         makeDrawCall: function(getInputSetter) {
-            const uTexPerObjectPositionsDecodeMatrix = getInputSetter("uTexPerObjectPositionsDecodeMatrix");
-            const uTexPerVertexIdCoordinates         = getInputSetter("uTexPerVertexIdCoordinates");
-            const uTexPerObjectColorsAndFlags        = getInputSetter("uTexPerObjectColorsAndFlags");
-            const uTexPerObjectMatrix                = getInputSetter("uTexPerObjectMatrix");
             const uTexPerPrimitiveIdPortionIds       = getInputSetter("uTexPerPrimitiveIdPortionIds");
             const uTexPerPrimitiveIdIndices          = getInputSetter("uTexPerPrimitiveIdIndices");
-
             return function(layerDrawState, inputSetters) {
-                layerDrawState.bindCommonTextures(
-                    uTexPerObjectPositionsDecodeMatrix,
-                    uTexPerVertexIdCoordinates,
-                    uTexPerObjectColorsAndFlags,
-                    uTexPerObjectMatrix);
-
                 (subGeometry ? layerDrawState.drawEdges : layerDrawState.drawTriangles)(
                     uTexPerPrimitiveIdPortionIds,
                     uTexPerPrimitiveIdIndices,
