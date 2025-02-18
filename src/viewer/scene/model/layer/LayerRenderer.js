@@ -70,7 +70,7 @@ export class LayerRenderer {
 
         const geoParams = renderingAttributes.geometryParameters;
 
-        const isPerspective       = programVariables.createVarying("float",      "isPerspective",       () => `float(${isPerspectiveMatrix("projMatrix")})`);
+        const isPerspective       = programVariables.createVarying("float",      "isPerspective",       () => `float(${isPerspectiveMatrix(geoParams.projMatrix)})`);
         const vClippable          = programVariables.createVarying("float",      "vClippable",          () => renderingAttributes.getClippable(), "flat");
         const vClipPositionW      = programVariables.createVarying("float",      "vClipPositionW",      () => "clipPos.w");
         const vFragDepth          = programVariables.createVarying("float",      "vFragDepth",          () => "1.0 + clipPos.w");
@@ -172,6 +172,8 @@ export class LayerRenderer {
 
         const vertexData = [ ];
         renderingAttributes.appendVertexData(vertexData, afterFlagsColorLines);
+        vertexData.push(`vec4 viewPosition = ${geoParams.viewMatrix} * ${geoParams.attributes.position.world};`);
+        vertexData.push(`vec4 clipPos = ${geoParams.projMatrix} * viewPosition;`);
 
         const buildVertexShader = () => {
             const src = [];
@@ -179,8 +181,6 @@ export class LayerRenderer {
             programVariablesState.appendVertexDefinitions(src);
             src.push("void main(void) {");
             vertexData.forEach(line => src.push(line));
-            src.push(`vec4 viewPosition = ${geoParams.viewMatrix} * ${geoParams.attributes.position.world};`);
-            src.push("vec4 clipPos = projMatrix * viewPosition;");
             vertexOutputs.forEach(line => src.push(line));
             src.push("}");
             return src;
@@ -196,7 +196,6 @@ export class LayerRenderer {
             src.push("#define EPSILON 1e-6");
             src.push("#define saturate(a) clamp( a, 0.0, 1.0 )");
 
-            renderingAttributes.appendFragmentDefinitions(src);
             programVariablesState.appendFragmentDefinitions(src);
 
             src.push("vec4 sRGBToLinear(in vec4 value) {");
@@ -254,7 +253,7 @@ export class LayerRenderer {
 
         const getInputSetter = makeInputSetters(gl, program.handle);
         const inputSetters = programVariablesState.setupInputs(getInputSetter);
-        const drawCall = renderingAttributes.makeDrawCall(getInputSetter, inputSetters);
+        const drawCall = renderingAttributes.makeDrawCall(getInputSetter);
 
         this.destroy = () => program.destroy();
         this.drawLayer = (frameCtx, layer, renderPass) => {
@@ -292,15 +291,21 @@ export class LayerRenderer {
                 mesh: {
                     layerIndex:  layer.layerIndex,
                     origin:      rtcOrigin,
-                    renderFlags: { sectionPlanesActivePerLayer: model.renderFlags.sectionPlanesActivePerLayer }
+                    renderFlags: { sectionPlanesActivePerLayer: model.renderFlags.sectionPlanesActivePerLayer },
+                    worldMatrix: model.rotationMatrix
                 },
                 renderPass:     renderPass,
                 view: {
-                    far: far
+                    eye:              eye,
+                    far:              far,
+                    pickClipPos:      frameCtx.pickClipPos,
+                    projMatrix:       projMatrix,
+                    viewMatrix:       rtcViewMatrix,
+                    viewNormalMatrix: camera.viewNormalMatrix
                 }
             });
 
-            drawCall(frameCtx, layerDrawState, model.rotationMatrix, rtcViewMatrix, projMatrix, rtcOrigin, eye);
+            drawCall(layerDrawState, inputSetters);
 
             if (incrementDrawState) {
                 frameCtx.drawElements++;
