@@ -193,17 +193,19 @@ export class DTXLayer extends Layer {
                     const edgeIndicesTexture = (lenEdgeIndices > 0) && createTextureForSingleItems(edgeIndicesBuffer, lenEdgeIndices, 2, indicesType, "sizeDataTextureEdgeIndices");
 
                     return {
-                        indices: function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
+                        indices: function(inputSetters, state, glMode) {
                             if (numIndices > 0) {
-                                uTexPerPrimitiveIdPortionIds(portionIdsTexture, 5); // webgl texture unit
-                                uTexPerPrimitiveIdIndices(   indicesTexture,    6); // webgl texture unit
+                                state.layerDrawState.perPrimIdPorIds = portionIdsTexture;
+                                state.layerDrawState.perPrimIndices  = indicesTexture;
+                                inputSetters.setUniforms(state);
                                 gl.drawArrays(glMode, 0, numIndices);
                             }
                         },
-                        edges: function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
+                        edges: function(inputSetters, state, glMode) {
                             if (numEdgeIndices > 0) {
-                                uTexPerPrimitiveIdPortionIds(portionEdgeIdsTexture, 5); // webgl texture unit
-                                uTexPerPrimitiveIdIndices(   edgeIndicesTexture,    6); // webgl texture unit
+                                state.layerDrawState.perPrimIdPorIds = portionEdgeIdsTexture;
+                                state.layerDrawState.perPrimIndices  = edgeIndicesTexture;
+                                inputSetters.setUniforms(state);
                                 gl.drawArrays(glMode, 0, numEdgeIndices);
                             }
                         }
@@ -653,16 +655,16 @@ export class DTXLayer extends Layer {
                 texturePerObjectColorsAndFlags:        texturePerObjectColorsAndFlags,
                 texturePerObjectInstanceMatrices:      texturePerObjectInstanceMatrices,
 
-                drawTriangles: function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
-                    draw8.indices( uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
-                    draw16.indices(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
-                    draw32.indices(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+                drawTriangles: function(inputSetters, state, glMode) {
+                    draw8.indices( inputSetters, state, glMode);
+                    draw16.indices(inputSetters, state, glMode);
+                    draw32.indices(inputSetters, state, glMode);
                 },
 
-                drawEdges: function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
-                    draw8.edges( uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
-                    draw16.edges(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
-                    draw32.edges(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode);
+                drawEdges: function(inputSetters, state, glMode) {
+                    draw8.edges( inputSetters, state, glMode);
+                    draw16.edges(inputSetters, state, glMode);
+                    draw32.edges(inputSetters, state, glMode);
                 }
             },
 
@@ -761,6 +763,10 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
         const tex = setupTexture(programVariables, type, name, LinearEncoding, (set, state) => set(getTexture(state.layerDrawState)));
         return (P) => tex.texelFetch(P, "0");
     };
+
+    const perPrimIndices  = setupTex("highp   usampler2D", "perPrimIndices",  (l) => l.perPrimIndices);
+    const perPrimIdPorIds = setupTex("mediump usampler2D", "perPrimIdPorIds", (l) => l.perPrimIdPorIds);
+
     const perObjPosDecode = setupTex("highp    sampler2D", "perObjPosDecode", (l) => l.texturePerObjectPositionsDecodeMatrix);
     const perVertIdCoords = setupTex("mediump usampler2D", "perVertIdCoords", (l) => l.texturePerVertexIdCoordinates);
     const perObjColsFlags = setupTex("lowp    usampler2D", "perObjColsFlags", (l) => l.texturePerObjectColorsAndFlags);
@@ -815,11 +821,6 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
 
         getClippable: () => "float(flags2.r)",
 
-        appendVertexDefinitions: (src) => {
-            src.push("uniform highp   usampler2D uTexPerPrimitiveIdIndices;");
-            src.push("uniform mediump usampler2D uTexPerPrimitiveIdPortionIds;");
-        },
-
         appendVertexData: (src, afterFlagsColorLines) => {
             // constants
             src.push("int primitiveIndex = gl_VertexID / " + (isTriangle ? 3 : 2) + ";");
@@ -828,7 +829,7 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
             src.push("int h_packed_object_id_index = (primitiveIndex >> 3) & 4095;");
             src.push("int v_packed_object_id_index = (primitiveIndex >> 3) >> 12;");
 
-            src.push("int objectIndex = int(texelFetch(uTexPerPrimitiveIdPortionIds, ivec2(h_packed_object_id_index, v_packed_object_id_index), 0).r);");
+            src.push(`int objectIndex = int(${perPrimIdPorIds("ivec2(h_packed_object_id_index, v_packed_object_id_index)")}.r);`);
             src.push("ivec2 objectIndexCoords = ivec2(objectIndex % 512, objectIndex / 512);");
 
             const colorsAndFlags = (offset) => perObjColsFlags(`ivec2(objectIndexCoords.x*8+${offset}, objectIndexCoords.y)`);
@@ -854,7 +855,7 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
             src.push("int h_index = (primitiveIndex - indexBaseOffset) & 4095;");
             src.push("int v_index = (primitiveIndex - indexBaseOffset) >> 12;");
 
-            src.push("ivec3 vertexIndices = ivec3(texelFetch(uTexPerPrimitiveIdIndices, ivec2(h_index, v_index), 0));");
+            src.push(`ivec3 vertexIndices = ivec3(${perPrimIndices("ivec2(h_index, v_index)")});`);
             src.push("ivec3 uniqueVertexIndexes = vertexIndices + (packedVertexBase.r << 24) + (packedVertexBase.g << 16) + (packedVertexBase.b << 8) + packedVertexBase.a;");
 
             if (isTriangle) {
@@ -901,15 +902,11 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
             src.push(`vec4 worldPosition = ${worldMatrix} * (objectDecodeAndInstanceMatrix * vec4(position, 1.0));`);
         },
 
-        makeDrawCall: function(getInputSetter) {
-            const uTexPerPrimitiveIdPortionIds       = getInputSetter("uTexPerPrimitiveIdPortionIds");
-            const uTexPerPrimitiveIdIndices          = getInputSetter("uTexPerPrimitiveIdIndices");
-            return function(layerDrawState, inputSetters) {
-                (subGeometry ? layerDrawState.drawEdges : layerDrawState.drawTriangles)(
-                    uTexPerPrimitiveIdPortionIds,
-                    uTexPerPrimitiveIdIndices,
-                    subGeometry ? (subGeometry.vertices ? gl.POINTS : gl.LINES) : gl.TRIANGLES);
-            };
+        drawCall: function(layerDrawState, inputSetters, state) {
+            (subGeometry ? layerDrawState.drawEdges : layerDrawState.drawTriangles)(
+                inputSetters,
+                state,
+                subGeometry ? (subGeometry.vertices ? gl.POINTS : gl.LINES) : gl.TRIANGLES);
         }
     };
 };
