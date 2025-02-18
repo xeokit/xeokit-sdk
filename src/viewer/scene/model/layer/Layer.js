@@ -166,8 +166,8 @@ export const getRenderers = (function() {
 
             const wrapRenderer = function(createProgramSetup, subGeometry, isEager) {
                 const instantiate = function() {
-                    const renderingAttributes = makeRenderingAttributes(subGeometry);
                     const programVariablesState = createProgramVariablesState();
+                    const renderingAttributes = makeRenderingAttributes(programVariablesState.programVariables, subGeometry);
                     return createProgramSetup(
                         programVariablesState.programVariables,
                         renderingAttributes.geometryParameters,
