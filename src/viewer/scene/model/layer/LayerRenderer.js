@@ -76,11 +76,9 @@ export const setupTexture = (name, type, encoding, hasMatrix) => {
         setupInputs: (getInputSetter) => {
             const setMap    = map.setupInputs(getInputSetter);
             const setMatrix = matrix && matrix.setupInputs(getInputSetter);
-            return setMap && function(tex, mtx, frameCtx) {
+            return setMap && function(tex, mtx) {
                 if (tex) {
-                    setMap(tex, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
-                    frameCtx.bindTexture++;
+                    setMap(tex);
                     if (mtx && setMatrix) {
                         setMatrix(mtx);
                     }
@@ -96,12 +94,9 @@ export const setup2dTexture = (name, getTexturesetValue) => {
         getValueExpression: (texturePos) => `texture(${name}, ${texturePos})`,
         setupInputs: (getUniformSetter) => {
             const setMap = getUniformSetter(name);
-            return (textureSet, frameCtx) => {
+            return (textureSet) => {
                 const texture = getTexturesetValue(textureSet);
-                if (texture) {
-                    setMap(texture.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
-                }
+                texture && setMap(texture.texture);
             };
         }
     };
