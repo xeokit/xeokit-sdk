@@ -1,19 +1,12 @@
 import {isPerspectiveMatrix} from "./Layer.js";
-import {createRTCViewMat, getPlaneRTCPos, math} from "../../math/index.js";
+import {createRTCViewMat, math} from "../../math/index.js";
 import {Program} from "../../webgl/Program.js";
-import {makeInputSetters} from "../../webgl/WebGLRenderer.js";
+import {createSectionPlanesSetup, makeInputSetters} from "../../webgl/WebGLRenderer.js";
 
 const tempVec2 = math.vec2();
 const tempVec3 = math.vec3();
-const tempVec3a = math.vec3();
 const tempMat4 = math.mat4();
 const vec3zero = math.vec3([0,0,0]);
-
-const iota = function(n) {
-    const ret = [ ];
-    for (let i = 0; i < n; ++i) ret.push(i);
-    return ret;
-};
 
 export const lazyShaderVariable = function(name) {
     const variable = {
@@ -57,44 +50,7 @@ export class LayerRenderer {
 
         const programVariables = programVariablesState.programVariables;
         const gl = scene.canvas.gl;
-        const clipping = (function() {
-            const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
-
-            return (numAllocatedSectionPlanes > 0) && {
-                appendDefinitions: (src) => {
-                    for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
-                        src.push("uniform bool sectionPlaneActive" + i + ";");
-                        src.push("uniform vec3 sectionPlanePos" + i + ";");
-                        src.push("uniform vec3 sectionPlaneDir" + i + ";");
-                    }
-                },
-                getDistance: (worldPosition) => {
-                    return iota(numAllocatedSectionPlanes).map(i => `(sectionPlaneActive${i} ? clamp(dot(-sectionPlaneDir${i}, ${worldPosition} - sectionPlanePos${i}), 0.0, 1000.0) : 0.0)`).join(" + ");
-                },
-                setupInputs: (getUniformSetter) => {
-                    const uSectionPlanes = iota(numAllocatedSectionPlanes).map(i => ({
-                        active: getUniformSetter("sectionPlaneActive" + i),
-                        pos:    getUniformSetter("sectionPlanePos" + i),
-                        dir:    getUniformSetter("sectionPlaneDir" + i)
-                    }));
-                    return (layerIndex, rtcOrigin, sectionPlanesActivePerLayer) => {
-                        const sectionPlanes = sectionPlanesState.sectionPlanes;
-                        const numSectionPlanes = sectionPlanes.length;
-                        const baseIndex = layerIndex * numSectionPlanes;
-                        for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
-                            const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
-                            const active = (sectionPlaneIndex < numSectionPlanes) && sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                            sectionPlaneUniforms.active(active ? 1 : 0);
-                            if (active) {
-                                const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                                sectionPlaneUniforms.dir(sectionPlane.dir);
-                                sectionPlaneUniforms.pos(getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcOrigin, tempVec3a));
-                            }
-                        }
-                    };
-                }
-            };
-        })();
+        const clipping = createSectionPlanesSetup(programVariablesState.programVariables, scene._sectionPlanesState);
 
         const intensityRange  = programVariables.createUniform("vec2", "intensityRange", (set) => {
             tempVec2[0] = pointsMaterial.minIntensity;
@@ -240,8 +196,6 @@ export class LayerRenderer {
             src.push("#define EPSILON 1e-6");
             src.push("#define saturate(a) clamp( a, 0.0, 1.0 )");
 
-            clipping && clipping.appendDefinitions(src);
-
             renderingAttributes.appendFragmentDefinitions(src);
             programVariablesState.appendFragmentDefinitions(src);
 
@@ -302,8 +256,6 @@ export class LayerRenderer {
         const inputSetters = programVariablesState.setupInputs(getInputSetter);
         const drawCall = renderingAttributes.makeDrawCall(getInputSetter, inputSetters);
 
-        const setClippingState = clipping && clipping.setupInputs(getInputSetter);
-
         this.destroy = () => program.destroy();
         this.drawLayer = (frameCtx, layer, renderPass) => {
             if (frameCtx.lastProgramId !== program.id) {
@@ -316,10 +268,6 @@ export class LayerRenderer {
             const camera = scene.camera;
             const rtcOrigin = tempVec3;
             math.transformPoint3(model.matrix, origin, rtcOrigin);
-
-            if (setClippingState) {
-                setClippingState(layer.layerIndex, rtcOrigin, model.renderFlags.sectionPlanesActivePerLayer);
-            }
 
             const viewMatrix = (isShadowProgram && frameCtx.shadowViewMatrix) || (usePickParams && frameCtx.pickViewMatrix) || camera.viewMatrix;
             const projMatrix = (isShadowProgram && frameCtx.shadowProjMatrix) || (usePickParams && frameCtx.pickProjMatrix) || camera.projMatrix;
@@ -341,6 +289,11 @@ export class LayerRenderer {
             inputSetters.setUniforms({
                 legacyFrameCtx: frameCtx,
                 layerDrawState: layerDrawState,
+                mesh: {
+                    layerIndex:  layer.layerIndex,
+                    origin:      rtcOrigin,
+                    renderFlags: { sectionPlanesActivePerLayer: model.renderFlags.sectionPlanesActivePerLayer }
+                },
                 renderPass:     renderPass,
                 view: {
                     far: far
