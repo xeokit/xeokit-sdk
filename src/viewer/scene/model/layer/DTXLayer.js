@@ -576,7 +576,7 @@ export class DTXLayer extends Layer {
 
         return {
             renderers: getRenderers(scene, "dtx", primitive, false,
-                                           subGeometry => makeDTXRenderingAttributes(scene.canvas.gl, subGeometry)),
+                                           (programVariables, subGeometry) => makeDTXRenderingAttributes(programVariables, scene.canvas.gl, subGeometry)),
             edgesColorOpaqueAllowed: () => {
                 if (scene.logarithmicDepthBufferEnabled) {
                     if (!scene._loggedWarning) {
@@ -760,7 +760,7 @@ const createBindableDataTexture = function(gl, entitiesCnt, entitySize, type, en
     };
 };
 
-const makeDTXRenderingAttributes = function(gl, subGeometry) {
+const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
     const lazyShaderVariable = function(name) {
         const variable = {
             toString: () => {
