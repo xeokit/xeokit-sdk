@@ -877,17 +877,29 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing,
     const matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
 
     const needNormal = () => (viewNormal.needed || worldNormal.needed);
-
-    const matricesUniformBlockLines = () => [
-        "uniform Matrices {",
-        "    mat4 worldMatrix;",
-        "    mat4 viewMatrix;",
-        "    mat4 projMatrix;",
-        "    mat4 positionsDecodeMatrix;"
-    ].concat(needNormal() ? [
-        "    mat4 worldNormalMatrix;",
-        "    mat4 viewNormalMatrix;",
-    ] : [ ]).concat([ "};" ]);
+    const matrices = programVariables.createUniformBlock(
+        "Matrices",
+        {
+            worldMatrix:           "mat4",
+            viewMatrix:            "mat4",
+            projMatrix:            "mat4",
+            positionsDecodeMatrix: "mat4",
+            worldNormalMatrix:     "mat4",
+            viewNormalMatrix:      "mat4"
+        },
+        (set, state) => {
+            let offset = 0;
+            const mat4Size = 4 * 4;
+            matricesUniformBlockBufferData.set(state.mesh.worldMatrix, 0);
+            matricesUniformBlockBufferData.set(state.view.viewMatrix, offset += mat4Size);
+            matricesUniformBlockBufferData.set(state.view.projMatrix, offset += mat4Size);
+            matricesUniformBlockBufferData.set(state.layerDrawState.positionsDecodeMatrix, offset += mat4Size);
+            if (needNormal()) {
+                matricesUniformBlockBufferData.set(state.layerDrawState.getWorldNormalMatrix(), offset += mat4Size);
+                matricesUniformBlockBufferData.set(state.view.viewNormalMatrix, offset += mat4Size);
+            }
+            set(matricesUniformBlockBufferData);
+        });
 
     return {
         isVBO: true,
@@ -909,65 +921,51 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing,
                 },
                 uv:                uvA
             },
-            viewMatrix: "viewMatrix"
+            projMatrix: matrices.projMatrix,
+            viewMatrix: matrices.viewMatrix
         },
 
         getFlag: renderPassFlag => `(int(${attributes.flags}) >> ${renderPassFlag * 4} & 0xF)`,
 
         getClippable: () => `((int(${attributes.flags}) >> 16 & 0xF) == 1) ? 1.0 : 0.0`,
 
-        appendVertexDefinitions: (src) => {
-            matricesUniformBlockLines().forEach(line => src.push(line));
-
-            if (needNormal()) {
-                src.push("vec3 octDecode(vec2 oct) {");
-                src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
-                src.push("    if (v.z < 0.0) {");
-                src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
-                src.push("    }");
-                src.push("    return normalize(v);");
-                src.push("}");
-            }
-        },
+        appendVertexDefinitions: (src) => { },
 
         appendVertexData: (src, afterFlagsColorLines) => {
             afterFlagsColorLines.forEach(line => src.push(line));
 
             if (needNormal()) {
-                src.push(`vec4 modelNormal = vec4(octDecode(${attributes.normal}.xy), 0.0);`);
+                const octDecode = programVariables.createVertexDefinition(
+                    "octDecode",
+                    (name, src) => {
+                        src.push(`vec3 ${name}(vec2 oct) {`);
+                        src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
+                        src.push("    if (v.z < 0.0) {");
+                        src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
+                        src.push("    }");
+                        src.push("    return normalize(v);");
+                        src.push("}");
+                    });
+                src.push(`vec4 modelNormal = vec4(${octDecode}(${attributes.normal}.xy), 0.0);`);
                 if (instancing) {
                     src.push(`modelNormal = vec4(dot(modelNormal, ${modelNormalMatrixCol[0]}), dot(modelNormal, ${modelNormalMatrixCol[1]}), dot(modelNormal, ${modelNormalMatrixCol[2]}), 0.0);`);
                 }
-                src.push(`vec3 ${worldNormal} = (worldNormalMatrix * modelNormal).xyz;`);
+                src.push(`vec3 ${worldNormal} = (${matrices.worldNormalMatrix} * modelNormal).xyz;`);
                 if (viewNormal.needed) {
-                    src.push(`vec3 ${viewNormal} = normalize((viewNormalMatrix * vec4(${worldNormal}, 0.0)).xyz);`);
+                    src.push(`vec3 ${viewNormal} = normalize((${matrices.viewNormalMatrix} * vec4(${worldNormal}, 0.0)).xyz);`);
                 }
             }
 
             uvA.needed && src.push(`vec2 ${uvA} = (${uvDecodeMatrix} * vec3(${attributes.uV}, 1.0)).xy;`);
 
             const modelMatrixTransposed = instancing && `mat4(${modelMatrixCol[0]}, ${modelMatrixCol[1]}, ${modelMatrixCol[2]}, vec4(0.0,0.0,0.0,1.0))`;
-            src.push(`vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(${attributes.position}, 1.0)${modelMatrixTransposed ? (" * " + modelMatrixTransposed) : ""});`);
+            src.push(`vec4 worldPosition = ${matrices.worldMatrix} * (${matrices.positionsDecodeMatrix} * vec4(${attributes.position}, 1.0)${modelMatrixTransposed ? (" * " + modelMatrixTransposed) : ""});`);
 
             scene.entityOffsetsEnabled && src.push(`worldPosition.xyz = worldPosition.xyz + ${attributes.offset};`);
         },
 
-        appendFragmentDefinitions: (src) => matricesUniformBlockLines().forEach(line => src.push(line)),
-
-        makeDrawCall: function(getInputSetter, inputSetters) {
-            const uMatricesBlock  = getInputSetter("Matrices");
-            return function(frameCtx, layerDrawState, sceneModelMat, viewMatrix, projMatrix, rtcOrigin, eye) {
-                let offset = 0;
-                const mat4Size = 4 * 4;
-                matricesUniformBlockBufferData.set(sceneModelMat, 0);
-                matricesUniformBlockBufferData.set(viewMatrix, offset += mat4Size);
-                matricesUniformBlockBufferData.set(projMatrix, offset += mat4Size);
-                matricesUniformBlockBufferData.set(layerDrawState.positionsDecodeMatrix, offset += mat4Size);
-                if (needNormal()) {
-                    matricesUniformBlockBufferData.set(layerDrawState.getWorldNormalMatrix(), offset += mat4Size);
-                    matricesUniformBlockBufferData.set(scene.camera.viewNormalMatrix, offset += mat4Size);
-                }
-                uMatricesBlock(matricesUniformBlockBufferData);
+        makeDrawCall: function(getInputSetter) {
+            return function(layerDrawState, inputSetters) {
                 layerDrawState.drawCall(inputSetters, subGeometry);
             };
         }

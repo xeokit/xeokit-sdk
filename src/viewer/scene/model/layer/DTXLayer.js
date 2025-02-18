@@ -761,6 +761,11 @@ const createBindableDataTexture = function(gl, entitiesCnt, entitySize, type, en
 };
 
 const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
+    const worldMatrix   = programVariables.createUniform("mat4", "worldMatrix",   (set, state) => set(state.mesh.worldMatrix));
+    const viewMatrix    = programVariables.createUniform("mat4", "viewMatrix",    (set, state) => set(state.view.viewMatrix));
+    const projMatrix    = programVariables.createUniform("mat4", "projMatrix",    (set, state) => set(state.view.projMatrix));
+    const uCameraEyeRtc = programVariables.createUniform("vec3", "uCameraEyeRtc", (set, state) => set(math.subVec3(state.view.eye, state.mesh.origin, tempVec3)));
+
     const lazyShaderVariable = function(name) {
         const variable = {
             toString: () => {
@@ -797,7 +802,8 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
                 },
                 uv:                null
             },
-            viewMatrix: "viewMatrix"
+            projMatrix: projMatrix,
+            viewMatrix: viewMatrix
         },
 
         getFlag: renderPassFlag => `int(flags[${renderPassFlag}])`,
@@ -805,19 +811,12 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
         getClippable: () => "float(flags2.r)",
 
         appendVertexDefinitions: (src) => {
-            src.push("uniform mat4 sceneModelMatrix;");
-            src.push("uniform mat4 viewMatrix;");
-            src.push("uniform mat4 projMatrix;");
-
             src.push("uniform highp   sampler2D  uTexPerObjectPositionsDecodeMatrix;");
             src.push("uniform highp   sampler2D  uTexPerObjectMatrix;");
             src.push("uniform lowp    usampler2D uTexPerObjectColorsAndFlags;");
             src.push("uniform mediump usampler2D uTexPerVertexIdCoordinates;");
             src.push("uniform highp   usampler2D uTexPerPrimitiveIdIndices;");
             src.push("uniform mediump usampler2D uTexPerPrimitiveIdPortionIds;");
-            if (isTriangle) {
-                src.push("uniform vec3 uCameraEyeRtc;");
-            }
         },
 
         appendVertexData: (src, afterFlagsColorLines) => {
@@ -865,12 +864,12 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
                 src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
                 src.push("vec3 position = positions[gl_VertexID % 3];");
                 if (viewNormal.needed) {
-                    src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
+                    src.push(`vec3 viewNormal = -normalize((transpose(inverse(${viewMatrix} * objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);`);
                 }
                 // when the geometry is not solid, if needed, flip the triangle winding
                 src.push("if (solid != 1u) {");
-                src.push(`  if (${isPerspectiveMatrix("projMatrix")}) {`);
-                src.push("      vec3 uCameraEyeRtcInQuantizedSpace = (inverse(sceneModelMatrix * objectDecodeAndInstanceMatrix) * vec4(uCameraEyeRtc, 1)).xyz;");
+                src.push(`  if (${isPerspectiveMatrix(projMatrix)}) {`);
+                src.push(`      vec3 uCameraEyeRtcInQuantizedSpace = (inverse(${worldMatrix} * objectDecodeAndInstanceMatrix) * vec4(${uCameraEyeRtc}, 1)).xyz;`);
                 src.push("      if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
                 src.push("          position = positions[2 - (gl_VertexID % 3)];");
                 if (viewNormal.needed) {
@@ -879,7 +878,7 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
                 src.push("      }");
                 src.push("  } else {");
                 if (!viewNormal.needed) {
-                    src.push("      vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
+                    src.push(`      vec3 viewNormal = -normalize((transpose(inverse(${viewMatrix} * objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);`);
                 }
                 src.push("      if (viewNormal.z < 0.0) {");
                 src.push("          position = positions[2 - (gl_VertexID % 3)];");
@@ -900,17 +899,10 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
                 src.push("vec4 pickColor = vec4(texelFetch(uTexPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
             }
 
-            src.push("vec4 worldPosition = sceneModelMatrix * (objectDecodeAndInstanceMatrix * vec4(position, 1.0));");
+            src.push(`vec4 worldPosition = ${worldMatrix} * (objectDecodeAndInstanceMatrix * vec4(position, 1.0));`);
         },
 
-        appendFragmentDefinitions: (src) => { },
-
         makeDrawCall: function(getInputSetter) {
-            const uSceneModelMatrix                  = getInputSetter("sceneModelMatrix");
-            const uViewMatrix                        = getInputSetter("viewMatrix");
-            const uProjMatrix                        = getInputSetter("projMatrix");
-            const uCameraEyeRtc                      = isTriangle && getInputSetter("uCameraEyeRtc");
-
             const uTexPerObjectPositionsDecodeMatrix = getInputSetter("uTexPerObjectPositionsDecodeMatrix");
             const uTexPerVertexIdCoordinates         = getInputSetter("uTexPerVertexIdCoordinates");
             const uTexPerObjectColorsAndFlags        = getInputSetter("uTexPerObjectColorsAndFlags");
@@ -918,12 +910,7 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
             const uTexPerPrimitiveIdPortionIds       = getInputSetter("uTexPerPrimitiveIdPortionIds");
             const uTexPerPrimitiveIdIndices          = getInputSetter("uTexPerPrimitiveIdIndices");
 
-            return function(frameCtx, layerDrawState, sceneModelMat, viewMatrix, projMatrix, rtcOrigin, eye) {
-                uSceneModelMatrix(sceneModelMat);
-                uViewMatrix(viewMatrix);
-                uProjMatrix(projMatrix);
-                uCameraEyeRtc && uCameraEyeRtc(math.subVec3(eye, rtcOrigin, tempVec3));
-
+            return function(layerDrawState, inputSetters) {
                 layerDrawState.bindCommonTextures(
                     uTexPerObjectPositionsDecodeMatrix,
                     uTexPerVertexIdCoordinates,
