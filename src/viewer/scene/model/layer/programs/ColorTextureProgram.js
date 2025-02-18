@@ -21,7 +21,7 @@ export const ColorTextureProgram = function(programVariables, geometry, scene, l
         getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", !!gammaFactor, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
         getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 0,      // COLOR_OPAQUE | COLOR_TRANSPARENT
-        appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr) => {
+        appendFragmentOutputs: (src, gl_FragCoord, sliceColorOr) => {
             src.push(`vec3 viewNormal = normalize(cross(dFdx(${vViewPosition}), dFdy(${vViewPosition})));`);
             src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
             lightSetup.directionalLights.forEach(light => {
