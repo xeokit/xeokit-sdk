@@ -121,7 +121,7 @@ const createLightSetup = function(lightsState, setupCubes) {
             getValueExpression:    tex.getValueExpression,
             setupInputs:           (getInputSetter) => {
                 const setInputsState = tex.setupInputs(getInputSetter);
-                return setInputsState && ((frameCtx) => setInputsState(getValue().texture, null, frameCtx));
+                return setInputsState && (() => setInputsState(getValue().texture));
             }
         };
     };
@@ -146,11 +146,11 @@ const createLightSetup = function(lightsState, setupCubes) {
             const setDirectionalsInputStates = directionals.map(light => light.setupLightsInputs(getUniformSetter));
             const uLightMap      = lightMap && lightMap.setupInputs(getUniformSetter);
             const uReflectionMap = reflectionMap && reflectionMap.setupInputs(getUniformSetter);
-            return function(frameCtx) {
+            return function() {
                 setAmbientInputState && setAmbientInputState();
                 setDirectionalsInputStates.forEach(setState => setState());
-                uLightMap && uLightMap(frameCtx);
-                uReflectionMap && uReflectionMap(frameCtx);
+                uLightMap && uLightMap();
+                uReflectionMap && uReflectionMap();
             };
         }
     };
@@ -176,7 +176,7 @@ const createPickClipTransformSetup = function(gl, renderBufferSize) {
     };
 };
 
-const createSAOSetup = (gl, sceneSAO, textureUnit = undefined) => {
+const createSAOSetup = (gl, sceneSAO) => {
     return {
         appendDefinitions: (src) => {
             src.push("uniform sampler2D uOcclusionTexture;");
@@ -209,11 +209,7 @@ const createSAOSetup = (gl, sceneSAO, textureUnit = undefined) => {
                     tempVec4[2] = sao.blendCutoff;
                     tempVec4[3] = sao.blendFactor;
                     uSAOParams(tempVec4);
-                    uOcclusionTexture(frameCtx.occlusionTexture, textureUnit ?? frameCtx.textureUnit);
-                    if (textureUnit === undefined) {
-                        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
-                        frameCtx.bindTexture++;
-                    }
+                    uOcclusionTexture(frameCtx.occlusionTexture);
                 }
             };
         }
@@ -388,7 +384,7 @@ export const getRenderers = (function() {
                         };
                         return {
                             "sao-": saoRenderers(null),
-                            "sao+": saoRenderers(createSAOSetup(gl, scene.sao, isVBO ? undefined : 10))
+                            "sao+": saoRenderers(createSAOSetup(gl, scene.sao))
                         };
                     })(),
                     depthRenderer:           lazy((geo, c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
