@@ -929,8 +929,6 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing,
 
         getClippable: () => `((int(${attributes.flags}) >> 16 & 0xF) == 1) ? 1.0 : 0.0`,
 
-        appendVertexDefinitions: (src) => { },
-
         appendVertexData: (src, afterFlagsColorLines) => {
             afterFlagsColorLines.forEach(line => src.push(line));
 
@@ -964,10 +962,9 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing,
             scene.entityOffsetsEnabled && src.push(`worldPosition.xyz = worldPosition.xyz + ${attributes.offset};`);
         },
 
-        makeDrawCall: function(getInputSetter) {
-            return function(layerDrawState, inputSetters) {
-                layerDrawState.drawCall(inputSetters, subGeometry);
-            };
+        drawCall: function(layerDrawState, inputSetters, state) {
+            inputSetters.setUniforms(state);
+            layerDrawState.drawCall(inputSetters, subGeometry);
         }
     };
 };
