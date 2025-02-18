@@ -2403,7 +2403,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
     if (program.errors) {
         return { errors: program.errors };
     } else {
-        const inputSetters = programVariablesState.setupInputs(makeInputSetters(gl, program.handle, true));
+        const inputSetters = programVariablesState.setupInputs(makeInputSetters(gl, program.handle));
 
         let lastMaterialId = null;
         let lastGeometryId = null;
