@@ -1,30 +1,14 @@
-export const PickMeshProgram = function(geometryParameters, logarithmicDepthBufferEnabled, clipTransformSetup, isPoints) {
+export const PickMeshProgram = function(programVariables, geometry, logarithmicDepthBufferEnabled, clipTransformSetup) {
+    const vPickColor = programVariables.createVarying("vec4", "vPickColor", () => `${geometry.attributes.pickColor} / 255.0`);
+    const outPickColor = programVariables.createOutput("vec4", "outPickColor");
     return {
         programName: "PickMesh",
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 3,  // PICK
+        incPointSizeBy10: true,
         usePickParams: true,
-        appendVertexDefinitions: (src) => {
-            src.push("out vec4 vPickColor;");
-            clipTransformSetup.appendDefinitions(src);
-        },
         transformClipPos: clipTransformSetup.transformClipPos,
-        appendVertexOutputs: (src) => {
-            src.push(`vPickColor = ${geometryParameters.attributes.pickColor} / 255.0;`);
-            if (isPoints) {
-                src.push("gl_PointSize += 10.0;");
-            }
-        },
-        appendFragmentDefinitions: (src) => {
-            src.push("in vec4 vPickColor;");
-            src.push("out vec4 outPickColor;");
-        },
-        appendFragmentOutputs: (src) => src.push("outPickColor = vPickColor;"),
-        setupInputs: (getUniformSetter) => {
-            const setClipTransformState = clipTransformSetup.setupInputs(getUniformSetter);
-            return (frameCtx, textureSet) => setClipTransformState(frameCtx);
-        },
-
-        dontCullOnAlphaZero: true // should be false?
+        dontCullOnAlphaZero: true, // should be false?
+        appendFragmentOutputs: (src) => src.push(`${outPickColor} = ${vPickColor};`)
     };
 };
