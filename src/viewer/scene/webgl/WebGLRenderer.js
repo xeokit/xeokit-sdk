@@ -258,6 +258,7 @@ export const setupTexture = (programVariables, type, name, encoding, getTexture,
         return (encoding !== LinearEncoding) ? `${TEXTURE_DECODE_FUNCS[encoding]}(${texel})` : texel;
     };
     sample.getTexCoordExpression = getTexCoordExpression;
+    sample.texelFetch = (P, lod) => `texelFetch(${map}, ${P}, ${lod})`;
     return sample;
 };
 
