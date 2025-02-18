@@ -791,6 +791,7 @@ const makeDTXRenderingAttributes = function(gl, subGeometry) {
                 },
                 pickColor:         pickColorA,
                 position:          {
+                    clip:  "gl_Position",
                     view:  "viewPosition",
                     world: "worldPosition"
                 },
