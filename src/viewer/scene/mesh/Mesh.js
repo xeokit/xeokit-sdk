@@ -2233,16 +2233,25 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
     const billboard = mesh.billboard;
     const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
     const stationary = mesh.stationary;
-    const billboardIfApplicable = v => isBillboard ? `billboard(${v})` : v;
-    const billboardLines = isBillboard && [
-        "mat4 billboard(in mat4 matIn) {",
+    const defineBillboard = isBillboard && ((name, src) => [
+        `mat4 ${name}(in mat4 matIn) {`,
         "   mat4 mat = matIn;",
         `   mat[0].xyz = vec3(${scale}[0], 0.0, 0.0);`,
         ...((billboard === "spherical") ? [ `   mat[1].xyz = vec3(0.0, ${scale}[1], 0.0);` ] : [ ]),
         "   mat[2].xyz = vec3(0.0, 0.0, 1.0);",
         "   return mat;",
         "}",
-    ];
+    ].forEach(l => src.push(l)));
+
+    const billboardIfApplicable = (function() {
+        const billboardVert = defineBillboard && programVariables.createVertexDefinition("billboard", defineBillboard);
+        return v => billboardVert ? `${billboardVert}(${v})` : v;
+    })();
+
+    const billboardIfApplicableFrag = (function() {
+        const billboardFrag = defineBillboard && programVariables.createFragmentDefinition("billboard", defineBillboard);
+        return v => billboardFrag ? `${billboardFrag}(${v})` : v;
+    })();
 
     const programFragmentOutputs = [ ];
     if (clipping) {
@@ -2267,7 +2276,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         } else if (meshStateBackground) {
             programFragmentOutputs.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
         }
-        programFragmentOutputs.push(`mat4 viewMatrix2 = ${billboardIfApplicable("viewMatrix1")};`);
+        programFragmentOutputs.push(`mat4 viewMatrix2 = ${billboardIfApplicableFrag("viewMatrix1")};`);
     }
     if (getLogDepth) {
         programFragmentOutputs.push(`gl_FragDepth = ${isPerspective} == 0.0 ? gl_FragCoord.z : log2(${vFragDepth}) * ${logDepthBufFC} * 0.5;`);
@@ -2283,7 +2292,6 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
     programSetup.appendFragmentOutputs(programFragmentOutputs, scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord");
 
     const fragmentShader = [
-        ...(billboardLines || [ ]),
         ...programVariablesState.getFragmentDefinitions(),
         "void main(void) {",
         ...programFragmentOutputs,
@@ -2301,60 +2309,56 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         ...programVariablesState.getVertexOutputs()
     ];
 
-    const vertexShader = (function() {
+    const vertexData = (function() {
         const viewNormalDefinition = viewNormal && viewNormal.needed && `vec3 ${viewNormal} = normalize((${billboardIfApplicable(viewNormalMatrix)} * vec4(${worldNormal}, 0.0)).xyz);`;
-
-        const mainVertexOutputs = (function() {
-            const src = [ ];
-            src.push(`vec4 localPosition = vec4(${attributes.position}, 1.0);`);
-            if (quantizedGeometry) {
-                src.push(`localPosition = ${positionsDecodeMatrix} * localPosition;`);
+        const src = [ ];
+        src.push(`vec4 localPosition = vec4(${attributes.position}, 1.0);`);
+        if (quantizedGeometry) {
+            src.push(`localPosition = ${positionsDecodeMatrix} * localPosition;`);
+        }
+        src.push(`vec4 worldPosition = ${billboardIfApplicable(modelMatrix)} * localPosition;`);
+        src.push(`worldPosition.xyz = worldPosition.xyz + ${offset};`);
+        if (programSetup.dontBillboardAnything) {
+            src.push(`vec4 viewPosition = ${viewMatrix} * worldPosition;`);
+        } else {
+            src.push(`mat4 viewMatrix1 = ${viewMatrix};`);
+            if (stationary) {
+                src.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
+            } else if (meshStateBackground) {
+                src.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
             }
-            src.push(`vec4 worldPosition = ${billboardIfApplicable(modelMatrix)} * localPosition;`);
-            src.push(`worldPosition.xyz = worldPosition.xyz + ${offset};`);
-            if (programSetup.dontBillboardAnything) {
-                src.push(`vec4 viewPosition = ${viewMatrix} * worldPosition;`);
-            } else {
-                src.push(`mat4 viewMatrix1 = ${viewMatrix};`);
-                if (stationary) {
-                    src.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
-                } else if (meshStateBackground) {
-                    src.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
-                }
-                src.push(`mat4 viewMatrix2 = ${billboardIfApplicable("viewMatrix1")};`);
-                src.push(`vec4 viewPosition = ${(isBillboard
+            src.push(`mat4 viewMatrix2 = ${billboardIfApplicable("viewMatrix1")};`);
+            src.push(`vec4 viewPosition = ${(isBillboard
                                                  ? `${billboardIfApplicable(`viewMatrix1 * ${modelMatrix}`)} * localPosition`
                                                  : "viewMatrix2 * worldPosition")};`);
-            }
-            decodedUv && decodedUv.needed && src.push(`vec2 ${decodedUv} = ${quantizedGeometry ? `(${uvDecodeMatrix} * vec3(${attributes.uv}, 1.0)).xy` : attributes.uv};`);
-            if (worldNormal && worldNormal.needed) {
-                const octDecode = programVariables.createVertexDefinition(
-                    "octDecode",
-                    (name, src) => {
-                        src.push(`vec3 ${name}(vec2 oct) {`);
-                        src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
-                        src.push("    if (v.z < 0.0) {");
-                        src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
-                        src.push("    }");
-                        src.push("    return normalize(v);");
-                        src.push("}");
-                    });
-                const localNormal = quantizedGeometry ? `${octDecode}(${attributes.normal}.xy)` : attributes.normal;
-                src.push(`vec3 ${worldNormal} = (${billboardIfApplicable(modelNormalMatrix)} * vec4(${localNormal}, 0.0)).xyz;`);
-            }
-            viewNormalDefinition && src.push(viewNormalDefinition);
-            return src;
-        })();
-
-        return [
-            ...(billboardLines || [ ]),
-            ...programVariablesState.getVertexDefinitions(),
-            "void main(void) {",
-            ...mainVertexOutputs,
-            ...vertexOutputs,
-            "}"
-        ];
+        }
+        decodedUv && decodedUv.needed && src.push(`vec2 ${decodedUv} = ${quantizedGeometry ? `(${uvDecodeMatrix} * vec3(${attributes.uv}, 1.0)).xy` : attributes.uv};`);
+        if (worldNormal && worldNormal.needed) {
+            const octDecode = programVariables.createVertexDefinition(
+                "octDecode",
+                (name, src) => {
+                    src.push(`vec3 ${name}(vec2 oct) {`);
+                    src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
+                    src.push("    if (v.z < 0.0) {");
+                    src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
+                    src.push("    }");
+                    src.push("    return normalize(v);");
+                    src.push("}");
+                });
+            const localNormal = quantizedGeometry ? `${octDecode}(${attributes.normal}.xy)` : attributes.normal;
+            src.push(`vec3 ${worldNormal} = (${billboardIfApplicable(modelNormalMatrix)} * vec4(${localNormal}, 0.0)).xyz;`);
+        }
+        viewNormalDefinition && src.push(viewNormalDefinition);
+        return src;
     })();
+
+    const vertexShader = [
+        ...programVariablesState.getVertexDefinitions(),
+        "void main(void) {",
+        ...vertexData,
+        ...vertexOutputs,
+        "}"
+    ];
 
     const gl = scene.canvas.gl;
 
