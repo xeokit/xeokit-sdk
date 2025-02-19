@@ -48,7 +48,7 @@ export class VBOInstancingPointsShadowRenderer extends VBOInstancingPointsRender
         src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
         src.push("} else {");
         src.push("  vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
-        src.push("  worldPosition = vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+        src.push("  worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
         if (scene.entityOffsetsEnabled) {
             src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
         }
