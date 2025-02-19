@@ -249,16 +249,12 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
 
         src.push("vec4 color =  vec4((lightAmbient.rgb * lightAmbient.a * newColor.rgb) + (reflectedColor * newColor.rgb), newColor.a);");
 
-        src.push("vec4 sampleColor = texture(uColorMap, vUV);");
+        src.push("vec4 sampleColor = sRGBToLinear(texture(uColorMap, vUV));");
 
         if (useAlphaCutoff) {
             src.push("if (sampleColor.a < materialAlphaCutoff) {");
             src.push("   discard;");
             src.push("}");
-        }
-
-        if (gammaOutput) {
-            src.push("sampleColor = sRGBToLinear(sampleColor);");
         }
 
         src.push("vec4 colorTexel = color * sampleColor;");
