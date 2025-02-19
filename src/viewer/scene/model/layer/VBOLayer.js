@@ -931,9 +931,7 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing,
 
         getClippable: () => `((int(${attributes.flags}) >> 16 & 0xF) == 1) ? 1.0 : 0.0`,
 
-        appendVertexData: (src, afterFlagsColorLines) => {
-            afterFlagsColorLines.forEach(line => src.push(line));
-
+        appendVertexData: (src) => {
             if (needNormal()) {
                 const octDecode = programVariables.createVertexDefinition(
                     "octDecode",
