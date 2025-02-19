@@ -28,7 +28,7 @@ export class LayerRenderer {
         const programName               = cfg.programName;
         const incrementDrawState        = cfg.incrementDrawState;
         const getLogDepth               = cfg.getLogDepth;
-        const clippingCaps              = isVBO && cfg.clippingCaps;
+        const clippingCaps              = cfg.clippingCaps;
         const renderPassFlag            = cfg.renderPassFlag;
         const usePickParams             = cfg.usePickParams;
         const cullOnAlphaZero           = (!isVBO) && (!cfg.dontCullOnAlphaZero);
