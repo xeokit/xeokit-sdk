@@ -126,8 +126,8 @@ export const createProgramVariablesState = function() {
                 };
             }
         },
-        appendVertexDefinitions:   (src) => vertAppenders.forEach(a => a(src)),
-        appendVertexOutputs:       (src) => vOutAppenders.forEach(a => a(src)),
+        getVertexDefinitions:   () => { const src = [ ]; vertAppenders.forEach(a => a(src)); return src; },
+        getVertexOutputs:       () => { const src = [ ]; vOutAppenders.forEach(a => a(src)); return src; },
         getFragmentDefinitions: () => { const src = [ ]; fragAppenders.forEach(a => a(src)); return src; },
         buildProgram: (gl, programName, vertexLines, fragmentLines) => {
             const preamble = (type) => [
