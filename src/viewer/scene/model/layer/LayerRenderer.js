@@ -137,6 +137,7 @@ export class LayerRenderer {
         const colorA = geoParams.attributes.color;
 
         const vertexOutputs = [
+            `vec4 clipPos = ${geoParams.projMatrix} * viewPosition;`,
             `gl_Position = ${transformClipPos ? transformClipPos("clipPos") : "clipPos"};`,
             ...programVariablesState.getVertexOutputs()
         ];
@@ -189,7 +190,6 @@ export class LayerRenderer {
         afterFlagsColorLines.forEach(line => vertexData.push(line));
         renderingAttributes.appendVertexData(vertexData);
         vertexData.push(`vec4 viewPosition = ${geoParams.viewMatrix} * ${geoParams.attributes.position.world};`);
-        vertexData.push(`vec4 clipPos = ${geoParams.projMatrix} * viewPosition;`);
 
         const vertexShader = [
             ...programVariablesState.getVertexDefinitions(),
