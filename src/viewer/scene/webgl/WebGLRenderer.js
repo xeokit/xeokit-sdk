@@ -126,21 +126,25 @@ export const createProgramVariablesState = function() {
                 };
             }
         },
-        getFragmentDefinitions: () => { const src = [ ]; fragAppenders.forEach(a => a(src)); return src; },
         buildProgram: (gl, programName, cfg) => {
+            const fragmentShader = [
+                ...(function() { const src = [ ]; fragAppenders.forEach(a => a(src)); return src; })(),
+                "void main(void) {",
+                ...cfg.fragmentOutputs,
+                "}"
+            ];
+
             const vertexOutputs = [
                 `vec4 clipPos = ${cfg.projMatrix} * viewPosition;`,
                 `gl_Position = ${cfg.transformClipPos ? cfg.transformClipPos("clipPos") : "clipPos"};`,
-                ...(cfg.getPointSize ? [ `gl_PointSize = ${cfg.getPointSize()};` ] : [ ])
+                ...(cfg.getPointSize ? [ `gl_PointSize = ${cfg.getPointSize()};` ] : [ ]),
+                ...(function() { const src = [ ]; vOutAppenders.forEach(a => a(src)); return src; })()
             ];
-            vOutAppenders.forEach(a => a(vertexOutputs));
 
             const vertexData = cfg.getVertexData();
 
-            const vertexDefs = [ ];
-            vertAppenders.forEach(a => a(vertexDefs));
             const vertexShader = [
-                ...vertexDefs,
+                ...(function() { const src = [ ]; vertAppenders.forEach(a => a(src)); return src; })(),
                 "void main(void) {",
                 ...vertexData,
                 ...vertexOutputs,
@@ -172,7 +176,7 @@ export const createProgramVariablesState = function() {
                     "vec4 sRGBToLinear(in vec4 value) {",
                     "  return vec4(mix(pow(value.rgb * 0.9478672986 + 0.0521327014, vec3(2.4)), value.rgb * 0.0773993808, vec3(lessThanEqual(value.rgb, vec3(0.04045)))), value.w);",
                     "}"
-                ]).concat(cfg.fragmentShader)
+                ]).concat(fragmentShader)
             });
 
             if (program.errors) {
