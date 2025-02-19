@@ -117,9 +117,7 @@ export class LayerRenderer {
             return src;
         })();
 
-        const fragmentShader = [
-            ...programVariablesState.getFragmentDefinitions(),
-            "void main(void) {",
+        const programFragmentOutputs = [
             ...((setupPoints && pointsMaterial.roundPoints)
                 ? [
                     `  vec2 cxy = 2.0 * gl_PointCoord - 1.0;`,
@@ -130,8 +128,7 @@ export class LayerRenderer {
                 ]
                 : [ ]),
             ...fragmentClippingLines,
-            ...fragmentOutputs,
-            "}"
+            ...fragmentOutputs
         ];
 
         const getVertexData = () => {
@@ -193,7 +190,7 @@ export class LayerRenderer {
             gl,
             primitive + " " + renderingAttributes.signature + " " + cfg.programName,
             {
-                fragmentShader:   fragmentShader,
+                fragmentOutputs:  programFragmentOutputs,
                 getPointSize:     getPointSize,
                 getVertexData:    getVertexData,
                 projMatrix:       projMatrix,
