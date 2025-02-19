@@ -2367,13 +2367,6 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         src.push("precision mediump int;");
         src.push("#endif");
 
-        // CONSTANT DEFINITIONS
-        src.push("#define PI 3.14159265359");
-        src.push("#define RECIPROCAL_PI 0.31830988618");
-        src.push("#define RECIPROCAL_PI2 0.15915494");
-        src.push("#define EPSILON 1e-6");
-        src.push("#define saturate(a) clamp( a, 0.0, 1.0 )");
-
         if (isBillboard) {
             src.push("mat4 billboard(in mat4 matIn) {");
             src.push("   mat4 mat = matIn;");
