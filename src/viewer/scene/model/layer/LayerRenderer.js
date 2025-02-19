@@ -31,7 +31,6 @@ export class LayerRenderer {
         const usePickParams             = cfg.usePickParams;
         const cullOnAlphaZero           = (!isVBO) && (!cfg.dontCullOnAlphaZero);
         const filterIntensityRange      = cfg.filterIntensityRange && (primitive === "points") && pointsMaterial.filterIntensity;
-        const transformClipPos          = cfg.transformClipPos;
         const isShadowProgram           = cfg.isShadowProgram;
         const incPointSizeBy10          = cfg.incPointSizeBy10;
 
@@ -65,8 +64,9 @@ export class LayerRenderer {
         const sliceThickness  = programVariables.createUniform("float", "sliceThickness", (set) => set(scene.crossSections.sliceThickness));
 
         const geoParams = renderingAttributes.geometryParameters;
+        const projMatrix = geoParams.projMatrix;
 
-        const isPerspective       = programVariables.createVarying("float",      "isPerspective",       () => `float(${isPerspectiveMatrix(geoParams.projMatrix)})`);
+        const isPerspective       = programVariables.createVarying("float",      "isPerspective",       () => `float(${isPerspectiveMatrix(projMatrix)})`);
         const vClippable          = programVariables.createVarying("float",      "vClippable",          () => renderingAttributes.getClippable(), "flat");
         const vClipPositionW      = programVariables.createVarying("float",      "vClipPositionW",      () => "clipPos.w");
         const vFragDepth          = programVariables.createVarying("float",      "vFragDepth",          () => "1.0 + clipPos.w");
@@ -134,74 +134,71 @@ export class LayerRenderer {
             "}"
         ];
 
-        const colorA = geoParams.attributes.color;
+        const getVertexData = () => {
+            const colorA = geoParams.attributes.color;
+            const flagTest = (isShadowProgram
+                              ? `(${renderingAttributes.getFlag(renderPassFlag)} <= 0) || (${colorA}.a < 1.0)`
+                              : `${renderingAttributes.getFlag(renderPassFlag)} != ${renderPass}`);
 
-        const vertexOutputs = [
-            `vec4 clipPos = ${geoParams.projMatrix} * viewPosition;`,
-            `gl_Position = ${transformClipPos ? transformClipPos("clipPos") : "clipPos"};`,
-            ...programVariablesState.getVertexOutputs()
-        ];
-        if (setupPoints) {
-            if (pointsMaterial.perspectivePoints) {
-                vertexOutputs.push(`gl_PointSize = (${nearPlaneHeight} * ${pointSize}) / gl_Position.w;`);
-                vertexOutputs.push(`gl_PointSize = max(gl_PointSize, ${Math.floor(pointsMaterial.minPerspectivePointSize)}.0);`);
-                vertexOutputs.push(`gl_PointSize = min(gl_PointSize, ${Math.floor(pointsMaterial.maxPerspectivePointSize)}.0);`);
-            } else {
-                vertexOutputs.push(`gl_PointSize = ${pointSize};`);
+            const afterFlagsColorLines = [
+                `if (${flagTest}) {`,
+                "   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);", // Cull vertex
+                "   return;",
+                "}"
+            ].concat(
+                cullOnAlphaZero
+                    ? [
+                        `if (${colorA}.a == 0.0) {`,
+                        "   gl_Position = vec4(0.0, 0.0, 0.0, 1.0);", // Cull vertex
+                        "   return;",
+                        "}"
+                    ]
+                    : [ ]
+            ).concat(
+                filterIntensityRange
+                    ? [
+                        `if ((${colorA}.a < ${intensityRange}[0]) || (${colorA}.a > ${intensityRange}[1])) {`,
+                        "   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);", // Cull vertex
+                        "   return;",
+                        "}"
+                    ]
+                    : [ ]);
+
+            const vertexData = [ ];
+            renderingAttributes.ensureColorAndFlagAvailable && renderingAttributes.ensureColorAndFlagAvailable(vertexData);
+            afterFlagsColorLines.forEach(line => vertexData.push(line));
+            renderingAttributes.appendVertexData(vertexData);
+            vertexData.push(`vec4 viewPosition = ${geoParams.viewMatrix} * ${geoParams.attributes.position.world};`);
+            return vertexData;
+        };
+
+        const getPointSize = (function() {
+            const addends = [ ];
+            if (setupPoints) {
+                if (pointsMaterial.perspectivePoints) {
+                    const minVal = `${Math.floor(pointsMaterial.minPerspectivePointSize)}.0`;
+                    const maxVal = `${Math.floor(pointsMaterial.maxPerspectivePointSize)}.0`;
+                    addends.push(`clamp((${nearPlaneHeight} * ${pointSize}) / gl_Position.w, ${minVal}, ${maxVal})`);
+                } else {
+                    addends.push(pointSize);
+                }
+            } else if (subGeometry && subGeometry.vertices) {
+                addends.push("1.0");
             }
-        } else if (subGeometry && subGeometry.vertices) {
-            vertexOutputs.push("gl_PointSize = 1.0;");
-        }
+            incPointSizeBy10 && (primitive === "points") && addends.push("10.0");
+            return (addends.length > 0) && (() => addends.join(" + "));
+        })();
 
-        if (incPointSizeBy10 && (primitive === "points")) {
-            vertexOutputs.push("gl_PointSize += 10.0;");
-        }
-
-        const flagTest = (isShadowProgram
-                          ? `(${renderingAttributes.getFlag(renderPassFlag)} <= 0) || (${colorA}.a < 1.0)`
-                          : `${renderingAttributes.getFlag(renderPassFlag)} != ${renderPass}`);
-
-        const afterFlagsColorLines = [
-            `if (${flagTest}) {`,
-            "   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);", // Cull vertex
-            "   return;",
-            "}"
-        ].concat(
-            cullOnAlphaZero
-                ? [
-                    `if (${colorA}.a == 0.0) {`,
-                    "   gl_Position = vec4(0.0, 0.0, 0.0, 1.0);", // Cull vertex
-                    "   return;",
-                    "}"
-                ]
-                : [ ]
-        ).concat(
-            filterIntensityRange
-                ? [
-                    `if ((${colorA}.a < ${intensityRange}[0]) || (${colorA}.a > ${intensityRange}[1])) {`,
-                    "   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);", // Cull vertex
-                    "   return;",
-                    "}"
-                ]
-                : [ ]);
-
-        const vertexData = [ ];
-        renderingAttributes.ensureColorAndFlagAvailable && renderingAttributes.ensureColorAndFlagAvailable(vertexData);
-        afterFlagsColorLines.forEach(line => vertexData.push(line));
-        renderingAttributes.appendVertexData(vertexData);
-        vertexData.push(`vec4 viewPosition = ${geoParams.viewMatrix} * ${geoParams.attributes.position.world};`);
-
-        const vertexShader = [
-            ...programVariablesState.getVertexDefinitions(),
-            "void main(void) {",
-            ...vertexData,
-            ...vertexOutputs,
-            "}"
-        ];
-
-        const programName = primitive + " " + renderingAttributes.signature + " " + cfg.programName;
-
-        const [ program, errors ] = programVariablesState.buildProgram(gl, programName, vertexShader, fragmentShader);
+        const [ program, errors ] = programVariablesState.buildProgram(
+            gl,
+            primitive + " " + renderingAttributes.signature + " " + cfg.programName,
+            {
+                fragmentShader:   fragmentShader,
+                getPointSize:     getPointSize,
+                getVertexData:    getVertexData,
+                projMatrix:       projMatrix,
+                transformClipPos: cfg.transformClipPos
+            });
 
         if (errors) {
             console.error(errors);
