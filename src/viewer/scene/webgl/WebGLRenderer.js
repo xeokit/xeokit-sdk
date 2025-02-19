@@ -128,7 +128,7 @@ export const createProgramVariablesState = function() {
         },
         appendVertexDefinitions:   (src) => vertAppenders.forEach(a => a(src)),
         appendVertexOutputs:       (src) => vOutAppenders.forEach(a => a(src)),
-        appendFragmentDefinitions: (src) => fragAppenders.forEach(a => a(src)),
+        getFragmentDefinitions: () => { const src = [ ]; fragAppenders.forEach(a => a(src)); return src; },
         buildProgram: (gl, programName, vertexLines, fragmentLines) => {
             const preamble = (type) => [
                 "#version 300 es",
