@@ -793,6 +793,8 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
 
     const isTriangle = ! subGeometry;
 
+    const colorsAndFlags = (offset) => perObjColsFlags(`ivec2(objectIndexCoords.x*8+${offset}, objectIndexCoords.y)`);
+
     return {
         isVBO: false,
         signature: "DTX",
@@ -821,7 +823,7 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
 
         getClippable: () => "float(flags2.r)",
 
-        appendVertexData: (src, afterFlagsColorLines) => {
+        ensureColorAndFlagAvailable: (src) => {
             // constants
             src.push("int primitiveIndex = gl_VertexID / " + (isTriangle ? 3 : 2) + ";");
 
@@ -832,16 +834,14 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
             src.push(`int objectIndex = int(${perPrimIdPorIds("ivec2(h_packed_object_id_index, v_packed_object_id_index)")}.r);`);
             src.push("ivec2 objectIndexCoords = ivec2(objectIndex % 512, objectIndex / 512);");
 
-            const colorsAndFlags = (offset) => perObjColsFlags(`ivec2(objectIndexCoords.x*8+${offset}, objectIndexCoords.y)`);
-
             // get flags & flags2
             src.push(`uvec4 flags  = ${colorsAndFlags(2)};`);
             src.push(`uvec4 flags2 = ${colorsAndFlags(3)};`);
 
             colorA.needed && src.push(`vec4 ${colorA} = vec4(${colorsAndFlags(0)}) / 255.0;`);
+        },
 
-            afterFlagsColorLines.forEach(line => src.push(line));
-
+        appendVertexData: (src) => {
             const objMatrix = (offset) => perObjectMatrix(`ivec2(objectIndexCoords.x*4+${offset}, objectIndexCoords.y)`);
             src.push(`mat4 objectInstanceMatrix = mat4(${objMatrix(0)}, ${objMatrix(1)}, ${objMatrix(2)}, ${objMatrix(3)});`);
 
