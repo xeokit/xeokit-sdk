@@ -2204,6 +2204,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
     const worldNormal = auxVariables.worldNormal;
     const viewNormal  = auxVariables.viewNormal;
     const scene = mesh.scene;
+    const gl = scene.canvas.gl;
     const meshStateBackground = mesh._state.background;
     const clipping = createSectionPlanesSetup(programVariables, scene._sectionPlanesState);
     const getLogDepth = (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled;
@@ -2297,18 +2298,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         "}"
     ];
 
-    const vertexOutputs = [
-        `vec4 clipPos = ${projMatrix} * viewPosition;`,
-        `gl_Position = ${meshStateBackground
-                         ? "clipPos.xyww"
-                         : (programSetup.isPick
-                            ? `vec4((clipPos.xy / clipPos.w - ${pickClipPos}) * clipPos.w, clipPos.zw)`
-                            : "clipPos")};`,
-        ...((programSetup.setupPointSize && isPoints) ? [ `gl_PointSize = ${pointSize};` ] : [ ]),
-        ...programVariablesState.getVertexOutputs()
-    ];
-
-    const vertexData = (function() {
+    const getVertexData = function() {
         const viewNormalDefinition = viewNormal && viewNormal.needed && `vec3 ${viewNormal} = normalize((${billboardIfApplicable(viewNormalMatrix)} * vec4(${worldNormal}, 0.0)).xyz);`;
         const src = [ ];
         src.push(`vec4 localPosition = vec4(${attributes.position}, 1.0);`);
@@ -2349,19 +2339,22 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         }
         viewNormalDefinition && src.push(viewNormalDefinition);
         return src;
-    })();
+    };
 
-    const vertexShader = [
-        ...programVariablesState.getVertexDefinitions(),
-        "void main(void) {",
-        ...vertexData,
-        ...vertexOutputs,
-        "}"
-    ];
-
-    const gl = scene.canvas.gl;
-
-    const [ program, errors ] = programVariablesState.buildProgram(gl, programSetup.programName, vertexShader, fragmentShader);
+    const [ program, errors ] = programVariablesState.buildProgram(
+        gl,
+        programSetup.programName,
+        {
+            fragmentShader:   fragmentShader,
+            getPointSize:     programSetup.setupPointSize && isPoints && (() => pointSize),
+            getVertexData:    getVertexData,
+            projMatrix:       projMatrix,
+            transformClipPos: (meshStateBackground
+                               ? (clipPos => `${clipPos}.xyww`)
+                               : (programSetup.isPick
+                                  &&
+                                  (clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - ${pickClipPos}) * ${clipPos}.w, ${clipPos}.zw)`)))
+        });
 
     if (errors) {
         return { errors: errors };
