@@ -126,10 +126,27 @@ export const createProgramVariablesState = function() {
                 };
             }
         },
-        getVertexDefinitions:   () => { const src = [ ]; vertAppenders.forEach(a => a(src)); return src; },
-        getVertexOutputs:       () => { const src = [ ]; vOutAppenders.forEach(a => a(src)); return src; },
         getFragmentDefinitions: () => { const src = [ ]; fragAppenders.forEach(a => a(src)); return src; },
-        buildProgram: (gl, programName, vertexLines, fragmentLines) => {
+        buildProgram: (gl, programName, cfg) => {
+            const vertexOutputs = [
+                `vec4 clipPos = ${cfg.projMatrix} * viewPosition;`,
+                `gl_Position = ${cfg.transformClipPos ? cfg.transformClipPos("clipPos") : "clipPos"};`,
+                ...(cfg.getPointSize ? [ `gl_PointSize = ${cfg.getPointSize()};` ] : [ ])
+            ];
+            vOutAppenders.forEach(a => a(vertexOutputs));
+
+            const vertexData = cfg.getVertexData();
+
+            const vertexDefs = [ ];
+            vertAppenders.forEach(a => a(vertexDefs));
+            const vertexShader = [
+                ...vertexDefs,
+                "void main(void) {",
+                ...vertexData,
+                ...vertexOutputs,
+                "}"
+            ];
+
             const preamble = (type) => [
                 "#version 300 es",
                 "// " + programName + " " + type + " shader",
@@ -149,13 +166,13 @@ export const createProgramVariablesState = function() {
             ];
 
             const program = new Program(gl, {
-                vertex:   preamble("vertex"  ).concat(vertexLines),
+                vertex:   preamble("vertex"  ).concat(vertexShader),
                 fragment: preamble("fragment").concat([
                     // Not the best place to define here, TODO: Move somewhere more appropriate after refactors
                     "vec4 sRGBToLinear(in vec4 value) {",
                     "  return vec4(mix(pow(value.rgb * 0.9478672986 + 0.0521327014, vec3(2.4)), value.rgb * 0.0773993808, vec3(lessThanEqual(value.rgb, vec3(0.04045)))), value.w);",
                     "}"
-                ]).concat(fragmentLines)
+                ]).concat(cfg.fragmentShader)
             });
 
             if (program.errors) {
