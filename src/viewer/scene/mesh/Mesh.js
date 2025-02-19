@@ -2234,6 +2234,15 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
     const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
     const stationary = mesh.stationary;
     const billboardIfApplicable = v => isBillboard ? `billboard(${v})` : v;
+    const billboardLines = isBillboard && [
+        "mat4 billboard(in mat4 matIn) {",
+        "   mat4 mat = matIn;",
+        `   mat[0].xyz = vec3(${scale}[0], 0.0, 0.0);`,
+        ...((billboard === "spherical") ? [ `   mat[1].xyz = vec3(0.0, ${scale}[1], 0.0);` ] : [ ]),
+        "   mat[2].xyz = vec3(0.0, 0.0, 1.0);",
+        "   return mat;",
+        "}",
+    ];
 
     const programFragmentOutputs = [ ];
     if (clipping) {
@@ -2272,6 +2281,14 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
             src.push("}");
         });
     programSetup.appendFragmentOutputs(programFragmentOutputs, scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord");
+
+    const fragmentShader = [
+        ...(billboardLines || [ ]),
+        ...programVariablesState.getFragmentDefinitions(),
+        "void main(void) {",
+        ...programFragmentOutputs,
+        "}"
+    ];
 
     const programVertexOutputs = [ ];
     programVariablesState.appendVertexOutputs(programVertexOutputs);
@@ -2332,18 +2349,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         programVertexOutputs.push(`gl_Position = ${gl_Position};`);
 
         const src = [];
-
-        if (isBillboard) {
-            src.push("mat4 billboard(in mat4 matIn) {");
-            src.push("   mat4 mat = matIn;");
-            src.push(`   mat[0].xyz = vec3(${scale}[0], 0.0, 0.0);`);
-            if (billboard === "spherical") {
-                src.push(`   mat[1].xyz = vec3(0.0, ${scale}[1], 0.0);`);
-            }
-            src.push("   mat[2].xyz = vec3(0.0, 0.0, 1.0);");
-            src.push("   return mat;");
-            src.push("}");
-        }
+        billboardLines && billboardLines.forEach(l => src.push(l));
         programVariablesState.appendVertexDefinitions(src);
         src.push("void main(void) {");
         mainVertexOutputs.forEach(line => src.push(line));
@@ -2352,32 +2358,9 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         return src;
     };
 
-    const buildFragmentShader = () => {
-        const src = [];
-
-        if (isBillboard) {
-            src.push("mat4 billboard(in mat4 matIn) {");
-            src.push("   mat4 mat = matIn;");
-            src.push(`   mat[0].xyz = vec3(${scale}[0], 0.0, 0.0);`);
-            if (billboard === "spherical") {
-                src.push(`   mat[1].xyz = vec3(0.0, ${scale}[1], 0.0);`);
-            }
-            src.push("   mat[2].xyz = vec3(0.0, 0.0, 1.0);");
-            src.push("   return mat;");
-            src.push("}");
-        }
-
-        programVariablesState.appendFragmentDefinitions(src);
-
-        src.push("void main(void) {");
-        programFragmentOutputs.forEach(line => src.push(line));
-        src.push("}");
-        return src;
-    };
-
     const gl = scene.canvas.gl;
 
-    const [ program, errors ] = programVariablesState.buildProgram(gl, programSetup.programName, buildVertexShader(), buildFragmentShader());
+    const [ program, errors ] = programVariablesState.buildProgram(gl, programSetup.programName, buildVertexShader(), fragmentShader);
 
     if (errors) {
         return { errors: errors };

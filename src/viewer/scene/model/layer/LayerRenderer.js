@@ -33,7 +33,6 @@ export class LayerRenderer {
         const filterIntensityRange      = cfg.filterIntensityRange && (primitive === "points") && pointsMaterial.filterIntensity;
         const transformClipPos          = cfg.transformClipPos;
         const isShadowProgram           = cfg.isShadowProgram;
-        const appendFragmentOutputs     = cfg.appendFragmentOutputs;
         const incPointSizeBy10          = cfg.incPointSizeBy10;
 
         const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || subGeometry;
@@ -86,7 +85,7 @@ export class LayerRenderer {
         const fragmentOutputs = [ ];
         getLogDepth && fragmentOutputs.push(`gl_FragDepth = ${testPerspectiveForGl_FragDepth ? `${isPerspective} == 0.0 ? gl_FragCoord.z : ` : ""}log2(${getLogDepth(vFragDepth)}) * ${logDepthBufFC} * 0.5;`);
 
-        appendFragmentOutputs(fragmentOutputs, "gl_FragCoord", sliceColorOr);
+        cfg.appendFragmentOutputs(fragmentOutputs, "gl_FragCoord", sliceColorOr);
 
         const fragmentClippingLines = (function() {
             const src = [ ];
@@ -117,6 +116,23 @@ export class LayerRenderer {
 
             return src;
         })();
+
+        const fragmentShader = [
+            ...programVariablesState.getFragmentDefinitions(),
+            "void main(void) {",
+            ...((setupPoints && pointsMaterial.roundPoints)
+                ? [
+                    `  vec2 cxy = 2.0 * gl_PointCoord - 1.0;`,
+                    "  float r = dot(cxy, cxy);",
+                    "  if (r > 1.0) {",
+                    "       discard;",
+                    "  }"
+                ]
+                : [ ]),
+            ...fragmentClippingLines,
+            ...fragmentOutputs,
+            "}"
+        ];
 
         const colorA = geoParams.attributes.color;
 
@@ -184,32 +200,9 @@ export class LayerRenderer {
             return src;
         };
 
-        const buildFragmentShader = () => {
-            const src = [];
-
-            programVariablesState.appendFragmentDefinitions(src);
-
-            src.push("void main(void) {");
-
-            if (setupPoints && pointsMaterial.roundPoints) {
-                src.push(`  vec2 cxy = 2.0 * gl_PointCoord - 1.0;`);
-                src.push("  float r = dot(cxy, cxy);");
-                src.push("  if (r > 1.0) {");
-                src.push("       discard;");
-                src.push("  }");
-            }
-
-            fragmentClippingLines.forEach(line => src.push(line));
-
-            fragmentOutputs.forEach(line => src.push(line));
-
-            src.push("}");
-            return src;
-        };
-
         const programName = primitive + " " + renderingAttributes.signature + " " + cfg.programName;
 
-        const [ program, errors ] = programVariablesState.buildProgram(gl, programName, buildVertexShader(), buildFragmentShader());
+        const [ program, errors ] = programVariablesState.buildProgram(gl, programName, buildVertexShader(), fragmentShader);
 
         if (errors) {
             console.error(errors);
