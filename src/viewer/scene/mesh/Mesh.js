@@ -2261,13 +2261,6 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         programFragmentOutputs.push("  if (dist > 0.0) { discard; }");
         programFragmentOutputs.push("}");
     }
-    if (isPoints && programSetup.discardPoints) {
-        programFragmentOutputs.push("vec2 cxy = 2.0 * gl_PointCoord - 1.0;");
-        programFragmentOutputs.push("float r = dot(cxy, cxy);");
-        programFragmentOutputs.push("if (r > 1.0) {");
-        programFragmentOutputs.push("   discard;");
-        programFragmentOutputs.push("}");
-    }
     if (programSetup.dontBillboardAnything) {
         programFragmentOutputs.push(`mat4 viewMatrix2 = ${viewMatrix};`);
     } else {
@@ -2339,6 +2332,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         gl,
         programSetup.programName,
         {
+            discardPoints:    isPoints && programSetup.discardPoints,
             fragmentOutputs:  programFragmentOutputs,
             getPointSize:     programSetup.setupPointSize && isPoints && (() => pointSize),
             getVertexData:    getVertexData,
