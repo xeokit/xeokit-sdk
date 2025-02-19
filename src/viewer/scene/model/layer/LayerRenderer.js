@@ -189,13 +189,6 @@ export class LayerRenderer {
         const buildFragmentShader = () => {
             const src = [];
 
-            // CONSTANT DEFINITIONS
-            src.push("#define PI 3.14159265359");
-            src.push("#define RECIPROCAL_PI 0.31830988618");
-            src.push("#define RECIPROCAL_PI2 0.15915494");
-            src.push("#define EPSILON 1e-6");
-            src.push("#define saturate(a) clamp( a, 0.0, 1.0 )");
-
             programVariablesState.appendFragmentDefinitions(src);
 
             src.push("vec4 sRGBToLinear(in vec4 value) {");
