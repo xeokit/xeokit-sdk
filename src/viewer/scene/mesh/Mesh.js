@@ -2290,7 +2290,16 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         "}"
     ];
 
-    const programVertexOutputs = programVariablesState.getVertexOutputs();
+    const vertexOutputs = [
+        `vec4 clipPos = ${projMatrix} * viewPosition;`,
+        `gl_Position = ${meshStateBackground
+                         ? "clipPos.xyww"
+                         : (programSetup.isPick
+                            ? `vec4((clipPos.xy / clipPos.w - ${pickClipPos}) * clipPos.w, clipPos.zw)`
+                            : "clipPos")};`,
+        ...((programSetup.setupPointSize && isPoints) ? [ `gl_PointSize = ${pointSize};` ] : [ ]),
+        ...programVariablesState.getVertexOutputs()
+    ];
 
     const vertexShader = (function() {
         const viewNormalDefinition = viewNormal && viewNormal.needed && `vec3 ${viewNormal} = normalize((${billboardIfApplicable(viewNormalMatrix)} * vec4(${worldNormal}, 0.0)).xyz);`;
@@ -2334,25 +2343,15 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
                 src.push(`vec3 ${worldNormal} = (${billboardIfApplicable(modelNormalMatrix)} * vec4(${localNormal}, 0.0)).xyz;`);
             }
             viewNormalDefinition && src.push(viewNormalDefinition);
-            programSetup.setupPointSize && isPoints && src.push(`gl_PointSize = ${pointSize};`);
             return src;
         })();
-
-        programVertexOutputs.unshift(`vec4 clipPos = ${projMatrix} * viewPosition;`);
-
-        const gl_Position = (meshStateBackground
-                             ? "clipPos.xyww"
-                             : (programSetup.isPick
-                                ? `vec4((clipPos.xy / clipPos.w - ${pickClipPos}) * clipPos.w, clipPos.zw)`
-                                : "clipPos"));
-        programVertexOutputs.push(`gl_Position = ${gl_Position};`);
 
         return [
             ...(billboardLines || [ ]),
             ...programVariablesState.getVertexDefinitions(),
             "void main(void) {",
             ...mainVertexOutputs,
-            ...programVertexOutputs,
+            ...vertexOutputs,
             "}"
         ];
     })();
