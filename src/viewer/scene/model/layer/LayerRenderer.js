@@ -119,15 +119,6 @@ export class LayerRenderer {
         })();
 
         const programFragmentOutputs = [
-            ...((setupPoints && pointsMaterial.roundPoints)
-                ? [
-                    `  vec2 cxy = 2.0 * gl_PointCoord - 1.0;`,
-                    "  float r = dot(cxy, cxy);",
-                    "  if (r > 1.0) {",
-                    "       discard;",
-                    "  }"
-                ]
-                : [ ]),
             ...fragmentClippingLines,
             ...fragmentOutputs
         ];
@@ -191,6 +182,7 @@ export class LayerRenderer {
             gl,
             primitive + " " + renderingAttributes.signature + " " + cfg.programName,
             {
+                discardPoints:    setupPoints && pointsMaterial.roundPoints,
                 fragmentOutputs:  programFragmentOutputs,
                 getPointSize:     getPointSize,
                 getVertexData:    getVertexData,
