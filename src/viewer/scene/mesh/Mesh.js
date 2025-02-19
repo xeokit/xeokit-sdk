@@ -2290,10 +2290,9 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         "}"
     ];
 
-    const programVertexOutputs = [ ];
-    programVariablesState.appendVertexOutputs(programVertexOutputs);
+    const programVertexOutputs = programVariablesState.getVertexOutputs();
 
-    const buildVertexShader = () => {
+    const vertexShader = (function() {
         const viewNormalDefinition = viewNormal && viewNormal.needed && `vec3 ${viewNormal} = normalize((${billboardIfApplicable(viewNormalMatrix)} * vec4(${worldNormal}, 0.0)).xyz);`;
 
         const mainVertexOutputs = (function() {
@@ -2348,19 +2347,19 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
                                 : "clipPos"));
         programVertexOutputs.push(`gl_Position = ${gl_Position};`);
 
-        const src = [];
-        billboardLines && billboardLines.forEach(l => src.push(l));
-        programVariablesState.appendVertexDefinitions(src);
-        src.push("void main(void) {");
-        mainVertexOutputs.forEach(line => src.push(line));
-        programVertexOutputs.forEach(line => src.push(line));
-        src.push("}");
-        return src;
-    };
+        return [
+            ...(billboardLines || [ ]),
+            ...programVariablesState.getVertexDefinitions(),
+            "void main(void) {",
+            ...mainVertexOutputs,
+            ...programVertexOutputs,
+            "}"
+        ];
+    })();
 
     const gl = scene.canvas.gl;
 
-    const [ program, errors ] = programVariablesState.buildProgram(gl, programSetup.programName, buildVertexShader(), fragmentShader);
+    const [ program, errors ] = programVariablesState.buildProgram(gl, programSetup.programName, vertexShader, fragmentShader);
 
     if (errors) {
         return { errors: errors };
