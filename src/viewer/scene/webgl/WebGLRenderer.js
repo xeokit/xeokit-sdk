@@ -270,9 +270,10 @@ const makeInputSetters = function(gl, handle) {
     for (let i = 0; i < numAttributes; ++i) {
         const attribute = gl.getActiveAttrib(handle, i);
         const location = gl.getAttribLocation(handle, attribute.name);
-        activeInputs[attribute.name] = function(arrayBuf, divisor) {
+        activeInputs[attribute.name] = function(arrayBuf) {
             arrayBuf.bindAtLocation(location);
             gl.enableVertexAttribArray(location);
+            const divisor = arrayBuf.attributeDivisor;
             if (divisor) {
                 gl.vertexAttribDivisor(location, divisor);
             }
