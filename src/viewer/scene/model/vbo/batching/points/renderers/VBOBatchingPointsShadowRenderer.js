@@ -44,7 +44,7 @@ export class VBOBatchingPointsShadowRenderer extends VBOBatchingPointsRenderer {
         src.push("  if (!visible || transparent) {");
         src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);");
         src.push("  } else {");
-        src.push("      vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
+        src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
         if (scene.entityOffsetsEnabled) {
             src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
         }
