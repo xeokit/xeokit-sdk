@@ -18,7 +18,6 @@ import {OcclusionShaderSource} from "./occlusion/OcclusionShaderSource.js";
 import {ShadowShaderSource} from "./shadow/ShadowShaderSource.js";
 
 import {geometryCompressionUtils} from '../math/geometryCompressionUtils.js';
-import {Program} from "../webgl/Program.js";
 import {RenderFlags} from "../webgl/RenderFlags.js";
 import {stats} from '../stats.js';
 import {Map} from "../utils/Map.js";
@@ -2333,8 +2332,6 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         programVertexOutputs.push(`gl_Position = ${gl_Position};`);
 
         const src = [];
-        src.push("#version 300 es");
-        src.push("// " + programSetup.programName + " vertex shader");
 
         if (isBillboard) {
             src.push("mat4 billboard(in mat4 matIn) {");
@@ -2357,15 +2354,6 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
 
     const buildFragmentShader = () => {
         const src = [];
-        src.push("#version 300 es");
-        src.push("// " + programSetup.programName + " fragment shader");
-        src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
-        src.push("precision highp float;");
-        src.push("precision highp int;");
-        src.push("#else");
-        src.push("precision mediump float;");
-        src.push("precision mediump int;");
-        src.push("#endif");
 
         if (isBillboard) {
             src.push("mat4 billboard(in mat4 matIn) {");
@@ -2381,10 +2369,6 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
 
         programVariablesState.appendFragmentDefinitions(src);
 
-        src.push("vec4 sRGBToLinear(in vec4 value) {");
-        src.push("  return vec4(mix(pow(value.rgb * 0.9478672986 + 0.0521327014, vec3(2.4)), value.rgb * 0.0773993808, vec3(lessThanEqual(value.rgb, vec3(0.04045)))), value.w);");
-        src.push("}");
-
         src.push("void main(void) {");
         programFragmentOutputs.forEach(line => src.push(line));
         src.push("}");
@@ -2392,11 +2376,13 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
     };
 
     const gl = scene.canvas.gl;
-    const program = new Program(gl, { vertex: buildVertexShader(), fragment: buildFragmentShader() });
-    if (program.errors) {
-        return { errors: program.errors };
+
+    const [ program, errors ] = programVariablesState.buildProgram(gl, programSetup.programName, buildVertexShader(), buildFragmentShader());
+
+    if (errors) {
+        return { errors: errors };
     } else {
-        const inputSetters = programVariablesState.setupInputs(gl, program.handle);
+        const inputSetters = program.inputSetters;
 
         let lastMaterialId = null;
         let lastGeometryId = null;
