@@ -171,7 +171,9 @@ export class LayerRenderer {
                 : [ ]);
 
         const vertexData = [ ];
-        renderingAttributes.appendVertexData(vertexData, afterFlagsColorLines);
+        renderingAttributes.ensureColorAndFlagAvailable && renderingAttributes.ensureColorAndFlagAvailable(vertexData);
+        afterFlagsColorLines.forEach(line => vertexData.push(line));
+        renderingAttributes.appendVertexData(vertexData);
         vertexData.push(`vec4 viewPosition = ${geoParams.viewMatrix} * ${geoParams.attributes.position.world};`);
         vertexData.push(`vec4 clipPos = ${geoParams.projMatrix} * viewPosition;`);
 
