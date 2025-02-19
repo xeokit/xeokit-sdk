@@ -2291,13 +2291,6 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         });
     programSetup.appendFragmentOutputs(programFragmentOutputs, scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord");
 
-    const fragmentShader = [
-        ...programVariablesState.getFragmentDefinitions(),
-        "void main(void) {",
-        ...programFragmentOutputs,
-        "}"
-    ];
-
     const getVertexData = function() {
         const viewNormalDefinition = viewNormal && viewNormal.needed && `vec3 ${viewNormal} = normalize((${billboardIfApplicable(viewNormalMatrix)} * vec4(${worldNormal}, 0.0)).xyz);`;
         const src = [ ];
@@ -2345,7 +2338,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         gl,
         programSetup.programName,
         {
-            fragmentShader:   fragmentShader,
+            fragmentOutputs:  programFragmentOutputs,
             getPointSize:     programSetup.setupPointSize && isPoints && (() => pointSize),
             getVertexData:    getVertexData,
             projMatrix:       projMatrix,
