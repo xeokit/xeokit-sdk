@@ -136,9 +136,10 @@ export class LayerRenderer {
 
         const colorA = geoParams.attributes.color;
 
-        const vertexOutputs = [ ];
-        vertexOutputs.push(`gl_Position = ${transformClipPos ? transformClipPos("clipPos") : "clipPos"};`);
-        programVariablesState.appendVertexOutputs(vertexOutputs);
+        const vertexOutputs = [
+            `gl_Position = ${transformClipPos ? transformClipPos("clipPos") : "clipPos"};`,
+            ...programVariablesState.getVertexOutputs()
+        ];
         if (setupPoints) {
             if (pointsMaterial.perspectivePoints) {
                 vertexOutputs.push(`gl_PointSize = (${nearPlaneHeight} * ${pointSize}) / gl_Position.w;`);
@@ -190,19 +191,17 @@ export class LayerRenderer {
         vertexData.push(`vec4 viewPosition = ${geoParams.viewMatrix} * ${geoParams.attributes.position.world};`);
         vertexData.push(`vec4 clipPos = ${geoParams.projMatrix} * viewPosition;`);
 
-        const buildVertexShader = () => {
-            const src = [];
-            programVariablesState.appendVertexDefinitions(src);
-            src.push("void main(void) {");
-            vertexData.forEach(line => src.push(line));
-            vertexOutputs.forEach(line => src.push(line));
-            src.push("}");
-            return src;
-        };
+        const vertexShader = [
+            ...programVariablesState.getVertexDefinitions(),
+            "void main(void) {",
+            ...vertexData,
+            ...vertexOutputs,
+            "}"
+        ];
 
         const programName = primitive + " " + renderingAttributes.signature + " " + cfg.programName;
 
-        const [ program, errors ] = programVariablesState.buildProgram(gl, programName, buildVertexShader(), fragmentShader);
+        const [ program, errors ] = programVariablesState.buildProgram(gl, programName, vertexShader, fragmentShader);
 
         if (errors) {
             console.error(errors);
