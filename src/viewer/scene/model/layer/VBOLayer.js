@@ -409,12 +409,13 @@ export class VBOLayer extends Layer {
             }
         };
 
-        const maybeCreateBuffer = (srcData, size, usage, normalized = false) => {
+        const maybeCreateBuffer = (srcData, size, usage, setDivisor = false, normalized = false) => {
             const buf = createGlBuffer(srcData, gl.ARRAY_BUFFER, usage);
             return buf && {
                 numItems: srcData.length / size,
                 setData: buf.setData,
                 setSubData: buf.setSubData,
+                attributeDivisor: setDivisor && 1,
                 bindAtLocation: location => {
                     buf.bindBuffer();
                     gl.vertexAttribPointer(location, size, buf.type, !!normalized, 0, 0);
@@ -433,17 +434,18 @@ export class VBOLayer extends Layer {
 
         const attributesCnt = portions.reduce((acc,p) => acc + p.portionSize, 0);
 
-        const flagsBuf = maybeCreateBuffer(new Float32Array(attributesCnt), 1, gl.DYNAMIC_DRAW);
+        const flagsBuf = maybeCreateBuffer(new Float32Array(attributesCnt), 1, gl.DYNAMIC_DRAW, instancing);
 
+        const createColorsBuf = (srcData, usage) => maybeCreateBuffer(srcData, 4, usage, instancing && (primitive !== "points"), true);
         const colorsBuf = ((instancing && instancedGeometry.colorsCompressed)
-                           ? maybeCreateBuffer(new Uint8Array(instancedGeometry.colorsCompressed), 4, gl.STATIC_DRAW, true)
-                           : maybeCreateBuffer(buffer.colors.compileBuffer(Uint8Array), 4, gl.DYNAMIC_DRAW, true));
+                           ? createColorsBuf(new Uint8Array(instancedGeometry.colorsCompressed), gl.STATIC_DRAW)
+                           : createColorsBuf(buffer.colors.compileBuffer(Uint8Array), gl.DYNAMIC_DRAW));
 
-        const offsetsBuf = scene.entityOffsetsEnabled ? maybeCreateBuffer(new Float32Array(attributesCnt * 3), 3, gl.DYNAMIC_DRAW) : null;
+        const offsetsBuf = scene.entityOffsetsEnabled && maybeCreateBuffer(new Float32Array(attributesCnt * 3), 3, gl.DYNAMIC_DRAW, instancing);
 
-        const metallicRoughnessBuf = maybeCreateBuffer(buffer.metallicRoughness.compileBuffer(Uint8Array), 2, gl.STATIC_DRAW);
+        const metallicRoughnessBuf = maybeCreateBuffer(buffer.metallicRoughness.compileBuffer(Uint8Array), 2, gl.STATIC_DRAW, instancing);
 
-        const pickColorsBuf = maybeCreateBuffer(buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
+        const pickColorsBuf = maybeCreateBuffer(buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW, instancing);
 
         const edgeIndicesBuf = maybeCreateIndicesBuffer(instancing
                                                         ? new Uint32Array(instancedGeometry.edgeIndices)
@@ -469,16 +471,16 @@ export class VBOLayer extends Layer {
             });
         }
 
-        const modelMatrixColBufs = instancing && buffer.modelMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
+        const modelMatrixColBufs = instancing && buffer.modelMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW, true));
 
         const normals = (instancing
                          ? false // (primitive !== "points") && (primitive !== "lines") && instancedGeometry.normalsCompressed
                          : buffer.normals.compileBuffer(Int8Array));
         // Normals are already oct-encoded, so `normalized = true` for oct encoded UInts
-        const normalsBuf = normals && maybeCreateBuffer(normals, 3, gl.STATIC_DRAW, true);
+        const normalsBuf = normals && maybeCreateBuffer(normals, 3, gl.STATIC_DRAW, false, true);
 
         // WARNING: modelMatrixColBufs and normalsBuf are never simultaneously defined at the moment (when instancing=true)
-        const modelNormalMatrixColBufs = modelMatrixColBufs && normalsBuf && buffer.modelNormalMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW));
+        const modelNormalMatrixColBufs = modelMatrixColBufs && normalsBuf && buffer.modelNormalMatrixCol.map(b => maybeCreateBuffer(b.compileBuffer(Float32Array), 4, gl.STATIC_DRAW, true));
 
         const uvSetup = (instancing
                          ? ((primitive !== "points") && (primitive !== "lines") && instancedGeometry.uvCompressed && {
@@ -550,7 +552,7 @@ export class VBOLayer extends Layer {
         const solid = (primitive === "solid");
         return {
             renderers: getRenderers(scene, instancing ? "instancing" : "batching", primitive, true,
-                                    (programVariables, subGeometry) => makeVBORenderingAttributes(programVariables, scene, instancing, primitive, subGeometry)),
+                                    (programVariables, subGeometry) => makeVBORenderingAttributes(programVariables, scene, instancing, subGeometry)),
             edgesColorOpaqueAllowed: () => true,
             solid: solid,
             sortId: (((primitive === "points") ? "Points" : ((primitive === "lines") ? "Lines" : "Triangles"))
@@ -848,26 +850,26 @@ export class VBOLayer extends Layer {
     }
 }
 
-const makeVBORenderingAttributes = function(programVariables, scene, instancing, primitive, subGeometry) {
-    const createAttribute = (type, name, getBuffer, setDivisor) => {
+const makeVBORenderingAttributes = function(programVariables, scene, instancing, subGeometry) {
+    const createAttribute = (type, name, getBuffer) => {
         return programVariables.createAttribute(type, name, (set, state) => {
             const arrayBuf = getBuffer(state);
-            arrayBuf && set(arrayBuf, setDivisor && 1);
+            arrayBuf && set(arrayBuf);
         });
     };
 
     const attributes = {
         position:          createAttribute("vec3",  "positionA",         (state) => state.positionsBuf),
         normal:            createAttribute("vec3",  "normalA",           (state) => state.normalsBuf),
-        color:             createAttribute("vec4",  "colorA",            (state) => state.colorsBuf,            instancing && (primitive !== "points")),
-        pickColor:         createAttribute("vec4",  "pickColor",         (state) => state.pickColorsBuf,        instancing),
+        color:             createAttribute("vec4",  "colorA",            (state) => state.colorsBuf),
+        pickColor:         createAttribute("vec4",  "pickColor",         (state) => state.pickColorsBuf),
         uV:                createAttribute("vec2",  "uvApremul",         (state) => state.uvBuf),
-        metallicRoughness: createAttribute("vec2",  "metallicRoughness", (state) => state.metallicRoughnessBuf, instancing),
-        flags:             createAttribute("float", "flagsA",            (state) => state.flagsBuf,             instancing),
-        offset:            createAttribute("vec3",  "offset",            (state) => state.offsetsBuf,           instancing)
+        metallicRoughness: createAttribute("vec2",  "metallicRoughness", (state) => state.metallicRoughnessBuf),
+        flags:             createAttribute("float", "flagsA",            (state) => state.flagsBuf),
+        offset:            createAttribute("vec3",  "offset",            (state) => state.offsetsBuf)
     };
-    const modelMatrixCol       = iota(3).map(i => createAttribute("vec4", "modelMatrixCol"       + i, (state) => state.modelMatrixColBufs[i],       true));
-    const modelNormalMatrixCol = iota(3).map(i => createAttribute("vec4", "modelNormalMatrixCol" + i, (state) => state.modelNormalMatrixColBufs[i], true));
+    const modelMatrixCol       = iota(3).map(i => createAttribute("vec4", "modelMatrixCol"       + i, (state) => state.modelMatrixColBufs[i]));
+    const modelNormalMatrixCol = iota(3).map(i => createAttribute("vec4", "modelNormalMatrixCol" + i, (state) => state.modelNormalMatrixColBufs[i]));
 
     const uvA = lazyShaderVariable("aUv");
     const viewNormal = lazyShaderVariable("viewNormal");
