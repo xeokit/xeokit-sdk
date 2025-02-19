@@ -1,6 +1,5 @@
 import {isPerspectiveMatrix} from "./Layer.js";
 import {createRTCViewMat, math} from "../../math/index.js";
-import {Program} from "../../webgl/Program.js";
 import {createSectionPlanesSetup} from "../../webgl/WebGLRenderer.js";
 
 const tempVec2 = math.vec2();
@@ -25,7 +24,6 @@ export class LayerRenderer {
         const isVBO = renderingAttributes.isVBO;
         const pointsMaterial = scene.pointsMaterial;
 
-        const programName               = cfg.programName;
         const incrementDrawState        = cfg.incrementDrawState;
         const getLogDepth               = cfg.getLogDepth;
         const clippingCaps              = cfg.clippingCaps;
@@ -191,10 +189,6 @@ export class LayerRenderer {
 
             programVariablesState.appendFragmentDefinitions(src);
 
-            src.push("vec4 sRGBToLinear(in vec4 value) {");
-            src.push("  return vec4(mix(pow(value.rgb * 0.9478672986 + 0.0521327014, vec3(2.4)), value.rgb * 0.0773993808, vec3(lessThanEqual(value.rgb, vec3(0.04045)))), value.w);");
-            src.push("}");
-
             src.push("void main(void) {");
 
             if (setupPoints && pointsMaterial.roundPoints) {
@@ -213,38 +207,16 @@ export class LayerRenderer {
             return src;
         };
 
-        const preamble = (type) => [
-            "#version 300 es",
-            "// " + primitive + " " + renderingAttributes.signature + " " + programName + " " + type + " shader",
-            "#ifdef GL_FRAGMENT_PRECISION_HIGH",
-            "precision highp float;",
-            "precision highp int;",
-            "precision highp usampler2D;",
-            "precision highp isampler2D;",
-            "precision highp sampler2D;",
-            "#else",
-            "precision mediump float;",
-            "precision mediump int;",
-            "precision mediump usampler2D;",
-            "precision mediump isampler2D;",
-            "precision mediump sampler2D;",
-            "#endif",
-        ];
+        const programName = primitive + " " + renderingAttributes.signature + " " + cfg.programName;
 
-        const program = new Program(gl, {
-            vertex:   preamble("vertex"  ).concat(buildVertexShader()),
-            fragment: preamble("fragment").concat(buildFragmentShader())
-        });
+        const [ program, errors ] = programVariablesState.buildProgram(gl, programName, buildVertexShader(), buildFragmentShader());
 
-        const errors = program.errors;
         if (errors) {
             console.error(errors);
             this.destroy = () => { };
             this.drawLayer = (frameCtx, layer, renderPass) => { };
             return;
         }
-
-        const inputSetters = programVariablesState.setupInputs(gl, program.handle);
 
         this.destroy = () => program.destroy();
         this.drawLayer = (frameCtx, layer, renderPass) => {
@@ -296,7 +268,7 @@ export class LayerRenderer {
                 }
             };
 
-            renderingAttributes.drawCall(layerDrawState, inputSetters, state);
+            renderingAttributes.drawCall(layerDrawState, program.inputSetters, state);
 
             if (incrementDrawState) {
                 frameCtx.drawElements++;

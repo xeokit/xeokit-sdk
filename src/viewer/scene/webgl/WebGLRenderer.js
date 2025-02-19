@@ -1,4 +1,5 @@
 import {getPlaneRTCPos} from "../math/rtcCoords.js";
+import {Program} from "./Program.js";
 import {math} from "../math/math.js";
 const tempVec3a = math.vec3();
 const tempVec4 = math.vec4();
@@ -128,15 +129,52 @@ export const createProgramVariablesState = function() {
         appendVertexDefinitions:   (src) => vertAppenders.forEach(a => a(src)),
         appendVertexOutputs:       (src) => vOutAppenders.forEach(a => a(src)),
         appendFragmentDefinitions: (src) => fragAppenders.forEach(a => a(src)),
-        setupInputs: (gl, handle) => {
-            const getInputSetter = makeInputSetters(gl, handle);
-            const aSetters = attrSetters.map(i => i(getInputSetter)).filter(s => s);
-            const uSetters = unifSetters.map(i => i(getInputSetter)).filter(s => s);
-            return {
-                attributesHash: aSetters.map(a => a.attributeHash).filter(h => h).sort().join(", "),
-                setAttributes: (state) => aSetters.forEach(s => s(state)),
-                setUniforms:   (state) => uSetters.forEach(s => s(state))
-            };
+        buildProgram: (gl, programName, vertexLines, fragmentLines) => {
+            const preamble = (type) => [
+                "#version 300 es",
+                "// " + programName + " " + type + " shader",
+                "#ifdef GL_FRAGMENT_PRECISION_HIGH",
+                "precision highp float;",
+                "precision highp int;",
+                "precision highp usampler2D;",
+                "precision highp isampler2D;",
+                "precision highp sampler2D;",
+                "#else",
+                "precision mediump float;",
+                "precision mediump int;",
+                "precision mediump usampler2D;",
+                "precision mediump isampler2D;",
+                "precision mediump sampler2D;",
+                "#endif",
+            ];
+
+            const program = new Program(gl, {
+                vertex:   preamble("vertex"  ).concat(vertexLines),
+                fragment: preamble("fragment").concat([
+                    // Not the best place to define here, TODO: Move somewhere more appropriate after refactors
+                    "vec4 sRGBToLinear(in vec4 value) {",
+                    "  return vec4(mix(pow(value.rgb * 0.9478672986 + 0.0521327014, vec3(2.4)), value.rgb * 0.0773993808, vec3(lessThanEqual(value.rgb, vec3(0.04045)))), value.w);",
+                    "}"
+                ]).concat(fragmentLines)
+            });
+
+            if (program.errors) {
+                return [ null, program.errors ];
+            } else {
+                const getInputSetter = makeInputSetters(gl, program.handle);
+                const aSetters = attrSetters.map(i => i(getInputSetter)).filter(s => s);
+                const uSetters = unifSetters.map(i => i(getInputSetter)).filter(s => s);
+                return [ {
+                    bind: () => program.bind(),
+                    destroy: () => program.destroy(),
+                    id: program.id,
+                    inputSetters: {
+                        attributesHash: aSetters.map(a => a.attributeHash).filter(h => h).sort().join(", "),
+                        setAttributes: (state) => aSetters.forEach(s => s(state)),
+                        setUniforms:   (state) => uSetters.forEach(s => s(state))
+                    }
+                } ];
+            }
         }
     };
 };
