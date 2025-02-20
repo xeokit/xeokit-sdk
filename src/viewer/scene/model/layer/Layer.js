@@ -320,6 +320,7 @@ export class Layer {
             this._compiledPortions = this.compilePortions();
             this.sortId = this._compiledPortions.sortId;
             this.layerDrawState = this._compiledPortions.layerDrawState;
+            this.drawCalls = this._compiledPortions.drawCalls;
             this._renderers = this._compiledPortions.renderers;
             this._setFlags = this._compiledPortions.setFlags;
 
