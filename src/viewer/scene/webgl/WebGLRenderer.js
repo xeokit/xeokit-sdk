@@ -19,8 +19,7 @@ export const createProgramVariablesState = function() {
     const fragAppenders = [ ];
     const attrSetters = [ ];
     const unifSetters = [ ];
-    return {
-        programVariables: {
+    const programVariables = {
             createAttribute: function(type, name, valueSetter) {
                 let needed = false;
                 vertAppenders.push((src) => needed && src.push(`in ${type} ${name};`));
@@ -125,8 +124,73 @@ export const createProgramVariablesState = function() {
                     }
                 };
             }
-        },
+    };
+    return {
+        programVariables: programVariables,
         buildProgram: (gl, programName, cfg) => {
+            const scene = cfg.scene;
+            const getLogDepth = cfg.getLogDepth;
+
+            const fragmentOutputs = [ ];
+            const isPerspective = programVariables.createVarying("float", "isPerspective", () => `(${cfg.projMatrix}[2][3] == -1.0) ? 1.0 : 0.0`);
+            const logDepthBufFC = programVariables.createUniform("float", "logDepthBufFC", (set, state) => set(2.0 / (Math.log(state.view.far + 1.0) / Math.LN2)));
+            const vFragDepth    = programVariables.createVarying("float", "vFragDepth",    () => "1.0 + clipPos.w");
+            getLogDepth && fragmentOutputs.push(`gl_FragDepth = ${cfg.testPerspectiveForGl_FragDepth ? `${isPerspective} == 0.0 ? gl_FragCoord.z : ` : ""}log2(${getLogDepth(vFragDepth)}) * ${logDepthBufFC} * 0.5;`);
+
+            const linearToGamma = programVariables.createFragmentDefinition(
+                "linearToGamma",
+                (name, src) => {
+                    src.push(`vec4 ${name}(in vec4 value, in float gammaFactor) {`);
+                    src.push("  return vec4(pow(value.xyz, vec3(1.0 / gammaFactor)), value.w);");
+                    src.push("}");
+                });
+
+            const clipping = createSectionPlanesSetup(programVariables, scene._sectionPlanesState);
+            const sliceColorOr = (clipping
+                                  ? (function() {
+                                      const sliceColor = programVariables.createUniform("vec4", "sliceColor", (set) => set(scene.crossSections.sliceColor));
+                                      const sliceColorOr = color => {
+                                          sliceColorOr.needed = true;
+                                          return `(sliced ? ${sliceColor} : ${color})`;
+                                      };
+                                      return sliceColorOr;
+                                  })()
+                                  : (color => color));
+
+            const gammaFactor = programVariables.createUniform("float", "gammaFactor", (set) => set(scene.gammaFactor));
+            cfg.appendFragmentOutputs(fragmentOutputs, scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord", sliceColorOr);
+
+            const fragmentClippingLines = (function() {
+                const src = [ ];
+                const sliceThickness = programVariables.createUniform("float", "sliceThickness", (set) => set(scene.crossSections.sliceThickness));
+
+                if (clipping) {
+                    if (sliceColorOr.needed) {
+                        src.push("  bool sliced = false;");
+                    }
+                    src.push(`  if (${cfg.clippableTest()}) {`);
+                    const fragWorldPosition = programVariables.createVarying("highp vec3", "vHighpWorldPosition", () => `${cfg.worldPositionAttribute}.xyz`);
+                    src.push(`    float dist = ${clipping.getDistance(fragWorldPosition)};`);
+                    if (cfg.clippingCaps) {
+                        const vClipPositionW = programVariables.createVarying("float", "vClipPositionW", () => "clipPos.w");
+                        src.push(`    if (dist > (0.002 * ${vClipPositionW})) { discard; }`);
+                        src.push("    if (dist > 0.0) { ");
+                        src.push(`      ${cfg.clippingCaps} = vec4(1.0, 0.0, 0.0, 1.0);`);
+                        getLogDepth && src.push(`      gl_FragDepth = log2(${getLogDepth(vFragDepth)}) * ${logDepthBufFC} * 0.5;`);
+                        src.push("      return;");
+                        src.push("    }");
+                    } else {
+                        src.push(`    if (dist > ${sliceColorOr.needed ? sliceThickness : "0.0"}) { discard; }`);
+                    }
+                    if (sliceColorOr.needed) {
+                        src.push("    sliced = dist > 0.0;");
+                    }
+                    src.push("  }");
+                }
+
+                return src;
+            })();
+
             const fragmentShader = [
                 ...(function() { const src = [ ]; fragAppenders.forEach(a => a(src)); return src; })(),
                 "void main(void) {",
@@ -136,7 +200,9 @@ export const createProgramVariablesState = function() {
                         "  if (dot(cxy, cxy) > 1.0) { discard; }"
                     ]
                     : [ ]),
-                ...cfg.fragmentOutputs,
+                ...fragmentClippingLines,
+                ...cfg.fragmentOutputsSetup,
+                ...fragmentOutputs,
                 "}"
             ];
 
@@ -287,7 +353,7 @@ export const createLightSetup = function(programVariables, lightsState) {
     };
 };
 
-export const createSectionPlanesSetup = function(programVariables, sectionPlanesState) {
+const createSectionPlanesSetup = function(programVariables, sectionPlanesState) {
     const allocatedUniforms = iota(sectionPlanesState.getNumAllocatedSectionPlanes()).map(i => {
         const sectionPlaneUniform = (type, postfix, getValue) => {
             return programVariables.createUniform(type, `sectionPlane${postfix}${i}`, (set, state) => {
