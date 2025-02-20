@@ -5,16 +5,6 @@ const tempVec3 = math.vec3();
 const tempMat4 = math.mat4();
 const vec3zero = math.vec3([0,0,0]);
 
-export const lazyShaderVariable = function(name) {
-    const variable = {
-        toString: () => {
-            variable.needed = true;
-            return name;
-        }
-    };
-    return variable;
-};
-
 export class LayerRenderer {
 
     constructor(scene, primitive, cfg, subGeometry, renderingAttributes, programVariablesState) {
