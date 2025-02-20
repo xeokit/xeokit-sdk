@@ -1,6 +1,5 @@
 import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
 import {getColSilhEdgePickFlags, getRenderers, Layer} from "./Layer.js";
-import {lazyShaderVariable} from "./LayerRenderer.js";
 
 import {math} from "../../math/math.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../compression.js";
@@ -859,6 +858,16 @@ export class VBOLayer extends Layer {
         };
     }
 }
+
+const lazyShaderVariable = function(name) {
+    const variable = {
+        toString: () => {
+            variable.needed = true;
+            return name;
+        }
+    };
+    return variable;
+};
 
 const makeVBORenderingAttributes = function(programVariables, scene, instancing) {
     const createAttribute = (type, name, getBuffer) => {
