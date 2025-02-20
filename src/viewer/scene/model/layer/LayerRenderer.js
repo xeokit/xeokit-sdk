@@ -150,11 +150,9 @@ export class LayerRenderer {
                 frameCtx.snapPickOrigin[2] = rtcOrigin[2];
             }
 
-            const layerDrawState = layer.layerDrawState;
-
             const state = {
                 legacyFrameCtx: frameCtx,
-                layerDrawState: layerDrawState,
+                layerDrawState: layer.layerDrawState,
                 mesh: {
                     layerIndex:  layer.layerIndex,
                     origin:      rtcOrigin,
@@ -172,7 +170,7 @@ export class LayerRenderer {
                 }
             };
 
-            renderingAttributes.drawCall(layerDrawState, program.inputSetters, state);
+            layer.drawCalls[subGeometry ? (subGeometry.vertices ? "drawVertices" : "drawEdges") : "drawSurface"](program.inputSetters, state);
 
             if (incrementDrawState) {
                 frameCtx.drawElements++;
