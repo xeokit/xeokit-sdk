@@ -1,5 +1,4 @@
 import {createRTCViewMat, math} from "../../math/index.js";
-import {createSectionPlanesSetup} from "../../webgl/WebGLRenderer.js";
 
 const tempVec2 = math.vec2();
 const tempVec3 = math.vec3();
@@ -24,7 +23,6 @@ export class LayerRenderer {
         const pointsMaterial = scene.pointsMaterial;
 
         const incrementDrawState        = cfg.incrementDrawState;
-        const getLogDepth               = cfg.getLogDepth;
         const renderPassFlag            = cfg.renderPassFlag;
         const usePickParams             = cfg.usePickParams;
         const cullOnAlphaZero           = (!isVBO) && (!cfg.dontCullOnAlphaZero);
@@ -54,86 +52,11 @@ export class LayerRenderer {
                 1.0
                 : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0))));
         });
-        const gammaFactor     = programVariables.createUniform("float", "gammaFactor",    (set) => set(scene.gammaFactor));
         const pointSize       = programVariables.createUniform("float", "pointSize",      (set) => set(pointsMaterial.pointSize));
         const renderPass      = programVariables.createUniform("int",   "renderPass",     (set, state) => set(state.renderPass));
 
         const geoParams = renderingAttributes.geometryParameters;
-        const projMatrix = geoParams.projMatrix;
-
-        const vClippable          = programVariables.createVarying("float",      "vClippable",          () => renderingAttributes.getClippable(), "flat");
-
-        const fragmentOutputsSetup = [ ];
-
-        const appendFragmentOutputs = cfg.appendFragmentOutputs;
-        const clippableTest = () => `${vClippable} > 0.0`;
-        const clippingCaps = cfg.clippingCaps;
-        const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || subGeometry;
-
-        const fragmentOutputs = [ ];
-        const isPerspective = programVariables.createVarying("float", "isPerspective", () => `(${projMatrix}[2][3] == -1.0) ? 1.0 : 0.0`);
-        const logDepthBufFC = programVariables.createUniform("float", "logDepthBufFC", (set, state) => set(2.0 / (Math.log(state.view.far + 1.0) / Math.LN2)));
-        const vFragDepth    = programVariables.createVarying("float", "vFragDepth",    () => "1.0 + clipPos.w");
-        getLogDepth && fragmentOutputs.push(`gl_FragDepth = ${testPerspectiveForGl_FragDepth ? `${isPerspective} == 0.0 ? gl_FragCoord.z : ` : ""}log2(${getLogDepth(vFragDepth)}) * ${logDepthBufFC} * 0.5;`);
-
-        const linearToGamma = programVariables.createFragmentDefinition(
-            "linearToGamma",
-            (name, src) => {
-                src.push(`vec4 ${name}(in vec4 value, in float gammaFactor) {`);
-                src.push("  return vec4(pow(value.xyz, vec3(1.0 / gammaFactor)), value.w);");
-                src.push("}");
-            });
-
-        const clipping = createSectionPlanesSetup(programVariables, scene._sectionPlanesState);
-        const sliceColorOr = (clipping
-                              ? (function() {
-                                  const sliceColor = programVariables.createUniform("vec4", "sliceColor", (set) => set(scene.crossSections.sliceColor));
-                                  const sliceColorOr = color => {
-                                      sliceColorOr.needed = true;
-                                      return `(sliced ? ${sliceColor} : ${color})`;
-                                  };
-                                  return sliceColorOr;
-                              })()
-                              : (color => color));
-
-        appendFragmentOutputs(fragmentOutputs, scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord", sliceColorOr);
-
-        const fragmentClippingLines = (function() {
-            const src = [ ];
-            const sliceThickness = programVariables.createUniform("float", "sliceThickness", (set) => set(scene.crossSections.sliceThickness));
-
-            if (clipping) {
-                if (sliceColorOr.needed) {
-                    src.push("  bool sliced = false;");
-                }
-                src.push(`  if (${clippableTest()}) {`);
-                const fragWorldPosition = programVariables.createVarying("highp vec3", "vHighpWorldPosition", () => `${geoParams.attributes.position.world}.xyz`);
-                src.push(`    float dist = ${clipping.getDistance(fragWorldPosition)};`);
-                if (clippingCaps) {
-                    const vClipPositionW = programVariables.createVarying("float", "vClipPositionW", () => "clipPos.w");
-                    src.push(`    if (dist > (0.002 * ${vClipPositionW})) { discard; }`);
-                    src.push("    if (dist > 0.0) { ");
-                    src.push(`      ${clippingCaps} = vec4(1.0, 0.0, 0.0, 1.0);`);
-                    getLogDepth && src.push(`      gl_FragDepth = log2(${getLogDepth(vFragDepth)}) * ${logDepthBufFC} * 0.5;`);
-                    src.push("      return;");
-                    src.push("    }");
-                } else {
-                    src.push(`    if (dist > ${sliceColorOr.needed ? sliceThickness : "0.0"}) { discard; }`);
-                }
-                if (sliceColorOr.needed) {
-                    src.push("    sliced = dist > 0.0;");
-                }
-                src.push("  }");
-            }
-
-            return src;
-        })();
-
-        const programFragmentOutputs = [
-            ...fragmentClippingLines,
-            ...fragmentOutputsSetup,
-            ...fragmentOutputs
-        ];
+        const worldPositionAttribute = geoParams.attributes.position.world;
 
         const getVertexData = () => {
             const colorA = geoParams.attributes.color;
@@ -169,7 +92,7 @@ export class LayerRenderer {
             renderingAttributes.ensureColorAndFlagAvailable && renderingAttributes.ensureColorAndFlagAvailable(vertexData);
             afterFlagsColorLines.forEach(line => vertexData.push(line));
             renderingAttributes.appendVertexData(vertexData);
-            vertexData.push(`vec4 viewPosition = ${geoParams.viewMatrix} * ${geoParams.attributes.position.world};`);
+            vertexData.push(`vec4 viewPosition = ${geoParams.viewMatrix} * ${worldPositionAttribute};`);
             return vertexData;
         };
 
@@ -190,16 +113,25 @@ export class LayerRenderer {
             return (addends.length > 0) && (() => addends.join(" + "));
         })();
 
+        const vClippable = programVariables.createVarying("float", "vClippable", () => renderingAttributes.getClippable(), "flat");
+
         const [ program, errors ] = programVariablesState.buildProgram(
             gl,
             primitive + " " + renderingAttributes.signature + " " + cfg.programName,
             {
-                discardPoints:    setupPoints && pointsMaterial.roundPoints,
-                fragmentOutputs:  programFragmentOutputs,
-                getPointSize:     getPointSize,
-                getVertexData:    getVertexData,
-                projMatrix:       projMatrix,
-                transformClipPos: cfg.transformClipPos
+                appendFragmentOutputs:          cfg.appendFragmentOutputs,
+                clippableTest:                  () => `${vClippable} > 0.0`,
+                clippingCaps:                   cfg.clippingCaps,
+                discardPoints:                  setupPoints && pointsMaterial.roundPoints,
+                fragmentOutputsSetup:           [ ],
+                getLogDepth:                    cfg.getLogDepth,
+                getPointSize:                   getPointSize,
+                getVertexData:                  getVertexData,
+                projMatrix:                     geoParams.projMatrix,
+                scene:                          scene,
+                testPerspectiveForGl_FragDepth: ((primitive !== "points") && (primitive !== "lines")) || subGeometry,
+                transformClipPos:               cfg.transformClipPos,
+                worldPositionAttribute:         worldPositionAttribute
             });
 
         if (errors) {
