@@ -512,7 +512,6 @@ export class VBOLayer extends Layer {
         scratchMemory.acquire();
         cleanups.push(() => scratchMemory.release());
 
-        const drawCallCache = { };
         let deferredFlagValues = null;
 
         /**
@@ -552,7 +551,7 @@ export class VBOLayer extends Layer {
         const solid = (primitive === "solid");
         return {
             renderers: getRenderers(scene, instancing ? "instancing" : "batching", primitive, true,
-                                    (programVariables, subGeometry) => makeVBORenderingAttributes(programVariables, scene, instancing, subGeometry)),
+                                    (programVariables) => makeVBORenderingAttributes(programVariables, scene, instancing)),
             edgesColorOpaqueAllowed: () => true,
             solid: solid,
             sortId: (((primitive === "points") ? "Points" : ((primitive === "lines") ? "Lines" : "Triangles"))
@@ -760,8 +759,13 @@ export class VBOLayer extends Layer {
                 uvDecodeMatrix:        uvSetup && uvSetup.mat,
                 textureSet:            textureSet,
                 colorTextureSupported: uvSetup && textureSet && textureSet.colorTexture,
-                pbrSupported:          uvSetup && textureSet && textureSet.colorTexture && normalsBuf && metallicRoughnessBuf && textureSet.metallicRoughnessTexture,
-                drawCall: (inputSetters, subGeometry) => {
+                pbrSupported:          uvSetup && textureSet && textureSet.colorTexture && normalsBuf && metallicRoughnessBuf && textureSet.metallicRoughnessTexture
+            },
+
+            drawCalls: (function() {
+                const drawCallCache = { };
+                const drawCall = (inputSetters, state, subGeometry) => {
+                    inputSetters.setUniforms(state);
                     const hash = inputSetters.attributesHash;
                     if (! (hash in drawCallCache)) {
                         drawCallCache[hash] = [ null, null, null ];
@@ -839,8 +843,14 @@ export class VBOLayer extends Layer {
                     }
 
                     inputsCache[cacheKey]();
-                }
-            },
+                };
+
+                return {
+                    drawVertices: (inputSetters, state) => drawCall(inputSetters, state, { vertices: true }),
+                    drawEdges:    (inputSetters, state) => drawCall(inputSetters, state, { }),
+                    drawSurface:  (inputSetters, state) => drawCall(inputSetters, state, null)
+                };
+            })(),
 
             destroy: () => {
                 cleanups.forEach(c => c());
@@ -850,7 +860,7 @@ export class VBOLayer extends Layer {
     }
 }
 
-const makeVBORenderingAttributes = function(programVariables, scene, instancing, subGeometry) {
+const makeVBORenderingAttributes = function(programVariables, scene, instancing) {
     const createAttribute = (type, name, getBuffer) => {
         return programVariables.createAttribute(type, name, (set, state) => {
             const arrayBuf = getBuffer(state);
@@ -960,11 +970,6 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing,
             src.push(`vec4 worldPosition = ${matrices.worldMatrix} * (${matrices.positionsDecodeMatrix} * vec4(${attributes.position}, 1.0)${modelMatrixTransposed ? (" * " + modelMatrixTransposed) : ""});`);
 
             scene.entityOffsetsEnabled && src.push(`worldPosition.xyz = worldPosition.xyz + ${attributes.offset};`);
-        },
-
-        drawCall: function(layerDrawState, inputSetters, state) {
-            inputSetters.setUniforms(state);
-            layerDrawState.drawCall(inputSetters, subGeometry);
         }
     };
 };
