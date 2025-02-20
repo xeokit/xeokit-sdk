@@ -6,7 +6,6 @@ export const ColorTextureProgram = function(programVariables, geometry, scene, l
         const texture = state.layerDrawState.textureSet.colorTexture;
         texture && set(texture.texture);
     });
-    const gammaFactor = gammaOutput && programVariables.createUniform("float", "gammaFactor", (set) => set(scene.gammaFactor));
     const materialAlphaCutoff = useAlphaCutoff && programVariables.createUniform("float", "materialAlphaCutoff", (set, state) => set(state.layerDrawState.textureSet.alphaCutoff));
 
     const attributes = geometry.attributes;
@@ -18,10 +17,10 @@ export const ColorTextureProgram = function(programVariables, geometry, scene, l
 
     return {
         programName: "ColorTexture",
-        getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", !!gammaFactor, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
+        getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", !!gammaOutput, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
         getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 0,      // COLOR_OPAQUE | COLOR_TRANSPARENT
-        appendFragmentOutputs: (src, gl_FragCoord, sliceColorOr) => {
+        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord, sliceColorOr) => {
             src.push(`vec3 viewNormal = normalize(cross(dFdx(${vViewPosition}), dFdy(${vViewPosition})));`);
             src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
             lightSetup.directionalLights.forEach(light => {
@@ -39,16 +38,7 @@ export const ColorTextureProgram = function(programVariables, geometry, scene, l
             src.push("vec4 colorTexel = color * sampleColor;");
             src.push(`${outColor} = vec4(colorTexel.rgb${(sao ? (" * " + sao.getAmbient(gl_FragCoord)) : "")}, color.a);`);
 
-            if (gammaFactor) {
-                const linearToGamma = programVariables.createFragmentDefinition(
-                    "linearToGamma",
-                    (name, src) => {
-                        src.push(`vec4 ${name}(in vec4 value, in float gammaFactor) {`);
-                        src.push("  return vec4(pow(value.xyz, vec3(1.0 / gammaFactor)), value.w);");
-                        src.push("}");
-                    });
-                src.push(`${outColor} = ${linearToGamma}(${outColor}, ${gammaFactor});`);
-            }
+            getGammaOutputExpression && src.push(`${outColor} = ${getGammaOutputExpression(outColor)};`);
         },
 
         incrementDrawState: true
