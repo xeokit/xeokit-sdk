@@ -156,12 +156,6 @@ export class LayerRenderer {
 
             const viewMatrix = (isShadowProgram && frameCtx.shadowViewMatrix) || (usePickParams && frameCtx.pickViewMatrix) || camera.viewMatrix;
             const projMatrix = (isShadowProgram && frameCtx.shadowProjMatrix) || (usePickParams && frameCtx.pickProjMatrix) || camera.projMatrix;
-            const eye        = (usePickParams && frameCtx.pickOrigin) || camera.eye;
-            const far        = (usePickParams && frameCtx.pickProjMatrix) ? frameCtx.pickZFar : camera.project.far;
-
-            const rtcViewMatrix = (math.compareVec3(rtcOrigin, vec3zero)
-                                   ? viewMatrix
-                                   : createRTCViewMat(viewMatrix, rtcOrigin, tempMat4));
 
             if (frameCtx.snapPickOrigin) {
                 frameCtx.snapPickOrigin[0] = rtcOrigin[0];
@@ -182,11 +176,11 @@ export class LayerRenderer {
                 },
                 renderPass:     renderPass,
                 view: {
-                    eye:              eye,
-                    far:              far,
+                    eye:              (usePickParams && frameCtx.pickOrigin) || camera.eye,
+                    far:              (usePickParams && frameCtx.pickProjMatrix) ? frameCtx.pickZFar : camera.project.far,
                     pickClipPos:      frameCtx.pickClipPos,
                     projMatrix:       projMatrix,
-                    viewMatrix:       rtcViewMatrix,
+                    viewMatrix:       math.compareVec3(rtcOrigin, vec3zero) ? viewMatrix : createRTCViewMat(viewMatrix, rtcOrigin, tempMat4),
                     viewNormalMatrix: camera.viewNormalMatrix
                 }
             };
