@@ -2254,27 +2254,19 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         return v => billboardFrag ? `${billboardFrag}(${v})` : v;
     })();
 
-    const programFragmentOutputs = [ ];
-    if (clipping) {
-        programFragmentOutputs.push(`if (${clippable}) {`);
-        programFragmentOutputs.push(`  float dist = ${clipping.getDistance(vWorldPosition)};`);
-        programFragmentOutputs.push("  if (dist > 0.0) { discard; }");
-        programFragmentOutputs.push("}");
-    }
+    const fragmentOutputs = [ ];
     if (programSetup.dontBillboardAnything) {
-        programFragmentOutputs.push(`mat4 viewMatrix2 = ${viewMatrix};`);
+        fragmentOutputs.push(`mat4 viewMatrix2 = ${viewMatrix};`);
     } else {
-        programFragmentOutputs.push(`mat4 viewMatrix1 = ${viewMatrix};`);
+        fragmentOutputs.push(`mat4 viewMatrix1 = ${viewMatrix};`);
         if (stationary) {
-            programFragmentOutputs.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
+            fragmentOutputs.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
         } else if (meshStateBackground) {
-            programFragmentOutputs.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
+            fragmentOutputs.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
         }
-        programFragmentOutputs.push(`mat4 viewMatrix2 = ${billboardIfApplicableFrag("viewMatrix1")};`);
+        fragmentOutputs.push(`mat4 viewMatrix2 = ${billboardIfApplicableFrag("viewMatrix1")};`);
     }
-    if (getLogDepth) {
-        programFragmentOutputs.push(`gl_FragDepth = ${isPerspective} == 0.0 ? gl_FragCoord.z : log2(${vFragDepth}) * ${logDepthBufFC} * 0.5;`);
-    }
+    getLogDepth && fragmentOutputs.push(`gl_FragDepth = ${isPerspective} == 0.0 ? gl_FragCoord.z : log2(${vFragDepth}) * ${logDepthBufFC} * 0.5;`);
 
     const linearToGamma = programVariables.createFragmentDefinition(
         "linearToGamma",
@@ -2283,7 +2275,25 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
             src.push("  return vec4(pow(value.xyz, vec3(1.0 / gammaFactor)), value.w);");
             src.push("}");
         });
-    programSetup.appendFragmentOutputs(programFragmentOutputs, scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord");
+    programSetup.appendFragmentOutputs(fragmentOutputs, scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord");
+
+    const fragmentClippingLines = (function() {
+        const src = [ ];
+
+        if (clipping) {
+            src.push(`if (${clippable}) {`);
+            src.push(`  float dist = ${clipping.getDistance(vWorldPosition)};`);
+            src.push("  if (dist > 0.0) { discard; }");
+            src.push("}");
+        }
+
+        return src;
+    })();
+
+    const programFragmentOutputs = [
+        ...fragmentClippingLines,
+        ...fragmentOutputs
+    ];
 
     const getVertexData = function() {
         const viewNormalDefinition = viewNormal && viewNormal.needed && `vec3 ${viewNormal} = normalize((${billboardIfApplicable(viewNormalMatrix)} * vec4(${worldNormal}, 0.0)).xyz);`;
