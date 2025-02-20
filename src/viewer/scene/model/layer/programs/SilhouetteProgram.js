@@ -6,7 +6,7 @@ export const SilhouetteProgram = function(programVariables, geometry, logarithmi
         programName: "Silhouette",
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 1,  // SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | SILHOUETTE_XRAYED
-        appendFragmentOutputs: (src, gl_FragCoord, sliceColorOr) => {
+        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord, sliceColorOr) => {
             src.push(`${outColor} = ${isPointsOrLines
                                       ? silhouetteColor
                                       : sliceColorOr(`vec4(${silhouetteColor}.rgb, min(${silhouetteColor}.a, ${vAlpha}))`)};`);
