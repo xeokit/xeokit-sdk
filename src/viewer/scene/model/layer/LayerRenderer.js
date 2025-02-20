@@ -58,6 +58,7 @@ export class LayerRenderer {
                 1.0
                 : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0))));
         });
+        const gammaFactor     = programVariables.createUniform("float", "gammaFactor",    (set) => set(scene.gammaFactor));
         const pointSize       = programVariables.createUniform("float", "pointSize",      (set) => set(pointsMaterial.pointSize));
         const renderPass      = programVariables.createUniform("int",   "renderPass",     (set, state) => set(state.renderPass));
         const sliceColor      = programVariables.createUniform("vec4",  "sliceColor",     (set) => set(scene.crossSections.sliceColor));
@@ -85,7 +86,14 @@ export class LayerRenderer {
         const fragmentOutputs = [ ];
         getLogDepth && fragmentOutputs.push(`gl_FragDepth = ${testPerspectiveForGl_FragDepth ? `${isPerspective} == 0.0 ? gl_FragCoord.z : ` : ""}log2(${getLogDepth(vFragDepth)}) * ${logDepthBufFC} * 0.5;`);
 
-        cfg.appendFragmentOutputs(fragmentOutputs, "gl_FragCoord", sliceColorOr);
+        const linearToGamma = programVariables.createFragmentDefinition(
+            "linearToGamma",
+            (name, src) => {
+                src.push(`vec4 ${name}(in vec4 value, in float gammaFactor) {`);
+                src.push("  return vec4(pow(value.xyz, vec3(1.0 / gammaFactor)), value.w);");
+                src.push("}");
+            });
+        cfg.appendFragmentOutputs(fragmentOutputs, scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord", sliceColorOr);
 
         const fragmentClippingLines = (function() {
             const src = [ ];

@@ -19,7 +19,7 @@ export const ColorProgram = function(programVariables, geometry, logarithmicDept
         getHash: () => [lightSetup ? lightSetup.getHash() : "-", sao ? "sao" : "nosao"],
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => ((primitive !== "points") && (primitive !== "lines")) ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth),
         renderPassFlag: 0,  // COLOR_OPAQUE | COLOR_TRANSPARENT
-        appendFragmentOutputs: (src, gl_FragCoord, sliceColorOr) => {
+        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord, sliceColorOr) => {
             if ((primitive === "points") || (primitive === "lines")) {
                 src.push(`${outColor} = ${vColor};`);
             } else {
