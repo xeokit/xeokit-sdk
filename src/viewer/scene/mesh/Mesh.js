@@ -2206,8 +2206,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
     const scene = mesh.scene;
     const gl = scene.canvas.gl;
     const meshStateBackground = mesh._state.background;
-    const clipping = createSectionPlanesSetup(programVariables, scene._sectionPlanesState);
-    const getLogDepth = (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled;
+    const getLogDepth = (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth);
     const geometryState = mesh._geometry._state;
     const quantizedGeometry = geometryState.compressGeometry;
     const isPoints = geometryState.primitiveName === "points";
@@ -2224,12 +2223,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
     const viewMatrix            = programVariables.createUniform("mat4",  "viewMatrix",            (set, state) => set(state.view.viewMatrix));
     const viewNormalMatrix      = programVariables.createUniform("mat4",  "viewNormalMatrix",      (set, state) => set(state.view.viewNormalMatrix));
     const projMatrix            = programVariables.createUniform("mat4",  "projMatrix",            (set, state) => set(state.view.projMatrix));
-    const logDepthBufFC         = programVariables.createUniform("float", "logDepthBufFC",         (set, state) => set(2.0 / (Math.log(state.view.far + 1.0) / Math.LN2)));
     const pickClipPos           = programVariables.createUniform("vec2",  "pickClipPos",           (set, state) => set(state.view.pickClipPos));
-
-    const vWorldPosition = programVariables.createVarying("vec3",  "vWorldPosition", () => "worldPosition.xyz");
-    const isPerspective  = programVariables.createVarying("float", "isPerspective",  () => `(${projMatrix}[2][3] == -1.0) ? 1.0 : 0.0`);
-    const vFragDepth     = programVariables.createVarying("float", "vFragDepth",     () => "1.0 + clipPos.w");
 
     const billboard = mesh.billboard;
     const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
@@ -2254,19 +2248,30 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         return v => billboardFrag ? `${billboardFrag}(${v})` : v;
     })();
 
-    const fragmentOutputs = [ ];
+    const fragmentOutputsSetup = [ ];
     if (programSetup.dontBillboardAnything) {
-        fragmentOutputs.push(`mat4 viewMatrix2 = ${viewMatrix};`);
+        fragmentOutputsSetup.push(`mat4 viewMatrix2 = ${viewMatrix};`);
     } else {
-        fragmentOutputs.push(`mat4 viewMatrix1 = ${viewMatrix};`);
+        fragmentOutputsSetup.push(`mat4 viewMatrix1 = ${viewMatrix};`);
         if (stationary) {
-            fragmentOutputs.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
+            fragmentOutputsSetup.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
         } else if (meshStateBackground) {
-            fragmentOutputs.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
+            fragmentOutputsSetup.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
         }
-        fragmentOutputs.push(`mat4 viewMatrix2 = ${billboardIfApplicableFrag("viewMatrix1")};`);
+        fragmentOutputsSetup.push(`mat4 viewMatrix2 = ${billboardIfApplicableFrag("viewMatrix1")};`);
     }
-    getLogDepth && fragmentOutputs.push(`gl_FragDepth = ${isPerspective} == 0.0 ? gl_FragCoord.z : log2(${vFragDepth}) * ${logDepthBufFC} * 0.5;`);
+
+    const geoParams = { attributes: { position: { world: "worldPosition" } } };
+    const appendFragmentOutputs = programSetup.appendFragmentOutputs;
+    const clippableTest = () => clippable;
+    const clippingCaps = programSetup.clippingCaps;
+    const testPerspectiveForGl_FragDepth = true;
+
+    const fragmentOutputs = [ ];
+    const isPerspective = programVariables.createVarying("float", "isPerspective", () => `(${projMatrix}[2][3] == -1.0) ? 1.0 : 0.0`);
+    const logDepthBufFC = programVariables.createUniform("float", "logDepthBufFC", (set, state) => set(2.0 / (Math.log(state.view.far + 1.0) / Math.LN2)));
+    const vFragDepth    = programVariables.createVarying("float", "vFragDepth",    () => "1.0 + clipPos.w");
+    getLogDepth && fragmentOutputs.push(`gl_FragDepth = ${testPerspectiveForGl_FragDepth ? `${isPerspective} == 0.0 ? gl_FragCoord.z : ` : ""}log2(${getLogDepth(vFragDepth)}) * ${logDepthBufFC} * 0.5;`);
 
     const linearToGamma = programVariables.createFragmentDefinition(
         "linearToGamma",
@@ -2275,16 +2280,47 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
             src.push("  return vec4(pow(value.xyz, vec3(1.0 / gammaFactor)), value.w);");
             src.push("}");
         });
-    programSetup.appendFragmentOutputs(fragmentOutputs, scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord");
+
+    const clipping = createSectionPlanesSetup(programVariables, scene._sectionPlanesState);
+    const sliceColorOr = (clipping
+                          ? (function() {
+                              const sliceColor = programVariables.createUniform("vec4", "sliceColor", (set) => set(scene.crossSections.sliceColor));
+                              const sliceColorOr = color => {
+                                  sliceColorOr.needed = true;
+                                  return `(sliced ? ${sliceColor} : ${color})`;
+                              };
+                              return sliceColorOr;
+                          })()
+                          : (color => color));
+
+    appendFragmentOutputs(fragmentOutputs, scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord", sliceColorOr);
 
     const fragmentClippingLines = (function() {
         const src = [ ];
+        const sliceThickness = programVariables.createUniform("float", "sliceThickness", (set) => set(scene.crossSections.sliceThickness));
 
         if (clipping) {
-            src.push(`if (${clippable}) {`);
-            src.push(`  float dist = ${clipping.getDistance(vWorldPosition)};`);
-            src.push("  if (dist > 0.0) { discard; }");
-            src.push("}");
+            if (sliceColorOr.needed) {
+                src.push("  bool sliced = false;");
+            }
+            src.push(`  if (${clippableTest()}) {`);
+            const fragWorldPosition = programVariables.createVarying("highp vec3", "vHighpWorldPosition", () => `${geoParams.attributes.position.world}.xyz`);
+            src.push(`    float dist = ${clipping.getDistance(fragWorldPosition)};`);
+            if (clippingCaps) {
+                const vClipPositionW = programVariables.createVarying("float", "vClipPositionW", () => "clipPos.w");
+                src.push(`    if (dist > (0.002 * ${vClipPositionW})) { discard; }`);
+                src.push("    if (dist > 0.0) { ");
+                src.push(`      ${clippingCaps} = vec4(1.0, 0.0, 0.0, 1.0);`);
+                getLogDepth && src.push(`      gl_FragDepth = log2(${getLogDepth(vFragDepth)}) * ${logDepthBufFC} * 0.5;`);
+                src.push("      return;");
+                src.push("    }");
+            } else {
+                src.push(`    if (dist > ${sliceColorOr.needed ? sliceThickness : "0.0"}) { discard; }`);
+            }
+            if (sliceColorOr.needed) {
+                src.push("    sliced = dist > 0.0;");
+            }
+            src.push("  }");
         }
 
         return src;
@@ -2292,6 +2328,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
 
     const programFragmentOutputs = [
         ...fragmentClippingLines,
+        ...fragmentOutputsSetup,
         ...fragmentOutputs
     ];
 
