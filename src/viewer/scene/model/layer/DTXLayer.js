@@ -580,7 +580,7 @@ export class DTXLayer extends Layer {
 
         return {
             renderers: getRenderers(scene, "dtx", primitive, false,
-                                           (programVariables, subGeometry) => makeDTXRenderingAttributes(programVariables, scene.canvas.gl, subGeometry)),
+                                           (programVariables, subGeometry) => makeDTXRenderingAttributes(programVariables, !subGeometry)),
             edgesColorOpaqueAllowed: () => {
                 if (scene.logarithmicDepthBufferEnabled) {
                     if (!scene._loggedWarning) {
@@ -653,20 +653,27 @@ export class DTXLayer extends Layer {
                 texturePerObjectPositionsDecodeMatrix: texturePerObjectPositionsDecodeMatrix,
                 texturePerVertexIdCoordinates:         texturePerVertexIdCoordinates,
                 texturePerObjectColorsAndFlags:        texturePerObjectColorsAndFlags,
-                texturePerObjectInstanceMatrices:      texturePerObjectInstanceMatrices,
+                texturePerObjectInstanceMatrices:      texturePerObjectInstanceMatrices
+            },
 
-                drawTriangles: function(inputSetters, state, glMode) {
-                    draw8.indices( inputSetters, state, glMode);
-                    draw16.indices(inputSetters, state, glMode);
-                    draw32.indices(inputSetters, state, glMode);
-                },
-
-                drawEdges: function(inputSetters, state, glMode) {
+            drawCalls: (function() {
+                const drawVertEdges = function(inputSetters, state, glMode) {
                     draw8.edges( inputSetters, state, glMode);
                     draw16.edges(inputSetters, state, glMode);
                     draw32.edges(inputSetters, state, glMode);
-                }
-            },
+                };
+
+                return {
+                    drawVertices: (inputSetters, state) => drawVertEdges(inputSetters, state, gl.POINTS),
+                    drawEdges:    (inputSetters, state) => drawVertEdges(inputSetters, state, gl.LINES),
+                    drawSurface:  (inputSetters, state) => {
+                        const glMode = gl.TRIANGLES;
+                        draw8.indices( inputSetters, state, glMode);
+                        draw16.indices(inputSetters, state, glMode);
+                        draw32.indices(inputSetters, state, glMode);
+                    }
+                };
+            })(),
 
             destroy: () => {
                 if (! destroyed) {
@@ -758,7 +765,7 @@ const createBindableDataTexture = function(gl, entitiesCnt, entitySize, type, en
     };
 };
 
-const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
+const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
     const setupTex = (type, name, getTexture) => {
         const tex = setupTexture(programVariables, type, name, LinearEncoding, (set, state) => set(getTexture(state.layerDrawState)));
         return (P) => tex.texelFetch(P, "0");
@@ -790,8 +797,6 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
     const colorA     = lazyShaderVariable("colorA");
     const pickColorA = lazyShaderVariable("pickColor");
     const viewNormal = lazyShaderVariable("viewNormal");
-
-    const isTriangle = ! subGeometry;
 
     const colorsAndFlags = (offset) => perObjColsFlags(`ivec2(objectIndexCoords.x*8+${offset}, objectIndexCoords.y)`);
 
@@ -900,13 +905,6 @@ const makeDTXRenderingAttributes = function(programVariables, gl, subGeometry) {
             pickColorA.needed && src.push(`vec4 pickColor = vec4(${colorsAndFlags(1)});`); // TODO: Normalize color "/ 255.0"?
 
             src.push(`vec4 worldPosition = ${worldMatrix} * (objectDecodeAndInstanceMatrix * vec4(position, 1.0));`);
-        },
-
-        drawCall: function(layerDrawState, inputSetters, state) {
-            (subGeometry ? layerDrawState.drawEdges : layerDrawState.drawTriangles)(
-                inputSetters,
-                state,
-                subGeometry ? (subGeometry.vertices ? gl.POINTS : gl.LINES) : gl.TRIANGLES);
         }
     };
 };
