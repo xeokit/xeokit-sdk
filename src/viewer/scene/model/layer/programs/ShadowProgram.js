@@ -18,6 +18,6 @@ export const ShadowProgram = function(programVariables, logarithmicDepthBufferEn
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 0,
         isShadowProgram: true,
-        appendFragmentOutputs: (src, gl_FragCoord) => src.push(`${outColor} = ${encodeFloat}(${gl_FragCoord}.z);`)
+        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => src.push(`${outColor} = ${encodeFloat}(${gl_FragCoord}.z);`)
     };
 };

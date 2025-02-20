@@ -7,7 +7,7 @@ export const FlatColorProgram = function(programVariables, geometry, logarithmic
         getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao"],
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 0,      // COLOR_OPAQUE | COLOR_TRANSPARENT
-        appendFragmentOutputs: (src, gl_FragCoord, sliceColorOr) => {
+        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord, sliceColorOr) => {
             src.push(`vec3 viewNormal = normalize(cross(dFdx(${vViewPosition}.xyz), dFdy(${vViewPosition}.xyz)));`);
             const lightComponents = [
                 lightSetup.getAmbientColor()
