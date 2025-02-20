@@ -1,4 +1,3 @@
-import {isPerspectiveMatrix} from "./Layer.js";
 import {createRTCViewMat, math} from "../../math/index.js";
 import {createSectionPlanesSetup} from "../../webgl/WebGLRenderer.js";
 
@@ -26,7 +25,6 @@ export class LayerRenderer {
 
         const incrementDrawState        = cfg.incrementDrawState;
         const getLogDepth               = cfg.getLogDepth;
-        const clippingCaps              = cfg.clippingCaps;
         const renderPassFlag            = cfg.renderPassFlag;
         const usePickParams             = cfg.usePickParams;
         const cullOnAlphaZero           = (!isVBO) && (!cfg.dontCullOnAlphaZero);
@@ -34,7 +32,6 @@ export class LayerRenderer {
         const isShadowProgram           = cfg.isShadowProgram;
         const incPointSizeBy10          = cfg.incPointSizeBy10;
 
-        const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || subGeometry;
         const setupPoints = (primitive === "points") && (! subGeometry);
 
         const sectionPlanesState = scene._sectionPlanesState;
@@ -45,14 +42,12 @@ export class LayerRenderer {
 
         const programVariables = programVariablesState.programVariables;
         const gl = scene.canvas.gl;
-        const clipping = createSectionPlanesSetup(programVariablesState.programVariables, scene._sectionPlanesState);
 
         const intensityRange  = programVariables.createUniform("vec2", "intensityRange", (set) => {
             tempVec2[0] = pointsMaterial.minIntensity;
             tempVec2[1] = pointsMaterial.maxIntensity;
             set(tempVec2);
         });
-        const logDepthBufFC   = programVariables.createUniform("float", "logDepthBufFC", (set, state) => set(2.0 / (Math.log(state.view.far + 1.0) / Math.LN2)));
         const nearPlaneHeight = programVariables.createUniform("float", "nearPlaneHeight", (set) => {
             set((scene.camera.projection === "ortho") ?
                 1.0
@@ -61,29 +56,23 @@ export class LayerRenderer {
         const gammaFactor     = programVariables.createUniform("float", "gammaFactor",    (set) => set(scene.gammaFactor));
         const pointSize       = programVariables.createUniform("float", "pointSize",      (set) => set(pointsMaterial.pointSize));
         const renderPass      = programVariables.createUniform("int",   "renderPass",     (set, state) => set(state.renderPass));
-        const sliceColor      = programVariables.createUniform("vec4",  "sliceColor",     (set) => set(scene.crossSections.sliceColor));
-        const sliceThickness  = programVariables.createUniform("float", "sliceThickness", (set) => set(scene.crossSections.sliceThickness));
 
         const geoParams = renderingAttributes.geometryParameters;
         const projMatrix = geoParams.projMatrix;
 
-        const isPerspective       = programVariables.createVarying("float",      "isPerspective",       () => `float(${isPerspectiveMatrix(projMatrix)})`);
         const vClippable          = programVariables.createVarying("float",      "vClippable",          () => renderingAttributes.getClippable(), "flat");
-        const vClipPositionW      = programVariables.createVarying("float",      "vClipPositionW",      () => "clipPos.w");
-        const vFragDepth          = programVariables.createVarying("float",      "vFragDepth",          () => "1.0 + clipPos.w");
-        const vHighpWorldPosition = programVariables.createVarying("highp vec3", "vHighpWorldPosition", () => `${geoParams.attributes.position.world}.xyz`);
 
-        const sliceColorOr = (clipping
-                              ? (function() {
-                                  const sliceColorOr = color => {
-                                      sliceColorOr.needed = true;
-                                      return `(sliced ? ${sliceColor} : ${color})`;
-                                  };
-                                  return sliceColorOr;
-                              })()
-                              : (color => color));
+        const fragmentOutputsSetup = [ ];
+
+        const appendFragmentOutputs = cfg.appendFragmentOutputs;
+        const clippableTest = () => `${vClippable} > 0.0`;
+        const clippingCaps = cfg.clippingCaps;
+        const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || subGeometry;
 
         const fragmentOutputs = [ ];
+        const isPerspective = programVariables.createVarying("float", "isPerspective", () => `(${projMatrix}[2][3] == -1.0) ? 1.0 : 0.0`);
+        const logDepthBufFC = programVariables.createUniform("float", "logDepthBufFC", (set, state) => set(2.0 / (Math.log(state.view.far + 1.0) / Math.LN2)));
+        const vFragDepth    = programVariables.createVarying("float", "vFragDepth",    () => "1.0 + clipPos.w");
         getLogDepth && fragmentOutputs.push(`gl_FragDepth = ${testPerspectiveForGl_FragDepth ? `${isPerspective} == 0.0 ? gl_FragCoord.z : ` : ""}log2(${getLogDepth(vFragDepth)}) * ${logDepthBufFC} * 0.5;`);
 
         const linearToGamma = programVariables.createFragmentDefinition(
@@ -93,33 +82,47 @@ export class LayerRenderer {
                 src.push("  return vec4(pow(value.xyz, vec3(1.0 / gammaFactor)), value.w);");
                 src.push("}");
             });
-        cfg.appendFragmentOutputs(fragmentOutputs, scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord", sliceColorOr);
+
+        const clipping = createSectionPlanesSetup(programVariables, scene._sectionPlanesState);
+        const sliceColorOr = (clipping
+                              ? (function() {
+                                  const sliceColor = programVariables.createUniform("vec4", "sliceColor", (set) => set(scene.crossSections.sliceColor));
+                                  const sliceColorOr = color => {
+                                      sliceColorOr.needed = true;
+                                      return `(sliced ? ${sliceColor} : ${color})`;
+                                  };
+                                  return sliceColorOr;
+                              })()
+                              : (color => color));
+
+        appendFragmentOutputs(fragmentOutputs, scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord", sliceColorOr);
 
         const fragmentClippingLines = (function() {
             const src = [ ];
+            const sliceThickness = programVariables.createUniform("float", "sliceThickness", (set) => set(scene.crossSections.sliceThickness));
 
             if (clipping) {
                 if (sliceColorOr.needed) {
                     src.push("  bool sliced = false;");
                 }
-                src.push(`  if (${vClippable} > 0.0) {`);
-                src.push("      float dist = " + clipping.getDistance(vHighpWorldPosition) + ";");
+                src.push(`  if (${clippableTest()}) {`);
+                const fragWorldPosition = programVariables.createVarying("highp vec3", "vHighpWorldPosition", () => `${geoParams.attributes.position.world}.xyz`);
+                src.push(`    float dist = ${clipping.getDistance(fragWorldPosition)};`);
                 if (clippingCaps) {
-                    src.push(`  if (dist > (0.002 * ${vClipPositionW})) { discard; }`);
-                    src.push("  if (dist > 0.0) { ");
-                    src.push("      " + clippingCaps + " = vec4(1.0, 0.0, 0.0, 1.0);");
-                    if (getLogDepth) {
-                        src.push(`  gl_FragDepth = log2(${getLogDepth(vFragDepth)}) * ${logDepthBufFC} * 0.5;`);
-                    }
-                    src.push("  return;");
-                    src.push("  }");
+                    const vClipPositionW = programVariables.createVarying("float", "vClipPositionW", () => "clipPos.w");
+                    src.push(`    if (dist > (0.002 * ${vClipPositionW})) { discard; }`);
+                    src.push("    if (dist > 0.0) { ");
+                    src.push(`      ${clippingCaps} = vec4(1.0, 0.0, 0.0, 1.0);`);
+                    getLogDepth && src.push(`      gl_FragDepth = log2(${getLogDepth(vFragDepth)}) * ${logDepthBufFC} * 0.5;`);
+                    src.push("      return;");
+                    src.push("    }");
                 } else {
-                    src.push(`  if (dist > ${sliceColorOr.needed ? sliceThickness : "0.0"}) { discard; }`);
+                    src.push(`    if (dist > ${sliceColorOr.needed ? sliceThickness : "0.0"}) { discard; }`);
                 }
                 if (sliceColorOr.needed) {
-                    src.push("  sliced = dist > 0.0;");
+                    src.push("    sliced = dist > 0.0;");
                 }
-                src.push("}");
+                src.push("  }");
             }
 
             return src;
@@ -127,6 +130,7 @@ export class LayerRenderer {
 
         const programFragmentOutputs = [
             ...fragmentClippingLines,
+            ...fragmentOutputsSetup,
             ...fragmentOutputs
         ];
 
