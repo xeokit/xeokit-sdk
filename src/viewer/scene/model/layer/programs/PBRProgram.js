@@ -11,7 +11,6 @@ export const PBRProgram = function(programVariables, geometry, scene, lightSetup
 
     const attributes = geometry.attributes;
     const getIrradiance = lightSetup.getIrradiance;
-    const gammaFactor = scene.gammaOutput && programVariables.createUniform("float", "gammaFactor", (set) => set(scene.gammaFactor)); // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
 
     const colorMap         = setup2dTexture("uColorMap",         true,  textureSet => textureSet.colorTexture);
     const metallicRoughMap = setup2dTexture("uMetallicRoughMap", false, textureSet => textureSet.metallicRoughnessTexture);
@@ -109,22 +108,14 @@ export const PBRProgram = function(programVariables, geometry, scene, lightSetup
             src.push("}");
         });
 
-    const linearToGamma = programVariables.createFragmentDefinition(
-        "linearToGamma",
-        (name, src) => {
-            src.push(`vec4 ${name}(in vec4 value, in float gammaFactor) {`);
-            src.push("  return vec4(pow(value.xyz, vec3(1.0 / gammaFactor)), value.w);");
-            src.push("}");
-        });
-
-        return {
+    return {
         programName: "PBR",
-        getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", !!gammaFactor],
+        getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", !!scene.gammaOutput],
         getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 0,      // COLOR_OPAQUE | COLOR_TRANSPARENT
         clippingCaps: scene._sectionPlanesState.clippingCaps && outColor,
         incrementDrawState: true,
-        appendFragmentOutputs: (src, gl_FragCoord) => {
+        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => {
             src.push("const float PI = 3.14159265359;");
             src.push("vec3 reflDiff = vec3(0.0);");
             src.push("vec3 reflSpec = vec3(0.0);");
@@ -183,7 +174,7 @@ export const PBRProgram = function(programVariables, geometry, scene, lightSetup
 
             src.push(`${outColor} = vec4(outgoingLight * aoFactor${sao ? ` * ${sao.getAmbient(gl_FragCoord)}` : ""}, opacity);`);
 
-            gammaFactor && src.push(`${outColor} = ${linearToGamma}(${outColor}, ${gammaFactor});`);
+            getGammaOutputExpression && src.push(`${outColor} = ${getGammaOutputExpression(outColor)};`);
         }
     };
 };
