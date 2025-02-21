@@ -798,7 +798,6 @@ const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
     const colorsAndFlags = (offset) => perObjColsFlags(`ivec2(objectIndexCoords.x*8+${offset}, objectIndexCoords.y)`);
 
     return {
-        isVBO: false,
         signature: "DTX",
 
         geometryParameters: {
