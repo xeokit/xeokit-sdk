@@ -46,15 +46,14 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
 
 
     const setup2dTexture = (name, getMaterialValue) => {
-        return attributes.uv && (function() {
-            const initTex = getMaterialValue(material);
-            return initTex && setupTexture(
-                programVariables,
-                "sampler2D",
-                name,
-                initTex.encoding,
-                (set, state) => set(getMaterialValue(state.material)._state.texture),
-                initTex._state.matrix && ((set, state) => set(getMaterialValue(state.material)._state.matrix)));
+        const initTex = attributes.uv && getMaterialValue(material);
+        const tex = initTex && setupTexture(programVariables, "sampler2D", name, initTex.encoding, (set, state) => set(getMaterialValue(state.material)._state.texture));
+        return tex && (function() {
+            const matrix = initTex._state.matrix && programVariables.createUniform("mat4", name + "MapMatrix", (set, state) => set(getMaterialValue(state.material)._state.matrix));
+            const getTexCoordExpression = matrix ? (texPos => `(${matrix} * ${texPos}).st`) : (texPos => `${texPos}.st`);
+            const sample = (texturePos, bias) => tex(getTexCoordExpression(texturePos, bias));
+            sample.getTexCoordExpression = getTexCoordExpression;
+            return sample;
         })();
     };
 
