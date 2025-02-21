@@ -185,7 +185,8 @@ export const getRenderers = (function() {
                             const incrementDrawState     = programSetup.incrementDrawState;
                             const isShadowProgram        = programSetup.isShadowProgram;
                             const usePickParams          = programSetup.usePickParams;
-                            const worldPositionAttribute = geometryParameters.attributes.position.world;
+                            const attributes             = geometryParameters.attributes;
+                            const worldPositionAttribute = attributes.position.world;
 
                             const [ program, errors ] = programVariablesState.buildProgram(
                                 gl,
@@ -193,7 +194,7 @@ export const getRenderers = (function() {
                                 {
                                     appendFragmentOutputs:          programSetup.appendFragmentOutputs,
                                     clippableTest:                  (function() {
-                                        const vClippable = programVariables.createVarying("float", "vClippable", () => renderingAttributes.getClippable(), "flat");
+                                        const vClippable = programVariables.createVarying("float", "vClippable", () => `${attributes.clippable} ? 1.0 : 0.0`, "flat");
                                         return () => `${vClippable} > 0.0`;
                                     })(),
                                     clippingCaps:                   programSetup.clippingCaps,
@@ -223,7 +224,7 @@ export const getRenderers = (function() {
                                         return (addends.length > 0) && (() => addends.join(" + "));
                                     })(),
                                     getVertexData:                  () => {
-                                        const colorA = geometryParameters.attributes.color;
+                                        const colorA = attributes.color;
                                         const flag = renderingAttributes.getFlag(programSetup.renderPassFlag);
                                         const renderPass = programVariables.createUniform("int", "renderPass", (set, state) => set(state.renderPass));
                                         const flagTest = (isShadowProgram
