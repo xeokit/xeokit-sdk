@@ -326,8 +326,9 @@ export const getRenderers = (function() {
                                                 viewNormalMatrix: camera.viewNormalMatrix
                                             }
                                         };
+                                        program.inputSetters.setUniforms(state);
 
-                                        layer.drawCalls[subGeometry ? (subGeometry.vertices ? "drawVertices" : "drawEdges") : "drawSurface"](program.inputSetters, state);
+                                        layer.drawCalls[subGeometry ? (subGeometry.vertices ? "drawVertices" : "drawEdges") : "drawSurface"](program.inputSetters, renderingAttributes.layerTypeInputs);
 
                                         if (incrementDrawState) {
                                             frameCtx.drawElements++;
