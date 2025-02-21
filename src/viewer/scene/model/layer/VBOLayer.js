@@ -763,8 +763,7 @@ export class VBOLayer extends Layer {
 
             drawCalls: (function() {
                 const drawCallCache = { };
-                const drawCall = (inputSetters, state, subGeometry) => {
-                    inputSetters.setUniforms(state);
+                const drawCall = (inputSetters, subGeometry) => {
                     const hash = inputSetters.attributesHash;
                     if (! (hash in drawCallCache)) {
                         drawCallCache[hash] = [ null, null, null ];
@@ -845,9 +844,9 @@ export class VBOLayer extends Layer {
                 };
 
                 return {
-                    drawVertices: (inputSetters, state) => drawCall(inputSetters, state, { vertices: true }),
-                    drawEdges:    (inputSetters, state) => drawCall(inputSetters, state, { }),
-                    drawSurface:  (inputSetters, state) => drawCall(inputSetters, state, null)
+                    drawVertices: (inputSetters) => drawCall(inputSetters, { vertices: true }),
+                    drawEdges:    (inputSetters) => drawCall(inputSetters, { }),
+                    drawSurface:  (inputSetters) => drawCall(inputSetters, null)
                 };
             })(),
 
