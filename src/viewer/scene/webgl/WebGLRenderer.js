@@ -377,19 +377,14 @@ const createSectionPlanesSetup = function(programVariables, sectionPlanesState) 
     };
 };
 
-export const setupTexture = (programVariables, type, name, encoding, getTexture, getMatrix) => {
+export const setupTexture = (programVariables, type, name, encoding, getTexture) => {
     const map    = programVariables.createUniform(type, name + "Map", getTexture);
-    const matrix = getMatrix && programVariables.createUniform("mat4", name + "MapMatrix", getMatrix);
-    const swizzle = (type === "samplerCube") ? "xyz" : "xy";
-    const getTexCoordExpression = texPos => (matrix ? `(${matrix} * ${texPos}).${swizzle}` : `${texPos}.${swizzle}`);
-
     const sample = (texturePos, bias) => {
         const texel = (bias
-                       ? `texture(${map}, ${getTexCoordExpression(texturePos)}, ${bias})`
-                       : `texture(${map}, ${getTexCoordExpression(texturePos)})`);
+                       ? `texture(${map}, ${texturePos}, ${bias})`
+                       : `texture(${map}, ${texturePos})`);
         return (encoding !== LinearEncoding) ? `${TEXTURE_DECODE_FUNCS[encoding]}(${texel})` : texel;
     };
-    sample.getTexCoordExpression = getTexCoordExpression;
     sample.texelFetch = (P, lod) => `texelFetch(${map}, ${P}, ${lod})`;
     return sample;
 };
