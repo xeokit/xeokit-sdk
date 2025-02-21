@@ -225,7 +225,7 @@ export const getRenderers = (function() {
                                     })(),
                                     getVertexData:                  () => {
                                         const colorA = attributes.color;
-                                        const flag = renderingAttributes.getFlag(programSetup.renderPassFlag);
+                                        const flag = attributes.flags[programSetup.renderPassFlag];
                                         const renderPass = programVariables.createUniform("int", "renderPass", (set, state) => set(state.renderPass));
                                         const flagTest = (isShadowProgram
                                                           ? `(${flag} <= 0) || (${colorA}.a < 1.0)`
