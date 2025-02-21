@@ -550,7 +550,7 @@ export class VBOLayer extends Layer {
         const solid = (primitive === "solid");
         return {
             renderers: getRenderers(scene, instancing ? "instancing" : "batching", primitive, true,
-                                    (programVariables) => makeVBORenderingAttributes(programVariables, scene, instancing)),
+                                    (programVariables) => makeVBORenderingAttributes(programVariables, scene, instancing, !!modelNormalMatrixColBufs)),
             edgesColorOpaqueAllowed: () => true,
             solid: solid,
             sortId: (((primitive === "points") ? "Points" : ((primitive === "lines") ? "Lines" : "Triangles"))
@@ -868,7 +868,7 @@ const lazyShaderVariable = function(name) {
     return variable;
 };
 
-const makeVBORenderingAttributes = function(programVariables, scene, instancing) {
+const makeVBORenderingAttributes = function(programVariables, scene, instancing, hasModelNormalMat) {
     const createAttribute = (type, name, getBuffer) => {
         return programVariables.createAttribute(type, name, (set, state) => {
             const arrayBuf = getBuffer(state);
@@ -961,10 +961,8 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing)
                         src.push("    return normalize(v);");
                         src.push("}");
                     });
-                src.push(`vec4 modelNormal = vec4(${octDecode}(${attributes.normal}.xy), 0.0);`);
-                if (instancing) {
-                    src.push(`modelNormal = vec4(dot(modelNormal, ${modelNormalMatrixCol[0]}), dot(modelNormal, ${modelNormalMatrixCol[1]}), dot(modelNormal, ${modelNormalMatrixCol[2]}), 0.0);`);
-                }
+                const timesModelNormalMatrixT = hasModelNormalMat && `* mat4(${modelNormalMatrixCol[0]}, ${modelNormalMatrixCol[1]}, ${modelNormalMatrixCol[2]}, vec4(0.0,0.0,0.0,1.0))`;
+                src.push(`vec4 modelNormal = vec4(${octDecode}(${attributes.normal}.xy), 0.0)${timesModelNormalMatrixT || ""};`);
                 src.push(`vec3 ${worldNormal} = (${matrices.worldNormalMatrix} * modelNormal).xyz;`);
                 if (viewNormal.needed) {
                     src.push(`vec3 ${viewNormal} = normalize((${matrices.viewNormalMatrix} * vec4(${worldNormal}, 0.0)).xyz);`);
