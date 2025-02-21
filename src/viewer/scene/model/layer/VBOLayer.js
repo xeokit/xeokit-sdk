@@ -922,8 +922,9 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing)
         });
 
     return {
-        isVBO: true,
         signature: instancing ? "instancing" : "batching",
+
+        dontCullOnAlphaZero: true,
 
         geometryParameters: {
             attributes: {
