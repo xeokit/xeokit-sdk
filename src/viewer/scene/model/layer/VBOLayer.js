@@ -926,6 +926,7 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing)
 
         geometryParameters: {
             attributes: {
+                clippable:         `((int(${attributes.flags}) >> 16 & 0xF) == 1)`,
                 color:             attributes.color,
                 metallicRoughness: attributes.metallicRoughness,
                 normal:            {
@@ -945,8 +946,6 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing)
         },
 
         getFlag: renderPassFlag => `(int(${attributes.flags}) >> ${renderPassFlag * 4} & 0xF)`,
-
-        getClippable: () => `((int(${attributes.flags}) >> 16 & 0xF) == 1) ? 1.0 : 0.0`,
 
         appendVertexData: (src) => {
             if (needNormal()) {
