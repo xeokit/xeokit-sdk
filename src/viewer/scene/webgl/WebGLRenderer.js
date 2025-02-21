@@ -65,16 +65,22 @@ export const createProgramVariablesState = function() {
                 const append = (src) => needed && src.push(`uniform ${type} ${name};`);
                 vertAppenders.push(append);
                 fragAppenders.push(append);
-                unifSetters.push((getInputSetter) => {
-                    const setValue = needed && getInputSetter(name);
-                    return setValue && ((state) => valueSetter(setValue, state));
-                });
-                return {
+                const ret = {
                     toString: () => {
                         needed = true;
                         return name;
                     }
                 };
+                unifSetters.push((getInputSetter) => {
+                    const setValue = needed && getInputSetter(name);
+                    if (valueSetter) {
+                        return setValue && ((state) => valueSetter(setValue, state));
+                    } else {
+                        ret.setInputValue = setValue;
+                        return null;
+                    }
+                });
+                return ret;
             },
             createUniformBlock: (name, types, valueSetter) => {
                 let needed = false;
