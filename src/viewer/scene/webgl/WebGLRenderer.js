@@ -378,15 +378,13 @@ const createSectionPlanesSetup = function(programVariables, sectionPlanesState) 
 };
 
 export const setupTexture = (programVariables, type, name, encoding, getTexture) => {
-    const map    = programVariables.createUniform(type, name + "Map", getTexture);
-    const sample = (texturePos, bias) => {
+    const map = programVariables.createUniform(type, name + "Map", getTexture);
+    return (texturePos, bias) => {
         const texel = (bias
                        ? `texture(${map}, ${texturePos}, ${bias})`
                        : `texture(${map}, ${texturePos})`);
         return (encoding !== LinearEncoding) ? `${TEXTURE_DECODE_FUNCS[encoding]}(${texel})` : texel;
     };
-    sample.texelFetch = (P, lod) => `texelFetch(${map}, ${P}, ${lod})`;
-    return sample;
 };
 
 const makeInputSetters = function(gl, handle) {

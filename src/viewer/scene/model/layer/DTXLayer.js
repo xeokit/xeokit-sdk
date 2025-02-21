@@ -1,8 +1,5 @@
 import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
 import {getColSilhEdgePickFlags, getRenderers, isPerspectiveMatrix, Layer} from "./Layer.js";
-import {LinearEncoding, sRGBEncoding} from "../../constants/constants.js";
-import {setupTexture} from "../../webgl/WebGLRenderer.js";
-
 import {math} from "../../math/math.js";
 import {Configs} from "../../../Configs.js";
 
@@ -767,8 +764,8 @@ const createBindableDataTexture = function(gl, entitiesCnt, entitySize, type, en
 
 const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
     const setupTex = (type, name, getTexture) => {
-        const tex = setupTexture(programVariables, type, name, LinearEncoding, (set, state) => set(getTexture(state.layerDrawState)));
-        return (P) => tex.texelFetch(P, "0");
+        const map = programVariables.createUniform(type, name, (set, state) => set(getTexture(state.layerDrawState)));
+        return (P) => `texelFetch(${map}, ${P}, 0)`;
     };
 
     const perPrimIndices  = setupTex("highp   usampler2D", "perPrimIndices",  (l) => l.perPrimIndices);
