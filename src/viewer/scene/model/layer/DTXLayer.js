@@ -802,6 +802,7 @@ const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
 
         geometryParameters: {
             attributes: {
+                clippable:         "(flags2.r > 0u)",
                 color:             colorA,
                 metallicRoughness: null,
                 normal:            {
@@ -821,8 +822,6 @@ const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
         },
 
         getFlag: renderPassFlag => `int(flags[${renderPassFlag}])`,
-
-        getClippable: () => "float(flags2.r)",
 
         ensureColorAndFlagAvailable: (src) => {
             // constants
