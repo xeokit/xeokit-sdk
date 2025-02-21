@@ -3,6 +3,8 @@ import {getColSilhEdgePickFlags, getRenderers, isPerspectiveMatrix, Layer} from 
 import {math} from "../../math/math.js";
 import {Configs} from "../../../Configs.js";
 
+const iota = (n) => { const ret = [ ]; for (let i = 0; i < n; ++i) ret.push(i); return ret; };
+
 const dataTextureRamStats = {
     sizeDataColorsAndFlags: 0,
     sizeDataInstancesMatrices: 0,
@@ -804,6 +806,7 @@ const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
             attributes: {
                 clippable:         "(flags2.r > 0u)",
                 color:             colorA,
+                flags:             iota(4).map(i => `int(flags[${i}])`),
                 metallicRoughness: null,
                 normal:            {
                     view:  viewNormal,
@@ -820,8 +823,6 @@ const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
             projMatrix: projMatrix,
             viewMatrix: viewMatrix
         },
-
-        getFlag: renderPassFlag => `int(flags[${renderPassFlag}])`,
 
         ensureColorAndFlagAvailable: (src) => {
             // constants
