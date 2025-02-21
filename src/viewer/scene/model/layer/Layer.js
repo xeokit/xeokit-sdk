@@ -236,7 +236,7 @@ export const getRenderers = (function() {
                                             "   return;",
                                             "}"
                                         ].concat(
-                                            (!renderingAttributes.isVBO) && (!programSetup.dontCullOnAlphaZero)
+                                            ((! renderingAttributes.dontCullOnAlphaZero) && (! programSetup.dontCullOnAlphaZero))
                                                 ? [
                                                     `if (${colorA}.a == 0.0) {`,
                                                     "   gl_Position = vec4(0.0, 0.0, 0.0, 1.0);", // Cull vertex
