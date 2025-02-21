@@ -930,6 +930,7 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing)
             attributes: {
                 clippable:         `((int(${attributes.flags}) >> 16 & 0xF) == 1)`,
                 color:             attributes.color,
+                flags:             iota(4).map(i => ({ toString: () => `(int(${attributes.flags}) >> ${i * 4} & 0xF)` })),
                 metallicRoughness: attributes.metallicRoughness,
                 normal:            {
                     view:  viewNormal,
@@ -946,8 +947,6 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing)
             projMatrix: matrices.projMatrix,
             viewMatrix: matrices.viewMatrix
         },
-
-        getFlag: renderPassFlag => `(int(${attributes.flags}) >> ${renderPassFlag * 4} & 0xF)`,
 
         appendVertexData: (src) => {
             if (needNormal()) {
