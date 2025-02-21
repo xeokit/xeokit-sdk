@@ -190,19 +190,17 @@ export class DTXLayer extends Layer {
                     const edgeIndicesTexture = (lenEdgeIndices > 0) && createTextureForSingleItems(edgeIndicesBuffer, lenEdgeIndices, 2, indicesType, "sizeDataTextureEdgeIndices");
 
                     return {
-                        indices: function(inputSetters, state, glMode) {
+                        indices: function(layerTypeInputs, glMode) {
                             if (numIndices > 0) {
-                                state.layerDrawState.perPrimIdPorIds = portionIdsTexture;
-                                state.layerDrawState.perPrimIndices  = indicesTexture;
-                                inputSetters.setUniforms(state);
+                                layerTypeInputs.perPrimIndices.setInputValue(indicesTexture);
+                                layerTypeInputs.perPrimIdPorIds.setInputValue(portionIdsTexture);
                                 gl.drawArrays(glMode, 0, numIndices);
                             }
                         },
-                        edges: function(inputSetters, state, glMode) {
+                        edges: function(layerTypeInputs, glMode) {
                             if (numEdgeIndices > 0) {
-                                state.layerDrawState.perPrimIdPorIds = portionEdgeIdsTexture;
-                                state.layerDrawState.perPrimIndices  = edgeIndicesTexture;
-                                inputSetters.setUniforms(state);
+                                layerTypeInputs.perPrimIndices.setInputValue(edgeIndicesTexture);
+                                layerTypeInputs.perPrimIdPorIds.setInputValue(portionEdgeIdsTexture);
                                 gl.drawArrays(glMode, 0, numEdgeIndices);
                             }
                         }
@@ -654,20 +652,20 @@ export class DTXLayer extends Layer {
             },
 
             drawCalls: (function() {
-                const drawVertEdges = function(inputSetters, state, glMode) {
-                    draw8.edges( inputSetters, state, glMode);
-                    draw16.edges(inputSetters, state, glMode);
-                    draw32.edges(inputSetters, state, glMode);
+                const drawVertEdges = function(layerTypeInputs, glMode) {
+                    draw8.edges( layerTypeInputs, glMode);
+                    draw16.edges(layerTypeInputs, glMode);
+                    draw32.edges(layerTypeInputs, glMode);
                 };
 
                 return {
-                    drawVertices: (inputSetters, state) => drawVertEdges(inputSetters, state, gl.POINTS),
-                    drawEdges:    (inputSetters, state) => drawVertEdges(inputSetters, state, gl.LINES),
-                    drawSurface:  (inputSetters, state) => {
+                    drawVertices: (inputSetters, layerTypeInputs) => drawVertEdges(layerTypeInputs, gl.POINTS),
+                    drawEdges:    (inputSetters, layerTypeInputs) => drawVertEdges(layerTypeInputs, gl.LINES),
+                    drawSurface:  (inputSetters, layerTypeInputs) => {
                         const glMode = gl.TRIANGLES;
-                        draw8.indices( inputSetters, state, glMode);
-                        draw16.indices(inputSetters, state, glMode);
-                        draw32.indices(inputSetters, state, glMode);
+                        draw8.indices( layerTypeInputs, glMode);
+                        draw16.indices(layerTypeInputs, glMode);
+                        draw32.indices(layerTypeInputs, glMode);
                     }
                 };
             })(),
@@ -764,12 +762,14 @@ const createBindableDataTexture = function(gl, entitiesCnt, entitySize, type, en
 
 const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
     const setupTex = (type, name, getTexture) => {
-        const map = programVariables.createUniform(type, name, (set, state) => set(getTexture(state.layerDrawState)));
-        return (P) => `texelFetch(${map}, ${P}, 0)`;
+        const map = programVariables.createUniform(type, name, getTexture && ((set, state) => set(getTexture(state.layerDrawState))));
+        const texelFetch = (P) => `texelFetch(${map}, ${P}, 0)`;
+        texelFetch.map = map;
+        return texelFetch;
     };
 
-    const perPrimIndices  = setupTex("highp   usampler2D", "perPrimIndices",  (l) => l.perPrimIndices);
-    const perPrimIdPorIds = setupTex("mediump usampler2D", "perPrimIdPorIds", (l) => l.perPrimIdPorIds);
+    const perPrimIndices  = setupTex("highp   usampler2D", "perPrimIndices");
+    const perPrimIdPorIds = setupTex("mediump usampler2D", "perPrimIdPorIds");
 
     const perObjPosDecode = setupTex("highp    sampler2D", "perObjPosDecode", (l) => l.texturePerObjectPositionsDecodeMatrix);
     const perVertIdCoords = setupTex("mediump usampler2D", "perVertIdCoords", (l) => l.texturePerVertexIdCoordinates);
@@ -902,6 +902,11 @@ const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
             pickColorA.needed && src.push(`vec4 pickColor = vec4(${colorsAndFlags(1)});`); // TODO: Normalize color "/ 255.0"?
 
             src.push(`vec4 worldPosition = ${worldMatrix} * (objectDecodeAndInstanceMatrix * vec4(position, 1.0));`);
+        },
+
+        layerTypeInputs: {
+            perPrimIndices:  perPrimIndices.map,
+            perPrimIdPorIds: perPrimIdPorIds.map
         }
     };
 };
