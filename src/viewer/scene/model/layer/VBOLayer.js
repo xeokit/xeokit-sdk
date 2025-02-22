@@ -950,19 +950,8 @@ const makeVBORenderingAttributes = function(programVariables, scene, instancing,
 
         appendVertexData: (src) => {
             if (needNormal()) {
-                const octDecode = programVariables.createVertexDefinition(
-                    "octDecode",
-                    (name, src) => {
-                        src.push(`vec3 ${name}(vec2 oct) {`);
-                        src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
-                        src.push("    if (v.z < 0.0) {");
-                        src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
-                        src.push("    }");
-                        src.push("    return normalize(v);");
-                        src.push("}");
-                    });
                 const timesModelNormalMatrixT = hasModelNormalMat && `* mat4(${modelNormalMatrixCol[0]}, ${modelNormalMatrixCol[1]}, ${modelNormalMatrixCol[2]}, vec4(0.0,0.0,0.0,1.0))`;
-                src.push(`vec4 modelNormal = vec4(${octDecode}(${attributes.normal}.xy), 0.0)${timesModelNormalMatrixT || ""};`);
+                src.push(`vec4 modelNormal = vec4(${programVariables.commonLibrary.octDecode}(${attributes.normal}.xy), 0.0)${timesModelNormalMatrixT || ""};`);
                 src.push(`vec3 ${worldNormal} = (${matrices.worldNormalMatrix} * modelNormal).xyz;`);
                 if (viewNormal.needed) {
                     src.push(`vec3 ${viewNormal} = normalize((${matrices.viewNormalMatrix} * vec4(${worldNormal}, 0.0)).xyz);`);
