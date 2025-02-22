@@ -2283,18 +2283,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         }
         decodedUv && decodedUv.needed && src.push(`vec2 ${decodedUv} = ${quantizedGeometry ? `(${uvDecodeMatrix} * vec3(${attributes.uv}, 1.0)).xy` : attributes.uv};`);
         if (worldNormal && worldNormal.needed) {
-            const octDecode = programVariables.createVertexDefinition(
-                "octDecode",
-                (name, src) => {
-                    src.push(`vec3 ${name}(vec2 oct) {`);
-                    src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
-                    src.push("    if (v.z < 0.0) {");
-                    src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
-                    src.push("    }");
-                    src.push("    return normalize(v);");
-                    src.push("}");
-                });
-            const localNormal = quantizedGeometry ? `${octDecode}(${attributes.normal}.xy)` : attributes.normal;
+            const localNormal = quantizedGeometry ? `${programVariables.commonLibrary.octDecode}(${attributes.normal}.xy)` : attributes.normal;
             src.push(`vec3 ${worldNormal} = (${billboardIfApplicable(modelNormalMatrix)} * vec4(${localNormal}, 0.0)).xyz;`);
         }
         viewNormalDefinition && src.push(viewNormalDefinition);
