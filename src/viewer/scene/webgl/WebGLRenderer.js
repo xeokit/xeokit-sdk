@@ -19,6 +19,16 @@ export const createProgramVariablesState = function() {
     const fragAppenders = [ ];
     const attrSetters = [ ];
     const unifSetters = [ ];
+    const createVertexDefinition = (name, appendDefinition) => {
+        let needed = false;
+        vertAppenders.push((src) => needed && appendDefinition(name, src));
+        return {
+            toString: () => {
+                needed = true;
+                return name;
+            }
+        };
+    };
     const programVariables = {
             createAttribute: function(type, name, valueSetter) {
                 let needed = false;
@@ -120,16 +130,20 @@ export const createProgramVariablesState = function() {
                     }
                 };
             },
-            createVertexDefinition: (name, appendDefinition) => {
-                let needed = false;
-                vertAppenders.push((src) => needed && appendDefinition(name, src));
-                return {
-                    toString: () => {
-                        needed = true;
-                        return name;
-                    }
-                };
-            }
+        createVertexDefinition: createVertexDefinition,
+        commonLibrary: {
+            octDecode: createVertexDefinition(
+                "octDecode",
+                (name, src) => {
+                    src.push(`vec3 ${name}(vec2 oct) {`);
+                    src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
+                    src.push("    if (v.z < 0.0) {");
+                    src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
+                    src.push("    }");
+                    src.push("    return normalize(v);");
+                    src.push("}");
+                })
+        }
     };
     return {
         programVariables: programVariables,
