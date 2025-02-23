@@ -190,7 +190,7 @@ export const getRenderers = (function() {
 
                             const [ program, errors ] = programVariablesState.buildProgram(
                                 gl,
-                                primitive + " " + renderingAttributes.signature + " " + programSetup.programName,
+                                primitive + " " + cacheKey + " " + programSetup.programName,
                                 {
                                     appendFragmentOutputs:          programSetup.appendFragmentOutputs,
                                     clippableTest:                  (function() {
