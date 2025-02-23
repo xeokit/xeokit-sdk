@@ -576,8 +576,6 @@ export class DTXLayer extends Layer {
         };
 
         return {
-            renderers: getRenderers(scene, "dtx", primitive, false,
-                                           (programVariables, subGeometry) => makeDTXRenderingAttributes(programVariables, !subGeometry)),
             edgesColorOpaqueAllowed: () => {
                 if (scene.logarithmicDepthBufferEnabled) {
                     if (!scene._loggedWarning) {
@@ -653,6 +651,8 @@ export class DTXLayer extends Layer {
                 texturePerObjectInstanceMatrices:      texturePerObjectInstanceMatrices
             },
 
+            renderers: getRenderers(scene, "dtx", primitive, false,
+                                    (programVariables, subGeometry) => makeDTXRenderingAttributes(programVariables, !subGeometry)),
             drawCalls: (function() {
                 const drawVertEdges = function(layerTypeInputs, glMode) {
                     draw8.edges( layerTypeInputs, glMode);
