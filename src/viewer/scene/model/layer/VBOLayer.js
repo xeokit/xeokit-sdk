@@ -922,8 +922,6 @@ const makeVBORenderingAttributes = function(programVariables, instancing, entity
         });
 
     return {
-        signature: instancing ? "instancing" : "batching",
-
         dontCullOnAlphaZero: true,
 
         geometryParameters: {
