@@ -800,8 +800,6 @@ const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
     const colorsAndFlags = (offset) => perObjColsFlags(`ivec2(objectIndexCoords.x*8+${offset}, objectIndexCoords.y)`);
 
     return {
-        signature: "DTX",
-
         geometryParameters: {
             attributes: {
                 clippable:         "(flags2.r > 0u)",
