@@ -548,8 +548,6 @@ export class VBOLayer extends Layer {
         };
 
         return {
-            renderers: getRenderers(scene, instancing ? "instancing" : "batching", primitive, true,
-                                    (programVariables) => makeVBORenderingAttributes(programVariables, instancing && { hasModelNormalMat: !!modelNormalMatrixColBufs }, scene.entityOffsetsEnabled)),
             edgesColorOpaqueAllowed: () => true,
             sortId: (((primitive === "points") ? "Points" : ((primitive === "lines") ? "Lines" : "Triangles"))
                      + (instancing ? "Instancing" : "Batching") + "Layer" +
@@ -759,6 +757,8 @@ export class VBOLayer extends Layer {
                 pbrSupported:          uvSetup && textureSet && textureSet.colorTexture && normalsBuf && metallicRoughnessBuf && textureSet.metallicRoughnessTexture
             },
 
+            renderers: getRenderers(scene, instancing ? "instancing" : "batching", primitive, true,
+                                    (programVariables) => makeVBORenderingAttributes(programVariables, instancing && { hasModelNormalMat: !!modelNormalMatrixColBufs }, scene.entityOffsetsEnabled)),
             drawCalls: (function() {
                 const drawCallCache = { };
                 const drawCall = (inputSetters, subGeometry) => {
