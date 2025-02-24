@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>xeokit visual test</title>
+    <link href="css/pageStyle.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <canvas id="myCanvas"></canvas>
+  </body>
+
+  <script type="module">
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for viewer.scene.camera example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import { Viewer, SceneModel } from "../../dist/xeokit-sdk.min.es.js";
+    import { math } from "../src/viewer/scene/math/math.js";
+    import { signalTestComplete } from "./lib/utils.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+      canvasId: "myCanvas",
+      transparent: true,
+      logarithmicDepthBufferEnabled: true, // Better precision for snapping
+    });
+
+    viewer.scene.camera.eye = [-21.8, 4.01, 6.56];
+    viewer.scene.camera.look = [0, -5.75, 0];
+    viewer.scene.camera.up = [0, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a SceneModel representing a table with four legs, using geometry batching
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sceneModel = new SceneModel(viewer.scene, {
+      id: "table",
+      isModel: true, // <--------------------- Represents a model, registers SceneModel by ID on viewer.scene.models
+      position: [0, 0, 0],
+      scale: [1, 1, 1],
+      rotation: [0, 0, 0],
+      edges: true,
+    });
+
+    //-----------------------------------------------------------
+    // Create a red table leg object
+    // Each object is comprised of a mesh, which belongs to a node
+    //-----------------------------------------------------------
+
+    const mesh1Config = {
+      id: "redLegMesh",
+
+      // The primitive type - allowed values are "points", "lines" and "triangles".
+      // See the OpenGL/WebGL specification docs for how the coordinate arrays are supposed to be laid out.
+      primitive: "triangles",
+
+      // The vertices - eight for our cube, each one spanning three array elements for X,Y and Z
+      positions: [
+        1,
+        1,
+        1,
+        -1,
+        1,
+        1,
+        -1,
+        -1,
+        1,
+        1,
+        -1,
+        1, // v0-v1-v2-v3 front
+        1,
+        1,
+        1,
+        1,
+        -1,
+        1,
+        1,
+        -1,
+        -1,
+        1,
+        1,
+        -1, // v0-v3-v4-v1 right
+        1,
+        1,
+        1,
+        1,
+        1,
+        -1,
+        -1,
+        1,
+        -1,
+        -1,
+        1,
+        1, // v0-v1-v6-v1 top
+        -1,
+        1,
+        1,
+        -1,
+        1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        1, // v1-v6-v7-v2 left
+        -1,
+        -1,
+        -1,
+        1,
+        -1,
+        -1,
+        1,
+        -1,
+        1,
+        -1,
+        -1,
+        1, // v7-v4-v3-v2 bottom
+        1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        1,
+        -1,
+        1,
+        1,
+        -1, // v4-v7-v6-v1 back
+      ],
+
+      // Normal vectors, one for each vertex
+      normals: [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1, // v0-v1-v2-v3 front
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0, // v0-v3-v4-v5 right
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0, // v0-v5-v6-v1 top
+        -1,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        -1,
+        0,
+        0, // v1-v6-v7-v2 left
+        0,
+        -1,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        -1,
+        0, // v7-v4-v3-v2 bottom
+        0,
+        0,
+        -1,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        -1, // v4-v7-v6-v5 back
+      ],
+
+      // Indices - these organise the positions and and normals
+      // into geometric primitives in accordance with the "primitive" parameter,
+      // in viewer.scene.camera case a set of three indices for each triangle.
+      //
+      // Note that each triangle is specified in counter-clockwise winding order.
+      //
+      indices: [
+        0,
+        1,
+        2,
+        0,
+        2,
+        3, // front
+        4,
+        5,
+        6,
+        4,
+        6,
+        7, // right
+        8,
+        9,
+        10,
+        8,
+        10,
+        11, // top
+        12,
+        13,
+        14,
+        12,
+        14,
+        15, // left
+        16,
+        17,
+        18,
+        16,
+        18,
+        19, // bottom
+        20,
+        21,
+        22,
+        20,
+        22,
+        23,
+      ],
+
+      position: [-4, -6, -4],
+      scale: [1, 3, 1],
+      rotation: [0, 0, 0],
+      color: [1, 0.3, 0.3],
+    };
+
+    sceneModel.createMesh(mesh1Config);
+
+    //--------------------------------------------------------
+    // Green table leg object
+    //--------------------------------------------------------
+    const configs = [];
+    const mesh2Config = {
+      id: "greenLegMesh",
+      primitive: "triangles",
+      positions: [
+        1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1,
+        1, -1, 1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1,
+        -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1, -1,
+        -1, -1, -1, -1, -1, 1, -1, 1, 1, -1,
+      ],
+      normals: [
+        0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+        0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1,
+        0, 0, -1,
+      ],
+      indices: [
+        0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12,
+        14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23,
+      ],
+      position: [4, -6, -4],
+      scale: [1, 3, 1],
+      rotation: [0, 0, 0],
+      color: [0.3, 1.0, 0.3],
+    };
+
+    sceneModel.createMesh(mesh2Config);
+
+    sceneModel.createEntity({
+      id: "greenLeg",
+      meshIds: ["greenLegMesh"],
+      isObject: true, // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    //--------------------------------------------------------
+    // Blue table leg object
+    //--------------------------------------------------------
+
+    const mesh3Config = {
+      id: "blueLegMesh",
+      positions: [
+        1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1,
+        1, -1, 1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1,
+        -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1, -1,
+        -1, -1, -1, -1, -1, 1, -1, 1, 1, -1,
+      ],
+      normals: [
+        0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+        0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1,
+        0, 0, -1,
+      ],
+      indices: [
+        0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12,
+        14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23,
+      ],
+      position: [4, -6, 4],
+      scale: [1, 3, 1],
+      rotation: [0, 0, 0],
+      color: [0.3, 0.3, 1.0],
+    };
+
+    sceneModel.createMesh(mesh3Config);
+
+    sceneModel.createEntity({
+      id: "blueLeg",
+      meshIds: ["blueLegMesh"],
+      isObject: true, // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    //--------------------------------------------------------
+    // Yellow table leg object
+    //--------------------------------------------------------
+    const mesh4Config = {
+      id: "yellowLegMesh",
+      positions: [
+        1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1,
+        1, -1, 1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1,
+        -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1, -1,
+        -1, -1, -1, -1, -1, 1, -1, 1, 1, -1,
+      ],
+      normals: [
+        0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+        0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1,
+        0, 0, -1,
+      ],
+      indices: [
+        0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12,
+        14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23,
+      ],
+      position: [-4, -6, 4],
+      scale: [1, 3, 1],
+      rotation: [0, 0, 0],
+      color: [1.0, 1.0, 0.0],
+    };
+
+    sceneModel.createMesh(mesh4Config);
+
+    sceneModel.createEntity({
+      id: "yellowLeg",
+      meshIds: ["yellowLegMesh"],
+      isObject: true, // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    //--------------------------------------------------------
+    // Purple table top object
+    //--------------------------------------------------------
+
+    const mesh5Config = {
+      id: "purpleTableTopMesh",
+      positions: [
+        1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1,
+        1, -1, 1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1,
+        -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1, -1,
+        -1, -1, -1, -1, -1, 1, -1, 1, 1, -1,
+      ],
+      normals: [
+        0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+        0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1,
+        0, 0, -1,
+      ],
+      indices: [
+        0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12,
+        14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23,
+      ],
+      position: [0, -3, 0],
+      scale: [6, 0.5, 6],
+      rotation: [0, 0, 0],
+      color: [1.0, 0.3, 1.0],
+    };
+
+    sceneModel.createMesh(mesh5Config);
+
+    sceneModel.createEntity({
+      id: "purpleTableTop",
+      meshIds: ["purpleTableTopMesh"],
+      isObject: true, // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    //------------------------------------------------------------
+    // Finalize the SceneModel.
+    //
+    // Internally, viewer.scene.camera builds any geometry batches or instanced
+    // arrays that are currently under construction within it.
+    //------------------------------------------------------------
+
+    sceneModel.finalize();
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Mouse hover to snap to vertices
+    //------------------------------------------------------------------------------------------------------------------
+
+    const markerDiv = document.createElement("div");
+    const canvas = viewer.scene.canvas.canvas;
+    canvas.parentNode.insertBefore(markerDiv, canvas);
+
+    markerDiv.style.background = "black";
+    markerDiv.style.border = "2px solid blue";
+    markerDiv.style.borderRadius = "20px";
+    markerDiv.style.width = "10px";
+    markerDiv.style.height = "10px";
+    markerDiv.style.margin = "-200px -200px";
+    markerDiv.style.zIndex = "100";
+    markerDiv.style.position = "absolute";
+    markerDiv.style.pointerEvents = "none";
+
+    configs.push(
+      mesh1Config,
+      mesh2Config,
+      mesh3Config,
+      mesh4Config,
+      mesh5Config
+    );
+    const vertices = [];
+
+    for (const meshConfig of configs) {
+      vertices.push(...getMeshVerticesWorldPos(meshConfig));
+    }
+
+    const uniqueVerticesSet = new Set(vertices.map(JSON.stringify));
+    const uniqueVertices = Array.from(uniqueVerticesSet).map(JSON.parse);
+
+    const distancesToCameraEye = calculateDistances(
+      uniqueVertices,
+      viewer.scene.camera.eye
+    );
+    const minDistance = Math.min(...distancesToCameraEye);
+
+    const closestVertex =
+      uniqueVertices[distancesToCameraEye.indexOf(minDistance)];
+
+    const canvasPos = projectWorldPos(closestVertex);
+
+    window.canvasPos = canvasPos;
+    signalTestComplete(viewer);
+
+    viewer.scene.input.on("mousemove", function (canvasPos) {
+      const snapPickResult = viewer.scene.pick({
+        canvasPos: canvasPos,
+        snapRadius: 30,
+        snapToEdge: false, // Default is true
+        snapToVertex: true, // Default is true
+      });
+
+      if (snapPickResult && snapPickResult.snappedCanvasPos) {
+        markerDiv.style.marginLeft = `${
+          snapPickResult.snappedCanvasPos[0] - 10
+        }px`;
+        markerDiv.style.marginTop = `${
+          snapPickResult.snappedCanvasPos[1] - 10
+        }px`;
+        markerDiv.style.background = "greenyellow";
+        markerDiv.style.border = "3px solid green";
+      } else {
+        markerDiv.style.marginLeft = `${canvasPos[0] - 10}px`;
+        markerDiv.style.marginTop = `${canvasPos[1] - 10}px`;
+        markerDiv.style.background = "white";
+        markerDiv.style.border = "1px solid black";
+      }
+    });
+
+    function calculateDistances(vertices, targetPoint) {
+      const distances = [];
+      const tempVec3 = math.vec3();
+      for (const vertex of vertices) {
+        const distance = math.lenVec3(
+          math.subVec3(vertex, viewer.camera.eye, tempVec3)
+        );
+        distances.push(distance);
+      }
+
+      return distances;
+    }
+
+    function projectWorldPos(worldPos) {
+      const _worldPos = math.vec4();
+      const viewPos = math.vec4();
+      const screenPos = math.vec4();
+      _worldPos[0] = worldPos[0];
+      _worldPos[1] = worldPos[1];
+      _worldPos[2] = worldPos[2];
+      _worldPos[3] = 1;
+      math.mulMat4v4(viewer.scene.camera.viewMatrix, _worldPos, viewPos);
+      math.mulMat4v4(viewer.scene.camera.projMatrix, viewPos, screenPos);
+      math.mulVec3Scalar(screenPos, 1.0 / screenPos[3]);
+      screenPos[3] = 1.0;
+      screenPos[1] *= -1;
+      const canvas = viewer.scene.canvas.canvas;
+      const halfCanvasWidth = canvas.width / 2.0;
+      const halfCanvasHeight = canvas.height / 2.0;
+      const canvasPos = [
+        screenPos[0] * halfCanvasWidth + halfCanvasWidth,
+        screenPos[1] * halfCanvasHeight + halfCanvasHeight,
+      ];
+      return canvasPos;
+    }
+
+    function getMeshVerticesWorldPos(meshConfig) {
+      const { positions } = meshConfig;
+
+      const worldPositions = [];
+      const projectionMatrix = viewer.scene.camera.projMatrix;
+      const viewMatrix = viewer.scene.camera.viewMatrix;
+
+      for (let i = 0; i < positions.length; i += 3) {
+        const worldPosition = [
+          positions[i],
+          positions[i + 1],
+          positions[i + 2],
+          1,
+        ];
+
+        worldPositions.push(worldPosition);
+      }
+
+      return worldPositions;
+    }
+  </script>
+</html>

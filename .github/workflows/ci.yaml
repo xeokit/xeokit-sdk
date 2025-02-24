@@ -1,5 +1,4 @@
-name: CI
-
+name: Build
 on:
   push:
     branches:
@@ -7,20 +6,36 @@ on:
   pull_request:
     branches:
       - master
-  workflow_dispatch:
-
+    types: [labeled]
+ 
 jobs:
   build:
+    # Run this job on push to master when *not* publishing a tag 
+    # and on 'percy' labeled pull requests
+    if: |
+      (${{ github.event_name == 'push' }} && startsWith(github.ref, 'refs/tags/') != true) || 
+      (${{ github.event_name == 'pull_request' }} && ${{ github.event.label.name == 'percy' }})
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout source code
+        uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-      - name: Restore
+      - name: Install dependencies
         run: npm ci
 
       - name: Build
         run: npm run build
+
+      - name: Test
+        run: |
+          echo "$DOT_ENV" > .env 
+          npx playwright install --with-deps chromium
+          npm run test
+        env:
+          DOT_ENV: ${{ secrets.PERCY_ENV }}
