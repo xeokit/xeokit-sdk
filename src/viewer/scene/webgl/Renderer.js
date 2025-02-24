@@ -1302,13 +1302,16 @@ const Renderer = function (scene, options) {
 
             const snapRadiusInPixels = snapRadius || 30;
 
-            const vertexPickBuffer = renderBufferManager.getRenderBuffer("uniquePickColors-aabs", {
-                depthTexture: true,
-                size: [
-                    2 * snapRadiusInPixels + 1,
-                    2 * snapRadiusInPixels + 1,
-                ]
-            });
+            const vertexPickBuffer = renderBufferManager.getRenderBuffer(
+                `uniquePickColors-aabs-${snapRadiusInPixels}`,
+                {
+                    depthTexture: true,
+                    size: [
+                        2 * snapRadiusInPixels + 1,
+                        2 * snapRadiusInPixels + 1,
+                    ]
+                }
+            );
 
             frameCtx.snapVectorA = [
                 canvasPos ? getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth) : 0,
