@@ -21,6 +21,7 @@ const tempVec3f = math.vec3();
 const tempVec3g = math.vec3();
 
 const tempUint8Array4 = new Uint8Array(4);
+const matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
 
 const iota = function(n) {
     const ret = [ ];
@@ -749,12 +750,7 @@ export class VBOLayer extends Layer {
                 }
             },
 
-            layerDrawState: {
-                getWorldNormalMatrix:  () => model.worldNormalMatrix,
-                positionsDecodeMatrix: positionsDecodeMatrix,
-                uvDecodeMatrix:        uvSetup && uvSetup.mat,
-                textureSet:            textureSet
-            },
+            layerTextureSet: textureSet,
 
             renderers: getRenderers(scene, instancing ? "instancing" : "batching", primitive,
                                     model.saoEnabled,
@@ -764,28 +760,42 @@ export class VBOLayer extends Layer {
                                     (programVariables) => makeVBORenderingAttributes(programVariables, instancing && { hasModelNormalMat: !!modelNormalMatrixColBufs }, scene.entityOffsetsEnabled)),
             drawCalls: (function() {
                 const drawCallCache = { };
-                const drawCall = (inputSetters, subGeometry) => {
-                    const hash = inputSetters.attributesHash;
-                    if (! (hash in drawCallCache)) {
-                        drawCallCache[hash] = [ null, null, null ];
+                const drawCall = (attributesHash, layerTypeInputs, viewState, subGeometry) => {
+                    let offset = 0;
+                    const mat4Size = 4 * 4;
+                    matricesUniformBlockBufferData.set(model.rotationMatrix, 0);
+                    matricesUniformBlockBufferData.set(viewState.viewMatrix, offset += mat4Size);
+                    matricesUniformBlockBufferData.set(viewState.projMatrix, offset += mat4Size);
+                    matricesUniformBlockBufferData.set(positionsDecodeMatrix, offset += mat4Size);
+                    if (layerTypeInputs.needNormal()) {
+                        matricesUniformBlockBufferData.set(model.worldNormalMatrix, offset += mat4Size);
+                        matricesUniformBlockBufferData.set(viewState.viewNormalMatrix, offset += mat4Size);
                     }
-                    const inputsCache = drawCallCache[hash];
+                    layerTypeInputs.matrices.setInputValue(matricesUniformBlockBufferData);
+
+                    layerTypeInputs.uvDecodeMatrix.setInputValue && layerTypeInputs.uvDecodeMatrix.setInputValue(uvSetup.mat);
+
+                    if (! (attributesHash in drawCallCache)) {
+                        drawCallCache[attributesHash] = [ null, null, null ];
+                    }
+                    const inputsCache = drawCallCache[attributesHash];
                     const cacheKey = subGeometry ? (subGeometry.vertices ? 0 : 1) : 2;
                     if (! inputsCache[cacheKey]) {
                         const vao = gl.createVertexArray();
                         gl.bindVertexArray(vao);
-                        inputSetters.setAttributes({
-                            positionsBuf:             positionsBuf,
-                            normalsBuf:               normalsBuf,
-                            colorsBuf:                colorsBuf,
-                            pickColorsBuf:            pickColorsBuf,
-                            uvBuf:                    uvSetup && uvSetup.buf,
-                            metallicRoughnessBuf:     metallicRoughnessBuf,
-                            flagsBuf:                 flagsBuf,
-                            offsetsBuf:               offsetsBuf,
-                            modelMatrixColBufs:       modelMatrixColBufs,
-                            modelNormalMatrixColBufs: modelNormalMatrixColBufs
-                        });
+
+                        const setAttr = (a, b) => { if (a && a.setInputValue && b) { a.setInputValue(b); } };
+                        const attrs = layerTypeInputs.attributes;
+                        setAttr(attrs.position, positionsBuf);
+                        setAttr(attrs.normal, normalsBuf);
+                        setAttr(attrs.color, colorsBuf);
+                        setAttr(attrs.pickColor, pickColorsBuf);
+                        setAttr(attrs.uV, uvSetup && uvSetup.buf);
+                        setAttr(attrs.metallicRoughness, metallicRoughnessBuf);
+                        setAttr(attrs.flags, flagsBuf);
+                        setAttr(attrs.offset, offsetsBuf);
+                        attrs.modelMatrixCol && attrs.modelMatrixCol.forEach((a, i) => setAttr(a, modelMatrixColBufs[i]));
+                        attrs.modelNormalMatrixCol && attrs.modelNormalMatrixCol.forEach((a, i) => setAttr(a, modelNormalMatrixColBufs[i]));
 
                         const drawer = (function() {
                             // TODO: Use drawElements count and offset to draw only one entity
@@ -845,9 +855,9 @@ export class VBOLayer extends Layer {
                 };
 
                 return {
-                    drawVertices: (inputSetters) => drawCall(inputSetters, { vertices: true }),
-                    drawEdges:    (inputSetters) => drawCall(inputSetters, { }),
-                    drawSurface:  (inputSetters) => drawCall(inputSetters, null)
+                    drawVertices: (inputSetters, layerTypeInputs, viewState) => drawCall(inputSetters, layerTypeInputs, viewState, { vertices: true }),
+                    drawEdges:    (inputSetters, layerTypeInputs, viewState) => drawCall(inputSetters, layerTypeInputs, viewState, { }),
+                    drawSurface:  (inputSetters, layerTypeInputs, viewState) => drawCall(inputSetters, layerTypeInputs, viewState, null)
                 };
             })(),
 
@@ -870,32 +880,25 @@ const lazyShaderVariable = function(name) {
 };
 
 const makeVBORenderingAttributes = function(programVariables, instancing, entityOffsetsEnabled) {
-    const createAttribute = (type, name, getBuffer) => {
-        return programVariables.createAttribute(type, name, (set, state) => {
-            const arrayBuf = getBuffer(state);
-            arrayBuf && set(arrayBuf);
-        });
-    };
+    const createAttribute = programVariables.createAttribute;
 
     const attributes = {
-        position:             createAttribute("vec3",  "positionA",         (state) => state.positionsBuf),
-        normal:               createAttribute("vec3",  "normalA",           (state) => state.normalsBuf),
-        color:                createAttribute("vec4",  "colorA",            (state) => state.colorsBuf),
-        pickColor:            createAttribute("vec4",  "pickColor",         (state) => state.pickColorsBuf),
-        uV:                   createAttribute("vec2",  "uvApremul",         (state) => state.uvBuf),
-        metallicRoughness:    createAttribute("vec2",  "metallicRoughness", (state) => state.metallicRoughnessBuf),
-        flags:                createAttribute("float", "flagsA",            (state) => state.flagsBuf),
-        offset:               entityOffsetsEnabled && createAttribute("vec3", "offset", (state) => state.offsetsBuf),
-        modelMatrixCol:       instancing && iota(3).map(i => createAttribute("vec4", "modelMatrixCol" + i, (state) => state.modelMatrixColBufs[i])),
-        modelNormalMatrixCol: instancing && instancing.hasModelNormalMat && iota(3).map(i => createAttribute("vec4", "modelNormalMatrixCol" + i, (state) => state.modelNormalMatrixColBufs[i]))
+        position:             createAttribute("vec3",  "positionA"),
+        normal:               createAttribute("vec3",  "normalA"),
+        color:                createAttribute("vec4",  "colorA"),
+        pickColor:            createAttribute("vec4",  "pickColor"),
+        uV:                   createAttribute("vec2",  "uvApremul"),
+        metallicRoughness:    createAttribute("vec2",  "metallicRoughness"),
+        flags:                createAttribute("float", "flagsA"),
+        offset:               entityOffsetsEnabled && createAttribute("vec3", "offset"),
+        modelMatrixCol:       instancing && iota(3).map(i => createAttribute("vec4", "modelMatrixCol" + i)),
+        modelNormalMatrixCol: instancing && instancing.hasModelNormalMat && iota(3).map(i => createAttribute("vec4", "modelNormalMatrixCol" + i))
     };
 
     const uvA            = lazyShaderVariable("aUv");
     const viewNormal     = lazyShaderVariable("viewNormal");
     const worldNormal    = lazyShaderVariable("worldNormal");
-    const uvDecodeMatrix = programVariables.createUniform("mat3", "uvDecodeMatrix", (set, state) => set(state.layerDrawState.uvDecodeMatrix));
-
-    const matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
+    const uvDecodeMatrix = programVariables.createUniform("mat3", "uvDecodeMatrix");
 
     const needNormal = () => (viewNormal.needed || worldNormal.needed);
     const matrices = programVariables.createUniformBlock(
@@ -907,19 +910,6 @@ const makeVBORenderingAttributes = function(programVariables, instancing, entity
             positionsDecodeMatrix: "mat4",
             worldNormalMatrix:     "mat4",
             viewNormalMatrix:      "mat4"
-        },
-        (set, state) => {
-            let offset = 0;
-            const mat4Size = 4 * 4;
-            matricesUniformBlockBufferData.set(state.mesh.worldMatrix, 0);
-            matricesUniformBlockBufferData.set(state.view.viewMatrix, offset += mat4Size);
-            matricesUniformBlockBufferData.set(state.view.projMatrix, offset += mat4Size);
-            matricesUniformBlockBufferData.set(state.layerDrawState.positionsDecodeMatrix, offset += mat4Size);
-            if (needNormal()) {
-                matricesUniformBlockBufferData.set(state.layerDrawState.getWorldNormalMatrix(), offset += mat4Size);
-                matricesUniformBlockBufferData.set(state.view.viewNormalMatrix, offset += mat4Size);
-            }
-            set(matricesUniformBlockBufferData);
         });
 
     return {
@@ -962,6 +952,13 @@ const makeVBORenderingAttributes = function(programVariables, instancing, entity
                     src.push(`vec3 ${viewNormal} = normalize((${matrices.viewNormalMatrix} * vec4(${worldNormal}, 0.0)).xyz);`);
                 }
             }
+        },
+
+        layerTypeInputs: {
+            attributes:     attributes,
+            matrices:       matrices,
+            uvDecodeMatrix: uvDecodeMatrix,
+            needNormal:     needNormal
         }
     };
 };

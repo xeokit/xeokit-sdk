@@ -3,10 +3,10 @@ import {setupTexture} from "../../../webgl/WebGLRenderer.js";
 
 export const ColorTextureProgram = function(programVariables, geometry, scene, lightSetup, sao, useAlphaCutoff, gammaOutput) {
     const colorTexture = setupTexture(programVariables, "sampler2D", "uColorMap", sRGBEncoding, (set, state) => {
-        const texture = state.layerDrawState.textureSet.colorTexture;
+        const texture = state.layerTextureSet.colorTexture;
         texture && set(texture.texture);
     });
-    const materialAlphaCutoff = useAlphaCutoff && programVariables.createUniform("float", "materialAlphaCutoff", (set, state) => set(state.layerDrawState.textureSet.alphaCutoff));
+    const materialAlphaCutoff = useAlphaCutoff && programVariables.createUniform("float", "materialAlphaCutoff", (set, state) => set(state.layerTextureSet.alphaCutoff));
 
     const attributes = geometry.attributes;
     const vViewPosition = programVariables.createVarying("vec3", "vViewPosition", () => `${attributes.position.view}.xyz`);
