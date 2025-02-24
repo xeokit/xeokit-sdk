@@ -31,7 +31,7 @@ export const createProgramVariablesState = function() {
         };
     };
     const programVariables = {
-            createAttribute: function(type, name, valueSetter) {
+            createAttribute: function(type, name) {
                 let needed = false;
                 vertAppenders.push((src) => needed && src.push(`in ${type} ${name};`));
                 const ret = {
@@ -43,12 +43,8 @@ export const createProgramVariablesState = function() {
                 attrSetters.push((getInputSetter) => {
                     const setValue = needed && getInputSetter(name);
                     setValue && attrHahes.push(setValue.attributeHash);
-                    if (valueSetter) {
-                        return setValue && ((state) => valueSetter(setValue, state));
-                    } else {
-                        ret.setInputValue = setValue;
-                        return null;
-                    }
+                    ret.setInputValue = setValue;
+                    return null;
                 });
                 return ret;
             },
@@ -282,7 +278,7 @@ export const createProgramVariablesState = function() {
                 return [ null, program.errors ];
             } else {
                 const getInputSetter = makeInputSetters(gl, program.handle);
-                const aSetters = attrSetters.map(i => i(getInputSetter)).filter(s => s);
+                attrSetters.forEach(i => i(getInputSetter));
                 const uSetters = unifSetters.map(i => i(getInputSetter)).filter(s => s);
                 return [ {
                     bind: () => program.bind(),
@@ -290,7 +286,6 @@ export const createProgramVariablesState = function() {
                     id: program.id,
                     inputSetters: {
                         attributesHash: attrHahes.sort().join(", "),
-                        setAttributes: (state) => aSetters.forEach(s => s(state)),
                         setUniforms:   (state) => uSetters.forEach(s => s(state))
                     }
                 } ];
