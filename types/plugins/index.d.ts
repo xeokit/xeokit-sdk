@@ -3,6 +3,7 @@ export * from "./AnnotationsPlugin";
 export * from "./AxisGizmoPlugin";
 export * from "./BCFViewpointsPlugin";
 export * from "./CityJSONLoaderPlugin";
+export * from "./CxConverterIFCLoaderPlugin";
 export * from "./DistanceMeasurementsPlugin";
 export * from "./DotBIMLoaderPlugin";
 export * from "./FastNavPlugin";
