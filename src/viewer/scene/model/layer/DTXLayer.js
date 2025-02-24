@@ -795,6 +795,7 @@ const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
 
     const colorA     = lazyShaderVariable("colorA");
     const pickColorA = lazyShaderVariable("pickColor");
+    const worldNormal = lazyShaderVariable("worldNormal");
     const viewNormal = lazyShaderVariable("viewNormal");
 
     const colorsAndFlags = (offset) => perObjColsFlags(`ivec2(objectIndexCoords.x*8+${offset}, objectIndexCoords.y)`);
@@ -808,7 +809,7 @@ const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
                 metallicRoughness: null,
                 normal:            {
                     view:  viewNormal,
-                    world: null
+                    world: worldNormal
                 },
                 pickColor:         pickColorA,
                 position:          {
@@ -865,6 +866,9 @@ const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
                 src.push(`vec3 positions[] = vec3[](${vertIdCoords(0)}, ${vertIdCoords(1)}, ${vertIdCoords(2)});`);
                 src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
                 src.push("vec3 position = positions[gl_VertexID % 3];");
+                if (worldNormal.needed) { // WARNING: Not thoroughly tested, as not being used at the moment
+                    src.push(`vec3 worldNormal = -normalize((transpose(inverse(${worldMatrix} * objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);`);
+                }
                 if (viewNormal.needed) {
                     src.push(`vec3 viewNormal = -normalize((transpose(inverse(${viewMatrix} * objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);`);
                 }
@@ -874,6 +878,9 @@ const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
                 src.push(`      vec3 uCameraEyeRtcInQuantizedSpace = (inverse(${worldMatrix} * objectDecodeAndInstanceMatrix) * vec4(${uCameraEyeRtc}, 1)).xyz;`);
                 src.push("      if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
                 src.push("          position = positions[2 - (gl_VertexID % 3)];");
+                if (worldNormal.needed) {
+                    src.push("          worldNormal = -worldNormal;");
+                }
                 if (viewNormal.needed) {
                     src.push("          viewNormal = -viewNormal;");
                 }
@@ -884,6 +891,9 @@ const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
                 }
                 src.push("      if (viewNormal.z < 0.0) {");
                 src.push("          position = positions[2 - (gl_VertexID % 3)];");
+                if (worldNormal.needed) {
+                    src.push("          worldNormal = -worldNormal;");
+                }
                 if (viewNormal.needed) {
                     src.push("          viewNormal = -viewNormal;");
                 }
