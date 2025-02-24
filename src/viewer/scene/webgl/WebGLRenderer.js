@@ -18,6 +18,7 @@ export const createProgramVariablesState = function() {
     const vOutAppenders = [ ];
     const fragAppenders = [ ];
     const attrSetters = [ ];
+    const attrHahes = [ ];
     const unifSetters = [ ];
     const createVertexDefinition = (name, appendDefinition) => {
         let needed = false;
@@ -33,22 +34,23 @@ export const createProgramVariablesState = function() {
             createAttribute: function(type, name, valueSetter) {
                 let needed = false;
                 vertAppenders.push((src) => needed && src.push(`in ${type} ${name};`));
-                attrSetters.push((getInputSetter) => {
-                    const setValue = needed && getInputSetter(name);
-                    if (setValue) {
-                        const setter = (state) => valueSetter(setValue, state);
-                        setter.attributeHash = setValue.attributeHash;
-                        return setter;
-                    } else {
-                        return null;
-                    }
-                });
-                return {
+                const ret = {
                     toString: () => {
                         needed = true;
                         return name;
                     }
                 };
+                attrSetters.push((getInputSetter) => {
+                    const setValue = needed && getInputSetter(name);
+                    setValue && attrHahes.push(setValue.attributeHash);
+                    if (valueSetter) {
+                        return setValue && ((state) => valueSetter(setValue, state));
+                    } else {
+                        ret.setInputValue = setValue;
+                        return null;
+                    }
+                });
+                return ret;
             },
             createFragmentDefinition: (name, appendDefinition) => {
                 let needed = false;
@@ -104,15 +106,20 @@ export const createProgramVariablesState = function() {
                 };
                 vertAppenders.push(append);
                 fragAppenders.push(append);
-                unifSetters.push((getInputSetter) => {
-                    const setValue = needed && getInputSetter(name);
-                    return setValue && ((state) => valueSetter(setValue, state));
-                });
                 const ret = { };
                 keys.forEach(k => ret[k] = {
                     toString: () => {
                         needed = true;
                         return k;
+                    }
+                });
+                unifSetters.push((getInputSetter) => {
+                    const setValue = needed && getInputSetter(name);
+                    if (valueSetter) {
+                        return setValue && ((state) => valueSetter(setValue, state));
+                    } else {
+                        ret.setInputValue = setValue;
+                        return null;
                     }
                 });
                 return ret;
@@ -282,7 +289,7 @@ export const createProgramVariablesState = function() {
                     destroy: () => program.destroy(),
                     id: program.id,
                     inputSetters: {
-                        attributesHash: aSetters.map(a => a.attributeHash).filter(h => h).sort().join(", "),
+                        attributesHash: attrHahes.sort().join(", "),
                         setAttributes: (state) => aSetters.forEach(s => s(state)),
                         setUniforms:   (state) => uSetters.forEach(s => s(state))
                     }
