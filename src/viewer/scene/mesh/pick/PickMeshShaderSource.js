@@ -3,7 +3,7 @@ const tmpVec4 = math.vec4();
 
 export const PickMeshShaderSource = function(meshHash, programVariables) {
     const pickColor = programVariables.createUniform("vec4", "pickColor", (set, state) => {
-        var pickID = state.mesh._state.pickID; // Mesh-indexed color
+        var pickID = state.meshPickID; // Mesh-indexed color
         tmpVec4[0] = pickID       & 0xFF;
         tmpVec4[1] = pickID >>  8 & 0xFF;
         tmpVec4[2] = pickID >> 16 & 0xFF;

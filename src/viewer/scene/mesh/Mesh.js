@@ -2198,17 +2198,17 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
     const quantizedGeometry = geometryState.compressGeometry;
     const isPoints = geometryState.primitiveName === "points";
 
-    const pointSize             = programVariables.createUniform("float", "pointSize",             (set, state) => set(state.material.pointSize));
-    const modelMatrix           = programVariables.createUniform("mat4",  "modelMatrix",           (set, state) => set(state.mesh.worldMatrix));
-    const modelNormalMatrix     = programVariables.createUniform("mat4",  "modelNormalMatrix",     (set, state) => set(state.mesh.worldNormalMatrix));
-    const offset                = programVariables.createUniform("vec3",  "offset",                (set, state) => set(state.mesh.offset));
-    const scale                 = programVariables.createUniform("vec3",  "scale",                 (set, state) => set(state.mesh.scale));
-    const positionsDecodeMatrix = programVariables.createUniform("mat4",  "positionsDecodeMatrix", (set, state) => set(state.mesh._geometry._state.positionsDecodeMatrix));
-    const uvDecodeMatrix        = programVariables.createUniform("mat3",  "uvDecodeMatrix",        (set, state) => set(state.mesh._geometry._state.uvDecodeMatrix));
-    const viewMatrix            = programVariables.createUniform("mat4",  "viewMatrix",            (set, state) => set(state.view.viewMatrix));
-    const viewNormalMatrix      = programVariables.createUniform("mat4",  "viewNormalMatrix",      (set, state) => set(state.view.viewNormalMatrix));
-    const projMatrix            = programVariables.createUniform("mat4",  "projMatrix",            (set, state) => set(state.view.projMatrix));
-    const pickClipPos           = programVariables.createUniform("vec2",  "pickClipPos",           (set, state) => set(state.view.pickClipPos));
+    const pointSize             = programVariables.createUniform("float", "pointSize");
+    const modelMatrix           = programVariables.createUniform("mat4",  "modelMatrix");
+    const modelNormalMatrix     = programVariables.createUniform("mat4",  "modelNormalMatrix");
+    const offset                = programVariables.createUniform("vec3",  "offset");
+    const scale                 = programVariables.createUniform("vec3",  "scale");
+    const positionsDecodeMatrix = programVariables.createUniform("mat4",  "positionsDecodeMatrix");
+    const uvDecodeMatrix        = programVariables.createUniform("mat3",  "uvDecodeMatrix");
+    const viewMatrix            = programVariables.createUniform("mat4",  "viewMatrix");
+    const viewNormalMatrix      = programVariables.createUniform("mat4",  "viewNormalMatrix");
+    const projMatrix            = programVariables.createUniform("mat4",  "projMatrix");
+    const pickClipPos           = programVariables.createUniform("vec2",  "pickClipPos");
 
     const billboard = mesh.billboard;
     const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
@@ -2278,7 +2278,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         return src;
     };
 
-    const clippable = programVariables.createUniform("bool", "clippable", (set, state) => set(state.mesh.clippable));
+    const clippable = programVariables.createUniform("bool", "clippable");
 
     const [ program, errors ] = programVariablesState.buildProgram(
         gl,
@@ -2365,17 +2365,30 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
                     lastMaterialId = materialState.id;
                 }
 
-                const setUniforms = (projMatrix, viewMatrix) => {
+                const setUniforms = (projMat, viewMat) => {
+                    const setUni = (u, v) => (u.setInputValue && u.setInputValue(v));
+                    setUni(pointSize,             material.pointSize);
+                    setUni(modelMatrix,           mesh.worldMatrix);
+                    setUni(modelNormalMatrix,     mesh.worldNormalMatrix);
+                    setUni(offset,                mesh.offset);
+                    setUni(scale,                 mesh.scale);
+                    setUni(positionsDecodeMatrix, geometryState.positionsDecodeMatrix);
+                    setUni(uvDecodeMatrix,        geometryState.uvDecodeMatrix);
+                    setUni(viewMatrix,            viewMat);
+                    setUni(viewNormalMatrix,      camera.viewNormalMatrix);
+                    setUni(projMatrix,            projMat);
+                    setUni(pickClipPos,           frameCtx.pickClipPos);
+                    setUni(clippable,             mesh.clippable);
+
                     inputSetters.setUniforms({
-                        material: material,
-                        mesh:     mesh,
-                        view:     {
-                            projMatrix:       projMatrix,
-                            viewMatrix:       viewMatrix,
-                            viewNormalMatrix: camera.viewNormalMatrix,
-                            far:              project.far,
-                            pickClipPos:      frameCtx.pickClipPos
-                        }
+                        material:     material,
+                        meshColorize: mesh.colorize,
+                        meshPickID:   mesh._state.pickID,
+                        mesh:         {
+                            origin:      mesh.origin,
+                            renderFlags: { sectionPlanesActivePerLayer: mesh.renderFlags.sectionPlanesActivePerLayer }
+                        },
+                        view:         { far: project.far }
                     });
                 };
 
