@@ -4,7 +4,7 @@ import {setupTexture} from "../../../webgl/WebGLRenderer.js";
 export const PBRProgram = function(programVariables, geometry, scene, lightSetup, sao) {
     const setup2dTexture = (name, isSrgb, getTexture) => {
         return setupTexture(programVariables, "sampler2D", name, isSrgb ? sRGBEncoding : LinearEncoding, (set, state) => {
-            const texture = getTexture(state.layerDrawState.textureSet);
+            const texture = getTexture(state.layerTextureSet);
             texture && set(texture.texture);
         });
     };
