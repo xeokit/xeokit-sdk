@@ -279,26 +279,14 @@ export class Mesh extends Component {
             const ensureInstance = () => {
                 if (! instance) {
                     const programVariablesState = createProgramVariablesState();
-
-                    const createAttribute = (type, name, getBuffer) => {
-                        return programVariablesState.programVariables.createAttribute(type, name, (set, state) => {
-                            set({
-                                bindAtLocation: location => { // see ArrayBuf.js and Attribute.js
-                                    const arrayBuf = getBuffer(state);
-                                    arrayBuf.bind();
-                                        scene.canvas.gl.vertexAttribPointer(location, arrayBuf.itemSize, arrayBuf.itemType, arrayBuf.normalized, 0, 0);
-                                }
-                                });
-                            state.onBindAttribute();
-                        });
-                    };
+                    const createAttribute = programVariablesState.programVariables.createAttribute;
                     const geometryState = mesh._geometry._state;
                     const attributes = {
-                        position:  createAttribute("vec3", "position", (state) => (state.triangleGeometry || state.geometryState).positionsBuf),
-                        color:     geometryState.colorsBuf && createAttribute("vec4", "color", (state) => state.geometryState.colorsBuf),
-                        pickColor: createAttribute("vec4", "pickColor", (state) => state.triangleGeometry.pickColorsBuf),
-                        uv:        geometryState.uvBuf && createAttribute("vec2", "uv", (state) => state.geometryState.uvBuf),
-                        normal:    (geometryState.autoVertexNormals || geometryState.normalsBuf) && [ "triangles", "triangle-strip", "triangle-fan" ].includes(geometryState.primitiveName) && createAttribute("vec3", "normal", (state) => state.geometryState.normalsBuf)
+                        position:  createAttribute("vec3", "position"),
+                        color:     geometryState.colorsBuf && createAttribute("vec4", "color"),
+                        pickColor: createAttribute("vec4", "pickColor"),
+                        uv:        geometryState.uvBuf && createAttribute("vec2", "uv"),
+                        normal:    (geometryState.autoVertexNormals || geometryState.normalsBuf) && [ "triangles", "triangle-strip", "triangle-fan" ].includes(geometryState.primitiveName) && createAttribute("vec3", "normal")
                     };
 
                     const lazyShaderVariable = function(name) {
@@ -2377,7 +2365,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
                     lastMaterialId = materialState.id;
                 }
 
-                const withViewProjMatrices = (projMatrix, viewMatrix) => {
+                const setUniforms = (projMatrix, viewMatrix) => {
                     inputSetters.setUniforms({
                         material: material,
                         mesh:     mesh,
@@ -2393,25 +2381,36 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
 
                 const origin = mesh.origin;
                 if (programSetup.isPick) {
-                    withViewProjMatrices(frameCtx.pickProjMatrix,   origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix);
+                    setUniforms(frameCtx.pickProjMatrix,   origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix);
                 } else if (programSetup.useShadowView) {
-                    withViewProjMatrices(frameCtx.shadowProjMatrix, frameCtx.shadowViewMatrix);
+                    setUniforms(frameCtx.shadowProjMatrix, frameCtx.shadowViewMatrix);
                 } else {
-                    withViewProjMatrices(project.matrix,            origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
+                    setUniforms(project.matrix,            origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
                 }
 
-                const withTriangleGeometry = (triangleGeometry) => {
-                    inputSetters.setAttributes({
-                        geometryState:    geometryState,
-                        onBindAttribute:  () => frameCtx.bindArray++,
-                        triangleGeometry: triangleGeometry
-                    });
+                const setAttributes = (triangleGeometry) => {
+                    const setAttr = (a, b) => {
+                        if (a && a.setInputValue && b) {
+                            a.setInputValue({
+                                bindAtLocation: location => { // see ArrayBuf.js and Attribute.js
+                                    b.bind();
+                                    scene.canvas.gl.vertexAttribPointer(location, b.itemSize, b.itemType, b.normalized, 0, 0);
+                                }
+                            });
+                            frameCtx.bindArray++;
+                        }
+                    };
+                    setAttr(attributes.position,  (triangleGeometry || geometryState).positionsBuf);
+                    setAttr(attributes.color,     geometryState.colorsBuf);
+                    setAttr(attributes.pickColor, triangleGeometry && triangleGeometry.pickColorsBuf);
+                    setAttr(attributes.uv,        geometryState.uvBuf);
+                    setAttr(attributes.normal,    geometryState.normalsBuf);
                 };
 
                 if (programSetup.trianglePick) {
                     const positionsBuf = geometry._getPickTrianglePositions();
                     if (geometryState.id !== lastGeometryId) {
-                        withTriangleGeometry({ positionsBuf: positionsBuf, pickColorsBuf: geometry._getPickTriangleColors() });
+                        setAttributes({ positionsBuf: positionsBuf, pickColorsBuf: geometry._getPickTriangleColors() });
                         lastGeometryId = geometryState.id;
                     }
 
@@ -2423,7 +2422,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
 
                     if (indicesBuf) {
                         if (geometryState.id !== lastGeometryId) {
-                            withTriangleGeometry();
+                            setAttributes();
 
                             indicesBuf.bind();
                             frameCtx.bindArray++;
@@ -2436,7 +2435,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
                     }
                 } else {
                     if (geometryState.id !== lastGeometryId) {
-                        withTriangleGeometry();
+                        setAttributes();
 
                         if (geometryState.indicesBuf) {
                             geometryState.indicesBuf.bind();
