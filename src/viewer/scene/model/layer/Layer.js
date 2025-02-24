@@ -152,15 +152,13 @@ export const getColSilhEdgePickFlags = (flags, transparent, hasEdges, scene, dst
 export const getRenderers = (function() {
     const cachedRenderers = { };
 
-    return function(scene, cacheKey, primitive, isVBO, makeRenderingAttributes) {
+    return function(scene, layerType, primitive, saoEnabled, pbrSupported, colorTextureSupported, surfaceHasNormals, makeRenderingAttributes) {
+        const primKey = ((primitive === "points") || (primitive === "lines")) ? primitive : "triangles";
+        const cacheKey = [ layerType, primKey, !!saoEnabled, !!pbrSupported, !!colorTextureSupported, !!surfaceHasNormals ].join(":");
         if (! (cacheKey in cachedRenderers)) {
             cachedRenderers[cacheKey] = { };
         }
-        const primKey = ((primitive === "points") || (primitive === "lines")) ? primitive : "triangles";
-        if (! (primKey in cachedRenderers[cacheKey])) {
-            cachedRenderers[cacheKey][primKey] = { };
-        }
-        const cache = cachedRenderers[cacheKey][primKey];
+        const cache = cachedRenderers[cacheKey];
         const sceneId = scene.id;
         if (! (sceneId in cache)) {
             const gl = scene.canvas.gl;
@@ -181,7 +179,6 @@ export const getRenderers = (function() {
                             const getValid = () => hash === getHash();
 
                             const geometryParameters     = renderingAttributes.geometryParameters;
-                            const gl                     = scene.canvas.gl;
                             const incrementDrawState     = programSetup.incrementDrawState;
                             const isShadowProgram        = programSetup.isShadowProgram;
                             const usePickParams          = programSetup.usePickParams;
@@ -190,7 +187,7 @@ export const getRenderers = (function() {
 
                             const [ program, errors ] = programVariablesState.buildProgram(
                                 gl,
-                                primitive + " " + cacheKey + " " + programSetup.programName,
+                                layerType + " " + primitive + " " + programSetup.programName,
                                 {
                                     appendFragmentOutputs:          programSetup.appendFragmentOutputs,
                                     clippableTest:                  (function() {
@@ -371,7 +368,7 @@ export const getRenderers = (function() {
 
             if (primitive === "points") {
                 cache[sceneId] = {
-                    colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((vars, geo, c) => c(makeColorProgram(vars, geo, null, null))) } } },
+                    colorRenderers:     { "sao-": { "vertex": lazy((vars, geo, c) => c(makeColorProgram(vars, geo, null, null))) } },
                     occlusionRenderer:  lazy((vars, geo, c) => c(OcclusionProgram(vars, scene.logarithmicDepthBufferEnabled))),
                     pickDepthRenderer:  lazy((vars, geo, c) => c(makePickDepthProgram(vars, geo))),
                     pickMeshRenderer:   lazy((vars, geo, c) => c(makePickMeshProgram(vars, geo))),
@@ -385,7 +382,7 @@ export const getRenderers = (function() {
                 };
             } else if (primitive === "lines") {
                 cache[sceneId] = {
-                    colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((vars, geo, c) => c(makeColorProgram(vars, geo, null, null))) } } },
+                    colorRenderers:     { "sao-": { "vertex": lazy((vars, geo, c) => c(makeColorProgram(vars, geo, null, null))) } },
                     silhouetteRenderer: lazy((vars, geo, c) => c(SilhouetteProgram(vars, geo, scene.logarithmicDepthBufferEnabled, true))),
                     snapInitRenderer:   lazy((vars, geo, c) => c(makeSnapProgram(vars, geo, true,  false))),
                     snapEdgeRenderer:   lazy((vars, geo, c) => c(makeSnapProgram(vars, geo, false, false)), { vertices: false }),
@@ -399,23 +396,20 @@ export const getRenderers = (function() {
                         const createSAO = vars => createSAOSetup(vars, gl, scene.sao);
                         const saoRenderers = function(useSao) {
                             const makeColorTextureProgram = (vars, geo, useAlphaCutoff) => ColorTextureProgram(vars, geo, scene, createLights(vars), useSao && createSAO(vars), useAlphaCutoff, scene.gammaOutput); // If gammaOutput set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
-                            return (isVBO
-                                    ? {
-                                        "PBR": lazy((vars, geo, c) => c(PBRProgram(vars, geo, scene, createLights(vars), useSao && createSAO(vars)))),
-                                        "texture": {
-                                            "alphaCutoff-": lazy((vars, geo, c) => c(makeColorTextureProgram(vars, geo, false))),
-                                            "alphaCutoff+": lazy((vars, geo, c) => c(makeColorTextureProgram(vars, geo, true)))
-                                        },
-                                        "vertex": {
-                                            "flat-": lazy((vars, geo, c) => c(makeColorProgram(vars, geo, createLights(vars), useSao && createSAO(vars)))),
-                                            "flat+": lazy((vars, geo, c) => c(FlatColorProgram(vars, geo, scene.logarithmicDepthBufferEnabled, createLights(vars), useSao && createSAO(vars))))
-                                        }
-                                    }
-                                    : { "vertex": { "flat-": lazy((vars, geo, c) => c(makeColorProgram(vars, geo, createLights(vars), useSao && createSAO(vars)))) } });
+                            return {
+                                "PBR": pbrSupported && lazy((vars, geo, c) => c(PBRProgram(vars, geo, scene, createLights(vars), useSao && createSAO(vars)))),
+                                "texture": colorTextureSupported && {
+                                    "alphaCutoff-": lazy((vars, geo, c) => c(makeColorTextureProgram(vars, geo, false))),
+                                    "alphaCutoff+": lazy((vars, geo, c) => c(makeColorTextureProgram(vars, geo, true)))
+                                },
+                                "vertex": (surfaceHasNormals
+                                           ? lazy((vars, geo, c) => c(makeColorProgram(vars, geo, createLights(vars), useSao && createSAO(vars))))
+                                           : lazy((vars, geo, c) => c(FlatColorProgram(vars, geo, scene.logarithmicDepthBufferEnabled, createLights(vars), useSao && createSAO(vars)))))
+                            };
                         };
                         return {
                             "sao-": saoRenderers(false),
-                            "sao+": saoRenderers(true)
+                            "sao+": saoEnabled && saoRenderers(true)
                         };
                     })(),
                     depthRenderer:           lazy((vars, geo, c) => c(DepthProgram(vars, geo, scene.logarithmicDepthBufferEnabled))),
@@ -567,13 +561,12 @@ export class Layer {
         if ((renderOpaque ? (this._numTransparentLayerPortions < this._portions.length) : (this._numTransparentLayerPortions > 0))
             &&
             (this._countsByFlag[ENTITY_FLAGS.XRAYED].count < this._portions.length)) {
-
-            const saoRenderer = (renderOpaque && frameCtx.withSAO && this.model.saoEnabled && this._renderers.colorRenderers["sao+"]) || this._renderers.colorRenderers["sao-"];
-            const renderer = ((saoRenderer["PBR"] && frameCtx.pbrEnabled && this.model.pbrEnabled && this.layerDrawState.pbrSupported)
+            const saoRenderer = (renderOpaque && frameCtx.withSAO && this._renderers.colorRenderers["sao+"]) || this._renderers.colorRenderers["sao-"];
+            const renderer = ((frameCtx.pbrEnabled && saoRenderer["PBR"])
                               ? saoRenderer["PBR"]
-                              : ((saoRenderer["texture"] && frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this.layerDrawState.colorTextureSupported)
+                              : ((frameCtx.colorTextureEnabled && saoRenderer["texture"])
                                  ? saoRenderer["texture"][(this.layerDrawState.textureSet && (typeof(this.layerDrawState.textureSet.alphaCutoff) === "number")) ? "alphaCutoff+" : "alphaCutoff-"]
-                                 : saoRenderer["vertex"][((this.primitive === "points") || (this.primitive === "lines") || this._compiledPortions.surfaceHasNormals) ? "flat-" : "flat+"]));
+                                 : saoRenderer["vertex"]));
             const pass = renderOpaque ? RENDER_PASSES.COLOR_OPAQUE : RENDER_PASSES.COLOR_TRANSPARENT;
             this.__drawLayer(renderFlags, frameCtx, renderer, pass);
         }

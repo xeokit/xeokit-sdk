@@ -563,7 +563,6 @@ export class VBOLayer extends Layer {
                                +
                                (textureSet && textureSet.metallicRoughnessTexture ? "-metallicRoughnessTexture" : ""))))
                       : "")),
-            surfaceHasNormals: !!normalsBuf,
             setClippableFlags: setFlags,
             setFlags: setFlags,
             setFlags2: (portionId, flags, deferred) => { },
@@ -754,12 +753,14 @@ export class VBOLayer extends Layer {
                 getWorldNormalMatrix:  () => model.worldNormalMatrix,
                 positionsDecodeMatrix: positionsDecodeMatrix,
                 uvDecodeMatrix:        uvSetup && uvSetup.mat,
-                textureSet:            textureSet,
-                colorTextureSupported: uvSetup && textureSet && textureSet.colorTexture,
-                pbrSupported:          uvSetup && textureSet && textureSet.colorTexture && normalsBuf && metallicRoughnessBuf && textureSet.metallicRoughnessTexture
+                textureSet:            textureSet
             },
 
-            renderers: getRenderers(scene, instancing ? "instancing" : "batching", primitive, true,
+            renderers: getRenderers(scene, instancing ? "instancing" : "batching", primitive,
+                                    model.saoEnabled,
+                                    model.pbrEnabled          && uvSetup && textureSet && textureSet.colorTexture && normalsBuf && metallicRoughnessBuf && textureSet.metallicRoughnessTexture,
+                                    model.colorTextureEnabled && uvSetup && textureSet && textureSet.colorTexture,
+                                    !!normalsBuf,
                                     (programVariables) => makeVBORenderingAttributes(programVariables, instancing && { hasModelNormalMat: !!modelNormalMatrixColBufs }, scene.entityOffsetsEnabled)),
             drawCalls: (function() {
                 const drawCallCache = { };
