@@ -588,7 +588,6 @@ export class DTXLayer extends Layer {
                 }
             },
             sortId: sortId,
-            surfaceHasNormals: true,
             setClippableFlags: setFlags2,
             setFlags: (portionId, flags, transparent, deferred = false) => {
                 getColSilhEdgePickFlags(flags, transparent, true, scene, tempUint8Array4);
@@ -651,7 +650,7 @@ export class DTXLayer extends Layer {
                 texturePerObjectInstanceMatrices:      texturePerObjectInstanceMatrices
             },
 
-            renderers: getRenderers(scene, "dtx", primitive, false,
+            renderers: getRenderers(scene, "dtx", primitive, model.saoEnabled, false, false, true,
                                     (programVariables, subGeometry) => makeDTXRenderingAttributes(programVariables, !subGeometry)),
             drawCalls: (function() {
                 const drawVertEdges = function(layerTypeInputs, glMode) {
