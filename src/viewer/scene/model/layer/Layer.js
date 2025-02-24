@@ -307,12 +307,11 @@ export const getRenderers = (function() {
 
                                         const state = {
                                             legacyFrameCtx: frameCtx,
-                                            layerDrawState: layer.layerDrawState,
+                                            layerTextureSet: layer.layerTextureSet,
                                             mesh: {
                                                 layerIndex:  layer.layerIndex,
                                                 origin:      rtcOrigin,
                                                 renderFlags: { sectionPlanesActivePerLayer: model.renderFlags.sectionPlanesActivePerLayer },
-                                                worldMatrix: model.rotationMatrix
                                             },
                                             renderPass:     renderPass,
                                             view: {
@@ -326,7 +325,15 @@ export const getRenderers = (function() {
                                         };
                                         program.inputSetters.setUniforms(state);
 
-                                        layer.drawCalls[subGeometry ? (subGeometry.vertices ? "drawVertices" : "drawEdges") : "drawSurface"](program.inputSetters, renderingAttributes.layerTypeInputs);
+                                        layer.drawCalls[subGeometry ? (subGeometry.vertices ? "drawVertices" : "drawEdges") : "drawSurface"](
+                                            program.inputSetters.attributesHash,
+                                            renderingAttributes.layerTypeInputs,
+                                            {
+                                                projMatrix:       projMatrix,
+                                                viewMatrix:       math.compareVec3(rtcOrigin, vec3zero) ? viewMatrix : createRTCViewMat(viewMatrix, rtcOrigin, tempMat4),
+                                                viewNormalMatrix: camera.viewNormalMatrix,
+                                                eye:              (usePickParams && frameCtx.pickOrigin) || camera.eye
+                                            });
 
                                         if (incrementDrawState) {
                                             frameCtx.drawElements++;
@@ -470,7 +477,7 @@ export class Layer {
             this._compiledPortions = this.compilePortions();
             this.solid = this._compiledPortions.solid;
             this.sortId = this._compiledPortions.sortId;
-            this.layerDrawState = this._compiledPortions.layerDrawState;
+            this.layerTextureSet = this._compiledPortions.layerTextureSet;
             this.drawCalls = this._compiledPortions.drawCalls;
             this._renderers = this._compiledPortions.renderers;
             this._setFlags = this._compiledPortions.setFlags;
@@ -565,7 +572,7 @@ export class Layer {
             const renderer = ((frameCtx.pbrEnabled && saoRenderer["PBR"])
                               ? saoRenderer["PBR"]
                               : ((frameCtx.colorTextureEnabled && saoRenderer["texture"])
-                                 ? saoRenderer["texture"][(this.layerDrawState.textureSet && (typeof(this.layerDrawState.textureSet.alphaCutoff) === "number")) ? "alphaCutoff+" : "alphaCutoff-"]
+                                 ? saoRenderer["texture"][(this.layerTextureSet && (typeof(this.layerTextureSet.alphaCutoff) === "number")) ? "alphaCutoff+" : "alphaCutoff-"]
                                  : saoRenderer["vertex"]));
             const pass = renderOpaque ? RENDER_PASSES.COLOR_OPAQUE : RENDER_PASSES.COLOR_TRANSPARENT;
             this.__drawLayer(renderFlags, frameCtx, renderer, pass);

@@ -91,6 +91,7 @@ const INDICES_EDGE_INDICES_ALIGNEMENT_SIZE = 8;
 const MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE = 10;
 
 const tempVec3 = math.vec3();
+const tempVec3a = math.vec3();
 const tempVec4a = math.vec4();
 const tempVec4b = math.vec4();
 const tempMat4a = new Float32Array(16);
@@ -643,31 +644,42 @@ export class DTXLayer extends Layer {
             },
             precisionRayPickSurface: (portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) => false,
 
-            layerDrawState: {
-                texturePerObjectPositionsDecodeMatrix: texturePerObjectPositionsDecodeMatrix,
-                texturePerVertexIdCoordinates:         texturePerVertexIdCoordinates,
-                texturePerObjectColorsAndFlags:        texturePerObjectColorsAndFlags,
-                texturePerObjectInstanceMatrices:      texturePerObjectInstanceMatrices
-            },
-
             renderers: getRenderers(scene, "dtx", primitive, model.saoEnabled, false, false, true,
                                     (programVariables, subGeometry) => makeDTXRenderingAttributes(programVariables, !subGeometry)),
             drawCalls: (function() {
-                const drawVertEdges = function(layerTypeInputs, glMode) {
-                    draw8.edges( layerTypeInputs, glMode);
-                    draw16.edges(layerTypeInputs, glMode);
-                    draw32.edges(layerTypeInputs, glMode);
+                const drawer = function(drawCall) {
+                    const setInputValue = (input, value) => (input.setInputValue && input.setInputValue(value));
+                    return (attributesHash, layerTypeInputs, viewState) => {
+                        setInputValue(layerTypeInputs.worldMatrix, model.rotationMatrix);
+                        setInputValue(layerTypeInputs.viewMatrix, viewState.viewMatrix);
+                        setInputValue(layerTypeInputs.projMatrix, viewState.projMatrix);
+                        const rtcOrigin = math.transformPoint3(model.matrix, origin, tempVec3);
+                        setInputValue(layerTypeInputs.uCameraEyeRtc, math.subVec3(viewState.eye, rtcOrigin, tempVec3a));
+                        setInputValue(layerTypeInputs.perObjPosDecode, texturePerObjectPositionsDecodeMatrix);
+                        setInputValue(layerTypeInputs.perVertIdCoords, texturePerVertexIdCoordinates);
+                        setInputValue(layerTypeInputs.perObjColsFlags, texturePerObjectColorsAndFlags);
+                        setInputValue(layerTypeInputs.perObjectMatrix, texturePerObjectInstanceMatrices);
+                        drawCall(layerTypeInputs);
+                    };
+                };
+
+                const vertEdgesDrawer = function(glMode) {
+                    return drawer((layerTypeInputs) => {
+                        draw8.edges( layerTypeInputs, glMode);
+                        draw16.edges(layerTypeInputs, glMode);
+                        draw32.edges(layerTypeInputs, glMode);
+                    });
                 };
 
                 return {
-                    drawVertices: (inputSetters, layerTypeInputs) => drawVertEdges(layerTypeInputs, gl.POINTS),
-                    drawEdges:    (inputSetters, layerTypeInputs) => drawVertEdges(layerTypeInputs, gl.LINES),
-                    drawSurface:  (inputSetters, layerTypeInputs) => {
+                    drawVertices: vertEdgesDrawer(gl.POINTS),
+                    drawEdges:    vertEdgesDrawer(gl.LINES),
+                    drawSurface:  drawer((layerTypeInputs) => {
                         const glMode = gl.TRIANGLES;
                         draw8.indices( layerTypeInputs, glMode);
                         draw16.indices(layerTypeInputs, glMode);
                         draw32.indices(layerTypeInputs, glMode);
-                    }
+                    })
                 };
             })(),
 
@@ -762,8 +774,8 @@ const createBindableDataTexture = function(gl, entitiesCnt, entitySize, type, en
 };
 
 const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
-    const setupTex = (type, name, getTexture) => {
-        const map = programVariables.createUniform(type, name, getTexture && ((set, state) => set(getTexture(state.layerDrawState))));
+    const setupTex = (type, name) => {
+        const map = programVariables.createUniform(type, name);
         const texelFetch = (P) => `texelFetch(${map}, ${P}, 0)`;
         texelFetch.map = map;
         return texelFetch;
@@ -772,15 +784,15 @@ const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
     const perPrimIndices  = setupTex("highp   usampler2D", "perPrimIndices");
     const perPrimIdPorIds = setupTex("mediump usampler2D", "perPrimIdPorIds");
 
-    const perObjPosDecode = setupTex("highp    sampler2D", "perObjPosDecode", (l) => l.texturePerObjectPositionsDecodeMatrix);
-    const perVertIdCoords = setupTex("mediump usampler2D", "perVertIdCoords", (l) => l.texturePerVertexIdCoordinates);
-    const perObjColsFlags = setupTex("lowp    usampler2D", "perObjColsFlags", (l) => l.texturePerObjectColorsAndFlags);
-    const perObjectMatrix = setupTex("highp    sampler2D", "perObjectMatrix", (l) => l.texturePerObjectInstanceMatrices);
+    const perObjPosDecode = setupTex("highp    sampler2D", "perObjPosDecode");
+    const perVertIdCoords = setupTex("mediump usampler2D", "perVertIdCoords");
+    const perObjColsFlags = setupTex("lowp    usampler2D", "perObjColsFlags");
+    const perObjectMatrix = setupTex("highp    sampler2D", "perObjectMatrix");
 
-    const worldMatrix   = programVariables.createUniform("mat4", "worldMatrix",   (set, state) => set(state.mesh.worldMatrix));
-    const viewMatrix    = programVariables.createUniform("mat4", "viewMatrix",    (set, state) => set(state.view.viewMatrix));
-    const projMatrix    = programVariables.createUniform("mat4", "projMatrix",    (set, state) => set(state.view.projMatrix));
-    const uCameraEyeRtc = programVariables.createUniform("vec3", "uCameraEyeRtc", (set, state) => set(math.subVec3(state.view.eye, state.mesh.origin, tempVec3)));
+    const worldMatrix   = programVariables.createUniform("mat4", "worldMatrix");
+    const viewMatrix    = programVariables.createUniform("mat4", "viewMatrix");
+    const projMatrix    = programVariables.createUniform("mat4", "projMatrix");
+    const uCameraEyeRtc = programVariables.createUniform("vec3", "uCameraEyeRtc");
 
     const lazyShaderVariable = function(name) {
         const variable = {
@@ -912,7 +924,17 @@ const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
 
         layerTypeInputs: {
             perPrimIndices:  perPrimIndices.map,
-            perPrimIdPorIds: perPrimIdPorIds.map
+            perPrimIdPorIds: perPrimIdPorIds.map,
+
+            perObjPosDecode: perObjPosDecode.map,
+            perVertIdCoords: perVertIdCoords.map,
+            perObjColsFlags: perObjColsFlags.map,
+            perObjectMatrix: perObjectMatrix.map,
+
+            worldMatrix:   worldMatrix,
+            viewMatrix:    viewMatrix,
+            projMatrix:    projMatrix,
+            uCameraEyeRtc: uCameraEyeRtc
         }
     };
 };
