@@ -23,15 +23,23 @@ class IFCLoaderPlugin extends Plugin {
             this.error("load() param expected: src");
         }
         const data = await fetchFile(params.src);
-        const { gltf, metaData } = await ifc2gltf(data, "remote", params.progressCallback, params.progressTextCallback);
+        const { gltf, metaData } = await ifc2gltf(
+            data,
+            {
+                remote: true,
+                progressCallback: params.progressCallback,
+                progressTextCallback: params.progressTextCallback
+            }
+
+        );
         const gltfLoader = new GLTFLoaderPlugin(this.viewer);
         const model = await gltfLoader.load({
             id: "myModel",
             gltf: gltf,
-            metaModelJSON: metaData            
+            metaModelJSON: metaData
         });
         model.on("loaded", () => {
-            this.viewer.cameraFlight.flyTo();            
+            this.viewer.cameraFlight.flyTo();
         });
     }
 }
