@@ -859,6 +859,7 @@ class XKTLoaderPlugin extends Plugin {
      * @param {{String:Object}} [params.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object. Default value is {@link IFCObjectDefaults}.
      * @param {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
+     * @param {String[]} [params.includeIds] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#id} values in this list.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the model with edges emphasized.
      * @param {Number[]} [params.origin=[0,0,0]] The model's World-space double-precision 3D origin. Use this to position the model within xeokit's World coordinate system, using double-precision coordinates.
      * @param {Number[]} [params.position=[0,0,0]] The model single-precision 3D position, relative to the ````origin```` parameter.
@@ -900,6 +901,7 @@ class XKTLoaderPlugin extends Plugin {
         const options = {};
         const includeTypes = params.includeTypes || this._includeTypes;
         const excludeTypes = params.excludeTypes || this._excludeTypes;
+        const includeIds = params.includeIds || this._includeIds;
         const objectDefaults = params.objectDefaults || this._objectDefaults;
 
         options.reuseGeometries = (params.reuseGeometries !== null && params.reuseGeometries !== undefined) ? params.reuseGeometries : (this._reuseGeometries !== false);
@@ -916,6 +918,10 @@ class XKTLoaderPlugin extends Plugin {
             for (let i = 0, len = excludeTypes.length; i < len; i++) {
                 options.excludeTypesMap[excludeTypes[i]] = true;
             }
+        }
+
+        if (includeIds) {
+            options.includeIdsMap = includeIds;
         }
 
         if (objectDefaults) {
