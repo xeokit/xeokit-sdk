@@ -168,8 +168,30 @@ export const createProgramVariablesState = function() {
                     src.push("}");
                 });
 
-            const clipping = createSectionPlanesSetup(programVariables, scene._sectionPlanesState);
-            const sliceColorOr = (clipping
+            const getClippingDistance = (function() {
+                const sectionPlanesState = scene._sectionPlanesState;
+                const allocatedUniforms = iota(sectionPlanesState.getNumAllocatedSectionPlanes()).map(i => {
+                    const sectionPlaneUniform = (type, postfix, getValue) => {
+                        return programVariables.createUniform(type, `sectionPlane${postfix}${i}`, (set, state) => {
+                            const sectionPlanes = sectionPlanesState.sectionPlanes;
+                            const numSectionPlanes = sectionPlanes.length;
+                            const baseIndex = (state.mesh.layerIndex || 0) * numSectionPlanes;
+                            const active = (i < numSectionPlanes) && state.mesh.renderFlags.sectionPlanesActivePerLayer[baseIndex + i];
+                            return getValue(set, active, sectionPlanes[i], state.mesh.origin);
+                        });
+                    };
+                    return {
+                        act: sectionPlaneUniform("bool", "Active", (set, active) => set(active ? 1 : 0)),
+                        dir: sectionPlaneUniform("vec3", "Dir",    (set, active, plane) => active && set(plane.dir)),
+                        pos: sectionPlaneUniform("vec3", "Pos",    (set, active, plane, orig) => active && set(orig
+                                                                                                               ? getPlaneRTCPos(plane.dist, plane.dir, orig, tempVec3a)
+                                                                                                               : plane.pos))
+                    };
+                });
+                return (allocatedUniforms.length > 0) && ((worldPosition) => allocatedUniforms.map(a => `(${a.act} ? clamp(dot(-${a.dir}, ${worldPosition} - ${a.pos}), 0.0, 1000.0) : 0.0)`).join(" + "));
+            })();
+
+            const sliceColorOr = (getClippingDistance
                                   ? (function() {
                                       const sliceColor = programVariables.createUniform("vec4", "sliceColor", (set) => set(scene.crossSections.sliceColor));
                                       const sliceColorOr = color => {
@@ -187,13 +209,13 @@ export const createProgramVariablesState = function() {
                 const src = [ ];
                 const sliceThickness = programVariables.createUniform("float", "sliceThickness", (set) => set(scene.crossSections.sliceThickness));
 
-                if (clipping) {
+                if (getClippingDistance) {
                     if (sliceColorOr.needed) {
                         src.push("  bool sliced = false;");
                     }
                     src.push(`  if (${cfg.clippableTest()}) {`);
                     const fragWorldPosition = programVariables.createVarying("highp vec3", "vHighpWorldPosition", () => `${cfg.worldPositionAttribute}.xyz`);
-                    src.push(`    float dist = ${clipping.getDistance(fragWorldPosition)};`);
+                    src.push(`    float dist = ${getClippingDistance(fragWorldPosition)};`);
                     if (cfg.clippingCaps) {
                         const vClipPositionW = programVariables.createVarying("float", "vClipPositionW", () => "clipPos.w");
                         src.push(`    if (dist > (0.002 * ${vClipPositionW})) { discard; }`);
@@ -372,30 +394,6 @@ export const createLightSetup = function(programVariables, lightsState) {
         directionalLights: directionals.map(light => light.glslLight),
         getIrradiance: lightMap      && ((worldNormal) => `${lightMap(worldNormal)}.rgb`),
         getReflection: reflectionMap && ((reflectVec, mipLevel) => `${reflectionMap(reflectVec, mipLevel)}.rgb`)
-    };
-};
-
-const createSectionPlanesSetup = function(programVariables, sectionPlanesState) {
-    const allocatedUniforms = iota(sectionPlanesState.getNumAllocatedSectionPlanes()).map(i => {
-        const sectionPlaneUniform = (type, postfix, getValue) => {
-            return programVariables.createUniform(type, `sectionPlane${postfix}${i}`, (set, state) => {
-                const sectionPlanes = sectionPlanesState.sectionPlanes;
-                const numSectionPlanes = sectionPlanes.length;
-                const baseIndex = (state.mesh.layerIndex || 0) * numSectionPlanes;
-                const active = (i < numSectionPlanes) && state.mesh.renderFlags.sectionPlanesActivePerLayer[baseIndex + i];
-                return getValue(set, active, sectionPlanes[i], state.mesh.origin);
-            });
-        };
-        return {
-            act: sectionPlaneUniform("bool", "Active", (set, active) => set(active ? 1 : 0)),
-            dir: sectionPlaneUniform("vec3", "Dir",    (set, active, plane) => active && set(plane.dir)),
-            pos: sectionPlaneUniform("vec3", "Pos",    (set, active, plane, orig) => active && set(orig
-                                                                                                   ? getPlaneRTCPos(plane.dist, plane.dir, orig, tempVec3a)
-                                                                                                   : plane.pos))
-        };
-    });
-    return (allocatedUniforms.length > 0) && {
-        getDistance: (worldPosition) => allocatedUniforms.map(a => `(${a.act} ? clamp(dot(-${a.dir}, ${worldPosition} - ${a.pos}), 0.0, 1000.0) : 0.0)`).join(" + ")
     };
 };
 
