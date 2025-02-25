@@ -760,7 +760,7 @@ export class VBOLayer extends Layer {
                                     (programVariables) => makeVBORenderingAttributes(programVariables, instancing && { hasModelNormalMat: !!modelNormalMatrixColBufs }, scene.entityOffsetsEnabled)),
             drawCalls: (function() {
                 const drawCallCache = { };
-                const drawCall = (attributesHash, layerTypeInputs, viewState, subGeometry) => {
+                const makeDrawer = (subGeometry) => (attributesHash, layerTypeInputs, viewState) => {
                     let offset = 0;
                     const mat4Size = 4 * 4;
                     matricesUniformBlockBufferData.set(model.rotationMatrix, 0);
@@ -855,9 +855,9 @@ export class VBOLayer extends Layer {
                 };
 
                 return {
-                    drawVertices: (inputSetters, layerTypeInputs, viewState) => drawCall(inputSetters, layerTypeInputs, viewState, { vertices: true }),
-                    drawEdges:    (inputSetters, layerTypeInputs, viewState) => drawCall(inputSetters, layerTypeInputs, viewState, { }),
-                    drawSurface:  (inputSetters, layerTypeInputs, viewState) => drawCall(inputSetters, layerTypeInputs, viewState, null)
+                    drawVertices: makeDrawer({ vertices: true }),
+                    drawEdges:    makeDrawer({ }),
+                    drawSurface:  makeDrawer(null)
                 };
             })(),
 
