@@ -315,7 +315,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
                 // Mask loading of object ids
 
-                if (options.includeIdsMap && (!options.includeIdsMap[metaObject.id])) {
+                if (options.includeIdsMap && metaObject.id && (!options.includeIdsMap[metaObject.id])) {
                     continue;
                 }
 

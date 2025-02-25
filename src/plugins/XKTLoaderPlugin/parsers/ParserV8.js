@@ -273,6 +273,12 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                     continue;
                 }
 
+                // Mask loading of object ids
+
+                if (options.includeIdsMap && metaObject.id && (!options.includeIdsMap[metaObject.id])) {
+                    continue;
+                }
+
                 // Get initial property values for object types
 
                 const props = options.objectDefaults ? options.objectDefaults[metaObject.type] || options.objectDefaults["DEFAULT"] : null;
