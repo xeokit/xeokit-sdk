@@ -1,5 +1,6 @@
 import {ENTITY_FLAGS} from './ENTITY_FLAGS.js';
 import {math} from "../math/math.js";
+import { Material } from '../materials/Material.js';
 
 const tempFloatRGB = new Float32Array([0, 0, 0]);
 const tempIntRGB = new Uint16Array([0, 0, 0]);
@@ -48,6 +49,7 @@ export class SceneModelEntity {
         this.meshes = meshes;
 
         this._numPrimitives = 0;
+        this._capMaterial = null;
 
         for (let i = 0, len = this.meshes.length; i < len; i++) {  // TODO: tidier way? Refactor?
             const mesh = this.meshes[i];
@@ -647,6 +649,30 @@ export class SceneModelEntity {
 
     get saoEnabled() {
         return this.model.saoEnabled;
+    }
+
+    /**
+     * Sets the SceneModelEntity's capMaterial that will be used on the caps generated when this entity is sliced
+     *
+     * Default value is ````null````.
+     *
+     * @type {Material}
+     */
+    set capMaterial(value) {
+        if(!this.scene.readableGeometryEnabled) return;
+        this._capMaterial = value instanceof Material ? value : null;
+        this.scene._capMaterialUpdated(this.id, this.model.id);
+    }
+
+    /**
+     * Gets the SceneModelEntity's capMaterial.
+     *
+     * Default value is ````null````.
+     *
+     * @type {Material}
+     */
+    get capMaterial() {
+        return this._capMaterial;
     }
 
     getEachVertex(callback) {
