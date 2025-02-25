@@ -748,6 +748,34 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
+     * Gets the whitelist of the specified elements loaded by this XKTLoaderPlugin.
+     *
+     * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose ids are in this
+     * list. An object's id is indicated by its {@link MetaObject}'s {@link MetaObject#id}.
+     *
+     * Default value is ````undefined````.
+     *
+     * @type {String[]}
+     */
+    get includeIds() {
+        return this._includeIds;
+    }
+
+    /**
+     * Sets the whitelist of the specified elements by this XKTLoaderPlugin.
+     *
+     * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose ids are in this
+     * list. An object's id is indicated by its {@link MetaObject}'s {@link MetaObject#id}.
+     *
+     * Default value is ````undefined````.
+     *
+     * @type {String[]}
+     */
+    set includeIds(value) {
+        this._includeIds = value;
+    }
+
+    /**
      * Gets whether we load objects that don't have IFC types.
      *
      * When loading models with metadata and this is ````true````, XKTLoaderPlugin will not load objects
@@ -921,7 +949,10 @@ class XKTLoaderPlugin extends Plugin {
         }
 
         if (includeIds) {
-            options.includeIdsMap = includeIds;
+            options.includeIdsMap = {};
+            for (let i = 0, len = includeIds.length; i < len; i++) {
+                options.includeIdsMap[includeIds[i]] = true;
+            }
         }
 
         if (objectDefaults) {
