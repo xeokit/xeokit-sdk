@@ -128,7 +128,7 @@
     <div id="treeViewContainer"></div>
     <div class="slideout-sidebar">
         <img class="info-icon" src="../../assets/images/bim_icon.png" />
-        <h1>IFCLoaderPlugin</h1>
+        <h1>CxConverterIFCLoaderPlugin</h1>
         <h3>Components used</h3>
         <ul>
             <li>
@@ -170,7 +170,7 @@
 
 <script type="module">
 
-    import { IFCLoaderPlugin, XKTLoaderPlugin, Viewer, NavCubePlugin, TreeViewPlugin, SceneModel } from "../../dist/xeokit-sdk.es.js";
+    import { CxConverterIFCLoaderPlugin, XKTLoaderPlugin, Viewer, NavCubePlugin, TreeViewPlugin, SceneModel } from "../../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -195,7 +195,7 @@
         autoExpandDepth: 3 // Initially expand the root tree node
     });
 
-    const ifcLoaderPlugin = new IFCLoaderPlugin(viewer);
+    const cxConverterIFCLoaderPlugin = new CxConverterIFCLoaderPlugin(viewer);
     const progressCallback =
         (progress) => {
             const progressPercentage = document.getElementById("progressPercentage");
@@ -208,13 +208,15 @@
             progressTextElement.innerText = progressText;
         }
 
-
-    ifcLoaderPlugin.load({ 
-        src: "../../assets/models/ifc/Duplex.ifc", 
-        progressCallback: progressCallback, 
+    const sceneModel = await cxConverterIFCLoaderPlugin.load({
+        src: "../../assets/models/ifc/Duplex.ifc",
+        progressCallback: progressCallback,
         progressTextCallback: progressTextCallback
     });
 
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.flyTo();
+    });
 
 </script>
 

@@ -14,9 +14,10 @@ async function fetchFile(url) {
     }
 }
 
-class IFCLoaderPlugin extends Plugin {
+class CxConverterIFCLoaderPlugin extends Plugin {    
     constructor(viewer, cfg = {}) {
         super("ifcLoader", viewer, cfg);
+        this.gltfLoader = new GLTFLoaderPlugin(this.viewer);
     }
     async load(params = {}) {
         if (!params.src) {
@@ -31,16 +32,13 @@ class IFCLoaderPlugin extends Plugin {
                 progressTextCallback: params.progressTextCallback
             }
 
-        );
-        const gltfLoader = new GLTFLoaderPlugin(this.viewer);
-        const model = await gltfLoader.load({
+        );        
+        const sceneModel = this.gltfLoader.load({
             id: "myModel",
             gltf: gltf,
             metaModelJSON: metaData
         });
-        model.on("loaded", () => {
-            this.viewer.cameraFlight.flyTo();
-        });
+        return sceneModel;        
     }
 }
-export { IFCLoaderPlugin };
+export { CxConverterIFCLoaderPlugin };
