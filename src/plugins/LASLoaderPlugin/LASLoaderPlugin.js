@@ -4,7 +4,7 @@ import {Plugin} from "../../viewer/Plugin.js";
 import {LASDefaultDataSource} from "./LASDefaultDataSource.js";
 import {math} from "../../viewer/index.js";
 import {parse} from '@loaders.gl/core';
-import {LASLoader} from '@loaders.gl/las/dist/esm/las-loader.js';
+import {LASLoader} from '@loaders.gl/las';
 import {loadLASHeader} from "./loadLASHeader";
 
 const MAX_VERTICES = 500000; // TODO: Rough estimate
