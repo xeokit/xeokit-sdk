@@ -253,6 +253,20 @@ parsers[ParserV11.version] = ParserV11;
  * });
  * ````
  *
+ * # Including specific elements by id
+ *
+ * We can also load only those objects that have the specified ids.
+ *
+ * In the example below, we'll load only the objects that represent a specified wall with 4 windows.
+ *
+ * ````javascript
+ * const model4 = xktLoader.load({
+ *      id: "myModel4",
+ *      src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
+ *      includeIds: ["2O2Fr$t4X7Zf8NOew3FLOH", "1hOSvn6df7F8_7GcBWlS_W", "1hOSvn6df7F8_7GcBWlS4Q", "1hOSvn6df7F8_7GcBWlS1M", "1hOSvn6df7F8_7GcBWlS2V"],
+ * });
+ * ````
+ *
  * # Configuring initial IFC object appearances
  *
  * We can specify the custom initial appearance of loaded objects according to their IFC types.
