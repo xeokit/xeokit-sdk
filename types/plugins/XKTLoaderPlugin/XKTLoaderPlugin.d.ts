@@ -11,6 +11,8 @@ export declare type XKTLoaderPluginConfiguration = {
     includeTypes?: string[];
     /** When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject.type} values in this list. */
     excludeTypes?: string[];
+    /** When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject.id} values in this list. */
+    includeIds?: string[];
     /** When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}. */
     excludeUnclassifiedObjects?: boolean;
     /** Indicates whether to enable geometry reuse */
@@ -40,6 +42,8 @@ export declare type LoadXKTModel = {
     includeTypes?: string[]
     /** When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject.type} values in this list. */
     excludeTypes?: string[];
+    /** When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject.id} values in this list. */
+    includeIds?: string[]
     /** Whether or not xeokit renders the model with edges emphasized. */
     edges?: boolean;
     /** The model's World-space double-precision 3D origin. Use this to position the model within xeokit's World coordinate system, using double-precision coordinates. */
@@ -197,6 +201,30 @@ export declare class XKTLoaderPlugin extends Plugin {
      * @type {String[]}
      */
     get excludeTypes(): string[];
+
+    /**
+     * Sets the whitelist of the specified elements by this XKTLoaderPlugin.
+     *
+     * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose ids are in this
+     * list. An object's id is indicated by its {@link MetaObject}'s {@link MetaObject#id}.
+     *
+     * Default value is ````undefined````.
+     *
+     * @type {String[]}
+     */
+    set includeIds(arg: string[]);
+
+    /**
+     * Gets the whitelist of the specified elements loaded by this XKTLoaderPlugin.
+     *
+     * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose ids are in this
+     * list. An object's id is indicated by its {@link MetaObject}'s {@link MetaObject#id}.
+     *
+     * Default value is ````undefined````.
+     *
+     * @type {String[]}
+     */
+    get includeIds(): string[];
 
     /**
      * Sets whether we load objects that don't have IFC types.
