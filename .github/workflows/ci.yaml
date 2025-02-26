@@ -37,3 +37,4 @@ jobs:
           echo "PERCY_TOKEN=${{ secrets.PERCY_TOKEN }}" > .env
           npx playwright install --with-deps chromium
           npm run test
+          echo $?
