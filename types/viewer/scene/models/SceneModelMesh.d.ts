@@ -65,4 +65,11 @@ export declare class SceneModelMesh {
      */
     entity: SceneModelEntity;
 
+    /**
+     * Tells whether this SceneModelMesh is a solid or not
+     * 
+     * @type {Boolean}
+     */
+    isSolid(): boolean;
+
 }
