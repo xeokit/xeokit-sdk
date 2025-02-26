@@ -4,7 +4,7 @@ import {core} from "../../viewer/scene/core.js";
 import {sRGBEncoding} from "../../viewer/scene/constants/constants.js";
 import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords.js";
 import {parse} from '@loaders.gl/core';
-import {GLTFLoader} from '@loaders.gl/gltf/dist/esm/gltf-loader.js';
+import {GLTFLoader, postProcessGLTF} from '@loaders.gl/gltf';
 
 import {
     ClampToEdgeWrapping,
@@ -104,6 +104,7 @@ function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok) {
     parse(gltf, GLTFLoader, {
         baseUri: options.basePath
     }).then((gltfData) => {
+        const processedGLTF = postProcessGLTF(gltfData);
         const ctx = {
             src: src,
             entityId: options.entityId,
@@ -115,7 +116,7 @@ function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok) {
             basePath: options.basePath,
             handlenode: options.handlenode,
             backfaces: !!options.backfaces,
-            gltfData: gltfData,
+            gltfData: processedGLTF,
             scene: sceneModel.scene,
             plugin: plugin,
             sceneModel: sceneModel,
