@@ -1,5 +1,40 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.67](https://github.com/xeokit/xeokit-sdk/compare/v2.6.66...v2.6.67)
+
+### 27 February 2025
+
+-  XEOK-35: Render IfcAxisLabels - [#1808](https://github.com/xeokit/xeokit-sdk/pull/1808)
+-  [DOCUMENTATION] Adding missing types and update documentation for includeIds in XKTLoaderPlugin - [#1817](https://github.com/xeokit/xeokit-sdk/pull/1817)
+-  Upgrade loaders.gl - [#1815](https://github.com/xeokit/xeokit-sdk/pull/1815)
+-  chore: fix percy token passing, remove percy abel once test done - [#1814](https://github.com/xeokit/xeokit-sdk/pull/1814)
+-  [FEATURE] Load only specified elements - [#1813](https://github.com/xeokit/xeokit-sdk/pull/1813)
+-  Implement section caps through sceneModelEntity:capMaterial - [#1775](https://github.com/xeokit/xeokit-sdk/pull/1775)
+-  Feat/percy visual testing - [#1801](https://github.com/xeokit/xeokit-sdk/pull/1801)
+-  FIX: allow to change the `snapRadius` during snap picking - [#1811](https://github.com/xeokit/xeokit-sdk/pull/1811)
+-  Fix typings of 'WebIFCLoaderPlugin' - [#1804](https://github.com/xeokit/xeokit-sdk/pull/1804)
+
+# [v2.6.66](https://github.com/xeokit/xeokit-sdk/compare/v2.6.65...v2.6.66)
+
+### 11 February 2025
+
+-  Update package.json - [#1806](https://github.com/xeokit/xeokit-sdk/pull/1806)
+-  XCD-230 Don't cull backfaces of solid objects - [#1805](https://github.com/xeokit/xeokit-sdk/pull/1805)
+-  #1704 Optimize Annotations' position update - [#1761](https://github.com/xeokit/xeokit-sdk/pull/1761)
+-  Fix overlay examples - [#1800](https://github.com/xeokit/xeokit-sdk/pull/1800)
+-  XEOK-136: Deprecate preset property on EmphasisMaterial - [#1797](https://github.com/xeokit/xeokit-sdk/pull/1797)
+-  XEOK-205 Fix math.mat4ToEuler to return angles in degrees, not radians - [#1796](https://github.com/xeokit/xeokit-sdk/pull/1796)
+-  Remove SceneModel LoD examples from index, for now - [#1795](https://github.com/xeokit/xeokit-sdk/pull/1795)
+-  Add types for touchPointSelector - [#1794](https://github.com/xeokit/xeokit-sdk/pull/1794)
+-  Add PointerCircle.d.ts - [#1793](https://github.com/xeokit/xeokit-sdk/pull/1793)
+-  XCD-242 Fix near and far values for ray picking - [#1791](https://github.com/xeokit/xeokit-sdk/pull/1791)
+-  [EXAMPLES] Comments clean-up - [#1790](https://github.com/xeokit/xeokit-sdk/pull/1790)
+-  XEOK-197 Implement SectionPlane::quaternion and ::roll - [#1789](https://github.com/xeokit/xeokit-sdk/pull/1789)
+-  Much cleaner edge rendering when enabling logarithmic depth buffer - [#1788](https://github.com/xeokit/xeokit-sdk/pull/1788)
+-  XEOK-198 Update SceneModel::rotation on SceneModel::matrix change - [#1787](https://github.com/xeokit/xeokit-sdk/pull/1787)
+-  XEOK-196 Rotate the SectionPlane Control gizmo to be Y-up by default - [#1786](https://github.com/xeokit/xeokit-sdk/pull/1786)
+-  [EXAMPLE] Adds example of creating a section plane with a short tap - [#1785](https://github.com/xeokit/xeokit-sdk/pull/1785)
+
 # [v2.6.65](https://github.com/xeokit/xeokit-sdk/compare/v2.6.64...v2.6.65)
 
 ### 22 January 2025
