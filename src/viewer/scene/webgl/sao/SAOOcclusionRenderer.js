@@ -46,6 +46,12 @@ class SAOOcclusionRenderer {
         this._uvBuf = null;
         this._positionsBuf = null;
         this._indicesBuf = null;
+
+        this.init();
+    }
+
+    init() {
+        this._rebuild = true;
     }
 
     render(depthRenderBuffer) {
@@ -136,9 +142,11 @@ class SAOOcclusionRenderer {
             dirty = true;
         }
 
-        if (!dirty) {
+        if (! (dirty || this._rebuild)) {
             return;
         }
+
+        this._rebuild = false;
 
         const gl = this._scene.canvas.gl;
 
