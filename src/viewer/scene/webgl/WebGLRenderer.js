@@ -169,7 +169,7 @@ export const createProgramVariablesState = function() {
                     src.push("}");
                 });
 
-            const getClippingDistance = (function() {
+            const getClippingDistance = (! cfg.ignoreSectionPlanes) && (function() {
                 const sectionPlanesState = scene._sectionPlanesState;
                 const allocatedUniforms = iota(sectionPlanesState.getNumAllocatedSectionPlanes()).map(i => {
                     const sectionPlaneUniform = (type, postfix, getValue) => {
