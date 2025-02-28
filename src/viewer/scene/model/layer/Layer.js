@@ -184,6 +184,7 @@ export const getRenderers = (function() {
                             const usePickParams          = programSetup.usePickParams;
                             const attributes             = geometryParameters.attributes;
                             const worldPositionAttribute = attributes.position.world;
+                            const clipPos                = "clipPos";
 
                             const [ program, errors ] = programVariablesState.buildProgram(
                                 gl,
@@ -263,13 +264,17 @@ export const getRenderers = (function() {
                                         renderingAttributes.ensureColorAndFlagAvailable && renderingAttributes.ensureColorAndFlagAvailable(vertexData);
                                         afterFlagsColorLines.forEach(line => vertexData.push(line));
                                         renderingAttributes.appendVertexData(vertexData);
-                                        vertexData.push(`vec4 viewPosition = ${geometryParameters.viewMatrix} * ${worldPositionAttribute};`);
+                                        const viewPosition = geometryParameters.attributes.position.view;
+                                        vertexData.push(`vec4 ${viewPosition} = ${geometryParameters.viewMatrix} * ${worldPositionAttribute};`);
+                                        vertexData.push(`vec4 ${clipPos} = ${geometryParameters.projMatrix} * ${viewPosition};`);
                                         return vertexData;
                                     },
                                     projMatrix:                     geometryParameters.projMatrix,
                                     scene:                          scene,
                                     testPerspectiveForGl_FragDepth: ((primitive !== "points") && (primitive !== "lines")) || subGeometry,
-                                    transformClipPos:               programSetup.transformClipPos,
+                                    vertexClipPosition:             (programSetup.transformClipPos
+                                                                     ? programSetup.transformClipPos(clipPos)
+                                                                     : clipPos),
                                     worldPositionAttribute:         worldPositionAttribute
                                 });
 
