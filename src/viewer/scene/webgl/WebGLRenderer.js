@@ -17,6 +17,7 @@ export const createProgramVariablesState = function() {
     const vertAppenders = [ ];
     const vOutAppenders = [ ];
     const fragAppenders = [ ];
+    const fragDefAppenders = [ ];
     const attrSetters = [ ];
     const attrHahes = [ ];
     const unifSetters = [ ];
@@ -50,7 +51,7 @@ export const createProgramVariablesState = function() {
             },
             createFragmentDefinition: (name, appendDefinition) => {
                 let needed = false;
-                fragAppenders.push((src) => needed && appendDefinition(name, src));
+                fragDefAppenders.push((src) => needed && appendDefinition(name, src));
                 return {
                     toString: () => {
                         needed = true;
@@ -236,8 +237,10 @@ export const createProgramVariablesState = function() {
                 return src;
             })();
 
+            const fragDefinitions = (function() { const src = [ ]; fragDefAppenders.forEach(a => a(src)); return src; })();
             const fragmentShader = [
                 ...(function() { const src = [ ]; fragAppenders.forEach(a => a(src)); return src; })(),
+                ...fragDefinitions,
                 "void main(void) {",
                 ...(cfg.discardPoints
                     ? [
