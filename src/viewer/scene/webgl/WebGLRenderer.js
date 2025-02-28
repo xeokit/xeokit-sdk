@@ -217,7 +217,7 @@ export const createProgramVariablesState = function() {
                     const fragWorldPosition = programVariables.createVarying("highp vec3", "vHighpWorldPosition", () => `${cfg.worldPositionAttribute}.xyz`);
                     src.push(`    float dist = ${getClippingDistance(fragWorldPosition)};`);
                     if (cfg.clippingCaps) {
-                        const vClipPositionW = programVariables.createVarying("float", "vClipPositionW", () => "clipPos.w");
+                        const vClipPositionW = programVariables.createVarying("float", "vClipPositionW", () => "gl_Position.w");
                         src.push(`    if (dist > (0.002 * ${vClipPositionW})) { discard; }`);
                         src.push("    if (dist > 0.0) { ");
                         src.push(`      ${cfg.clippingCaps} = vec4(1.0, 0.0, 0.0, 1.0);`);
@@ -252,8 +252,7 @@ export const createProgramVariablesState = function() {
             ];
 
             const vertexOutputs = [
-                `vec4 clipPos = ${cfg.projMatrix} * viewPosition;`,
-                `gl_Position = ${cfg.transformClipPos ? cfg.transformClipPos("clipPos") : "clipPos"};`,
+                `gl_Position = ${cfg.vertexClipPosition};`,
                 ...(cfg.getPointSize ? [ `gl_PointSize = ${cfg.getPointSize()};` ] : [ ]),
                 ...(function() { const src = [ ]; vOutAppenders.forEach(a => a(src)); return src; })()
             ];
