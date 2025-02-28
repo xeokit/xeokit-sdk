@@ -2246,6 +2246,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         fragmentOutputsSetup.push(`mat4 viewMatrix2 = ${billboardIfApplicableFrag("viewMatrix1")};`);
     }
 
+    const clipPos = "clipPos";
     const getVertexData = function() {
         const viewNormalDefinition = viewNormal && viewNormal.needed && `vec3 ${viewNormal} = normalize((${billboardIfApplicable(viewNormalMatrix)} * vec4(${worldNormal}, 0.0)).xyz);`;
         const src = [ ];
@@ -2275,6 +2276,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
             src.push(`vec3 ${worldNormal} = (${billboardIfApplicable(modelNormalMatrix)} * vec4(${localNormal}, 0.0)).xyz;`);
         }
         viewNormalDefinition && src.push(viewNormalDefinition);
+        src.push(`vec4 ${clipPos} = ${projMatrix} * viewPosition;`);
         return src;
     };
 
@@ -2295,11 +2297,11 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
             projMatrix:                     projMatrix,
             scene:                          scene,
             testPerspectiveForGl_FragDepth: true,
-            transformClipPos:               (meshStateBackground
-                                             ? (clipPos => `${clipPos}.xyww`)
+            vertexClipPosition:             (meshStateBackground
+                                             ? `${clipPos}.xyww`
                                              : (programSetup.isPick
-                                                &&
-                                                (clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - ${pickClipPos}) * ${clipPos}.w, ${clipPos}.zw)`))),
+                                                ? `vec4((${clipPos}.xy / ${clipPos}.w - ${pickClipPos}) * ${clipPos}.w, ${clipPos}.zw)`
+                                                : clipPos)),
             worldPositionAttribute:         "worldPosition"
         });
 
