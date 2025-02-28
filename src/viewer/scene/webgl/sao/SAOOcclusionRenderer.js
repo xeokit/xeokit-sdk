@@ -1,7 +1,6 @@
-import {Program} from "./../Program.js";
+import {createProgramVariablesState} from "../WebGLRenderer.js";
 import {ArrayBuf} from "./../ArrayBuf.js";
 import {math} from "../../math/math.js";
-import {WEBGL_INFO} from "../../webglInfo.js";
 
 const tempVec2 = math.vec2();
 
@@ -9,44 +8,13 @@ const tempVec2 = math.vec2();
  * SAO implementation inspired from previous SAO work in THREE.js by ludobaka / ludobaka.github.io and bhouston
  * @private
  */
-class SAOOcclusionRenderer {
+export class SAOOcclusionRenderer {
 
     constructor(scene) {
-
         this._scene = scene;
-
         this._numSamples = null;
-
-        // The program
-
         this._program = null;
         this._programError = false;
-
-        // Variable locations
-
-        this._aPosition = null;
-        this._aUV = null;
-
-        this._uDepthTexture = "uDepthTexture";
-
-        this._uCameraNear = null;
-        this._uCameraFar = null;
-        this._uCameraProjectionMatrix = null;
-        this._uCameraInverseProjectionMatrix = null;
-
-        this._uScale = null;
-        this._uIntensity = null;
-        this._uBias = null;
-        this._uKernelRadius = null;
-        this._uMinResolution = null;
-        this._uRandomSeed = null;
-
-        // VBOs
-
-        this._uvBuf = null;
-        this._positionsBuf = null;
-        this._indicesBuf = null;
-
         this.init();
     }
 
@@ -62,6 +30,7 @@ class SAOOcclusionRenderer {
             return;
         }
 
+        const scene = this._scene;
         if (!this._getInverseProjectMat) { // HACK: scene.camera not defined until render time
             this._getInverseProjectMat = (() => {
                 let projMatDirty = true;
@@ -74,26 +43,13 @@ class SAOOcclusionRenderer {
                         math.inverseMat4(scene.camera.projMatrix, inverseProjectMat);
                     }
                     return inverseProjectMat;
-                }
+                };
             })();
         }
 
         const gl = this._scene.canvas.gl;
-        const program = this._program;
-        const scene = this._scene;
-        const sao = scene.sao;
         const viewportWidth = gl.drawingBufferWidth;
         const viewportHeight = gl.drawingBufferHeight;
-        const projectState = scene.camera.project._state;
-        const near = projectState.near;
-        const far = projectState.far;
-        const projectionMatrix = projectState.matrix;
-        const inverseProjectionMatrix = this._getInverseProjectMat();
-        const randomSeed = Math.random();
-        const perspective = (scene.camera.projection === "perspective");
-
-        tempVec2[0] = viewportWidth;
-        tempVec2[1] = viewportHeight;
 
         gl.viewport(0, 0, viewportWidth, viewportHeight);
         gl.clearColor(0, 0, 0, 1);
@@ -102,40 +58,17 @@ class SAOOcclusionRenderer {
         gl.frontFace(gl.CCW);
         gl.clear(gl.COLOR_BUFFER_BIT);
 
-        program.bind();
-
-        gl.uniform1f(this._uCameraNear, near);
-        gl.uniform1f(this._uCameraFar, far);
-
-        gl.uniformMatrix4fv(this._uCameraProjectionMatrix, false, projectionMatrix);
-        gl.uniformMatrix4fv(this._uCameraInverseProjectionMatrix, false, inverseProjectionMatrix);
-
-        gl.uniform1i(this._uPerspective, perspective);
-
-        gl.uniform1f(this._uScale, sao.scale * (far / 5));
-        gl.uniform1f(this._uIntensity, sao.intensity);
-        gl.uniform1f(this._uBias, sao.bias);
-        gl.uniform1f(this._uKernelRadius, sao.kernelRadius);
-        gl.uniform1f(this._uMinResolution, sao.minResolution);
-        gl.uniform2fv(this._uViewport, tempVec2);
-        gl.uniform1f(this._uRandomSeed, randomSeed);
-
-        const depthTexture = depthRenderBuffer.getDepthTexture();
-
-        program.bindTexture(this._uDepthTexture, depthTexture, 0);
-
-        this._aUV.bindArrayBuffer(this._uvBuf);
-        this._aPosition.bindArrayBuffer(this._positionsBuf);
-        this._indicesBuf.bind();
-
-        gl.drawElements(gl.TRIANGLES, this._indicesBuf.numItems, this._indicesBuf.itemType, 0);
+        tempVec2[0] = viewportWidth;
+        tempVec2[1] = viewportHeight;
+        this._program.draw(depthRenderBuffer, tempVec2);
     }
 
     _build() {
 
         let dirty = false;
 
-        const sao = this._scene.sao;
+        const scene = this._scene;
+        const sao = scene.sao;
 
         if (sao.numSamples !== this._numSamples) {
             this._numSamples = Math.floor(sao.numSamples);
@@ -148,59 +81,48 @@ class SAOOcclusionRenderer {
 
         this._rebuild = false;
 
-        const gl = this._scene.canvas.gl;
+        const gl = scene.canvas.gl;
 
         if (this._program) {
             this._program.destroy();
             this._program = null;
         }
 
-        this._program = new Program(gl, {
+        const programVariablesState = createProgramVariablesState();
 
-            vertex: [`#version 300 es
-                    precision highp float;
-                    precision highp int;
-                    
-                    in vec3 aPosition;
-                    in vec2 aUV;            
-                    
-                    out vec2 vUV;
-                    
-                    void main () {
-                        gl_Position = vec4(aPosition, 1.0);
-                        vUV = aUV;
-                    }`],
+        const programVariables = programVariablesState.programVariables;
 
-            fragment: [
-                `#version 300 es      
-                precision highp float;
-                precision highp int;           
-                
+        const uDepthTexture         = programVariables.createUniform("sampler2D", "uDepthTexture");
+        const uCameraNear           = programVariables.createUniform("float",     "uCameraNear");
+        const uCameraFar            = programVariables.createUniform("float",     "uCameraFar");
+        const uProjectMatrix        = programVariables.createUniform("mat4",      "uProjectMatrix");
+        const uInverseProjectMatrix = programVariables.createUniform("mat4",      "uInverseProjectMatrix");
+        const uPerspective          = programVariables.createUniform("bool",      "uPerspective");
+        const uScale                = programVariables.createUniform("float",     "uScale");
+        const uIntensity            = programVariables.createUniform("float",     "uIntensity");
+        const uBias                 = programVariables.createUniform("float",     "uBias");
+        const uKernelRadius         = programVariables.createUniform("float",     "uKernelRadius");
+        const uMinResolution        = programVariables.createUniform("float",     "uMinResolution");
+        const uViewport             = programVariables.createUniform("vec2",      "uViewport");
+        const uRandomSeed           = programVariables.createUniform("float",     "uRandomSeed");
+
+        const position = programVariables.createAttribute("vec3", "position");
+        const uv       = programVariables.createAttribute("vec2", "uv");
+
+        const vUV      = programVariables.createVarying("vec2", "vUV", () => uv);
+
+        const outColor = programVariables.createOutput("vec4", "outColor");
+
+        const getOutColor = programVariables.createFragmentDefinition(
+            "getOutColor",
+            (name, src) => {
+                src.push(`
                 #define NORMAL_TEXTURE 0
                 #define PI 3.14159265359
                 #define PI2 6.28318530718
                 #define EPSILON 1e-6
                 #define NUM_SAMPLES ${this._numSamples}
                 #define NUM_RINGS 4              
-            
-                in vec2        vUV;
-            
-                uniform sampler2D   uDepthTexture;
-               
-                uniform float       uCameraNear;
-                uniform float       uCameraFar;
-                uniform mat4        uProjectMatrix;
-                uniform mat4        uInverseProjectMatrix;
-                
-                uniform bool        uPerspective;
-
-                uniform float       uScale;
-                uniform float       uIntensity;
-                uniform float       uBias;
-                uniform float       uKernelRadius;
-                uniform float       uMinResolution;
-                uniform vec2        uViewport;
-                uniform float       uRandomSeed;
 
                 float pow2( const in float x ) { return x*x; }
                 
@@ -245,22 +167,22 @@ class SAOOcclusionRenderer {
                 }
                 
                 float getDepth( const in vec2 screenPosition ) {
-                    return vec4(texture(uDepthTexture, screenPosition)).r;
+                    return vec4(texture(${uDepthTexture}, screenPosition)).r;
                 }
 
                 float getViewZ( const in float depth ) {
-                     if (uPerspective) {
-                         return perspectiveDepthToViewZ( depth, uCameraNear, uCameraFar );
+                     if (${uPerspective}) {
+                         return perspectiveDepthToViewZ( depth, ${uCameraNear}, ${uCameraFar} );
                      } else {
-                        return orthographicDepthToViewZ( depth, uCameraNear, uCameraFar );
+                        return orthographicDepthToViewZ( depth, ${uCameraNear}, ${uCameraFar} );
                      }
                 }
 
                 vec3 getViewPos( const in vec2 screenPos, const in float depth, const in float viewZ ) {
-                	float clipW = uProjectMatrix[2][3] * viewZ + uProjectMatrix[3][3];
+                       float clipW = ${uProjectMatrix}[2][3] * viewZ + ${uProjectMatrix}[3][3];
                 	vec4 clipPosition = vec4( ( vec3( screenPos, depth ) - 0.5 ) * 2.0, 1.0 );
                 	clipPosition *= clipW; 
-                	return ( uInverseProjectMatrix * clipPosition ).xyz;
+                       return ( ${uInverseProjectMatrix} * clipPosition ).xyz;
                 }
 
                 vec3 getViewNormal( const in vec3 viewPosition, const in vec2 screenPos ) {               
@@ -274,7 +196,7 @@ class SAOOcclusionRenderer {
                 	vec3 viewDelta = sampleViewPosition - centerViewPosition;
                 	float viewDistance = length( viewDelta );
                 	float scaledScreenDistance = scaleDividedByCameraFar * viewDistance;
-                	return max(0.0, (dot(centerViewNormal, viewDelta) - minResolutionMultipliedByCameraFar) / scaledScreenDistance - uBias) / (1.0 + pow2( scaledScreenDistance ) );
+                       return max(0.0, (dot(centerViewNormal, viewDelta) - minResolutionMultipliedByCameraFar) / scaledScreenDistance - ${uBias}) / (1.0 + pow2( scaledScreenDistance ) );
                 }
 
                 const float ANGLE_STEP = PI2 * float( NUM_RINGS ) / float( NUM_SAMPLES );
@@ -282,19 +204,19 @@ class SAOOcclusionRenderer {
 
                 float getAmbientOcclusion( const in vec3 centerViewPosition ) {
             
-                	scaleDividedByCameraFar = uScale / uCameraFar;
-                	minResolutionMultipliedByCameraFar = uMinResolution * uCameraFar;
-                	vec3 centerViewNormal = getViewNormal( centerViewPosition, vUV );
+                       scaleDividedByCameraFar = ${uScale} / ${uCameraFar};
+                       minResolutionMultipliedByCameraFar = ${uMinResolution} * ${uCameraFar};
+                       vec3 centerViewNormal = getViewNormal( centerViewPosition, ${vUV} );
 
-                	float angle = rand( vUV + uRandomSeed ) * PI2;
-                	vec2 radius = vec2( uKernelRadius * INV_NUM_SAMPLES ) / uViewport;
+                       float angle = rand( ${vUV} + ${uRandomSeed} ) * PI2;
+                       vec2 radius = vec2( ${uKernelRadius} * INV_NUM_SAMPLES ) / ${uViewport};
                 	vec2 radiusStep = radius;
 
                 	float occlusionSum = 0.0;
                 	float weightSum = 0.0;
 
                 	for( int i = 0; i < NUM_SAMPLES; i ++ ) {
-                		vec2 sampleUv = vUV + vec2( cos( angle ), sin( angle ) ) * radius;
+                               vec2 sampleUv = ${vUV} + vec2( cos( angle ), sin( angle ) ) * radius;
                 		radius += radiusStep;
                 		angle += ANGLE_STEP;
 
@@ -311,66 +233,90 @@ class SAOOcclusionRenderer {
 
                 	if( weightSum == 0.0 ) discard;
 
-                	return occlusionSum * ( uIntensity / weightSum );
+                       return occlusionSum * ( ${uIntensity} / weightSum );
                 }
 
-                out vec4 outColor;
-   
-                void main() {
-                
-                	float centerDepth = getDepth( vUV );
-                	
+                vec4 ${name}() {
+                        float centerDepth = getDepth( ${vUV} );
+
                 	if( centerDepth >= ( 1.0 - EPSILON ) ) {
                 		discard;
                 	}
 
                 	float centerViewZ = getViewZ( centerDepth );
-                	vec3 viewPosition = getViewPos( vUV, centerDepth, centerViewZ );
+                        vec3 viewPosition = getViewPos( ${vUV}, centerDepth, centerViewZ );
 
                 	float ambientOcclusion = getAmbientOcclusion( viewPosition );
                 
-                	outColor = packFloatToRGBA(  1.0- ambientOcclusion );
-                }`]
-        });
+                        return packFloatToRGBA(  1.0- ambientOcclusion );
+                }`);
+            });
 
-        if (this._program.errors) {
-            console.error(this._program.errors.join("\n"));
+        const [program, errors] = programVariablesState.buildProgram(
+            gl,
+            "SAOOcclusionRenderer",
+            {
+                ignoreSectionPlanes: true,
+                scene: { },
+                appendFragmentOutputs: (src) => src.push(`${outColor} = ${getOutColor}();`),
+                fragmentOutputsSetup: [ ],
+                getVertexData: () => [ ],
+                vertexClipPosition: `vec4(${position}, 1.0)`
+            });
+
+        if (errors) {
+            console.error(errors.join("\n"));
             this._programError = true;
-            return;
+        } else {
+            const binder = (arr, size) => {
+                const b = new ArrayBuf(gl, gl.ARRAY_BUFFER, arr, arr.length, size, gl.STATIC_DRAW);
+                return {
+                    bindAtLocation: location => { // see ArrayBuf.js and Attribute.js
+                        b.bind();
+                        this._scene.canvas.gl.vertexAttribPointer(location, b.itemSize, b.itemType, b.normalized, 0, 0);
+                    }
+                };
+            };
+            const positionsBuf = binder(new Float32Array([1, 1, 0,  -1, 1, 0,  -1, -1, 0,  1, -1, 0]), 3);
+            const uvBuf        = binder(new Float32Array([  1, 1,      0, 1,      0, 0,      1, 0]),   2);
+
+            // Mitigation: if Uint8Array is used, the geometry is corrupted on OSX when using Chrome with data-textures
+            const indices = new Uint32Array([0, 1, 2, 0, 2, 3]);
+            const indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, indices.length, 1, gl.STATIC_DRAW);
+
+            this._program = {
+                destroy: program.destroy,
+                draw: (depthRenderBuffer, viewportSize) => {
+                    program.bind();
+
+                    const projectState = scene.camera.project._state;
+                    const far = projectState.far;
+                    uCameraNear.setInputValue(projectState.near);
+                    uCameraFar.setInputValue(far);
+
+                    uProjectMatrix.setInputValue(projectState.matrix);
+                    uInverseProjectMatrix.setInputValue(this._getInverseProjectMat());
+
+                    uPerspective.setInputValue(scene.camera.projection === "perspective");
+
+                    uScale.setInputValue(sao.scale * (far / 5));
+                    uIntensity.setInputValue(sao.intensity);
+                    uBias.setInputValue(sao.bias);
+                    uKernelRadius.setInputValue(sao.kernelRadius);
+                    uMinResolution.setInputValue(sao.minResolution);
+                    uViewport.setInputValue(viewportSize);
+                    uRandomSeed.setInputValue(Math.random());
+
+                    uDepthTexture.setInputValue(depthRenderBuffer.getDepthTexture());
+
+                    uv.setInputValue(uvBuf);
+                    position.setInputValue(positionsBuf);
+
+                    indicesBuf.bind();
+                    gl.drawElements(gl.TRIANGLES, indicesBuf.numItems, indicesBuf.itemType, 0);
+                }
+            };
         }
-
-        const uv = new Float32Array([1, 1, 0, 1, 0, 0, 1, 0]);
-        const positions = new Float32Array([1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0]);
-        
-        // Mitigation: if Uint8Array is used, the geometry is corrupted on OSX when using Chrome with data-textures
-        const indices = new Uint32Array([0, 1, 2, 0, 2, 3]);
-
-        this._positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, positions.length, 3, gl.STATIC_DRAW);
-        this._uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, uv, uv.length, 2, gl.STATIC_DRAW);
-        this._indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, indices.length, 1, gl.STATIC_DRAW);
-
-        this._program.bind();
-
-        this._uCameraNear = this._program.getLocation("uCameraNear");
-        this._uCameraFar = this._program.getLocation("uCameraFar");
-
-        this._uCameraProjectionMatrix = this._program.getLocation("uProjectMatrix");
-        this._uCameraInverseProjectionMatrix = this._program.getLocation("uInverseProjectMatrix");
-
-        this._uPerspective = this._program.getLocation("uPerspective");
-
-        this._uScale = this._program.getLocation("uScale");
-        this._uIntensity = this._program.getLocation("uIntensity");
-        this._uBias = this._program.getLocation("uBias");
-        this._uKernelRadius = this._program.getLocation("uKernelRadius");
-        this._uMinResolution = this._program.getLocation("uMinResolution");
-        this._uViewport = this._program.getLocation("uViewport");
-        this._uRandomSeed = this._program.getLocation("uRandomSeed");
-
-        this._aPosition = this._program.getAttribute("aPosition");
-        this._aUV = this._program.getAttribute("aUV");
-
-        this._dirty = false;
     }
 
     destroy() {
@@ -380,5 +326,3 @@ class SAOOcclusionRenderer {
         }
     }
 }
-
-export {SAOOcclusionRenderer};
