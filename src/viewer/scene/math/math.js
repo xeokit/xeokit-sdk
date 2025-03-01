@@ -4951,9 +4951,10 @@ const math = {
 
             // Calculate clip space coordinates, which will be in range
             // of x=[-1..1] and y=[-1..1], with y=(+1) at top
-
-            const clipX =     2 * canvasPos[0] / canvas.width - 1;  // Calculate clip space coordinates
-            const clipY = 1 - 2 * canvasPos[1] / canvas.height;
+            // clientWidth/Height needs to be used in case canvas.width/height is scaled down,
+            // but not reflecting client dimensions (e.g. when using FastNavPlugin)
+            const clipX =     2 * canvasPos[0] / canvas.clientWidth - 1;  // Calculate clip space coordinates
+            const clipY = 1 - 2 * canvasPos[1] / canvas.clientHeight;
 
             clipToWorld(clipX, clipY, -1, isOrtho, vec4Near);
 
