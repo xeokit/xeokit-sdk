@@ -520,7 +520,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                             case 7:
                                 geometryArrays.primitiveName = "lines";
                                 geometryArrays.geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
-                                geometryArrays.decompressedPositions = geometryCompressionUtils.decompressPositions(geometryArrays.geometryPositions, tileDecodeMatrix);
+                                geometryArrays.decompressedPositions = geometryCompressionUtils.decompressPositions(geometryArrays.geometryPositions, reusedGeometriesDecodeMatrix);
                                 ifcLabel = buildVectorTextGeometry({
                                     origin: geometryArrays.decompressedPositions,
                                     text: axisLabel,
@@ -545,7 +545,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                             if (geometryReuseCount > 1000) { // TODO: Heuristic to force batching of instanced geometry beyond a certain reuse count (or budget)?
                                 // geometryArrays.batchThisMesh = true;
                             }
-                            if (geometryArrays.geometryPositions.length > 1000) { // TODO: Heuristic to force batching on instanced geometry above certain vertex size?
+                            if (geometryArrays.geometryPositions && geometryArrays.geometryPositions.length > 1000) { // TODO: Heuristic to force batching on instanced geometry above certain vertex size?
                                 // geometryArrays.batchThisMesh = true;
                             }
                             if (geometryArrays.batchThisMesh) {
