@@ -1,9 +1,9 @@
 {
-  "name": "@xeokit/xeokit-sdk",
+  "name": "@3DVES/xeokit-sdk",
   "version": "2.6.53",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
-  "module": "./dist/xeokit-sdk.es.js",
-  "main": "./dist/xeokit-sdk.cjs.js",
+  "module": "index.js",
+  "main": "index.js",
   "types": "./types/index.d.ts",
   "scripts": {
     "build": "rollup --config rollup.config.js; rollup --config rollup.minified.config.js",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xeokit/xeokit-sdk.git"
+    "url": "git+https://github.com/3DVES/xeokit-sdk.git"
   },
   "auto-changelog": {
     "output": "CHANGELOG.md",
@@ -51,9 +51,9 @@
   "author": "Lindsay Kay",
   "license": "See LICENSE.txt",
   "bugs": {
-    "url": "https://github.com/xeokit/xeokit-sdk/issues"
+    "url": "https://github.com/3DVES/xeokit-sdk/issues"
   },
-  "homepage": "https://xeokit.io",
+  "homepage": "https://3dves.com",
   "dependencies": {
     "@loaders.gl/core": "^3.2.6",
     "@loaders.gl/gltf": "^3.2.6",
