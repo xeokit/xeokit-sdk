@@ -165,7 +165,6 @@ class MetaModel {
      * @param metaModelData
      */
     loadData(metaModelData, options = {}) {
-
         if (this.finalized) {
             throw "MetaScene already finalized - can't add more data";
         }

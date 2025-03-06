@@ -83,9 +83,9 @@ const DTX = 2;
  * # Overview
  *
  * While xeokit's standard [scene graph](https://github.com/xeokit/xeokit-sdk/wiki/Scene-Graphs) is great for gizmos and medium-sized models, it doesn't scale up to millions of objects in terms of memory and rendering efficiency.
+ *to memory and render it efficiently using WebGL.
  *
- * For huge models, we have the ````SceneModel```` representation, which is optimized to pack large amounts of geometry into memory and render it efficiently using WebGL.
- *
+ * For huge models, we have the ````SceneModel```` representation, which is optimized to pack large amounts of geometry in
  * ````SceneModel```` is the default model representation loaded by  (at least) {@link GLTFLoaderPlugin}, {@link XKTLoaderPlugin} and  {@link WebIFCLoaderPlugin}.
  *
  * In this tutorial you'll learn how to use ````SceneModel```` to create high-detail content programmatically. Ordinarily you'd be learning about ````SceneModel```` if you were writing your own model loader plugins.
@@ -2441,8 +2441,8 @@ export class SceneModel extends Component {
             minFilter !== LinearMipmapLinearFilter &&
             minFilter !== NearestMipMapLinearFilter &&
             minFilter !== NearestMipMapNearestFilter) {
-            this.error(`[createTexture] Unsupported value for 'minFilter' - 
-            supported values are LinearFilter, LinearMipMapNearestFilter, NearestMipMapNearestFilter, 
+          this.error(`[createTexture] Unsupported value for 'minFilter' -
+            supported values are LinearFilter, LinearMipMapNearestFilter, NearestMipMapNearestFilter,
             NearestMipMapLinearFilter and LinearMipmapLinearFilter. Defaulting to LinearMipmapLinearFilter.`);
             minFilter = LinearMipmapLinearFilter;
         }
@@ -2857,7 +2857,6 @@ export class SceneModel extends Component {
                     math.expandAABB3Points3(aabb, cfg.positionsCompressed);
                     geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
                     cfg.aabb = aabb;
-
                 }
                 if (cfg.buckets) {
                     const aabb = math.collapseAABB3();
@@ -3070,7 +3069,7 @@ export class SceneModel extends Component {
         }
 
         cfg.numPrimitives = this._getNumPrimitives(cfg);
-
+        console.log('lo que se le envia al config', cfg)
         return this._createMesh(cfg);
     }
 
@@ -3083,7 +3082,9 @@ export class SceneModel extends Component {
     }
 
     _createMesh(cfg) {
+        console.log('*** _createMesh ***', {cfg});
         const mesh = new SceneModelMesh(this, cfg.id, cfg.color, cfg.opacity, cfg.transform, cfg.textureSet);
+        console.log({ cfg });
         mesh.pickId = this.scene._renderer.getPickID(mesh);
         const pickId = mesh.pickId;
         const a = pickId >> 24 & 0xFF;

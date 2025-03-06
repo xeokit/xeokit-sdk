@@ -647,8 +647,22 @@ export class SceneModelEntity {
         this.model.glRedraw();
     }
 
-    get saoEnabled() {
-        return this.model.saoEnabled;
+  get saoEnabled() {
+    return this.model.saoEnabled;
+  }
+
+  rotate({radians, pivot}) {
+    for (let i = 0, len = this.meshes.length; i < len; i++) {
+        this.meshes[i].rotate(radians, pivot);
+      }
+      this.model.glRedraw();
+    }
+
+  translate(translationDelta) {
+    for (let i = 0, len = this.meshes.length; i < len; i++) {
+      this.meshes[i].translate(translationDelta);
+    }
+    this.model.glRedraw();
     }
 
     /**
@@ -787,5 +801,6 @@ export class SceneModelEntity {
             this.meshes[i]._destroy();
         }
         scene._aabbDirty = true;
+        this.model.glRedraw();
     }
 }
