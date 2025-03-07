@@ -158,8 +158,20 @@ const math = {
      * @static
      * @returns {Number[]}
      */
-    mat4ToMat3(mat4, mat3) { // TODO
-        //return new FloatArrayType(values || 9);
+    mat4ToMat3(mat4, mat3 = new FloatArrayType(9)) {
+        mat3[0] = mat4[0];
+        mat3[1] = mat4[1];
+        mat3[2] = mat4[2];
+        
+        mat3[3] = mat4[4];
+        mat3[4] = mat4[5];
+        mat3[5] = mat4[6];
+        
+        mat3[6] = mat4[8];
+        mat3[7] = mat4[9];
+        mat3[8] = mat4[10];
+        
+        return mat3;
     },
 
     /**
