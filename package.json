@@ -53,6 +53,7 @@
   },
   "homepage": "https://xeokit.io",
   "dependencies": {
+    "@creooxag/cx-converter": "^0.0.12-alpha",
     "@loaders.gl/core": "^4.3.3",
     "@loaders.gl/gltf": "^4.3.3",
     "@loaders.gl/las": "^4.3.3",
