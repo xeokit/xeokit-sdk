@@ -425,7 +425,6 @@ export class SceneModelMesh {
      * @private
      */
     _destroy() {
-        this.model.scene._renderer.putPickID(this.pickId);
-        this.layer.destroy();
+      this.model.scene._renderer.putPickID(this.pickId);
     }
 }
