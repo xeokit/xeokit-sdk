@@ -801,6 +801,5 @@ export class SceneModelEntity {
             this.meshes[i]._destroy();
         }
         scene._aabbDirty = true;
-        this.model.glRedraw();
     }
 }

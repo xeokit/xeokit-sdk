@@ -3069,7 +3069,6 @@ export class SceneModel extends Component {
         }
 
         cfg.numPrimitives = this._getNumPrimitives(cfg);
-        console.log('lo que se le envia al config', cfg)
         return this._createMesh(cfg);
     }
 
@@ -3082,9 +3081,7 @@ export class SceneModel extends Component {
     }
 
     _createMesh(cfg) {
-        console.log('*** _createMesh ***', {cfg});
         const mesh = new SceneModelMesh(this, cfg.id, cfg.color, cfg.opacity, cfg.transform, cfg.textureSet);
-        console.log({ cfg });
         mesh.pickId = this.scene._renderer.getPickID(mesh);
         const pickId = mesh.pickId;
         const a = pickId >> 24 & 0xFF;
