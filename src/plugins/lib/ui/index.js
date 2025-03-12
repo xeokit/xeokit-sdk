@@ -280,8 +280,14 @@ export class Label3D {
         this._mid   = math.vec3();
         this._end   = math.vec3();
         this._yOff  = 0;
-        this._betweenWires = false;
         this.__visible = true;
+
+        this._updatePos = () => {
+            toClipSpace(camera, this._start, tmpVec4a);
+            math.mulVec4Scalar(tmpVec4a, 1.0 / tmpVec4a[3]);
+            toCanvasSpace(scene.canvas.canvas, parentElement, tmpVec4a, tmpVec2a);
+            this._label.setPos(tmpVec2a[0], tmpVec2a[1]);
+        };
 
         const setPosOnWire = (p0, p1, yOff) => {
             p0[0] += p1[0];
@@ -290,36 +296,44 @@ export class Label3D {
             this._label.setPos(p0[0], p0[1] + yOff);
         };
 
-        this._updatePositions = () => {
-            if (! this.__visible) {
-                return;
-            }
-            if (this._betweenWires) {
-                const visibleA = clipSegment(scene, parentElement, this._start, this._mid, tmpVec2a, tmpVec2b);
-                const visibleB = clipSegment(scene, parentElement, this._end,   this._mid, tmpVec2c, tmpVec2d);
-                this._label.setCulled(! (visibleA || visibleB));
-                if (visibleA && visibleB) {
-                    tmpVec2b[0] += tmpVec2d[0];
-                    tmpVec2b[1] += tmpVec2d[1];
-                    math.mulVec2Scalar(tmpVec2b, .5);
+        this._updatePosBetween = () => {
+            const visibleA = clipSegment(scene, parentElement, this._start, this._mid, tmpVec2a, tmpVec2b);
+            const visibleB = clipSegment(scene, parentElement, this._end,   this._mid, tmpVec2c, tmpVec2d);
+            this._label.setCulled(! (visibleA || visibleB));
+            if (visibleA && visibleB) {
+                tmpVec2b[0] += tmpVec2d[0];
+                tmpVec2b[1] += tmpVec2d[1];
+                math.mulVec2Scalar(tmpVec2b, .5);
 
-                    tmpVec2b[0] += tmpVec2a[0] + tmpVec2c[0];
-                    tmpVec2b[1] += tmpVec2a[1] + tmpVec2c[1];
-                    math.mulVec2Scalar(tmpVec2b, 1/3);
-                    this._label.setPos(tmpVec2b[0], tmpVec2b[1]);
-                } else if (visibleA) {
-                    setPosOnWire(tmpVec2a, tmpVec2b, 0);
-                } else if (visibleB) {
-                    setPosOnWire(tmpVec2c, tmpVec2d, 0);
-                }
-            } else {
-                const visible = (clipSegment(scene, parentElement, this._start, this._end, tmpVec2a, tmpVec2b)
-                                 &&
-                                 (math.distVec2(tmpVec2a, tmpVec2b) >= this._labelMinAxisLength));
-                this._label.setCulled(!visible);
-                if (visible) {
-                    setPosOnWire(tmpVec2a, tmpVec2b, this._yOff);
-                }
+                tmpVec2b[0] += tmpVec2a[0] + tmpVec2c[0];
+                tmpVec2b[1] += tmpVec2a[1] + tmpVec2c[1];
+                math.mulVec2Scalar(tmpVec2b, 1/3);
+                this._label.setPos(tmpVec2b[0], tmpVec2b[1]);
+            } else if (visibleA) {
+                setPosOnWire(tmpVec2a, tmpVec2b, 0);
+            } else if (visibleB) {
+                setPosOnWire(tmpVec2c, tmpVec2d, 0);
+            }
+        };
+
+        this._updatePosOnWire = () => {
+            const visible = (clipSegment(scene, parentElement, this._start, this._end, tmpVec2a, tmpVec2b)
+                             &&
+                             (math.distVec2(tmpVec2a, tmpVec2b) >= this._labelMinAxisLength));
+            this._label.setCulled(!visible);
+            if (visible) {
+                setPosOnWire(tmpVec2a, tmpVec2b, this._yOff);
+            }
+        };
+
+        let posUpdate = () => { };
+        this._setUpdatePositions = (_posUpdate) => {
+            posUpdate = _posUpdate;
+            this._updatePositions();
+        };
+        this._updatePositions = () => {
+            if (this.__visible) {
+                posUpdate();
             }
         };
 
@@ -337,21 +351,24 @@ export class Label3D {
         };
     }
 
+    setPos(p0) {
+        this._start.set(p0);
+        this._setUpdatePositions(this._updatePos);
+    }
+
     setPosOnWire(p0, p1, yOff, labelMinAxisLength) {
         this._start.set(p0);
         this._end.set(p1);
         this._yOff = yOff;
         this._labelMinAxisLength = labelMinAxisLength;
-        this._betweenWires = false;
-        this._updatePositions();
+        this._setUpdatePositions(this._updatePosOnWire);
     }
 
     setPosBetween(p0, p1, p2) {
         this._start.set(p0);
         this._mid.set(p1);
         this._end.set(p2);
-        this._betweenWires = true;
-        this._updatePositions();
+        this._setUpdatePositions(this._updatePosBetween);
     }
 
     setFillColor(value) {
