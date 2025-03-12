@@ -131,6 +131,7 @@ const marker3D = function(scene, color) {
             marker.setVisible(!!worldPos);
         },
 
+        setFillColor:  c => marker.setFillColor(c),
         setHighlighted: h => marker.setHighlighted(h),
         getCanvasPos:  () => marker.canvasPos,
         getWorldPos:   () => marker.worldPos,
@@ -138,7 +139,7 @@ const marker3D = function(scene, color) {
     };
 };
 
-const wire3D = function(scene, color, startWorldPos) {
+const wire3D = function(scene, color) {
     const wire = new Wire3D(scene, scene.canvas.canvas.ownerDocument.body, {
         color: color,
         thickness: 1,
@@ -146,7 +147,7 @@ const wire3D = function(scene, color, startWorldPos) {
     });
     wire.setVisible(false);
     return {
-        update: endWorldPos => {
+        update: (startWorldPos, endWorldPos) => {
             if (endWorldPos)
             {
                 wire.setEnds(startWorldPos, endWorldPos);
@@ -154,6 +155,7 @@ const wire3D = function(scene, color, startWorldPos) {
             wire.setVisible(!!endWorldPos);
         },
 
+        setColor: c => wire.setColor(c),
         destroy: () => wire.destroy()
     };
 };
@@ -1160,7 +1162,8 @@ const startPolysurfaceZoneCreateUI = function(scene, zoneAltitude, zoneHeight, z
 
     (function selectNextPoint(markers) {
         const marker = marker3D(scene, zoneColor);
-        const wire = (markers.length > 0) && wire3D(scene, zoneColor, markers[markers.length - 1].getWorldPos());
+        const wire = (markers.length > 0) && wire3D(scene, zoneColor);
+        const wireStart = wire && markers[markers.length - 1].getWorldPos();
 
         cleanups.push(() => {
             marker.destroy();
@@ -1220,7 +1223,7 @@ const startPolysurfaceZoneCreateUI = function(scene, zoneAltitude, zoneHeight, z
             () => {
                 updatePointerLens(null);
                 marker.update(null);
-                wire && wire.update(null);
+                wire && wire.update(wireStart, null);
                 basePolygon.updateBase((markers.length > 2) ? markers.map(m => m.getWorldPos()) : null);
             },
             (canvasPos, worldPos) => {
@@ -1228,7 +1231,7 @@ const startPolysurfaceZoneCreateUI = function(scene, zoneAltitude, zoneHeight, z
                 firstMarker && firstMarker.setHighlighted(!! snappedFirst);
                 updatePointerLens(snappedFirst ? snappedFirst.canvasPos : canvasPos);
                 marker.update((! snappedFirst) && worldPos);
-                wire && wire.update(snappedFirst ? snappedFirst.worldPos : worldPos);
+                wire && wire.update(wireStart, snappedFirst ? snappedFirst.worldPos : worldPos);
                 if ((markers.length >= 2))
                 {
                     const pos = markers.map(m => m.getWorldPos()).concat(snappedFirst ? [] : [worldPos]);
@@ -1272,7 +1275,7 @@ const startPolysurfaceZoneCreateUI = function(scene, zoneAltitude, zoneHeight, z
                 else
                 {
                     marker.update(worldPos);
-                    wire && wire.update(worldPos);
+                    wire && wire.update(wireStart, worldPos);
                     selectNextPoint(markers.concat(marker));
                 }
             });
