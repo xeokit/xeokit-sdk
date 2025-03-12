@@ -613,6 +613,66 @@ class ReadableGeometry extends Geometry {
         return this._obb;
     }
 
+    _getMetrics() {
+        if (! ("_metrics" in this)) {
+            switch (this._state.primitiveName) {
+            case "solid":
+            case "surface":
+            case "triangles": {
+                const indices = this._state.indices;
+                const positions = this._state.positions;
+                const getPos = (i, out) => {
+                    const idx = indices[i] * 3;
+                    for (let j = 0; j < 3; ++j) {
+                        out[j] = positions[idx + j];
+                    };
+                    return out;
+                };
+                const tmp = [ math.vec3(), math.vec3(), math.vec3(), math.vec3() ];
+                let totalArea = 0;
+                const centroid = math.vec3([ 0, 0, 0 ]);
+                for (let i = 0; i < indices.length; i += 3) {
+                    const v0 = getPos(i,   tmp[0]);
+                    const v1 = getPos(i+1, tmp[1]);
+                    const v2 = getPos(i+2, tmp[2]);
+                    math.addVec3(v0, v1, tmp[3]);
+                    math.addVec3(v2, tmp[3], tmp[3]);
+                    const faceArea = math.lenVec3(
+                        math.cross3Vec3(
+                            math.subVec3(v1, v0, tmp[1]),
+                            math.subVec3(v2, v0, tmp[2]),
+                            tmp[0])) / 2;
+                    totalArea += faceArea;
+                    math.mulVec3Scalar(tmp[3], faceArea, tmp[3]);
+                    math.addVec3(centroid, tmp[3], centroid);
+                }
+                this._metrics = { surfaceArea: totalArea, centroid: math.mulVec3Scalar(centroid, 1 / totalArea / 3, centroid) };
+                break;
+            }
+            default:
+                this._metrics = { surfaceArea: 0 };
+                break;
+            }
+        }
+        return this._metrics;
+    }
+
+    /**
+     * Returns the surface area of this Mesh.
+     * @returns {number}
+     */
+    get surfaceArea() {
+        return this._getMetrics().surfaceArea;
+    }
+
+    /**
+     * Returns the centroid of this Mesh.
+     * @returns {number}
+     */
+    get centroid() {
+        return this._getMetrics().centroid;
+    }
+
     /**
      * Approximate number of triangles in this ReadableGeometry.
      *
