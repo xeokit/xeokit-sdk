@@ -7,8 +7,6 @@ import html2canvas from 'html2canvas/dist/html2canvas.esm.js';
 import {math} from "./scene/math/math.js";
 import {transformToNode} from "../plugins/lib/ui/index.js";
 
-const VIEWER_VERSION = '__VIEWER_VERSION__';
-
 /**
  * The 3D Viewer at the heart of the xeokit SDK.
  *
@@ -69,10 +67,6 @@ class Viewer {
      * your expected usage.
      */
     constructor(cfg) {
-
-        this.version = VIEWER_VERSION;
-
-        console.info('Xeokit SDK Version: ', this.version);
 
         /**
          * The Viewer's current language setting.

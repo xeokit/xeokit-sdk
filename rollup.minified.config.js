@@ -1,10 +1,22 @@
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 import { terser } from "rollup-plugin-terser";
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
-import replace from '@rollup/plugin-replace';
 import { readFileSync } from 'fs';
+import { execSync } from 'child_process';
+import banner from 'rollup-plugin-banner';
 
 const pkg = JSON.parse(readFileSync('./package.json', 'utf8'));
+
+let gitCommitHash = 'unknown';
+try {
+    gitCommitHash = execSync('git rev-parse HEAD').toString().trim();
+} catch(err) {
+    console.warn('Unable to get git commit hash: ', err.message);
+}
+
+const buildTimeStamp = new Date().toISOString();
+
+const versionInfo = `xeokit-sdk v${pkg.version}\n Commit: ${gitCommitHash}\n Built: ${buildTimeStamp}`;
 
 export default {
     input: './src/index.js',
@@ -36,10 +48,6 @@ export default {
             preferBuiltins: false
         }),
         terser(),
-        replace({
-            delimiters: ['', ''],
-            '__VIEWER_VERSION__': JSON.stringify(pkg.version),
-            preventAssignment: true
-        }),
+        banner(versionInfo)
     ]
 }
