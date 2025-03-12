@@ -7862,7 +7862,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Stop the shricking circle and hide it.\n     ",
+                    "value": "*\n     * Stop the shrinking circle and hide it.\n     ",
                     "start": 3183,
                     "end": 3240,
                     "loc": {
@@ -8677,7 +8677,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Stop the shricking circle and hide it.\n     ",
+                    "value": "*\n     * Stop the shrinking circle and hide it.\n     ",
                     "start": 3183,
                     "end": 3240,
                     "loc": {
@@ -9799,7 +9799,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Stop the shricking circle and hide it.\n     ",
+      "value": "*\n     * Stop the shrinking circle and hide it.\n     ",
       "start": 3183,
       "end": 3240,
       "loc": {
@@ -23943,7 +23943,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Stop the shricking circle and hide it.\n     ",
+      "value": "*\n     * Stop the shrinking circle and hide it.\n     ",
       "start": 3183,
       "end": 3240,
       "loc": {

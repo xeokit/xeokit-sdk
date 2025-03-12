@@ -450,6 +450,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js~label3d",
+    "class/src/plugins/lib/ui/index.js~Label3D.html",
+    "<span>Label3D</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/lambertmaterial.js~lambertmaterial",
     "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html",
     "<span>LambertMaterial</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/LambertMaterial.js</span>",
@@ -1062,6 +1068,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/sectioncaps/sectioncaps.js~sectioncaps",
+    "class/src/viewer/scene/sectionCaps/SectionCaps.js~SectionCaps.html",
+    "<span>SectionCaps</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/sectionCaps/SectionCaps.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/sectionplane/sectionplane.js~sectionplane",
     "class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html",
     "<span>SectionPlane</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/sectionPlane/SectionPlane.js</span>",
@@ -1218,12 +1230,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/viewer.js~viewer",
-    "class/src/viewer/Viewer.js~Viewer.html",
-    "<span>Viewer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/Viewer.js</span>",
-    "class"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/viewer/scene/viewport/viewport.js~viewport",
     "class/src/viewer/scene/viewport/Viewport.js~Viewport.html",
     "<span>Viewport</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/viewport/Viewport.js</span>",
@@ -1239,6 +1245,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin",
     "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html",
     "<span>WebIFCLoaderPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js~wire3d",
+    "class/src/plugins/lib/ui/index.js~Wire3D.html",
+    "<span>Wire3D</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js</span>",
     "class"
   ],
   [
@@ -1350,6 +1362,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/lib/html/menuevent.js~addcontextmenulistener",
+    "function/index.html#static-function-addContextMenuListener",
+    "<span>addContextMenuListener</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/html/MenuEvent.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildboxgeometry.js~buildboxgeometry",
     "function/index.html#static-function-buildBoxGeometry",
     "<span>buildBoxGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildBoxGeometry.js</span>",
@@ -1432,6 +1450,24 @@ window.esdocSearchIndex = [
     "variable/index.html#static-variable-dataTextureRamStats",
     "<span>dataTextureRamStats</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/lib/dataTextureRamStats.js</span>",
     "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/libs/earcut.js~deviation",
+    "function/index.html#static-function-deviation",
+    "<span>deviation</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/libs/earcut.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/libs/earcut.js~earcut",
+    "function/index.html#static-function-earcut",
+    "<span>earcut</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/libs/earcut.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/libs/earcut.js~flatten",
+    "function/index.html#static-function-flatten",
+    "<span>flatten</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/libs/earcut.js</span>",
+    "function"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/load3dsgeometry.js~load3dsgeometry",
@@ -5358,6 +5394,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#includeids",
+    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-includeIds",
+    "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#includeIds",
+    "member"
+  ],
+  [
+    "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#includeids",
+    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-includeIds",
+    "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#includeIds",
+    "member"
+  ],
+  [
     "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#includetypes",
     "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-includeTypes",
     "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#includeTypes",
@@ -5802,12 +5850,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/plugins/lib/earcut.js",
-    "file/src/plugins/lib/earcut.js.html",
-    "src/plugins/lib/earcut.js",
-    "file"
-  ],
-  [
     "src/plugins/lib/html/dot.js",
     "file/src/plugins/lib/html/Dot.js.html",
     "src/plugins/lib/html/Dot.js",
@@ -5817,6 +5859,12 @@ window.esdocSearchIndex = [
     "src/plugins/lib/html/label.js",
     "file/src/plugins/lib/html/Label.js.html",
     "src/plugins/lib/html/Label.js",
+    "file"
+  ],
+  [
+    "src/plugins/lib/html/menuevent.js",
+    "file/src/plugins/lib/html/MenuEvent.js.html",
+    "src/plugins/lib/html/MenuEvent.js",
     "file"
   ],
   [
@@ -5844,15 +5892,15 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/plugins/lib/ui/index.js~dot3d#setclickable",
-    "class/src/plugins/lib/ui/index.js~Dot3D.html#instance-method-setClickable",
-    "src/plugins/lib/ui/index.js~Dot3D#setClickable",
+    "src/plugins/lib/ui/index.js~dot3d#setbordercolor",
+    "class/src/plugins/lib/ui/index.js~Dot3D.html#instance-method-setBorderColor",
+    "src/plugins/lib/ui/index.js~Dot3D#setBorderColor",
     "method"
   ],
   [
-    "src/plugins/lib/ui/index.js~dot3d#setculled",
-    "class/src/plugins/lib/ui/index.js~Dot3D.html#instance-method-setCulled",
-    "src/plugins/lib/ui/index.js~Dot3D#setCulled",
+    "src/plugins/lib/ui/index.js~dot3d#setclickable",
+    "class/src/plugins/lib/ui/index.js~Dot3D.html#instance-method-setClickable",
+    "src/plugins/lib/ui/index.js~Dot3D#setClickable",
     "method"
   ],
   [
@@ -5877,6 +5925,108 @@ window.esdocSearchIndex = [
     "src/plugins/lib/ui/index.js~dot3d#setvisible",
     "class/src/plugins/lib/ui/index.js~Dot3D.html#instance-method-setVisible",
     "src/plugins/lib/ui/index.js~Dot3D#setVisible",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~label3d#constructor",
+    "class/src/plugins/lib/ui/index.js~Label3D.html#instance-constructor-constructor",
+    "src/plugins/lib/ui/index.js~Label3D#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~label3d#destroy",
+    "class/src/plugins/lib/ui/index.js~Label3D.html#instance-method-destroy",
+    "src/plugins/lib/ui/index.js~Label3D#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~label3d#setclickable",
+    "class/src/plugins/lib/ui/index.js~Label3D.html#instance-method-setClickable",
+    "src/plugins/lib/ui/index.js~Label3D#setClickable",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~label3d#setfillcolor",
+    "class/src/plugins/lib/ui/index.js~Label3D.html#instance-method-setFillColor",
+    "src/plugins/lib/ui/index.js~Label3D#setFillColor",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~label3d#sethighlighted",
+    "class/src/plugins/lib/ui/index.js~Label3D.html#instance-method-setHighlighted",
+    "src/plugins/lib/ui/index.js~Label3D#setHighlighted",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~label3d#setposbetween",
+    "class/src/plugins/lib/ui/index.js~Label3D.html#instance-method-setPosBetween",
+    "src/plugins/lib/ui/index.js~Label3D#setPosBetween",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~label3d#setposonwire",
+    "class/src/plugins/lib/ui/index.js~Label3D.html#instance-method-setPosOnWire",
+    "src/plugins/lib/ui/index.js~Label3D#setPosOnWire",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~label3d#settext",
+    "class/src/plugins/lib/ui/index.js~Label3D.html#instance-method-setText",
+    "src/plugins/lib/ui/index.js~Label3D#setText",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~label3d#setvisible",
+    "class/src/plugins/lib/ui/index.js~Label3D.html#instance-method-setVisible",
+    "src/plugins/lib/ui/index.js~Label3D#setVisible",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~wire3d#constructor",
+    "class/src/plugins/lib/ui/index.js~Wire3D.html#instance-constructor-constructor",
+    "src/plugins/lib/ui/index.js~Wire3D#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~wire3d#destroy",
+    "class/src/plugins/lib/ui/index.js~Wire3D.html#instance-method-destroy",
+    "src/plugins/lib/ui/index.js~Wire3D#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~wire3d#setclickable",
+    "class/src/plugins/lib/ui/index.js~Wire3D.html#instance-method-setClickable",
+    "src/plugins/lib/ui/index.js~Wire3D#setClickable",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~wire3d#setcolor",
+    "class/src/plugins/lib/ui/index.js~Wire3D.html#instance-method-setColor",
+    "src/plugins/lib/ui/index.js~Wire3D#setColor",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~wire3d#setends",
+    "class/src/plugins/lib/ui/index.js~Wire3D.html#instance-method-setEnds",
+    "src/plugins/lib/ui/index.js~Wire3D#setEnds",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~wire3d#sethighlighted",
+    "class/src/plugins/lib/ui/index.js~Wire3D.html#instance-method-setHighlighted",
+    "src/plugins/lib/ui/index.js~Wire3D#setHighlighted",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~wire3d#setopacity",
+    "class/src/plugins/lib/ui/index.js~Wire3D.html#instance-method-setOpacity",
+    "src/plugins/lib/ui/index.js~Wire3D#setOpacity",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~wire3d#setvisible",
+    "class/src/plugins/lib/ui/index.js~Wire3D.html#instance-method-setVisible",
+    "src/plugins/lib/ui/index.js~Wire3D#setVisible",
     "method"
   ],
   [
@@ -6010,132 +6160,6 @@ window.esdocSearchIndex = [
     "class/src/viewer/Plugin.js~Plugin.html#instance-method-warn",
     "src/viewer/Plugin.js~Plugin#warn",
     "method"
-  ],
-  [
-    "src/viewer/viewer.js",
-    "file/src/viewer/Viewer.js.html",
-    "src/viewer/Viewer.js",
-    "file"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#beginsnapshot",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-method-beginSnapshot",
-    "src/viewer/Viewer.js~Viewer#beginSnapshot",
-    "method"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#camera",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-member-camera",
-    "src/viewer/Viewer.js~Viewer#camera",
-    "member"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#cameracontrol",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-member-cameraControl",
-    "src/viewer/Viewer.js~Viewer#cameraControl",
-    "member"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#cameraflight",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-member-cameraFlight",
-    "src/viewer/Viewer.js~Viewer#cameraFlight",
-    "member"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#capabilities",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-get-capabilities",
-    "src/viewer/Viewer.js~Viewer#capabilities",
-    "member"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#constructor",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-constructor-constructor",
-    "src/viewer/Viewer.js~Viewer#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#destroy",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-method-destroy",
-    "src/viewer/Viewer.js~Viewer#destroy",
-    "method"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#endsnapshot",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-method-endSnapshot",
-    "src/viewer/Viewer.js~Viewer#endSnapshot",
-    "method"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#error",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-method-error",
-    "src/viewer/Viewer.js~Viewer#error",
-    "method"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#fire",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-method-fire",
-    "src/viewer/Viewer.js~Viewer#fire",
-    "method"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#getsnapshot",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-method-getSnapshot",
-    "src/viewer/Viewer.js~Viewer#getSnapshot",
-    "method"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#getsnapshotwithplugins",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-method-getSnapshotWithPlugins",
-    "src/viewer/Viewer.js~Viewer#getSnapshotWithPlugins",
-    "method"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#id",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-member-id",
-    "src/viewer/Viewer.js~Viewer#id",
-    "member"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#language",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-member-language",
-    "src/viewer/Viewer.js~Viewer#language",
-    "member"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#localeservice",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-member-localeService",
-    "src/viewer/Viewer.js~Viewer#localeService",
-    "member"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#log",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-method-log",
-    "src/viewer/Viewer.js~Viewer#log",
-    "method"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#metascene",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-member-metaScene",
-    "src/viewer/Viewer.js~Viewer#metaScene",
-    "member"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#off",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-method-off",
-    "src/viewer/Viewer.js~Viewer#off",
-    "method"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#on",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-method-on",
-    "src/viewer/Viewer.js~Viewer#on",
-    "method"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#scene",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-member-scene",
-    "src/viewer/Viewer.js~Viewer#scene",
-    "member"
   ],
   [
     "src/viewer/index.js",
@@ -9358,6 +9382,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/input/Input.js~Input.html#instance-member-shiftDown",
     "src/viewer/scene/input/Input.js~Input#shiftDown",
     "member"
+  ],
+  [
+    "src/viewer/scene/libs/earcut.js",
+    "file/src/viewer/scene/libs/earcut.js.html",
+    "src/viewer/scene/libs/earcut.js",
+    "file"
   ],
   [
     "src/viewer/scene/libs/k3d.js",
@@ -12702,6 +12732,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/model/scenemodelentity.js~scenemodelentity#capmaterial",
+    "class/src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity.html#instance-set-capMaterial",
+    "src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity#capMaterial",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodelentity.js~scenemodelentity#capmaterial",
+    "class/src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity.html#instance-get-capMaterial",
+    "src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity#capMaterial",
+    "member"
+  ],
+  [
     "src/viewer/scene/model/scenemodelentity.js~scenemodelentity#clippable",
     "class/src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity.html#instance-get-clippable",
     "src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity#clippable",
@@ -12831,6 +12873,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/model/scenemodelentity.js~scenemodelentity#isobject",
     "class/src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity.html#instance-get-isObject",
     "src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity#isObject",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodelentity.js~scenemodelentity#isscenemodelentity",
+    "class/src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity.html#instance-member-isSceneModelEntity",
+    "src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity#isSceneModelEntity",
     "member"
   ],
   [
@@ -12976,6 +13024,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/model/SceneModelMesh.js~SceneModelMesh.html#instance-member-id",
     "src/viewer/scene/model/SceneModelMesh.js~SceneModelMesh#id",
     "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodelmesh.js~scenemodelmesh#issolid",
+    "class/src/viewer/scene/model/SceneModelMesh.js~SceneModelMesh.html#instance-method-isSolid",
+    "src/viewer/scene/model/SceneModelMesh.js~SceneModelMesh#isSolid",
+    "method"
   ],
   [
     "src/viewer/scene/model/scenemodelmesh.js~scenemodelmesh#model",
@@ -15528,6 +15582,36 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/sectioncaps/sectioncaps.js",
+    "file/src/viewer/scene/sectionCaps/SectionCaps.js.html",
+    "src/viewer/scene/sectionCaps/SectionCaps.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/sectioncaps/sectioncaps.js~sectioncaps#constructor",
+    "class/src/viewer/scene/sectionCaps/SectionCaps.js~SectionCaps.html#instance-constructor-constructor",
+    "src/viewer/scene/sectionCaps/SectionCaps.js~SectionCaps#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/sectioncaps/sectioncaps.js~sectioncaps#destroy",
+    "class/src/viewer/scene/sectionCaps/SectionCaps.js~SectionCaps.html#instance-method-destroy",
+    "src/viewer/scene/sectionCaps/SectionCaps.js~SectionCaps#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/sectioncaps/sectioncaps.js~sectioncaps#scene",
+    "class/src/viewer/scene/sectionCaps/SectionCaps.js~SectionCaps.html#instance-member-scene",
+    "src/viewer/scene/sectionCaps/SectionCaps.js~SectionCaps#scene",
+    "member"
+  ],
+  [
+    "src/viewer/scene/sectioncaps/index.js",
+    "file/src/viewer/scene/sectionCaps/index.js.html",
+    "src/viewer/scene/sectionCaps/index.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/sectionplane/sectionplane.js",
     "file/src/viewer/scene/sectionPlane/SectionPlane.js.html",
     "src/viewer/scene/sectionPlane/SectionPlane.js",
@@ -15591,6 +15675,30 @@ window.esdocSearchIndex = [
     "src/viewer/scene/sectionplane/sectionplane.js~sectionplane#pos",
     "class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-get-pos",
     "src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane#pos",
+    "member"
+  ],
+  [
+    "src/viewer/scene/sectionplane/sectionplane.js~sectionplane#quaternion",
+    "class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-set-quaternion",
+    "src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane#quaternion",
+    "member"
+  ],
+  [
+    "src/viewer/scene/sectionplane/sectionplane.js~sectionplane#quaternion",
+    "class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-get-quaternion",
+    "src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane#quaternion",
+    "member"
+  ],
+  [
+    "src/viewer/scene/sectionplane/sectionplane.js~sectionplane#roll",
+    "class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-set-roll",
+    "src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane#roll",
+    "member"
+  ],
+  [
+    "src/viewer/scene/sectionplane/sectionplane.js~sectionplane#roll",
+    "class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-get-roll",
+    "src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane#roll",
     "member"
   ],
   [
@@ -16377,6 +16485,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/webglinfo.js",
     "file/src/viewer/scene/webglInfo.js.html",
     "src/viewer/scene/webglInfo.js",
+    "file"
+  ],
+  [
+    "src/viewer/utils/index.js",
+    "file/src/viewer/utils/index.js.html",
+    "src/viewer/utils/index.js",
     "file"
   ],
   [
