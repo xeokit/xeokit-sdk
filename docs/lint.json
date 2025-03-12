@@ -40,31 +40,31 @@
     "filePath": "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js",
     "lines": [
       {
-        "lineNumber": 676,
+        "lineNumber": 727,
         "line": "    /**"
       },
       {
-        "lineNumber": 677,
+        "lineNumber": 728,
         "line": "     * Gets the ID of the storey that contains the given 3D World-space position."
       },
       {
-        "lineNumber": 678,
+        "lineNumber": 729,
         "line": "     *."
       },
       {
-        "lineNumber": 679,
+        "lineNumber": 730,
         "line": "     * @param {Number[]} worldPos 3D World-space position."
       },
       {
-        "lineNumber": 680,
+        "lineNumber": 731,
         "line": "     * @returns {String} ID of the storey containing the position, or null if the position falls outside all the storeys."
       },
       {
-        "lineNumber": 681,
+        "lineNumber": 732,
         "line": "     */"
       },
       {
-        "lineNumber": 682,
+        "lineNumber": 733,
         "line": "    getStoreyContainingWorldPos(worldPos, modelId = null) {"
       }
     ],
@@ -81,31 +81,31 @@
     "filePath": "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js",
     "lines": [
       {
-        "lineNumber": 693,
+        "lineNumber": 744,
         "line": "    /**"
       },
       {
-        "lineNumber": 694,
+        "lineNumber": 745,
         "line": "     * Gets the ID of the storey which's bounding box contains the y point of the world position"
       },
       {
-        "lineNumber": 695,
+        "lineNumber": 746,
         "line": "     *"
       },
       {
-        "lineNumber": 696,
+        "lineNumber": 747,
         "line": "     * @param {Number[]} worldPos 3D World-space position."
       },
       {
-        "lineNumber": 697,
+        "lineNumber": 748,
         "line": "     * @returns {String} ID of the storey containing the position, or null if the position falls outside all the storeys."
       },
       {
-        "lineNumber": 698,
+        "lineNumber": 749,
         "line": "     */"
       },
       {
-        "lineNumber": 699,
+        "lineNumber": 750,
         "line": "    getStoreyInVerticalRange(worldPos, modelId = null) {"
       }
     ],
@@ -122,31 +122,31 @@
     "filePath": "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js",
     "lines": [
       {
-        "lineNumber": 714,
+        "lineNumber": 765,
         "line": "    /**"
       },
       {
-        "lineNumber": 715,
+        "lineNumber": 766,
         "line": "     * Returns whether a position is above or below a building"
       },
       {
-        "lineNumber": 716,
+        "lineNumber": 767,
         "line": "     *"
       },
       {
-        "lineNumber": 717,
+        "lineNumber": 768,
         "line": "     * @param {Number[]} worldPos 3D World-space position."
       },
       {
-        "lineNumber": 718,
+        "lineNumber": 769,
         "line": "     * @returns {String} ID of the lowest/highest story or null."
       },
       {
-        "lineNumber": 719,
+        "lineNumber": 770,
         "line": "     */"
       },
       {
-        "lineNumber": 720,
+        "lineNumber": 771,
         "line": "    isPositionAboveOrBelowBuilding(worldPos, modelId = null) {"
       }
     ],

@@ -464,7 +464,8 @@ export class TreeViewPlugin extends Plugin {
                 const indeterminate = this._showIndeterminate 
                   && parent.numVisibleEntities > 0 
                   && parent.numVisibleEntities < parent.numEntities;
-                this._renderService.setCheckbox(parent.nodeId, (parent.numVisibleEntities > 0), indeterminate);
+                parent.checked = parent.numVisibleEntities > 0;
+                this._renderService.setCheckbox(parent.nodeId, parent.checked, indeterminate);
 
                 parent = parent.parent;
             }
@@ -539,7 +540,6 @@ export class TreeViewPlugin extends Plugin {
 
             let parent = checkedNode.parent;
             while (parent) {
-                parent.checked = visible;
                 
                 if (visible) {
                     parent.numVisibleEntities += numUpdated;
@@ -549,7 +549,8 @@ export class TreeViewPlugin extends Plugin {
                 const indeterminate = this._showIndeterminate 
                   && parent.numVisibleEntities > 0 
                   && parent.numVisibleEntities < parent.numEntities;
-                this._renderService.setCheckbox(parent.nodeId, (parent.numVisibleEntities > 0), indeterminate);
+                parent.checked = parent.numVisibleEntities > 0;
+                this._renderService.setCheckbox(parent.nodeId, parent.checked, indeterminate);
                 
                 parent = parent.parent;
             }
