@@ -15,8 +15,27 @@ const tmpVec4b = math.vec4();
 const tmpVec4c = math.vec4();
 const tmpVec4d = math.vec4();
 const tmpMat4  = math.mat4();
+const tmpRay = {
+    origin:    math.vec3(),
+    direction: math.vec3()
+};
 
 const nop = () => { };
+
+const planeIntersect = function(p0, n, origin, direction) {
+    const t = (p0 - math.dotVec3(origin, n)) / math.dotVec3(direction, n);
+    if (t < 0)
+    {
+        return null;
+    }
+    else
+    {
+        const worldPos = math.vec3();
+        math.mulVec3Scalar(direction, t, worldPos);
+        math.addVec3(origin, worldPos, worldPos);
+        return worldPos;
+    }
+};
 
 export function transformToNode(from, to, vec) {
     const fromRec = from.getBoundingClientRect();
@@ -931,4 +950,326 @@ export const triangulateEarClipping = function(planeCoords) {
     }
 
     return [ planeCoords, baseTriangles, isCCW ];
+};
+
+export const addMousePressListener = function(element, onChange) {
+    const moveTolerance = 4;
+
+    const copyElementPos = (event, out) => {
+        out[0] = event.clientX;
+        out[1] = event.clientY;
+        transformToNode(element.ownerDocument.documentElement, element, out);
+        return out;
+    };
+
+    let buttonDown = false;
+
+    const cleanups = [ ];
+    const cleanup = () => cleanups.forEach(c => c());
+
+    const addElementEventListener = (type, listener) => {
+        element.addEventListener(type, listener);
+        cleanups.push(() => element.removeEventListener(type, listener));
+    };
+
+    const downPos = math.vec2();
+    addElementEventListener("mousedown", function(event) {
+        if (event.which === 1) {
+            buttonDown = true;
+            onChange(copyElementPos(event, downPos));
+        }
+    });
+
+    addElementEventListener("mousemove", function(event) {
+        copyElementPos(event, tmpVec2a);
+        if (buttonDown && (math.distVec2(downPos, tmpVec2a) > moveTolerance)) {
+            buttonDown = false;
+        }
+        if (buttonDown || (! event.buttons & 1)) {
+            onChange(tmpVec2a);
+        }
+    });
+
+    addElementEventListener("mouseup", function(event) {
+        if ((event.which === 1) && buttonDown) {
+            const commit = onChange(copyElementPos(event, tmpVec2a));
+            if (commit) {
+                cleanup();
+                commit();
+            }
+        }
+    });
+
+    return cleanup;
+};
+
+export const addTouchPressListener = function(element, cameraControl, pointerCircle, onChange) {
+    const longTouchTimeoutMs = 300;
+    const moveTolerance = 20;
+    const startPos = math.vec2();
+
+    const copyElementPos = (event, out) => {
+        out[0] = event.clientX;
+        out[1] = event.clientY;
+        transformToNode(element.ownerDocument.documentElement, element, out);
+        return out;
+    };
+
+    let longTouchTimeout = null;
+    let onSingleTouchMove = nop;
+    let startTouchIdentifier;
+
+    const resetAction = function() {
+        clearTimeout(longTouchTimeout);
+        pointerCircle.stop();
+        cameraControl.active = true;
+        onSingleTouchMove = nop;
+        startTouchIdentifier = null;
+    };
+
+    const cleanups = [ ];
+    const cleanup = () => cleanups.forEach(c => c());
+
+    const addElementEventListener = (type, listener) => {
+        element.addEventListener(type, listener, {passive: true});
+        cleanups.push(() => element.removeEventListener(type, listener));
+    };
+
+    addElementEventListener("touchstart", function(event) {
+        const touches = event.touches;
+
+        if (touches.length !== 1)
+        {
+            resetAction();
+            onChange(null);
+        }
+        else
+        {
+            const touch = touches[0];
+            copyElementPos(touch, startPos);
+
+            startTouchIdentifier = touch.identifier;
+
+            onSingleTouchMove = elementPos => {
+                if (math.distVec2(startPos, elementPos) > moveTolerance)
+                {
+                    resetAction();
+                }
+            };
+
+            longTouchTimeout = setTimeout(
+                function() {
+                    pointerCircle.start(startPos);
+
+                    longTouchTimeout = setTimeout(
+                        function() {
+                            pointerCircle.stop();
+                            cameraControl.active = false;
+                            onSingleTouchMove = onChange;
+                            onSingleTouchMove(startPos);
+                        },
+                        longTouchTimeoutMs);
+                },
+                250);
+        }
+    });
+
+    // element.addEventListener("touchcancel", e => console.log("touchcancel", e), {passive: true});
+
+    addElementEventListener("touchmove", function(event) {
+        const touch = [...event.changedTouches].find(e => e.identifier === startTouchIdentifier);
+        if (touch)
+        {
+            onSingleTouchMove(copyElementPos(touch, tmpVec2a));
+        }
+    });
+
+    addElementEventListener("touchend", function(event) {
+        const touch = [...event.changedTouches].find(e => e.identifier === startTouchIdentifier);
+        if (touch)
+        {
+            const commit = onChange(copyElementPos(touch, tmpVec2a));
+            resetAction();
+	    if (commit) {
+	        cleanup();
+		commit();
+	    } else {
+                onChange(null);
+            }
+        }
+    });
+
+    return cleanup;
+};
+
+export const startPolygonCreate = function(scene, pointerLens, addPressListener, pickRayResult, onChange, onConclude) {
+    const canvas = scene.canvas.canvas;
+
+    const updatePointerLens = (pointerLens
+                               ? function(canvasPos, isSnapped) {
+                                   pointerLens.visible = !! canvasPos;
+                                   if (canvasPos)
+                                   {
+                                       pointerLens.canvasPos = canvasPos;
+                                       pointerLens.snapped = !! isSnapped;
+                                   }
+                               }
+                               : () => { });
+
+    const testLastSegmentIntersects = (function() {
+        const onSegment = (p, q, r) => ((q[0] <= Math.max(p[0], r[0])) &&
+                                        (q[0] >= Math.min(p[0], r[0])) &&
+                                        (q[1] <= Math.max(p[1], r[1])) &&
+                                        (q[1] >= Math.min(p[1], r[1])));
+
+        const orient = (p, q, r) => {
+            const val = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);
+            // collinear
+            // clockwise
+            // counterclockwise
+            return ((val === 0) ? 0 : ((val > 0) ? 1 : 2));
+        };
+
+        return function(pos2D, lastSegmentClosesLoop) {
+            const s = lastSegmentClosesLoop ? 1 : 0;
+            const a = pos2D[(pos2D.length - 2 + s) % pos2D.length];
+            const b = pos2D[(pos2D.length - 1 + s) % pos2D.length];
+
+            for (let i = s; i < pos2D.length - 2 - 1 + s; ++i) {
+                const c = pos2D[i];
+                const d = pos2D[i + 1];
+
+                const o1 = orient(a, b, c);
+                const o2 = orient(a, b, d);
+                const o3 = orient(c, d, a);
+                const o4 = orient(c, d, b);
+
+                if (((o1 !== o2) && (o3 !== o4))       || // General case
+                    ((o1 === 0) && onSegment(a, c, b)) || // a, b and c are collinear and c lies on segment ab
+                    ((o2 === 0) && onSegment(a, d, b)) || // a, b and d are collinear and d lies on segment ab
+                    ((o3 === 0) && onSegment(c, a, d)) || // c, d and a are collinear and a lies on segment cd
+                    ((o4 === 0) && onSegment(c, b, d)))   // c, d and b are collinear and b lies on segment cd
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+    })();
+
+    const vertices = [ ];
+
+    (function selectNextPoint(plane) {
+        const canvasPos2Ray = (canvasPos, dst) => (math.canvasPosToWorldRay(canvas, scene.camera.viewMatrix, scene.camera.projMatrix, scene.camera.projection, canvasPos, dst.origin, dst.direction), dst);
+
+        const pickRay = (ray) => {
+            const pickResult = pickRayResult(ray);
+            const snapWorldPos = pickResult && pickResult.entity && ((! plane) || pickResult.snapped) && pickResult.worldPos;
+            if (plane) {
+                const originDistance = math.dotVec3(plane.normal, plane.origin);
+                const snapPlaneDist = (snapWorldPos
+                                       ? ((originDistance - math.dotVec3(snapWorldPos, plane.normal)))
+                                       : window.Infinity);
+                if (Math.abs(snapPlaneDist) < 0.0001) {
+                    const ret = math.vec3();
+                    return {
+                        worldPos: math.addVec3(snapWorldPos, math.mulVec3Scalar(plane.normal, snapPlaneDist, ret), ret),
+                        snapped:  true
+                    };
+                } else {
+                    return {
+                        worldPos: planeIntersect(originDistance, plane.normal, ray.origin, ray.direction),
+                        snapped:  false
+                    };
+                }
+            } else {
+                return {
+                    worldPos: snapWorldPos,
+                    snapped:  pickResult && pickResult.snapped
+                };
+            }
+        };
+
+        addPressListener(
+            (inputCanvasPos) => {
+                const rayPick = inputCanvasPos && pickRay(canvasPos2Ray(inputCanvasPos, tmpRay));
+                const worldPos = rayPick && rayPick.worldPos;
+                const canvasPos = worldPos ? scene.camera.projectWorldPos(worldPos) : inputCanvasPos;
+
+                const firstMarker = (vertices.length > 0) && (function() {
+                    const v = vertices[0];
+                    return {
+                        canvasPos: scene.camera.projectWorldPos(v),
+                        worldPos: v
+                    };
+                })();
+                const snapToFirst = (vertices.length >= 3) && ((canvasPos && (math.distVec2(canvasPos, firstMarker.canvasPos) < 10))
+                                                               ||
+                                                               (worldPos && math.compareVec3(worldPos, firstMarker.worldPos)));
+
+                updatePointerLens(snapToFirst ? firstMarker.canvasPos : canvasPos, snapToFirst || (rayPick && rayPick.snapped));
+
+                const lastPointOverlaps = (inputCanvasPos
+                                           &&
+                                           ((! worldPos)
+                                            ||
+                                            ((vertices.length < 3)
+                                             ? vertices.some(v => math.compareVec3(v, worldPos))
+                                             : math.compareVec3(vertices[vertices.length - 1], worldPos))));
+
+                const points = vertices.concat(((! snapToFirst) && worldPos && (! lastPointOverlaps)) ? [worldPos] : []);
+
+                const curPlane = (! lastPointOverlaps) && (plane || ((points.length >= 3) && (function() {
+                    const u      = math.normalizeVec3(math.subVec3(points[1], points[0], math.vec3()));
+                    const v20    = math.normalizeVec3(math.subVec3(points[2], points[0], tmpVec3a));
+                    const normal = math.normalizeVec3(math.cross3Vec3(u, v20, math.vec3()));
+                    const v      = math.normalizeVec3(math.cross3Vec3(normal, u, math.vec3()));
+                    return {
+                        normal: normal,
+                        origin: math.vec3(points[0]),
+                        u:      u,
+                        v:      v
+                    };
+                })()));
+
+                const uvs = curPlane && points.map(p => {
+                    math.subVec3(p, curPlane.origin, tmpVec3a);
+                    return math.vec2([ math.dotVec3(tmpVec3a, curPlane.u), math.dotVec3(tmpVec3a, curPlane.v) ]);
+                });
+
+                const isValid = (! lastPointOverlaps) && (! (uvs && testLastSegmentIntersects(uvs, snapToFirst)));
+                const geometry = isValid && uvs && (snapToFirst || (! testLastSegmentIntersects(uvs, true))) && (function() {
+                    try {
+                        const [ baseVertices, baseTriangles, isCCW ] = triangulateEarClipping(uvs);
+                        return {
+                            faces: baseTriangles,
+                            vertices: baseVertices.map(uv => math.addVec3(
+                                curPlane.origin,
+                                math.addVec3(
+                                    math.mulVec3Scalar(curPlane.u, uv[0], tmpVec3a),
+                                    math.mulVec3Scalar(curPlane.v, uv[1], tmpVec3b),
+                                    tmpVec3a),
+                                math.vec3()))
+                        };
+                    } catch (e) {
+                        console.warn("e", e);
+                        return false;
+                    }
+                })();
+
+                onChange(points, snapToFirst, isValid, geometry);
+
+                return isValid && (snapToFirst
+                                   ? () => {
+                                       updatePointerLens(null);
+                                       onConclude();
+                                   }
+                                   : () => {
+                                       vertices.push(math.vec3(worldPos));
+                                       updatePointerLens(null);
+                                       selectNextPoint(curPlane);
+                                   });
+            });
+    })();
 };
