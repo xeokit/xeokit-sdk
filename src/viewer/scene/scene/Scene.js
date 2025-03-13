@@ -359,9 +359,6 @@ class Scene extends Component {
             throw "Mandatory config expected: valid canvasId or canvasElement";
         }
 
-        //set the viewer version on canvas data
-        canvas.dataset.viewerVersion = viewer.version;
-
         /**
          * @type {{[key: string]: {wrapperFunc: Function, tickSubId: string}}}
          */
