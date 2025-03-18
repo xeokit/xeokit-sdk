@@ -57,6 +57,7 @@ sceneModel.on("loaded", () => {
                          ? function() {
                              let label = null;
                              return {
+                                 destroy: () => label && label.destroy(),
                                  setVisible: s => label && label.setVisible(s),
                                  setPosText: (pos, txt) => {
                                      if (! label) {
@@ -76,6 +77,7 @@ sceneModel.on("loaded", () => {
                              return function() {
                                  let annotation = null;
                                  return {
+                                     destroy: () => annotation && annotation.destroy(),
                                      setVisible: s => annotation && annotation.setMarkerShown(s),
                                      setPosText: (pos, txt) => {
                                          if (! annotation) {
@@ -173,10 +175,45 @@ sceneModel.on("loaded", () => {
                 wires.forEach(w => w.destroy());
             }
             mesh.edges = useEdges;
+            window.document.removeEventListener("keydown", keydownListener);
             onCreate();
         };
 
-        startPolygonCreate(scene, pointerLens, setupPick, pickRayResult, onChange, onConclude);
+        const interaction = startPolygonCreate(scene, pointerLens, setupPick, pickRayResult, onChange, onConclude);
+
+        const keydownListener = event => {
+            switch (event.key) {
+            case "Backspace":
+                // Remove latest vertex, and update polygon's visuals to the previous state
+                if (interaction.popVertex()) {
+                    interaction.updateOnChange();
+                }
+                break;
+            case " ":
+                // Place a vertex using current pointer's position
+                interaction.placeVertex();
+                break;
+            case "Tab":
+                // Close the polygon from the latest placed vertex
+                interaction.closePolygon();
+            case "Enter":
+                // Place a new vertex and close the polygon from there if possible
+                if (interaction.placeVertex() && (! interaction.closePolygon())) {
+                    interaction.popVertex();
+                }
+                break;
+            case "Escape":
+                interaction.cancel();
+
+                label.destroy();
+                markers.forEach(m => m.destroy());
+                wires.forEach(w => w.destroy());
+                mesh && mesh.destroy();
+                window.document.removeEventListener("keydown", keydownListener);
+                break;
+            }
+        };
+        window.document.addEventListener("keydown", keydownListener);
     };
 
     createPolygon(() => console.log("Polygon created"));

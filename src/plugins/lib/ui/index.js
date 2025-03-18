@@ -1099,7 +1099,10 @@ export const addTouchPressListener = function(element, cameraControl, pointerCir
         }
     });
 
-    return cleanup;
+    return () => {
+        resetAction();
+        cleanup();
+    };
 };
 
 export const startPolygonCreate = function(scene, pointerLens, addPressListener, pickRayResult, onChange, onConclude) {
@@ -1158,9 +1161,25 @@ export const startPolygonCreate = function(scene, pointerLens, addPressListener,
         };
     })();
 
-    const vertices = [ ];
+    const getPlane = (points) => (points.length >= 3) && (function() {
+        const u      = math.normalizeVec3(math.subVec3(points[1], points[0], math.vec3()));
+        const v20    = math.normalizeVec3(math.subVec3(points[2], points[0], tmpVec3a));
+        const normal = math.normalizeVec3(math.cross3Vec3(u, v20, math.vec3()));
+        const v      = math.normalizeVec3(math.cross3Vec3(normal, u, math.vec3()));
+        return {
+            normal: normal,
+            origin: math.vec3(points[0]),
+            u:      u,
+            v:      v
+        };
+    })();
 
-    (function selectNextPoint(plane) {
+    const vertices = [ ];
+    let currentInteraction;
+
+    (function selectNextPoint() {
+        const plane = getPlane(vertices);
+
         const canvasPos2Ray = (canvasPos, dst) => (math.canvasPosToWorldRay(canvas, scene.camera.viewMatrix, scene.camera.projMatrix, scene.camera.projection, canvasPos, dst.origin, dst.direction), dst);
 
         const pickRay = (ray) => {
@@ -1191,12 +1210,16 @@ export const startPolygonCreate = function(scene, pointerLens, addPressListener,
             }
         };
 
-        addPressListener(
+        let placeVertex = false;
+        const removePressListener = addPressListener(
             (inputCanvasPos) => {
                 const rayPick = inputCanvasPos && pickRay(canvasPos2Ray(inputCanvasPos, tmpRay));
                 const worldPos = rayPick && rayPick.worldPos;
-                const canvasPos = worldPos ? scene.camera.projectWorldPos(worldPos) : inputCanvasPos;
+                return onWorldPos(worldPos, inputCanvasPos, rayPick && rayPick.snapped);
+            });
 
+        const onWorldPos = (worldPos, inputCanvasPos, rayPickSnapped) => {
+                const canvasPos = worldPos ? scene.camera.projectWorldPos(worldPos) : inputCanvasPos;
                 const firstMarker = (vertices.length > 0) && (function() {
                     const v = vertices[0];
                     return {
@@ -1208,7 +1231,7 @@ export const startPolygonCreate = function(scene, pointerLens, addPressListener,
                                                                ||
                                                                (worldPos && math.compareVec3(worldPos, firstMarker.worldPos)));
 
-                updatePointerLens(snapToFirst ? firstMarker.canvasPos : canvasPos, snapToFirst || (rayPick && rayPick.snapped));
+                updatePointerLens(snapToFirst ? firstMarker.canvasPos : canvasPos, snapToFirst || rayPickSnapped);
 
                 const lastPointOverlaps = (inputCanvasPos
                                            &&
@@ -1220,18 +1243,7 @@ export const startPolygonCreate = function(scene, pointerLens, addPressListener,
 
                 const points = vertices.concat(((! snapToFirst) && worldPos && (! lastPointOverlaps)) ? [worldPos] : []);
 
-                const curPlane = (! lastPointOverlaps) && (plane || ((points.length >= 3) && (function() {
-                    const u      = math.normalizeVec3(math.subVec3(points[1], points[0], math.vec3()));
-                    const v20    = math.normalizeVec3(math.subVec3(points[2], points[0], tmpVec3a));
-                    const normal = math.normalizeVec3(math.cross3Vec3(u, v20, math.vec3()));
-                    const v      = math.normalizeVec3(math.cross3Vec3(normal, u, math.vec3()));
-                    return {
-                        normal: normal,
-                        origin: math.vec3(points[0]),
-                        u:      u,
-                        v:      v
-                    };
-                })()));
+                const curPlane = (! lastPointOverlaps) && (plane || getPlane(points));
 
                 const uvs = curPlane && points.map(p => {
                     math.subVec3(p, curPlane.origin, tmpVec3a);
@@ -1260,16 +1272,57 @@ export const startPolygonCreate = function(scene, pointerLens, addPressListener,
 
                 onChange(points, snapToFirst, isValid, geometry);
 
-                return isValid && (snapToFirst
-                                   ? () => {
-                                       updatePointerLens(null);
-                                       onConclude();
-                                   }
-                                   : () => {
-                                       vertices.push(math.vec3(worldPos));
-                                       updatePointerLens(null);
-                                       selectNextPoint(curPlane);
-                                   });
-            });
+                return placeVertex = (isValid && (snapToFirst
+                                                  ? () => {
+                                                      updatePointerLens(null);
+                                                      onConclude();
+                                                  }
+                                                  : () => {
+                                                      vertices.push(math.vec3(worldPos));
+                                                      updatePointerLens(null);
+                                                      selectNextPoint();
+                                                  }));
+            };
+
+        currentInteraction = {
+            closePolygon: (() => {
+                const commit = (vertices.length >= 3) && onWorldPos(vertices[0]);
+                if (commit) {
+                    removePressListener();
+                    commit();
+                }
+                return !! commit;
+            }),
+            placeVertex: () => {
+                if (placeVertex) {
+                    removePressListener();
+                    placeVertex();
+                }
+                return !!placeVertex;
+            },
+            popVertex: () => {
+                if (vertices.length > 0) {
+                    removePressListener();
+                    vertices.pop();
+                    selectNextPoint();
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            removePressListener: removePressListener,
+            updateOnChange: () => onWorldPos()
+        };
     })();
+
+    return {
+        cancel: () => {
+            currentInteraction.removePressListener();
+            updatePointerLens(null);
+        },
+        closePolygon:   () => currentInteraction.closePolygon(),
+        placeVertex:    () => currentInteraction.placeVertex(),
+        popVertex:      () => currentInteraction.popVertex(),
+        updateOnChange: () => currentInteraction.updateOnChange()
+    };
 };
