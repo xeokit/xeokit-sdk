@@ -1,3 +1,5 @@
+import {utils} from "../../viewer/scene/utils.js";
+
 /**
  * Default data access strategy for {@link LASLoaderPlugin}.
  */
@@ -60,12 +62,22 @@ class LASDefaultDataSource {
                     if (request.status === 200) {
                         ok(request.response);
                     } else {
-                        error('getXKT error : ' + request.response);
+                        error('getLAS error : ' + request.response);
                     }
                 }
             };
             request.send(null);
         }
+    }
+
+    getManifest(manifestSrc, ok, error) {
+        utils.loadJSON(this._cacheBusterURL(manifestSrc),
+            (json) => {
+                ok(json);
+            },
+            function (errMsg) {
+                error(errMsg);
+            });
     }
 }
 
