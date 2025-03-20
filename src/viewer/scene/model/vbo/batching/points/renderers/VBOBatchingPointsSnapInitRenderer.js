@@ -125,6 +125,8 @@ export class VBOBatchingPointsSnapInitRenderer extends VBORenderer {
         //=============================================================
 
         gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
+
+        gl.bindVertexArray(null);
     }
 
     _allocate() {

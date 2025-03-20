@@ -151,6 +151,8 @@ export class TrianglesSnapRenderer extends VBORenderer {
         if (this._aOffset) {
             gl.vertexAttribDivisor(this._aOffset.location, 0);
         }
+
+        gl.bindVertexArray(null);
     }
 
     _allocate() {
