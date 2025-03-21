@@ -135,6 +135,8 @@ export class VBOBatchingLinesSnapRenderer extends VBORenderer{
         } else {
             gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
         }
+
+        gl.bindVertexArray(null);
     }
 
     _allocate() {

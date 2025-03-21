@@ -126,6 +126,8 @@ export class VBOBatchingLinesSnapInitRenderer extends VBORenderer {
         state.indicesBuf.bind();
         gl.drawElements(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
         state.indicesBuf.unbind();
+
+        gl.bindVertexArray(null);
     }
 
     _allocate() {
