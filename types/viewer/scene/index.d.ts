@@ -18,3 +18,4 @@ export * from "./sectionPlane";
 export * from "./stats";
 export * from "./viewport";
 export * from "./webgl";
+export * from "./ImagePlane";
