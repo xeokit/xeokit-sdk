@@ -5,157 +5,11 @@ import {ReadableGeometry} from "../../viewer/scene/geometry/ReadableGeometry.js"
 import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
-import {activateDraggableDots, Dot3D, Wire3D, touchPointSelector, transformToNode} from "../../../src/plugins/lib/ui/index.js";
+import {activateDraggableDots, Dot3D, marker3D, wire3D, touchPointSelector, transformToNode, triangulateEarClipping} from "../../../src/plugins/lib/ui/index.js";
 
 const hex2rgb = function(color) {
     const rgb = idx => parseInt(color.substr(idx + 1, 2), 16) / 255;
     return [ rgb(0), rgb(2), rgb(4) ];
-};
-
-const triangulateEarClipping = function(planeCoords) {
-
-    const polygonVertices = [ ];
-    for (let i = 0; i < planeCoords.length; ++i)
-        polygonVertices.push(i);
-
-    const isCCW = (function() {
-        const ba = math.vec2();
-        const bc = math.vec2();
-
-        let anglesSum = 0;
-        const angles = [ ];
-
-        for (let i = 0; i < polygonVertices.length; ++i)
-        {
-            const a = planeCoords[polygonVertices[i]];
-            const b = planeCoords[polygonVertices[(i + 1) % polygonVertices.length]];
-            const c = planeCoords[polygonVertices[(i + 2) % polygonVertices.length]];
-
-            math.subVec2(a, b, ba);
-            math.subVec2(c, b, bc);
-
-            const theta = math.dotVec2(ba, bc) / Math.sqrt(math.sqLenVec2(ba) * math.sqLenVec2(bc));
-            const angle = Math.acos(Math.max(-1, Math.min(theta, 1)));
-            const convex = (ba[0] * bc[1] - ba[1] * bc[0]) >= 0;
-            anglesSum += convex ? angle : (2 * Math.PI - angle);
-        }
-
-        return anglesSum < (polygonVertices.length * Math.PI);
-    })();
-
-    const pointInTriangle = (function() {
-        const sign = (p1, p2, p3) => {
-            return (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p3[1]);
-        };
-
-        return (pt, v1, v2, v3) => {
-            const d1 = sign(pt, v1, v2);
-            const d2 = sign(pt, v2, v3);
-            const d3 = sign(pt, v3, v1);
-
-            const has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
-            const has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
-
-            return !(has_neg && has_pos);
-        };
-    })();
-
-    const baseTriangles = [ ];
-
-    const vertices = (isCCW ? polygonVertices : polygonVertices.slice(0).reverse()).map(i => ({ idx: i }));
-    vertices.forEach((v, i) => {
-        v.prev = vertices[(i - 1 + vertices.length) % vertices.length];
-        v.next = vertices[(i + 1)                   % vertices.length];
-    });
-
-    const ba = math.vec2();
-    const bc = math.vec2();
-
-    while (vertices.length > 2) {
-        let earIdx = 0;
-        while (true) {
-            if (earIdx >= vertices.length)
-            {
-                throw `isCCW = ${isCCW}; earIdx = ${earIdx}; len = ${vertices.length}`;
-            }
-            const v = vertices[earIdx];
-
-            const a = planeCoords[v.prev.idx];
-            const b = planeCoords[v.idx];
-            const c = planeCoords[v.next.idx];
-
-            math.subVec2(a, b, ba);
-            math.subVec2(c, b, bc);
-
-            if (((ba[0] * bc[1] - ba[1] * bc[0]) >= 0) // a convex vertex
-                &&
-                vertices.every( // no other vertices inside
-                    vv => ((vv === v)
-                           ||
-                           (vv === v.prev)
-                           ||
-                           (vv === v.next)
-                           ||
-                           !pointInTriangle(planeCoords[vv.idx], a, b, c))))
-                break;
-            ++earIdx;
-        }
-
-        const ear = vertices[earIdx];
-        vertices.splice(earIdx, 1);
-
-        baseTriangles.push([ ear.idx, ear.next.idx, ear.prev.idx ]);
-
-        const prev = ear.prev;
-        prev.next = ear.next;
-        const next = ear.next;
-        next.prev = ear.prev;
-    }
-
-    return [ planeCoords, baseTriangles, isCCW ];
-};
-
-const marker3D = function(scene, color) {
-    const marker = new Dot3D(scene, {}, scene.canvas.canvas.parentNode, {
-        borderColor: "white",
-        fillColor: color,
-        zIndex: 100
-    });
-
-    return {
-        update: function(worldPos) {
-            if (worldPos)
-            {
-                marker.worldPos = worldPos;
-            }
-            marker.setVisible(!!worldPos);
-        },
-
-        setHighlighted: h => marker.setHighlighted(h),
-        getCanvasPos:  () => marker.canvasPos,
-        getWorldPos:   () => marker.worldPos,
-        destroy:       () => marker.destroy()
-    };
-};
-
-const wire3D = function(scene, color, startWorldPos) {
-    const wire = new Wire3D(scene, scene.canvas.canvas.ownerDocument.body, {
-        color: color,
-        thickness: 1,
-        thicknessClickable: 6
-    });
-    wire.setVisible(false);
-    return {
-        update: endWorldPos => {
-            if (endWorldPos)
-            {
-                wire.setEnds(startWorldPos, endWorldPos);
-            }
-            wire.setVisible(!!endWorldPos);
-        },
-
-        destroy: () => wire.destroy()
-    };
 };
 
 const basePolygon3D = function(scene, color, alpha) {
@@ -1160,7 +1014,8 @@ const startPolysurfaceZoneCreateUI = function(scene, zoneAltitude, zoneHeight, z
 
     (function selectNextPoint(markers) {
         const marker = marker3D(scene, zoneColor);
-        const wire = (markers.length > 0) && wire3D(scene, zoneColor, markers[markers.length - 1].getWorldPos());
+        const wire = (markers.length > 0) && wire3D(scene, zoneColor);
+        const wireStart = wire && markers[markers.length - 1].getWorldPos();
 
         cleanups.push(() => {
             marker.destroy();
@@ -1220,7 +1075,7 @@ const startPolysurfaceZoneCreateUI = function(scene, zoneAltitude, zoneHeight, z
             () => {
                 updatePointerLens(null);
                 marker.update(null);
-                wire && wire.update(null);
+                wire && wire.update(wireStart, null);
                 basePolygon.updateBase((markers.length > 2) ? markers.map(m => m.getWorldPos()) : null);
             },
             (canvasPos, worldPos) => {
@@ -1228,7 +1083,7 @@ const startPolysurfaceZoneCreateUI = function(scene, zoneAltitude, zoneHeight, z
                 firstMarker && firstMarker.setHighlighted(!! snappedFirst);
                 updatePointerLens(snappedFirst ? snappedFirst.canvasPos : canvasPos);
                 marker.update((! snappedFirst) && worldPos);
-                wire && wire.update(snappedFirst ? snappedFirst.worldPos : worldPos);
+                wire && wire.update(wireStart, snappedFirst ? snappedFirst.worldPos : worldPos);
                 if ((markers.length >= 2))
                 {
                     const pos = markers.map(m => m.getWorldPos()).concat(snappedFirst ? [] : [worldPos]);
@@ -1272,7 +1127,7 @@ const startPolysurfaceZoneCreateUI = function(scene, zoneAltitude, zoneHeight, z
                 else
                 {
                     marker.update(worldPos);
-                    wire && wire.update(worldPos);
+                    wire && wire.update(wireStart, worldPos);
                     selectNextPoint(markers.concat(marker));
                 }
             });
