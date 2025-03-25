@@ -7,6 +7,8 @@ const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
 const tempVec3c = math.vec3();
 
+const px = x => x + "px";
+
 /**
  * A {@link Marker} with an HTML label attached to it, managed by an {@link AnnotationsPlugin}.
  *
@@ -213,22 +215,29 @@ class Annotation extends Marker {
      * @private
      */
     _updateWithCurWidths() {
-        const px = x => x + "px";
         const boundary = this.scene.canvas.boundary;
         const left = boundary[0] + this.canvasPos[0];
         const top  = boundary[1] + this.canvasPos[1];
-        const markerWidth = this._curMarkerWidth;
-        const markerDir = (this._markerAlign === "right") ? -1 : ((this._markerAlign === "center") ? 0 : 1);
-        const markerCenter = left + markerDir * (markerWidth / 2 - 12);
-        this._marker.style.left = px(markerCenter - markerWidth / 2);
-        this._marker.style.top  = px(top - 12);
-        this._marker.style["z-index"] = 90005 + Math.floor(this._viewPos[2]) + 1;
-
-        const labelWidth = this._curLabelWidth;
-        const labelDir = Math.sign(this._labelPosition);
-        this._label.style.left = px(markerCenter + labelDir * (markerWidth / 2 + Math.abs(this._labelPosition) + labelWidth / 2) - labelWidth / 2);
+        this._marker.style.top = px(top - 12);
         this._label.style.top  = px(top - 17);
-        this._label.style["z-index"] = 90005 + Math.floor(this._viewPos[2]) + 1;
+
+        if (this._markerAlign === "legacy") {
+            this._marker.style.left = px(left - 12);
+            this._label.style.left  = px(left + 40);
+        } else {
+            const markerWidth = this._curMarkerWidth;
+            const markerDir = (this._markerAlign === "right") ? -1 : ((this._markerAlign === "center") ? 0 : 1);
+            const markerCenter = left + markerDir * (markerWidth / 2 - 12);
+            this._marker.style.left = px(markerCenter - markerWidth / 2);
+
+            const labelWidth = this._curLabelWidth;
+            const labelDir = Math.sign(this._labelPosition);
+            this._label.style.left = px(markerCenter + labelDir * (markerWidth / 2 + Math.abs(this._labelPosition) + labelWidth / 2) - labelWidth / 2);
+        }
+
+        const zIndex = 90005 + Math.floor(this._viewPos[2]) + 1;
+        this._marker.style["z-index"] = zIndex;
+        this._label.style["z-index"]  = zIndex;
     }
 
     /**
@@ -259,7 +268,8 @@ class Annotation extends Marker {
      * @private
      */
     _updatePosition() {
-        if (this._curMarkerWidth === undefined) {
+        const isLegacy = this._markerAlign === "legacy";
+        if ((! isLegacy) && (this._curMarkerWidth === undefined)) {
             this._updateIfWidthsChanged();
         } else {
             // Update position with cached width values
@@ -267,7 +277,9 @@ class Annotation extends Marker {
             // so they don't interfere with e.g. interactive scene manipulation
             this._updateWithCurWidths();
             window.clearTimeout(this._widthTimeout);
-            this._widthTimeout = window.setTimeout(() => this._updateIfWidthsChanged(), 500);
+            if (! isLegacy) {
+                this._widthTimeout = window.setTimeout(() => this._updateIfWidthsChanged(), 500);
+            }
         }
     }
 
@@ -305,10 +317,10 @@ class Annotation extends Marker {
     /**
      * Sets the horizontal alignment of the Annotation's marker HTML.
      *
-     * @param {String} align Either "left", "center", "right" (default "left")
+     * @param {String} align Either "left", "center", "right", "legacy" (default "left")
      */
     setMarkerAlign(align) {
-        const valid = [ "left", "center", "right" ];
+        const valid = [ "left", "center", "right", "legacy" ];
         if (! valid.includes(align)) {
             this.error("Param 'align' should be one of: " + JSON.stringify(valid));
         } else {
