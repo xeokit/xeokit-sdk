@@ -160,11 +160,14 @@ class SectionCaps {
 
             this._onTick = this.scene.on("tick", () => {
                 //on ticks we only check if there is a model that we have saved vertices for,
-                //but it's no more available on the scene
+                //but it's no more available on the scene, or if its visibility changed
                 let dirty = false;
                 for(const sceneModelId in this._sceneModelsData) {
                     if(!this.scene.models[sceneModelId]){
                         delete this._sceneModelsData[sceneModelId];
+                        dirty = true;
+                    } else if (this._sceneModelsData[sceneModelId].visible !== (!!this.scene.models[sceneModelId].visible)) {
+                        this._sceneModelsData[sceneModelId].visible = !!this.scene.models[sceneModelId].visible;
                         dirty = true;
                     }
                 }
@@ -186,7 +189,7 @@ class SectionCaps {
         this._deletePreviousModels();
         this._updateTimeout = setTimeout(() => {
             clearTimeout(this._updateTimeout);
-            const sceneModels = Object.keys(this.scene.models).map((key) => this.scene.models[key]);
+            const sceneModels = Object.values(this.scene.models).filter(sceneModel => sceneModel.visible);
             this._addHatches(sceneModels, this._sectionPlanes.filter(sectionPlane => sectionPlane.active));
             this._setAllDirty(false);
         }, 100);
