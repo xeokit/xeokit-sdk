@@ -127,8 +127,7 @@ class SectionCaps {
         if(!this._resourcesAllocated) {
             this._resourcesAllocated = true;
             this._sectionPlanes = [];
-            this._verticesMap = {};
-            this._indicesMap = {};
+            this._sceneModelsData = {};
             this._dirtyMap = {};
             this._prevIntersectionModelsMap = {};
             this._sectionPlaneTimeout = null;
@@ -163,10 +162,9 @@ class SectionCaps {
                 //on ticks we only check if there is a model that we have saved vertices for,
                 //but it's no more available on the scene
                 let dirty = false;
-                for(const key in this._verticesMap) {
-                    if(!this.scene.models[key]){
-                        delete this._verticesMap[key];
-                        delete this._indicesMap[key];
+                for(const sceneModelId in this._sceneModelsData) {
+                    if(!this.scene.models[sceneModelId]){
+                        delete this._sceneModelsData[sceneModelId];
                         dirty = true;
                     }
                 }
@@ -240,31 +238,30 @@ class SectionCaps {
 
                     if(!this._doesPlaneIntersectBoundingBox(object.aabb, planeEquation)) return;
 
-                    if(!this._verticesMap[sceneModel.id]) {
-                        this._verticesMap[sceneModel.id] = new Map();
-                        this._indicesMap[sceneModel.id] = new Map();
+                    if(!this._sceneModelsData[sceneModel.id]) {
+                        this._sceneModelsData[sceneModel.id] = {
+                            verticesMap: new Map(),
+                            indicesMap:  new Map()
+                        };
                     }
 
-                    let vertices = [], indices = [];
+                    const sceneModelData = this._sceneModelsData[sceneModel.id];
 
-                    if(!this._verticesMap[sceneModel.id].has(objectId)) {
+                    if(!sceneModelData.verticesMap.has(objectId)) {
                         const isSolid = object.meshes[0].isSolid();
+                        const vertices = [ ];
+                        const indices  = [ ];
                         if(isSolid && object.capMaterial) {
-                            object.getEachVertex((_vertices) => {
-                                vertices.push(_vertices[0], _vertices[1], _vertices[2]);
-                            })
-                            object.getEachIndex((_indices) => {
-                                indices.push(_indices);
-                            })
+                            object.getEachVertex(v => vertices.push(v[0], v[1], v[2]));
+                            object.getEachIndex(i  => indices.push(i));
                         }
-                        this._verticesMap[sceneModel.id].set(objectId, vertices);
-                        this._indicesMap[sceneModel.id].set(objectId, indices);
+                        sceneModelData.verticesMap.set(objectId, vertices);
+                        sceneModelData.indicesMap.set(objectId, indices);
                     }
-                    else {
-                        vertices = this._verticesMap[sceneModel.id].get(objectId);
-                        indices = this._indicesMap[sceneModel.id].get(objectId);
-                    }
-                    
+
+                    const vertices = sceneModelData.verticesMap.get(objectId);
+                    const indices  = sceneModelData.indicesMap.get(objectId);
+
                     const capSegments = [];
                     const vertCount = indices.length;
                     
