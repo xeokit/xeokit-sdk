@@ -200,21 +200,9 @@ class SectionCaps {
 
     _addHatches(sceneModels, planes) {
 
-        if (planes.length <= 0) return;
-
         planes.forEach((plane) => {
             sceneModels.forEach((sceneModel) => {
-                //#region creating a plane equation
-                //we create a plane equation that will be used to slice through each triangle
-                const planeEquation = {
-                    A: plane.dir[0],
-                    B: plane.dir[1],
-                    C: plane.dir[2],
-                    D: -(plane.dir[0] * plane.pos[0] + plane.dir[1] * plane.pos[1] + plane.dir[2] * plane.pos[2])
-                }
-                //#endregion
-                
-                if(!this._doesPlaneIntersectBoundingBox(sceneModel.aabb, planeEquation)) return;
+                if(!this._doesPlaneIntersectBoundingBox(sceneModel.aabb, plane)) return;
 
                 if(!this._dirtyMap[sceneModel.id]) return;
 
@@ -236,7 +224,7 @@ class SectionCaps {
 
                     const object = objects[objectId];
 
-                    if(!this._doesPlaneIntersectBoundingBox(object.aabb, planeEquation)) return;
+                    if(!this._doesPlaneIntersectBoundingBox(object.aabb, plane)) return;
 
                     if(!this._sceneModelsData[sceneModel.id]) {
                         this._sceneModelsData[sceneModel.id] = {
@@ -281,10 +269,9 @@ class SectionCaps {
                         for (let i = 0; i < 3; i++) {
                             const p1 = triangle[i];
                             const p2 = triangle[(i + 1) % 3];
-                            
-                            // Inline the distance calculations to avoid function calls
-                            const d1 = planeEquation.A * p1[0] + planeEquation.B * p1[1] + planeEquation.C * p1[2] + planeEquation.D;
-                            const d2 = planeEquation.A * p2[0] + planeEquation.B * p2[1] + planeEquation.C * p2[2] + planeEquation.D;
+
+                            const d1 = plane.dist + math.dotVec3(plane.dir, p1);
+                            const d2 = plane.dist + math.dotVec3(plane.dir, p2);
 
                             if (d1 * d2 > 0) continue;
 
@@ -570,7 +557,7 @@ class SectionCaps {
 
     }
 
-    _doesPlaneIntersectBoundingBox(bb, planeEquation) {
+    _doesPlaneIntersectBoundingBox(bb, plane) {
         const min = [bb[0], bb[1], bb[2]];
         const max = [bb[3], bb[4], bb[5]];
 
@@ -590,10 +577,7 @@ class SectionCaps {
         let hasNegative = false;
 
         for (const corner of corners) {
-            const distance = planeEquation.A * corner[0] +
-                planeEquation.B * corner[1] +
-                planeEquation.C * corner[2] +
-                planeEquation.D;
+            const distance = plane.dist + math.dotVec3(plane.dir, corner);
 
             if (distance > 0) hasPositive = true;
             if (distance < 0) hasNegative = true;
