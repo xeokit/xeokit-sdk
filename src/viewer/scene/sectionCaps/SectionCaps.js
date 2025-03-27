@@ -143,7 +143,7 @@ class SectionCaps {
                 this._sectionPlanes.push(sectionPlane);
                 sectionPlane.on('pos', onSectionPlaneUpdated);
                 sectionPlane.on('dir', onSectionPlaneUpdated);
-                sectionPlane.once('destroyed', ((sectionPlane) => {
+                sectionPlane.once('destroyed', (() => {
                     const sectionPlaneId = sectionPlane.id;
                     if (sectionPlaneId) {
                         this._sectionPlanes = this._sectionPlanes.filter((sectionPlane) => sectionPlane.id !== sectionPlaneId);
