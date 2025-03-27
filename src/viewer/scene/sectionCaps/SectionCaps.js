@@ -143,6 +143,7 @@ class SectionCaps {
                 this._sectionPlanes.push(sectionPlane);
                 sectionPlane.on('pos', onSectionPlaneUpdated);
                 sectionPlane.on('dir', onSectionPlaneUpdated);
+                sectionPlane.on('active', onSectionPlaneUpdated);
                 sectionPlane.once('destroyed', (() => {
                     const sectionPlaneId = sectionPlane.id;
                     if (sectionPlaneId) {
@@ -184,7 +185,7 @@ class SectionCaps {
         this._updateTimeout = setTimeout(() => {
             clearTimeout(this._updateTimeout);
             const sceneModels = Object.keys(this.scene.models).map((key) => this.scene.models[key]);
-            this._addHatches(sceneModels, this._sectionPlanes);
+            this._addHatches(sceneModels, this._sectionPlanes.filter(sectionPlane => sectionPlane.active));
             this._setAllDirty(false);
         }, 100);
     }
