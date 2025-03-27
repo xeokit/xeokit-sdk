@@ -264,10 +264,7 @@ class SectionCaps {
 
                     const capSegments = [];
                     const vertCount = indices.length;
-                    
-                    // Preallocate intersection result array
-                    const intersectionBuffer = new Float32Array(3);
-                    
+
                     for (let i = 0; i < vertCount; i += 3) {
                         // Reuse triangle buffer instead of creating new arrays
                         for (let j = 0; j < 3; j++) {
@@ -288,17 +285,12 @@ class SectionCaps {
                             // Inline the distance calculations to avoid function calls
                             const d1 = planeEquation.A * p1[0] + planeEquation.B * p1[1] + planeEquation.C * p1[2] + planeEquation.D;
                             const d2 = planeEquation.A * p2[0] + planeEquation.B * p2[1] + planeEquation.C * p2[2] + planeEquation.D;
-                            
+
                             if (d1 * d2 > 0) continue;
-                            
+
                             const t = -d1 / (d2 - d1);
-                            // Reuse intersection buffer
-                            intersectionBuffer[0] = p1[0] + t * (p2[0] - p1[0]);
-                            intersectionBuffer[1] = p1[1] + t * (p2[1] - p1[1]);
-                            intersectionBuffer[2] = p1[2] + t * (p2[2] - p1[2]);
-                            
-                            // Clone the buffer for storage
-                            intersections.push(new Float32Array(intersectionBuffer));
+
+                            intersections.push(math.lerpVec3(t, 0, 1, p1, p2, math.vec3()));
                         }
 
                         if(intersections.length === 2) capSegments.push(intersections);
