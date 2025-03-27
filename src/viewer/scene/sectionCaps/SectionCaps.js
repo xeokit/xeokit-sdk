@@ -162,12 +162,16 @@ class SectionCaps {
             this._onTick = this.scene.on("tick", () => {
                 //on ticks we only check if there is a model that we have saved vertices for,
                 //but it's no more available on the scene
+                let dirty = false;
                 for(const key in this._verticesMap) {
                     if(!this.scene.models[key]){
                         delete this._verticesMap[key];
                         delete this._indicesMap[key];
-                        this._update();
+                        dirty = true;
                     }
+                }
+                if (dirty) {
+                    this._update();
                 }
             })
         }
