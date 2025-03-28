@@ -127,8 +127,7 @@ class SectionCaps {
         if(!this._resourcesAllocated) {
             this._resourcesAllocated = true;
             this._sectionPlanes = [];
-            this._verticesMap = {};
-            this._indicesMap = {};
+            this._sceneModelsData = {};
             this._dirtyMap = {};
             this._prevIntersectionModelsMap = {};
             this._sectionPlaneTimeout = null;
@@ -143,7 +142,8 @@ class SectionCaps {
                 this._sectionPlanes.push(sectionPlane);
                 sectionPlane.on('pos', onSectionPlaneUpdated);
                 sectionPlane.on('dir', onSectionPlaneUpdated);
-                sectionPlane.once('destroyed', ((sectionPlane) => {
+                sectionPlane.on('active', onSectionPlaneUpdated);
+                sectionPlane.once('destroyed', (() => {
                     const sectionPlaneId = sectionPlane.id;
                     if (sectionPlaneId) {
                         this._sectionPlanes = this._sectionPlanes.filter((sectionPlane) => sectionPlane.id !== sectionPlaneId);
@@ -160,13 +160,19 @@ class SectionCaps {
 
             this._onTick = this.scene.on("tick", () => {
                 //on ticks we only check if there is a model that we have saved vertices for,
-                //but it's no more available on the scene
-                for(const key in this._verticesMap) {
-                    if(!this.scene.models[key]){
-                        delete this._verticesMap[key];
-                        delete this._indicesMap[key];
-                        this._update();
+                //but it's no more available on the scene, or if its visibility changed
+                let dirty = false;
+                for(const sceneModelId in this._sceneModelsData) {
+                    if(!this.scene.models[sceneModelId]){
+                        delete this._sceneModelsData[sceneModelId];
+                        dirty = true;
+                    } else if (this._sceneModelsData[sceneModelId].visible !== (!!this.scene.models[sceneModelId].visible)) {
+                        this._sceneModelsData[sceneModelId].visible = !!this.scene.models[sceneModelId].visible;
+                        dirty = true;
                     }
+                }
+                if (dirty) {
+                    this._update();
                 }
             })
         }
@@ -183,8 +189,8 @@ class SectionCaps {
         this._deletePreviousModels();
         this._updateTimeout = setTimeout(() => {
             clearTimeout(this._updateTimeout);
-            const sceneModels = Object.keys(this.scene.models).map((key) => this.scene.models[key]);
-            this._addHatches(sceneModels, this._sectionPlanes);
+            const sceneModels = Object.values(this.scene.models).filter(sceneModel => sceneModel.visible);
+            this._addHatches(sceneModels, this._sectionPlanes.filter(sectionPlane => sectionPlane.active));
             this._setAllDirty(false);
         }, 100);
     }
@@ -197,21 +203,9 @@ class SectionCaps {
 
     _addHatches(sceneModels, planes) {
 
-        if (planes.length <= 0) return;
-
         planes.forEach((plane) => {
             sceneModels.forEach((sceneModel) => {
-                //#region creating a plane equation
-                //we create a plane equation that will be used to slice through each triangle
-                const planeEquation = {
-                    A: plane.dir[0],
-                    B: plane.dir[1],
-                    C: plane.dir[2],
-                    D: -(plane.dir[0] * plane.pos[0] + plane.dir[1] * plane.pos[1] + plane.dir[2] * plane.pos[2])
-                }
-                //#endregion
-                
-                if(!this._doesPlaneIntersectBoundingBox(sceneModel.aabb, planeEquation)) return;
+                if(!this._doesPlaneIntersectBoundingBox(sceneModel.aabb, plane)) return;
 
                 if(!this._dirtyMap[sceneModel.id]) return;
 
@@ -233,39 +227,35 @@ class SectionCaps {
 
                     const object = objects[objectId];
 
-                    if(!this._doesPlaneIntersectBoundingBox(object.aabb, planeEquation)) return;
+                    if(!this._doesPlaneIntersectBoundingBox(object.aabb, plane)) return;
 
-                    if(!this._verticesMap[sceneModel.id]) {
-                        this._verticesMap[sceneModel.id] = new Map();
-                        this._indicesMap[sceneModel.id] = new Map();
+                    if(!this._sceneModelsData[sceneModel.id]) {
+                        this._sceneModelsData[sceneModel.id] = {
+                            verticesMap: new Map(),
+                            indicesMap:  new Map()
+                        };
                     }
 
-                    let vertices = [], indices = [];
+                    const sceneModelData = this._sceneModelsData[sceneModel.id];
 
-                    if(!this._verticesMap[sceneModel.id].has(objectId)) {
+                    if(!sceneModelData.verticesMap.has(objectId)) {
                         const isSolid = object.meshes[0].isSolid();
+                        const vertices = [ ];
+                        const indices  = [ ];
                         if(isSolid && object.capMaterial) {
-                            object.getEachVertex((_vertices) => {
-                                vertices.push(_vertices[0], _vertices[1], _vertices[2]);
-                            })
-                            object.getEachIndex((_indices) => {
-                                indices.push(_indices);
-                            })
+                            object.getEachVertex(v => vertices.push(v[0], v[1], v[2]));
+                            object.getEachIndex(i  => indices.push(i));
                         }
-                        this._verticesMap[sceneModel.id].set(objectId, vertices);
-                        this._indicesMap[sceneModel.id].set(objectId, indices);
+                        sceneModelData.verticesMap.set(objectId, vertices);
+                        sceneModelData.indicesMap.set(objectId, indices);
                     }
-                    else {
-                        vertices = this._verticesMap[sceneModel.id].get(objectId);
-                        indices = this._indicesMap[sceneModel.id].get(objectId);
-                    }
-                    
+
+                    const vertices = sceneModelData.verticesMap.get(objectId);
+                    const indices  = sceneModelData.indicesMap.get(objectId);
+
                     const capSegments = [];
                     const vertCount = indices.length;
-                    
-                    // Preallocate intersection result array
-                    const intersectionBuffer = new Float32Array(3);
-                    
+
                     for (let i = 0; i < vertCount; i += 3) {
                         // Reuse triangle buffer instead of creating new arrays
                         for (let j = 0; j < 3; j++) {
@@ -282,21 +272,15 @@ class SectionCaps {
                         for (let i = 0; i < 3; i++) {
                             const p1 = triangle[i];
                             const p2 = triangle[(i + 1) % 3];
-                            
-                            // Inline the distance calculations to avoid function calls
-                            const d1 = planeEquation.A * p1[0] + planeEquation.B * p1[1] + planeEquation.C * p1[2] + planeEquation.D;
-                            const d2 = planeEquation.A * p2[0] + planeEquation.B * p2[1] + planeEquation.C * p2[2] + planeEquation.D;
-                            
+
+                            const d1 = plane.dist + math.dotVec3(plane.dir, p1);
+                            const d2 = plane.dist + math.dotVec3(plane.dir, p2);
+
                             if (d1 * d2 > 0) continue;
-                            
+
                             const t = -d1 / (d2 - d1);
-                            // Reuse intersection buffer
-                            intersectionBuffer[0] = p1[0] + t * (p2[0] - p1[0]);
-                            intersectionBuffer[1] = p1[1] + t * (p2[1] - p1[1]);
-                            intersectionBuffer[2] = p1[2] + t * (p2[2] - p1[2]);
-                            
-                            // Clone the buffer for storage
-                            intersections.push(new Float32Array(intersectionBuffer));
+
+                            intersections.push(math.lerpVec3(t, 0, 1, p1, p2, math.vec3()));
                         }
 
                         if(intersections.length === 2) capSegments.push(intersections);
@@ -576,7 +560,7 @@ class SectionCaps {
 
     }
 
-    _doesPlaneIntersectBoundingBox(bb, planeEquation) {
+    _doesPlaneIntersectBoundingBox(bb, plane) {
         const min = [bb[0], bb[1], bb[2]];
         const max = [bb[3], bb[4], bb[5]];
 
@@ -596,10 +580,7 @@ class SectionCaps {
         let hasNegative = false;
 
         for (const corner of corners) {
-            const distance = planeEquation.A * corner[0] +
-                planeEquation.B * corner[1] +
-                planeEquation.C * corner[2] +
-                planeEquation.D;
+            const distance = plane.dist + math.dotVec3(plane.dir, corner);
 
             if (distance > 0) hasPositive = true;
             if (distance < 0) hasNegative = true;
