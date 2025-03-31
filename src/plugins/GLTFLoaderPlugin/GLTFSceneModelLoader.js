@@ -583,6 +583,15 @@ function parseNodeMesh(node, ctx, matrix, meshIds) {
             if (primitive.attributes.TEXCOORD_0) {
                 meshCfg.uv = primitive.attributes.TEXCOORD_0.value;
             }
+            if (primitive.attributes.COLOR_0) {
+                let colorsWithoutAlpha = [];
+                for (let i = 0; i < primitive.attributes.COLOR_0.value.length; i+=4) {
+                    colorsWithoutAlpha.push(primitive.attributes.COLOR_0.value[i]); // r
+                    colorsWithoutAlpha.push(primitive.attributes.COLOR_0.value[i+1]); // g
+                    colorsWithoutAlpha.push(primitive.attributes.COLOR_0.value[i+2]); // b
+                }
+                meshCfg.colors = colorsWithoutAlpha;
+            }
             if (primitive.indices) {
                 meshCfg.indices = primitive.indices.value;
             }
