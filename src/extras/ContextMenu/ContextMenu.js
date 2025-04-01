@@ -282,6 +282,7 @@ class ContextMenu {
      * @param {Boolean} [cfg.enabled=true] Whether this ````ContextMenu```` is initially enabled. {@link ContextMenu#show} does nothing while this is ````false````.
      * @param {Boolean} [cfg.hideOnMouseDown=true] Whether this ````ContextMenu```` automatically hides whenever we mouse-down or tap anywhere in the page.
      * @param {Boolean} [cfg.hideOnAction=true] Whether this ````ContextMenu```` automatically hides after we select a menu item. Se false if we want the menu to remain shown and show any updates to its item titles, after we've selected an item.
+     * @param {Node | undefined} [cfg.rootDOMNode] Optional reference of an existing DOM Node (e.g. ShadowRoot), which encapsulates all HTML elements related to viewer plugins, defaults to ````document.body````.
      */
     constructor(cfg = {}) {
 
@@ -296,6 +297,7 @@ class ContextMenu {
         this._itemMap = {};     // Items mapped to their IDs
         this._shown = false;    // True when the ContextMenu is visible
         this._nextId = 0;
+        this._rootDOMNode = cfg.rootDOMNode || document.body;
 
         /**
          * Subscriptions to events fired at this ContextMenu.
@@ -304,12 +306,12 @@ class ContextMenu {
         this._eventSubs = {};
 
         if (cfg.hideOnMouseDown !== false) {
-            document.addEventListener("mousedown", (event) => {
+            this._rootDOMNode.addEventListener("mousedown", (event) => {
                 if (!event.target.classList.contains("xeokit-context-menu-item")) {
                     this.hide();
                 }
             });
-            document.addEventListener("touchstart", this._canvasTouchStartHandler = (event) => {
+            this._rootDOMNode.addEventListener("touchstart", this._canvasTouchStartHandler = (event) => {
                 if (!event.target.classList.contains("xeokit-context-menu-item")) {
                     this.hide();
                 }
@@ -613,7 +615,10 @@ class ContextMenu {
         const groups = menu.groups;
         const html = [];
 
-        html.push('<div class="xeokit-context-menu ' + menu.id + '" style="z-index:300000; position: absolute;">');
+        const menuElement= document.createElement("div");
+        menuElement.classList.add("xeokit-context-menu", menu.id);
+        menuElement.style.zIndex = 300000;
+        menuElement.style.position = "absolute";
 
         html.push('<ul>');
 
@@ -664,13 +669,10 @@ class ContextMenu {
         }
 
         html.push('</ul>');
-        html.push('</div>');
 
         const htmlString = html.join("");
-
-        document.body.insertAdjacentHTML('beforeend', htmlString);
-
-        const menuElement = document.querySelector("." + menu.id);
+        menuElement.innerHTML = htmlString;
+        this._rootDOMNode.appendChild(menuElement);
 
         menu.menuElement = menuElement;
 
@@ -704,7 +706,7 @@ class ContextMenu {
                         const item = groupItems[j];
                         const itemSubMenu = item.subMenu;
 
-                        item.itemElement = document.getElementById(item.id);
+                        item.itemElement = this._rootDOMNode.querySelector(`#${item.id}`);
 
                         if (!item.itemElement) {
                             console.error("ContextMenu item element not found: " + item.id);
