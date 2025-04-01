@@ -102,6 +102,7 @@ class NavCubePlugin extends Plugin {
      * @param {Boolean} [cfg.synchProjection=false] Sets whether the NavCube switches between perspective and orthographic projections in synchrony with the {@link Camera}. When ````false````, the NavCube will always be rendered with perspective projection.
      * @param {Boolean} [cfg.isProjectNorth] sets whether the NavCube switches between true north and project north - using the project north offset angle.
      * @param {number} [cfg.projectNorthOffsetAngle] sets the NavCube project north offset angle - when the {@link isProjectNorth} is true.
+     * @param {Node | undefined} [cfg.rootDOMNode] Optional reference of an existing DOM Node (e.g. ShadowRoot), which encapsulates all HTML elements related to viewer plugins, defaults to ````document````.
      */
     constructor(viewer, cfg = {}) {
 
@@ -111,11 +112,13 @@ class NavCubePlugin extends Plugin {
 
         var visible = true;
 
+        const rootDOMNode = cfg.rootDOMNode || document;
         try {
             this._navCubeScene = new Scene(viewer, {
                 canvasId: cfg.canvasId,
                 canvasElement: cfg.canvasElement,
-                transparent: true
+                transparent: true,
+                rootDOMNode: rootDOMNode
             });
 
             this._navCubeCanvas = this._navCubeScene.canvas.canvas;
