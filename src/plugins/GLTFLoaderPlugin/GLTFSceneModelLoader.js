@@ -584,13 +584,19 @@ function parseNodeMesh(node, ctx, matrix, meshIds) {
                 meshCfg.uv = primitive.attributes.TEXCOORD_0.value;
             }
             if (primitive.attributes.COLOR_0) {
-                let colorsWithoutAlpha = [];
-                for (let i = 0; i < primitive.attributes.COLOR_0.value.length; i+=4) {
-                    colorsWithoutAlpha.push(primitive.attributes.COLOR_0.value[i]); // r
-                    colorsWithoutAlpha.push(primitive.attributes.COLOR_0.value[i+1]); // g
-                    colorsWithoutAlpha.push(primitive.attributes.COLOR_0.value[i+2]); // b
+                if (primitive.attributes.COLOR_0.type === "VEC4") {
+                    let colorsWithoutAlpha = [];
+                    for (let i = 0; i < primitive.attributes.COLOR_0.value.length; i+=4) {
+                        colorsWithoutAlpha.push(primitive.attributes.COLOR_0.value[i]); // r
+                        colorsWithoutAlpha.push(primitive.attributes.COLOR_0.value[i+1]); // g
+                        colorsWithoutAlpha.push(primitive.attributes.COLOR_0.value[i+2]); // b
+                    }
+                    meshCfg.colors = colorsWithoutAlpha;
+                } else if (primitive.attributes.COLOR_0.type === "VEC3") {
+                    meshCfg.colors = primitive.attributes.COLOR_0.value;
+                } else {
+                    error(ctx, "glTF has incorrect type of COLOR_0");
                 }
-                meshCfg.colors = colorsWithoutAlpha;
             }
             if (primitive.indices) {
                 meshCfg.indices = primitive.indices.value;
