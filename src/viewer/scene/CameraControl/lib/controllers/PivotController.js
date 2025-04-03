@@ -195,7 +195,7 @@ class PivotController {
 
         const camera = this._scene.camera;
 
-        let lookat = math.lookAtMat4v(camera.eye, camera.look, camera.worldUp);
+        let lookat = math.lookAtMat4v(camera.eye, camera.look, camera.up);
         math.transformPoint3(lookat, this.getPivotPos(), this._cameraOffset);
 
         const pivotPos = this.getPivotPos();
