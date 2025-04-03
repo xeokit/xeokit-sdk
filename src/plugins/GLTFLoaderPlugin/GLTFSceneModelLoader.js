@@ -584,18 +584,22 @@ function parseNodeMesh(node, ctx, matrix, meshIds) {
                 meshCfg.uv = primitive.attributes.TEXCOORD_0.value;
             }
             if (primitive.attributes.COLOR_0) {
+                let step;
                 if (primitive.attributes.COLOR_0.type === "VEC4") {
-                    let colorsWithoutAlpha = [];
-                    for (let i = 0; i < primitive.attributes.COLOR_0.value.length; i+=4) {
-                        colorsWithoutAlpha.push(primitive.attributes.COLOR_0.value[i]); // r
-                        colorsWithoutAlpha.push(primitive.attributes.COLOR_0.value[i+1]); // g
-                        colorsWithoutAlpha.push(primitive.attributes.COLOR_0.value[i+2]); // b
-                    }
-                    meshCfg.colors = colorsWithoutAlpha;
+                    step = 4;
                 } else if (primitive.attributes.COLOR_0.type === "VEC3") {
-                    meshCfg.colors = primitive.attributes.COLOR_0.value;
+                    step = 3;
                 } else {
                     error(ctx, "glTF has incorrect type of COLOR_0");
+                }
+                if (step) {
+                    let colorsMultiplied = []; // It is a workaround to display vertex colors as described in a glTF specification. The base color is multiplied by vertex colors inside this loader (right below), this way meshCfg.colors stores multiplication result already.
+                    for (let i = 0; i < primitive.attributes.COLOR_0.value.length; i+=step) {
+                        colorsMultiplied.push(primitive.attributes.COLOR_0.value[i] * meshCfg.color[0]); // r
+                        colorsMultiplied.push(primitive.attributes.COLOR_0.value[i+1] * meshCfg.color[1]); // g
+                        colorsMultiplied.push(primitive.attributes.COLOR_0.value[i+2] * meshCfg.color[2]); // b
+                    }
+                    meshCfg.colors = colorsMultiplied;
                 }
             }
             if (primitive.indices) {
