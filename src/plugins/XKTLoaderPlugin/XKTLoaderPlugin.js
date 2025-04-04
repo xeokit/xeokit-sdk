@@ -1031,6 +1031,21 @@ class XKTLoaderPlugin extends Plugin {
             }
         };
 
+window._timestamp = (function() {
+    const start = performance.now();
+    let t = null;
+    const f = n => n.toFixed(2) + " ms";
+    return function(msg) {
+        const now = performance.now();
+        if (t === null) {
+            console.log(msg, f(now - start));
+        } else {
+            console.log(msg, f(now - t), "[total " + f(now - start) + "]");
+        }
+        t = now;
+    };
+})();
+
         if (params.metaModelSrc || params.metaModelData) {
 
             if (params.metaModelSrc) {
@@ -1180,8 +1195,10 @@ class XKTLoaderPlugin extends Plugin {
 
     _loadModel(src, options, sceneModel, metaModel, manifestCtx, done, error) {
         this._dataSource.getXKT(src, (arrayBuffer) => {
+window._timestamp("dataSource.getXKT (arrayBuffer.byteLength " + arrayBuffer.byteLength + ")");
             this._parseModel(arrayBuffer, options, sceneModel, metaModel, manifestCtx);
             sceneModel.preFinalize();
+window._timestamp("preFinalize");
             done();
         }, error);
     }

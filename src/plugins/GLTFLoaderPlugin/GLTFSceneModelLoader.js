@@ -3,8 +3,8 @@ import {utils} from "../../viewer/scene/utils.js";
 import {core} from "../../viewer/scene/core.js";
 import {sRGBEncoding} from "../../viewer/scene/constants/constants.js";
 import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords.js";
-import {parse} from '@loaders.gl/core';
-import {GLTFLoader, postProcessGLTF} from '@loaders.gl/gltf';
+import {parse} from '../../../_aux/lib.es.js';      // @loaders.gl/core
+import {GLTFLoader, postProcessGLTF} from '../../../_aux/lib.es.js'; // @loaders.gl/gltf
 
 import {
     ClampToEdgeWrapping,

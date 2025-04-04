@@ -659,7 +659,9 @@ const ParserV10 = {
     parse: function (viewer, options, elements, sceneModel, metaModel, manifestCtx) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
+window._timestamp("ParserV10::decode");
         load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx);
+window._timestamp("ParserV10::load");
     }
 };
 
