@@ -40,8 +40,6 @@ export declare type NavCubePluginConfiguration = {
   fitVisible?: boolean;
   /** Sets whether the NavCube switches between perspective and orthographic projections in synchrony with the {@link Camera}. When ````false````, the NavCube will always be rendered with perspective projection. */
   synchProjection?: boolean;
-  /** Optional reference of an existing DOM Node(e.g.ShadowRoot), that encapsulates all HTML elements related to viewer plugins, defaults to ````document````. */
-  rootDOMNode?: Node;
 };
 
 /**
