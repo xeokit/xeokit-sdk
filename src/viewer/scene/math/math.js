@@ -14,268 +14,379 @@ const tempVec4 = new FloatArrayType(4);
  * @private
  */
 const math = {
-    transformMatrix({
-      matrix,
-      rotation = [0, 0, 0],
-      translation = [0, 0, 0],
-      scale = [1, 1, 1],
-      rotationPivot = null,
-      isAllModel = true
-    }) {
-      // Ensure matrix is a Float64Array
-      let modifiedMatrix = Float64Array.from(matrix);
-      modifiedMatrix = math.transposeMat4(
-        modifiedMatrix,
-        modifiedMatrix
-      );
 
-      // Create translation matrix
-      let translationMatrix = new Float64Array([
-        1,
-        0,
-        0,
-        translation[0],
-        0,
-        1,
-        0,
-        translation[1],
-        0,
-        0,
-        1,
-        translation[2],
-        0,
-        0,
-        0,
-        1,
-      ]);
+  transformMatrix({
+    matrix,
+    rotation,
+    translation,
+    scale,
+    pivot = null,
+    isAllModel = false
+  }) {
+    // let modifiedMatrix = Float64Array.from(matrix);
 
-      // Calculate rotation cosines and sines
-      const [cosX, sinX] = [
-        Math.cos(rotation[0]),
-        Math.sin(rotation[0]),
-      ];
-      const [cosY, sinY] = [
-        Math.cos(rotation[1]),
-        Math.sin(rotation[1]),
-      ];
-      const [cosZ, sinZ] = [
-        Math.cos(rotation[2]),
-        Math.sin(rotation[2]),
-      ];
-
-      // Define rotation matrices
-      const rotationXMatrix = new Float64Array([
-        1,
-        0,
-        0,
-        0,
-        0,
-        cosX,
-        -sinX,
-        0,
-        0,
-        sinX,
-        cosX,
-        0,
-        0,
-        0,
-        0,
-        1,
-      ]);
-
-      const rotationYMatrix = new Float64Array([
-        cosY,
-        0,
-        sinY,
-        0,
-        0,
-        1,
-        0,
-        0,
-        -sinY,
-        0,
-        cosY,
-        0,
-        0,
-        0,
-        0,
-        1,
-      ]);
-
-      const rotationZMatrix = new Float64Array([
-        cosZ,
-        -sinZ,
-        0,
-        0,
-        sinZ,
-        cosZ,
-        0,
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0,
-        0,
-        1,
-      ]);
-
-      // Create scaling matrix
-      const scalingMatrix = new Float64Array([
-        scale[0],
-        0,
-        0,
-        0,
-        0,
-        scale[1],
-        0,
-        0,
-        0,
-        0,
-        scale[2],
-        0,
-        0,
-        0,
-        0,
-        1,
-      ]);
-
-      let matrixTransformations = [
-        translationMatrix,
-        scalingMatrix,
-        rotationZMatrix,
-        rotationYMatrix,
-        rotationXMatrix,
-      ];
-
-      let tempMatrix = modifiedMatrix;
-
-      // If the model is not all model, we need to apply the following transformations
-      if (!isAllModel) {
-
-        const sx = Math.sqrt(
-          modifiedMatrix[0] * modifiedMatrix[0] +
-          modifiedMatrix[4] * modifiedMatrix[4] +
-          modifiedMatrix[8] * modifiedMatrix[8]
-        );
-        const sy = Math.sqrt(
-          modifiedMatrix[1] * modifiedMatrix[1] +
-          modifiedMatrix[5] * modifiedMatrix[5] +
-          modifiedMatrix[9] * modifiedMatrix[9]
-        );
-        const sz = Math.sqrt(
-          modifiedMatrix[2] * modifiedMatrix[2] +
-          modifiedMatrix[6] * modifiedMatrix[6] +
-          modifiedMatrix[10] * modifiedMatrix[10]
-        );
+    const currentPosition = math.vec3();
+    const currentScale = math.vec3();
+    const currentRotationQuaternion = math.vec4()
 
 
-        rotationPivot = [
-          rotationPivot[0],
-          rotationPivot[1],
-          rotationPivot[2],
-        ]
-        const positivePivotMatrix = new Float64Array([
-          1,
-          0,
-          0,
-          rotationPivot[0],
-          0,
-          1,
-          0,
-          rotationPivot[1],
-          0,
-          0,
-          1,
-          rotationPivot[2],
-          0,
-          0,
-          0,
-          1,
-        ]);
+    math.decomposeMat4(matrix, currentPosition, currentRotationQuaternion, currentScale);
 
-        const negativePivotMatrix = new Float64Array([
-          1,
-          0,
-          0,
-          -rotationPivot[0],
-          0,
-          1,
-          0,
-          -rotationPivot[1],
-          0,
-          0,
-          1,
-          -rotationPivot[2],
-          0,
-          0,
-          0,
-          1,
-        ]);
-
-        const compensationMatrix = [
-          1 / sx,
-          0,
-          0,
-          0,
-          0,
-          1 / sy,
-          0,
-          0,
-          0,
-          0,
-          1 / sz,
-          0,
-          0,
-          0,
-          0,
-          1,
-        ];
-
-        const scaledMatrix = [
-          sx,
-          0,
-          0,
-          0,
-          0,
-          sy,
-          0,
-          0,
-          0,
-          0,
-          sz,
-          0,
-          0,
-          0,
-          0,
-          1,
-        ];
+    console.log('currentPosition', currentPosition)
+    const newPosition = translation ? translation : currentPosition;
+    const newScale = scale ? scale : currentScale;
+    const mewRotationQuaternion = rotation ? rotation : currentRotationQuaternion;
 
 
-        tempMatrix = scaledMatrix;
-        matrixTransformations = [
-          negativePivotMatrix,
-          translationMatrix,
-          scalingMatrix,
-          rotationZMatrix,
-          rotationYMatrix,
-          rotationXMatrix,
-          positivePivotMatrix,
-          compensationMatrix,
-          modifiedMatrix,
-        ];
-      }
+    // const pos = math.vec3();
+    // const setPos = (function () {
+    //   const origin = math.vec3();
+    //   const rtcPos = math.vec3();
+    //   return function (p) {
+    //     pos.set(p);
+    //     worldToRTCPos(p, origin, rtcPos);
+    //     rootNode.origin = origin;
+    //     rootNode.position = rtcPos;
+    //   };
+    // })();
 
-      // Apply transformations: scale -> rotate -> translate
-      matrixTransformations.forEach((matrixTransformation) => {
-        tempMatrix = math.mulMat4(tempMatrix, matrixTransformation);
-      });
+    // math.addVec3(translation, currentPosition, translation);
+    // math.translateMat4v(translation, matrix);
+    // math.mulVec3(scale, currentScale, scale);
 
-      // Apply the transpose matrix
-      modifiedMatrix = math.transposeMat4(tempMatrix, tempMatrix);
-      return modifiedMatrix;
-    },
+    // If a pivot is provided, adjust the transformation relative to the pivot
+
+    math.composeMat4(newPosition, mewRotationQuaternion, newScale, matrix);
+    return matrix;
+  },
+  // transformMatrix({
+  //   matrix,
+  //   rotation = [0, 0, 0],
+  //   translation = [0, 0, 0],
+  //   scale = [1, 1, 1],
+  //   rotationPivot = null,
+  //   isAllModel = false
+  // }) {
+
+  //   const rotationRad = math.mulVec3Scalar(rotation, math.DEGTORAD);
+  //   rotation = rotationRad;
+  //   // Ensure matrix is a Float64Array
+  //   let modifiedMatrix = Float64Array.from(matrix);
+  //   modifiedMatrix = math.transposeMat4(
+  //     modifiedMatrix,
+  //     modifiedMatrix
+  //   );
+
+  //   const positiveLocalPivotMatrix = new Float64Array([
+  //     1,
+  //     0,
+  //     0,
+  //     modifiedMatrix[3],
+  //     0,
+  //     1,
+  //     0,
+  //     modifiedMatrix[7],
+  //     0,
+  //     0,
+  //     1,
+  //     modifiedMatrix[11],
+  //     0,
+  //     0,
+  //     0,
+  //     1])
+
+  //   const negativeLocalPivotMatrix = new Float64Array([
+  //     1,
+  //     0,
+  //     0,
+  //     -modifiedMatrix[3],
+  //     0,
+  //     1,
+  //     0,
+  //     -modifiedMatrix[7],
+  //     0,
+  //     0,
+  //     1,
+  //     -modifiedMatrix[11],
+  //     0,
+  //     0,
+  //     0,
+  //     1])
+
+
+  //   // Create translation matrix
+  //   let translationMatrix = new Float64Array([
+  //     1,
+  //     0,
+  //     0,
+  //     translation[0],
+  //     0,
+  //     1,
+  //     0,
+  //     translation[1],
+  //     0,
+  //     0,
+  //     1,
+  //     translation[2],
+  //     0,
+  //     0,
+  //     0,
+  //     1,
+  //   ]);
+
+  //   // Calculate rotation cosines and sines
+  //   const [cosX, sinX] = [
+  //     Math.cos(rotation[0]),
+  //     Math.sin(rotation[0]),
+  //   ];
+  //   const [cosY, sinY] = [
+  //     Math.cos(rotation[1]),
+  //     Math.sin(rotation[1]),
+  //   ];
+  //   const [cosZ, sinZ] = [
+  //     Math.cos(rotation[2]),
+  //     Math.sin(rotation[2]),
+  //   ];
+
+  //   // Define rotation matrices
+  //   const rotationXMatrix = new Float64Array([
+  //     1,
+  //     0,
+  //     0,
+  //     0,
+  //     0,
+  //     cosX,
+  //     -sinX,
+  //     0,
+  //     0,
+  //     sinX,
+  //     cosX,
+  //     0,
+  //     0,
+  //     0,
+  //     0,
+  //     1,
+  //   ]);
+
+  //   const rotationYMatrix = new Float64Array([
+  //     cosY,
+  //     0,
+  //     sinY,
+  //     0,
+  //     0,
+  //     1,
+  //     0,
+  //     0,
+  //     -sinY,
+  //     0,
+  //     cosY,
+  //     0,
+  //     0,
+  //     0,
+  //     0,
+  //     1,
+  //   ]);
+
+  //   const rotationZMatrix = new Float64Array([
+  //     cosZ,
+  //     -sinZ,
+  //     0,
+  //     0,
+  //     sinZ,
+  //     cosZ,
+  //     0,
+  //     0,
+  //     0,
+  //     0,
+  //     1,
+  //     0,
+  //     0,
+  //     0,
+  //     0,
+  //     1,
+  //   ]);
+
+  //   // Create scaling matrix
+  //   const scalingMatrix = new Float64Array([
+  //     scale[0],
+  //     0,
+  //     0,
+  //     0,
+  //     0,
+  //     scale[1],
+  //     0,
+  //     0,
+  //     0,
+  //     0,
+  //     scale[2],
+  //     0,
+  //     0,
+  //     0,
+  //     0,
+  //     1,
+  //   ]);
+
+  //   let matrixTransformations = [
+  //     translationMatrix,
+  //     scalingMatrix,
+  //     rotationZMatrix,
+  //     rotationYMatrix,
+  //     rotationXMatrix,
+  //   ];
+
+  //   let tempMatrix = modifiedMatrix;
+
+  //   // If the model is not all model, we need to apply the following transformations
+  //   if (!isAllModel && rotationPivot) {
+
+  //     const sx = Math.sqrt(
+  //       modifiedMatrix[0] * modifiedMatrix[0] +
+  //       modifiedMatrix[4] * modifiedMatrix[4] +
+  //       modifiedMatrix[8] * modifiedMatrix[8]
+  //     );
+  //     const sy = Math.sqrt(
+  //       modifiedMatrix[1] * modifiedMatrix[1] +
+  //       modifiedMatrix[5] * modifiedMatrix[5] +
+  //       modifiedMatrix[9] * modifiedMatrix[9]
+  //     );
+  //     const sz = Math.sqrt(
+  //       modifiedMatrix[2] * modifiedMatrix[2] +
+  //       modifiedMatrix[6] * modifiedMatrix[6] +
+  //       modifiedMatrix[10] * modifiedMatrix[10]
+  //     );
+
+
+  //     rotationPivot = [
+  //       rotationPivot[0],
+  //       rotationPivot[1],
+  //       rotationPivot[2],
+  //     ]
+  //     const positivePivotMatrix = new Float64Array([
+  //       1,
+  //       0,
+  //       0,
+  //       rotationPivot[0],
+  //       0,
+  //       1,
+  //       0,
+  //       rotationPivot[1],
+  //       0,
+  //       0,
+  //       1,
+  //       -rotationPivot[2],
+  //       0,
+  //       0,
+  //       0,
+  //       1,
+  //     ]);
+
+  //     const negativePivotMatrix = new Float64Array([
+  //       1,
+  //       0,
+  //       0,
+  //       -rotationPivot[0],
+  //       0,
+  //       1,
+  //       0,
+  //       -rotationPivot[1],
+  //       0,
+  //       0,
+  //       1,
+  //       rotationPivot[2],
+  //       0,
+  //       0,
+  //       0,
+  //       1,
+  //     ]);
+
+  //     const compensationMatrix = [
+  //       1 / sx,
+  //       0,
+  //       0,
+  //       0,
+  //       0,
+  //       1 / sy,
+  //       0,
+  //       0,
+  //       0,
+  //       0,
+  //       1 / sz,
+  //       0,
+  //       0,
+  //       0,
+  //       0,
+  //       1,
+  //     ];
+
+  //     const scaledMatrix = [
+  //       sx,
+  //       0,
+  //       0,
+  //       0,
+  //       0,
+  //       sy,
+  //       0,
+  //       0,
+  //       0,
+  //       0,
+  //       sz,
+  //       0,
+  //       0,
+  //       0,
+  //       0,
+  //       1,
+  //     ];
+  //     tempMatrix = scaledMatrix;
+  //     matrixTransformations = [
+  //       // negativeLocalPivotMatrix,
+  //       // negativePivotMatrix,
+  //       // positiveLocalPivotMatrix,
+  //       // positivePivotMatrix,
+  //       // scaledMatrix,
+  //       // negativeLocalPivotMatrix,
+  //       negativePivotMatrix,
+  //       // positiveLocalPivotMatrix,
+  //       // positivePivotMatrix,
+  //       translationMatrix,
+  //       scalingMatrix,
+  //       rotationZMatrix,
+  //       rotationYMatrix,
+  //       rotationXMatrix,
+  //       // negativeLocalPivotMatrix,
+  //       // negativePivotMatrix,
+  //       // positiveLocalPivotMatrix,
+  //       positivePivotMatrix,
+  //       compensationMatrix,
+  //       // negativeLocalPivotMatrix,
+  //       // negativePivotMatrix,
+  //       // positiveLocalPivotMatrix,
+  //       // positivePivotMatrix,
+  //       modifiedMatrix,
+  //     ];
+  //     const tempNegative = math.mat4()
+  //     math.mulMat4(negativePivotMatrix, negativeLocalPivotMatrix, tempNegative);
+  //     console.log(tempNegative)
+  //   }
+  //   const currentPosition = math.vec3();
+  //   const currentScale = math.vec3();
+  //   const currentRotationQuaternion = math.vec4()
+
+  //   const decomponeMatrix = math.decomposeMat4(modifiedMatrix, currentPosition, currentRotationQuaternion, currentScale);
+  //   console.log('decomponeMatrix', decomponeMatrix)
+  //   console.log('currentPosition', currentPosition)
+  //   console.log('currentRotationQuaternion', currentRotationQuaternion)
+  //   console.log('currentScale', currentScale)
+
+  //   // Apply transformations: scale -> rotate -> translate
+  //   matrixTransformations.forEach((matrixTransformation) => {
+  //     math.mulMat4(tempMatrix, matrixTransformation, tempMatrix);
+  //   });
+
+  //   // Apply the transpose matrix
+  //   math.transposeMat4(tempMatrix, modifiedMatrix);
+  //   console.log(modifiedMatrix)
+  //   return modifiedMatrix;
+  // },
 
     setDoublePrecisionEnabled(enable) {
         doublePrecision = enable;
@@ -424,15 +535,15 @@ const math = {
         mat3[0] = mat4[0];
         mat3[1] = mat4[1];
         mat3[2] = mat4[2];
-        
+
         mat3[3] = mat4[4];
         mat3[4] = mat4[5];
         mat3[5] = mat4[6];
-        
+
         mat3[6] = mat4[8];
         mat3[7] = mat4[9];
         mat3[8] = mat4[10];
-        
+
         return mat3;
     },
 
@@ -772,6 +883,24 @@ const math = {
         dest[3] = u[3] * v[3];
         return dest;
     },
+  /**
+   * Multiplies one three-element vector by another.
+   * @method mulVec3
+   * @static
+   * @param {Array(Number)} u First vector
+   * @param {Array(Number)} v Second vector
+   * @param  {Array(Number)} [dest] Destination vector
+   * @return {Array(Number)} dest if specified, u otherwise
+   */
+  mulVec3(u, v, dest) {
+    if (!dest) {
+      dest = u;
+    }
+    dest[0] = u[0] * v[0];
+    dest[1] = u[1] * v[1];
+    dest[2] = u[2] * v[2];
+    return dest;
+  },
 
     /**
      * Multiplies each element of a four-element vector by a scalar.
