@@ -122,7 +122,7 @@ function buildPlaneGeometry(cfg = {}) {
             positions[offset + 1] = centerY;
             positions[offset + 2] = -z + centerZ;
 
-            normals[offset + 2] = -1;
+            normals[offset + 1] = 1;
 
             uvs[offset2] = (ix) / planeX;
             uvs[offset2 + 1] = ((planeZ - iz) / planeZ);
