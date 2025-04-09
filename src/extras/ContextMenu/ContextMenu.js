@@ -518,7 +518,7 @@ class ContextMenu {
         for (let i = 0, len = this._menuList.length; i < len; i++) {
             const menu = this._menuList[i];
             const menuElement = menu.menuElement;
-            menuElement.parentElement.removeChild(menuElement);
+            menuElement.remove();
         }
         this._itemsCfg = [];
         this._rootMenu = null;
