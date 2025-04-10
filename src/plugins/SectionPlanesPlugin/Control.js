@@ -482,8 +482,8 @@ class Control {
             const canvasPos = math.vec2();
 
             const copyCanvasPos = (event, vec2) => {
-                vec2[0] = event.clientX;
-                vec2[1] = event.clientY;
+                vec2[0] = event.pageX;
+                vec2[1] = event.pageY;
                 transformToNode(canvas.ownerDocument.documentElement, canvas, vec2);
             };
 
