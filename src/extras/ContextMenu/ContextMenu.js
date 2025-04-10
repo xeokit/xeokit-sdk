@@ -298,7 +298,8 @@ class ContextMenu {
         this._shown = false;    // True when the ContextMenu is visible
         this._nextId = 0;
         this._parentNode = cfg.parentNode || document.body;
-
+        this._offsetParent = (this._parentNode instanceof ShadowRoot) ? this._parentNode.host : this._parentNode;
+        
         /**
          * Subscriptions to events fired at this ContextMenu.
          * @private
@@ -510,7 +511,7 @@ class ContextMenu {
         for (let i = 0, len = this._menuList.length; i < len; i++) {
             const menu = this._menuList[i];
             const menuElement = menu.menuElement;
-            menuElement.parentElement.removeChild(menuElement);
+            menuElement.remove();
         }
         this._itemsCfg = [];
         this._rootMenu = null;
@@ -738,21 +739,22 @@ class ContextMenu {
 
                             const itemRect = itemElement.getBoundingClientRect();
                             const menuRect = subMenuElement.getBoundingClientRect();
+                            const offsetRect = self._offsetParent.getBoundingClientRect();
 
                             const subMenuWidth = 200; // TODO
-                            const showOnRight = (itemRect.right + subMenuWidth) < window.innerWidth;
-                            const showOnLeft = (itemRect.left - subMenuWidth) > 0;
-
+                            const showOnRight = (itemRect.right + subMenuWidth) < offsetRect.right;
+                            const showOnLeft = (itemRect.left - subMenuWidth) > offsetRect.left;
+                        
                             if(showOnRight)
-                                self._showMenu(subMenu.id, itemRect.right - 5, itemRect.top - 1);
+                                self._showMenu(subMenu.id, itemRect.right + window.scrollX - 5, itemRect.top + window.scrollY - 1);
                             else if (showOnLeft)
-                                self._showMenu(subMenu.id, itemRect.left - subMenuWidth, itemRect.top - 1);
+                                self._showMenu(subMenu.id, itemRect.left - subMenuWidth + window.scrollX, itemRect.top + window.scrollY - 1);
                             else {
-                                const spaceOnLeft = itemRect.left, spaceOnRight = window.innerWidth - itemRect.right;
+                                const spaceOnLeft = itemRect.left - offsetRect.left, spaceOnRight = offsetRect.right - itemRect.right;
                                 if(spaceOnRight > spaceOnLeft) 
-                                    self._showMenu(subMenu.id, itemRect.right - 5 - (subMenuWidth - spaceOnRight), itemRect.top - 1);
+                                    self._showMenu(subMenu.id, itemRect.right - 5 - (subMenuWidth - spaceOnRight), itemRect.top + window.scrollY - 1);
                                 else 
-                                    self._showMenu(subMenu.id, itemRect.left - spaceOnLeft, itemRect.top - 1);
+                                    self._showMenu(subMenu.id, itemRect.left - spaceOnLeft, itemRect.top + window.scrollY - 1);
                             }
 
                             lastSubMenu = subMenu;
@@ -945,14 +947,21 @@ class ContextMenu {
         menuElement.style.display = 'block';
         const menuHeight = menuElement.offsetHeight;
         const menuWidth = menuElement.offsetWidth;
-        if ((pageY + menuHeight) > window.innerHeight) {
-            pageY = window.innerHeight - menuHeight;
+
+        const offsetRect = this._offsetParent.getBoundingClientRect();
+        
+        const bottomContainerBorder = offsetRect.bottom + window.scrollY;
+        const rightContainerBorder = offsetRect.right + window.scrollX;
+        if ((pageY + menuHeight) > bottomContainerBorder) {
+            pageY = bottomContainerBorder- menuHeight;
         }
-        if ((pageX + menuWidth) > window.innerWidth) {
-            pageX = window.innerWidth - menuWidth;
+        if ((pageX + menuWidth) > rightContainerBorder) {
+            pageX = rightContainerBorder - menuWidth;
         }
-        menuElement.style.left = pageX + 'px';
-        menuElement.style.top = pageY + 'px';
+
+
+        menuElement.style.left = pageX - offsetRect.left - window.scrollX + 'px';
+        menuElement.style.top = pageY - offsetRect.top - window.scrollY + 'px';
     }
 
     _hideMenuElement(menuElement) {
