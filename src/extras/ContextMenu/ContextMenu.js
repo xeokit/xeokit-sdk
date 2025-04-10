@@ -746,9 +746,9 @@ class ContextMenu {
                             const showOnLeft = (itemRect.left - subMenuWidth) > offsetRect.left;
                         
                             if(showOnRight)
-                                self._showMenu(subMenu.id, itemRect.right - 5, itemRect.top + window.scrollY - 1);
+                                self._showMenu(subMenu.id, itemRect.right + window.scrollX - 5, itemRect.top + window.scrollY - 1);
                             else if (showOnLeft)
-                                self._showMenu(subMenu.id, itemRect.left - subMenuWidth, itemRect.top + window.scrollY - 1);
+                                self._showMenu(subMenu.id, itemRect.left - subMenuWidth + window.scrollX, itemRect.top + window.scrollY - 1);
                             else {
                                 const spaceOnLeft = itemRect.left - offsetRect.left, spaceOnRight = offsetRect.right - itemRect.right;
                                 if(spaceOnRight > spaceOnLeft) 
@@ -951,15 +951,16 @@ class ContextMenu {
         const offsetRect = this._offsetParent.getBoundingClientRect();
         
         const bottomContainerBorder = offsetRect.bottom + window.scrollY;
+        const rightContainerBorder = offsetRect.right + window.scrollX;
         if ((pageY + menuHeight) > bottomContainerBorder) {
             pageY = bottomContainerBorder- menuHeight;
         }
-        if ((pageX + menuWidth) > offsetRect.right) {
-            pageX = offsetRect.right - menuWidth;
+        if ((pageX + menuWidth) > rightContainerBorder) {
+            pageX = rightContainerBorder - menuWidth;
         }
 
 
-        menuElement.style.left = pageX - offsetRect.left + 'px';
+        menuElement.style.left = pageX - offsetRect.left - window.scrollX + 'px';
         menuElement.style.top = pageY - offsetRect.top - window.scrollY + 'px';
     }
 
