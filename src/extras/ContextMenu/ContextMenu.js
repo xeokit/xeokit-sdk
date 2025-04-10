@@ -298,20 +298,13 @@ class ContextMenu {
         this._shown = false;    // True when the ContextMenu is visible
         this._nextId = 0;
         this._parentNode = cfg.parentNode || document.body;
-
+        this._offsetParent = (this._parentNode instanceof ShadowRoot) ? this._parentNode.host : this._parentNode;
+        
         /**
          * Subscriptions to events fired at this ContextMenu.
          * @private
          */
         this._eventSubs = {};
-
-        let offsetParent;
-        if (this._parentNode.host) {
-            offsetParent = this._parentNode.host;
-        } else {
-            offsetParent = this._parentNode;
-        }
-        this._offsetParent = offsetParent;
 
         if (cfg.hideOnMouseDown !== false) {
             this._parentNode.addEventListener("mousedown", (event) => {
