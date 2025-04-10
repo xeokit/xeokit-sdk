@@ -753,15 +753,15 @@ class ContextMenu {
                             const showOnLeft = (itemRect.left - subMenuWidth) > offsetRect.left;
                         
                             if(showOnRight)
-                                self._showMenu(subMenu.id, itemRect.right - 5, itemRect.top - 1);
+                                self._showMenu(subMenu.id, itemRect.right - 5, itemRect.top + window.scrollY - 1);
                             else if (showOnLeft)
-                                self._showMenu(subMenu.id, itemRect.left - subMenuWidth, itemRect.top - 1);
+                                self._showMenu(subMenu.id, itemRect.left - subMenuWidth, itemRect.top + window.scrollY - 1);
                             else {
                                 const spaceOnLeft = itemRect.left - offsetRect.left, spaceOnRight = offsetRect.right - itemRect.right;
                                 if(spaceOnRight > spaceOnLeft) 
-                                    self._showMenu(subMenu.id, itemRect.right - 5 - (subMenuWidth - spaceOnRight), itemRect.top - 1);
+                                    self._showMenu(subMenu.id, itemRect.right - 5 - (subMenuWidth - spaceOnRight), itemRect.top + window.scrollY - 1);
                                 else 
-                                    self._showMenu(subMenu.id, itemRect.left - spaceOnLeft, itemRect.top - 1);
+                                    self._showMenu(subMenu.id, itemRect.left - spaceOnLeft, itemRect.top + window.scrollY - 1);
                             }
 
                             lastSubMenu = subMenu;
@@ -956,9 +956,10 @@ class ContextMenu {
         const menuWidth = menuElement.offsetWidth;
 
         const offsetRect = this._offsetParent.getBoundingClientRect();
-
-        if ((pageY + menuHeight) > offsetRect.bottom) {
-            pageY = offsetRect.bottom - menuHeight;
+        
+        const bottomContainerBorder = offsetRect.bottom + window.scrollY;
+        if ((pageY + menuHeight) > bottomContainerBorder) {
+            pageY = bottomContainerBorder- menuHeight;
         }
         if ((pageX + menuWidth) > offsetRect.right) {
             pageX = offsetRect.right - menuWidth;
@@ -966,7 +967,7 @@ class ContextMenu {
 
 
         menuElement.style.left = pageX - offsetRect.left + 'px';
-        menuElement.style.top = pageY - offsetRect.top + 'px';
+        menuElement.style.top = pageY - offsetRect.top - window.scrollY + 'px';
     }
 
     _hideMenuElement(menuElement) {
