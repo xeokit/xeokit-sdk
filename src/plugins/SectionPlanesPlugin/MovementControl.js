@@ -12,14 +12,14 @@ import { buildSphereGeometry } from "../../viewer/scene/geometry/builders/buildS
 import { worldToRTCPos } from "../../viewer/scene/math/rtcCoords.js";
 import { transformToNode } from "../lib/ui/index.js";
 
-const translateElement = (element, translation) => {
+const translateElement = (element, worldAxis, translation, elementCenter) => {
   if (element) {
-    // let offset = [0, 0, 0];
+    let offset = [0, 0, 0];
 
-    // offset[0] += worldAxis[0] * translation;
-    // offset[1] += worldAxis[1] * translation;
-    // offset[2] += worldAxis[2] * translation;
-    element.translate(translation);
+    offset[0] += worldAxis[0] * translation[0];
+    offset[1] += worldAxis[1] * translation[1];
+    offset[2] += worldAxis[2] * translation[2];
+    element.translate({ translation: offset, originLocalPivot: elementCenter, rotationPivot: elementCenter, localAABB: element.aabb });
   }
 };
 
@@ -279,10 +279,12 @@ class MovementControl {
 
       const localToWorldVec = (localVec, worldVec) => math.vec3ApplyQuaternion(rootNode.quaternion, localVec, worldVec);
 
+      let count = 0;
       const closestPointOnAxis = (function () {
         const worldAxis = math.vec3();
         const org = math.vec3();
         const dir = math.vec3();
+
         return (canvasPos, dst) => {
           localToWorldVec(rgb, worldAxis);
 
@@ -313,12 +315,11 @@ class MovementControl {
         initDragAction: (initCanvasPos) => {
           return closestPointOnAxis(initCanvasPos, initOffset) && math.subVec3(initOffset, pos, initOffset) && ((canvasPos) => {
             if (closestPointOnAxis(canvasPos, tempVec3)) {
+              const elementCenter = this.getOriginalPos(this.element)
               math.subVec3(tempVec3, initOffset, tempVec3);
-              const newOffset = math.vec3();
-              math.subVec3(pos, tempVec3, newOffset);
-              math.mulVec3Scalar(newOffset, -1, newOffset)
+
               setPos(tempVec3);
-              translateElement(this.element, newOffset);
+              this.element.translate({ translation: tempVec3, originLocalPivot: elementCenter, rotationPivot: elementCenter, localAABB: this.element.aabb });
             }
           });
         }
@@ -356,6 +357,7 @@ class MovementControl {
             const q1 = math.vec4();
             const q2 = math.vec4();
             const angleAxis = math.vec4(4);
+            const engles = math.vec3();
 
             angleAxis[0] = rgb[0];
             angleAxis[1] = rgb[1];
@@ -368,14 +370,17 @@ class MovementControl {
             console.log("rotation:ANGLE", angle)
             console.log("rotation:angelSum", angelSum)
             console.log("rotation:EULERAngle", rotationEulerAngle)
-
+            math.mulVec3Scalar(rgb, angle, engles)
             const elementDimensions = this.element.aabb;
             const gizmoPosition = math.getAABB3Center(elementDimensions);
             console.log('gizmoPosition:   ', gizmoPosition)
             this.element.rotate({
-              radians: [0,0,90],
+              // rotation: [0, 0, angle],
+              rotation: q2,
+              // rotation: engles,
               pivot: pos,
-              isAllModel: true
+              originLocalPivot: pos, localAABB: this.element.aabb,
+              isAllModel: false
             });
             // this.element.rotate({
             //   radians: rotationEulerAngle,
@@ -618,54 +623,19 @@ class MovementControl {
     this._unbindSectionPlane = () => { };
     this._unbindElement = () => { };
 
-    this.__setSectionPlane = sectionPlane => {
-      this.id = sectionPlane.id;
-      this._sectionPlane = sectionPlane;
-      const setPosFromSectionPlane = () => setPos(sectionPlane.pos);
-      const setDirFromSectionPlane = () => rootNode.quaternion = sectionPlane.quaternion;
-      setPosFromSectionPlane();
-      setDirFromSectionPlane();
-      const onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
-      const onSectionPlaneDir = sectionPlane.on("dir", () => {
-        if (!ignoreNextSectionPlaneDirUpdate) {
-          setDirFromSectionPlane();
-        } else {
-          ignoreNextSectionPlaneDirUpdate = false;
-        }
-      });
-
-      this._unbindSectionPlane = () => {
-        this.id = null;
-        this._sectionPlane = null;
-        sectionPlane.off(onSectionPlanePos);
-        sectionPlane.off(onSectionPlaneDir);
-        this._unbindSectionPlane = () => { };
-      };
-    };
-
-
     this.__setElement = element => {
       this.id = element.id;
       this._element = element;
       const elementCenter = this.getOriginalPos(element)
+      console.log('originCenter', elementCenter)
       const setPosFromSectionPlane = () => setPos(elementCenter);
       const setDirFromSectionPlane = () => rootNode.quaternion = [0, 0, 0, 1];
       setPosFromSectionPlane();
       setDirFromSectionPlane();
-      // const onSectionPlanePos = element.on("pos", setPosFromSectionPlane);
-      // const onSectionPlaneDir = element.on("dir", () => {
-      //   if (!ignoreNextSectionPlaneDirUpdate) {
-      //     setDirFromSectionPlane();
-      //   } else {
-      //     ignoreNextSectionPlaneDirUpdate = false;
-      //   }
-      // });
 
       this._unbindElement = () => {
         this.id = null;
         this._element = null;
-        // element.off(onSectionPlanePos);
-        // element.off(onSectionPlaneDir);
         this._unbindElement = () => { };
       };
     };
