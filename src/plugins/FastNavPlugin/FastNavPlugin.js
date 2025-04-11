@@ -108,6 +108,7 @@ class FastNavPlugin extends Plugin {
      * @param {Number} [cfg.scaleCanvasResolutionFactor=0.6] The factor by which we downscale the canvas resolution whenever we interact with the Viewer.
      * @param {Boolean} [cfg.delayBeforeRestore=true] Whether to temporarily have a delay before restoring normal rendering after we stop interacting with the Viewer.
      * @param {Number} [cfg.delayBeforeRestoreSeconds=0.5] Delay in seconds before restoring normal rendering after we stop interacting with the Viewer.
+     * @param {String[]} [cfg.typesToHide] Types of Scene objects that will be hidden during interactions.
      */
     constructor(viewer, cfg = {}) {
 
@@ -123,6 +124,7 @@ class FastNavPlugin extends Plugin {
         this._scaleCanvasResolutionFactor = cfg.scaleCanvasResolutionFactor || 0.6;
         this._delayBeforeRestore = (cfg.delayBeforeRestore !== false);
         this._delayBeforeRestoreSeconds = cfg.delayBeforeRestoreSeconds || 0.5;
+        this._typesToHide = cfg.typesToHide || [];
 
         let timer = this._delayBeforeRestoreSeconds * 1000;
         let fastMode = false;
@@ -141,6 +143,17 @@ class FastNavPlugin extends Plugin {
                 } else {
                     viewer.scene.canvas.resolutionScale = this._defaultScaleCanvasResolutionFactor;
                 }
+                if (this._typesToHide && this._typesToHide.length > 0) {
+                    let objects = viewer.scene.objects;
+                    for (const [key, value] of Object.entries(objects)) {
+                        let metaObjects = viewer.metaScene.metaObjects;
+                        let currentMetaObject = metaObjects[key];
+                        if (this._typesToHide.includes(currentMetaObject.type)){
+                            value.visible = false;
+                        }
+                    }
+                }
+
                 fastMode = true;
             }
         };
@@ -152,6 +165,18 @@ class FastNavPlugin extends Plugin {
             viewer.scene._renderer.setPBREnabled(true);
             viewer.scene._renderer.setSAOEnabled(true);
             viewer.scene._renderer.setTransparentEnabled(true);
+
+            if (this._typesToHide && this._typesToHide.length > 0) {
+                let objects = viewer.scene.objects;
+                for (const [key, value] of Object.entries(objects)) {
+                    let metaObjects = viewer.metaScene.metaObjects;
+                    let currentMetaObject = metaObjects[key];
+                    if (this._typesToHide.includes(currentMetaObject.type)){
+                        value.visible = true;
+                    }
+                }
+            }
+
             fastMode = false;
         };
 
