@@ -949,7 +949,7 @@ class Node extends Component {
         }
         this._children.push(child);
         child._parentNode = this;
-        if (!!inheritStates) {
+      if (!!inheritStates) {
             child.visible = this.visible;
             child.culled = this.culled;
             child.xrayed = this.xrayed;
@@ -1227,7 +1227,7 @@ class Node extends Component {
         angleAxis[1] = axis[1];
         angleAxis[2] = axis[2];
         angleAxis[3] = angle * math.DEGTORAD;
-        math.angleAxisToQuaternion(angleAxis, q1);
+      math.angleAxisToQuaternion(angleAxis, q1);
         math.mulQuaternions(this.quaternion, q1, q2);
         this.quaternion = q2;
         this._setLocalMatrixDirty();
