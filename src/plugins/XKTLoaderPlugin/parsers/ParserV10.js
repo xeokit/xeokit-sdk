@@ -566,8 +566,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                             sceneModel.createMesh(utils.apply(meshDefaults, {
                                 id: meshId,
                                 textureSetId,
-                                origin: meshIndex % 2 === 0 ? tileCenter : [tileCenter[1], tileCenter[0], tileCenter[2] * 2],
-                                // rotation: [90, 90, 90],
+                                origin: tileCenter,
                                 primitive: geometryArrays.primitiveName,
                                 positionsCompressed: transformedAndRecompressedPositions,
                                 normalsCompressed: geometryArrays.geometryNormals,
