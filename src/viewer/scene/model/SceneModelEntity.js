@@ -651,16 +651,16 @@ export class SceneModelEntity {
     return this.model.saoEnabled;
   }
 
-  rotate({radians, pivot}) {
+  rotate(conf) {
     for (let i = 0, len = this.meshes.length; i < len; i++) {
-        this.meshes[i].rotate(radians, pivot);
+      this.meshes[i].rotate(conf);
       }
       this.model.glRedraw();
     }
 
-  translate(translationDelta) {
+  translate(conf) {
     for (let i = 0, len = this.meshes.length; i < len; i++) {
-      this.meshes[i].translate(translationDelta);
+      this.meshes[i].translate(conf);
     }
     this.model.glRedraw();
     }

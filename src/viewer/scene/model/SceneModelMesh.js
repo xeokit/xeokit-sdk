@@ -412,12 +412,12 @@ export class SceneModelMesh {
         return this._aabbWorld;
     }
 
-    rotate(radians, pivot) {
-      this.layer.rotate(radians, pivot);
+  rotate(conf) {
+    this.layer.rotate(conf);
     }
 
-    translate(translationDelta) {
-      this.layer.translate(translationDelta);
+  translate(conf) {
+    this.layer.translate(conf);
     }
 
     destroy() {

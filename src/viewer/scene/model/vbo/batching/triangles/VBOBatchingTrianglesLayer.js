@@ -661,16 +661,16 @@ export class VBOBatchingTrianglesLayer {
         this._setFlags(portionId, flags, transparent);
     }
 
-    translate(translationDelta) {
+  translate(conf) {
       let positionsDecodeMatrix = math.transformMatrix({
         matrix: this._state.positionsDecodeMatrix,
-        translation: translationDelta,
+        ...conf
       });
 
       this._state.positionsDecodeMatrix = positionsDecodeMatrix;
     }
 
-    rotate(radians, pivot) {
+  rotate(conf) {
       if (!this._finalized) {
         throw 'Not finalized';
       }
@@ -678,8 +678,7 @@ export class VBOBatchingTrianglesLayer {
       if (this._state && this._state.positionsDecodeMatrix) {
         let positionsDecodeMatrix = math.transformMatrix({
           matrix: this._state.positionsDecodeMatrix,
-          rotation: radians,
-          rotationPivot: pivot,
+          ...conf
         });
 
         this._state.positionsDecodeMatrix = positionsDecodeMatrix;
