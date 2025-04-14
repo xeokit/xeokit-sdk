@@ -87,6 +87,7 @@ class LineSet extends Component {
         }
 
         this._color = cfg.color || [1, 1, 1];
+        this._opacity = cfg.opacity || 1.0;
 
         this._sceneModel = new SceneModel(this, {
             isModel: false // Don't register in Scene.models
@@ -98,6 +99,7 @@ class LineSet extends Component {
             positions: this._positions,
             indices: this._indices,
             color: this._color,
+            opacity: this._opacity,
         })
 
         this._sceneModel.createEntity({
