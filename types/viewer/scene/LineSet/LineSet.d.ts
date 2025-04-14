@@ -66,7 +66,7 @@ export declare class LineSet extends Component {
      * @param {string} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
      * @param {number[]} cfg.positions World-space 3D vertex positions.
      * @param {number[]} [cfg.indices] Indices to connect ````positions```` into line segments. Note that these are separate line segments, not a polyline.
-     * @param {number[]} [cfg.color=[0,0,0]] The color of this ````LineSet````. This is both emissive and diffuse.
+     * @param {number[]} [cfg.color=[1,1,1]] The color of this ````LineSet````. This is both emissive and diffuse.
      * @param {boolean} [cfg.visible=true] Indicates whether or not this ````LineSet```` is visible.
      * @param {number} [cfg.opacity=1.0] ````LineSet````'s initial opacity factor.
      */
