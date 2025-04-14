@@ -34,6 +34,12 @@ export declare class PickResult {
   pickSurfacePrecision: boolean;
 
   /**
+   * True when picked from touch input, else false when from mouse input.
+   * @type {boolean}
+   */
+  touchInput: boolean;
+
+  /**
    * Canvas coordinates when picking with a 2D pointer.
    * @property canvasPos
    * @type {Number[]}
@@ -65,6 +71,13 @@ export declare class PickResult {
    * @type {Number[]}
    */
   get localPos(): number[];
+
+  /**
+   * Canvas cursor coordinates, snapped when snap picking, otherwise same as {@link PickResult#pointerPos}.
+   * @property snappedCanvasPos
+   * @type {Number[]}
+   */
+  get snappedCanvasPos(): number[];
 
   /**
    * Picked World-space point on surface.
@@ -100,6 +113,12 @@ export declare class PickResult {
    * @type {Number[]}
    */
   get uv(): number[];
+
+  /**
+   * True if snapped to edge or vertex.
+   * @returns {boolean}
+   */
+  get snapped(): boolean;
 
   /**
    * True when snapped to the nearest vertex position.

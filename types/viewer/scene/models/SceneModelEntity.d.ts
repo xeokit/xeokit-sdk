@@ -1,6 +1,7 @@
 import {Entity} from "../Entity";
 import {SceneModelMesh} from "./SceneModelMesh";
 import {SceneModel} from "./SceneModel";
+import { Material } from "../materials";
 
 /**
  * An abstract 3D scene element that can be individually shown, hidden, selected,
@@ -88,6 +89,11 @@ export declare abstract class SceneModelEntity implements Entity {
      * @abstract
      */
     get aabb(): number[];
+
+    /**
+     * The approximate number of primitives in this SceneModelEntity
+     */
+    get numPrimitives(): number;
 
     /**
      * The approximate number of triangles in this SceneModelEntity.
@@ -204,6 +210,26 @@ export declare abstract class SceneModelEntity implements Entity {
      * @abstract
      */
     get edges(): boolean;
+
+    /**
+     * Toggle View Frustum Culling
+     */
+    set culledVFC(arg: boolean);
+
+    /**
+     * Gets View Frustum Culling
+     */
+    get culledVFC(): boolean;
+
+    /**
+     * Toggle Level of Detail Culling
+     */
+    set culledLOD(arg: boolean);
+
+    /**
+     * Gets level of detail culling
+     */
+    get culledLOD(): boolean;
 
     /**
      * Sets if this SceneModelEntity is culled.
@@ -364,6 +390,20 @@ export declare abstract class SceneModelEntity implements Entity {
     get saoEnabled(): boolean;
 
     /**
+     * Sets the material for this SceneModelEntity that will be used on the caps 
+     * when the objects of this entity are sliced
+     * 
+     * If there is no capMaterial attached to a SceneModelEntity then its objects
+     * will not be capped when sliced
+     */
+    set capMaterial(value: Material);
+
+    /**
+     * Gets the cap material attached to this SceneModelEntity
+     */
+    get capMaterial(): Material;
+
+    /**
      * Sets the SceneModelEntity's 3D World-space offset.
      *
      * Since offsetting Entities comes with memory and rendering overhead on some systems, this feature
@@ -397,6 +437,31 @@ export declare abstract class SceneModelEntity implements Entity {
      * @param callback
      */
     getEachVertex(callback: any): void;
+
+    /**
+     * Gets the indices of this entity in a callback
+     */
+    getEachIndex(callback: any): void;
+
+    /**
+     * Returns the volume of this SceneModelEntity.
+     *
+     * Only works when {@link Scene.readableGeometryEnabled | Scene.readableGeometryEnabled} is `true` and the
+     * SceneModelEntity contains solid triangle meshes; returns `0` otherwise.
+     *
+     * @returns {number}
+     */
+    get volume(): number;
+
+    /**
+     * Returns the surface area of this SceneModelEntity.
+     *
+     * Only works when {@link Scene.readableGeometryEnabled | Scene.readableGeometryEnabled} is `true` and the
+     * SceneModelEntity contains triangle meshes; returns `0` otherwise.
+     *
+     * @returns {number}
+     */
+    get surfaceArea(): number;
 
     /**
      * The {@link SceneModel} to which this SceneModelEntity belongs.

@@ -203,4 +203,9 @@ export declare class PointsMaterial extends Material {
    * @type {Number}
    */
   get maxIntensity(): number;
+
+  /**
+   * Destroys this ````PointsMaterial````.
+   */
+  destroy(): void;
 }

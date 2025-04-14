@@ -60,4 +60,6 @@ export declare class VBOGeometry extends Geometry {
    * Will be zero if {@link VBOGeometry#primitive} is not 'triangles', 'triangle-strip' or 'triangle-fan'.
    */
   get numTriangles(): Number;
+
+  destroy(): void;
 }

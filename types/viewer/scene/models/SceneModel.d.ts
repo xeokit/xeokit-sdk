@@ -3,6 +3,8 @@ import { SceneModelEntity } from "./SceneModelEntity";
 import { EdgeMaterial, EmphasisMaterial } from "../materials";
 import { SceneModelMesh } from "./SceneModelMesh";
 import { SceneModelTextureSet } from "./SceneModelTextureSet";
+import { SceneModelTransform } from "./SceneModelTransform";
+import { SceneModelTexture } from "./SceneModelTexture";
 
 /**
  * A high-performance model representation for efficient rendering and low memory usage.
@@ -26,6 +28,49 @@ export declare class SceneModel extends Component {
     on(event: "error", callback: (msg: string) => void, scope?: any): string;
 
     /**
+     * Returns true to indicate that this Component is a SceneModel.
+     * @type {Boolean}
+     */
+    get isPerformanceModel(): boolean;
+
+    /**
+     * The {@link SceneModelTransform}s in this SceneModel.
+     *
+     * Each {@link SceneModelTransform} is stored here against its {@link SceneModelTransform.id}.
+     *
+     * @returns {*|{}}
+     */
+    get transforms(): { [key: string]: SceneModelTransform }
+
+    /**
+     * The {@link SceneModelTexture}s in this SceneModel.
+     *
+     * * Each {@link SceneModelTexture} is created with {@link SceneModel.createTexture}.
+     * * Each {@link SceneModelTexture} is stored here against its {@link SceneModelTexture.id}.
+     *
+     * @returns {*|{}}
+     */
+    get textures(): { [key: string]: SceneModelTexture }
+
+    /**
+     * The {@link SceneModelTextureSet}s in this SceneModel.
+     *
+     * Each {@link SceneModelTextureSet} is stored here against its {@link SceneModelTextureSet.id}.
+     *
+     * @returns {*|{}}
+     */
+    get textureSets(): { [key: string]: SceneModelTextureSet }
+
+    /**
+     * The {@link SceneModelMesh}es in this SceneModel.
+     *
+     * Each {@link SceneModelMesh} is stored here against its {@link SceneModelMesh.id}.
+     *
+     * @returns {*|{}}
+     */
+    get meshes(): { [key: string]: SceneModelMesh }
+
+    /**
      * Returns the {@link SceneModelEntity}s in this SceneModel.
      * @returns {*|{}}
      */
@@ -43,6 +88,15 @@ export declare class SceneModel extends Component {
     get origin(): number[];
 
     /**
+     * Sets the SceneModel's local translation.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {number[]}
+     */
+    set position(value: number[]);
+
+    /**
      * Gets the SceneModel's local translation.
      *
      * Default value is ````[0,0,0]````.
@@ -50,6 +104,15 @@ export declare class SceneModel extends Component {
      * @type {number[]}
      */
     get position(): number[];
+
+    /**
+     * Sets the SceneModel's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {number[]}
+     */
+    set rotation(value: number[]);
 
     /**
      * Gets the SceneModel's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -61,6 +124,15 @@ export declare class SceneModel extends Component {
     get rotation(): number[];
 
     /**
+     * Sets the SceneModel's local rotation quaternion.
+     *
+     * Default value is ````[0,0,0,1]````.
+     *
+     * @type {number[]}
+     */
+    set quaternion(value: number[]);
+
+    /**
      * Gets the VBOSceneModels's local rotation quaternion.
      *
      * Default value is ````[0,0,0,1]````.
@@ -68,6 +140,16 @@ export declare class SceneModel extends Component {
      * @type {number[]}
      */
     get quaternion(): number[];
+
+    /**
+     * Sets the SceneModel's local scale.
+     *
+     * Default value is ````[1,1,1]````.
+     *
+     * @type {number[]}
+     * @deprecated
+     */
+    set scale(value: number[]);
 
     /**
      * Gets the SceneModel's local scale.
@@ -79,6 +161,15 @@ export declare class SceneModel extends Component {
     get scale(): number[];
 
     /**
+     * Sets the SceneModel's local modeling transform matrix.
+     *
+     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
+     *
+     * @type {number[]}
+     */
+    set matrix(value: number[])
+
+    /**
      * Gets the SceneModel's local modeling transform matrix.
      *
      * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
@@ -86,6 +177,22 @@ export declare class SceneModel extends Component {
      * @type {number[]}
      */
     get matrix(): number[];
+
+    /**
+     * Gets the SceneModel's local modeling rotation transform matrix.
+     *
+     * @type {number[]}
+     */
+    get rotationMatrix(): number[];
+
+    /**
+     * Gets the conjugate of the SceneModel's local modeling rotation transform matrix.
+     *
+     * This is used for RTC view matrix management in renderers.
+     *
+     * @type {Number[]}
+     */
+    get rotationMatrixConjugate(): number[];
 
     /**
      * Gets the SceneModel's World matrix.
@@ -167,13 +274,6 @@ export declare class SceneModel extends Component {
      * @type {number[]}
      */
     get aabb(): number[];
-
-    /**
-     * The number of entities in this SceneModel.
-     *
-     * @type {number}
-     */
-    get numEntities(): number;
 
     /**
      * The approximate number of triangle primitives in this SceneModel.
@@ -425,6 +525,15 @@ export declare class SceneModel extends Component {
     get pbrEnabled(): boolean;
 
     /**
+     * Gets if color textures are enabled for this SceneModel.
+     *
+     * Only works when {@link Scene#colorTextureEnabled} is also true.
+     *
+     * @type {Boolean}
+     */
+    get colorTextureEnabled(): boolean;
+
+    /**
      * Returns true to indicate that SceneModel is implements {@link Drawable}.
      *
      * @type {Boolean}
@@ -466,6 +575,12 @@ export declare class SceneModel extends Component {
      * @type {EdgeMaterial}
      */
     get edgeMaterial(): EdgeMaterial;
+
+    /**
+     *
+     * @param cfg
+     */
+    createQuantizationRange(arg: {id: string | number, aabb: number[]}): void;
 
     /**
      * Creates a texture within this SceneModel.
@@ -703,6 +818,13 @@ export declare class SceneModel extends Component {
     }): SceneModelEntity;
 
     /**
+     * Pre-renders all meshes that have been added, even if the SceneModel has not bee finalized yet.
+     * This is use for progressively showing the SceneModel while it is being loaded or constructed.
+     * @returns {boolean}
+     */
+    preFinalize(): boolean;
+
+    /**
      * Finalizes this SceneModel.
      *
      * Immediately creates the SceneModel's {@link SceneModelEntity}s within the {@link Scene}.
@@ -710,4 +832,9 @@ export declare class SceneModel extends Component {
      * Once finalized, you can't add anything more to this SceneModel.
      */
     finalize(): void;
+
+    /**
+     * Destroys this SceneModel.
+     */
+    destroy(): void;
 }
