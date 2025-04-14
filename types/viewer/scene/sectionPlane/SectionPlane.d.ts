@@ -59,6 +59,42 @@ export declare class SectionPlane extends Component {
   get pos(): number[];
 
   /**
+   * Sets the quaternion of this SectionPlane's plane.
+   *
+   * Default value is ````[0, -1, 0, 0]````.
+   *
+   * @param {Number[]} value New quaternion.
+   */
+  set quaternion(value: number[]);
+
+  /**
+   * Gets the quaternion of this SectionPlane's plane.
+   *
+   * Default value is ````[0, -1, 0, 0]````.
+   *
+   * @returns {Number[]} value Current quaternion.
+   */
+  get quaternion(): number[];
+
+  /**
+   * Sets the roll of this SectionPlane's plane.
+   *
+   * Default value is ````0````.
+   *
+   * @param {Number[]} value New roll.
+   */
+  set roll(value: number[]);
+
+  /**
+   * Gets the roll of this SectionPlane's plane.
+   *
+   * Default value is ````0````.
+   *
+   * @returns {Number[]} value Current roll.
+   */
+  get roll(): number[];
+
+  /**
    * Sets the direction of this SectionPlane's plane.
    *
    * Default value is ````[0, 0, -1]````.
@@ -90,4 +126,9 @@ export declare class SectionPlane extends Component {
    * Inverts the direction of {@link SectionPlane.dir}.
    */
   flipDir(): void;
+
+  /**
+   * @destroy
+   */
+  destroy(): void;
 }

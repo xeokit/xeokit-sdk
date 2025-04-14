@@ -465,4 +465,9 @@ export declare class PhongMaterial extends Material {
    * @type {Fresnel}
    */
   get reflectivityFresnel(): Fresnel;
+
+  /**
+   * Destroys this PhongMaterial.
+   */
+  destroy(): void;
 }

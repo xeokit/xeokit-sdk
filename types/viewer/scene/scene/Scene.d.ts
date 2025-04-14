@@ -205,6 +205,19 @@ export declare class Scene extends Component {
   get entityOffsetsEnabled(): boolean;
 
   /**
+   * Whether geometry is readable.
+   *
+   * This is set via the {@link Viewer} constructor and is ````false```` by default.
+   *
+   * The ````readableGeometryEnabled```` option for ````Scene#pick```` only works if this is set ````true````.
+   *
+   * Note that when ````true````, this configuration will increase the amount of browser memory used by the Viewer.
+   *
+   * @returns {Boolean} True if geometry is readable.
+   */
+  get readableGeometryEnabled(): boolean;
+
+  /**
    * Whether precision surface picking is enabled.
    *
    * This is set via the {@link Viewer} constructor and is ````false```` by default.
@@ -227,6 +240,34 @@ export declare class Scene extends Component {
   get logarithmicDepthBufferEnabled(): boolean;
 
   /**
+   * Sets the number of {@link SectionPlane}s for which this Scene pre-caches resources.
+   *
+   * This property enhances the efficiency of SectionPlane creation by proactively allocating and caching Viewer resources for a specified quantity
+   * of SectionPlanes. Introducing this parameter streamlines the initial creation speed of SectionPlanes, particularly up to the designated quantity. This parameter internally
+   * configures renderer logic for the specified number of SectionPlanes, eliminating the need for setting up logic with each SectionPlane creation and thereby enhancing
+   * responsiveness. It is important to consider that each SectionPlane impacts rendering performance, so it is recommended to set this value to a quantity that aligns with
+   * your expected usage.
+   *
+   * Default is ````0````.
+   */
+  set numCachedSectionPlanes(numCachedSectionPlanes: number);
+
+  /**
+   * Gets the number of {@link SectionPlane}s for which this Scene pre-caches resources.
+   *
+   * This property enhances the efficiency of SectionPlane creation by proactively allocating and caching Viewer resources for a specified quantity
+   * of SectionPlanes. Introducing this parameter streamlines the initial creation speed of SectionPlanes, particularly up to the designated quantity. This parameter internally
+   * configures renderer logic for the specified number of SectionPlanes, eliminating the need for setting up logic with each SectionPlane creation and thereby enhancing
+   * responsiveness. It is important to consider that each SectionPlane impacts rendering performance, so it is recommended to set this value to a quantity that aligns with
+   * your expected usage.
+   *
+   * Default is ````0````.
+   *
+   * @returns {number} The number of {@link SectionPlane}s for which this Scene pre-caches resources.
+   */
+  get numCachedSectionPlanes(): number;
+
+  /**
    * Sets whether physically-based rendering is enabled.
    *
    */
@@ -240,6 +281,44 @@ export declare class Scene extends Component {
    * @returns {Boolean} True if quality rendering is enabled.
    */
   get pbrEnabled(): boolean
+
+  /**
+   * Sets whether data texture scene representation (DTX) is enabled for the {@link Scene}.
+   *
+   * Even when enabled, DTX will only work if supported.
+   *
+   * Default value is ````false````.
+   *
+   * @type {Boolean}
+   */
+  set dtxEnabled(value: boolean);
+
+  /**
+   * Gets whether data texture-based scene representation (DTX) is enabled for the {@link Scene}.
+   *
+   * Even when enabled, DTX will only apply if supported.
+   *
+   * Default value is ````false````.
+   *
+   * @type {Boolean}
+   */
+  get dtxEnabled(): boolean;
+
+  /**
+   * Sets whether basic color texture rendering is enabled.
+   *
+   * Default is ````true````.
+   */
+  set colorTextureEnabled(colorTextureEnabled: boolean);
+
+  /**
+   * Gets whether basic color texture rendering is enabled.
+   *
+   * Default is ````true````.
+   *
+   * @returns {Boolean} True if basic color texture rendering is enabled.
+   */
+  get colorTextureEnabled(): boolean;
 
   /**
    * Gets the Z value of offset for Marker's OcclusionTester.
@@ -669,6 +748,16 @@ export declare class Scene extends Component {
   clearSectionPlanes(): void;
 
   /**
+   * Destroys all {@link Bitmaps}s in this Scene.
+   */
+  clearBitmaps(): void;
+
+  /**
+   * Destroys all {@link Line}s in this Scene.
+   */
+  clearLines(): void;
+
+  /**
    * Gets the collective axis-aligned boundary (AABB) of a batch of {@link Entity}s that represent objects.
    *
    * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
@@ -821,6 +910,19 @@ export declare class Scene extends Component {
    * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
    */
   withObjects(ids: string[], callback: Function): boolean;
+
+  /**
+   * This method will "tickify" the provided `cb` function.
+   *
+   * This means, the function will be wrapped so:
+   *
+   * - it runs time-aligned to scene ticks
+   * - it runs maximum once per scene-tick
+   *
+   * @param {Function} cb The function to tickify
+   * @returns {Function}
+   */
+  tickify<T extends (...args: any[]) => any>(cb: T): (...args: Parameters<T>) => void;
 
   /**
    * Destroys this Scene.

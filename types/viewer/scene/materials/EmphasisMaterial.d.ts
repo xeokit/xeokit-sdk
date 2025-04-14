@@ -238,4 +238,9 @@ export declare class EmphasisMaterial extends Material {
    * @type {Boolean}
    */
   get glowThrough(): boolean;
+
+  /**
+   * Destroys this EmphasisMaterial.
+   */
+  destroy(): void;
 }
