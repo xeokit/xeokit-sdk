@@ -13,6 +13,9 @@ const tempVec4a = math.vec4();
 const tempVec4b = math.vec4();
 const tempVec4c = math.vec4();
 
+const TOP_LIMIT = 0.001;
+const BOTTOM_LIMIT = Math.PI - 0.001;
+
 
 /** @private */
 class PivotController {
@@ -188,14 +191,9 @@ class PivotController {
      */
     startPivot() {
 
-        if (this._cameraLookingDownwards()) {
-            this._pivoting = false;
-            return false;
-        }
-
         const camera = this._scene.camera;
 
-        let lookat = math.lookAtMat4v(camera.eye, camera.look, camera.worldUp);
+        let lookat = math.lookAtMat4v(camera.eye, camera.look, camera.up);
         math.transformPoint3(lookat, this.getPivotPos(), this._cameraOffset);
 
         const pivotPos = this.getPivotPos();
@@ -298,8 +296,31 @@ class PivotController {
             dx = -dx;
         }
         this._azimuth += -dx * .01;
-        this._polar += dy * .01;
-        this._polar = math.clamp(this._polar, .001, Math.PI - .001);
+
+        const isMovingUp = dy < 0;
+        const isMovingDown = dy > 0;
+        
+        // Track if we're at limits - only check if we're very close to the limit
+        const atTopLimit = Math.abs(this._polar - TOP_LIMIT) < 0.005;
+        const atBottomLimit = Math.abs(this._polar - BOTTOM_LIMIT) < 0.005;
+        
+        let newPolar = this._polar + dy * .01;
+        
+        // Case 1: At top limit and trying to go beyond
+        if (atTopLimit && isMovingUp) {
+            newPolar = TOP_LIMIT;
+        }
+        // Case 2: At bottom limit and trying to go beyond
+        else if (atBottomLimit && isMovingDown) {
+            newPolar = BOTTOM_LIMIT;
+        }
+        // Case 3: Normal rotation or moving away from a limit
+        else {
+            newPolar = math.clamp(newPolar, TOP_LIMIT, BOTTOM_LIMIT);
+        }
+
+        this._polar = newPolar;
+
         const pos = [
             this._radius * Math.sin(this._polar) * Math.sin(this._azimuth),
             this._radius * Math.cos(this._polar),
