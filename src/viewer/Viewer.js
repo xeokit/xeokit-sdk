@@ -363,22 +363,6 @@ class Viewer {
             this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
         }
 
-        const captured = {};
-        for (let i = 0, len = this._plugins.length; i < len; i++) {
-            const plugin = this._plugins[i];
-            if (plugin.getContainerElement) {
-                const container = plugin.getContainerElement();
-                if (container !== document.body) {
-                    if (!captured[container.id]) {
-                        captured[container.id] = true;
-                        html2canvas(container).then(function (canvas) {
-                            document.body.appendChild(canvas);
-                        });
-                    }
-                }
-            }
-        }
-
         // firing "rendering" is necessary to trigger DTX{Lines,Triangles}Layer::_uploadDeferredFlags
         this.scene.fire("rendering", { }, true);
 
