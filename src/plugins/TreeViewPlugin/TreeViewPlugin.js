@@ -415,7 +415,7 @@ export class TreeViewPlugin extends Plugin {
         this._sortNodes = cfg.sortNodes;
         this._pruneEmptyNodes = cfg.pruneEmptyNodes;
         this._showListItemElementId = null;
-        this._renderService = cfg.renderService || new RenderService();
+        this._renderService = cfg.renderService || new RenderService(this._containerElement);
         this._showIndeterminate = cfg.showIndeterminate ?? false;
         this._showProjectNode = cfg.showProjectNode ?? false;
         this._elevationSortFunction = cfg.elevationSortFunction ?? undefined;

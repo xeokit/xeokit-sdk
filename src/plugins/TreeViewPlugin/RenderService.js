@@ -5,6 +5,15 @@ import { addContextMenuListener } from "../lib/html/MenuEvent.js";
  */
 export class RenderService {
 
+  /**
+  * @constructor
+  *
+  * @param {HTMLElement} treeViewContainer Container element for the tree which uses this render service.
+  */
+  constructor(treeViewContainer) {
+    this._treeViewContainer = treeViewContainer;
+  }
+
   /*
   * Creates the root node of the tree.
   * @return {HTMLElement} The root node of the tree.
@@ -129,7 +138,7 @@ export class RenderService {
   }
 
   getSwitchElement(nodeId) {
-    return document.getElementById(`switch-${nodeId}`);
+    return this._treeViewContainer.querySelector(`[id="switch-${nodeId}"]`);
   }
 
   isChecked(element) {
@@ -137,7 +146,7 @@ export class RenderService {
   }
 
   setCheckbox(nodeId, checked, indeterminate = false) {
-    const checkbox = document.getElementById(`checkbox-${nodeId}`);
+    const checkbox = this._treeViewContainer.querySelector(`[id="checkbox-${nodeId}"]`);
     if (checkbox) {
       if (checked !== checkbox.checked) {
         checkbox.checked = checked;
@@ -152,7 +161,7 @@ export class RenderService {
   }
 
   setXRayed(nodeId, xrayed) {
-    const treeNode = document.getElementById(nodeId);
+    const treeNode = this._treeViewContainer.querySelector(`[id="${nodeId}"]`);
     if (treeNode) {
       if (xrayed) {
         treeNode.classList.add('xrayed-node');
@@ -163,7 +172,7 @@ export class RenderService {
   }
 
   setHighlighted(nodeId, highlighted) { 
-    const treeNode = document.getElementById(nodeId);
+    const treeNode = this._treeViewContainer.querySelector(`[id="${nodeId}"]`);
     if (treeNode) {
       if (highlighted) {
         treeNode.scrollIntoView({block: "center"});
