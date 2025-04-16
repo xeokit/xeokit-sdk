@@ -4,9 +4,9 @@ export declare type SkyboxConfiguration = {
     /** Optional ID, unique among all components in the parent {Scene}, generated automatically when omitted. */
     id?: string;
     /** Path to skybox texture */
-    src: string;
+    src: string | string[];
     /** Texture encoding format.  See the {@link Texture#encoding} property for more info. */
-    encoding?: string;
+    encoding?: number;
     /** Size of this Skybox, given as the distance from the center at ````[0,0,0]```` to each face. */
     size?: number;
     /** True when this Skybox is visible. */

@@ -3,6 +3,7 @@ import {Mesh} from "../mesh/Mesh.js";
 import {ReadableGeometry} from "../geometry/ReadableGeometry.js";
 import {PhongMaterial} from "../materials/PhongMaterial.js";
 import {Texture} from "../materials/Texture.js";
+import { ClampToEdgeWrapping, LinearEncoding } from "../constants/constants.js";
 
 /**
  * @desc A Skybox.
@@ -14,14 +15,40 @@ class Skybox extends Component {
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this PointLight as well.
      * @param {*} [cfg]  Skybox configuration
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent {Scene}, generated automatically when omitted.
-     * @param {String} [cfg.src=null] Path to skybox texture
-     * @param {String} [cfg.encoding="linear"] Texture encoding format.  See the {@link Texture#encoding} property for more info.
+     * @param {String | String[]} [cfg.src=null] Path to skybox texture
+     * @param {Number} [cfg.encoding=LinearEncoding] Texture encoding format.  See the {@link Texture#encoding} property for more info.
      * @param {Number} [cfg.size=1000] Size of this Skybox, given as the distance from the center at ````[0,0,0]```` to each face.
      * @param {Boolean} [cfg.active=true] True when this Skybox is visible.
      */
     constructor(owner, cfg = {}) {
 
         super(owner, cfg);
+
+        const useMultipleTexture = typeof cfg.src === "object" && cfg.src !== null;
+
+        if (useMultipleTexture) {
+            this._createCombinedTexture(cfg).then(combinedTexture => {
+                this._createSkyboxMesh(cfg, combinedTexture);
+            }).catch(e => this.error(e));
+        } else {
+            this._createSkyboxMesh(cfg);
+        }
+    }
+
+    /**
+     * 
+     * @private
+     * @param {*} cfg 
+     * @param {Texture} combinedTexture 
+     */
+    _createSkyboxMesh(cfg, combinedTexture = null) {
+        const texture = combinedTexture || new Texture(this, {
+            src: cfg.src,
+            flipY: true,
+            wrapS: ClampToEdgeWrapping,
+            wrapT: ClampToEdgeWrapping,
+            encoding: cfg.encoding || LinearEncoding
+        });
 
         this._skyboxMesh = new Mesh(this, {
 
@@ -53,13 +80,7 @@ class Skybox extends Component {
                 diffuse: [0, 0, 0],
                 specular: [0, 0, 0],
                 emissive: [1, 1, 1],
-                emissiveMap: new Texture(this, {
-                    src: cfg.src,
-                    flipY: true,
-                    wrapS: "clampToEdge",
-                    wrapT: "clampToEdge",
-                    encoding: cfg.encoding || "sRGB"
-                }),
+                emissiveMap: texture,
                 backfaces: true // Show interior faces of our skybox geometry
             }),
             // stationary: true,
@@ -73,6 +94,86 @@ class Skybox extends Component {
         this.active = cfg.active;
     }
 
+    /**
+     * 
+     * @private
+     * @param {*} cfg 
+     * @returns {Texture}
+     */
+    async _createCombinedTexture(cfg) {
+        const [
+            posX,
+            negX,
+            posY,
+            negY,
+            posZ,
+            negZ
+        ] = cfg.src;
+
+        if (!posX || !negX || !posY || !negY || !posZ || !negZ) {
+            throw new Error("All six skybox textures must be provided");
+        }
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const loadImage = src => {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = () => resolve(img);
+                img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
+                img.src = src;
+            });
+        };
+
+        try {
+            const [imgPosX, imgNegX, imgPosY, imgNegY, imgPosZ, imgNegZ] = await Promise.all([
+                loadImage(posX),
+                loadImage(negX),
+                loadImage(posY),
+                loadImage(negY),
+                loadImage(posZ),
+                loadImage(negZ)
+            ]);
+
+            const imageSize = imgPosX.width;
+            if (
+                imgNegX.width !== imageSize || imgPosY.width !== imageSize ||
+                imgNegY.width !== imageSize || imgPosZ.width !== imageSize ||
+                imgNegZ.width !== imageSize
+            ) {
+                throw new Error("All skybox textures must have the same dimensions");
+            }
+
+            // Set canvas size for the Christ cross layout (3×4 grid)
+            canvas.width = imageSize * 4;
+            canvas.height = imageSize * 3;
+
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.drawImage(imgNegX, imageSize * 0, imageSize * 1, imageSize, imageSize);  // -X (left)
+            ctx.drawImage(imgPosX, imageSize * 2, imageSize * 1, imageSize, imageSize);  // +X (right)
+            ctx.drawImage(imgPosY, imageSize * 1, imageSize * 0, imageSize, imageSize);  // +Y (top)
+            ctx.drawImage(imgNegY, imageSize * 1, imageSize * 2, imageSize, imageSize);  // -Y (bottom)
+            ctx.drawImage(imgPosZ, imageSize * 1, imageSize * 1, imageSize, imageSize);  // +Z (front)
+            ctx.drawImage(imgNegZ, imageSize * 3, imageSize * 1, imageSize, imageSize);  // -Z (back)
+
+            const combinedTexture = new Texture(this, {
+                image: canvas,
+                flipY: true,
+                wrapS: ClampToEdgeWrapping,
+                wrapT: ClampToEdgeWrapping,
+                encoding: cfg.encoding || LinearEncoding
+            });
+
+            return combinedTexture;
+        } catch (error) {
+            console.error("Error creating combined skybox texture:", error);
+            throw error;
+        }
+    }
 
     /**
      * Sets the size of this Skybox, given as the distance from the center at [0,0,0] to each face.
