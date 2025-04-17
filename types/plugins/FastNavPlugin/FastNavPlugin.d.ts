@@ -1,6 +1,9 @@
 import { Plugin } from "../../viewer/Plugin";
 import { Viewer } from "../../viewer/Viewer";
 
+type OnStopped = () => void;
+type OnMoved = () => OnStopped;
+
 export declare type FastNavPluginConfiguration = {
   /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
@@ -22,6 +25,8 @@ export declare type FastNavPluginConfiguration = {
   delayBeforeRestore?: boolean;
   /** Delay in seconds before restoring normal rendering after we stop interacting with the Viewer. */
   delayBeforeRestoreSeconds?: number;
+  /** Optional callback function fired during moving mode, should return the callback function that will be fired when the interaction stops. */
+  onMoved?: OnMoved;
 };
 
 /**
