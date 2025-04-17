@@ -1,0 +1,20 @@
+<svg width="512" height="512" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="var(--stroke-width, 1.5)" stroke-linecap="round" stroke-linejoin="round">
+  <style>
+    :root {
+      --shadow-color: rgba(0, 0, 0, 0.15);
+    }
+    .cloud-path {
+      filter: drop-shadow(1px 1px 1px var(--shadow-color));
+    }
+  </style>
+  <!-- Revision Cloud Path -->
+  <path class="cloud-path" d="M50,100
+           C50,70 75,70 75,85
+           C75,60 110,60 110,85
+           C110,65 145,65 145,90
+           C165,90 165,125 145,125
+           C145,145 110,145 110,120
+           C110,145 75,145 75,120
+           C55,135 50,125 50,100
+           Z" />
+</svg>
