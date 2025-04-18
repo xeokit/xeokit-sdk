@@ -25,22 +25,12 @@ class Control {
     /** @private */
     constructor(viewer) {
 
-        /**
-         * ID of this Control.
-         *
-         * SectionPlaneControls are mapped by this ID in {@link SectionPlanesPlugin#sectionPlaneControls}.
-         *
-         * @property id
-         * @type {String|Number}
-         */
-        this.id = null;
+        let sectionPlane = null;
 
         const camera = viewer.camera;
         const cameraControl = viewer.cameraControl;
         const scene = viewer.scene;
         const canvas = scene.canvas.canvas;
-
-        this._visible = false;
 
         let ignoreNextSectionPlaneDirUpdate = false;
 
@@ -306,8 +296,8 @@ class Control {
                         if (closestPointOnAxis(canvasPos, tempVec3)) {
                             math.subVec3(tempVec3, initOffset, tempVec3);
                             setPos(tempVec3);
-                            if (this._sectionPlane) {
-                                this._sectionPlane.pos = tempVec3;
+                            if (sectionPlane) {
+                                sectionPlane.pos = tempVec3;
                             }
                         }
                     });
@@ -334,9 +324,9 @@ class Control {
                     return canvasPos => {
                         const rotation = rotationFromCanvasPos(canvasPos);
                         rootNode.rotate(rgb, (rotation - lastRotation) * 180 / Math.PI);
-                        if (this._sectionPlane) {
+                        if (sectionPlane) {
                             ignoreNextSectionPlaneDirUpdate = true;
-                            this._sectionPlane.quaternion = rootNode.quaternion;
+                            sectionPlane.quaternion = rootNode.quaternion;
                         }
                         lastRotation = rotation;
                     };
@@ -584,11 +574,15 @@ class Control {
             });
         }
 
-        this._unbindSectionPlane = () => { };
+        let unbindSectionPlane = () => { };
 
-        this.__setSectionPlane = sectionPlane => {
-            this.id = sectionPlane.id;
-            this._sectionPlane = sectionPlane;
+        this.__setSectionPlane = newSectionPlane => {
+            unbindSectionPlane();
+            if (!newSectionPlane) {
+                return;
+            }
+
+            sectionPlane = newSectionPlane;
             const setPosFromSectionPlane = () => setPos(sectionPlane.pos);
             const setDirFromSectionPlane = () => rootNode.quaternion = sectionPlane.quaternion;
             setPosFromSectionPlane();
@@ -602,18 +596,17 @@ class Control {
                 }
             });
 
-            this._unbindSectionPlane = () => {
-                this.id = null;
-                this._sectionPlane = null;
+            unbindSectionPlane = () => {
                 sectionPlane.off(onSectionPlanePos);
                 sectionPlane.off(onSectionPlaneDir);
-                this._unbindSectionPlane = () => { };
+                sectionPlane = null;
+                unbindSectionPlane = () => { };
             };
         };
 
         this.__destroy = () => {
             cleanups.forEach(c => c());
-            this._unbindSectionPlane();
+            unbindSectionPlane();
             rootNode.destroy();
             this._displayMeshes = [ ];
             for (let id in handlers) {
@@ -633,10 +626,7 @@ class Control {
      * @private
      */
     _setSectionPlane(sectionPlane) {
-        this._unbindSectionPlane();
-        if (sectionPlane) {
-            this.__setSectionPlane(sectionPlane);
-        }
+        this.__setSectionPlane(sectionPlane);
     }
 
     /**
@@ -645,10 +635,7 @@ class Control {
      * @type {Boolean}
      */
     setVisible(visible = true) {
-        if (this._visible !== visible) {
-            this._visible = visible;
-            this._displayMeshes.forEach(m => m.visible = visible);
-        }
+        this._displayMeshes.forEach(m => m.visible = visible);
     }
 
     /**
