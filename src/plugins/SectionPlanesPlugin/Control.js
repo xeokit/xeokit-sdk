@@ -24,15 +24,10 @@ class Control {
 
     /** @private */
     constructor(viewer) {
-
-        let sectionPlane = null;
-
         const camera = viewer.camera;
         const cameraControl = viewer.cameraControl;
         const scene = viewer.scene;
         const canvas = scene.canvas.canvas;
-
-        let ignoreNextSectionPlaneDirUpdate = false;
 
         // Builds the Entities that represent this Control.
         const NO_STATE_INHERIT = false;
@@ -296,8 +291,8 @@ class Control {
                         if (closestPointOnAxis(canvasPos, tempVec3)) {
                             math.subVec3(tempVec3, initOffset, tempVec3);
                             setPos(tempVec3);
-                            if (sectionPlane) {
-                                sectionPlane.pos = tempVec3;
+                            if (this._handlers) {
+                                this._handlers.setPosition(tempVec3);
                             }
                         }
                     });
@@ -324,9 +319,8 @@ class Control {
                     return canvasPos => {
                         const rotation = rotationFromCanvasPos(canvasPos);
                         rootNode.rotate(rgb, (rotation - lastRotation) * 180 / Math.PI);
-                        if (sectionPlane) {
-                            ignoreNextSectionPlaneDirUpdate = true;
-                            sectionPlane.quaternion = rootNode.quaternion;
+                        if (this._handlers) {
+                            this._handlers.setQuaternion(rootNode.quaternion);
                         }
                         lastRotation = rotation;
                     };
@@ -569,32 +563,37 @@ class Control {
 
         let unbindSectionPlane = () => { };
 
-        this.__setSectionPlane = newSectionPlane => {
+        this.__setSectionPlane = sectionPlane => {
             unbindSectionPlane();
-            if (!newSectionPlane) {
-                return;
+            if (sectionPlane) {
+                let ignoreNextSectionPlaneDirUpdate = false;
+                this._handlers = {
+                    setPosition:   p => { sectionPlane.pos = p; },
+                    setQuaternion: q => {
+                        ignoreNextSectionPlaneDirUpdate = true;
+                        sectionPlane.quaternion = q;
+                    }
+                };
+
+                const setPosFromSectionPlane = () => setPos(sectionPlane.pos);
+                const setDirFromSectionPlane = () => rootNode.quaternion = sectionPlane.quaternion;
+                setPosFromSectionPlane();
+                setDirFromSectionPlane();
+                const onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
+                const onSectionPlaneDir = sectionPlane.on("dir", () => {
+                    if (!ignoreNextSectionPlaneDirUpdate) {
+                        setDirFromSectionPlane();
+                    } else {
+                        ignoreNextSectionPlaneDirUpdate = false;
+                    }
+                });
+
+                unbindSectionPlane = () => {
+                    sectionPlane.off(onSectionPlanePos);
+                    sectionPlane.off(onSectionPlaneDir);
+                    unbindSectionPlane = () => { };
+                };
             }
-
-            sectionPlane = newSectionPlane;
-            const setPosFromSectionPlane = () => setPos(sectionPlane.pos);
-            const setDirFromSectionPlane = () => rootNode.quaternion = sectionPlane.quaternion;
-            setPosFromSectionPlane();
-            setDirFromSectionPlane();
-            const onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
-            const onSectionPlaneDir = sectionPlane.on("dir", () => {
-                if (!ignoreNextSectionPlaneDirUpdate) {
-                    setDirFromSectionPlane();
-                } else {
-                    ignoreNextSectionPlaneDirUpdate = false;
-                }
-            });
-
-            unbindSectionPlane = () => {
-                sectionPlane.off(onSectionPlanePos);
-                sectionPlane.off(onSectionPlaneDir);
-                sectionPlane = null;
-                unbindSectionPlane = () => { };
-            };
         };
 
         this.__destroy = () => {
