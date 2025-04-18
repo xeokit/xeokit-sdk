@@ -23,7 +23,7 @@ const quat = new Float64Array(4);
 class Control {
 
     /** @private */
-    constructor(plugin) {
+    constructor(viewer) {
 
         /**
          * ID of this Control.
@@ -35,7 +35,6 @@ class Control {
          */
         this.id = null;
 
-        const viewer = plugin.viewer;
         const camera = viewer.camera;
         const cameraControl = viewer.cameraControl;
         const scene = viewer.scene;

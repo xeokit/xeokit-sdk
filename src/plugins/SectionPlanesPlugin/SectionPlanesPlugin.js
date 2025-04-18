@@ -234,7 +234,7 @@ class SectionPlanesPlugin extends Plugin {
     }
 
     _sectionPlaneCreated(sectionPlane) {
-        const control = (this._freeControls.length > 0) ? this._freeControls.pop() : new Control(this);
+        const control = (this._freeControls.length > 0) ? this._freeControls.pop() : new Control(this.viewer);
         control._setSectionPlane(sectionPlane);
         control.setVisible(false);
         this._controls[sectionPlane.id] = control;
