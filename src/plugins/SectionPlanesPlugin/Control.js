@@ -340,13 +340,6 @@ class Control {
                         bigArrowHead.visible = v;
                         hoop.visible = v;
                     }
-                },
-                set culled(c) {
-                    arrow.culled = arrowHandle.culled = shaft.culled = shaftHandle.culled = curve.culled = rotateHandle.culled = arrow1.culled = arrow2.culled = c;
-                    if (! c) {
-                        bigArrowHead.culled = c;
-                        hoop.culled = c;
-                    }
                 }
             };
         };
@@ -615,7 +608,7 @@ class Control {
         };
     }
 
-    _destroy() {
+    destroy() {
         this.__destroy();
     }
 
@@ -625,7 +618,7 @@ class Control {
      * Call with a null or undefined value to disconnect the Control ffrom whatever SectionPlane it was assigned to.
      * @private
      */
-    _setSectionPlane(sectionPlane) {
+    setSectionPlane(sectionPlane) {
         this.__setSectionPlane(sectionPlane);
     }
 
@@ -634,17 +627,8 @@ class Control {
      *
      * @type {Boolean}
      */
-    setVisible(visible = true) {
+    setVisible(visible) {
         this._displayMeshes.forEach(m => m.visible = visible);
-    }
-
-    /**
-     * Sets if this Control is culled. This is called by SectionPlanesPlugin to
-     * temporarily hide the Control while a snapshot is being taken by Viewer#getSnapshot().
-     * @param culled
-     */
-    setCulled(culled) {
-        this._displayMeshes.forEach(m => m.culled = culled);
     }
 }
 
