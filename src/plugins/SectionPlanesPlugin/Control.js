@@ -641,14 +641,6 @@ class Control {
     }
 
     /**
-     * Gets the {@link SectionPlane} controlled by this Control.
-     * @returns {SectionPlane} The SectionPlane.
-     */
-    get sectionPlane() {
-        return this._sectionPlane;
-    }
-
-    /**
      * Sets if this Control is visible.
      *
      * @type {Boolean}
@@ -658,15 +650,6 @@ class Control {
             this._visible = visible;
             this._displayMeshes.forEach(m => m.visible = visible);
         }
-    }
-
-    /**
-     * Gets if this Control is visible.
-     *
-     * @type {Boolean}
-     */
-    getVisible() {
-        return this._visible;
     }
 
     /**
