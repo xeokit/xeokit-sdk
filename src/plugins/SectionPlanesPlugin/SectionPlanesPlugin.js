@@ -237,15 +237,51 @@ class SectionPlanesPlugin extends Plugin {
         const control = ((this._freeControls.length > 0)
                          ? this._freeControls.pop()
                          : (() => {
+                             let unbindSectionPlane = () => { };
                              const ctrl = new Control(this.viewer);
                              let culled  = false;
                              let visible = false;
-                             const updateVisible = () => ctrl.setVisible(visible && (! culled));
+                             let handlers = null;
+                             const updateVisible = () => ctrl.setHandlers(visible && (! culled) && handlers);
                              return {
-                                 _destroy: () => ctrl.destroy(),
+                                 _destroy: () => {
+                                     unbindSectionPlane();
+                                     ctrl.destroy();
+                                 },
                                  setCulled:  c => { culled = c;  updateVisible(); },
                                  setVisible: v => { visible = v; updateVisible(); },
-                                 _setSectionPlane: sectionPlane => ctrl.setSectionPlane(sectionPlane)
+                                 _setSectionPlane: sectionPlane => {
+                                     unbindSectionPlane();
+                                     if (sectionPlane) {
+                                         let ignoreNextSectionPlaneDirUpdate = false;
+                                         handlers = {
+                                             setPosition:   p => { sectionPlane.pos = p; },
+                                             setQuaternion: q => {
+                                                 ignoreNextSectionPlaneDirUpdate = true;
+                                                 sectionPlane.quaternion = q;
+                                             }
+                                         };
+
+                                         const setPosFromSectionPlane = () => ctrl.setPosition(sectionPlane.pos);
+                                         const setDirFromSectionPlane = () => ctrl.setQuaternion(sectionPlane.quaternion);
+                                         setPosFromSectionPlane();
+                                         setDirFromSectionPlane();
+                                         const onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
+                                         const onSectionPlaneDir = sectionPlane.on("dir", () => {
+                                             if (!ignoreNextSectionPlaneDirUpdate) {
+                                                 setDirFromSectionPlane();
+                                             } else {
+                                                 ignoreNextSectionPlaneDirUpdate = false;
+                                             }
+                                         });
+
+                                         unbindSectionPlane = () => {
+                                             sectionPlane.off(onSectionPlanePos);
+                                             sectionPlane.off(onSectionPlaneDir);
+                                             unbindSectionPlane = () => { };
+                                         };
+                                     }
+                                 }
                              };
                          })());
         control._setSectionPlane(sectionPlane);
