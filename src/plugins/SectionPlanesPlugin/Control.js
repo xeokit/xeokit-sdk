@@ -339,73 +339,7 @@ class Control {
             };
         };
 
-        this._displayMeshes = [ // Meshes that are always visible
-            rootNode.addChild(new Mesh(rootNode, { // plane
-                geometry: new ReadableGeometry(rootNode, {
-                    primitive: "triangles",
-                    positions: [
-                        0.5, 0.5, 0.0, 0.5, -0.5, 0.0, // 0
-                        -0.5, -0.5, 0.0, -0.5, 0.5, 0.0, // 1
-                        0.5, 0.5, -0.0, 0.5, -0.5, -0.0, // 2
-                        -0.5, -0.5, -0.0, -0.5, 0.5, -0.0 // 3
-                    ],
-                    indices: [0, 1, 2, 2, 3, 0]
-                }),
-                material: new PhongMaterial(rootNode, {
-                    emissive: [0, 0.0, 0],
-                    diffuse: [0, 0, 0],
-                    backfaces: true
-                }),
-                opacity: 0.6,
-                ghosted: true,
-                ghostMaterial: new EmphasisMaterial(rootNode, {
-                    edges: false,
-                    filled: true,
-                    fillColor: [1, 1, 0],
-                    edgeColor: [0, 0, 0],
-                    fillAlpha: 0.1,
-                    backfaces: true
-                }),
-                pickable: false,
-                collidable: true,
-                clippable: false,
-                visible: false,
-                scale: [2.4, 2.4, 1],
-                isObject: false
-            }), NO_STATE_INHERIT),
-
-            rootNode.addChild(new Mesh(rootNode, { // Visible frame
-                geometry: new ReadableGeometry(rootNode, buildTorusGeometry({
-                    center: [0, 0, 0],
-                    radius: 1.7,
-                    tube: tubeRadius * 2,
-                    radialSegments: 4,
-                    tubeSegments: 4,
-                    arc: Math.PI * 2.0
-                })),
-                material: new PhongMaterial(rootNode, {
-                    emissive: [0, 0, 0],
-                    diffuse: [0, 0, 0],
-                    specular: [0, 0, 0],
-                    shininess: 0
-                }),
-                //highlighted: true,
-                highlightMaterial: new EmphasisMaterial(rootNode, {
-                    edges: false,
-                    edgeColor: [0.0, 0.0, 0.0],
-                    filled: true,
-                    fillColor: [0.8, 0.8, 0.8],
-                    fillAlpha: 1.0
-                }),
-                pickable: false,
-                collidable: false,
-                clippable: false,
-                visible: false,
-                scale: [1, 1, .1],
-                rotation: [0, 0, 45],
-                isObject: false
-            }), NO_STATE_INHERIT),
-
+        this._displayMeshes = [
             rootNode.addChild(new Mesh(rootNode, { // center
                 geometry: new ReadableGeometry(rootNode, buildSphereGeometry({
                     radius: 0.05
@@ -424,10 +358,6 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT),
 
-            //----------------------------------------------------------------------------------------------------------
-            //
-            //----------------------------------------------------------------------------------------------------------
-
             addAxis([1,0,0], math.vec3PairToQuaternion([1,0,0], [0,0,1])),
             addAxis([0,1,0], math.eulerToQuaternion([90,0,0], "XYZ")),
             addAxis([0,0,1], math.identityQuaternion())
@@ -437,7 +367,14 @@ class Control {
 
         { // Keep gizmo screen size constant
             let lastDist = -1;
-            const setRootNodeScale = size => { if (size !== rootNode.scale[0]) { rootNode.scale = [size, size, size]; } };
+            const setRootNodeScale = size => {
+                if (rootNode.scale[0] !== size) {
+                    rootNode.scale = [size, size, size];
+                    if (this._handlers && this._handlers.setScreenScale) {
+                        this._handlers.setScreenScale(rootNode.scale);
+                    }
+                }
+            };
             const onSceneTick = scene.on("tick", () => {
                 const camera = scene.camera;
                 const dist = Math.abs(math.distVec3(camera.eye, pos));
