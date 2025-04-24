@@ -328,19 +328,38 @@ class Control {
                 }
             };
 
+            let positionActive = false;
+            let rotationActive = false;
+            let visible = false;
+
+            const updatePositionHandle = () => {
+                const v = visible && positionActive;
+                arrowHandle.visible = shaftHandle.visible = arrow.visible = shaft.visible = !!v;
+                if (! v) {
+                    bigArrowHead.visible = false;
+                }
+            };
+            const updateRotationHandle = () => {
+                const v = visible && rotationActive;
+                rotateHandle.visible = curve.visible = arrow1.visible = arrow2.visible = !!v;
+                if (! v) {
+                    hoop.visible = false;
+                }
+            };
+
             return {
+                setPositionActive: (a) => { positionActive = a; updatePositionHandle(); },
+                setRotationActive: (a) => { rotationActive = a; updateRotationHandle(); },
                 set visible(v) {
-                    arrow.visible = arrowHandle.visible = shaft.visible = shaftHandle.visible = curve.visible = rotateHandle.visible = arrow1.visible = arrow2.visible = v;
-                    if (! v) {
-                        bigArrowHead.visible = v;
-                        hoop.visible = v;
-                    }
+                    visible = v;
+                    updatePositionHandle();
+                    updateRotationHandle();
                 }
             };
         };
 
-        this._displayMeshes = [
-            rootNode.addChild(new Mesh(rootNode, { // center
+        this._displayMeshes = {
+            center: rootNode.addChild(new Mesh(rootNode, { // center
                 geometry: new ReadableGeometry(rootNode, buildSphereGeometry({
                     radius: 0.05
                 })),
@@ -358,10 +377,10 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT),
 
-            addAxis([1,0,0], math.vec3PairToQuaternion([1,0,0], [0,0,1])),
-            addAxis([0,1,0], math.eulerToQuaternion([90,0,0], "XYZ")),
-            addAxis([0,0,1], math.identityQuaternion())
-        ];
+            x: addAxis([1,0,0], math.vec3PairToQuaternion([1,0,0], [0,0,1])),
+            y: addAxis([0,1,0], math.eulerToQuaternion([90,0,0], "XYZ")),
+            z: addAxis([0,0,1], math.identityQuaternion())
+        };
 
         const cleanups = [ ];
 
@@ -503,7 +522,6 @@ class Control {
         this.__destroy = () => {
             cleanups.forEach(c => c());
             rootNode.destroy();
-            this._displayMeshes = [ ];
             for (let id in handlers) {
                 delete handlers[id];
             }
@@ -520,8 +538,14 @@ class Control {
      * @private
      */
     setHandlers(handlers) {
-        this._displayMeshes.forEach(m => m.visible = !!handlers);
+        Object.values(this._displayMeshes).forEach(m => m.visible = !!handlers);
         this._handlers = handlers;
+        this._displayMeshes.x.setPositionActive(handlers && handlers.onPosition);
+        this._displayMeshes.y.setPositionActive(handlers && handlers.onPosition);
+        this._displayMeshes.z.setPositionActive(handlers && handlers.onPosition);
+        this._displayMeshes.x.setRotationActive(handlers && handlers.onQuaternion);
+        this._displayMeshes.y.setRotationActive(handlers && handlers.onQuaternion);
+        this._displayMeshes.z.setRotationActive(handlers && handlers.onQuaternion);
     }
 
     /**
