@@ -16,7 +16,7 @@ const zeroVec = new Float64Array([0, 0, 1]);
 const quat = new Float64Array(4);
 
 /**
- * Controls a {@link SectionPlane} with mouse and touch input.
+ * Controls a transformation with mouse and touch input.
  *
  * @private
  */
@@ -42,7 +42,7 @@ class Control {
         });
 
         const pos = math.vec3();
-        const setPos = (function() {
+        this._setPosition = (function() {
             const origin = math.vec3();
             const rtcPos = math.vec3();
             return function(p) {
@@ -52,6 +52,8 @@ class Control {
                 rootNode.position = rtcPos;
             };
         })();
+
+        this._setQuaternion = q => { rootNode.quaternion = q; };
 
         const arrowGeometry = (radiusBottom, height) => new ReadableGeometry(rootNode, buildCylinderGeometry({
             radiusTop: 0.001,
@@ -290,7 +292,7 @@ class Control {
                     return closestPointOnAxis(initCanvasPos, initOffset) && math.subVec3(initOffset, pos, initOffset) && ((canvasPos) => {
                         if (closestPointOnAxis(canvasPos, tempVec3)) {
                             math.subVec3(tempVec3, initOffset, tempVec3);
-                            setPos(tempVec3);
+                            this._setPosition(tempVec3);
                             if (this._handlers) {
                                 this._handlers.setPosition(tempVec3);
                             }
@@ -561,44 +563,8 @@ class Control {
             });
         }
 
-        let unbindSectionPlane = () => { };
-
-        this.__setSectionPlane = sectionPlane => {
-            unbindSectionPlane();
-            if (sectionPlane) {
-                let ignoreNextSectionPlaneDirUpdate = false;
-                this._handlers = {
-                    setPosition:   p => { sectionPlane.pos = p; },
-                    setQuaternion: q => {
-                        ignoreNextSectionPlaneDirUpdate = true;
-                        sectionPlane.quaternion = q;
-                    }
-                };
-
-                const setPosFromSectionPlane = () => setPos(sectionPlane.pos);
-                const setDirFromSectionPlane = () => rootNode.quaternion = sectionPlane.quaternion;
-                setPosFromSectionPlane();
-                setDirFromSectionPlane();
-                const onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
-                const onSectionPlaneDir = sectionPlane.on("dir", () => {
-                    if (!ignoreNextSectionPlaneDirUpdate) {
-                        setDirFromSectionPlane();
-                    } else {
-                        ignoreNextSectionPlaneDirUpdate = false;
-                    }
-                });
-
-                unbindSectionPlane = () => {
-                    sectionPlane.off(onSectionPlanePos);
-                    sectionPlane.off(onSectionPlaneDir);
-                    unbindSectionPlane = () => { };
-                };
-            }
-        };
-
         this.__destroy = () => {
             cleanups.forEach(c => c());
-            unbindSectionPlane();
             rootNode.destroy();
             this._displayMeshes = [ ];
             for (let id in handlers) {
@@ -612,22 +578,31 @@ class Control {
     }
 
     /**
-     * Called by SectionPlanesPlugin to assign this Control to a SectionPlane.
-     * SectionPlanesPlugin keeps SectionPlaneControls in a reuse pool.
-     * Call with a null or undefined value to disconnect the Control ffrom whatever SectionPlane it was assigned to.
+     * Called to assign this Control to Handlers.
+     * Call with a null or undefined value to disconnect the Control from whatever Handlers it was assigned to.
      * @private
      */
-    setSectionPlane(sectionPlane) {
-        this.__setSectionPlane(sectionPlane);
+    setHandlers(handlers) {
+        this._displayMeshes.forEach(m => m.visible = !!handlers);
+        this._handlers = handlers;
     }
 
     /**
-     * Sets if this Control is visible.
+     * Sets the World-space position of this Control.
      *
-     * @type {Boolean}
+     * @param {Number[]} value New position.
      */
-    setVisible(visible) {
-        this._displayMeshes.forEach(m => m.visible = visible);
+    setPosition(p) {
+        this._setPosition(p);
+    }
+
+    /**
+     * Sets the quaternion of this Control.
+     *
+     * @param {Number[]} value New quaternion.
+     */
+    setQuaternion(q) {
+        this._setQuaternion(q);
     }
 }
 
