@@ -24,7 +24,6 @@ class Control {
 
     /** @private */
     constructor(viewer) {
-        const camera = viewer.camera;
         const cameraControl = viewer.cameraControl;
         const scene = viewer.scene;
         const canvas = scene.canvas.canvas;
@@ -305,9 +304,9 @@ class Control {
                 setActivated: a => hoop.visible = a,
                 initDragAction: (initCanvasPos) => {
                     const rotationFromCanvasPos = (function() {
-                        const planeCanvasPos = camera.projectWorldPos(pos);
+                        const planeCanvasPos = scene.camera.projectWorldPos(pos);
                         localToWorldVec(rgb, tempVec3);
-                        math.transformVec3(camera.normalMatrix, tempVec3, tempVec3);
+                        math.transformVec3(scene.camera.normalMatrix, tempVec3, tempVec3);
                         const axisCoeff = Math.sign(tempVec3[2]);
                         return (canvasPos) => {
                             const dx = canvasPos[0] - planeCanvasPos[0];
@@ -440,6 +439,7 @@ class Control {
             let lastDist = -1;
             const setRootNodeScale = size => { if (size !== rootNode.scale[0]) { rootNode.scale = [size, size, size]; } };
             const onSceneTick = scene.on("tick", () => {
+                const camera = scene.camera;
                 const dist = Math.abs(math.distVec3(camera.eye, pos));
                 if (camera.projection === "perspective") {
                     if (dist !== lastDist) {
@@ -467,7 +467,7 @@ class Control {
 
             const pickHandler = (e) => {
                 copyCanvasPos(e, canvasPos);
-                const pickResult = viewer.scene.pick({ canvasPos: canvasPos });
+                const pickResult = scene.pick({ canvasPos: canvasPos });
                 const pickEntity = pickResult && pickResult.entity;
                 const pickId = pickEntity && pickEntity.id;
                 return (pickId in handlers) && handlers[pickId];
