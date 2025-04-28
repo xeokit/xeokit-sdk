@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/section_plane_icon.png"/>
+    <h1>SectionPlanesPlugin</h1>
+    <h2>Centers the SectionPlane in the view</h2>
+    <p>Press [c] to position the SectionPlane in the center of the view.</p>
+    <h3>Stats</h3>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+    </ul>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html"
+               target="_other">SectionPlanesPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, math, SectionPlanesPlugin, XKTLoaderPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    const camera = viewer.camera;
+
+    camera.eye  = [ 4.703065213609852, 3.8871402938919473, -1.6003161649113062 ];
+    camera.look = [ 6.119727739745468, 2.9697281144743584, 8.149209781539271 ];
+    camera.up   = [ 0.013332602389837845, 0.9956923085141925, 0.09175548201166271 ];
+
+    const cameraControl = viewer.cameraControl;
+    cameraControl.navMode = "orbit";
+    cameraControl.followPointer = true;
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Create a xeokit loader plugin, load a model, fit to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    var t0 = performance.now();
+
+    document.getElementById("time").innerHTML = "Loading model...";
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
+        edges: true
+    });
+
+    sceneModel.on("loaded", () => {
+        var t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
+
+        //------------------------------------------------------------------------------------------------------------------
+        // Create a moving SectionPlane, that moves through the table models
+        //------------------------------------------------------------------------------------------------------------------
+
+        const sectionPlanes = new SectionPlanesPlugin(viewer, {
+            overviewCanvasId: "mySectionPlanesOverviewCanvas",
+            overviewVisible: true
+        });
+
+        const sectionPlane = sectionPlanes.createSectionPlane({
+            id: "mySectionPlane",
+            pos: [1, 3, 13],
+            dir: math.normalizeVec3([1, 0, 1])
+        });
+
+        sectionPlanes.showControl(sectionPlane.id);
+
+        // Setup a listener to handle the [c] keydown
+        window.document.addEventListener("keydown", event => {
+            switch (event.key) {
+            case "c":
+                event.preventDefault();
+
+                const P = sectionPlane.pos;
+                const N = sectionPlane.dir;
+                const O = math.vec3();          // camera origin
+                const D = math.vec3();          // camera direction
+                const I = math.vec3();          // intersection point
+                const canvas = viewer.scene.canvas.canvas;
+
+                // Get origin and direction of the ray pointing out from the camera
+                const canvasPos = math.vec2([ 0.5 * canvas.clientWidth, 0.5 * canvas.clientHeight ]); // view center
+                math.canvasPosToWorldRay(canvas, camera.viewMatrix, camera.projMatrix, camera.projection, canvasPos, O, D);
+
+                // Calculate the ray's intersection with the SectionPlane
+                const denom = math.dotVec3(N, D);
+                if (Math.abs(denom) >= 1e-6) {
+                    math.addVec3(O, math.mulVec3Scalar(D, math.dotVec3(N, math.subVec3(P, O, I)) / denom, I), I);
+
+                    // Move the SectionPlane to its intersection point with the camera's ray
+                    sectionPlane.pos = I;
+                }
+                break;
+            }
+        });
+    });
+
+</script>
+</html>
