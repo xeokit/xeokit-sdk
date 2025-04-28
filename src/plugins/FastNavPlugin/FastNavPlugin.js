@@ -165,7 +165,6 @@ class FastNavPlugin extends Plugin {
             fastMode = false;
         };
 
-        this._onCanvasBoundary = viewer.scene.canvas.on("boundary", switchToLowQuality);
         this._onCameraMatrix = viewer.scene.camera.on("matrix", switchToLowQuality);
 
         this._onSceneTick = viewer.scene.on("tick", (tickEvent) => {
@@ -176,23 +175,6 @@ class FastNavPlugin extends Plugin {
             if ((!this._delayBeforeRestore) || timer <= 0) {
                 switchToHighQuality();
             }
-        });
-
-        let down = false;
-
-        this._onSceneMouseDown = viewer.scene.input.on("mousedown", () => {
-            down = true;
-        });
-
-        this._onSceneMouseUp = viewer.scene.input.on("mouseup", () => {
-            down = false;
-        });
-
-        this._onSceneMouseMove = viewer.scene.input.on("mousemove", () => {
-            if (!down) {
-                return;
-            }
-            switchToLowQuality();
         });
     }
 
