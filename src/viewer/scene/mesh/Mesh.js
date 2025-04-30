@@ -260,7 +260,8 @@ class Mesh extends Component {
             pickHash: "",
             offset: math.vec3(),
             origin: null,
-            originHash: null
+            originHash: null,
+            isUI: cfg.isUI
         });
 
         this._drawRenderer = null;
@@ -611,6 +612,15 @@ class Mesh extends Component {
      */
     get isObject() {
         return this._isObject;
+    }
+
+    /**
+     * Returns ````true```` if this Mesh is an UI object.
+     *
+     * @type {Boolean}
+     */
+    get isUI() {
+        return this._state.isUI;
     }
 
     /**

@@ -20,7 +20,7 @@ const quat = new Float64Array(4);
  *
  * @private
  */
-class Control {
+class TransformControl {
 
     /** @private */
     constructor(viewer) {
@@ -141,6 +141,7 @@ class Control {
                 clippable: false,
                 backfaces: true,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -153,6 +154,7 @@ class Control {
                 clippable: false,
                 backfaces: true,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -164,6 +166,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -175,6 +178,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -188,6 +192,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -207,6 +212,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -218,6 +224,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -229,6 +236,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -240,6 +248,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -251,6 +260,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -421,9 +431,11 @@ class Control {
                 transformToNode(canvas.ownerDocument.documentElement, canvas, vec2);
             };
 
+            const pickIds = Object.keys(handlers);
             const pickHandler = (e) => {
                 copyCanvasPos(e, canvasPos);
-                const pickResult = scene.pick({ canvasPos: canvasPos });
+                // This doesn't guarantee the gizmo is prioritized (as it should be) by other Scene::pick calls
+                const pickResult = scene.pick({ canvasPos: canvasPos });//, includeEntities: pickIds });
                 const pickEntity = pickResult && pickResult.entity;
                 const pickId = pickEntity && pickEntity.id;
                 return (pickId in handlers) && handlers[pickId];
@@ -567,4 +579,4 @@ class Control {
     }
 }
 
-export {Control};
+export {TransformControl};

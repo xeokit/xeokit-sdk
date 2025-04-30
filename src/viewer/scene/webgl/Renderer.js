@@ -36,6 +36,7 @@ const Renderer = function (scene, options) {
 
     let postSortDrawableList = [];
     let postCullDrawableList = [];
+    let uiDrawableList       = [];
 
     let drawableListDirty = true;
     let stateSortDirty = true;
@@ -288,14 +289,20 @@ const Renderer = function (scene, options) {
 
     function cullDrawableList() {
         let lenDrawableList = 0;
+        let lenUiList       = 0;
         for (let i = 0, len = postSortDrawableList.length; i < len; i++) {
             const drawable = postSortDrawableList[i];
             drawable.rebuildRenderFlags();
             if (!drawable.renderFlags.culled) {
-                postCullDrawableList[lenDrawableList++] = drawable;
+                if (drawable.isUI) {
+                    uiDrawableList[lenUiList++] = drawable;
+                } else {
+                    postCullDrawableList[lenDrawableList++] = drawable;
+                }
             }
         }
         postCullDrawableList.length = lenDrawableList;
+        uiDrawableList.length       = lenUiList;
     }
 
     function draw(params) {
@@ -539,6 +546,8 @@ const Renderer = function (scene, options) {
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         }
 
+        const renderDrawables = function(drawables) {
+
         let normalDrawSAOBinLen = 0;
         let normalEdgesOpaqueBinLen = 0;
         let normalFillTransparentBinLen = 0;
@@ -562,10 +571,9 @@ const Renderer = function (scene, options) {
         //------------------------------------------------------------------------------------------------------
         // Render normal opaque solids, defer others to bins to render after
         //------------------------------------------------------------------------------------------------------
+        for (let i = 0, len = drawables.length; i < len; i++) {
 
-        for (let i = 0, len = postCullDrawableList.length; i < len; i++) {
-
-            drawable = postCullDrawableList[i];
+            drawable = drawables[i];
 
             if (drawable.culled === true || drawable.visible === false) {
                 continue;
@@ -863,6 +871,14 @@ const Renderer = function (scene, options) {
             gl.disable(gl.BLEND);
         }
 
+        };
+
+        renderDrawables(postCullDrawableList);
+        if (uiDrawableList.length > 0) {
+            gl.clear(gl.DEPTH_BUFFER_BIT);
+            renderDrawables(uiDrawableList);
+        }
+
         const endTime = Date.now();
         const frameStats = stats.frame;
 
@@ -1072,8 +1088,9 @@ const Renderer = function (scene, options) {
         const includeEntityIds = params.includeEntityIds;
         const excludeEntityIds = params.excludeEntityIds;
 
-        for (let i = 0, len = postCullDrawableList.length; i < len; i++) {
-            const drawable = postCullDrawableList[i];
+        const renderDrawables = function(drawables) {
+        for (let i = 0, len = drawables.length; i < len; i++) {
+            const drawable = drawables[i];
             if (drawable.culled === true || drawable.visible === false) {
                 continue;
             }
@@ -1087,6 +1104,13 @@ const Renderer = function (scene, options) {
                 continue;
             }
             drawable.drawPickMesh(frameCtx);
+        }
+        };
+
+        renderDrawables(postCullDrawableList);
+        if (uiDrawableList.length > 0) {
+            gl.clear(gl.DEPTH_BUFFER_BIT);
+            renderDrawables(uiDrawableList);
         }
 
         const pix = pickBuffer.read(0, 0);
