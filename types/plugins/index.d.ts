@@ -15,6 +15,7 @@ export * from "./SectionPlanesPlugin";
 export * from "./SkyboxesPlugin";
 export * from "./STLLoaderPlugin";
 export * from "./StoreyViewsPlugin";
+export * from "./TransformControl";
 export * from "./TreeViewPlugin";
 export * from "./ViewCullPlugin";
 export * from "./XKTLoaderPlugin";
