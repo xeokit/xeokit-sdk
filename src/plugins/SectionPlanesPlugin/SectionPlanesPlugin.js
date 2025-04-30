@@ -1,7 +1,7 @@
 import {math} from "../../viewer/scene/math/math.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {SectionPlane} from "../../viewer/scene/sectionPlane/SectionPlane.js";
-import {Control} from "./Control.js";
+import {TransformControl} from "../TransformControl/TransformControl.js";
 import {Overview} from "./Overview.js";
 
 import {buildCylinderGeometry} from "../../viewer/scene/geometry/builders/buildCylinderGeometry.js";
@@ -333,7 +333,7 @@ class SectionPlanesPlugin extends Plugin {
                                  };
                              })();
                              let unbindSectionPlane = () => { };
-                             const ctrl = new Control(this.viewer);
+                             const ctrl = new TransformControl(this.viewer);
 
                              let culled  = false;
                              let visible = false;

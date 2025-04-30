@@ -11,6 +11,7 @@ export * from "./SectionPlanesPlugin/index.js";
 export * from "./StoreyViewsPlugin/index.js";
 export * from "./FaceAlignedSectionPlanesPlugin/index.js";
 export * from "./STLLoaderPlugin/index.js";
+export * from "./TransformControl/index.js";
 export * from "./TreeViewPlugin/index.js";
 export * from "./ViewCullPlugin/index.js";
 export * from "./XKTLoaderPlugin/index.js";
