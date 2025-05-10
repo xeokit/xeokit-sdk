@@ -242,6 +242,11 @@ export class TrianglesFlatColorRenderer extends TrianglesInstancingRenderer {
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+        } else {
+            src.push("    float dx = dFdx(gl_FragCoord.z);")
+            src.push("    float dy = dFdy(gl_FragCoord.z);")
+            src.push("    float diff = sqrt(dx*dx+dy*dy);");
+            src.push("    gl_FragDepth = gl_FragCoord.z + diff;");
         }
 
         src.push("}");
