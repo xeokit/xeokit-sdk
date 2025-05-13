@@ -1152,9 +1152,10 @@ const Renderer = function (scene, options) {
 
                         pickable.drawPickDepths(frameCtx); // Draw color-encoded fragment screen-space depths
 
-                        const pix = pickBuffer.read(0, 0);
-
-                        const screenZ = unpackDepth(pix); // Get screen-space Z at the given canvas coords
+                        const depthZ = pickBuffer.read(0, 0);
+                        const vec = [depthZ[0] / 256.0, depthZ[1] / 256.0, depthZ[2] / 256.0, depthZ[3] / 256.0];
+                        const bitShift = [1.0 / (256.0 * 256.0 * 256.0), 1.0 / (256.0 * 256.0), 1.0 / 256.0, 1.0];
+                        const screenZ = math.dotVec4(vec, bitShift); // Get screen-space Z at the given canvas coords
 
                         // Calculate clip space coordinates, which will be in range of x=[-1..1] and y=[-1..1], with y=(+1) at top
                         const x = (canvasPos[0] - canvas.clientWidth / 2) / (canvas.clientWidth / 2);
@@ -1517,12 +1518,6 @@ const Renderer = function (scene, options) {
             return pickResult;
         };
     })();
-
-    function unpackDepth(depthZ) {
-        const vec = [depthZ[0] / 256.0, depthZ[1] / 256.0, depthZ[2] / 256.0, depthZ[3] / 256.0];
-        const bitShift = [1.0 / (256.0 * 256.0 * 256.0), 1.0 / (256.0 * 256.0), 1.0 / 256.0, 1.0];
-        return math.dotVec4(vec, bitShift);
-    }
 
     function gpuPickWorldNormal(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult) {
 
