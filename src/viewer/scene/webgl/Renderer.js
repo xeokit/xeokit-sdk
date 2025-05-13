@@ -68,6 +68,23 @@ const Renderer = function (scene, options) {
     const saoOcclusionRenderer = new SAOOcclusionRenderer(scene);
     const saoDepthLimitedBlurRenderer = new SAODepthLimitedBlurRenderer(scene);
 
+    const getSceneCameraViewParams = (function() {
+        let params = null; // scene.camera not defined yet
+        return function() {
+            if (! params) {
+                const camera = scene.camera;
+                params = {
+                    get eye() { return camera.eye; },
+                    get far() { return camera.project.far; },
+                    get projMatrix() { return camera.projMatrix; },
+                    get viewMatrix() { return camera.viewMatrix; },
+                    get viewNormalMatrix() { return camera.viewNormalMatrix; }
+                };
+            }
+            return params;
+        };
+    })();
+
     this.scene = scene;
 
     this._occlusionTester = null; // Lazy-created in #addMarker()
@@ -375,6 +392,7 @@ const Renderer = function (scene, options) {
 
         frameCtx.reset();
         frameCtx.pass = params.pass;
+        frameCtx.viewParams = getSceneCameraViewParams();
 
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -444,11 +462,10 @@ const Renderer = function (scene, options) {
         shadowRenderBuf.bind();
 
         frameCtx.reset();
-
         frameCtx.backfaces = true;
         frameCtx.frontface = true;
-        frameCtx.shadowViewMatrix = light.getShadowViewMatrix();
-        frameCtx.shadowProjMatrix = light.getShadowProjMatrix();
+        frameCtx.viewParams.viewMatrix = light.getShadowViewMatrix();
+        frameCtx.viewParams.projMatrix = light.getShadowProjMatrix();
 
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -513,6 +530,7 @@ const Renderer = function (scene, options) {
         frameCtx.withSAO = false;
         frameCtx.pbrEnabled = pbrEnabled && !!scene.pbrEnabled;
         frameCtx.colorTextureEnabled = colorTextureEnabled && !!scene.colorTextureEnabled;
+        frameCtx.viewParams = getSceneCameraViewParams();
 
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -732,7 +750,7 @@ const Renderer = function (scene, options) {
             // Transparent color fill
 
             if (normalFillTransparentBinLen > 0) {
-                const eye = frameCtx.pickOrigin || scene.camera.eye;
+                const eye = frameCtx.viewParams.eye;
                 const byDist = normalFillTransparentBin.map(d => ({ drawable: d, distSq: math.distVec3(d.origin || vec3_0, eye) }));
                 byDist.sort((a, b) => b.distSq - a.distSq);
                 for (i = 0; i < normalFillTransparentBinLen; i++) {
@@ -1024,9 +1042,10 @@ const Renderer = function (scene, options) {
                 frameCtx.reset();
                 frameCtx.backfaces = true;
                 frameCtx.frontface = true; // "ccw"
-                frameCtx.pickOrigin = pickResult.origin;
-                frameCtx.pickViewMatrix = pickViewMatrix; // Can be null
-                frameCtx.pickProjMatrix = pickProjMatrix; // Can be null
+                const camera = scene.camera;
+                frameCtx.viewParams.eye = pickResult.origin || camera.eye;
+                frameCtx.viewParams.projMatrix = pickProjMatrix || camera.projMatrix;
+                frameCtx.viewParams.viewMatrix = pickViewMatrix || camera.viewMatrix;
                 const resolutionScale = scene.canvas.resolutionScale;
                 frameCtx.pickClipPos = [
                     getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
@@ -1120,8 +1139,8 @@ const Renderer = function (scene, options) {
 
                         // pickWorldPos
                         resetPickFrameCtx();
-                        frameCtx.pickZNear = nearAndFar[0];
-                        frameCtx.pickZFar = nearAndFar[1];
+                        frameCtx.viewParams.near = nearAndFar[0];
+                        frameCtx.viewParams.far  = nearAndFar[1];
                         frameCtx.pickElementsCount = pickable.pickElementsCount;
                         frameCtx.pickElementsOffset = pickable.pickElementsOffset;
 
@@ -1278,13 +1297,14 @@ const Renderer = function (scene, options) {
                 return this.pick({canvasPos, pickSurface: true});
             }
 
+            const camera = scene.camera;
             const resolutionScale = scene.canvas.resolutionScale;
 
             frameCtx.reset();
             frameCtx.backfaces = true;
             frameCtx.frontface = true; // "ccw"
-            frameCtx.pickZNear = scene.camera.project.near;
-            frameCtx.pickZFar = scene.camera.project.far;
+            frameCtx.viewParams.far  = camera.project.far;
+            frameCtx.viewParams.near = camera.project.near;
 
             const snapRadiusInPixels = snapRadius || 30;
 
@@ -1328,15 +1348,16 @@ const Renderer = function (scene, options) {
             // Set view and proj mats for VBO renderers
             ///////////////////////////////////////
 
-            frameCtx.pickViewMatrix = (canvasPos
-                                       ? scene.camera.viewMatrix
-                                       : math.lookAtMat4v(
-                                           origin,
-                                           math.addVec3(origin, direction, math.vec3()),
-                                           math.vec3([0, 1, 0]),
-                                           math.mat4()));
+            frameCtx.viewParams.eye = camera.eye;
+            frameCtx.viewParams.viewMatrix = (canvasPos
+                                              ? camera.viewMatrix
+                                              : math.lookAtMat4v(
+                                                  origin,
+                                                  math.addVec3(origin, direction, math.vec3()),
+                                                  math.vec3([0, 1, 0]),
+                                                  math.mat4()));
 
-            const pickProjMatrix = scene.camera.projMatrix;
+            frameCtx.viewParams.projMatrix = camera.projMatrix;
 
             // a) init z-buffer
             gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1, gl.COLOR_ATTACHMENT2]);
@@ -1465,7 +1486,7 @@ const Renderer = function (scene, options) {
             let snappedCanvasPos = null;
 
             if (null !== snappedWorldPos) {
-                snappedCanvasPos = scene.camera.projectWorldPos(snappedWorldPos);
+                snappedCanvasPos = camera.projectWorldPos(snappedWorldPos);
             }
 
             const snappedEntity = (snappedPickable && snappedPickable.delegatePickedEntity) ? snappedPickable.delegatePickedEntity() : snappedPickable;
@@ -1479,7 +1500,7 @@ const Renderer = function (scene, options) {
             pickResult.worldPos = snappedWorldPos || worldPos;
             pickResult.worldNormal = snappedWorldNormal || worldNormal;
             pickResult.entity = snappedEntity || pickable;
-            pickResult.canvasPos = canvasPos || scene.camera.projectWorldPos(worldPos || snappedWorldPos);
+            pickResult.canvasPos = canvasPos || camera.projectWorldPos(worldPos || snappedWorldPos);
             pickResult.snappedCanvasPos = snappedCanvasPos || canvasPos;
 
             return pickResult;
@@ -1527,6 +1548,7 @@ const Renderer = function (scene, options) {
             frameCtx.reset();
             frameCtx.backfaces = true;
             frameCtx.frontface = true; // "ccw"
+            frameCtx.viewParams = getSceneCameraViewParams();
 
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
             gl.clearColor(0, 0, 0, 0);
