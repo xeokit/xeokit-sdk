@@ -13,6 +13,10 @@ import {getExtension} from "./getExtension.js";
 
 const vec3_0 = math.vec3([0,0,0]);
 
+const bitShiftScreenZ = math.vec4([1.0 / (256.0 * 256.0 * 256.0 * 256.0), 1.0 / (256.0 * 256.0 * 256.0), 1.0 / (256.0 * 256.0), 1.0 / 256.0]);
+
+const pixelToInt = pix => pix[0] + (pix[1] << 8) + (pix[2] << 16) + (pix[3] << 24);
+
 /**
  * @private
  */
@@ -1064,8 +1068,7 @@ const Renderer = function (scene, options) {
                 renderDrawables(uiDrawableList);
             }
 
-            const pix = pickBuffer.read(0, 0);
-            const pickID = pix[0] + (pix[1] << 8) + (pix[2] << 16) + (pix[3] << 24);
+            const pickID = pixelToInt(pickBuffer.read(0, 0));
             const pickable = (pickID >= 0) && pickIDs.items[pickID];
 
             if (!pickable) {
@@ -1099,11 +1102,7 @@ const Renderer = function (scene, options) {
 
                         pickable.drawPickTriangles(frameCtx);
 
-                        const pix = pickBuffer.read(0, 0);
-
-                        const primIndex = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
-
-                        pickResult.primIndex = 3 * primIndex; // Convert from triangle number to first vertex in indices
+                        pickResult.primIndex = 3 * pixelToInt(pickBuffer.read(0, 0)); // Convert from triangle number to first vertex in indices
                     }
 
                     pickable.pickTriangleSurface(pickViewMatrix, pickProjMatrix, projection, pickResult);
@@ -1132,10 +1131,7 @@ const Renderer = function (scene, options) {
 
                         pickable.drawPickDepths(frameCtx); // Draw color-encoded fragment screen-space depths
 
-                        const depthZ = pickBuffer.read(0, 0);
-                        const vec = [depthZ[0] / 256.0, depthZ[1] / 256.0, depthZ[2] / 256.0, depthZ[3] / 256.0];
-                        const bitShift = [1.0 / (256.0 * 256.0 * 256.0), 1.0 / (256.0 * 256.0), 1.0 / 256.0, 1.0];
-                        const screenZ = math.dotVec4(vec, bitShift); // Get screen-space Z at the given canvas coords
+                        const screenZ = math.dotVec4(pickBuffer.read(0, 0), bitShiftScreenZ);
 
                         // Calculate clip space coordinates, which will be in range of x=[-1..1] and y=[-1..1], with y=(+1) at top
                         const x = (canvasPos[0] - canvas.clientWidth / 2) / (canvas.clientWidth / 2);
