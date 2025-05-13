@@ -1000,18 +1000,6 @@ const Renderer = function (scene, options) {
                 canvasPos[1] = canvas.clientHeight * 0.5;
             }
 
-            for (let type in drawableTypeInfo) {
-                if (drawableTypeInfo.hasOwnProperty(type)) {
-                    const drawableList = drawableTypeInfo[type].drawableList;
-                    for (let i = 0, len = drawableList.length; i < len; i++) {
-                        const drawable = drawableList[i];
-                        if (drawable.setPickMatrices) { // Eg. SceneModel, which needs pre-loading into texture
-                            drawable.setPickMatrices(pickViewMatrix, pickProjMatrix);
-                        }
-                    }
-                }
-            }
-
             const pickBuffer = renderBufferManager.getRenderBuffer("pick", {size: [1, 1]});
 
             pickBuffer.bind();
@@ -1375,18 +1363,6 @@ const Renderer = function (scene, options) {
                                            math.mat4()));
 
             const pickProjMatrix = scene.camera.projMatrix;
-
-            for (let type in drawableTypeInfo) {
-                if (drawableTypeInfo.hasOwnProperty(type)) {
-                    const drawableList = drawableTypeInfo[type].drawableList;
-                    for (let i = 0, len = drawableList.length; i < len; i++) {
-                        const drawable = drawableList[i];
-                        if (drawable.setPickMatrices) { // Eg. SceneModel, which needs pre-loading into texture
-                            drawable.setPickMatrices(frameCtx.pickViewMatrix, pickProjMatrix);
-                        }
-                    }
-                }
-            }
 
             // a) init z-buffer
             gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1, gl.COLOR_ATTACHMENT2]);
