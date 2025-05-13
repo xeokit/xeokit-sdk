@@ -18,7 +18,6 @@ class FrameContext {
         this._matPoolNextFreeIndex = 0;
 
         this._rtcViewMats = {};
-        this._rtcPickViewMats = {};
 
         this.reset();
     }
@@ -31,7 +30,6 @@ class FrameContext {
 
         this._matPoolNextFreeIndex = 0;
         this._rtcViewMats = {};
-        this._rtcPickViewMats = {};
 
         /**
          * The WebGL rendering context.
@@ -263,19 +261,6 @@ class FrameContext {
             this._rtcViewMats[originHash] = rtcViewMat;
         }
         return rtcViewMat;
-    }
-
-    /**
-     * Get picking View RTC matrix for the given RTC center.
-     */
-    getRTCPickViewMatrix(originHash, origin) {
-        let rtcPickViewMat = this._rtcPickViewMats[originHash];
-        if (!rtcPickViewMat) {
-            rtcPickViewMat = this._getNewMat();
-            createRTCViewMat(this.viewParams.viewMatrix, origin, rtcPickViewMat);
-            this._rtcPickViewMats[originHash] = rtcPickViewMat;
-        }
-        return rtcPickViewMat;
     }
 
     _getNewMat() {
