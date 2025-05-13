@@ -914,8 +914,15 @@ const Renderer = function (scene, options) {
     this.pick = (function () {
 
         const tempVec3a = math.vec3();
+        const tempVec4a = math.vec4();
+        const tempVec4b = math.vec4();
+        const tempVec4c = math.vec4();
+        const tempVec4d = math.vec4();
+        const tempVec4e = math.vec4();
         const tempMat4a = math.mat4();
         const tempMat4b = math.mat4();
+        const tempMat4c = math.mat4();
+        const tempMat4d = math.mat4();
 
         const randomVec3 = math.vec3();
         const up = math.vec3([0, 1, 0]);
@@ -1117,7 +1124,80 @@ const Renderer = function (scene, options) {
 
                     if (pickable.canPickWorldPos && pickable.canPickWorldPos()) {
 
-                        gpuPickWorldPos(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult);
+                        // pickWorldPos
+                        const resolutionScale = scene.canvas.resolutionScale;
+
+                        frameCtx.reset();
+                        frameCtx.backfaces = true;
+                        frameCtx.frontface = true; // "ccw"
+                        frameCtx.pickOrigin = pickResult.origin;
+                        frameCtx.pickViewMatrix = pickViewMatrix;
+                        frameCtx.pickProjMatrix = pickProjMatrix;
+                        frameCtx.pickZNear = nearAndFar[0];
+                        frameCtx.pickZFar = nearAndFar[1];
+                        frameCtx.pickElementsCount = pickable.pickElementsCount;
+                        frameCtx.pickElementsOffset = pickable.pickElementsOffset;
+                        frameCtx.pickClipPos = [
+                            getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
+                            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight)
+                        ];
+
+                        gl.viewport(0, 0, 1, 1);
+
+                        gl.clearColor(0, 0, 0, 0);
+                        gl.depthMask(true);
+                        gl.enable(gl.DEPTH_TEST);
+                        gl.disable(gl.CULL_FACE);
+                        gl.disable(gl.BLEND);
+                        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+                        pickable.drawPickDepths(frameCtx); // Draw color-encoded fragment screen-space depths
+
+                        const pix = pickBuffer.read(0, 0);
+
+                        const screenZ = unpackDepth(pix); // Get screen-space Z at the given canvas coords
+
+                        // Calculate clip space coordinates, which will be in range of x=[-1..1] and y=[-1..1], with y=(+1) at top
+                        const x = (canvasPos[0] - canvas.clientWidth / 2) / (canvas.clientWidth / 2);
+                        const y = -(canvasPos[1] - canvas.clientHeight / 2) / (canvas.clientHeight / 2);
+
+                        const origin = pickable.origin;
+                        let pvMat;
+
+                        if (origin) {
+                            const rtcPickViewMat = createRTCViewMat(pickViewMatrix, origin, tempMat4a);
+                            pvMat = math.mulMat4(pickProjMatrix, rtcPickViewMat, tempMat4c);
+
+                        } else {
+                            pvMat = math.mulMat4(pickProjMatrix, pickViewMatrix, tempMat4c);
+                        }
+
+                        const pvMatInverse = math.inverseMat4(pvMat, tempMat4d);
+
+                        tempVec4a[0] = x;
+                        tempVec4a[1] = y;
+                        tempVec4a[2] = -1;
+                        tempVec4a[3] = 1;
+
+                        let world1 = math.transformVec4(pvMatInverse, tempVec4a);
+                        world1 = math.mulVec4Scalar(world1, 1 / world1[3]);
+
+                        tempVec4b[0] = x;
+                        tempVec4b[1] = y;
+                        tempVec4b[2] = 1;
+                        tempVec4b[3] = 1;
+
+                        let world2 = math.transformVec4(pvMatInverse, tempVec4b);
+                        world2 = math.mulVec4Scalar(world2, 1 / world2[3]);
+
+                        const dir = math.subVec3(world2, world1, tempVec4c);
+                        const worldPos = math.addVec3(world1, math.mulVec4Scalar(dir, screenZ, tempVec4d), tempVec4e);
+
+                        if (origin) {
+                            math.addVec3(worldPos, origin);
+                        }
+
+                        pickResult.worldPos = worldPos;
 
                         if (params.pickSurfaceNormal !== false) {
                             gpuPickWorldNormal(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
@@ -1131,95 +1211,6 @@ const Renderer = function (scene, options) {
             pickResult.entity = pickedEntity;
             return pickResult;
         };
-    })();
-
-    const gpuPickWorldPos = (function () {
-
-        const tempVec4a = math.vec4();
-        const tempVec4b = math.vec4();
-        const tempVec4c = math.vec4();
-        const tempVec4d = math.vec4();
-        const tempVec4e = math.vec4();
-        const tempMat4a = math.mat4();
-        const tempMat4b = math.mat4();
-        const tempMat4c = math.mat4();
-
-        return function (pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult) {
-
-            const resolutionScale = scene.canvas.resolutionScale;
-
-            frameCtx.reset();
-            frameCtx.backfaces = true;
-            frameCtx.frontface = true; // "ccw"
-            frameCtx.pickOrigin = pickResult.origin;
-            frameCtx.pickViewMatrix = pickViewMatrix;
-            frameCtx.pickProjMatrix = pickProjMatrix;
-            frameCtx.pickZNear = nearAndFar[0];
-            frameCtx.pickZFar = nearAndFar[1];
-            frameCtx.pickElementsCount = pickable.pickElementsCount;
-            frameCtx.pickElementsOffset = pickable.pickElementsOffset;
-            frameCtx.pickClipPos = [
-                getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
-                getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight)
-            ];
-
-            gl.viewport(0, 0, 1, 1);
-
-            gl.clearColor(0, 0, 0, 0);
-            gl.depthMask(true);
-            gl.enable(gl.DEPTH_TEST);
-            gl.disable(gl.CULL_FACE);
-            gl.disable(gl.BLEND);
-            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-            pickable.drawPickDepths(frameCtx); // Draw color-encoded fragment screen-space depths
-
-            const pix = pickBuffer.read(0, 0);
-
-            const screenZ = unpackDepth(pix); // Get screen-space Z at the given canvas coords
-
-            // Calculate clip space coordinates, which will be in range of x=[-1..1] and y=[-1..1], with y=(+1) at top
-            const x = (canvasPos[0] - canvas.clientWidth / 2) / (canvas.clientWidth / 2);
-            const y = -(canvasPos[1] - canvas.clientHeight / 2) / (canvas.clientHeight / 2);
-
-            const origin = pickable.origin;
-            let pvMat;
-
-            if (origin) {
-                const rtcPickViewMat = createRTCViewMat(pickViewMatrix, origin, tempMat4a);
-                pvMat = math.mulMat4(pickProjMatrix, rtcPickViewMat, tempMat4b);
-
-            } else {
-                pvMat = math.mulMat4(pickProjMatrix, pickViewMatrix, tempMat4b);
-            }
-
-            const pvMatInverse = math.inverseMat4(pvMat, tempMat4c);
-
-            tempVec4a[0] = x;
-            tempVec4a[1] = y;
-            tempVec4a[2] = -1;
-            tempVec4a[3] = 1;
-
-            let world1 = math.transformVec4(pvMatInverse, tempVec4a);
-            world1 = math.mulVec4Scalar(world1, 1 / world1[3]);
-
-            tempVec4b[0] = x;
-            tempVec4b[1] = y;
-            tempVec4b[2] = 1;
-            tempVec4b[3] = 1;
-
-            let world2 = math.transformVec4(pvMatInverse, tempVec4b);
-            world2 = math.mulVec4Scalar(world2, 1 / world2[3]);
-
-            const dir = math.subVec3(world2, world1, tempVec4c);
-            const worldPos = math.addVec3(world1, math.mulVec4Scalar(dir, screenZ, tempVec4d), tempVec4e);
-
-            if (origin) {
-                math.addVec3(worldPos, origin);
-            }
-
-            pickResult.worldPos = worldPos;
-        }
     })();
 
     function drawSnapInit(frameCtx) {
