@@ -330,7 +330,7 @@ class CameraFlightAnimation extends Component {
         this.fire("started", params, true);
 
         this._time1 = Date.now();
-        this._time2 = this._time1 + (params.duration ? params.duration * 1000 : this._duration);
+        this._time2 = this._time1 + (Number.isFinite(params.duration) ? params.duration * 1000 : this._duration);
 
         this._flying = true; // False as soon as we stop
 
@@ -566,7 +566,7 @@ class CameraFlightAnimation extends Component {
      * @param {Number} value New duration value.
      */
     set duration(value) {
-        this._duration = value ? (value * 1000.0) : 500;
+        this._duration = Number.isFinite(value) ? (value * 1000.0) : 500;
         this.stop();
     }
 
