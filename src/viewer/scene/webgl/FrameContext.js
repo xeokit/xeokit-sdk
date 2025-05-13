@@ -157,59 +157,39 @@ class FrameContext {
          */
         this.pass = 0;
 
-        /**
-         * The 4x4 viewing transform matrix the renderer is currently using when rendering castsShadows.
-         *
-         * This sets the viewpoint to look from the point of view of each {@link DirLight}
-         * or {@link PointLight} that casts a shadow.
-         *
-         * @property shadowViewMatrix
-         * @type {Number[]}
-         */
-        this.shadowViewMatrix = null;
+        this.viewParams = { };
 
         /**
-         * The 4x4 viewing projection matrix the renderer is currently using when rendering shadows.
+         * The 4x4 view matrix.
          *
-         * @property shadowProjMatrix
+         * @property viewMatrix
          * @type {Number[]}
          */
-        this.shadowProjMatrix = null;
+        this.viewParams.viewMatrix = null;
 
         /**
-         * The 4x4 viewing transform matrix the renderer is currently using when rendering a ray-pick.
+         * The 4x4 projection matrix.
          *
-         * This sets the viewpoint to look along the ray given to {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}
-         * when picking with a ray.
-         *
-         * @property pickViewMatrix
+         * @property projMatrix
          * @type {Number[]}
          */
-        this.pickViewMatrix = null;
-
-        /**
-         * The 4x4 orthographic projection transform matrix the renderer is currently using when rendering a ray-pick.
-         *
-         * @property pickProjMatrix
-         * @type {Number[]}
-         */
-        this.pickProjMatrix = null;
+        this.viewParams.projMatrix = null;
 
         /**
          * Distance to the near clipping plane when rendering depth fragments for GPU-accelerated 3D picking.
          *
-         * @property pickZNear
+         * @property near
          * @type {Number|*}
          */
-        this.pickZNear = 0.01;
+        this.viewParams.near = 0.01;
 
         /**
          * Distance to the far clipping plane when rendering depth fragments for GPU-accelerated 3D picking.
          *
-         * @property pickZFar
+         * @property far
          * @type {Number|*}
          */
-        this.pickZFar = 5000;
+        this.viewParams.far = 5000;
 
         /**
          * Whether or not the renderer is currently picking invisible objects.
@@ -279,7 +259,7 @@ class FrameContext {
         let rtcViewMat = this._rtcViewMats[originHash];
         if (!rtcViewMat) {
             rtcViewMat = this._getNewMat();
-            createRTCViewMat(this._scene.camera.viewMatrix, origin, rtcViewMat);
+            createRTCViewMat(this.viewParams.viewMatrix, origin, rtcViewMat);
             this._rtcViewMats[originHash] = rtcViewMat;
         }
         return rtcViewMat;
@@ -292,8 +272,7 @@ class FrameContext {
         let rtcPickViewMat = this._rtcPickViewMats[originHash];
         if (!rtcPickViewMat) {
             rtcPickViewMat = this._getNewMat();
-            const pickViewMat = this.pickViewMatrix || this._scene.camera.viewMatrix;
-            createRTCViewMat(pickViewMat, origin, rtcPickViewMat);
+            createRTCViewMat(this.viewParams.viewMatrix, origin, rtcPickViewMat);
             this._rtcPickViewMats[originHash] = rtcPickViewMat;
         }
         return rtcPickViewMat;
