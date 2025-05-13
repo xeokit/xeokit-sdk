@@ -1011,20 +1011,23 @@ const Renderer = function (scene, options) {
 
             pickBuffer.bind();
 
-            // gpuPickPickable
-            const resolutionScale = scene.canvas.resolutionScale;
+            const resetPickFrameCtx = () => {
+                frameCtx.reset();
+                frameCtx.backfaces = true;
+                frameCtx.frontface = true; // "ccw"
+                frameCtx.pickOrigin = pickResult.origin;
+                frameCtx.pickViewMatrix = pickViewMatrix; // Can be null
+                frameCtx.pickProjMatrix = pickProjMatrix; // Can be null
+                const resolutionScale = scene.canvas.resolutionScale;
+                frameCtx.pickClipPos = [
+                    getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
+                    getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight)
+                ];
+            };
 
-            frameCtx.reset();
-            frameCtx.backfaces = true;
-            frameCtx.frontface = true; // "ccw"
-            frameCtx.pickOrigin = pickResult.origin;
-            frameCtx.pickViewMatrix = pickViewMatrix;
-            frameCtx.pickProjMatrix = pickProjMatrix;
+            // gpuPickPickable
+            resetPickFrameCtx();
             frameCtx.pickInvisible = !!params.pickInvisible;
-            frameCtx.pickClipPos = [
-                getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
-                getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight)
-            ];
 
             gl.viewport(0, 0, 1, 1);
             gl.depthMask(true);
@@ -1084,22 +1087,10 @@ const Renderer = function (scene, options) {
                 if (pickable.canPickTriangle && pickable.canPickTriangle()) {
 
                     if (pickable.drawPickTriangles) {
-                        const resolutionScale = scene.canvas.resolutionScale;
-
-                        frameCtx.reset();
-                        frameCtx.backfaces = true;
-                        frameCtx.frontface = true; // "ccw"
-                        frameCtx.pickOrigin = pickResult.origin;
-                        frameCtx.pickViewMatrix = pickViewMatrix; // Can be null
-                        frameCtx.pickProjMatrix = pickProjMatrix; // Can be null
+                        resetPickFrameCtx();
                         // frameCtx.pickInvisible = !!params.pickInvisible;
-                        frameCtx.pickClipPos = [
-                            getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
-                            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight)
-                        ];
 
                         gl.viewport(0, 0, 1, 1);
-
                         gl.clearColor(0, 0, 0, 0);
                         gl.enable(gl.DEPTH_TEST);
                         gl.disable(gl.CULL_FACE);
@@ -1124,22 +1115,11 @@ const Renderer = function (scene, options) {
                     if (pickable.canPickWorldPos && pickable.canPickWorldPos()) {
 
                         // pickWorldPos
-                        const resolutionScale = scene.canvas.resolutionScale;
-
-                        frameCtx.reset();
-                        frameCtx.backfaces = true;
-                        frameCtx.frontface = true; // "ccw"
-                        frameCtx.pickOrigin = pickResult.origin;
-                        frameCtx.pickViewMatrix = pickViewMatrix;
-                        frameCtx.pickProjMatrix = pickProjMatrix;
+                        resetPickFrameCtx();
                         frameCtx.pickZNear = nearAndFar[0];
                         frameCtx.pickZFar = nearAndFar[1];
                         frameCtx.pickElementsCount = pickable.pickElementsCount;
                         frameCtx.pickElementsOffset = pickable.pickElementsOffset;
-                        frameCtx.pickClipPos = [
-                            getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
-                            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight)
-                        ];
 
                         gl.viewport(0, 0, 1, 1);
 
@@ -1201,18 +1181,7 @@ const Renderer = function (scene, options) {
 
                         if (params.pickSurfaceNormal !== false) {
                             // gpuPickWorldNormal
-                            const resolutionScale = scene.canvas.resolutionScale;
-
-                            frameCtx.reset();
-                            frameCtx.backfaces = true;
-                            frameCtx.frontface = true; // "ccw"
-                            frameCtx.pickOrigin = pickResult.origin;
-                            frameCtx.pickViewMatrix = pickViewMatrix;
-                            frameCtx.pickProjMatrix = pickProjMatrix;
-                            frameCtx.pickClipPos = [
-                                getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
-                                getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight),
-                            ];
+                            resetPickFrameCtx();
 
                             const pickNormalBuffer = renderBufferManager.getRenderBuffer("pick-normal", {size: [3, 3]});
 
