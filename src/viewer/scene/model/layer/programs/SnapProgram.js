@@ -18,7 +18,6 @@ export const SnapProgram = function(programVariables, geometry, isSnapInit, isPo
         // Improves occlusion accuracy at distance
         getLogDepth: true && (vFragDepth => (isSnapInit ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth)),
         renderPassFlag: 3,  // PICK
-        usePickParams: true,
         transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - ${snapVectorA}) * ${snapInvVectorAB} * ${clipPos}.w, ${clipPos}.zw)`,
         dontCullOnAlphaZero: !isSnapInit,
         appendFragmentOutputs: (src) => {
