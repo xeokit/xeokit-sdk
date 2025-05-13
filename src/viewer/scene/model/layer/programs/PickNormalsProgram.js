@@ -8,7 +8,6 @@ export const PickNormalsProgram = function(programVariables, geometry, logarithm
         programName: isFlat ? "PickNormalsFlat" : "PickNormals",
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 3,  // PICK
-        usePickParams: true,
         transformClipPos: clipTransformSetup.transformClipPos,
         appendFragmentOutputs: (src) => {
             const worldNormal = (isFlat

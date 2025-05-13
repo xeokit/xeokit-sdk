@@ -2324,8 +2324,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
                 const meshState = mesh._state;
                 const geometry = mesh._geometry;
                 const geometryState = geometry._state;
-                const camera = scene.camera;
-                const project = camera.project;
+                const viewParams = frameCtx.viewParams;
                 const actsAsBackground = programSetup.canActAsBackground && meshStateBackground;
 
                 if (frameCtx.lastProgramId !== program.id) {
@@ -2377,7 +2376,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
                     setUni(positionsDecodeMatrix, geometryState.positionsDecodeMatrix);
                     setUni(uvDecodeMatrix,        geometryState.uvDecodeMatrix);
                     setUni(viewMatrix,            viewMat);
-                    setUni(viewNormalMatrix,      camera.viewNormalMatrix);
+                    setUni(viewNormalMatrix,      viewParams.viewNormalMatrix);
                     setUni(projMatrix,            projMat);
                     setUni(pickClipPos,           frameCtx.pickClipPos);
                     setUni(clippable,             mesh.clippable);
@@ -2390,17 +2389,17 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
                             origin:      mesh.origin,
                             renderFlags: { sectionPlanesActivePerLayer: mesh.renderFlags.sectionPlanesActivePerLayer }
                         },
-                        view:         { far: project.far }
+                        view:         { far: viewParams.far }
                     });
                 };
 
                 const origin = mesh.origin;
                 if (programSetup.isPick) {
-                    setUniforms(frameCtx.pickProjMatrix,   origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix);
+                    setUniforms(viewParams.projMatrix, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : viewParams.viewMatrix);
                 } else if (programSetup.useShadowView) {
-                    setUniforms(frameCtx.shadowProjMatrix, frameCtx.shadowViewMatrix);
+                    setUniforms(viewParams.projMatrix, viewParams.viewMatrix);
                 } else {
-                    setUniforms(project.matrix,            origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
+                    setUniforms(viewParams.projMatrix, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : viewParams.viewMatrix);
                 }
 
                 const setAttributes = (triangleGeometry) => {
@@ -2409,7 +2408,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
                             a.setInputValue({
                                 bindAtLocation: location => { // see ArrayBuf.js and Attribute.js
                                     b.bind();
-                                    scene.canvas.gl.vertexAttribPointer(location, b.itemSize, b.itemType, b.normalized, 0, 0);
+                                    gl.vertexAttribPointer(location, b.itemSize, b.itemType, b.normalized, 0, 0);
                                 }
                             });
                             frameCtx.bindArray++;
