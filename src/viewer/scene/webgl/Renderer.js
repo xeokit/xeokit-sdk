@@ -1005,7 +1005,59 @@ const Renderer = function (scene, options) {
 
             pickBuffer.bind();
 
-            const pickable = gpuPickPickable(pickBuffer, canvasPos, pickViewMatrix, pickProjMatrix, params, pickResult);
+            // gpuPickPickable
+            const resolutionScale = scene.canvas.resolutionScale;
+
+            frameCtx.reset();
+            frameCtx.backfaces = true;
+            frameCtx.frontface = true; // "ccw"
+            frameCtx.pickOrigin = pickResult.origin;
+            frameCtx.pickViewMatrix = pickViewMatrix;
+            frameCtx.pickProjMatrix = pickProjMatrix;
+            frameCtx.pickInvisible = !!params.pickInvisible;
+            frameCtx.pickClipPos = [
+                getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
+                getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight)
+            ];
+
+            gl.viewport(0, 0, 1, 1);
+            gl.depthMask(true);
+            gl.enable(gl.DEPTH_TEST);
+            gl.disable(gl.CULL_FACE);
+            gl.disable(gl.BLEND);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+            const includeEntityIds = params.includeEntityIds;
+            const excludeEntityIds = params.excludeEntityIds;
+
+            const renderDrawables = function(drawables) {
+            for (let i = 0, len = drawables.length; i < len; i++) {
+                const drawable = drawables[i];
+                if (drawable.culled === true || drawable.visible === false) {
+                    continue;
+                }
+                if (!drawable.drawPickMesh || (params.pickInvisible !== true && drawable.visible === false) || drawable.pickable === false) {
+                    continue;
+                }
+                if (includeEntityIds && !includeEntityIds[drawable.id]) { // TODO: push this logic into drawable
+                    continue;
+                }
+                if (excludeEntityIds && excludeEntityIds[drawable.id]) {
+                    continue;
+                }
+                drawable.drawPickMesh(frameCtx);
+            }
+            };
+
+            renderDrawables(postCullDrawableList);
+            if (uiDrawableList.length > 0) {
+                gl.clear(gl.DEPTH_BUFFER_BIT);
+                renderDrawables(uiDrawableList);
+            }
+
+            const pix = pickBuffer.read(0, 0);
+            const pickID = pix[0] + (pix[1] << 8) + (pix[2] << 16) + (pix[3] << 24);
+            const pickable = (pickID >= 0) && pickIDs.items[pickID];
 
             if (!pickable) {
                 pickBuffer.unbind();
@@ -1080,69 +1132,6 @@ const Renderer = function (scene, options) {
             return pickResult;
         };
     })();
-
-    function gpuPickPickable(pickBuffer, canvasPos, pickViewMatrix, pickProjMatrix, params, pickResult) {
-
-        const resolutionScale = scene.canvas.resolutionScale;
-
-        frameCtx.reset();
-        frameCtx.backfaces = true;
-        frameCtx.frontface = true; // "ccw"
-        frameCtx.pickOrigin = pickResult.origin;
-        frameCtx.pickViewMatrix = pickViewMatrix;
-        frameCtx.pickProjMatrix = pickProjMatrix;
-        frameCtx.pickInvisible = !!params.pickInvisible;
-        frameCtx.pickClipPos = [
-            getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
-            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight)
-        ];
-
-        gl.viewport(0, 0, 1, 1);
-        gl.depthMask(true);
-        gl.enable(gl.DEPTH_TEST);
-        gl.disable(gl.CULL_FACE);
-        gl.disable(gl.BLEND);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-        const includeEntityIds = params.includeEntityIds;
-        const excludeEntityIds = params.excludeEntityIds;
-
-        const renderDrawables = function(drawables) {
-        for (let i = 0, len = drawables.length; i < len; i++) {
-            const drawable = drawables[i];
-            if (drawable.culled === true || drawable.visible === false) {
-                continue;
-            }
-            if (!drawable.drawPickMesh || (params.pickInvisible !== true && drawable.visible === false) || drawable.pickable === false) {
-                continue;
-            }
-            if (includeEntityIds && !includeEntityIds[drawable.id]) { // TODO: push this logic into drawable
-                continue;
-            }
-            if (excludeEntityIds && excludeEntityIds[drawable.id]) {
-                continue;
-            }
-            drawable.drawPickMesh(frameCtx);
-        }
-        };
-
-        renderDrawables(postCullDrawableList);
-        if (uiDrawableList.length > 0) {
-            gl.clear(gl.DEPTH_BUFFER_BIT);
-            renderDrawables(uiDrawableList);
-        }
-
-        const pix = pickBuffer.read(0, 0);
-        const pickID = pix[0] + (pix[1] << 8) + (pix[2] << 16) + (pix[3] << 24);
-
-        if (pickID < 0) {
-            return;
-        }
-
-        const pickable = pickIDs.items[pickID];
-
-        return pickable;
-    }
 
     const gpuPickWorldPos = (function () {
 
