@@ -17,6 +17,11 @@ const bitShiftScreenZ = math.vec4([1.0 / (256.0 * 256.0 * 256.0 * 256.0), 1.0 / 
 
 const pixelToInt = pix => pix[0] + (pix[1] << 8) + (pix[2] << 16) + (pix[3] << 24);
 
+const toWorldNormal = (n) => math.normalizeVec3(math.divVec3Scalar(n, math.MAX_INT, math.vec3()));
+const toWorldPos    = (p, origin, scale) => math.vec3([ p[0] * scale[0] + origin[0],
+                                                        p[1] * scale[1] + origin[1],
+                                                        p[2] * scale[2] + origin[2] ]);
+
 /**
  * @private
  */
@@ -1198,15 +1203,7 @@ const Renderer = function (scene, options) {
 
                             pickNormalBuffer.unbind();
 
-                            const worldNormal = [
-                                pix[0] / math.MAX_INT,
-                                pix[1] / math.MAX_INT,
-                                pix[2] / math.MAX_INT,
-                            ];
-
-                            math.normalizeVec3(worldNormal);
-
-                            pickResult.worldNormal = worldNormal;
+                            pickResult.worldNormal = toWorldNormal(pix);
                         }
 
                         pickResult.pickSurfacePrecision = false;
@@ -1392,26 +1389,10 @@ const Renderer = function (scene, options) {
 
             if (pickResultMiddleXY[3] !== 0) {
                 const pickedLayerParmasSurface = layerParamsSurface[Math.abs(pickResultMiddleXY[3]) % layerParamsSurface.length];
-                const origin = pickedLayerParmasSurface.origin;
-                const scale = pickedLayerParmasSurface.coordinateScale;
-                worldPos = [
-                    pickResultMiddleXY[0] * scale[0] + origin[0],
-                    pickResultMiddleXY[1] * scale[1] + origin[1],
-                    pickResultMiddleXY[2] * scale[2] + origin[2],
-                ];
-                worldNormal = math.normalizeVec3([
-                    pickNormalResultMiddleXY[0] / math.MAX_INT,
-                    pickNormalResultMiddleXY[1] / math.MAX_INT,
-                    pickNormalResultMiddleXY[2] / math.MAX_INT,
-                ]);
+                worldPos = toWorldPos(pickResultMiddleXY, pickedLayerParmasSurface.origin, pickedLayerParmasSurface.coordinateScale);
+                worldNormal = toWorldNormal(pickNormalResultMiddleXY);
 
-                const pickID =
-                    pickPickableResultMiddleXY[0]
-                    + (pickPickableResultMiddleXY[1] << 8)
-                    + (pickPickableResultMiddleXY[2] << 16)
-                    + (pickPickableResultMiddleXY[3] << 24);
-
-                pickable = pickIDs.items[pickID];
+                pickable = pickIDs.items[pixelToInt(pickPickableResultMiddleXY)];
             }
 
             // result 2) hi-precision snapped (to vertex/edge) world position
@@ -1467,34 +1448,15 @@ const Renderer = function (scene, options) {
                     }
                 });
 
-                snapType = snapPickResult[0].isVertex ? "vertex" : "edge";
-                const snapPick = snapPickResult[0].result;
-                const snapPickNormal = snapPickResult[0].normal;
-                const snapPickId = snapPickResult[0].id;
+                const res = snapPickResult[0];
+                snapType = res.isVertex ? "vertex" : "edge";
 
+                const snapPick = res.result;
                 const pickedLayerParmas = layerParamsSnap[snapPick[3]];
+                snappedWorldPos = toWorldPos(snapPick, pickedLayerParmas.origin, pickedLayerParmas.coordinateScale);
 
-                const origin = pickedLayerParmas.origin;
-                const scale = pickedLayerParmas.coordinateScale;
-
-                snappedWorldNormal = math.normalizeVec3([
-                    snapPickNormal[0] / math.MAX_INT,
-                    snapPickNormal[1] / math.MAX_INT,
-                    snapPickNormal[2] / math.MAX_INT,
-                ]);
-
-                snappedWorldPos = [
-                    snapPick[0] * scale[0] + origin[0],
-                    snapPick[1] * scale[1] + origin[1],
-                    snapPick[2] * scale[2] + origin[2],
-                ];
-
-                snappedPickable = pickIDs.items[
-                snapPickId[0]
-                + (snapPickId[1] << 8)
-                + (snapPickId[2] << 16)
-                + (snapPickId[3] << 24)
-                    ];
+                snappedWorldNormal = toWorldNormal(res.normal);
+                snappedPickable = pickIDs.items[pixelToInt(res.id)];
             }
 
             if (null === worldPos && null == snappedWorldPos) {   // If neither regular pick or snap pick, return null
