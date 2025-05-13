@@ -1,6 +1,6 @@
 export const PickDepthProgram = function(programVariables, geometry, logarithmicDepthBufferEnabled, clipTransformSetup) {
-    const pickZFar  = programVariables.createUniform("float", "pickZFar",  (set, state) => set(state.legacyFrameCtx.pickZFar));
-    const pickZNear = programVariables.createUniform("float", "pickZNear", (set, state) => set(state.legacyFrameCtx.pickZNear));
+    const far  = programVariables.createUniform("float", "far",  (set, state) => set(state.legacyFrameCtx.viewParams.far));
+    const near = programVariables.createUniform("float", "near", (set, state) => set(state.legacyFrameCtx.viewParams.near));
     const vViewPosition = programVariables.createVarying("vec3", "vViewPosition", () => `${geometry.attributes.position.view}.xyz`);
     const outPackedDepth = programVariables.createOutput("vec4", "outPackedDepth");
     const packDepth = programVariables.createFragmentDefinition(
@@ -20,10 +20,9 @@ export const PickDepthProgram = function(programVariables, geometry, logarithmic
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 3,  // PICK
         incPointSizeBy10: true,
-        usePickParams: true,
         transformClipPos: clipTransformSetup.transformClipPos,
         appendFragmentOutputs: (src) => {
-            src.push(`float zNormalizedDepth = abs((${pickZNear} + ${vViewPosition}.z) / (${pickZFar} - ${pickZNear}));`);
+            src.push(`float zNormalizedDepth = abs((${near} + ${vViewPosition}.z) / (${far} - ${near}));`);
             // isn't zNormalizedDepth the same as gl_FragDepth or gl_FragCoord.z?
             src.push(`${outPackedDepth} = ${packDepth}(zNormalizedDepth);`); // Must be linear depth
             // try: src.push("    outPackedDepth = vec4(zNormalizedDepth, fract(zNormalizedDepth * vec3(256.0, 256.0*256.0, 256.0*256.0*256.0)));");
