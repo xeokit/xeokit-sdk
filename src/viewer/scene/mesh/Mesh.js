@@ -2393,14 +2393,8 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
                     });
                 };
 
-                const origin = mesh.origin;
-                if (programSetup.isPick) {
-                    setUniforms(viewParams.projMatrix, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : viewParams.viewMatrix);
-                } else if (programSetup.useShadowView) {
-                    setUniforms(viewParams.projMatrix, viewParams.viewMatrix);
-                } else {
-                    setUniforms(viewParams.projMatrix, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : viewParams.viewMatrix);
-                }
+                const origin = (! programSetup.useShadowView) && mesh.origin;
+                setUniforms(viewParams.projMatrix, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : viewParams.viewMatrix);
 
                 const setAttributes = (triangleGeometry) => {
                     const setAttr = (a, b) => {
