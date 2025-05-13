@@ -1200,7 +1200,47 @@ const Renderer = function (scene, options) {
                         pickResult.worldPos = worldPos;
 
                         if (params.pickSurfaceNormal !== false) {
-                            gpuPickWorldNormal(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
+                            // gpuPickWorldNormal
+                            const resolutionScale = scene.canvas.resolutionScale;
+
+                            frameCtx.reset();
+                            frameCtx.backfaces = true;
+                            frameCtx.frontface = true; // "ccw"
+                            frameCtx.pickOrigin = pickResult.origin;
+                            frameCtx.pickViewMatrix = pickViewMatrix;
+                            frameCtx.pickProjMatrix = pickProjMatrix;
+                            frameCtx.pickClipPos = [
+                                getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
+                                getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight),
+                            ];
+
+                            const pickNormalBuffer = renderBufferManager.getRenderBuffer("pick-normal", {size: [3, 3]});
+
+                            pickNormalBuffer.bind(gl.RGBA32I);
+
+                            gl.viewport(0, 0, pickNormalBuffer.size[0], pickNormalBuffer.size[1]);
+
+                            gl.enable(gl.DEPTH_TEST);
+                            gl.disable(gl.CULL_FACE);
+                            gl.disable(gl.BLEND);
+                            gl.clear(gl.DEPTH_BUFFER_BIT);
+                            gl.clearBufferiv(gl.COLOR, 0, new Int32Array([0, 0, 0, 0]));
+
+                            pickable.drawPickNormals(frameCtx); // Draw color-encoded fragment World-space normals
+
+                            const pix = pickNormalBuffer.read(1, 1, gl.RGBA_INTEGER, gl.INT, Int32Array, 4);
+
+                            pickNormalBuffer.unbind();
+
+                            const worldNormal = [
+                                pix[0] / math.MAX_INT,
+                                pix[1] / math.MAX_INT,
+                                pix[2] / math.MAX_INT,
+                            ];
+
+                            math.normalizeVec3(worldNormal);
+
+                            pickResult.worldNormal = worldNormal;
                         }
 
                         pickResult.pickSurfacePrecision = false;
@@ -1518,50 +1558,6 @@ const Renderer = function (scene, options) {
             return pickResult;
         };
     })();
-
-    function gpuPickWorldNormal(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult) {
-
-        const resolutionScale = scene.canvas.resolutionScale;
-
-        frameCtx.reset();
-        frameCtx.backfaces = true;
-        frameCtx.frontface = true; // "ccw"
-        frameCtx.pickOrigin = pickResult.origin;
-        frameCtx.pickViewMatrix = pickViewMatrix;
-        frameCtx.pickProjMatrix = pickProjMatrix;
-        frameCtx.pickClipPos = [
-            getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
-            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight),
-        ];
-
-        const pickNormalBuffer = renderBufferManager.getRenderBuffer("pick-normal", {size: [3, 3]});
-
-        pickNormalBuffer.bind(gl.RGBA32I);
-
-        gl.viewport(0, 0, pickNormalBuffer.size[0], pickNormalBuffer.size[1]);
-
-        gl.enable(gl.DEPTH_TEST);
-        gl.disable(gl.CULL_FACE);
-        gl.disable(gl.BLEND);
-        gl.clear(gl.DEPTH_BUFFER_BIT);
-        gl.clearBufferiv(gl.COLOR, 0, new Int32Array([0, 0, 0, 0]));
-
-        pickable.drawPickNormals(frameCtx); // Draw color-encoded fragment World-space normals
-
-        const pix = pickNormalBuffer.read(1, 1, gl.RGBA_INTEGER, gl.INT, Int32Array, 4);
-
-        pickNormalBuffer.unbind();
-
-        const worldNormal = [
-            pix[0] / math.MAX_INT,
-            pix[1] / math.MAX_INT,
-            pix[2] / math.MAX_INT,
-        ];
-
-        math.normalizeVec3(worldNormal);
-
-        pickResult.worldNormal = worldNormal;
-    }
 
     /**
      * Adds a {@link Marker} for occlusion testing.
