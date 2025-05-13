@@ -181,7 +181,6 @@ export const getRenderers = (function() {
                             const geometryParameters     = renderingAttributes.geometryParameters;
                             const incrementDrawState     = programSetup.incrementDrawState;
                             const isShadowProgram        = programSetup.isShadowProgram;
-                            const usePickParams          = programSetup.usePickParams;
                             const attributes             = geometryParameters.attributes;
                             const worldPositionAttribute = attributes.position.world;
                             const clipPos                = "clipPos";
@@ -297,12 +296,12 @@ export const getRenderers = (function() {
 
                                         const origin = layer.origin;
                                         const model = layer.model;
-                                        const camera = scene.camera;
+                                        const viewParams = frameCtx.viewParams;
                                         const rtcOrigin = tempVec3;
                                         math.transformPoint3(model.matrix, origin, rtcOrigin);
 
-                                        const viewMatrix = (isShadowProgram && frameCtx.shadowViewMatrix) || (usePickParams && frameCtx.pickViewMatrix) || camera.viewMatrix;
-                                        const projMatrix = (isShadowProgram && frameCtx.shadowProjMatrix) || (usePickParams && frameCtx.pickProjMatrix) || camera.projMatrix;
+                                        const viewMatrix = viewParams.viewMatrix;
+                                        const projMatrix = viewParams.projMatrix;
 
                                         if (frameCtx.snapPickOrigin) {
                                             frameCtx.snapPickOrigin[0] = rtcOrigin[0];
@@ -320,12 +319,12 @@ export const getRenderers = (function() {
                                             },
                                             renderPass:     renderPass,
                                             view: {
-                                                eye:              (usePickParams && frameCtx.pickOrigin) || camera.eye,
-                                                far:              (usePickParams && frameCtx.pickProjMatrix) ? frameCtx.pickZFar : camera.project.far,
+                                                eye:              viewParams.eye,
+                                                far:              viewParams.far,
                                                 pickClipPos:      frameCtx.pickClipPos,
                                                 projMatrix:       projMatrix,
                                                 viewMatrix:       math.compareVec3(rtcOrigin, vec3zero) ? viewMatrix : createRTCViewMat(viewMatrix, rtcOrigin, tempMat4),
-                                                viewNormalMatrix: camera.viewNormalMatrix
+                                                viewNormalMatrix: viewParams.viewNormalMatrix
                                             }
                                         };
                                         program.inputSetters.setUniforms(state);
@@ -336,8 +335,8 @@ export const getRenderers = (function() {
                                             {
                                                 projMatrix:       projMatrix,
                                                 viewMatrix:       math.compareVec3(rtcOrigin, vec3zero) ? viewMatrix : createRTCViewMat(viewMatrix, rtcOrigin, tempMat4),
-                                                viewNormalMatrix: camera.viewNormalMatrix,
-                                                eye:              (usePickParams && frameCtx.pickOrigin) || camera.eye
+                                                viewNormalMatrix: viewParams.viewNormalMatrix,
+                                                eye:              viewParams.eye
                                             });
 
                                         if (incrementDrawState) {
