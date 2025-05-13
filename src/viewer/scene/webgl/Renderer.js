@@ -1024,7 +1024,37 @@ const Renderer = function (scene, options) {
 
                 if (pickable.canPickTriangle && pickable.canPickTriangle()) {
 
-                    gpuPickTriangle(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
+                    if (pickable.drawPickTriangles) {
+                        const resolutionScale = scene.canvas.resolutionScale;
+
+                        frameCtx.reset();
+                        frameCtx.backfaces = true;
+                        frameCtx.frontface = true; // "ccw"
+                        frameCtx.pickOrigin = pickResult.origin;
+                        frameCtx.pickViewMatrix = pickViewMatrix; // Can be null
+                        frameCtx.pickProjMatrix = pickProjMatrix; // Can be null
+                        // frameCtx.pickInvisible = !!params.pickInvisible;
+                        frameCtx.pickClipPos = [
+                            getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
+                            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight)
+                        ];
+
+                        gl.viewport(0, 0, 1, 1);
+
+                        gl.clearColor(0, 0, 0, 0);
+                        gl.enable(gl.DEPTH_TEST);
+                        gl.disable(gl.CULL_FACE);
+                        gl.disable(gl.BLEND);
+                        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+                        pickable.drawPickTriangles(frameCtx);
+
+                        const pix = pickBuffer.read(0, 0);
+
+                        const primIndex = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
+
+                        pickResult.primIndex = 3 * primIndex; // Convert from triangle number to first vertex in indices
+                    }
 
                     pickable.pickTriangleSurface(pickViewMatrix, pickProjMatrix, projection, pickResult);
 
@@ -1111,45 +1141,6 @@ const Renderer = function (scene, options) {
         const pickable = pickIDs.items[pickID];
 
         return pickable;
-    }
-
-    function gpuPickTriangle(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult) {
-
-        if (!pickable.drawPickTriangles) {
-            return;
-        }
-
-        const resolutionScale = scene.canvas.resolutionScale;
-
-        frameCtx.reset();
-        frameCtx.backfaces = true;
-        frameCtx.frontface = true; // "ccw"
-        frameCtx.pickOrigin = pickResult.origin;
-        frameCtx.pickViewMatrix = pickViewMatrix; // Can be null
-        frameCtx.pickProjMatrix = pickProjMatrix; // Can be null
-        // frameCtx.pickInvisible = !!params.pickInvisible;
-        frameCtx.pickClipPos = [
-            getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
-            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight)
-        ];
-
-        gl.viewport(0, 0, 1, 1);
-
-        gl.clearColor(0, 0, 0, 0);
-        gl.enable(gl.DEPTH_TEST);
-        gl.disable(gl.CULL_FACE);
-        gl.disable(gl.BLEND);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-        pickable.drawPickTriangles(frameCtx);
-
-        const pix = pickBuffer.read(0, 0);
-
-        let primIndex = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
-
-        primIndex *= 3; // Convert from triangle number to first vertex in indices
-
-        pickResult.primIndex = primIndex;
     }
 
     const gpuPickWorldPos = (function () {
