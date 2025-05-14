@@ -155,6 +155,21 @@ export const createProgramVariablesState = function() {
             const scene = cfg.scene;
             const getLogDepth = cfg.getLogDepth;
 
+            const clipPos = cfg.clipPos;
+            const clipTransformSetup = cfg.usePickClipPos && (function() {
+                const pickClipPos    = programVariables.createUniform("vec2", "pickClipPos");
+                const pickClipPosInv = programVariables.createUniform("vec2", "pickClipPosInv");
+                return {
+                    setClipPosInputValue: frameCtx => {
+                        pickClipPos.setInputValue(frameCtx.pickClipPos);
+                        pickClipPosInv.setInputValue(frameCtx.pickClipPosInv);
+                    },
+                    transformedClipPos: () => `vec4((${clipPos}.xy / ${clipPos}.w - ${pickClipPos}) * ${pickClipPosInv} * ${clipPos}.w, ${clipPos}.zw)`
+                };
+            })();
+
+            const vertexClipPosition = clipTransformSetup ? clipTransformSetup.transformedClipPos() : clipPos;
+
             const fragmentOutputs = [ ];
             const isPerspective = programVariables.createVarying("float", "isPerspective", () => `(${cfg.projMatrix}[2][3] == -1.0) ? 1.0 : 0.0`);
             const logDepthBufFC = programVariables.createUniform("float", "logDepthBufFC", (set, state) => set(2.0 / (Math.log(state.view.far + 1.0) / Math.LN2)));
@@ -255,7 +270,7 @@ export const createProgramVariablesState = function() {
             ];
 
             const vertexOutputs = [
-                `gl_Position = ${cfg.vertexClipPosition};`,
+                `gl_Position = ${vertexClipPosition};`,
                 ...(cfg.getPointSize ? [ `gl_PointSize = ${cfg.getPointSize()};` ] : [ ]),
                 ...(function() { const src = [ ]; vOutAppenders.forEach(a => a(src)); return src; })()
             ];
@@ -310,7 +325,10 @@ export const createProgramVariablesState = function() {
                     id: program.id,
                     inputSetters: {
                         attributesHash: attrHahes.sort().join(", "),
-                        setUniforms:   (state) => uSetters.forEach(s => s(state))
+                        setUniforms:   (frameCtx, state) => {
+                            clipTransformSetup && clipTransformSetup.setClipPosInputValue(frameCtx);
+                            uSetters.forEach(s => s(state));
+                        }
                     }
                 } ];
             }

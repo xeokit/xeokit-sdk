@@ -2208,8 +2208,6 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
     const viewMatrix            = programVariables.createUniform("mat4",  "viewMatrix");
     const viewNormalMatrix      = programVariables.createUniform("mat4",  "viewNormalMatrix");
     const projMatrix            = programVariables.createUniform("mat4",  "projMatrix");
-    const pickClipPos           = programVariables.createUniform("vec2",  "pickClipPos");
-    const pickClipPosInv        = programVariables.createUniform("vec2",  "pickClipPosInv");
 
     const billboard = mesh.billboard;
     const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
@@ -2290,6 +2288,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
             appendFragmentOutputs:          programSetup.appendFragmentOutputs,
             clippableTest:                  () => clippable,
             clippingCaps:                   programSetup.clippingCaps,
+            clipPos:                        meshStateBackground ? `${clipPos}.xyww` : clipPos,
             discardPoints:                  isPoints && programSetup.discardPoints,
             fragmentOutputsSetup:           fragmentOutputsSetup,
             getLogDepth:                    (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -2298,11 +2297,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
             projMatrix:                     projMatrix,
             scene:                          scene,
             testPerspectiveForGl_FragDepth: true,
-            vertexClipPosition:             (meshStateBackground
-                                             ? `${clipPos}.xyww`
-                                             : (programSetup.isPick
-                                                ? `vec4((${clipPos}.xy / ${clipPos}.w - ${pickClipPos}) * ${pickClipPosInv} * ${clipPos}.w, ${clipPos}.zw)`
-                                                : clipPos)),
+            usePickClipPos:                 programSetup.isPick,
             worldPositionAttribute:         "worldPosition"
         });
 
@@ -2379,11 +2374,9 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
                     setUni(viewMatrix,            viewMat);
                     setUni(viewNormalMatrix,      viewParams.viewNormalMatrix);
                     setUni(projMatrix,            projMat);
-                    setUni(pickClipPos,           frameCtx.pickClipPos);
-                    setUni(pickClipPosInv,        frameCtx.pickClipPosInv);
                     setUni(clippable,             mesh.clippable);
 
-                    inputSetters.setUniforms({
+                    inputSetters.setUniforms(frameCtx, {
                         material:     material,
                         meshColorize: mesh.colorize,
                         meshPickID:   mesh._state.pickID,
