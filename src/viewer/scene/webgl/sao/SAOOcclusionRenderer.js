@@ -261,7 +261,7 @@ export class SAOOcclusionRenderer {
                 appendFragmentOutputs: (src) => src.push(`${outColor} = ${getOutColor}();`),
                 fragmentOutputsSetup: [ ],
                 getVertexData: () => [ ],
-                vertexClipPosition: `vec4(${position}, 1.0)`
+                clipPos: `vec4(${position}, 1.0)`
             });
 
         if (errors) {
