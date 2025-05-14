@@ -173,23 +173,12 @@ export const getRenderers = (function() {
                             const worldPositionAttribute = attributes.position.world;
                             const clipPos                = "clipPos";
 
-                            const clipTransformSetup = usePickClipPos && (function() {
-                                const pickClipPos    = programVariables.createUniform("vec2", "pickClipPos");
-                                const pickClipPosInv = programVariables.createUniform("vec2", "pickClipPosInv");
-                                return {
-                                    setClipPosInputValue: (clipPos, clipPosInv) => {
-                                        pickClipPos.setInputValue(clipPos);
-                                        pickClipPosInv.setInputValue(clipPosInv);
-                                    },
-                                    transformedClipPos: () => `vec4((${clipPos}.xy / ${clipPos}.w - ${pickClipPos}) * ${pickClipPosInv} * ${clipPos}.w, ${clipPos}.zw)`
-                                };
-                            })();
-
                             const [ program, errors ] = programVariablesState.buildProgram(
                                 gl,
                                 layerType + " " + primitive + " " + programSetup.programName,
                                 {
                                     appendFragmentOutputs:          programSetup.appendFragmentOutputs,
+                                    clipPos:                        clipPos,
                                     clippableTest:                  (function() {
                                         const vClippable = programVariables.createVarying("float", "vClippable", () => `${attributes.clippable} ? 1.0 : 0.0`, "flat");
                                         return () => `${vClippable} > 0.0`;
@@ -271,9 +260,7 @@ export const getRenderers = (function() {
                                     projMatrix:                     geometryParameters.projMatrix,
                                     scene:                          scene,
                                     testPerspectiveForGl_FragDepth: ((primitive !== "points") && (primitive !== "lines")) || subGeometry,
-                                    vertexClipPosition:             (clipTransformSetup
-                                                                     ? clipTransformSetup.transformedClipPos()
-                                                                     : clipPos),
+                                    usePickClipPos:                 usePickClipPos,
                                     worldPositionAttribute:         worldPositionAttribute
                                 });
 
@@ -327,9 +314,7 @@ export const getRenderers = (function() {
                                             }
                                         };
 
-                                        clipTransformSetup && clipTransformSetup.setClipPosInputValue(frameCtx.pickClipPos, frameCtx.pickClipPosInv);
-
-                                        program.inputSetters.setUniforms(state);
+                                        program.inputSetters.setUniforms(frameCtx, state);
 
                                         layer.drawCalls[subGeometry ? (subGeometry.vertices ? "drawVertices" : "drawEdges") : "drawSurface"](
                                             program.inputSetters.attributesHash,
