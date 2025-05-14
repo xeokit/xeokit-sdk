@@ -51,15 +51,15 @@ const safeInvVec3 = v => [ math.safeInv(v[0]), math.safeInv(v[1]), math.safeInv(
 
 export const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
 
-const createPickClipTransformSetup = function(programVariables, gl, renderBufferSize) {
-    const pickClipPos = programVariables.createUniform("vec2", "pickClipPos", (set, state) => set(state.view.pickClipPos));
-    const drawingBufferSize = programVariables.createUniform("vec2", "drawingBufferSize", (set, state) => {
-        tempVec2[0] = gl.drawingBufferWidth;
-        tempVec2[1] = gl.drawingBufferHeight;
-        set(tempVec2);
-    });
+const createPickClipTransformSetup = function(programVariables) {
+    const pickClipPos    = programVariables.createUniform("vec2", "pickClipPos");
+    const pickClipPosInv = programVariables.createUniform("vec2", "pickClipPosInv");
     return {
-        transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - ${pickClipPos}) * ${drawingBufferSize} / ${renderBufferSize.toFixed(1)} * ${clipPos}.w, ${clipPos}.zw)`
+        setClipPosInputValue: (clipPos, clipPosInv) => {
+            pickClipPos.setInputValue(clipPos);
+            pickClipPosInv.setInputValue(clipPosInv);
+        },
+        transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - ${pickClipPos}) * ${pickClipPosInv} * ${clipPos}.w, ${clipPos}.zw)`
     };
 };
 
@@ -271,8 +271,8 @@ export const getRenderers = (function() {
                                     projMatrix:                     geometryParameters.projMatrix,
                                     scene:                          scene,
                                     testPerspectiveForGl_FragDepth: ((primitive !== "points") && (primitive !== "lines")) || subGeometry,
-                                    vertexClipPosition:             (programSetup.transformClipPos
-                                                                     ? programSetup.transformClipPos(clipPos)
+                                    vertexClipPosition:             (programSetup.clipTransformSetup
+                                                                     ? programSetup.clipTransformSetup.transformClipPos(clipPos)
                                                                      : clipPos),
                                     worldPositionAttribute:         worldPositionAttribute
                                 });
@@ -321,12 +321,14 @@ export const getRenderers = (function() {
                                             view: {
                                                 eye:              viewParams.eye,
                                                 far:              viewParams.far,
-                                                pickClipPos:      frameCtx.pickClipPos,
                                                 projMatrix:       projMatrix,
                                                 viewMatrix:       math.compareVec3(rtcOrigin, vec3zero) ? viewMatrix : createRTCViewMat(viewMatrix, rtcOrigin, tempMat4),
                                                 viewNormalMatrix: viewParams.viewNormalMatrix
                                             }
                                         };
+
+                                        programSetup.clipTransformSetup && programSetup.clipTransformSetup.setClipPosInputValue(frameCtx.pickClipPos, frameCtx.pickClipPosInv);
+
                                         program.inputSetters.setUniforms(state);
 
                                         layer.drawCalls[subGeometry ? (subGeometry.vertices ? "drawVertices" : "drawEdges") : "drawSurface"](
@@ -371,11 +373,11 @@ export const getRenderers = (function() {
 
             const makeColorProgram = (vars, geo, lights, sao) => ColorProgram(vars, geo, scene.logarithmicDepthBufferEnabled, lights, sao, primitive);
 
-            const makePickDepthProgram   = (vars, geo) => PickDepthProgram(vars, geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(vars, gl, 1));
-            const makePickMeshProgram    = (vars, geo) => PickMeshProgram(vars, geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(vars, gl, 1));
-            const makePickNormalsProgram = (vars, geo, isFlat) => PickNormalsProgram(vars, geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(vars, gl, 3), isFlat);
+            const makePickDepthProgram   = (vars, geo) => PickDepthProgram(vars, geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(vars));
+            const makePickMeshProgram    = (vars, geo) => PickMeshProgram(vars, geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(vars));
+            const makePickNormalsProgram = (vars, geo, isFlat) => PickNormalsProgram(vars, geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(vars), isFlat);
 
-            const makeSnapProgram = (vars, geo, isSnapInit, isPoints) => SnapProgram(vars, geo, isSnapInit, isPoints);
+            const makeSnapProgram = (vars, geo, isSnapInit, isPoints) => SnapProgram(vars, geo, isSnapInit, isPoints, createPickClipTransformSetup(vars));
 
             if (primitive === "points") {
                 cache[sceneId] = {
