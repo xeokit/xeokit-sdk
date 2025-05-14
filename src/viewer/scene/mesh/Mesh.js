@@ -2209,6 +2209,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
     const viewNormalMatrix      = programVariables.createUniform("mat4",  "viewNormalMatrix");
     const projMatrix            = programVariables.createUniform("mat4",  "projMatrix");
     const pickClipPos           = programVariables.createUniform("vec2",  "pickClipPos");
+    const pickClipPosInv        = programVariables.createUniform("vec2",  "pickClipPosInv");
 
     const billboard = mesh.billboard;
     const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
@@ -2300,7 +2301,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
             vertexClipPosition:             (meshStateBackground
                                              ? `${clipPos}.xyww`
                                              : (programSetup.isPick
-                                                ? `vec4((${clipPos}.xy / ${clipPos}.w - ${pickClipPos}) * ${clipPos}.w, ${clipPos}.zw)`
+                                                ? `vec4((${clipPos}.xy / ${clipPos}.w - ${pickClipPos}) * ${pickClipPosInv} * ${clipPos}.w, ${clipPos}.zw)`
                                                 : clipPos)),
             worldPositionAttribute:         "worldPosition"
         });
@@ -2379,6 +2380,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
                     setUni(viewNormalMatrix,      viewParams.viewNormalMatrix);
                     setUni(projMatrix,            projMat);
                     setUni(pickClipPos,           frameCtx.pickClipPos);
+                    setUni(pickClipPosInv,        frameCtx.pickClipPosInv);
                     setUni(clippable,             mesh.clippable);
 
                     inputSetters.setUniforms({
