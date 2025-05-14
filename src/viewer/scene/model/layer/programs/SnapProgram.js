@@ -1,8 +1,6 @@
 import {math} from "../../../math/math.js";
 
-export const SnapProgram = function(programVariables, geometry, isSnapInit, isPoints) {
-    const snapVectorA      = programVariables.createUniform("vec2", "snapVectorA",      (set, state) => set(state.legacyFrameCtx.snapVectorA));
-    const snapInvVectorAB  = programVariables.createUniform("vec2", "snapInvVectorAB",  (set, state) => set(state.legacyFrameCtx.snapInvVectorAB));
+export const SnapProgram = function(programVariables, geometry, isSnapInit, isPoints, clipTransformSetup) {
     const layerNumber      = programVariables.createUniform("int",  "layerNumber",      (set, state) => set(state.legacyFrameCtx.snapPickLayerNumber));
     const coordinateScaler = programVariables.createUniform("vec3", "coordinateScaler", (set, state) => set(state.legacyFrameCtx.snapPickCoordinateScale));
 
@@ -18,8 +16,8 @@ export const SnapProgram = function(programVariables, geometry, isSnapInit, isPo
         // Improves occlusion accuracy at distance
         getLogDepth: true && (vFragDepth => (isSnapInit ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth)),
         renderPassFlag: 3,  // PICK
-        transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - ${snapVectorA}) * ${snapInvVectorAB} * ${clipPos}.w, ${clipPos}.zw)`,
         vertexCullX: (!isSnapInit) && "2.0",
+        clipTransformSetup: clipTransformSetup,
         dontCullOnAlphaZero: !isSnapInit,
         appendFragmentOutputs: (src) => {
             src.push(`${outCoords} = ivec4(${vWorldPosition} * ${coordinateScaler}.xyz, ${isSnapInit ? "-" : ""}${layerNumber});`);
