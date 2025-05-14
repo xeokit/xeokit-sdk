@@ -1022,7 +1022,7 @@ const Renderer = function (scene, options) {
 
             pickBuffer.bind();
 
-            const resetPickFrameCtx = () => {
+            const resetPickFrameCtx = (clipTransformDiv) => {
                 frameCtx.reset();
                 frameCtx.backfaces = true;
                 frameCtx.frontface = true; // "ccw"
@@ -1035,10 +1035,14 @@ const Renderer = function (scene, options) {
                     getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
                     getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight)
                 ];
+                frameCtx.pickClipPosInv = [
+                    gl.drawingBufferWidth  / clipTransformDiv,
+                    gl.drawingBufferHeight / clipTransformDiv
+                ];
             };
 
             // gpuPickPickable
-            resetPickFrameCtx();
+            resetPickFrameCtx(1);
             frameCtx.pickInvisible = !!params.pickInvisible;
 
             gl.viewport(0, 0, 1, 1);
@@ -1090,7 +1094,7 @@ const Renderer = function (scene, options) {
                 if (pickable.canPickTriangle && pickable.canPickTriangle()) {
 
                     if (pickable.drawPickTriangles) {
-                        resetPickFrameCtx();
+                        resetPickFrameCtx(1);
                         // frameCtx.pickInvisible = !!params.pickInvisible;
 
                         gl.viewport(0, 0, 1, 1);
@@ -1114,7 +1118,7 @@ const Renderer = function (scene, options) {
                     if (pickable.canPickWorldPos && pickable.canPickWorldPos()) {
 
                         // pickWorldPos
-                        resetPickFrameCtx();
+                        resetPickFrameCtx(1);
                         frameCtx.viewParams.near = nearAndFar[0];
                         frameCtx.viewParams.far  = nearAndFar[1];
                         frameCtx.pickElementsCount = pickable.pickElementsCount;
@@ -1177,7 +1181,7 @@ const Renderer = function (scene, options) {
 
                         if (params.pickSurfaceNormal !== false) {
                             // gpuPickWorldNormal
-                            resetPickFrameCtx();
+                            resetPickFrameCtx(3);
 
                             const pickNormalBuffer = renderBufferManager.getRenderBuffer("pick-normal", {size: [3, 3]});
 
@@ -1295,13 +1299,13 @@ const Renderer = function (scene, options) {
                 }
             );
 
-            frameCtx.snapVectorA = [
+            frameCtx.pickClipPos = [
                 canvasPos ? getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth) : 0,
                 canvasPos ? getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight) : 0,
             ];
 
-            frameCtx.snapInvVectorAB = [
-                gl.drawingBufferWidth / (2 * snapRadiusInPixels),
+            frameCtx.pickClipPosInv = [
+                gl.drawingBufferWidth  / (2 * snapRadiusInPixels),
                 gl.drawingBufferHeight / (2 * snapRadiusInPixels),
             ];
 
