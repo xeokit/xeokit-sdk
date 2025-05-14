@@ -1,6 +1,6 @@
 import {math} from "../../../math/math.js";
 
-export const SnapProgram = function(programVariables, geometry, isSnapInit, isPoints, clipTransformSetup) {
+export const SnapProgram = function(programVariables, geometry, isSnapInit, isPoints) {
     const layerNumber      = programVariables.createUniform("int",  "layerNumber",      (set, state) => set(state.legacyFrameCtx.snapPickLayerNumber));
     const coordinateScaler = programVariables.createUniform("vec3", "coordinateScaler", (set, state) => set(state.legacyFrameCtx.snapPickCoordinateScale));
 
@@ -16,7 +16,6 @@ export const SnapProgram = function(programVariables, geometry, isSnapInit, isPo
         // Improves occlusion accuracy at distance
         getLogDepth: true && (vFragDepth => (isSnapInit ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth)),
         renderPassFlag: 3,  // PICK
-        clipTransformSetup: clipTransformSetup,
         dontCullOnAlphaZero: !isSnapInit,
         appendFragmentOutputs: (src) => {
             src.push(`${outCoords} = ivec4(${vWorldPosition} * ${coordinateScaler}.xyz, ${isSnapInit ? "-" : ""}${layerNumber});`);
