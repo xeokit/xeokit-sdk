@@ -51,18 +51,6 @@ const safeInvVec3 = v => [ math.safeInv(v[0]), math.safeInv(v[1]), math.safeInv(
 
 export const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
 
-const createPickClipTransformSetup = function(programVariables) {
-    const pickClipPos    = programVariables.createUniform("vec2", "pickClipPos");
-    const pickClipPosInv = programVariables.createUniform("vec2", "pickClipPosInv");
-    return {
-        setClipPosInputValue: (clipPos, clipPosInv) => {
-            pickClipPos.setInputValue(clipPos);
-            pickClipPosInv.setInputValue(clipPosInv);
-        },
-        transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - ${pickClipPos}) * ${pickClipPosInv} * ${clipPos}.w, ${clipPos}.zw)`
-    };
-};
-
 const createSAOSetup = (programVariables, gl, sceneSAO) => {
     const uSAOParams = programVariables.createUniform("vec4", "uSAOParams", (set, state) => {
         tempVec4[0] = gl.drawingBufferWidth;  // viewportWidth
@@ -170,7 +158,7 @@ export const getRenderers = (function() {
                     return createProgramSetup(
                         programVariables,
                         renderingAttributes.geometryParameters,
-                        function(programSetup) {
+                        function(programSetup, usePickClipPos) {
                             const pointsMaterial     = scene.pointsMaterial;
                             const setupPoints        = (primitive === "points") && (! subGeometry);
 
@@ -184,6 +172,18 @@ export const getRenderers = (function() {
                             const attributes             = geometryParameters.attributes;
                             const worldPositionAttribute = attributes.position.world;
                             const clipPos                = "clipPos";
+
+                            const clipTransformSetup = usePickClipPos && (function() {
+                                const pickClipPos    = programVariables.createUniform("vec2", "pickClipPos");
+                                const pickClipPosInv = programVariables.createUniform("vec2", "pickClipPosInv");
+                                return {
+                                    setClipPosInputValue: (clipPos, clipPosInv) => {
+                                        pickClipPos.setInputValue(clipPos);
+                                        pickClipPosInv.setInputValue(clipPosInv);
+                                    },
+                                    transformedClipPos: () => `vec4((${clipPos}.xy / ${clipPos}.w - ${pickClipPos}) * ${pickClipPosInv} * ${clipPos}.w, ${clipPos}.zw)`
+                                };
+                            })();
 
                             const [ program, errors ] = programVariablesState.buildProgram(
                                 gl,
@@ -271,8 +271,8 @@ export const getRenderers = (function() {
                                     projMatrix:                     geometryParameters.projMatrix,
                                     scene:                          scene,
                                     testPerspectiveForGl_FragDepth: ((primitive !== "points") && (primitive !== "lines")) || subGeometry,
-                                    vertexClipPosition:             (programSetup.clipTransformSetup
-                                                                     ? programSetup.clipTransformSetup.transformClipPos(clipPos)
+                                    vertexClipPosition:             (clipTransformSetup
+                                                                     ? clipTransformSetup.transformedClipPos()
                                                                      : clipPos),
                                     worldPositionAttribute:         worldPositionAttribute
                                 });
@@ -327,7 +327,7 @@ export const getRenderers = (function() {
                                             }
                                         };
 
-                                        programSetup.clipTransformSetup && programSetup.clipTransformSetup.setClipPosInputValue(frameCtx.pickClipPos, frameCtx.pickClipPosInv);
+                                        clipTransformSetup && clipTransformSetup.setClipPosInputValue(frameCtx.pickClipPos, frameCtx.pickClipPosInv);
 
                                         program.inputSetters.setUniforms(state);
 
@@ -373,33 +373,33 @@ export const getRenderers = (function() {
 
             const makeColorProgram = (vars, geo, lights, sao) => ColorProgram(vars, geo, scene.logarithmicDepthBufferEnabled, lights, sao, primitive);
 
-            const makePickDepthProgram   = (vars, geo) => PickDepthProgram(vars, geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(vars));
-            const makePickMeshProgram    = (vars, geo) => PickMeshProgram(vars, geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(vars));
-            const makePickNormalsProgram = (vars, geo, isFlat) => PickNormalsProgram(vars, geo, scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(vars), isFlat);
+            const makePickDepthProgram   = (vars, geo, c) => c(PickDepthProgram(vars, geo, scene.logarithmicDepthBufferEnabled), true);
+            const makePickMeshProgram    = (vars, geo, c) => c(PickMeshProgram(vars, geo, scene.logarithmicDepthBufferEnabled), true);
+            const makePickNormalsProgram = (vars, geo, c, isFlat) => c(PickNormalsProgram(vars, geo, scene.logarithmicDepthBufferEnabled, isFlat), true);
 
-            const makeSnapProgram = (vars, geo, isSnapInit, isPoints) => SnapProgram(vars, geo, isSnapInit, isPoints, createPickClipTransformSetup(vars));
+            const makeSnapProgram = (vars, geo, c, isSnapInit, isPoints) => c(SnapProgram(vars, geo, isSnapInit, isPoints), true);
 
             if (primitive === "points") {
                 cache[sceneId] = {
                     colorRenderers:     { "sao-": { "vertex": lazy((vars, geo, c) => c(makeColorProgram(vars, geo, null, null))) } },
                     occlusionRenderer:  lazy((vars, geo, c) => c(OcclusionProgram(vars, scene.logarithmicDepthBufferEnabled))),
-                    pickDepthRenderer:  lazy((vars, geo, c) => c(makePickDepthProgram(vars, geo))),
-                    pickMeshRenderer:   lazy((vars, geo, c) => c(makePickMeshProgram(vars, geo))),
+                    pickDepthRenderer:  lazy(makePickDepthProgram),
+                    pickMeshRenderer:   lazy(makePickMeshProgram),
                     // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
                     // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
                     // drawShadow has been nop in VBO point layers
                     // shadowRenderer:     instancing && lazy((vars, geo, c) => c(ShadowProgram(scene.logarithmicDepthBufferEnabled))),
                     silhouetteRenderer: lazy((vars, geo, c) => c(SilhouetteProgram(vars, geo, scene.logarithmicDepthBufferEnabled, true))),
-                    snapInitRenderer:   lazy((vars, geo, c) => c(makeSnapProgram(vars, geo, true,  true))),
-                    snapVertexRenderer: lazy((vars, geo, c) => c(makeSnapProgram(vars, geo, false, true)), { vertices: true })
+                    snapInitRenderer:   lazy((vars, geo, c) => makeSnapProgram(vars, geo, c, true,  true)),
+                    snapVertexRenderer: lazy((vars, geo, c) => makeSnapProgram(vars, geo, c, false, true), { vertices: true })
                 };
             } else if (primitive === "lines") {
                 cache[sceneId] = {
                     colorRenderers:     { "sao-": { "vertex": lazy((vars, geo, c) => c(makeColorProgram(vars, geo, null, null))) } },
                     silhouetteRenderer: lazy((vars, geo, c) => c(SilhouetteProgram(vars, geo, scene.logarithmicDepthBufferEnabled, true))),
-                    snapInitRenderer:   lazy((vars, geo, c) => c(makeSnapProgram(vars, geo, true,  false))),
-                    snapEdgeRenderer:   lazy((vars, geo, c) => c(makeSnapProgram(vars, geo, false, false)), { vertices: false }),
-                    snapVertexRenderer: lazy((vars, geo, c) => c(makeSnapProgram(vars, geo, false, false)), { vertices: true })
+                    snapInitRenderer:   lazy((vars, geo, c) => makeSnapProgram(vars, geo, c, true,  false)),
+                    snapEdgeRenderer:   lazy((vars, geo, c) => makeSnapProgram(vars, geo, c, false, false), { vertices: false }),
+                    snapVertexRenderer: lazy((vars, geo, c) => makeSnapProgram(vars, geo, c, false, false), { vertices: true })
                 };
             } else {
                 cache[sceneId] = {
@@ -431,15 +431,15 @@ export const getRenderers = (function() {
                         vertex:  lazy((vars, geo, c) => c(EdgesProgram(vars, geo, scene.logarithmicDepthBufferEnabled, false)), { vertices: false })
                     },
                     occlusionRenderer:       lazy((vars, geo, c) => c(OcclusionProgram(vars, scene.logarithmicDepthBufferEnabled))),
-                    pickDepthRenderer:       eager((vars, geo, c) => c(makePickDepthProgram(vars, geo))),
-                    pickMeshRenderer:        eager((vars, geo, c) => c(makePickMeshProgram(vars, geo))),
-                    pickNormalsFlatRenderer: eager((vars, geo, c) => c(makePickNormalsProgram(vars, geo, true))),
-                    pickNormalsRenderer:     eager((vars, geo, c) => c(makePickNormalsProgram(vars, geo, false))),
+                    pickDepthRenderer:       eager(makePickDepthProgram),
+                    pickMeshRenderer:        eager(makePickMeshProgram),
+                    pickNormalsFlatRenderer: eager((vars, geo, c) => makePickNormalsProgram(vars, geo, c, true)),
+                    pickNormalsRenderer:     eager((vars, geo, c) => makePickNormalsProgram(vars, geo, c, false)),
                     shadowRenderer:          lazy((vars, geo, c) => c(ShadowProgram(vars, scene))),
                     silhouetteRenderer:      eager((vars, geo, c) => c(SilhouetteProgram(vars, geo, scene.logarithmicDepthBufferEnabled, false))),
-                    snapInitRenderer:        eager((vars, geo, c) => c(makeSnapProgram(vars, geo, true,  false))),
-                    snapEdgeRenderer:        eager((vars, geo, c) => c(makeSnapProgram(vars, geo, false, false)), { vertices: false }),
-                    snapVertexRenderer:      eager((vars, geo, c) => c(makeSnapProgram(vars, geo, false, false)), { vertices: true })
+                    snapInitRenderer:        eager((vars, geo, c) => makeSnapProgram(vars, geo, c, true,  false)),
+                    snapEdgeRenderer:        eager((vars, geo, c) => makeSnapProgram(vars, geo, c, false, false), { vertices: false }),
+                    snapVertexRenderer:      eager((vars, geo, c) => makeSnapProgram(vars, geo, c, false, false), { vertices: true })
                 };
             }
 
