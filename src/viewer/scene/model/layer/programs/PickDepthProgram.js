@@ -1,4 +1,4 @@
-export const PickDepthProgram = function(programVariables, geometry, logarithmicDepthBufferEnabled, clipTransformSetup) {
+export const PickDepthProgram = function(programVariables, geometry, logarithmicDepthBufferEnabled) {
     const far  = programVariables.createUniform("float", "far",  (set, state) => set(state.legacyFrameCtx.viewParams.far));
     const near = programVariables.createUniform("float", "near", (set, state) => set(state.legacyFrameCtx.viewParams.near));
     const vViewPosition = programVariables.createVarying("vec3", "vViewPosition", () => `${geometry.attributes.position.view}.xyz`);
@@ -20,7 +20,6 @@ export const PickDepthProgram = function(programVariables, geometry, logarithmic
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 3,  // PICK
         incPointSizeBy10: true,
-        clipTransformSetup: clipTransformSetup,
         appendFragmentOutputs: (src) => {
             src.push(`float zNormalizedDepth = abs((${near} + ${vViewPosition}.z) / (${far} - ${near}));`);
             // isn't zNormalizedDepth the same as gl_FragDepth or gl_FragCoord.z?
