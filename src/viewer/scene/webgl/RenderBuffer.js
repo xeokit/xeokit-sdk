@@ -92,6 +92,7 @@ class RenderBuffer {
 
             } else {
                 this.buffer.textures.forEach(texture => gl.deleteTexture(texture));
+                this.buffer.depthTexture && gl.deleteTexture(this.buffer.depthTexture);
                 gl.deleteFramebuffer(this.buffer.framebuf);
                 gl.deleteRenderbuffer(this.buffer.renderbuf);
             }
@@ -362,7 +363,7 @@ class RenderBuffer {
         if (this.allocated) {
             const gl = this.gl;
             this.buffer.textures.forEach(texture => gl.deleteTexture(texture));
-            gl.deleteTexture(this.buffer.depthTexture);
+            this.buffer.depthTexture && gl.deleteTexture(this.buffer.depthTexture);
             gl.deleteFramebuffer(this.buffer.framebuf);
             gl.deleteRenderbuffer(this.buffer.renderbuf);
             this.allocated = false;
