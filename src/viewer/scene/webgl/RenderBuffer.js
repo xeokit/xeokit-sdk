@@ -38,34 +38,6 @@ class RenderBuffer {
     }
 
     /**
-     * Create and specify a WebGL texture image.
-     *
-     * @param { number } width 
-     * @param { number } height 
-     * @param { GLenum } [internalformat=null] 
-     *
-     * @returns { WebGLTexture }
-     */
-    createTexture(width, height, internalformat = null) {
-        const gl = this.gl;
-
-        const colorTexture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, colorTexture);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-        if (internalformat) {
-            gl.texStorage2D(gl.TEXTURE_2D, 1, internalformat, width, height);
-        } else {
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-        }
-
-        return colorTexture;
-    }
-
-    /**
      *
      * @param {number[]} [internalformats=[]]
      * @returns
@@ -98,12 +70,22 @@ class RenderBuffer {
             }
         }
 
-        const colorTextures = [];
-        if (internalformats.length > 0) {
-            colorTextures.push(...internalformats.map(internalformat => this.createTexture(width, height, internalformat)));
-        } else {
-            colorTextures.push(this.createTexture(width, height));
-        }
+        const colorTextures = ((internalformats.length > 0) ? internalformats : [ null ]).map(internalformat => {
+            const colorTexture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, colorTexture);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+            if (internalformat) {
+                gl.texStorage2D(gl.TEXTURE_2D, 1, internalformat, width, height);
+            } else {
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+            }
+
+            return colorTexture;
+        });
 
         let depthTexture;
 
