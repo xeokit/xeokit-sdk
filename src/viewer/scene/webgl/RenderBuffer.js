@@ -70,34 +70,25 @@ class RenderBuffer {
             }
         }
 
-        const colorTextures = ((internalformats.length > 0) ? internalformats : [ null ]).map(internalformat => {
-            const colorTexture = gl.createTexture();
-            gl.bindTexture(gl.TEXTURE_2D, colorTexture);
+        const createTexture = () => {
+            const tex = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, tex);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            return tex;
+        };
 
+        const colorTextures = ((internalformats.length > 0) ? internalformats : [ null ]).map(internalformat => {
+            const tex = createTexture();
             if (internalformat) {
                 gl.texStorage2D(gl.TEXTURE_2D, 1, internalformat, width, height);
             } else {
                 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
             }
-
-            return colorTexture;
+            return tex;
         });
-
-        let depthTexture;
-
-        if (this._hasDepthTexture) {
-            depthTexture = gl.createTexture();
-            gl.bindTexture(gl.TEXTURE_2D, depthTexture);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT32F, width, height, 0, gl.DEPTH_COMPONENT, gl.FLOAT, null);
-        }
 
         const renderbuf = gl.createRenderbuffer();
         gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuf);
@@ -112,7 +103,9 @@ class RenderBuffer {
             gl.drawBuffers(colorTextures.map((_, i) => gl.COLOR_ATTACHMENT0 + i));
         }
 
-        if (this._hasDepthTexture) {
+        const depthTexture = this._hasDepthTexture && createTexture();
+        if (depthTexture) {
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT32F, width, height, 0, gl.DEPTH_COMPONENT, gl.FLOAT, null);
             gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, depthTexture, 0);
         } else {
             gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, renderbuf);
