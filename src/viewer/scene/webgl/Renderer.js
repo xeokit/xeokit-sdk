@@ -8,7 +8,7 @@ import {OcclusionTester} from "./occlusion/OcclusionTester.js";
 import {SAOOcclusionRenderer} from "./sao/SAOOcclusionRenderer.js";
 import {createRTCViewMat} from "../math/rtcCoords.js";
 import {SAODepthLimitedBlurRenderer} from "./sao/SAODepthLimitedBlurRenderer.js";
-import {RenderBufferManager} from "./RenderBufferManager.js";
+import {RenderBuffer} from "./RenderBuffer.js";
 import {getExtension} from "./getExtension.js";
 
 const vec3_0 = math.vec3([0,0,0]);
@@ -58,7 +58,23 @@ const Renderer = function (scene, options) {
     let pbrEnabled = true;
     let colorTextureEnabled = true;
 
-    const renderBufferManager = new RenderBufferManager(scene);
+    const renderBufferManager = (function() {
+        const renderBuffersBasic  = {};
+        const renderBuffersScaled = {};
+        return {
+            getRenderBuffer: (id, options) => {
+                const renderBuffers = (scene.canvas.resolutionScale === 1.0) ? renderBuffersBasic : renderBuffersScaled;
+                if (! renderBuffers[id]) {
+                    renderBuffers[id] = new RenderBuffer(canvas, gl, options);
+                }
+                return renderBuffers[id];
+            },
+            destroy: () => {
+                Object.values(renderBuffersBasic ).forEach(buf => buf.destroy());
+                Object.values(renderBuffersScaled).forEach(buf => buf.destroy());
+            }
+        };
+    })();
 
     let snapshotBound = false;
 
