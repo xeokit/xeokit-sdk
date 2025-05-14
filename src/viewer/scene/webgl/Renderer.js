@@ -349,14 +349,32 @@ const Renderer = function (scene, options) {
         const sao = scene.sao;
 
         // Render depth buffer
-
-        const saoDepthRenderBuffer = renderBufferManager.getRenderBuffer("saoDepth", {
-            depthTexture: true
-        });
+        const saoDepthRenderBuffer = renderBufferManager.getRenderBuffer("saoDepth", { depthTexture: true });
 
         saoDepthRenderBuffer.bind();
         saoDepthRenderBuffer.clear();
-        drawDepth(params);
+
+        frameCtx.reset();
+        frameCtx.pass = params.pass;
+        frameCtx.viewParams = getSceneCameraViewParams();
+
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+        gl.clearColor(0, 0, 0, 0);
+        gl.enable(gl.DEPTH_TEST);
+        gl.frontFace(gl.CCW);
+        gl.enable(gl.CULL_FACE);
+        gl.depthMask(true);
+
+        if (params.clear !== false) {
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        }
+
+        postCullDrawableList.forEach(drawable => {
+            if ((drawable.culled !== true) && (drawable.visible !== false) && drawable.drawDepth && drawable.saoEnabled && drawable.renderFlags.colorOpaque) {
+                drawable.drawDepth(frameCtx);
+            }
+        });
+
         saoDepthRenderBuffer.unbind();
 
         // Render occlusion buffer
@@ -386,43 +404,6 @@ const Renderer = function (scene, options) {
             saoDepthLimitedBlurRenderer.render(saoDepthRenderBuffer, occlusionRenderBuffer2, 1);
             occlusionRenderBuffer1.unbind();
         }
-    }
-
-    function drawDepth(params) {
-
-        frameCtx.reset();
-        frameCtx.pass = params.pass;
-        frameCtx.viewParams = getSceneCameraViewParams();
-
-        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-
-        gl.clearColor(0, 0, 0, 0);
-        gl.enable(gl.DEPTH_TEST);
-        gl.frontFace(gl.CCW);
-        gl.enable(gl.CULL_FACE);
-        gl.depthMask(true);
-
-        if (params.clear !== false) {
-            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        }
-        for (let i = 0, len = postCullDrawableList.length; i < len; i++) {
-
-            const drawable = postCullDrawableList[i];
-
-            if (drawable.culled === true || drawable.visible === false || !drawable.drawDepth || !drawable.saoEnabled) {
-                continue;
-            }
-
-            if (drawable.renderFlags.colorOpaque) {
-                drawable.drawDepth(frameCtx);
-            }
-        }
-
-        // const numVertexAttribs = WEBGL_INFO.MAX_VERTEX_ATTRIBS; // Fixes https://github.com/xeokit/xeokit-sdk/issues/174
-        // for (let ii = 0; ii < numVertexAttribs; ii++) {
-        //     gl.disableVertexAttribArray(ii);
-        // }
-
     }
 
     function drawShadowMaps() {
