@@ -308,10 +308,6 @@ class RenderBuffer {
         });
     }
 
-    hasDepthTexture() {
-        return this._hasDepthTexture;
-    }
-
     getDepthTexture() {
         if (!this._hasDepthTexture) {
             return null;
