@@ -737,7 +737,7 @@ const createBindableDataTexture = function(gl, entitiesCnt, entitySize, type, en
     gl.bindTexture(gl.TEXTURE_2D, null);
 
     return {
-        // called by Sampler::bindTexture
+        // called by createSampler::bindTexture
         bind(unit) {
             gl.activeTexture(gl["TEXTURE" + unit]);
             gl.bindTexture(gl.TEXTURE_2D, texture);
