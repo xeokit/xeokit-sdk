@@ -1,6 +1,5 @@
 import {Map} from "../utils/Map.js";
 import {Shader} from "./Shader.js";
-import {Sampler} from "./Sampler.js";
 import {Attribute} from "./Attribute.js";
 
 const ids = new Map({});
@@ -76,7 +75,6 @@ class Program {
         let i;
         let u;
         let uName;
-        let location;
         this.handle = gl.createProgram();
         if (!this.handle) {
             this.errors = ["Failed to allocate program"];
@@ -108,11 +106,19 @@ class Program {
                 if (uName[uName.length - 1] === "\u0000") {
                     uName = uName.substr(0, uName.length - 1);
                 }
-                location = gl.getUniformLocation(this.handle, uName);
-                if ((u.type === gl.SAMPLER_2D) || (u.type === gl.SAMPLER_CUBE) || (u.type === 35682)) {
-                    this.samplers[uName] = new Sampler(gl, location);
-                } else if (gl instanceof WebGL2RenderingContext && (u.type === gl.UNSIGNED_INT_SAMPLER_2D || u.type === gl.INT_SAMPLER_2D)) {
-                    this.samplers[uName] = new Sampler(gl, location);
+                const location = gl.getUniformLocation(this.handle, uName);
+                if (((u.type === gl.SAMPLER_2D) || (u.type === gl.SAMPLER_CUBE) || (u.type === 35682))
+                    ||
+                    (gl instanceof WebGL2RenderingContext && (u.type === gl.UNSIGNED_INT_SAMPLER_2D || u.type === gl.INT_SAMPLER_2D))) {
+                    this.samplers[uName] = {
+                        bindTexture: (texture, unit) => {
+                            if (texture.bind(unit)) {
+                                gl.uniform1i(location, unit);
+                                return true;
+                            }
+                            return false;
+                        }
+                    };
                 } else {
                     this.uniforms[uName] = location;
                 }
@@ -122,7 +128,7 @@ class Program {
         for (i = 0; i < numAttribs; i++) {
             a = gl.getActiveAttrib(this.handle, i);
             if (a) {
-                location = gl.getAttribLocation(this.handle, a.name);
+                const location = gl.getAttribLocation(this.handle, a.name);
                 this.attributes[a.name] = new Attribute(gl, location);
             }
         }
