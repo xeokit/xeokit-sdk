@@ -165,6 +165,8 @@ class OcclusionTester {
 
         if (!TEST_MODE) {
             this._readPixelBuf = this._renderBufferManager.getRenderBuffer("occlusionReadPix");
+            const gl = this._scene.canvas.gl;
+            this._readPixelBuf.setSize([gl.drawingBufferWidth, gl.drawingBufferHeight]);
             this._readPixelBuf.bind();
             this._readPixelBuf.clear();
         }
