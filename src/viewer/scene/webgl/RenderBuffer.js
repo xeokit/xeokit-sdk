@@ -128,17 +128,23 @@ class RenderBuffer {
 
         this.buffer = {
             cleanup: () => {
-                this.buffer.textures.forEach(texture => gl.deleteTexture(texture));
+                colorTextures.forEach(texture => gl.deleteTexture(texture));
                 depthTexture && gl.deleteTexture(depthTexture);
-                gl.deleteFramebuffer(this.buffer.framebuf);
+                gl.deleteFramebuffer(framebuf);
                 gl.deleteRenderbuffer(renderbuf);
             },
             framebuf: framebuf,
-            texture: colorTextures[0],
-            textures: colorTextures,
             width: width,
             height: height
         };
+
+        this.colorTextures = colorTextures.map(tex => ({
+            bind: function(unit) {
+                gl.activeTexture(gl["TEXTURE" + unit]);
+                gl.bindTexture(gl.TEXTURE_2D, tex);
+                return true;
+            }
+        }));
 
         this.depthTexture = depthTexture && {
             bind: function(unit) {
@@ -190,9 +196,9 @@ class RenderBuffer {
         const canvas = imageDataCache.canvas;
         const imageData = imageDataCache.imageData;
         const context = imageDataCache.context;
-        gl.readPixels(0, 0, this.buffer.width, this.buffer.height, gl.RGBA, gl.UNSIGNED_BYTE, pixelData);
-        const width = this.buffer.width;
+        const width  = this.buffer.width;
         const height = this.buffer.height;
+        gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixelData);
         const halfHeight = height / 2 | 0;  // the | 0 keeps the result an int
         const bytesPerRow = width * 4;
         const temp = new Uint8Array(width * 4);
@@ -215,7 +221,8 @@ class RenderBuffer {
         const canvas = imageDataCache.canvas;
         const imageData = imageDataCache.imageData;
         const context = imageDataCache.context;
-        const { width, height } = this.buffer;
+        const width  = this.buffer.width;
+        const height = this.buffer.height;
         gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixelData);
         imageData.data.set(pixelData);
         context.putImageData(imageData, 0, 0);
@@ -275,27 +282,6 @@ class RenderBuffer {
         this.bound = false;
     }
 
-    getTexture(index = 0) {
-        const self = this;
-        return this._texture || (this._texture = {
-            renderBuffer: this,
-            bind: function (unit) {
-                if (self.buffer && self.buffer.textures[index]) {
-                    self.gl.activeTexture(self.gl["TEXTURE" + unit]);
-                    self.gl.bindTexture(self.gl.TEXTURE_2D, self.buffer.textures[index]);
-                    return true;
-                }
-                return false;
-            },
-            unbind: function (unit) {
-                if (self.buffer && self.buffer.textures[index]) {
-                    self.gl.activeTexture(self.gl["TEXTURE" + unit]);
-                    self.gl.bindTexture(self.gl.TEXTURE_2D, null);
-                }
-            }
-        });
-    }
-
     destroy() {
         if (this.allocated) {
             this.buffer.cleanup();
@@ -304,7 +290,7 @@ class RenderBuffer {
             this.bound = false;
         }
         this._imageDataCache = null;
-        this._texture = null;
+        this.colorTextures = null;
         this.depthTexture = null;
     }
 }
