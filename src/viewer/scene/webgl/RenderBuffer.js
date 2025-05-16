@@ -18,13 +18,6 @@ class RenderBuffer {
         this.size = size;
     }
 
-    webglContextRestored(gl) {
-        this.gl = gl;
-        this.buffer = null;
-        this.allocated = false;
-        this.bound = false;
-    }
-
     bind(...internalformats) {
         const width  = this.size[0];
         const height = this.size[1];
