@@ -414,14 +414,14 @@ const Renderer = function (scene, options) {
             occlusionRenderBuffer2.setSize(size);
             occlusionRenderBuffer2.bind();
             occlusionRenderBuffer2.clear();
-            saoDepthLimitedBlurRenderer.render(depthTexture, occlusionRenderBuffer1.getTexture(), 0);
+            saoDepthLimitedBlurRenderer.render(depthTexture, occlusionRenderBuffer1.colorTextures[0], 0);
             occlusionRenderBuffer2.unbind();
 
             // Vertically blur occlusion buffer 2 back into occlusion buffer 1
 
             occlusionRenderBuffer1.bind();
             occlusionRenderBuffer1.clear();
-            saoDepthLimitedBlurRenderer.render(depthTexture, occlusionRenderBuffer2.getTexture(), 1);
+            saoDepthLimitedBlurRenderer.render(depthTexture, occlusionRenderBuffer2.colorTextures[0], 1);
             occlusionRenderBuffer1.unbind();
         }
     }
@@ -552,13 +552,8 @@ const Renderer = function (scene, options) {
 
         const saoPossible = scene.sao.possible;
 
-        if (saoEnabled && saoPossible) {
-            const occlusionRenderBuffer1 = renderBufferManager.getRenderBuffer("saoOcclusion");
-            frameCtx.occlusionTexture = occlusionRenderBuffer1 ? occlusionRenderBuffer1.getTexture() : null;
-        } else {
-            frameCtx.occlusionTexture = null;
-
-        }
+        const occlusionRenderBuffer1 = saoEnabled && saoPossible && renderBufferManager.getRenderBuffer("saoOcclusion");
+        frameCtx.occlusionTexture = occlusionRenderBuffer1 ? occlusionRenderBuffer1.colorTextures[0] : null;
 
         let i;
         let len;
