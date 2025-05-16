@@ -357,7 +357,7 @@ export const createLightSetup = function(programVariables, lightsState) {
             shadowViewMatrix: programVariables.createUniform("mat4", `shadowViewMatrix${i}`, (set) => set(lights[i].getShadowViewMatrix())),
             shadowMap:        programVariables.createUniform("sampler2D", `shadowMap${i}`, (set) => {
                 const shadowRenderBuf = lights[i].getShadowRenderBuf();
-                set(shadowRenderBuf && shadowRenderBuf.getTexture());
+                set(shadowRenderBuf && shadowRenderBuf.colorTextures[0]);
             })
         };
 
