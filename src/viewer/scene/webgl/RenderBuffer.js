@@ -146,16 +146,23 @@ class RenderBuffer {
         this.buffer = {
             cleanup: () => {
                 this.buffer.textures.forEach(texture => gl.deleteTexture(texture));
-                this.buffer.depthTexture && gl.deleteTexture(this.buffer.depthTexture);
+                depthTexture && gl.deleteTexture(depthTexture);
                 gl.deleteFramebuffer(this.buffer.framebuf);
                 gl.deleteRenderbuffer(renderbuf);
             },
             framebuf: framebuf,
             texture: colorTextures[0],
             textures: colorTextures,
-            depthTexture: depthTexture,
             width: width,
             height: height
+        };
+
+        this.depthTexture = depthTexture && {
+            bind: function(unit) {
+                gl.activeTexture(gl["TEXTURE" + unit]);
+                gl.bindTexture(gl.TEXTURE_2D, depthTexture);
+                return true;
+            }
         };
 
         this.bound = false;
@@ -308,23 +315,6 @@ class RenderBuffer {
         });
     }
 
-    getDepthTexture() {
-        if (!this._hasDepthTexture) {
-            return null;
-        }
-        const self = this;
-        return this._depthTexture || (this._depthTexture = {
-            bind: function (unit) {
-                if (self.buffer && self.buffer.depthTexture) {
-                    self.gl.activeTexture(self.gl["TEXTURE" + unit]);
-                    self.gl.bindTexture(self.gl.TEXTURE_2D, self.buffer.depthTexture);
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
-
     destroy() {
         if (this.allocated) {
             this.buffer.cleanup();
@@ -334,7 +324,7 @@ class RenderBuffer {
         }
         this._imageDataCache = null;
         this._texture = null;
-        this._depthTexture = null;
+        this.depthTexture = null;
     }
 }
 
