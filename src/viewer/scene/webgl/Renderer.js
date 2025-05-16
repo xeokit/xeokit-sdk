@@ -364,9 +364,11 @@ const Renderer = function (scene, options) {
 
         const sao = scene.sao;
 
+        const size = [gl.drawingBufferWidth, gl.drawingBufferHeight];
+
         // Render depth buffer
         const saoDepthRenderBuffer = renderBufferManager.getRenderBuffer("saoDepth", { depthTexture: true });
-
+        saoDepthRenderBuffer.setSize(size);
         saoDepthRenderBuffer.bind();
         saoDepthRenderBuffer.clear();
 
@@ -398,7 +400,7 @@ const Renderer = function (scene, options) {
         // Render occlusion buffer
 
         const occlusionRenderBuffer1 = renderBufferManager.getRenderBuffer("saoOcclusion");
-
+        occlusionRenderBuffer1.setSize(size);
         occlusionRenderBuffer1.bind();
         occlusionRenderBuffer1.clear();
         saoOcclusionRenderer.render(depthTexture);
@@ -409,7 +411,7 @@ const Renderer = function (scene, options) {
             // Horizontally blur occlusion buffer 1 into occlusion buffer 2
 
             const occlusionRenderBuffer2 = renderBufferManager.getRenderBuffer("saoOcclusion2");
-
+            occlusionRenderBuffer2.setSize(size);
             occlusionRenderBuffer2.bind();
             occlusionRenderBuffer2.clear();
             saoDepthLimitedBlurRenderer.render(depthTexture, occlusionRenderBuffer1.getTexture(), 0);
@@ -1033,8 +1035,8 @@ const Renderer = function (scene, options) {
                 canvasPos[1] = canvas.clientHeight * 0.5;
             }
 
-            const pickBuffer = renderBufferManager.getRenderBuffer("pick", {size: [1, 1]});
-
+            const pickBuffer = renderBufferManager.getRenderBuffer("pick");
+            pickBuffer.setSize([1, 1]);
             pickBuffer.bind();
 
             const resetPickFrameCtx = (clipTransformDiv) => {
@@ -1206,8 +1208,8 @@ const Renderer = function (scene, options) {
                             // gpuPickWorldNormal
                             resetPickFrameCtx(3);
 
-                            const pickNormalBuffer = renderBufferManager.getRenderBuffer("pick-normal", {size: [3, 3]});
-
+                            const pickNormalBuffer = renderBufferManager.getRenderBuffer("pick-normal");
+                            pickNormalBuffer.setSize([3, 3]);
                             pickNormalBuffer.bind(gl.RGBA32I);
 
                             gl.viewport(0, 0, pickNormalBuffer.size[0], pickNormalBuffer.size[1]);
@@ -1311,16 +1313,7 @@ const Renderer = function (scene, options) {
 
             const snapRadiusInPixels = snapRadius || 30;
 
-            const vertexPickBuffer = renderBufferManager.getRenderBuffer(
-                `uniquePickColors-aabs-${snapRadiusInPixels}`,
-                {
-                    depthTexture: true,
-                    size: [
-                        2 * snapRadiusInPixels + 1,
-                        2 * snapRadiusInPixels + 1,
-                    ]
-                }
-            );
+            const vertexPickBuffer = renderBufferManager.getRenderBuffer(`uniquePickColors-aabs-${snapRadiusInPixels}`, { depthTexture: true });
 
             frameCtx.pickClipPos = [
                 canvasPos ? getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth) : 0,
@@ -1334,6 +1327,7 @@ const Renderer = function (scene, options) {
 
             // Bind and clear the snap render target
 
+            vertexPickBuffer.setSize([2 * snapRadiusInPixels + 1, 2 * snapRadiusInPixels + 1]);
             vertexPickBuffer.bind(gl.RGBA32I, gl.RGBA32I, gl.RGBA8UI);
             gl.viewport(0, 0, vertexPickBuffer.size[0], vertexPickBuffer.size[1]);
             gl.enable(gl.DEPTH_TEST);
@@ -1617,9 +1611,9 @@ const Renderer = function (scene, options) {
      */
     this.beginSnapshot = function (params = {}) {
         const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
-        if (params.width && params.height) {
-            snapshotBuffer.setSize([params.width, params.height]);
-        }
+        snapshotBuffer.setSize((params.width && params.height)
+                               ? [params.width, params.height]
+                               : [gl.drawingBufferWidth, gl.drawingBufferHeight]);
         snapshotBuffer.bind();
         snapshotBuffer.clear();
         snapshotBound = true;
