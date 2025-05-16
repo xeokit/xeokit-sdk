@@ -393,13 +393,15 @@ const Renderer = function (scene, options) {
 
         saoDepthRenderBuffer.unbind();
 
+        const depthTexture = saoDepthRenderBuffer.depthTexture;
+
         // Render occlusion buffer
 
         const occlusionRenderBuffer1 = renderBufferManager.getRenderBuffer("saoOcclusion");
 
         occlusionRenderBuffer1.bind();
         occlusionRenderBuffer1.clear();
-        saoOcclusionRenderer.render(saoDepthRenderBuffer);
+        saoOcclusionRenderer.render(depthTexture);
         occlusionRenderBuffer1.unbind();
 
         if (sao.blur) {
@@ -410,14 +412,14 @@ const Renderer = function (scene, options) {
 
             occlusionRenderBuffer2.bind();
             occlusionRenderBuffer2.clear();
-            saoDepthLimitedBlurRenderer.render(saoDepthRenderBuffer, occlusionRenderBuffer1, 0);
+            saoDepthLimitedBlurRenderer.render(depthTexture, occlusionRenderBuffer1.getTexture(), 0);
             occlusionRenderBuffer2.unbind();
 
             // Vertically blur occlusion buffer 2 back into occlusion buffer 1
 
             occlusionRenderBuffer1.bind();
             occlusionRenderBuffer1.clear();
-            saoDepthLimitedBlurRenderer.render(saoDepthRenderBuffer, occlusionRenderBuffer2, 1);
+            saoDepthLimitedBlurRenderer.render(depthTexture, occlusionRenderBuffer2.getTexture(), 1);
             occlusionRenderBuffer1.unbind();
         }
     }

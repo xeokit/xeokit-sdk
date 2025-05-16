@@ -225,7 +225,7 @@ class SAODepthLimitedBlurRenderer {
         this._aUV = this._program.getAttribute("aUV");
     }
 
-    render(depthRenderBuffer, occlusionRenderBuffer, direction) {
+    render(depthTexture, occlusionTexture, direction) {
 
         if (this._programError) {
             return;
@@ -281,9 +281,6 @@ class SAODepthLimitedBlurRenderer {
         }
 
         gl.uniform1fv(this._uSampleWeights, sampleWeights);
-
-        const depthTexture = depthRenderBuffer.depthTexture;
-        const occlusionTexture = occlusionRenderBuffer.getTexture();
 
         program.bindTexture(this._uDepthTexture, depthTexture, 0); // TODO: use FrameCtx.textureUnit
         program.bindTexture(this._uOcclusionTexture, occlusionTexture, 1);
