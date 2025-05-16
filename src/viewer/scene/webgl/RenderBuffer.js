@@ -318,7 +318,7 @@ class RenderBuffer {
             return null;
         }
         const self = this;
-        return this._depthTexture || (this._dethTexture = {
+        return this._depthTexture || (this._depthTexture = {
             renderBuffer: this,
             bind: function (unit) {
                 if (self.buffer && self.buffer.depthTexture) {
