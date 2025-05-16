@@ -22,7 +22,7 @@ export class SAOOcclusionRenderer {
         this._rebuild = true;
     }
 
-    render(depthRenderBuffer) {
+    render(depthTexture) {
 
         this._build();
 
@@ -60,7 +60,7 @@ export class SAOOcclusionRenderer {
 
         tempVec2[0] = viewportWidth;
         tempVec2[1] = viewportHeight;
-        this._program.draw(depthRenderBuffer, tempVec2);
+        this._program.draw(depthTexture, tempVec2);
     }
 
     _build() {
@@ -286,7 +286,7 @@ export class SAOOcclusionRenderer {
 
             this._program = {
                 destroy: program.destroy,
-                draw: (depthRenderBuffer, viewportSize) => {
+                draw: (depthTexture, viewportSize) => {
                     program.bind();
 
                     const projectState = scene.camera.project._state;
@@ -307,7 +307,7 @@ export class SAOOcclusionRenderer {
                     uViewport.setInputValue(viewportSize);
                     uRandomSeed.setInputValue(Math.random());
 
-                    uDepthTexture.setInputValue(depthRenderBuffer.depthTexture);
+                    uDepthTexture.setInputValue(depthTexture);
 
                     uv.setInputValue(uvBuf);
                     position.setInputValue(positionsBuf);
