@@ -307,7 +307,7 @@ export class SAOOcclusionRenderer {
                     uViewport.setInputValue(viewportSize);
                     uRandomSeed.setInputValue(Math.random());
 
-                    uDepthTexture.setInputValue(depthRenderBuffer.getDepthTexture());
+                    uDepthTexture.setInputValue(depthRenderBuffer.depthTexture);
 
                     uv.setInputValue(uvBuf);
                     position.setInputValue(positionsBuf);
