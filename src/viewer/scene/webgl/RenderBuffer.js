@@ -28,44 +28,36 @@ class RenderBuffer {
     }
 
     bind(...internalformats) {
-        this._touch(...internalformats);
-        if (this.bound) {
-            return;
-        }
         const gl = this.gl;
-        gl.bindFramebuffer(gl.FRAMEBUFFER, this.buffer.framebuf);
-        this.bound = true;
-    }
-
-    /**
-     *
-     * @param {number[]} [internalformats=[]]
-     * @returns
-     */
-    _touch(...internalformats) {
-
         let width;
         let height;
-        const gl = this.gl;
-
         if (this.size) {
             width = this.size[0];
             height = this.size[1];
-
         } else {
             width = gl.drawingBufferWidth;
             height = gl.drawingBufferHeight;
         }
 
-        if (this.buffer) {
-
-            if (this.buffer.width === width && this.buffer.height === height) {
-                return;
-
-            } else {
-                this.buffer.cleanup();
-            }
+        if (this.buffer && ((this.buffer.width !== width) || (this.buffer.height !== height))) {
+            this.buffer.cleanup();
+            this.buffer = null;
         }
+
+        if (! this.buffer) {
+            this._allocateBuffer(width, height, ...internalformats);
+            this.bound = false;
+        }
+
+        if (! this.bound) {
+            gl.bindFramebuffer(gl.FRAMEBUFFER, this.buffer.framebuf);
+            this.bound = true;
+        }
+    }
+
+    _allocateBuffer(width, height, ...internalformats) {
+
+        const gl = this.gl;
 
         const createTexture = () => {
             const tex = gl.createTexture();
@@ -164,8 +156,6 @@ class RenderBuffer {
                 return true;
             }
         };
-
-        this.bound = false;
     }
 
     clear() {
