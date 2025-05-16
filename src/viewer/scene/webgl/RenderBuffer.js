@@ -5,15 +5,13 @@
 class RenderBuffer {
 
     constructor(canvas, gl, options) {
-        options = options || {};
         /** @type {WebGL2RenderingContext} */
         this.gl = gl;
         this.allocated = false;
         this.canvas = canvas;
         this.buffer = null;
         this.bound = false;
-        this.size = options.size;
-        this._hasDepthTexture = !!options.depthTexture;
+        this._hasDepthTexture = options && options.depthTexture;
     }
 
     setSize(size) {
@@ -28,16 +26,8 @@ class RenderBuffer {
     }
 
     bind(...internalformats) {
-        const gl = this.gl;
-        let width;
-        let height;
-        if (this.size) {
-            width = this.size[0];
-            height = this.size[1];
-        } else {
-            width = gl.drawingBufferWidth;
-            height = gl.drawingBufferHeight;
-        }
+        const width  = this.size[0];
+        const height = this.size[1];
 
         if (this.buffer && ((this.buffer.width !== width) || (this.buffer.height !== height))) {
             this.buffer.cleanup();
@@ -50,6 +40,7 @@ class RenderBuffer {
         }
 
         if (! this.bound) {
+            const gl = this.gl;
             gl.bindFramebuffer(gl.FRAMEBUFFER, this.buffer.framebuf);
             this.bound = true;
         }
