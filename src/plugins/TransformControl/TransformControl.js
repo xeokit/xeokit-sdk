@@ -468,6 +468,9 @@ class TransformControl {
                             }
                         };
                     }
+                    return !!dragAction;
+                } else {
+                    return false;
                 }
             };
 
@@ -476,16 +479,22 @@ class TransformControl {
                 cleanups.push(() => canvas.removeEventListener(type, listener));
             };
 
-            addCanvasEventListener("mousedown", (e) => {
+            const preventDefaultStopPropagation = e => {
                 e.preventDefault();
-                if (e.which === 1) {
-                    startDrag(e, event => (event.which === 1) && event);
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+            };
+
+            addCanvasEventListener("mousedown", (e) => {
+                if ((e.which === 1) && startDrag(e, event => (event.which === 1) && event)) {
+                    preventDefaultStopPropagation(e);
                 }
             });
 
             addCanvasEventListener("mousemove", (e) => {
                 if (currentDrag) {
                     currentDrag.onChange(e);
+                    preventDefaultStopPropagation(e);
                 } else {
                     if (deactivateActive) {
                         deactivateActive();
@@ -504,6 +513,9 @@ class TransformControl {
                 if (currentDrag) {
                     currentDrag.onChange(e);
                     currentDrag.cleanup();
+                    // Calling preventDefaultStopPropagation would interfere with cameraControl
+                    // by making it follow the pointer until next click
+                    // preventDefaultStopPropagation(e);
                 }
             });
 
@@ -513,20 +525,25 @@ class TransformControl {
                 if (event.touches.length === 1)
                 {
                     const touchStartId = event.touches[0].identifier;
-                    startDrag(event, event => [...event.changedTouches].find(e => e.identifier === touchStartId));
+                    if (startDrag(event, event => [...event.changedTouches].find(e => e.identifier === touchStartId))) {
+                        preventDefaultStopPropagation(event);
+                    }
                 }
             });
 
             addCanvasEventListener("touchmove", event => {
-                event.preventDefault();
-                currentDrag && currentDrag.onChange(event);
+                if (currentDrag) {
+                    currentDrag.onChange(event);
+                    preventDefaultStopPropagation(event);
+                }
             });
 
             addCanvasEventListener("touchend",  event => {
-                event.preventDefault();
                 if (currentDrag) {
                     currentDrag.onChange(event);
                     currentDrag.cleanup();
+                    // See the comment in mouseup listener
+                    // preventDefaultStopPropagation(e);
                 }
             });
         }
