@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <h1>Picking Objects</h1>
+    <h2>Click objects to pick them</h2>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    import {GLTFLoaderPlugin, TransformControl, Viewer, XKTLoaderPlugin} from "../../dist/xeokit-sdk.es.js";
+
+    const canvas = window.document.getElementById("myCanvas");
+    const viewer = new Viewer({ canvasElement: canvas });
+
+    viewer.camera.eye  = [7.745854139643612, 1.7407040933385476, 0.10102578111076946];
+    viewer.camera.look = [5.194602195399575, 0.9766361870359882, 2.1081111458071216];
+    viewer.camera.up   = [-0.18007260329766822, 0.9733987413438749, 0.14166420822409648];
+
+    new XKTLoaderPlugin(viewer).load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
+        edges: true
+    }).on("loaded", function() {
+        const chairPositions = [ [4,0,1], [4,0,2.5], [4,0,4] ];
+
+        const chairs = [ ];
+        (function placeNextChair(idx) {
+            // Load chairs
+            if (idx < chairPositions.length) {
+                const chair = new GLTFLoaderPlugin(viewer).load({ src: "../../assets/models/gltf/old_wooden_chair/old_wooden_chair.glb" });
+                chair.on("loaded", function() {
+                    chair.position = chairPositions[idx];
+                    chair.rotation = [0,90,0];
+                    chairs.push(chair);
+                    placeNextChair(idx + 1);
+                });
+            } else {
+                // Setup press handlers
+                const transformControl = new TransformControl(viewer);
+                let highlighted = null;
+
+                const handlePick = event => {
+                    const rect = canvas.getBoundingClientRect();
+                    const canvasPos = [ event.clientX - rect.left, event.clientY - rect.top ];
+                    const pickRecord = viewer.scene.pick({ canvasPos: canvasPos });
+                    const pickedModel = pickRecord && pickRecord.entity && pickRecord.entity.model;
+
+                    if (chairs.includes(pickedModel)) {
+                        if (highlighted && (highlighted !== pickedModel))
+                        {
+                            highlighted.highlighted = false;
+                            highlighted = null;
+                        }
+
+                        if (! highlighted) {
+                            highlighted = pickedModel;
+                            highlighted.highlighted = true;
+
+                            // Attach the TransformControl to the chair
+                            transformControl.setPosition(highlighted.position);
+                            transformControl.setQuaternion(highlighted.quaternion);
+                            transformControl.setHandlers({
+                                setPosition:   p => { highlighted.position   = p; },
+                                setQuaternion: q => { highlighted.quaternion = q; }
+                            });
+                        }
+                    }
+                };
+
+                canvas.addEventListener("mousedown",  e => (e.which === 1) && handlePick(e));
+                canvas.addEventListener("touchstart", e => (e.touches.length === 1) && handlePick(e.touches[0]));
+            }
+        })(0);
+    });
+
+</script>
+</html>
