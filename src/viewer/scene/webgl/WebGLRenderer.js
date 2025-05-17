@@ -1,5 +1,8 @@
 import {getPlaneRTCPos} from "../math/rtcCoords.js";
-import {Program} from "./Program.js";
+
+import {Map} from "../utils/Map.js";
+const ids = new Map({});
+
 import {math} from "../math/math.js";
 const tempVec3a = math.vec3();
 const tempVec4 = math.vec4();
@@ -320,34 +323,94 @@ export const createProgramVariablesState = function() {
                 "#endif",
             ];
 
-            const program = new Program(gl, {
-                vertex:   preamble("vertex"  ).concat(vertexShader),
-                fragment: preamble("fragment").concat([
-                    // Not the best place to define here, TODO: Move somewhere more appropriate after refactors
-                    "vec4 sRGBToLinear(in vec4 value) {",
-                    "  return vec4(mix(pow(value.rgb * 0.9478672986 + 0.0521327014, vec3(2.4)), value.rgb * 0.0773993808, vec3(lessThanEqual(value.rgb, vec3(0.04045)))), value.w);",
-                    "}"
-                ]).concat(fragmentShader)
-            });
+            const vertSrc = preamble("vertex"  ).concat(vertexShader);
+            const fragSrc = preamble("fragment").concat([
+                // Not the best place to define here, TODO: Move somewhere more appropriate after refactors
+                "vec4 sRGBToLinear(in vec4 value) {",
+                "  return vec4(mix(pow(value.rgb * 0.9478672986 + 0.0521327014, vec3(2.4)), value.rgb * 0.0773993808, vec3(lessThanEqual(value.rgb, vec3(0.04045)))), value.w);",
+                "}"
+            ]).concat(fragmentShader);
 
-            if (program.errors) {
-                return [ null, program.errors ];
+            const makeShader = (type, srcLines) => {
+                const src = srcLines.join("\n");
+                const shader = gl.createShader(type);
+                gl.shaderSource(shader, src);
+                gl.compileShader(shader);
+                if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                    return [ shader ];
+                } else {
+                    return [
+                        null,
+                        (gl.isContextLost()
+                         ? [ ] // Handled explicitly elsewhere, so won't re-handle here
+                         : [
+                             "Failed to compile",
+                             gl.getShaderInfoLog(shader),
+                             src.split("\n").map((line, i) => (i + 1) + ": " + line + "\n").join("")
+                         ])
+                    ];
+                }
+            };
+
+            const [vertShader, vertErrors] = makeShader(gl.VERTEX_SHADER,   vertSrc);
+            const [fragShader, fragErrors] = makeShader(gl.FRAGMENT_SHADER, fragSrc);
+
+            const errorObj = errors => {
+                console.error(errors.join("\n"));
+                return [ null, errors ];
+            };
+
+            if (vertErrors) {
+                return errorObj(["Vertex shader error"].concat(vertErrors));
+            } else if (fragErrors) {
+                return errorObj(["Fragment shader error"].concat(fragErrors));
             } else {
-                const getInputSetter = makeInputSetters(gl, program.handle);
-                attrSetters.forEach(i => i(getInputSetter));
-                const uSetters = unifSetters.map(i => i(getInputSetter)).filter(s => s);
-                return [ {
-                    bind: () => program.bind(),
-                    destroy: () => program.destroy(),
-                    id: program.id,
-                    inputSetters: {
-                        attributesHash: attrHahes.sort().join(", "),
-                        setUniforms:   (frameCtx, state) => {
-                            clipTransformSetup && clipTransformSetup.setClipPosInputValue(frameCtx);
-                            uSetters.forEach(s => s(state));
-                        }
+                const program = gl.createProgram();
+                if (! program) {
+                    return errorObj(["Failed to allocate program"]);
+                } else {
+                    gl.attachShader(program, vertShader);
+                    gl.attachShader(program, fragShader);
+                    gl.linkProgram(program);
+                    // HACK: Disable validation temporarily
+                    // Perhaps we should defer validation until render-time, when the program has values set for all inputs?
+                    if (! gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                        return errorObj([
+                            "",
+                            gl.getProgramInfoLog(this.program),
+                            "",
+                            "Vertex shader:",
+                            "",
+                            ...vertSrc,
+                            "",
+                            "Fragment shader:",
+                            "",
+                            ...fragSrc
+                        ]);
+                    } else {
+                        const getInputSetter = makeInputSetters(gl, program);
+                        attrSetters.forEach(i => i(getInputSetter));
+                        const uSetters = unifSetters.map(i => i(getInputSetter)).filter(s => s);
+                        const id = ids.addItem({});
+                        return [ {
+                            id: id,
+                            bind: () => gl.useProgram(program),
+                            inputSetters: {
+                                attributesHash: attrHahes.sort().join(", "),
+                                setUniforms:   (frameCtx, state) => {
+                                    clipTransformSetup && clipTransformSetup.setClipPosInputValue(frameCtx);
+                                    uSetters.forEach(s => s(state));
+                                }
+                            },
+                            destroy: () => {
+                                ids.removeItem(id);
+                                gl.deleteProgram(program);
+                                gl.deleteShader(vertShader);
+                                gl.deleteShader(fragShader);
+                            }
+                        } ];
                     }
-                } ];
+                }
             }
         }
     };
