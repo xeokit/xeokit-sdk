@@ -51,30 +51,6 @@ const safeInvVec3 = v => [ math.safeInv(v[0]), math.safeInv(v[1]), math.safeInv(
 
 export const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
 
-const createSAOSetup = (programVariables, gl, sceneSAO) => {
-    const uSAOParams = programVariables.createUniform("vec4", "uSAOParams", (set, state) => {
-        tempVec4[0] = gl.drawingBufferWidth;  // viewportWidth
-        tempVec4[1] = gl.drawingBufferHeight; // viewportHeight
-        tempVec4[2] = sceneSAO.blendCutoff;
-        tempVec4[3] = sceneSAO.blendFactor;
-        set(tempVec4);
-    });
-    const uOcclusionTexture = setupTexture(programVariables, "sampler2D", "uOcclusionTexture", LinearEncoding, (set, state) => set(state.legacyFrameCtx.occlusionTexture));
-    return {
-        getAmbient: (gl_FragCoord) => {
-            // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
-            // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
-            const viewportWH  = `${uSAOParams}.xy`;
-            const uv          = `${gl_FragCoord}.xy / ${viewportWH}`;
-            const blendCutoff = `${uSAOParams}.z`;
-            const blendFactor = `${uSAOParams}.w`;
-            const unPackFactors = "(255. / 256.) / vec4(256. * 256. * 256., 256. * 256., 256., 1.)";
-            const unpackRGBToFloat = (v) => `dot(${v}, ${unPackFactors})`;
-            return `(smoothstep(${blendCutoff}, 1.0, ${unpackRGBToFloat(uOcclusionTexture(uv))}) * ${blendFactor})`;
-        }
-    };
-};
-
 export const getColSilhEdgePickFlags = (flags, transparent, hasEdges, scene, dst) => {
     const visible     = !!(flags & ENTITY_FLAGS.VISIBLE);
     const xrayed      = !!(flags & ENTITY_FLAGS.XRAYED);
@@ -391,7 +367,21 @@ export const getRenderers = (function() {
                     colorRenderers: (function() {
                         // WARNING: Changing `useMaps' to `true' for DTX might have unexpected consequences while binding textures, as the DTX texture binding mechanism doesn't rely on `frameCtx.textureUnit` the way VBO does (see setSAORenderState);
                         const createLights = vars => createLightSetup(vars, scene._lightsState);
-                        const createSAO = vars => createSAOSetup(vars, gl, scene.sao);
+                        const createSAO = vars => {
+                            const uSAOParams = vars.createUniform("vec4", "uSAOParams", (set, state) => set(state.legacyFrameCtx.saoParams));
+                            const uOcclusionTexture = setupTexture(vars, "sampler2D", "uOcclusionTexture", LinearEncoding, (set, state) => set(state.legacyFrameCtx.occlusionTexture));
+                            return {
+                                getAmbient: (gl_FragCoord) => {
+                                    // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
+                                    // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
+                                    const uv          = `${gl_FragCoord}.xy / ${uSAOParams}.xy`; // / viewportWH
+                                    const blendCutoff = `${uSAOParams}.z`;
+                                    const blendFactor = `${uSAOParams}.w`;
+                                    const unPackFactors = "(255. / 256.) / vec4(256. * 256. * 256., 256. * 256., 256., 1.)";
+                                    return `(smoothstep(${blendCutoff}, 1.0, dot(${uOcclusionTexture(uv)}, ${unPackFactors})) * ${blendFactor})`;
+                                }
+                            };
+                        };
                         const saoRenderers = function(useSao) {
                             const makeColorTextureProgram = (vars, geo, useAlphaCutoff) => ColorTextureProgram(vars, geo, scene, createLights(vars), useSao && createSAO(vars), useAlphaCutoff, scene.gammaOutput); // If gammaOutput set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
                             return {
