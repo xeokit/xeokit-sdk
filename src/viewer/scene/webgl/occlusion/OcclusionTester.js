@@ -194,13 +194,7 @@ class OcclusionTester {
                                         }
                                     });
 
-                                position.setInputValue({
-                                    bindAtLocation: location => { // see ArrayBuf.js and Attribute.js
-                                        const b = occlusionLayer.positionsBuf;
-                                        b.bind();
-                                        this._scene.canvas.gl.vertexAttribPointer(location, b.itemSize, b.itemType, b.normalized, 0, 0);
-                                    }
-                                });
+                                position.setInputValue(occlusionLayer.positionsBufBinder);
 
                                 const indicesBuf = occlusionLayer.indicesBuf;
                                 indicesBuf.bind();
