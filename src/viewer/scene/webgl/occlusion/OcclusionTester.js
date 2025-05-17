@@ -31,7 +31,6 @@ class OcclusionTester {
         this._shaderSourceHash = null;
 
         this._shaderSourceDirty = true;         // Need to build shader source code ?
-        this._programDirty = false;             // Need to build shader program ?
 
         this._markersToOcclusionLayersMap = {};
 
@@ -139,19 +138,121 @@ class OcclusionTester {
         }
 
         if (this._shaderSourceDirty) {
-            this._buildShaderSource();
-            this._shaderSourceDirty = false;
-            this._programDirty = true;
-        }
+            const scene = this._scene;
+            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
+            const clipping = sectionPlanes.length > 0;
+            const vertexSrc = [];
+            vertexSrc.push("#version 300 es");
+            vertexSrc.push("// OcclusionTester vertex shader");
+            vertexSrc.push("in vec3 position;");
+            vertexSrc.push("uniform mat4 modelMatrix;");
+            vertexSrc.push("uniform mat4 viewMatrix;");
+            vertexSrc.push("uniform mat4 projMatrix;");
+            if (scene.logarithmicDepthBufferEnabled) {
+                vertexSrc.push("uniform float logDepthBufFC;");
+                vertexSrc.push("out float vFragDepth;");
+            }
+            if (clipping) {
+                vertexSrc.push("out vec4 vWorldPosition;");
+            }
+            vertexSrc.push("void main(void) {");
+            vertexSrc.push("vec4 worldPosition = vec4(position, 1.0); ");
+            vertexSrc.push("   vec4 viewPosition = viewMatrix * worldPosition;");
+            if (clipping) {
+                vertexSrc.push("   vWorldPosition = worldPosition;");
+            }
+            vertexSrc.push("   vec4 clipPos = projMatrix * viewPosition;");
+            vertexSrc.push("   gl_PointSize = " + POINT_SIZE + ".0;");
+            if (scene.logarithmicDepthBufferEnabled) {
+                vertexSrc.push("vFragDepth = 1.0 + clipPos.w;");
+            } else {
+                if (scene.markerZOffset < 0.000) {
+                    vertexSrc.push("clipPos.z += " + scene.markerZOffset + ";");
+                }
+            }
+            vertexSrc.push("   gl_Position = clipPos;");
+            vertexSrc.push("}");
 
-        if (this._programDirty) {
-            this._buildProgram();
-            this._programDirty = false;
-            this._occlusionTestListDirty = true;
+            const fragmentSrc = [];
+            fragmentSrc.push("#version 300 es");
+            fragmentSrc.push("// OcclusionTester fragment shader");
+            fragmentSrc.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
+            fragmentSrc.push("precision highp float;");
+            fragmentSrc.push("precision highp int;");
+            fragmentSrc.push("#else");
+            fragmentSrc.push("precision mediump float;");
+            fragmentSrc.push("precision mediump int;");
+            fragmentSrc.push("#endif");
+            if (scene.logarithmicDepthBufferEnabled) {
+                fragmentSrc.push("uniform float logDepthBufFC;");
+                fragmentSrc.push("in float vFragDepth;");
+            }
+            if (clipping) {
+                fragmentSrc.push("in vec4 vWorldPosition;");
+                for (let i = 0; i < sectionPlanes.length; i++) {
+                    fragmentSrc.push("uniform bool sectionPlaneActive" + i + ";");
+                    fragmentSrc.push("uniform vec3 sectionPlanePos" + i + ";");
+                    fragmentSrc.push("uniform vec3 sectionPlaneDir" + i + ";");
+                }
+            }
+            fragmentSrc.push("out vec4 outColor;");
+            fragmentSrc.push("void main(void) {");
+            if (clipping) {
+                fragmentSrc.push("  float dist = 0.0;");
+                for (var i = 0; i < sectionPlanes.length; i++) {
+                    fragmentSrc.push("if (sectionPlaneActive" + i + ") {");
+                    fragmentSrc.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
+                    fragmentSrc.push("}");
+                }
+                fragmentSrc.push("  if (dist > 0.0) { discard; }");
+            }
+            if (scene.logarithmicDepthBufferEnabled) {
+                fragmentSrc.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            }
+            fragmentSrc.push("   outColor = vec4(1.0, 0.0, 0.0, 1.0); ");
+            fragmentSrc.push("}");
+
+            this._shaderSource = {
+                vertex:   vertexSrc,
+                fragment: fragmentSrc
+            };
+            this._shaderSourceDirty = false;
+
+            if (this._program) {
+                this._program.destroy();
+            }
+
+            this._program = new Program(scene.canvas.gl, this._shaderSource);
+            if (this._program.errors) {
+                this.errors = this._program.errors;
+            } else {
+                const program = this._program;
+                this._uViewMatrix = program.getLocation("viewMatrix");
+                this._uProjMatrix = program.getLocation("projMatrix");
+                this._uSectionPlanes = [];
+                for (let i = 0, len = sectionPlanes.length; i < len; i++) {
+                    this._uSectionPlanes.push({
+                        active: program.getLocation("sectionPlaneActive" + i),
+                        pos: program.getLocation("sectionPlanePos" + i),
+                        dir: program.getLocation("sectionPlaneDir" + i)
+                    });
+                }
+                this._aPosition = program.getAttribute("position");
+                if (scene.logarithmicDepthBufferEnabled) {
+                    this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+                }
+                this._occlusionTestListDirty = true;
+            }
         }
 
         if (this._occlusionLayersListDirty) {
-            this._buildOcclusionLayersList();
+            let numOcclusionLayers = 0;
+            for (let originHash in this._occlusionLayers) {
+                if (this._occlusionLayers.hasOwnProperty(originHash)) {
+                    this._occlusionLayersList[numOcclusionLayers++] = this._occlusionLayers[originHash];
+                }
+            }
+            this._occlusionLayersList.length = numOcclusionLayers;
             this._occlusionLayersListDirty = false;
         }
 
@@ -169,137 +270,6 @@ class OcclusionTester {
             this._readPixelBuf.setSize([gl.drawingBufferWidth, gl.drawingBufferHeight]);
             this._readPixelBuf.bind();
             this._readPixelBuf.clear();
-        }
-    }
-
-    _buildOcclusionLayersList() {
-        let numOcclusionLayers = 0;
-        for (let originHash in this._occlusionLayers) {
-            if (this._occlusionLayers.hasOwnProperty(originHash)) {
-                this._occlusionLayersList[numOcclusionLayers++] = this._occlusionLayers[originHash];
-            }
-        }
-        this._occlusionLayersList.length = numOcclusionLayers;
-    }
-
-    _buildShaderSource() {
-        this._shaderSource = {
-            vertex: this._buildVertexShaderSource(),
-            fragment: this._buildFragmentShaderSource()
-        };
-    }
-
-    _buildVertexShaderSource() {
-        const scene = this._scene;
-        const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
-        const src = [];
-        src.push("#version 300 es");
-        src.push("// OcclusionTester vertex shader");
-        
-        src.push("in vec3 position;");
-        src.push("uniform mat4 modelMatrix;");
-        src.push("uniform mat4 viewMatrix;");
-        src.push("uniform mat4 projMatrix;");
-        if (scene.logarithmicDepthBufferEnabled) {
-            src.push("uniform float logDepthBufFC;");
-            src.push("out float vFragDepth;");
-        }
-        if (clipping) {
-            src.push("out vec4 vWorldPosition;");
-        }
-        src.push("void main(void) {");
-        src.push("vec4 worldPosition = vec4(position, 1.0); ");
-        src.push("   vec4 viewPosition = viewMatrix * worldPosition;");
-        if (clipping) {
-            src.push("   vWorldPosition = worldPosition;");
-        }
-        src.push("   vec4 clipPos = projMatrix * viewPosition;");
-        src.push("   gl_PointSize = " + POINT_SIZE + ".0;");
-        if (scene.logarithmicDepthBufferEnabled) {
-           src.push("vFragDepth = 1.0 + clipPos.w;");
-        } else {
-            if (scene.markerZOffset < 0.000) {
-                src.push("clipPos.z += " + scene.markerZOffset + ";");
-            }
-        }
-        src.push("   gl_Position = clipPos;");
-        src.push("}");
-        return src;
-    }
-
-    _buildFragmentShaderSource() {
-        const scene = this._scene;
-        const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.sectionPlanes.length > 0;
-        const src = [];
-        src.push("#version 300 es");
-        src.push("// OcclusionTester fragment shader");
-        
-        src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
-        src.push("precision highp float;");
-        src.push("precision highp int;");
-        src.push("#else");
-        src.push("precision mediump float;");
-        src.push("precision mediump int;");
-        src.push("#endif");
-        if (scene.logarithmicDepthBufferEnabled) {
-            src.push("uniform float logDepthBufFC;");
-            src.push("in float vFragDepth;");
-        }
-        if (clipping) {
-            src.push("in vec4 vWorldPosition;");
-            for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
-                src.push("uniform bool sectionPlaneActive" + i + ";");
-                src.push("uniform vec3 sectionPlanePos" + i + ";");
-                src.push("uniform vec3 sectionPlaneDir" + i + ";");
-            }
-        }
-        src.push("out vec4 outColor;");
-        src.push("void main(void) {");
-        if (clipping) {
-            src.push("  float dist = 0.0;");
-            for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
-                src.push("if (sectionPlaneActive" + i + ") {");
-                src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
-                src.push("}");
-            }
-            src.push("  if (dist > 0.0) { discard; }");
-        }
-        if (scene.logarithmicDepthBufferEnabled) {
-            src.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
-        }
-        src.push("   outColor = vec4(1.0, 0.0, 0.0, 1.0); ");
-        src.push("}");
-        return src;
-    }
-
-    _buildProgram() {
-        if (this._program) {
-            this._program.destroy();
-        }
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const sectionPlanesState = scene._sectionPlanesState;
-        this._program = new Program(gl, this._shaderSource);
-        if (this._program.errors) {
-            this.errors = this._program.errors;
-            return;
-        }
-        const program = this._program;
-        this._uViewMatrix = program.getLocation("viewMatrix");
-        this._uProjMatrix = program.getLocation("projMatrix");
-        this._uSectionPlanes = [];
-        const sectionPlanes = sectionPlanesState.sectionPlanes;
-        for (let i = 0, len = sectionPlanes.length; i < len; i++) {
-            this._uSectionPlanes.push({
-                active: program.getLocation("sectionPlaneActive" + i),
-                pos: program.getLocation("sectionPlanePos" + i),
-                dir: program.getLocation("sectionPlaneDir" + i)
-            });
-        }
-        this._aPosition = program.getAttribute("position");
-        if (scene.logarithmicDepthBufferEnabled) {
-            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
     }
 
