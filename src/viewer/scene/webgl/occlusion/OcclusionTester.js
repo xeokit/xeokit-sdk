@@ -129,7 +129,22 @@ class OcclusionTester {
      * then calls drawMarkers() and doOcclusionTest().
      */
     bindRenderBuf() {
+        if (!TEST_MODE) {
+            this._readPixelBuf = this._renderBufferManager.getRenderBuffer("occlusionReadPix");
+            const gl = this._scene.canvas.gl;
+            this._readPixelBuf.setSize([gl.drawingBufferWidth, gl.drawingBufferHeight]);
+            this._readPixelBuf.bind();
+            this._readPixelBuf.clear();
+        }
+    }
 
+    /**
+     * Draws {@link Marker}s to the render buffer.
+     */
+    drawMarkers() {
+
+        const scene = this._scene;
+        const gl = scene.canvas.gl;
         const shaderSourceHash = [this._scene.canvas.canvas.id, this._scene._sectionPlanesState.getHash()].join(";");
 
         if (shaderSourceHash !== this._shaderSourceHash) {
@@ -138,7 +153,6 @@ class OcclusionTester {
         }
 
         if (this._shaderSourceDirty) {
-            const scene = this._scene;
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
             const clipping = sectionPlanes.length > 0;
             const vertexSrc = [];
@@ -222,7 +236,7 @@ class OcclusionTester {
                 this._program.destroy();
             }
 
-            this._program = new Program(scene.canvas.gl, this._shaderSource);
+            this._program = new Program(gl, this._shaderSource);
             if (this._program.errors) {
                 this.errors = this._program.errors;
             } else {
@@ -271,15 +285,7 @@ class OcclusionTester {
             this._readPixelBuf.bind();
             this._readPixelBuf.clear();
         }
-    }
 
-    /**
-     * Draws {@link Marker}s to the render buffer.
-     */
-    drawMarkers() {
-
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
         const program = this._program;
         const sectionPlanesState = scene._sectionPlanesState;
         const camera = scene.camera;
