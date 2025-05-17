@@ -84,7 +84,7 @@ const Renderer = function (scene, options) {
     const unbindOutputFrameBuffer = null;
 
     const saoOcclusionRenderer = new SAOOcclusionRenderer(scene);
-    const saoDepthLimitedBlurRenderer = new SAODepthLimitedBlurRenderer(scene);
+    const saoDepthLimitedBlurRenderer = new SAODepthLimitedBlurRenderer(gl);
 
     const getSceneCameraViewParams = (function() {
         let params = null; // scene.camera not defined yet
@@ -409,21 +409,22 @@ const Renderer = function (scene, options) {
         occlusionRenderBuffer1.unbind();
 
         if (sao.blur) {
+            const project = scene.camera.project;
+            const near = project.near;
+            const far  = project.far;
 
             // Horizontally blur occlusion buffer 1 into occlusion buffer 2
-
             const occlusionRenderBuffer2 = renderBufferManager.getRenderBuffer("saoOcclusion2");
             occlusionRenderBuffer2.setSize(size);
             occlusionRenderBuffer2.bind();
             occlusionRenderBuffer2.clear();
-            saoDepthLimitedBlurRenderer.render(depthTexture, occlusionRenderBuffer1.colorTextures[0], 0);
+            saoDepthLimitedBlurRenderer.render(size, near, far, 0, depthTexture, occlusionRenderBuffer1.colorTextures[0]);
             occlusionRenderBuffer2.unbind();
 
             // Vertically blur occlusion buffer 2 back into occlusion buffer 1
-
             occlusionRenderBuffer1.bind();
             occlusionRenderBuffer1.clear();
-            saoDepthLimitedBlurRenderer.render(depthTexture, occlusionRenderBuffer2.colorTextures[0], 1);
+            saoDepthLimitedBlurRenderer.render(size, near, far, 1, depthTexture, occlusionRenderBuffer2.colorTextures[0]);
             occlusionRenderBuffer1.unbind();
         }
     }
