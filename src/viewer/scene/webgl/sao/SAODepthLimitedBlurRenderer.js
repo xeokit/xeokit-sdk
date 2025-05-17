@@ -22,16 +22,14 @@ const sampleOffsetsHor = createSampleOffsets([1, 0]);
 const gaussian = (i, stdDev) => Math.exp(-(i * i) / (2.0 * (stdDev * stdDev))) / (Math.sqrt(2.0 * Math.PI) * stdDev);
 const sampleWeights = new Float32Array(iota(KERNEL_RADIUS + 1).map(i => gaussian(i, blurStdDev))); // TODO: Optimize
 
-const tempVec2a = new Float32Array(2);
-
 /**
  * SAO implementation inspired from previous SAO work in THREE.js by ludobaka / ludobaka.github.io and bhouston
  * @private
  */
 export class SAODepthLimitedBlurRenderer {
 
-    constructor(scene) {
-        this._scene = scene;
+    constructor(gl) {
+        this._gl = gl;
         this.init();
     }
 
@@ -158,7 +156,7 @@ export class SAODepthLimitedBlurRenderer {
                 }`);
             });
 
-        const gl = this._scene.canvas.gl;
+        const gl = this._gl;
         const [program, errors] = programVariablesState.buildProgram(
             gl,
             "SAODepthLimitedBlurRenderer",
@@ -216,25 +214,17 @@ export class SAODepthLimitedBlurRenderer {
         }
     }
 
-    render(depthTexture, occlusionTexture, direction) {
+    render(viewportSize, near, far, direction, depthTexture, occlusionTexture) {
         if (! this._programError) {
-            const gl = this._scene.canvas.gl;
-            const viewportWidth = gl.drawingBufferWidth;
-            const viewportHeight = gl.drawingBufferHeight;
-            const projectState = this._scene.camera.project._state;
-            const near = projectState.near;
-            const far = projectState.far;
-
-            gl.viewport(0, 0, viewportWidth, viewportHeight);
+            const gl = this._gl;
+            gl.viewport(0, 0, viewportSize[0], viewportSize[1]);
             gl.clearColor(0, 0, 0, 1);
             gl.enable(gl.DEPTH_TEST);
             gl.disable(gl.BLEND);
             gl.frontFace(gl.CCW);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-            tempVec2a[0] = viewportWidth;
-            tempVec2a[1] = viewportHeight;
-            this._program.draw(tempVec2a, near, far, direction, depthTexture, occlusionTexture);
+            this._program.draw(viewportSize, near, far, direction, depthTexture, occlusionTexture);
         }
     }
 
