@@ -554,6 +554,7 @@ const Renderer = function (scene, options) {
 
         const occlusionRenderBuffer1 = saoEnabled && saoPossible && renderBufferManager.getRenderBuffer("saoOcclusion");
         frameCtx.occlusionTexture = occlusionRenderBuffer1 ? occlusionRenderBuffer1.colorTextures[0] : null;
+        frameCtx.saoParams = [gl.drawingBufferWidth, gl.drawingBufferHeight, scene.sao.blendCutoff, scene.sao.blendFactor];
 
         let i;
         let len;
