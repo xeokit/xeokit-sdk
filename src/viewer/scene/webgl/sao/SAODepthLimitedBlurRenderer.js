@@ -43,9 +43,8 @@ export class SAODepthLimitedBlurRenderer {
         const uDepthTexture     = programVariables.createUniform("sampler2D", "uDepthTexture");
         const uOcclusionTexture = programVariables.createUniform("sampler2D", "uOcclusionTexture");
 
-        const aPosition = programVariables.createAttribute("vec3", "aPosition");
-        const aUV       = programVariables.createAttribute("vec2", "aUV");
-        const vUV       = programVariables.createVarying("vec2", "vUV", () => aUV);
+        const aUV = programVariables.createAttribute("vec2", "aUV");
+        const vUV = programVariables.createVarying("vec2", "vUV", () => aUV);
 
         const vInvSize = programVariables.createVarying("vec2", "vInvSize", () => `1.0 / ${uViewport}`);
 
@@ -160,24 +159,21 @@ export class SAODepthLimitedBlurRenderer {
                 appendFragmentOutputs: (src) => src.push(`${outColor} = ${getOutColor}();`),
                 fragmentOutputsSetup: [ ],
                 getVertexData: () => [ ],
-                clipPos: `vec4(${aPosition}, 1.0)`
+                clipPos: `vec4(2.0 * ${aUV} - 1.0, 0.0, 1.0)`
             });
 
         if (errors) {
             console.error(errors.join("\n"));
             throw errors;
         } else {
-            const binder = (arr, size) => {
-                const b = new ArrayBuf(gl, gl.ARRAY_BUFFER, arr, arr.length, size, gl.STATIC_DRAW);
-                return {
-                    bindAtLocation: location => { // see ArrayBuf.js and Attribute.js
-                        b.bind();
-                        gl.vertexAttribPointer(location, b.itemSize, b.itemType, b.normalized, 0, 0);
-                    }
-                };
+            const uvs = new Float32Array([1,1, 0,1, 0,0, 1,0]);
+            const uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, uvs, uvs.length, 2, gl.STATIC_DRAW);
+            const uvBufBinder = {
+                bindAtLocation: location => { // see ArrayBuf.js and Attribute.js
+                    uvBuf.bind();
+                    gl.vertexAttribPointer(location, uvBuf.itemSize, uvBuf.itemType, uvBuf.normalized, 0, 0);
+                }
             };
-            const positionsBuf = binder(new Float32Array([1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0]), 3);
-            const uvBuf        = binder(new Float32Array([1, 1, 0, 1, 0, 0, 1, 0]), 2);
 
             // Mitigation: if Uint8Array is used, the geometry is corrupted on OSX when using Chrome with data-textures
             const indices      = new Uint32Array([0, 1, 2, 0, 2, 3]);
@@ -197,8 +193,7 @@ export class SAODepthLimitedBlurRenderer {
                 uDepthTexture.setInputValue(depthTexture);
                 uOcclusionTexture.setInputValue(occlusionTexture);
 
-                aPosition.setInputValue(positionsBuf);
-                aUV.setInputValue(uvBuf);
+                aUV.setInputValue(uvBufBinder);
 
                 indicesBuf.bind();
                 gl.drawElements(gl.TRIANGLES, indicesBuf.numItems, indicesBuf.itemType, 0);
