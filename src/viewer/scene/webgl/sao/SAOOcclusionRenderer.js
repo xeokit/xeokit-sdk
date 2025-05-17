@@ -87,6 +87,13 @@ export class SAOOcclusionRenderer {
             this._program.destroy();
             this._program = null;
         }
+        if (this._numSamples <= 0) {
+            this._program = {
+                destroy: () => { },
+                draw: () => { }
+            };
+            return;
+        }
 
         const programVariablesState = createProgramVariablesState();
 
