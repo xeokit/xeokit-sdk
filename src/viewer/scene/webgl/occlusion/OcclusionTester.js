@@ -179,9 +179,7 @@ class OcclusionTester {
                         projMatrix.setInputValue(camera._project._state.matrix);
 
                         this._occlusionLayersList.forEach(occlusionLayer => {
-                            occlusionLayer.update();
-
-                            if (! occlusionLayer.culledBySectionPlanes) {
+                            if (! occlusionLayer.updateReturnCulledBySectionPlanes()) {
                                 const origin = occlusionLayer.origin;
 
                                 viewMatrix.setInputValue(createRTCViewMat(camera.viewMatrix, origin));
