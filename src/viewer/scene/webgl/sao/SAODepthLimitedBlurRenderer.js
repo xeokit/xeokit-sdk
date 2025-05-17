@@ -171,7 +171,7 @@ export class SAODepthLimitedBlurRenderer {
 
         if (errors) {
             console.error(errors.join("\n"));
-            this._programError = true;
+            throw errors;
         } else {
             const binder = (arr, size) => {
                 const b = new ArrayBuf(gl, gl.ARRAY_BUFFER, arr, arr.length, size, gl.STATIC_DRAW);
@@ -189,46 +189,26 @@ export class SAODepthLimitedBlurRenderer {
             const indices      = new Uint32Array([0, 1, 2, 0, 2, 3]);
             const indicesBuf   = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, indices.length, 1, gl.STATIC_DRAW);
 
-            this._program = {
-                destroy: program.destroy,
-                draw: (viewportSize, near, far, direction, depthTexture, occlusionTexture) => {
-                    program.bind();
+            this.destroy = program.destroy;
+            this.render = (viewportSize, near, far, direction, depthTexture, occlusionTexture) => {
+                program.bind();
 
-                    uViewport.setInputValue(viewportSize);
-                    uCameraNear.setInputValue(near);
-                    uCameraFar.setInputValue(far);
-                    uDepthCutoff.setInputValue(blurDepthCutoff);
-                    uSampleOffsets.setInputValue((direction === 0) ? sampleOffsetsHor : sampleOffsetsVer);
-                    uSampleWeights.setInputValue(sampleWeights);
+                uViewport.setInputValue(viewportSize);
+                uCameraNear.setInputValue(near);
+                uCameraFar.setInputValue(far);
+                uDepthCutoff.setInputValue(blurDepthCutoff);
+                uSampleOffsets.setInputValue((direction === 0) ? sampleOffsetsHor : sampleOffsetsVer);
+                uSampleWeights.setInputValue(sampleWeights);
 
-                    uDepthTexture.setInputValue(depthTexture);
-                    uOcclusionTexture.setInputValue(occlusionTexture);
+                uDepthTexture.setInputValue(depthTexture);
+                uOcclusionTexture.setInputValue(occlusionTexture);
 
-                    aPosition.setInputValue(positionsBuf);
-                    aUV.setInputValue(uvBuf);
+                aPosition.setInputValue(positionsBuf);
+                aUV.setInputValue(uvBuf);
 
-                    indicesBuf.bind();
-                    gl.drawElements(gl.TRIANGLES, indicesBuf.numItems, indicesBuf.itemType, 0);
-                }
+                indicesBuf.bind();
+                gl.drawElements(gl.TRIANGLES, indicesBuf.numItems, indicesBuf.itemType, 0);
             };
         }
-    }
-
-    render(viewportSize, near, far, direction, depthTexture, occlusionTexture) {
-        if (! this._programError) {
-            const gl = this._gl;
-            gl.viewport(0, 0, viewportSize[0], viewportSize[1]);
-            gl.clearColor(0, 0, 0, 1);
-            gl.enable(gl.DEPTH_TEST);
-            gl.disable(gl.BLEND);
-            gl.frontFace(gl.CCW);
-            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-            this._program.draw(viewportSize, near, far, direction, depthTexture, occlusionTexture);
-        }
-    }
-
-    destroy() {
-        this._program.destroy();
     }
 }

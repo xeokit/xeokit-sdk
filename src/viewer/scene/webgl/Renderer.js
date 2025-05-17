@@ -409,23 +409,28 @@ const Renderer = function (scene, options) {
         occlusionRenderBuffer1.unbind();
 
         if (sao.blur) {
-            const project = scene.camera.project;
-            const near = project.near;
-            const far  = project.far;
-
-            // Horizontally blur occlusion buffer 1 into occlusion buffer 2
             const occlusionRenderBuffer2 = renderBufferManager.getRenderBuffer("saoOcclusion2");
             occlusionRenderBuffer2.setSize(size);
-            occlusionRenderBuffer2.bind();
-            occlusionRenderBuffer2.clear();
-            saoDepthLimitedBlurRenderer.render(size, near, far, 0, depthTexture, occlusionRenderBuffer1.colorTextures[0]);
-            occlusionRenderBuffer2.unbind();
 
-            // Vertically blur occlusion buffer 2 back into occlusion buffer 1
-            occlusionRenderBuffer1.bind();
-            occlusionRenderBuffer1.clear();
-            saoDepthLimitedBlurRenderer.render(size, near, far, 1, depthTexture, occlusionRenderBuffer2.colorTextures[0]);
-            occlusionRenderBuffer1.unbind();
+            const blurSAO = (src, dst, direction) => {
+                dst.bind();
+                dst.clear();
+
+                gl.viewport(0, 0, size[0], size[1]);
+                gl.clearColor(0, 0, 0, 1);
+                gl.enable(gl.DEPTH_TEST);
+                gl.disable(gl.BLEND);
+                gl.frontFace(gl.CCW);
+                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+                const project = scene.camera.project;
+                saoDepthLimitedBlurRenderer.render(size, project.near, project.far, direction, depthTexture, src.colorTextures[0]);
+
+                dst.unbind();
+            };
+
+            blurSAO(occlusionRenderBuffer1, occlusionRenderBuffer2, 0); // horizontally
+            blurSAO(occlusionRenderBuffer2, occlusionRenderBuffer1, 1); // vertically
         }
     }
 
