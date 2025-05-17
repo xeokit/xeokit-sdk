@@ -31,20 +31,23 @@
 </body>
 <script type="module">
 
-    import {Viewer, XKTLoaderPlugin} from "../../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin} from "../../src/index.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true
     });
+window.viewer = viewer;
+    viewer.scene.sao.enabled = true;
 
     viewer.camera.eye = [-3.93, 2.85, 27.01];
     viewer.camera.look = [4.40, 3.72, 8.89];
     viewer.camera.up = [-0.01, 0.99, 0.039];
 
-    viewer.cameraControl.on("doublePicked", pickResult => {
+    viewer.cameraControl.on("picked", pickResult => {
         if (pickResult.entity) {
             pickResult.entity.highlighted = true;
+            // pickResult.entity.outlined = true;
         }
     });
 

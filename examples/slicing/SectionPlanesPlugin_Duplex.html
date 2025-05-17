@@ -98,19 +98,19 @@
         // Create a moving SectionPlane, that moves through the table models
         //------------------------------------------------------------------------------------------------------------------
 
-        const sectionPlanes = new SectionPlanesPlugin(viewer, {
+        const sectionPlanes = 0 && new SectionPlanesPlugin(viewer, {
             overviewCanvasId: "mySectionPlanesOverviewCanvas",
             overviewVisible: true
         });
 
-        const sectionPlane = sectionPlanes.createSectionPlane({
+        const sectionPlane = sectionPlanes && sectionPlanes.createSectionPlane({
             id: "mySectionPlane",
 
             pos: viewer.scene.center,
             dir: math.normalizeVec3([1.0, 0.01, 1])
         });
 
-        sectionPlanes.showControl(sectionPlane.id);
+        sectionPlanes && sectionPlanes.showControl(sectionPlane.id);
 
         // let i = 0;
         // viewer.scene.on("tick", () => {
