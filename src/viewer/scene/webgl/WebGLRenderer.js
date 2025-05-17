@@ -91,6 +91,23 @@ export const createProgramVariablesState = function() {
                 });
                 return ret;
             },
+            createUniformArray: (type, name, length) => {
+                let needed = false;
+                const append = (src) => needed && src.push(`uniform ${type} ${name}[${length}];`);
+                vertAppenders.push(append);
+                fragAppenders.push(append);
+                const ret = {
+                    toString: () => {
+                        needed = true;
+                        return name;
+                    }
+                };
+                unifSetters.push((getInputSetter) => {
+                    ret.setInputValue = needed && getInputSetter(name);
+                    return null;
+                });
+                return ret;
+            },
             createUniformBlock: (name, types, valueSetter) => {
                 let needed = false;
                 const keys = Object.keys(types);
@@ -464,6 +481,9 @@ const makeInputSetters = function(gl, handle) {
     for (let i = 0; i < numUniforms; ++i) {
         const u = gl.getActiveUniform(handle, i);
         let uName = u.name;
+        if (uName.endsWith("[0]")) {
+            uName = uName.substr(0, uName.length - 3);
+        }
         if (uName[uName.length - 1] === "\u0000") {
             uName = uName.substr(0, uName.length - 1);
         }
@@ -507,6 +527,13 @@ const makeInputSetters = function(gl, handle) {
                     case gl.FLOAT_VEC4: return value => gl.uniform4fv(location, value);
                     case gl.FLOAT_MAT3: return value => gl.uniformMatrix3fv(location, false, value);
                     case gl.FLOAT_MAT4: return value => gl.uniformMatrix4fv(location, false, value);
+                    }
+                } else if (u.size > 1) {
+                    switch (u.type) {
+                    case gl.FLOAT:      return value => gl.uniform1fv(location, value);
+                    case gl.FLOAT_VEC2: return value => gl.uniform2fv(location, value);
+                    case gl.FLOAT_VEC3: return value => gl.uniform3fv(location, value);
+                    case gl.FLOAT_VEC4: return value => gl.uniform4fv(location, value);
                     }
                 }
                 throw `Unhandled uniform ${uName}`;
