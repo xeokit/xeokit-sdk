@@ -83,7 +83,8 @@ const Renderer = function (scene, options) {
     const unbindOutputFrameBuffer = null;
 
     const saoOcclusionRenderer = new SAOOcclusionRenderer(scene);
-    const saoDepthLimitedBlurRenderer = new SAODepthLimitedBlurRenderer(gl);
+    const saoDepthLimitedBlurRenderer = new SAODepthLimitedBlurRenderer();
+    saoDepthLimitedBlurRenderer.init(gl);
 
     const getSceneCameraViewParams = (function() {
         let params = null; // scene.camera not defined yet
@@ -160,7 +161,7 @@ const Renderer = function (scene, options) {
         // renderBufferManager.webglContextRestored(gl);
 
         saoOcclusionRenderer.init();
-        saoDepthLimitedBlurRenderer.init();
+        saoDepthLimitedBlurRenderer.init(gl);
 
         imageDirty = true;
     };
