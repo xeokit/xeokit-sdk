@@ -22,7 +22,6 @@ class OcclusionLayer {
         this.lenPositionsBuf = 0;
         this.indicesBuf = null;
         this.sectionPlanesActive = [];
-        this.culledBySectionPlanes = false;
         this.occlusionTestList = [];           // List of
         this.lenOcclusionTestList = 0;
         this.pixels = [];
@@ -54,7 +53,7 @@ class OcclusionLayer {
         this.numMarkers--;
     }
 
-    update() {
+    updateReturnCulledBySectionPlanes() {
         if (this.markerListDirty) {
             this.numMarkers = 0;
             for (var id in this.markers) {
@@ -160,15 +159,15 @@ class OcclusionLayer {
                     const intersect = math.planeAABB3Intersect(sectionPlane.dir, sectionPlane.dist, this.aabb);
                     const outside = (intersect === -1);
                     if (outside) {
-                        this.culledBySectionPlanes = true;
-                        return;
+                        return true;
                     }
                     const intersecting = (intersect === 0);
                     this.sectionPlanesActive[i] = intersecting;
                 }
             }
         }
-        this.culledBySectionPlanes = false;
+
+        return false;
     }
 
     destroy() {
