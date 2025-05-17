@@ -3,7 +3,6 @@ import {Program} from "./../Program.js";
 import {OcclusionLayer} from "./OcclusionLayer.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../math/rtcCoords.js";
 
-const TEST_MODE = false;
 const MARKER_COLOR = math.vec3([1.0, 0.0, 0.0]);
 const POINT_SIZE = 20;
 
@@ -15,11 +14,9 @@ const tempVec3a = math.vec3();
  */
 class OcclusionTester {
 
-    constructor(scene, renderBufferManager) {
+    constructor(scene) {
 
         this._scene = scene;
-
-        this._renderBufferManager = renderBufferManager;
 
         this._occlusionLayers = {};
         this._occlusionLayersList = [];
@@ -122,20 +119,6 @@ class OcclusionTester {
      */
     get needOcclusionTest() {
         return this._occlusionTestListDirty;
-    }
-
-    /**
-     * Binds the render buffer. After calling this, the caller then renders object silhouettes to the render buffer,
-     * then calls drawMarkers() and doOcclusionTest().
-     */
-    bindRenderBuf() {
-        if (!TEST_MODE) {
-            this._readPixelBuf = this._renderBufferManager.getRenderBuffer("occlusionReadPix");
-            const gl = this._scene.canvas.gl;
-            this._readPixelBuf.setSize([gl.drawingBufferWidth, gl.drawingBufferHeight]);
-            this._readPixelBuf.bind();
-            this._readPixelBuf.clear();
-        }
     }
 
     /**
@@ -278,14 +261,6 @@ class OcclusionTester {
             this._occlusionTestListDirty = false;
         }
 
-        if (!TEST_MODE) {
-            this._readPixelBuf = this._renderBufferManager.getRenderBuffer("occlusionReadPix");
-            const gl = this._scene.canvas.gl;
-            this._readPixelBuf.setSize([gl.drawingBufferWidth, gl.drawingBufferHeight]);
-            this._readPixelBuf.bind();
-            this._readPixelBuf.clear();
-        }
-
         const program = this._program;
         const sectionPlanesState = scene._sectionPlanesState;
         const camera = scene.camera;
@@ -342,39 +317,26 @@ class OcclusionTester {
     /**
      * Sets visibilities of {@link Marker}s according to whether or not they are obscured by anything in the render buffer.
      */
-    doOcclusionTest() {
+    doOcclusionTest(readPixelBuf) {
+        const resolutionScale = this._scene.canvas.resolutionScale;
 
-        if (!TEST_MODE) {
+        const markerR = MARKER_COLOR[0] * 255;
+        const markerG = MARKER_COLOR[1] * 255;
+        const markerB = MARKER_COLOR[2] * 255;
 
-            const resolutionScale = this._scene.canvas.resolutionScale;
+        for (let i = 0, len = this._occlusionLayersList.length; i < len; i++) {
 
-            const markerR = MARKER_COLOR[0] * 255;
-            const markerG = MARKER_COLOR[1] * 255;
-            const markerB = MARKER_COLOR[2] * 255;
+            const occlusionLayer = this._occlusionLayersList[i];
 
-            for (let i = 0, len = this._occlusionLayersList.length; i < len; i++) {
+            for (let i = 0; i < occlusionLayer.lenOcclusionTestList; i++) {
 
-                const occlusionLayer = this._occlusionLayersList[i];
+                const marker = occlusionLayer.occlusionTestList[i];
+                const j = i * 2;
+                const color = readPixelBuf.read(Math.round(occlusionLayer.pixels[j] * resolutionScale), Math.round(occlusionLayer.pixels[j + 1] * resolutionScale));
+                const visible = (color[0] === markerR) && (color[1] === markerG) && (color[2] === markerB);
 
-                for (let i = 0; i < occlusionLayer.lenOcclusionTestList; i++) {
-
-                    const marker = occlusionLayer.occlusionTestList[i];
-                    const j = i * 2;
-                    const color = this._readPixelBuf.read(Math.round(occlusionLayer.pixels[j] * resolutionScale), Math.round(occlusionLayer.pixels[j + 1] * resolutionScale));
-                    const visible = (color[0] === markerR) && (color[1] === markerG) && (color[2] === markerB);
-
-                    marker._setVisible(visible);
-                }
+                marker._setVisible(visible);
             }
-        }
-    }
-
-    /**
-     * Unbinds render buffer.
-     */
-    unbindRenderBuf() {
-        if (!TEST_MODE) {
-            this._readPixelBuf.unbind();
         }
     }
 
