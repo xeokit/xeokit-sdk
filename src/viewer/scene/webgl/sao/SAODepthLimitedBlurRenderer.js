@@ -33,7 +33,7 @@ export class SAODepthLimitedBlurRenderer {
 
         const programVariables = programVariablesState.programVariables;
 
-        const uViewport      = programVariables.createUniform("vec2", "uViewport");
+        const uViewportInv   = programVariables.createUniform("vec2", "uViewportInv");
         const uCameraNear    = programVariables.createUniform("float", "uCameraNear");
         const uCameraFar     = programVariables.createUniform("float", "uCameraFar");
         const uDepthCutoff   = programVariables.createUniform("float", "uDepthCutoff");
@@ -45,8 +45,6 @@ export class SAODepthLimitedBlurRenderer {
 
         const aUV = programVariables.createAttribute("vec2", "aUV");
         const vUV = programVariables.createVarying("vec2", "vUV", () => aUV);
-
-        const vInvSize = programVariables.createVarying("vec2", "vInvSize", () => `1.0 / ${uViewport}`);
 
         const outColor = programVariables.createOutput("vec4", "outColor");
 
@@ -82,7 +80,7 @@ export class SAODepthLimitedBlurRenderer {
 
                     for (int i = 1; i <= ${KERNEL_RADIUS}; i++) {
                         float sampleWeight = ${uSampleWeights}[i];
-                        vec2 sampleUVOffset = ${uSampleOffsets}[i] * ${vInvSize};
+                        vec2 sampleUVOffset = ${uSampleOffsets}[i] * ${uViewportInv};
 
                         vec2 rSampleUV = ${vUV} + sampleUVOffset;
                         if (abs(centerViewZ - getViewZ(texture(${uDepthTexture}, rSampleUV).r)) > ${uDepthCutoff}) {
@@ -144,7 +142,7 @@ export class SAODepthLimitedBlurRenderer {
             this.render = (viewportSize, near, far, direction, depthTexture, occlusionTexture) => {
                 program.bind();
 
-                uViewport.setInputValue(viewportSize);
+                uViewportInv.setInputValue([1 / viewportSize[0], 1 / viewportSize[1]]);
                 uCameraNear.setInputValue(near);
                 uCameraFar.setInputValue(far);
                 uDepthCutoff.setInputValue(blurDepthCutoff);
