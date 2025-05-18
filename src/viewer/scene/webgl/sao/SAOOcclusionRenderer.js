@@ -30,23 +30,6 @@ export class SAOOcclusionRenderer {
             return;
         }
 
-        const scene = this._scene;
-        if (!this._getInverseProjectMat) { // HACK: scene.camera not defined until render time
-            this._getInverseProjectMat = (() => {
-                let projMatDirty = true;
-                this._scene.camera.on("projMatrix", function () {
-                    projMatDirty = true;
-                });
-                const inverseProjectMat = math.mat4();
-                return () => {
-                    if (projMatDirty) {
-                        math.inverseMat4(scene.camera.projMatrix, inverseProjectMat);
-                    }
-                    return inverseProjectMat;
-                };
-            })();
-        }
-
         const gl = this._scene.canvas.gl;
         const viewportWidth = gl.drawingBufferWidth;
         const viewportHeight = gl.drawingBufferHeight;
@@ -218,13 +201,13 @@ export class SAOOcclusionRenderer {
                 draw: (depthTexture, viewportSize) => {
                     program.bind();
 
-                    const projectState = scene.camera.project._state;
-                    const far = projectState.far;
-                    uCameraNear.setInputValue(projectState.near);
+                    const project = scene.camera.project;
+                    const far = project.far;
+                    uCameraNear.setInputValue(project.near);
                     uCameraFar.setInputValue(far);
 
-                    uProjectMatrix.setInputValue(projectState.matrix);
-                    uInverseProjectMatrix.setInputValue(this._getInverseProjectMat());
+                    uProjectMatrix.setInputValue(project.matrix);
+                    uInverseProjectMatrix.setInputValue(project.inverseMatrix);
 
                     uPerspective.setInputValue(scene.camera.projection === "perspective");
 
