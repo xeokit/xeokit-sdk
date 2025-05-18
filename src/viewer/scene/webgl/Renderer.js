@@ -347,7 +347,7 @@ const Renderer = function (scene, options) {
 
         const sao = scene.sao;
 
-        if (saoEnabled && sao.possible) {
+        if (saoEnabled && sao.possible && (sao.numSamples >= 1)) {
             drawSAOBuffers(params);
         }
 
@@ -552,7 +552,8 @@ const Renderer = function (scene, options) {
 
         frameCtx.lineWidth = 1;
 
-        const saoPossible = scene.sao.possible;
+        const sao = scene.sao;
+        const saoPossible = sao.possible && (sao.numSamples >= 1);
 
         const occlusionRenderBuffer1 = saoEnabled && saoPossible && renderBufferManager.getRenderBuffer("saoOcclusion");
         frameCtx.occlusionTexture = occlusionRenderBuffer1 ? occlusionRenderBuffer1.colorTextures[0] : null;
