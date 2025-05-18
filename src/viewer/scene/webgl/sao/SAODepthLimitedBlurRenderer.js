@@ -54,99 +54,60 @@ export class SAODepthLimitedBlurRenderer {
             "getOutColor",
             (name, src) => {
                 src.push(`
-                #define PI 3.14159265359
-                #define PI2 6.28318530718
                 #define EPSILON 1e-6
 
-                #define KERNEL_RADIUS ${KERNEL_RADIUS}
+                const vec3 packFactors = vec3(256. * 256. * 256., 256. * 256., 256.);
 
-                const float         unpackDownscale = 255. / 256.; 
-
-                const vec3          packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );
-                const vec4          unpackFactors = unpackDownscale / vec4( packFactors, 1. );   
-
-                const float packUpscale = 256. / 255.;
-       
-                const float shiftRights = 1. / 256.;
-                
-                float unpackRGBAToFloat( const in vec4 v ) {
-                    return dot( floor( v * 255.0 + 0.5 ) / 255.0, unpackFactors );
-                }               
-
-                vec4 packFloatToRGBA( const in float v ) {
-                    vec4 r = vec4( fract( v * packFactors ), v );
-                    r.yzw -= r.xyz * shiftRights; 
-                    return r * packUpscale;
+                float getOcclusion(const in vec2 uv) {
+                    vec4 v = texture(${uOcclusionTexture}, uv);
+                    return dot(floor(v * 255.0 + 0.5) / 255.0, 255. / 256. / vec4(packFactors, 1.)); // unpackRGBAToFloat
                 }
 
-                float viewZToOrthographicDepth( const in float viewZ) {
-                    return ( viewZ + ${uCameraNear} ) / ( ${uCameraNear} - ${uCameraFar} );
-                }
-              
-                float orthographicDepthToViewZ( const in float linearClipZ) {
-                    return linearClipZ * ( ${uCameraNear} - ${uCameraFar} ) - ${uCameraNear};
-                }
-
-                float viewZToPerspectiveDepth( const in float viewZ) {
-                    return (( ${uCameraNear} + viewZ ) * ${uCameraFar} ) / (( ${uCameraFar} - ${uCameraNear} ) * viewZ );
-                }
-                
-                float perspectiveDepthToViewZ( const in float invClipZ) {
-                    return ( ${uCameraNear} * ${uCameraFar} ) / ( ( ${uCameraFar} - ${uCameraNear} ) * invClipZ - ${uCameraFar} );
-                }
-
-                float getDepth( const in vec2 screenPosition ) {
-                    return vec4(texture(${uDepthTexture}, screenPosition)).r;
-                }
-
-                float getViewZ( const in float depth ) {
-                     return perspectiveDepthToViewZ( depth );
+                float getViewZ(const in float depth) {
+                    return (${uCameraNear} * ${uCameraFar}) / ((${uCameraFar} - ${uCameraNear}) * depth - ${uCameraFar});
                 }
 
                 vec4 ${name}() {
-                    float depth = getDepth( ${vUV} );
-                    if( depth >= ( 1.0 - EPSILON ) ) {
+                    float depth = texture(${uDepthTexture}, ${vUV}).r;
+                    if (depth >= (1.0 - EPSILON)) {
                         discard;
                     }
 
-                    float centerViewZ = -getViewZ( depth );
+                    float centerViewZ = getViewZ(depth);
                     bool rBreak = false;
                     bool lBreak = false;
 
                     float weightSum = ${uSampleWeights}[0];
-                    float occlusionSum = unpackRGBAToFloat(texture( ${uOcclusionTexture}, ${vUV} )) * weightSum;
+                    float occlusionSum = getOcclusion(${vUV}) * weightSum;
 
-                    for( int i = 1; i <= KERNEL_RADIUS; i ++ ) {
-
+                    for (int i = 1; i <= ${KERNEL_RADIUS}; i++) {
                         float sampleWeight = ${uSampleWeights}[i];
                         vec2 sampleUVOffset = ${uSampleOffsets}[i] * ${vInvSize};
 
-                        vec2 sampleUV = ${vUV} + sampleUVOffset;
-                        float viewZ = -getViewZ( getDepth( sampleUV ) );
-
-                        if( abs( viewZ - centerViewZ ) > ${uDepthCutoff} ) {
+                        vec2 rSampleUV = ${vUV} + sampleUVOffset;
+                        if (abs(centerViewZ - getViewZ(texture(${uDepthTexture}, rSampleUV).r)) > ${uDepthCutoff}) {
                             rBreak = true;
                         }
-
-                        if( ! rBreak ) {
-                            occlusionSum += unpackRGBAToFloat(texture( ${uOcclusionTexture}, sampleUV )) * sampleWeight;
+                        if (! rBreak) {
+                            occlusionSum += getOcclusion(rSampleUV) * sampleWeight;
                             weightSum += sampleWeight;
                         }
 
-                        sampleUV = ${vUV} - sampleUVOffset;
-                        viewZ = -getViewZ( getDepth( sampleUV ) );
-
-                        if( abs( viewZ - centerViewZ ) > ${uDepthCutoff} ) {
+                        vec2 lSampleUV = ${vUV} - sampleUVOffset;
+                        if (abs(centerViewZ - getViewZ(texture(${uDepthTexture}, lSampleUV).r)) > ${uDepthCutoff}) {
                             lBreak = true;
                         }
-
-                        if( ! lBreak ) {
-                            occlusionSum += unpackRGBAToFloat(texture( ${uOcclusionTexture}, sampleUV )) * sampleWeight;
+                        if (! lBreak) {
+                            occlusionSum += getOcclusion(lSampleUV) * sampleWeight;
                             weightSum += sampleWeight;
                         }
                     }
 
-                    return packFloatToRGBA(occlusionSum / weightSum);
+                    float v = occlusionSum / weightSum;
+                    // packFloatToRGBA
+                    vec4 r = vec4(fract(v * packFactors), v);
+                    r.yzw -= r.xyz / 256.;
+                    return r * 256. / 255.;
                 }`);
             });
 
