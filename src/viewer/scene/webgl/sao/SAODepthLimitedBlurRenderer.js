@@ -116,7 +116,6 @@ export class SAODepthLimitedBlurRenderer {
                 ignoreSectionPlanes: true,
                 scene: { },
                 appendFragmentOutputs: (src) => src.push(`${outColor} = ${getOutColor}();`),
-                fragmentOutputsSetup: [ ],
                 getVertexData: () => [ ],
                 clipPos: `vec4(2.0 * ${aUV} - 1.0, 0.0, 1.0)`
             });
