@@ -14,19 +14,19 @@ export class SAOOcclusionRenderer {
 
         const programVariables = programVariablesState.programVariables;
 
-        const uDepthTexture         = programVariables.createUniform("sampler2D", "uDepthTexture");
-        const uCameraNear           = programVariables.createUniform("float",     "uCameraNear");
-        const uCameraFar            = programVariables.createUniform("float",     "uCameraFar");
-        const uProjectMatrix        = programVariables.createUniform("mat4",      "uProjectMatrix");
-        const uInverseProjectMatrix = programVariables.createUniform("mat4",      "uInverseProjectMatrix");
-        const uPerspective          = programVariables.createUniform("bool",      "uPerspective");
-        const uScale                = programVariables.createUniform("float",     "uScale");
-        const uIntensity            = programVariables.createUniform("float",     "uIntensity");
-        const uBias                 = programVariables.createUniform("float",     "uBias");
-        const uKernelRadius         = programVariables.createUniform("float",     "uKernelRadius");
-        const uMinResolution        = programVariables.createUniform("float",     "uMinResolution");
-        const uViewport             = programVariables.createUniform("vec2",      "uViewport");
-        const uRandomSeed           = programVariables.createUniform("float",     "uRandomSeed");
+        const uViewportInv   = programVariables.createUniform("vec2", "uViewportInv");
+        const uCameraNear    = programVariables.createUniform("float", "uCameraNear");
+        const uCameraFar     = programVariables.createUniform("float", "uCameraFar");
+        const uProjectMatrix = programVariables.createUniform("mat4", "uProjectMatrix");
+        const uInvProjMatrix = programVariables.createUniform("mat4", "uInvProjMatrix");
+        const uPerspective   = programVariables.createUniform("bool", "uPerspective");
+        const uScale         = programVariables.createUniform("float", "uScale");
+        const uIntensity     = programVariables.createUniform("float", "uIntensity");
+        const uBias          = programVariables.createUniform("float", "uBias");
+        const uKernelRadius  = programVariables.createUniform("float", "uKernelRadius");
+        const uMinResolution = programVariables.createUniform("float", "uMinResolution");
+        const uRandomSeed    = programVariables.createUniform("float", "uRandomSeed");
+        const uDepthTexture  = programVariables.createUniform("sampler2D", "uDepthTexture");
 
         const uv       = programVariables.createAttribute("vec2", "uv");
         const vUV      = programVariables.createVarying("vec2", "vUV", () => uv);
@@ -36,11 +36,23 @@ export class SAOOcclusionRenderer {
             "getOutColor",
             (name, src) => {
                 src.push(`
+                #define EPSILON 1e-6
                 #define PI 3.14159265359
                 #define PI2 6.28318530718
-                #define EPSILON 1e-6
                 #define NUM_SAMPLES ${numSamples}
                 #define NUM_RINGS 4
+
+                const vec3 packFactors = vec3(256. * 256. * 256., 256. * 256., 256.);
+
+                vec4 packFloatToRGBA(const in float v) {
+                    vec4 r = vec4(fract(v * packFactors), v);
+                    r.yzw -= r.xyz / 256.;
+                    return r * 256. / 255.;
+                }
+
+                float getDepth(const in vec2 uv) {
+                    return texture(${uDepthTexture}, uv).r;
+                }
 
                 highp float rand(const in vec2 uv) {
                     const highp float a = 12.9898, b = 78.233, c = 43758.5453;
@@ -48,57 +60,52 @@ export class SAOOcclusionRenderer {
                 }
 
                 vec3 getViewPos(const in vec2 screenPos, const in float depth) {
-                        float near = ${uCameraNear};
-                        float far  = ${uCameraFar};
-                        float viewZ = (${uPerspective}
-                                       ? ((near * far) / ((far - near) * depth - far))
-                                       : (depth * (near - far) - near));
-                        float clipW = ${uProjectMatrix}[2][3] * viewZ + ${uProjectMatrix}[3][3];
-                        return (${uInverseProjectMatrix} * (clipW * vec4((vec3(screenPos, depth) - 0.5) * 2.0, 1.0))).xyz;
+                    float near = ${uCameraNear};
+                    float far  = ${uCameraFar};
+                    float viewZ = (${uPerspective}
+                                   ? ((near * far) / ((far - near) * depth - far))
+                                   : (depth * (near - far) - near));
+                    float clipW = ${uProjectMatrix}[2][3] * viewZ + ${uProjectMatrix}[3][3];
+                    return (${uInvProjMatrix} * (clipW * vec4((vec3(screenPos, depth) - 0.5) * 2.0, 1.0))).xyz;
                 }
 
                 vec4 ${name}() {
-                        float centerDepth = texture(${uDepthTexture}, ${vUV}).r;
+                    float centerDepth = getDepth(${vUV});
+                    if (centerDepth >= (1.0 - EPSILON)) {
+                        discard;
+                    }
 
-                        if (centerDepth >= (1.0 - EPSILON)) {
-                                discard;
+                    vec3 centerViewPosition = getViewPos(${vUV}, centerDepth);
+                    float scaleDividedByCameraFar = ${uScale} / ${uCameraFar};
+                    float minResolutionMultipliedByCameraFar = ${uMinResolution} * ${uCameraFar};
+                    vec3 centerViewNormal = normalize(cross(dFdx(centerViewPosition), dFdy(centerViewPosition)));
+
+                    vec2 radiusStep = ${uKernelRadius} * ${uViewportInv} / float(NUM_SAMPLES);
+                    vec2 radius = radiusStep;
+                    const float angleStep = PI2 * float(NUM_RINGS) / float(NUM_SAMPLES);
+                    float angle = PI2 * rand(${vUV} + ${uRandomSeed});
+
+                    float occlusionSum = 0.0;
+                    float weightSum = 0.0;
+
+                    for (int i = 0; i < NUM_SAMPLES; i++) {
+                        vec2 sampleUv = ${vUV} + vec2(cos(angle), sin(angle)) * radius;
+                        radius += radiusStep;
+                        angle += angleStep;
+
+                        float sampleDepth = getDepth(sampleUv);
+                        if (sampleDepth >= (1.0 - EPSILON)) {
+                            continue;
                         }
 
-                        vec3 centerViewPosition = getViewPos(${vUV}, centerDepth);
-                        float scaleDividedByCameraFar = ${uScale} / ${uCameraFar};
-                        float minResolutionMultipliedByCameraFar = ${uMinResolution} * ${uCameraFar};
-                        vec3 centerViewNormal = normalize(cross(dFdx(centerViewPosition), dFdy(centerViewPosition)));
+                        vec3 sampleViewPosition = getViewPos(sampleUv, sampleDepth);
+                        vec3 viewDelta = sampleViewPosition - centerViewPosition;
+                        float scaledScreenDistance = scaleDividedByCameraFar * length(viewDelta);
+                        occlusionSum += max(0.0, (dot(centerViewNormal, viewDelta) - minResolutionMultipliedByCameraFar) / scaledScreenDistance - ${uBias}) / (1.0 + scaledScreenDistance * scaledScreenDistance );
+                        weightSum += 1.0;
+                    }
 
-                        vec2 radiusStep = ${uKernelRadius} / ${uViewport} / float(NUM_SAMPLES);
-                        vec2 radius = radiusStep;
-                        const float angleStep = PI2 * float(NUM_RINGS) / float(NUM_SAMPLES);
-                        float angle = PI2 * rand(${vUV} + ${uRandomSeed});
-
-                        float occlusionSum = 0.0;
-                        float weightSum = 0.0;
-
-                        for (int i = 0; i < NUM_SAMPLES; i++) {
-                                vec2 sampleUv = ${vUV} + vec2(cos(angle), sin(angle)) * radius;
-                                radius += radiusStep;
-                                angle += angleStep;
-
-                                float sampleDepth = texture(${uDepthTexture}, sampleUv).r;
-                                if (sampleDepth >= (1.0 - EPSILON)) {
-                                        continue;
-                                }
-
-                                vec3 sampleViewPosition = getViewPos(sampleUv, sampleDepth);
-                                vec3 viewDelta = sampleViewPosition - centerViewPosition;
-                                float scaledScreenDistance = scaleDividedByCameraFar * length(viewDelta);
-                                occlusionSum += max(0.0, (dot(centerViewNormal, viewDelta) - minResolutionMultipliedByCameraFar) / scaledScreenDistance - ${uBias}) / (1.0 + scaledScreenDistance * scaledScreenDistance );
-                                weightSum += 1.0;
-                        }
-
-                        float v = 1.0 - occlusionSum * ${uIntensity} / weightSum;
-                        // packFloatToRGBA
-                        vec4 r = vec4(fract(v * vec3(256. * 256. * 256., 256. * 256., 256.)), v);
-                        r.yzw -= r.xyz / 256.;
-                        return r * 256. / 255.;
+                    return packFloatToRGBA(1.0 - occlusionSum * ${uIntensity} / weightSum);
                 }`);
             });
 
@@ -129,24 +136,20 @@ export class SAOOcclusionRenderer {
             const indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, indices.length, 1, gl.STATIC_DRAW);
 
             this.destroy = program.destroy;
-            this.render = (viewportSize, sao, project, depthTexture) => {
+            this.render = (viewportSize, project, sao, depthTexture) => {
                 program.bind();
 
-                const far = project.far;
+                uViewportInv.setInputValue([1 / viewportSize[0], 1 / viewportSize[1]]);
                 uCameraNear.setInputValue(project.near);
-                uCameraFar.setInputValue(far);
-
+                uCameraFar.setInputValue(project.far);
                 uProjectMatrix.setInputValue(project.matrix);
-                uInverseProjectMatrix.setInputValue(project.inverseMatrix);
-
+                uInvProjMatrix.setInputValue(project.inverseMatrix);
                 uPerspective.setInputValue(project.type === "Perspective");
-
-                uScale.setInputValue(sao.scale * (far / 5));
+                uScale.setInputValue(sao.scale * project.far / 5);
                 uIntensity.setInputValue(sao.intensity);
                 uBias.setInputValue(sao.bias);
                 uKernelRadius.setInputValue(sao.kernelRadius);
                 uMinResolution.setInputValue(sao.minResolution);
-                uViewport.setInputValue(viewportSize);
                 uRandomSeed.setInputValue(Math.random());
 
                 uDepthTexture.setInputValue(depthTexture);
