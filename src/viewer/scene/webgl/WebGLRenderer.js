@@ -284,7 +284,6 @@ export const createProgramVariablesState = function() {
                     ]
                     : [ ]),
                 ...fragmentClippingLines,
-                ...cfg.fragmentOutputsSetup,
                 ...fragmentOutputs,
                 "}"
             ];

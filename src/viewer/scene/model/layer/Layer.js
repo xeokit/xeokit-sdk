@@ -161,7 +161,6 @@ export const getRenderers = (function() {
                                     })(),
                                     clippingCaps:                   programSetup.clippingCaps,
                                     discardPoints:                  setupPoints && pointsMaterial.roundPoints,
-                                    fragmentOutputsSetup:           [ ],
                                     getLogDepth:                    programSetup.getLogDepth,
                                     getPointSize:                   (function() {
                                         const addends = [ ];
