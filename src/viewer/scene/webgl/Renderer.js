@@ -83,7 +83,26 @@ const Renderer = function (scene, options) {
     const bindOutputFrameBuffer = null;
     const unbindOutputFrameBuffer = null;
 
-    const saoOcclusionRenderer = new SAOOcclusionRenderer(scene);
+    const saoOcclusionRenderer = (function() {
+        let gl = null;
+        let currentRenrerer = null;
+        let curNumSamples = null;
+        return {
+            setGL: _gl => { gl = _gl; },
+            destroy: () => currentRenrerer && currentRenrerer.destroy(),
+            render: (viewportSize, sao, project, depthTexture) => {
+                const numSamples = Math.floor(sao.numSamples);
+                if (curNumSamples !== numSamples) {
+                    currentRenrerer && currentRenrerer.destroy();
+                    currentRenrerer = new SAOOcclusionRenderer(gl, numSamples);
+                    curNumSamples = numSamples;
+                }
+                currentRenrerer.render(viewportSize, sao, project, depthTexture);
+            }
+        };
+    })();
+    saoOcclusionRenderer.setGL(gl);
+
     const saoDepthLimitedBlurRenderer = new SAODepthLimitedBlurRenderer();
     saoDepthLimitedBlurRenderer.init(gl);
 
@@ -161,7 +180,7 @@ const Renderer = function (scene, options) {
 
         // renderBufferManager.webglContextRestored(gl);
 
-        saoOcclusionRenderer.init();
+        saoOcclusionRenderer.setGL(gl);
         saoDepthLimitedBlurRenderer.init(gl);
 
         imageDirty = true;
@@ -406,7 +425,16 @@ const Renderer = function (scene, options) {
         occlusionRenderBuffer1.setSize(size);
         occlusionRenderBuffer1.bind();
         occlusionRenderBuffer1.clear();
-        saoOcclusionRenderer.render(depthTexture);
+
+        gl.viewport(0, 0, size[0], size[1]);
+        gl.clearColor(0, 0, 0, 1);
+        gl.disable(gl.DEPTH_TEST);
+        gl.disable(gl.BLEND);
+        gl.frontFace(gl.CCW);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        saoOcclusionRenderer.render(size, sao, scene.camera.project, depthTexture);
+
         occlusionRenderBuffer1.unbind();
 
         if (sao.blur) {

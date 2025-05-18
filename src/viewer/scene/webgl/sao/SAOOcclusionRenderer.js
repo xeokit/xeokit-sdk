@@ -2,81 +2,13 @@ import {createProgramVariablesState} from "../WebGLRenderer.js";
 import {ArrayBuf} from "./../ArrayBuf.js";
 import {math} from "../../math/math.js";
 
-const tempVec2 = math.vec2();
-
 /**
  * SAO implementation inspired from previous SAO work in THREE.js by ludobaka / ludobaka.github.io and bhouston
  * @private
  */
 export class SAOOcclusionRenderer {
 
-    constructor(scene) {
-        this._scene = scene;
-        this._numSamples = null;
-        this._program = null;
-        this._programError = false;
-        this.init();
-    }
-
-    init() {
-        this._rebuild = true;
-    }
-
-    render(depthTexture) {
-
-        this._build();
-
-        if (this._programError) {
-            return;
-        }
-
-        const gl = this._scene.canvas.gl;
-        const viewportWidth = gl.drawingBufferWidth;
-        const viewportHeight = gl.drawingBufferHeight;
-
-        gl.viewport(0, 0, viewportWidth, viewportHeight);
-        gl.clearColor(0, 0, 0, 1);
-        gl.disable(gl.DEPTH_TEST);
-        gl.disable(gl.BLEND);
-        gl.frontFace(gl.CCW);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-
-        tempVec2[0] = viewportWidth;
-        tempVec2[1] = viewportHeight;
-        this._program.draw(depthTexture, tempVec2);
-    }
-
-    _build() {
-
-        let dirty = false;
-
-        const scene = this._scene;
-        const sao = scene.sao;
-
-        if (sao.numSamples !== this._numSamples) {
-            this._numSamples = Math.floor(sao.numSamples);
-            dirty = true;
-        }
-
-        if (! (dirty || this._rebuild)) {
-            return;
-        }
-
-        this._rebuild = false;
-
-        const gl = scene.canvas.gl;
-
-        if (this._program) {
-            this._program.destroy();
-            this._program = null;
-        }
-        if (this._numSamples <= 0) {
-            this._program = {
-                destroy: () => { },
-                draw: () => { }
-            };
-            return;
-        }
+    constructor(gl, numSamples) {
 
         const programVariablesState = createProgramVariablesState();
 
@@ -107,7 +39,7 @@ export class SAOOcclusionRenderer {
                 #define PI 3.14159265359
                 #define PI2 6.28318530718
                 #define EPSILON 1e-6
-                #define NUM_SAMPLES ${this._numSamples}
+                #define NUM_SAMPLES ${numSamples}
                 #define NUM_RINGS 4
 
                 highp float rand(const in vec2 uv) {
@@ -181,7 +113,7 @@ export class SAOOcclusionRenderer {
 
         if (errors) {
             console.error(errors.join("\n"));
-            this._programError = true;
+            throw errors;
         } else {
             const uvs = new Float32Array([1,1, 0,1, 0,0, 1,0]);
             const uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, uvs, uvs.length, 2, gl.STATIC_DRAW);
@@ -196,44 +128,34 @@ export class SAOOcclusionRenderer {
             const indices = new Uint32Array([0, 1, 2, 0, 2, 3]);
             const indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, indices.length, 1, gl.STATIC_DRAW);
 
-            this._program = {
-                destroy: program.destroy,
-                draw: (depthTexture, viewportSize) => {
-                    program.bind();
+            this.destroy = program.destroy;
+            this.render = (viewportSize, sao, project, depthTexture) => {
+                program.bind();
 
-                    const project = scene.camera.project;
-                    const far = project.far;
-                    uCameraNear.setInputValue(project.near);
-                    uCameraFar.setInputValue(far);
+                const far = project.far;
+                uCameraNear.setInputValue(project.near);
+                uCameraFar.setInputValue(far);
 
-                    uProjectMatrix.setInputValue(project.matrix);
-                    uInverseProjectMatrix.setInputValue(project.inverseMatrix);
+                uProjectMatrix.setInputValue(project.matrix);
+                uInverseProjectMatrix.setInputValue(project.inverseMatrix);
 
-                    uPerspective.setInputValue(scene.camera.projection === "perspective");
+                uPerspective.setInputValue(project.type === "Perspective");
 
-                    uScale.setInputValue(sao.scale * (far / 5));
-                    uIntensity.setInputValue(sao.intensity);
-                    uBias.setInputValue(sao.bias);
-                    uKernelRadius.setInputValue(sao.kernelRadius);
-                    uMinResolution.setInputValue(sao.minResolution);
-                    uViewport.setInputValue(viewportSize);
-                    uRandomSeed.setInputValue(Math.random());
+                uScale.setInputValue(sao.scale * (far / 5));
+                uIntensity.setInputValue(sao.intensity);
+                uBias.setInputValue(sao.bias);
+                uKernelRadius.setInputValue(sao.kernelRadius);
+                uMinResolution.setInputValue(sao.minResolution);
+                uViewport.setInputValue(viewportSize);
+                uRandomSeed.setInputValue(Math.random());
 
-                    uDepthTexture.setInputValue(depthTexture);
+                uDepthTexture.setInputValue(depthTexture);
 
-                    uv.setInputValue(uvBufBinder);
+                uv.setInputValue(uvBufBinder);
 
-                    indicesBuf.bind();
-                    gl.drawElements(gl.TRIANGLES, indicesBuf.numItems, indicesBuf.itemType, 0);
-                }
+                indicesBuf.bind();
+                gl.drawElements(gl.TRIANGLES, indicesBuf.numItems, indicesBuf.itemType, 0);
             };
-        }
-    }
-
-    destroy() {
-        if (this._program) {
-            this._program.destroy();
-            this._program = null;
         }
     }
 }
