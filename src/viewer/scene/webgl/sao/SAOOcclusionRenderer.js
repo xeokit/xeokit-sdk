@@ -113,11 +113,8 @@ export class SAOOcclusionRenderer {
         const uViewport             = programVariables.createUniform("vec2",      "uViewport");
         const uRandomSeed           = programVariables.createUniform("float",     "uRandomSeed");
 
-        const position = programVariables.createAttribute("vec3", "position");
         const uv       = programVariables.createAttribute("vec2", "uv");
-
         const vUV      = programVariables.createVarying("vec2", "vUV", () => uv);
-
         const outColor = programVariables.createOutput("vec4", "outColor");
 
         const getOutColor = programVariables.createFragmentDefinition(
@@ -199,24 +196,21 @@ export class SAOOcclusionRenderer {
                 appendFragmentOutputs: (src) => src.push(`${outColor} = ${getOutColor}();`),
                 fragmentOutputsSetup: [ ],
                 getVertexData: () => [ ],
-                clipPos: `vec4(${position}, 1.0)`
+                clipPos: `vec4(2.0 * ${uv} - 1.0, 0.0, 1.0)`
             });
 
         if (errors) {
             console.error(errors.join("\n"));
             this._programError = true;
         } else {
-            const binder = (arr, size) => {
-                const b = new ArrayBuf(gl, gl.ARRAY_BUFFER, arr, arr.length, size, gl.STATIC_DRAW);
-                return {
-                    bindAtLocation: location => { // see ArrayBuf.js and Attribute.js
-                        b.bind();
-                        this._scene.canvas.gl.vertexAttribPointer(location, b.itemSize, b.itemType, b.normalized, 0, 0);
-                    }
-                };
+            const uvs = new Float32Array([1,1, 0,1, 0,0, 1,0]);
+            const uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, uvs, uvs.length, 2, gl.STATIC_DRAW);
+            const uvBufBinder = {
+                bindAtLocation: location => { // see ArrayBuf.js and Attribute.js
+                    uvBuf.bind();
+                    gl.vertexAttribPointer(location, uvBuf.itemSize, uvBuf.itemType, uvBuf.normalized, 0, 0);
+                }
             };
-            const positionsBuf = binder(new Float32Array([1, 1, 0,  -1, 1, 0,  -1, -1, 0,  1, -1, 0]), 3);
-            const uvBuf        = binder(new Float32Array([  1, 1,      0, 1,      0, 0,      1, 0]),   2);
 
             // Mitigation: if Uint8Array is used, the geometry is corrupted on OSX when using Chrome with data-textures
             const indices = new Uint32Array([0, 1, 2, 0, 2, 3]);
@@ -247,8 +241,7 @@ export class SAOOcclusionRenderer {
 
                     uDepthTexture.setInputValue(depthTexture);
 
-                    uv.setInputValue(uvBuf);
-                    position.setInputValue(positionsBuf);
+                    uv.setInputValue(uvBufBinder);
 
                     indicesBuf.bind();
                     gl.drawElements(gl.TRIANGLES, indicesBuf.numItems, indicesBuf.itemType, 0);
