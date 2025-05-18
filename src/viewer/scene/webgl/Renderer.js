@@ -90,14 +90,14 @@ const Renderer = function (scene, options) {
         return {
             setGL: _gl => { gl = _gl; },
             destroy: () => currentRenrerer && currentRenrerer.destroy(),
-            render: (viewportSize, sao, project, depthTexture) => {
+            render: (viewportSize, project, sao, depthTexture) => {
                 const numSamples = Math.floor(sao.numSamples);
                 if (curNumSamples !== numSamples) {
                     currentRenrerer && currentRenrerer.destroy();
                     currentRenrerer = new SAOOcclusionRenderer(gl, numSamples);
                     curNumSamples = numSamples;
                 }
-                currentRenrerer.render(viewportSize, sao, project, depthTexture);
+                currentRenrerer.render(viewportSize, project, sao, depthTexture);
             }
         };
     })();
@@ -433,7 +433,7 @@ const Renderer = function (scene, options) {
         gl.frontFace(gl.CCW);
         gl.clear(gl.COLOR_BUFFER_BIT);
 
-        saoOcclusionRenderer.render(size, sao, scene.camera.project, depthTexture);
+        saoOcclusionRenderer.render(size, scene.camera.project, sao, depthTexture);
 
         occlusionRenderBuffer1.unbind();
 
@@ -453,7 +453,7 @@ const Renderer = function (scene, options) {
                 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
                 const project = scene.camera.project;
-                saoDepthLimitedBlurRenderer.render(size, project.near, project.far, direction, depthTexture, src.colorTextures[0]);
+                saoDepthLimitedBlurRenderer.render(size, project, direction, depthTexture, src.colorTextures[0]);
 
                 dst.unbind();
             };
