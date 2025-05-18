@@ -2285,12 +2285,14 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         gl,
         programSetup.programName,
         {
-            appendFragmentOutputs:          programSetup.appendFragmentOutputs,
+            appendFragmentOutputs:          (src, getGammaOutputExpression, gl_FragCoord, sliceColorOr) => {
+                fragmentOutputsSetup.forEach(line => src.push(line));
+                programSetup.appendFragmentOutputs(src, getGammaOutputExpression, gl_FragCoord, sliceColorOr);
+            },
             clippableTest:                  () => clippable,
             clippingCaps:                   programSetup.clippingCaps,
             clipPos:                        meshStateBackground ? `${clipPos}.xyww` : clipPos,
             discardPoints:                  isPoints && programSetup.discardPoints,
-            fragmentOutputsSetup:           fragmentOutputsSetup,
             getLogDepth:                    (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getPointSize:                   programSetup.setupPointSize && isPoints && (() => pointSize),
             getVertexData:                  getVertexData,
