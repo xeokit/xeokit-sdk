@@ -82,22 +82,24 @@ export class SAODepthLimitedBlurRenderer {
                         float sampleWeight = ${uSampleWeights}[i];
                         vec2 sampleUVOffset = ${uSampleOffsets}[i] * ${uViewportInv};
 
-                        vec2 rSampleUV = ${vUV} + sampleUVOffset;
-                        if (abs(centerViewZ - getViewZ(texture(${uDepthTexture}, rSampleUV).r)) > ${uDepthCutoff}) {
-                            rBreak = true;
-                        }
                         if (! rBreak) {
-                            occlusionSum += getOcclusion(rSampleUV) * sampleWeight;
-                            weightSum += sampleWeight;
+                            vec2 rSampleUV = ${vUV} + sampleUVOffset;
+                            if (abs(centerViewZ - getViewZ(texture(${uDepthTexture}, rSampleUV).r)) > ${uDepthCutoff}) {
+                                rBreak = true;
+                            } else {
+                                occlusionSum += getOcclusion(rSampleUV) * sampleWeight;
+                                weightSum += sampleWeight;
+                            }
                         }
 
-                        vec2 lSampleUV = ${vUV} - sampleUVOffset;
-                        if (abs(centerViewZ - getViewZ(texture(${uDepthTexture}, lSampleUV).r)) > ${uDepthCutoff}) {
-                            lBreak = true;
-                        }
                         if (! lBreak) {
-                            occlusionSum += getOcclusion(lSampleUV) * sampleWeight;
-                            weightSum += sampleWeight;
+                            vec2 lSampleUV = ${vUV} - sampleUVOffset;
+                            if (abs(centerViewZ - getViewZ(texture(${uDepthTexture}, lSampleUV).r)) > ${uDepthCutoff}) {
+                                lBreak = true;
+                            } else {
+                                occlusionSum += getOcclusion(lSampleUV) * sampleWeight;
+                                weightSum += sampleWeight;
+                            }
                         }
                     }
 
