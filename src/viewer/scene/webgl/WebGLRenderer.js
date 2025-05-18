@@ -239,7 +239,7 @@ export const createProgramVariablesState = function() {
                                   : (color => color));
 
             const gammaFactor = programVariables.createUniform("float", "gammaFactor", (set) => set(scene.gammaFactor));
-            cfg.appendFragmentOutputs(fragmentOutputs, scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord", sliceColorOr);
+            cfg.appendFragmentOutputs(fragmentOutputs, scene && scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord", sliceColorOr);
 
             const fragmentClippingLines = (function() {
                 const src = [ ];
@@ -294,7 +294,7 @@ export const createProgramVariablesState = function() {
                 ...(function() { const src = [ ]; vOutAppenders.forEach(a => a(src)); return src; })()
             ];
 
-            const vertexData = cfg.getVertexData();
+            const vertexData = cfg.getVertexData ? cfg.getVertexData() : [ ];
 
             const vertexShader = [
                 ...(function() { const src = [ ]; vertAppenders.forEach(a => a(src)); return src; })(),
