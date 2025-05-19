@@ -2292,6 +2292,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
             clippableTest:                  () => clippable,
             clippingCaps:                   programSetup.clippingCaps,
             clipPos:                        meshStateBackground ? `${clipPos}.xyww` : clipPos,
+            crossSections:                  scene.crossSections,
             discardPoints:                  isPoints && programSetup.discardPoints,
             getLogDepth:                    (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getPointSize:                   programSetup.setupPointSize && isPoints && (() => pointSize),
