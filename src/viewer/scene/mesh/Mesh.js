@@ -2396,12 +2396,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
                 const setAttributes = (triangleGeometry) => {
                     const setAttr = (a, b) => {
                         if (a && a.setInputValue && b) {
-                            a.setInputValue({
-                                bindAtLocation: location => { // see ArrayBuf.js and Attribute.js
-                                    b.bind();
-                                    gl.vertexAttribPointer(location, b.itemSize, b.itemType, b.normalized, 0, 0);
-                                }
-                            });
+                            a.setInputValue(b);
                             frameCtx.bindArray++;
                         }
                     };
