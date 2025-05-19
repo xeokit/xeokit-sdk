@@ -26,17 +26,11 @@ export class OcclusionTester {
 
         this._markersToOcclusionLayersMap = {};
 
-        this._onCameraViewMatrix = scene.camera.on("viewMatrix", () => {
-            this._occlusionTestListDirty = true;
-        });
-
-        this._onCameraProjMatrix = scene.camera.on("projMatrix", () => {
-            this._occlusionTestListDirty = true;
-        });
-
-        this._onCanvasBoundary = scene.canvas.on("boundary", () => {
-            this._occlusionTestListDirty = true;
-        });
+        const camera = scene.camera;
+        const markOcclusionTestListDirty = () => { this._occlusionTestListDirty = true; };
+        this._onCameraViewMatrix = camera.on("viewMatrix",   markOcclusionTestListDirty);
+        this._onCameraProjMatrix = camera.on("projMatrix",   markOcclusionTestListDirty);
+        this._onCanvasBoundary = scene.canvas.on("boundary", markOcclusionTestListDirty);
     }
 
     _addMarker(marker, originHash) {
@@ -114,8 +108,10 @@ export class OcclusionTester {
     drawMarkers() {
 
         const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const shaderSourceHash = [this._scene.canvas.canvas.id, this._scene._sectionPlanesState.getHash()].join(";");
+        const canvas = scene.canvas;
+        const gl = canvas.gl;
+        const sectionPlanesState = scene._sectionPlanesState;
+        const shaderSourceHash = [canvas.canvas.id, sectionPlanesState.getHash()].join(";");
 
         if ((! this._drawable) || (shaderSourceHash !== this._drawable.shaderSourceHash)) {
             if (this._drawable) {
@@ -135,7 +131,7 @@ export class OcclusionTester {
                 gl,
                 "OcclusionTester",
                 {
-                    sectionPlanesState: scene._sectionPlanesState,
+                    sectionPlanesState: sectionPlanesState,
                     getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
                     clippableTest: () => "true",
                     getVertexData: () => {
@@ -163,13 +159,12 @@ export class OcclusionTester {
                     destroy: () => program.destroy(),
                     drawCall: () => {
                         const camera = scene.camera;
-                        const project = scene.camera.project;
+                        const project = camera.project;
 
                         program.bind();
 
-                        projMatrix.setInputValue(camera._project._state.matrix);
+                        projMatrix.setInputValue(project.matrix);
 
-                        const canvas = scene.canvas;
                         const boundary = canvas.boundary;
                         const canvasWidth = boundary[2];
                         const canvasHeight = boundary[3];
@@ -185,7 +180,7 @@ export class OcclusionTester {
                         this._occlusionLayersList.forEach(occlusionLayer => {
                             occlusionLayer.update(gl, markerInView);
 
-                            const culled = scene._sectionPlanesState.sectionPlanes.some((sectionPlane, i) => {
+                            const culled = sectionPlanesState.sectionPlanes.some((sectionPlane, i) => {
                                 const intersect = sectionPlane.active ? math.planeAABB3Intersect(sectionPlane.dir, sectionPlane.dist, occlusionLayer.aabb) : 1;
                                 const outside = (intersect === -1);
                                 occlusionLayer.sectionPlanesActive[i] = (intersect === 0); // if outside, then sectionPlanesActive won't be even tested
