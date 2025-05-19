@@ -6,9 +6,7 @@ import {ArrayBuf} from "../ArrayBuf.js";
  */
 class OcclusionLayer {
 
-    constructor(scene, origin) {
-
-        this.scene = scene;
+    constructor(origin) {
         this.aabb = math.AABB3();
         this.origin = math.vec3(origin);
         this.originHash = this.origin.join();
@@ -53,7 +51,7 @@ class OcclusionLayer {
         this.numMarkers--;
     }
 
-    update(markerInView) {
+    update(gl, markerInView) {
         if (this.markerListDirty) {
             this.numMarkers = 0;
             for (var id in this.markers) {
@@ -107,7 +105,6 @@ class OcclusionLayer {
             if (this.positionsBuf) {
                 this.positionsBuf.setData(positionsArr); // Just updating buffer elements, don't need to reallocate; Indices don't need updating
             } else {
-                const gl = this.scene.canvas.gl;
                 this.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positionsArr, positionsArr.length, 3, gl.STATIC_DRAW);
                 this.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.indices), this.indices.length, 1, gl.STATIC_DRAW);
                 this.lenPositionsBuf = this.positions.length;
