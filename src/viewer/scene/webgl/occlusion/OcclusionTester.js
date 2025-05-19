@@ -169,8 +169,21 @@ export class OcclusionTester {
 
                         projMatrix.setInputValue(camera._project._state.matrix);
 
+                        const canvas = scene.canvas;
+                        const boundary = canvas.boundary;
+                        const canvasWidth = boundary[2];
+                        const canvasHeight = boundary[3];
+                        const near = camera.perspective.near; // Assume near enough to ortho near
+                        const markerInView = marker => {
+                            const viewPos = marker.viewPos;
+                            const canvasPos = marker.canvasPos;
+                            const canvasX = canvasPos[0];
+                            const canvasY = canvasPos[1];
+                            return (viewPos[2] <= -near) && (canvasX >= -10) && (canvasY >= -10) && (canvasX <= canvasWidth + 10) && (canvasY <= canvasHeight + 10);
+                        };
+
                         this._occlusionLayersList.forEach(occlusionLayer => {
-                            if (! occlusionLayer.updateReturnCulledBySectionPlanes()) {
+                            if (! occlusionLayer.updateReturnCulledBySectionPlanes(markerInView)) {
                                 const origin = occlusionLayer.origin;
 
                                 viewMatrix.setInputValue(createRTCViewMat(camera.viewMatrix, origin));
