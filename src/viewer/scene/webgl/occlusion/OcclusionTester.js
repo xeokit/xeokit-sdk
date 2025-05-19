@@ -183,7 +183,16 @@ export class OcclusionTester {
                         };
 
                         this._occlusionLayersList.forEach(occlusionLayer => {
-                            if (! occlusionLayer.updateReturnCulledBySectionPlanes(markerInView)) {
+                            occlusionLayer.update(markerInView);
+
+                            const culled = scene._sectionPlanesState.sectionPlanes.some((sectionPlane, i) => {
+                                const intersect = sectionPlane.active ? math.planeAABB3Intersect(sectionPlane.dir, sectionPlane.dist, occlusionLayer.aabb) : 1;
+                                const outside = (intersect === -1);
+                                occlusionLayer.sectionPlanesActive[i] = (intersect === 0); // if outside, then sectionPlanesActive won't be even tested
+                                return outside;
+                            });
+
+                            if (! culled) {
                                 const origin = occlusionLayer.origin;
 
                                 viewMatrix.setInputValue(createRTCViewMat(camera.viewMatrix, origin));
