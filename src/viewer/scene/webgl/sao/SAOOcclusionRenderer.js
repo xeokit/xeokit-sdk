@@ -113,7 +113,6 @@ export class SAOOcclusionRenderer {
             gl,
             "SAOOcclusionRenderer",
             {
-                ignoreSectionPlanes: true,
                 clipPos: `vec4(2.0 * ${uv} - 1.0, 0.0, 1.0)`,
                 appendFragmentOutputs: (src) => src.push(`${outColor} = ${getOutColor}();`)
             });
