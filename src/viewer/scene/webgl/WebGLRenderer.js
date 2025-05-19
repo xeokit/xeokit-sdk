@@ -1,5 +1,3 @@
-import {getPlaneRTCPos} from "../math/rtcCoords.js";
-
 import {Map} from "../utils/Map.js";
 const ids = new Map({});
 
@@ -219,9 +217,11 @@ export const createProgramVariablesState = function() {
                     return {
                         act: sectionPlaneUniform("bool", "Active", (set, active) => set(active ? 1 : 0)),
                         dir: sectionPlaneUniform("vec3", "Dir",    (set, active, plane) => active && set(plane.dir)),
-                        pos: sectionPlaneUniform("vec3", "Pos",    (set, active, plane, orig) => active && set(orig
-                                                                                                               ? getPlaneRTCPos(plane.dist, plane.dir, orig, tempVec3a)
-                                                                                                               : plane.pos))
+                        pos: sectionPlaneUniform("vec3", "Pos",    (set, active, plane, orig) => {
+                            return active && set(orig
+                                                 ? math.mulVec3Scalar(math.normalizeVec3(plane.dir, tempVec3a), -(math.dotVec3(plane.dir, orig) + plane.dist), tempVec3a) // getPlaneRTCPos
+                                                 : plane.pos);
+                        })
                     };
                 });
                 return (allocatedUniforms.length > 0) && ((worldPosition) => allocatedUniforms.map(a => `(${a.act} ? clamp(dot(-${a.dir}, ${worldPosition} - ${a.pos}), 0.0, 1000.0) : 0.0)`).join(" + "));
