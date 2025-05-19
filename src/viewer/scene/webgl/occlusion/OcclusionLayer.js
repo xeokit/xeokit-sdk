@@ -148,26 +148,12 @@ class OcclusionLayer {
             }
         }
 
-        const sectionPlanes = this.scene._sectionPlanesState.sectionPlanes;
-        const numSectionPlanes = sectionPlanes.length;
-        if (numSectionPlanes > 0) {
-            for (let i = 0; i < numSectionPlanes; i++) {
-                const sectionPlane = sectionPlanes[i];
-                if (!sectionPlane.active) {
-                    this.sectionPlanesActive[i] = false;
-                } else {
-                    const intersect = math.planeAABB3Intersect(sectionPlane.dir, sectionPlane.dist, this.aabb);
-                    const outside = (intersect === -1);
-                    if (outside) {
-                        return true;
-                    }
-                    const intersecting = (intersect === 0);
-                    this.sectionPlanesActive[i] = intersecting;
-                }
-            }
-        }
-
-        return false;
+        return this.scene._sectionPlanesState.sectionPlanes.some((sectionPlane, i) => {
+            const intersect = sectionPlane.active ? math.planeAABB3Intersect(sectionPlane.dir, sectionPlane.dist, this.aabb) : 1;
+            const outside = (intersect === -1);
+            this.sectionPlanesActive[i] = (intersect === 0); // if outside, then sectionPlanesActive won't be even tested
+            return outside;
+        });
     }
 
     destroy() {
