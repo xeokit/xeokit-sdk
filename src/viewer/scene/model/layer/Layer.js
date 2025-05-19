@@ -234,6 +234,7 @@ export const getRenderers = (function() {
                                     },
                                     projMatrix:                     geometryParameters.projMatrix,
                                     scene:                          scene,
+                                    sectionPlanesState:             scene._sectionPlanesState,
                                     testPerspectiveForGl_FragDepth: ((primitive !== "points") && (primitive !== "lines")) || subGeometry,
                                     usePickClipPos:                 usePickClipPos,
                                     worldPositionAttribute:         worldPositionAttribute
