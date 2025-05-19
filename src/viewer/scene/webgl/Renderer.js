@@ -31,7 +31,7 @@ const Renderer = function (scene, options) {
 
     options = options || {};
 
-    const frameCtx = new FrameContext(scene);
+    const frameCtx = new FrameContext();
     const canvas = scene.canvas.canvas;
     /**
      * @type {WebGL2RenderingContext}
