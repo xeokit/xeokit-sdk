@@ -2298,6 +2298,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
             getVertexData:                  getVertexData,
             projMatrix:                     projMatrix,
             scene:                          scene,
+            sectionPlanesState:             scene._sectionPlanesState,
             testPerspectiveForGl_FragDepth: true,
             usePickClipPos:                 programSetup.isPick,
             worldPositionAttribute:         "worldPosition"

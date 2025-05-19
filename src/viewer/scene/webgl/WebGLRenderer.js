@@ -202,8 +202,8 @@ export const createProgramVariablesState = function() {
                     src.push("}");
                 });
 
-            const getClippingDistance = (! cfg.ignoreSectionPlanes) && (function() {
-                const sectionPlanesState = scene._sectionPlanesState;
+            const sectionPlanesState = cfg.sectionPlanesState;
+            const getClippingDistance = sectionPlanesState && (function() {
                 const allocatedUniforms = iota(sectionPlanesState.getNumAllocatedSectionPlanes()).map(i => {
                     const sectionPlaneUniform = (type, postfix, getValue) => {
                         return programVariables.createUniform(type, `sectionPlane${postfix}${i}`, (set, state) => {
