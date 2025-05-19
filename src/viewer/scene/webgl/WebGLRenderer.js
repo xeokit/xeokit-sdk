@@ -227,9 +227,10 @@ export const createProgramVariablesState = function() {
                 return (allocatedUniforms.length > 0) && ((worldPosition) => allocatedUniforms.map(a => `(${a.act} ? clamp(dot(-${a.dir}, ${worldPosition} - ${a.pos}), 0.0, 1000.0) : 0.0)`).join(" + "));
             })();
 
+            const crossSections = cfg.crossSections;
             const sliceColorOr = (getClippingDistance
                                   ? (function() {
-                                      const sliceColor = programVariables.createUniform("vec4", "sliceColor", (set) => set(scene.crossSections.sliceColor));
+                                      const sliceColor = programVariables.createUniform("vec4", "sliceColor", (set) => set(crossSections.sliceColor));
                                       const sliceColorOr = color => {
                                           sliceColorOr.needed = true;
                                           return `(sliced ? ${sliceColor} : ${color})`;
@@ -243,7 +244,7 @@ export const createProgramVariablesState = function() {
 
             const fragmentClippingLines = (function() {
                 const src = [ ];
-                const sliceThickness = programVariables.createUniform("float", "sliceThickness", (set) => set(scene.crossSections.sliceThickness));
+                const sliceThickness = programVariables.createUniform("float", "sliceThickness", (set) => set(crossSections.sliceThickness));
 
                 if (getClippingDistance) {
                     if (sliceColorOr.needed) {
