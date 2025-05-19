@@ -160,6 +160,7 @@ export const getRenderers = (function() {
                                         return () => `${vClippable} > 0.0`;
                                     })(),
                                     clippingCaps:                   programSetup.clippingCaps,
+                                    crossSections:                  scene.crossSections,
                                     discardPoints:                  setupPoints && pointsMaterial.roundPoints,
                                     getLogDepth:                    programSetup.getLogDepth,
                                     getPointSize:                   (function() {
