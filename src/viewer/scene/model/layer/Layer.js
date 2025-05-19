@@ -162,6 +162,7 @@ export const getRenderers = (function() {
                                     clippingCaps:                   programSetup.clippingCaps,
                                     crossSections:                  scene.crossSections,
                                     discardPoints:                  setupPoints && pointsMaterial.roundPoints,
+                                    getGammaFactor:                 scene.gammaOutput && (() => scene.gammaFactor),
                                     getLogDepth:                    programSetup.getLogDepth,
                                     getPointSize:                   (function() {
                                         const addends = [ ];
@@ -234,7 +235,6 @@ export const getRenderers = (function() {
                                         return vertexData;
                                     },
                                     projMatrix:                     geometryParameters.projMatrix,
-                                    scene:                          scene,
                                     sectionPlanesState:             scene._sectionPlanesState,
                                     testPerspectiveForGl_FragDepth: ((primitive !== "points") && (primitive !== "lines")) || subGeometry,
                                     usePickClipPos:                 usePickClipPos,
