@@ -185,7 +185,7 @@ class OcclusionTester {
                                         }
                                     });
 
-                                position.setInputValue(occlusionLayer.positionsBufBinder);
+                                position.setInputValue(occlusionLayer.positionsBuf);
 
                                 const indicesBuf = occlusionLayer.indicesBuf;
                                 indicesBuf.bind();
