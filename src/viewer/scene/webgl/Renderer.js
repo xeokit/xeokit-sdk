@@ -1603,7 +1603,7 @@ const Renderer = function (scene, options) {
             this._occlusionTester.drawMarkers();
 
             if (readPixelBuf) {
-                this._occlusionTester.doOcclusionTest(readPixelBuf); // Updates Marker "visible" properties
+                this._occlusionTester.doOcclusionTest(readPixelBuf, scene.canvas.resolutionScale); // Updates Marker "visible" properties
                 readPixelBuf.unbind();
             }
         }
