@@ -235,12 +235,11 @@ export class OcclusionTester {
     /**
      * Sets visibilities of {@link Marker}s according to whether or not they are obscured by anything in the render buffer.
      */
-    doOcclusionTest(readPixelBuf, resolutionScale) {
+    doOcclusionTest(readColorPixel) {
         this._occlusionLayersList.forEach(occlusionLayer => {
             for (let i = 0; i < occlusionLayer.lenOcclusionTestList; i++) {
                 const j = i * 2;
-                const color = readPixelBuf.read(Math.round(resolutionScale * occlusionLayer.pixels[j]),
-                                                Math.round(resolutionScale * occlusionLayer.pixels[j + 1]));
+                const color = readColorPixel(occlusionLayer.pixels[j], occlusionLayer.pixels[j + 1]);
                 occlusionLayer.occlusionTestList[i]._setVisible(math.compareVec3(MARKER_COLOR, color));
             }
         });
