@@ -11,14 +11,7 @@ import {createRTCViewMat} from "../math/rtcCoords.js";
 class FrameContext {
 
     constructor(scene) {
-
-        this._scene = scene;
-
         this._matPool = [];
-        this._matPoolNextFreeIndex = 0;
-
-        this._rtcViewMats = {};
-
         this.reset();
     }
 
@@ -30,12 +23,6 @@ class FrameContext {
 
         this._matPoolNextFreeIndex = 0;
         this._rtcViewMats = {};
-
-        /**
-         * The WebGL rendering context.
-         * @type {WebGLRenderingContext}
-         */
-        this.gl = this._scene.canvas.gl;
 
         /**
          * ID of the last {@link WebGLProgram} that was bound during the current frame.
