@@ -39,20 +39,34 @@ class OcclusionTester {
         });
     }
 
+    _addMarker(marker, originHash) {
+        if (! this._occlusionLayers[originHash]) {
+            this._occlusionLayers[originHash] = new OcclusionLayer(this._scene, marker.origin);
+            this._occlusionLayersListDirty = true;
+        }
+        const occlusionLayer = this._occlusionLayers[originHash];
+        occlusionLayer.addMarker(marker);
+        this._markersToOcclusionLayersMap[marker.id] = occlusionLayer;
+    }
+
+    _removeMarker(occlusionLayer, marker) {
+        if (occlusionLayer.numMarkers === 1) {
+            occlusionLayer.destroy();
+            delete this._occlusionLayers[occlusionLayer.originHash];
+            this._occlusionLayersListDirty = true;
+        } else {
+            occlusionLayer.removeMarker(marker);
+        }
+        delete this._markersToOcclusionLayersMap[marker.id];
+    }
+
     /**
      * Adds a Marker for occlusion testing.
      * @param marker
      */
     addMarker(marker) {
         const originHash = marker.origin.join();
-        let occlusionLayer = this._occlusionLayers[originHash];
-        if (!occlusionLayer) {
-            occlusionLayer = new OcclusionLayer(this._scene, marker.origin);
-            this._occlusionLayers[occlusionLayer.originHash] = occlusionLayer;
-            this._occlusionLayersListDirty = true;
-        }
-        occlusionLayer.addMarker(marker);
-        this._markersToOcclusionLayersMap[marker.id] = occlusionLayer;
+        this._addMarker(marker, originHash);
         this._occlusionTestListDirty = true;
     }
 
@@ -62,28 +76,14 @@ class OcclusionTester {
      */
     markerWorldPosUpdated(marker) {
         const occlusionLayer = this._markersToOcclusionLayersMap[marker.id];
-        if (!occlusionLayer) {
-            return;
-        }
-        const originHash = marker.origin.join();
-        if (originHash !== occlusionLayer.originHash) {
-            if (occlusionLayer.numMarkers === 1) {
-                occlusionLayer.destroy();
-                delete this._occlusionLayers[occlusionLayer.originHash];
-                this._occlusionLayersListDirty = true;
+        if (occlusionLayer) {
+            const originHash = marker.origin.join();
+            if (originHash !== occlusionLayer.originHash) {
+                this._removeMarker(occlusionLayer, marker);
+                this._addMarker(marker, originHash);
             } else {
-                occlusionLayer.removeMarker(marker);
+                occlusionLayer.markerWorldPosUpdated(marker);
             }
-            let newOcclusionLayer = this._occlusionLayers[originHash];
-            if (!newOcclusionLayer) {
-                newOcclusionLayer = new OcclusionLayer(this._scene, marker.origin);
-                this._occlusionLayers[originHash] = newOcclusionLayer;
-                this._occlusionLayersListDirty = true;
-            }
-            newOcclusionLayer.addMarker(marker);
-            this._markersToOcclusionLayersMap[marker.id] = newOcclusionLayer;
-        } else {
-            occlusionLayer.markerWorldPosUpdated(marker);
         }
     }
 
@@ -93,18 +93,10 @@ class OcclusionTester {
      */
     removeMarker(marker) {
         const originHash = marker.origin.join();
-        let occlusionLayer = this._occlusionLayers[originHash];
-        if (!occlusionLayer) {
-            return;
+        const occlusionLayer = this._occlusionLayers[originHash];
+        if (occlusionLayer) {
+            this._removeMarker(occlusionLayer, marker);
         }
-        if (occlusionLayer.numMarkers === 1) {
-            occlusionLayer.destroy();
-            delete this._occlusionLayers[occlusionLayer.originHash];
-            this._occlusionLayersListDirty = true;
-        } else {
-            occlusionLayer.removeMarker(marker);
-        }
-        delete this._markersToOcclusionLayersMap[marker.id];
     }
 
     /**
