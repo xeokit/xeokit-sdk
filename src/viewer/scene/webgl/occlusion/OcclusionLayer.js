@@ -53,7 +53,7 @@ class OcclusionLayer {
         this.numMarkers--;
     }
 
-    updateReturnCulledBySectionPlanes(markerInView) {
+    update(markerInView) {
         if (this.markerListDirty) {
             this.numMarkers = 0;
             for (var id in this.markers) {
@@ -130,13 +130,6 @@ class OcclusionLayer {
                 }
             }
         }
-
-        return this.scene._sectionPlanesState.sectionPlanes.some((sectionPlane, i) => {
-            const intersect = sectionPlane.active ? math.planeAABB3Intersect(sectionPlane.dir, sectionPlane.dist, this.aabb) : 1;
-            const outside = (intersect === -1);
-            this.sectionPlanesActive[i] = (intersect === 0); // if outside, then sectionPlanesActive won't be even tested
-            return outside;
-        });
     }
 
     destroy() {
