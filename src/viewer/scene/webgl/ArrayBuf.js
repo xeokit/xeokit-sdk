@@ -108,6 +108,11 @@ class ArrayBuf {
         this._gl.bindBuffer(this.type, null);
     }
 
+    bindAtLocation(location) {
+        this.bind();
+        this._gl.vertexAttribPointer(location, this.itemSize, this.itemType, this.normalized, 0, 0);
+    }
+
     destroy() {
         if (!this.allocated) {
             return;

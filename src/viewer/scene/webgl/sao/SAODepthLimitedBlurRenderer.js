@@ -131,12 +131,6 @@ export class SAODepthLimitedBlurRenderer {
         } else {
             const uvs = new Float32Array([1,1, 0,1, 0,0, 1,0]);
             const uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, uvs, uvs.length, 2, gl.STATIC_DRAW);
-            const uvBufBinder = {
-                bindAtLocation: location => { // see ArrayBuf.js and Attribute.js
-                    uvBuf.bind();
-                    gl.vertexAttribPointer(location, uvBuf.itemSize, uvBuf.itemType, uvBuf.normalized, 0, 0);
-                }
-            };
 
             // Mitigation: if Uint8Array is used, the geometry is corrupted on OSX when using Chrome with data-textures
             const indices = new Uint32Array([0, 1, 2, 0, 2, 3]);
@@ -156,7 +150,7 @@ export class SAODepthLimitedBlurRenderer {
                 uDepthTexture.setInputValue(depthTexture);
                 uOcclusionTex.setInputValue(occlusionTexture);
 
-                uv.setInputValue(uvBufBinder);
+                uv.setInputValue(uvBuf);
 
                 indicesBuf.bind();
                 gl.drawElements(gl.TRIANGLES, indicesBuf.numItems, indicesBuf.itemType, 0);

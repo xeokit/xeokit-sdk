@@ -114,13 +114,6 @@ class OcclusionLayer {
                 this.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this.positions), lenPositions, 3, gl.STATIC_DRAW);
                 this.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.indices), lenIndices, 1, gl.STATIC_DRAW);
                 this.lenPositionsBuf = this.positions.length;
-                this.positionsBufBinder = {
-                    bindAtLocation: location => { // see ArrayBuf.js and Attribute.js
-                        const b = this.positionsBuf;
-                        b.bind();
-                        gl.vertexAttribPointer(location, b.itemSize, b.itemType, b.normalized, 0, 0);
-                    }
-                };
             }
         }
 
