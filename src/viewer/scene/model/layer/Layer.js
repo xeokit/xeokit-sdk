@@ -520,7 +520,7 @@ export class Layer {
                 // _updateBackfaceCull
                 const backfaces = true; // See XCD-230
                 if (frameCtx.backfaces !== backfaces) {
-                    const gl = frameCtx.gl;
+                    const gl = this.model.scene.canvas.gl;
                     if (backfaces) {
                         gl.disable(gl.CULL_FACE);
                     } else {
