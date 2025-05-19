@@ -135,7 +135,6 @@ export class OcclusionTester {
                 gl,
                 "OcclusionTester",
                 {
-                    scene: scene,
                     sectionPlanesState: scene._sectionPlanesState,
                     getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
                     clippableTest: () => "true",
