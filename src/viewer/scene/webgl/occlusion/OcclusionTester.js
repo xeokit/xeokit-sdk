@@ -41,7 +41,7 @@ export class OcclusionTester {
 
     _addMarker(marker, originHash) {
         if (! this._occlusionLayers[originHash]) {
-            this._occlusionLayers[originHash] = new OcclusionLayer(this._scene, marker.origin);
+            this._occlusionLayers[originHash] = new OcclusionLayer(marker.origin);
             this._occlusionLayersListDirty = true;
         }
         const occlusionLayer = this._occlusionLayers[originHash];
@@ -183,7 +183,7 @@ export class OcclusionTester {
                         };
 
                         this._occlusionLayersList.forEach(occlusionLayer => {
-                            occlusionLayer.update(markerInView);
+                            occlusionLayer.update(gl, markerInView);
 
                             const culled = scene._sectionPlanesState.sectionPlanes.some((sectionPlane, i) => {
                                 const intersect = sectionPlane.active ? math.planeAABB3Intersect(sectionPlane.dir, sectionPlane.dist, occlusionLayer.aabb) : 1;
