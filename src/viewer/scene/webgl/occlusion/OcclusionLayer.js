@@ -53,7 +53,7 @@ class OcclusionLayer {
         this.numMarkers--;
     }
 
-    updateReturnCulledBySectionPlanes() {
+    updateReturnCulledBySectionPlanes(markerInView) {
         if (this.markerListDirty) {
             this.numMarkers = 0;
             for (var id in this.markers) {
@@ -118,32 +118,18 @@ class OcclusionLayer {
         }
 
         if (this.occlusionTestListDirty) {
-            const canvas = this.scene.canvas;
-            const near = this.scene.camera.perspective.near; // Assume near enough to ortho near
-            const boundary = canvas.boundary;
-            const canvasWidth = boundary[2];
-            const canvasHeight = boundary[3];
             let lenPixels = 0;
             this.lenOcclusionTestList = 0;
             for (let i = 0; i < this.numMarkers; i++) {
                 const marker = this.markerList[i];
-                const viewPos = marker.viewPos;
-                if (viewPos[2] > -near) { // Clipped by near plane
+                if ((marker.entity && !marker.entity.visible) || (! markerInView(marker))) {
                     marker._setVisible(false);
+                } else if (marker.occludable) {
+                    this.occlusionTestList[this.lenOcclusionTestList++] = marker;
+                    this.pixels[lenPixels++] = marker.canvasPos[0];
+                    this.pixels[lenPixels++] = marker.canvasPos[1];
                 } else {
-                    const canvasPos = marker.canvasPos;
-                    const canvasX = canvasPos[0];
-                    const canvasY = canvasPos[1];
-                    if ((canvasX < -10) || (canvasY < -10) || (canvasX > canvasWidth + 10) || (canvasY > canvasHeight + 10)
-                        || (marker.entity && !marker.entity.visible)) {
-                        marker._setVisible(false);
-                    } else if (marker.occludable) {
-                        this.occlusionTestList[this.lenOcclusionTestList++] = marker;
-                        this.pixels[lenPixels++] = canvasX;
-                        this.pixels[lenPixels++] = canvasY;
-                    } else {
-                        marker._setVisible(true);
-                    }
+                    marker._setVisible(true);
                 }
             }
         }
