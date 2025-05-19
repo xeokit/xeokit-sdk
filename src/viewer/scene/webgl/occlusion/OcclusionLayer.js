@@ -96,23 +96,20 @@ class OcclusionLayer {
             aabb[4] += origin[1];
             aabb[5] += origin[2];
 
-            if (this.positionsBuf) {
-                if (this.lenPositionsBuf === this.positions.length) { // Just updating buffer elements, don't need to reallocate
-                    this.positionsBuf.setData(new Float32Array(this.positions)); // Indices don't need updating
-                } else {
-                    this.positionsBuf.destroy();
-                    this.positionsBuf = null;
-                    this.indicesBuf.destroy();
-                    this.indicesBuf = null;
-                }
+            if (this.positionsBuf && (this.lenPositionsBuf !== this.positions.length)) {
+                this.positionsBuf.destroy();
+                this.positionsBuf = null;
+                this.indicesBuf.destroy();
+                this.indicesBuf = null;
             }
 
-            if (!this.positionsBuf) {
+            const positionsArr = new Float32Array(this.positions);
+            if (this.positionsBuf) {
+                this.positionsBuf.setData(positionsArr); // Just updating buffer elements, don't need to reallocate; Indices don't need updating
+            } else {
                 const gl = this.scene.canvas.gl;
-                const lenPositions = this.numMarkers * 3;
-                const lenIndices = this.numMarkers;
-                this.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this.positions), lenPositions, 3, gl.STATIC_DRAW);
-                this.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.indices), lenIndices, 1, gl.STATIC_DRAW);
+                this.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positionsArr, positionsArr.length, 3, gl.STATIC_DRAW);
+                this.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.indices), this.indices.length, 1, gl.STATIC_DRAW);
                 this.lenPositionsBuf = this.positions.length;
             }
         }
