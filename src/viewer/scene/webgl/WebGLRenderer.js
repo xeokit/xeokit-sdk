@@ -170,7 +170,6 @@ export const createProgramVariablesState = function() {
     return {
         programVariables: programVariables,
         buildProgram: (gl, programName, cfg) => {
-            const scene = cfg.scene;
             const getLogDepth = cfg.getLogDepth;
 
             const clipPos = cfg.clipPos;
@@ -239,8 +238,9 @@ export const createProgramVariablesState = function() {
                                   })()
                                   : (color => color));
 
-            const gammaFactor = programVariables.createUniform("float", "gammaFactor", (set) => set(scene.gammaFactor));
-            cfg.appendFragmentOutputs(fragmentOutputs, scene && scene.gammaOutput && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord", sliceColorOr);
+            const getGammaFactor = cfg.getGammaFactor;
+            const gammaFactor = programVariables.createUniform("float", "gammaFactor", (set) => set(getGammaFactor()));
+            cfg.appendFragmentOutputs(fragmentOutputs, getGammaFactor && ((color) => `${linearToGamma}(${color}, ${gammaFactor})`), "gl_FragCoord", sliceColorOr);
 
             const fragmentClippingLines = (function() {
                 const src = [ ];
