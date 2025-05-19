@@ -1604,7 +1604,9 @@ const Renderer = function (scene, options) {
             this._occlusionTester.drawMarkers();
 
             if (readPixelBuf) {
-                this._occlusionTester.doOcclusionTest(readPixelBuf, scene.canvas.resolutionScale); // Updates Marker "visible" properties
+                const resolutionScale = scene.canvas.resolutionScale;
+                this._occlusionTester.doOcclusionTest( // Updates Marker "visible" properties
+                    (x, y) => readPixelBuf.read(Math.round(resolutionScale * x), Math.round(resolutionScale * y)));
                 readPixelBuf.unbind();
             }
         }
