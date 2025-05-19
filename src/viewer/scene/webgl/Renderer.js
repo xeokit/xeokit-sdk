@@ -365,14 +365,11 @@ const Renderer = function (scene, options) {
     function draw(params) {
 
         const sao = scene.sao;
-
-        if (saoEnabled && sao.possible && (sao.numSamples >= 1)) {
-            drawSAOBuffers(params);
-        }
+        const occlusionTexture = saoEnabled && sao.possible && (sao.numSamples >= 1) && drawSAOBuffers(params);
 
         drawShadowMaps();
 
-        drawColor(params);
+        drawColor(params, occlusionTexture);
     }
 
     function drawSAOBuffers(params) {
@@ -454,6 +451,8 @@ const Renderer = function (scene, options) {
             blurSAO(occlusionRenderBuffer1, occlusionRenderBuffer2, 0); // horizontally
             blurSAO(occlusionRenderBuffer2, occlusionRenderBuffer1, 1); // vertically
         }
+
+        return occlusionRenderBuffer1.colorTextures[0];
     }
 
     function drawShadowMaps() {
@@ -531,7 +530,7 @@ const Renderer = function (scene, options) {
         shadowRenderBuf.unbind();
     }
 
-    function drawColor(params) {
+    function drawColor(params, occlusionTexture) {
 
         const normalDrawSAOBin = [];
         const normalEdgesOpaqueBin = [];
@@ -581,11 +580,8 @@ const Renderer = function (scene, options) {
         frameCtx.lineWidth = 1;
 
         const sao = scene.sao;
-        const saoPossible = sao.possible && (sao.numSamples >= 1);
-
-        const occlusionRenderBuffer1 = saoEnabled && saoPossible && renderBufferManager.getRenderBuffer("saoOcclusion");
-        frameCtx.occlusionTexture = occlusionRenderBuffer1 ? occlusionRenderBuffer1.colorTextures[0] : null;
         frameCtx.saoParams = [gl.drawingBufferWidth, gl.drawingBufferHeight, scene.sao.blendCutoff, scene.sao.blendFactor];
+        frameCtx.occlusionTexture = occlusionTexture;
 
         let i;
         let len;
@@ -636,7 +632,7 @@ const Renderer = function (scene, options) {
             const renderFlags = drawable.renderFlags;
 
             if (renderFlags.colorOpaque) {
-                if (saoEnabled && saoPossible && drawable.saoEnabled) {
+                if (drawable.saoEnabled && occlusionTexture) {
                     normalDrawSAOBin[normalDrawSAOBinLen++] = drawable;
                 } else {
                     drawable.drawColorOpaque(frameCtx);
