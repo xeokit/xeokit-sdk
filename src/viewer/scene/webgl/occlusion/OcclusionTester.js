@@ -3,7 +3,7 @@ import {createProgramVariablesState} from "../WebGLRenderer.js";
 import {OcclusionLayer} from "./OcclusionLayer.js";
 import {createRTCViewMat} from "../../math/rtcCoords.js";
 
-const MARKER_COLOR = math.vec3([1.0, 0.0, 0.0]);
+const MARKER_COLOR = math.vec3([ 255, 0, 0 ]);
 const POINT_SIZE = 20;
 
 const tempVec3a = math.vec3();
@@ -12,7 +12,7 @@ const tempVec3a = math.vec3();
  * Manages occlusion testing. Private member of a Renderer.
  * @private
  */
-class OcclusionTester {
+export class OcclusionTester {
 
     constructor(scene) {
 
@@ -222,50 +222,28 @@ class OcclusionTester {
     /**
      * Sets visibilities of {@link Marker}s according to whether or not they are obscured by anything in the render buffer.
      */
-    doOcclusionTest(readPixelBuf) {
-        const resolutionScale = this._scene.canvas.resolutionScale;
-
-        const markerR = MARKER_COLOR[0] * 255;
-        const markerG = MARKER_COLOR[1] * 255;
-        const markerB = MARKER_COLOR[2] * 255;
-
-        for (let i = 0, len = this._occlusionLayersList.length; i < len; i++) {
-
-            const occlusionLayer = this._occlusionLayersList[i];
-
+    doOcclusionTest(readPixelBuf, resolutionScale) {
+        this._occlusionLayersList.forEach(occlusionLayer => {
             for (let i = 0; i < occlusionLayer.lenOcclusionTestList; i++) {
-
-                const marker = occlusionLayer.occlusionTestList[i];
                 const j = i * 2;
-                const color = readPixelBuf.read(Math.round(occlusionLayer.pixels[j] * resolutionScale), Math.round(occlusionLayer.pixels[j + 1] * resolutionScale));
-                const visible = (color[0] === markerR) && (color[1] === markerG) && (color[2] === markerB);
-
-                marker._setVisible(visible);
+                const color = readPixelBuf.read(Math.round(resolutionScale * occlusionLayer.pixels[j]),
+                                                Math.round(resolutionScale * occlusionLayer.pixels[j + 1]));
+                occlusionLayer.occlusionTestList[i]._setVisible(math.compareVec3(MARKER_COLOR, color));
             }
-        }
+        });
     }
 
     /**
      * Destroys this OcclusionTester.
      */
     destroy() {
-        if (this.destroyed) {
-            return;
+        if (! this.destroyed) {
+            this._occlusionLayersList.forEach(layer => layer.destroy());
+            this._drawable && this._drawable.destroy();
+            this._scene.camera.off(this._onCameraViewMatrix);
+            this._scene.camera.off(this._onCameraProjMatrix);
+            this._scene.canvas.off(this._onCanvasBoundary);
+            this.destroyed = true;
         }
-        for (let i = 0, len = this._occlusionLayersList.length; i < len; i++) {
-            const occlusionLayer = this._occlusionLayersList[i];
-            occlusionLayer.destroy();
-        }
-
-        if (this._drawable) {
-            this._drawable.destroy();
-        }
-
-        this._scene.camera.off(this._onCameraViewMatrix);
-        this._scene.camera.off(this._onCameraProjMatrix);
-        this._scene.canvas.off(this._onCanvasBoundary);
-        this.destroyed = true;
     }
 }
-
-export {OcclusionTester};
