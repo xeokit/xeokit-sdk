@@ -123,6 +123,10 @@ const Renderer = function (scene, options) {
         };
     })();
 
+    const getNearPlaneHeight = (camera, drawingBufferHeight) => ((camera.projection === "ortho")
+                                                                 ? 1.0
+                                                                 : (drawingBufferHeight / (2 * Math.tan(0.5 * camera.perspective.fov * Math.PI / 180.0))));
+
     this.scene = scene;
 
     this._occlusionTester = null; // Lazy-created in #addMarker()
@@ -355,6 +359,7 @@ const Renderer = function (scene, options) {
                 frameCtx.frontface = true;
                 frameCtx.viewParams.viewMatrix = light.getShadowViewMatrix();
                 frameCtx.viewParams.projMatrix = light.getShadowProjMatrix();
+                frameCtx.nearPlaneHeight = getNearPlaneHeight(scene.camera, gl.drawingBufferHeight);
 
                 gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -405,6 +410,7 @@ const Renderer = function (scene, options) {
         frameCtx.reset();
         frameCtx.pass = params.pass;
         frameCtx.viewParams = getSceneCameraViewParams();
+        frameCtx.nearPlaneHeight = getNearPlaneHeight(scene.camera, gl.drawingBufferHeight);
 
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
         gl.clearColor(0, 0, 0, 0);
@@ -504,6 +510,7 @@ const Renderer = function (scene, options) {
         frameCtx.pbrEnabled = pbrEnabled && !!scene.pbrEnabled;
         frameCtx.colorTextureEnabled = colorTextureEnabled && !!scene.colorTextureEnabled;
         frameCtx.viewParams = getSceneCameraViewParams();
+        frameCtx.nearPlaneHeight = getNearPlaneHeight(scene.camera, gl.drawingBufferHeight);
 
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -1013,6 +1020,7 @@ const Renderer = function (scene, options) {
                 frameCtx.viewParams.eye = pickResult.origin || camera.eye;
                 frameCtx.viewParams.projMatrix = pickProjMatrix || camera.projMatrix;
                 frameCtx.viewParams.viewMatrix = pickViewMatrix || camera.viewMatrix;
+                frameCtx.nearPlaneHeight = getNearPlaneHeight(camera, gl.drawingBufferHeight);
                 const resolutionScale = scene.canvas.resolutionScale;
                 frameCtx.pickClipPos = [
                     getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
@@ -1276,6 +1284,7 @@ const Renderer = function (scene, options) {
             frameCtx.frontface = true; // "ccw"
             frameCtx.viewParams.far  = camera.project.far;
             frameCtx.viewParams.near = camera.project.near;
+            frameCtx.nearPlaneHeight = getNearPlaneHeight(camera, gl.drawingBufferHeight);
 
             const snapRadiusInPixels = snapRadius || 30;
 
@@ -1517,6 +1526,7 @@ const Renderer = function (scene, options) {
             frameCtx.backfaces = true;
             frameCtx.frontface = true; // "ccw"
             frameCtx.viewParams = getSceneCameraViewParams();
+            frameCtx.nearPlaneHeight = getNearPlaneHeight(scene.camera, gl.drawingBufferHeight);
 
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
             gl.clearColor(0, 0, 0, 0);

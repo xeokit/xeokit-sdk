@@ -169,11 +169,7 @@ export const getRenderers = (function() {
                                         if (setupPoints) {
                                             const pointSize = programVariables.createUniform("float", "pointSize", (set) => set(pointsMaterial.pointSize));
                                             if (pointsMaterial.perspectivePoints) {
-                                                const nearPlaneHeight = programVariables.createUniform("float", "nearPlaneHeight", (set) => {
-                                                    set((scene.camera.projection === "ortho") ?
-                                                        1.0
-                                                        : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0))));
-                                                });
+                                                const nearPlaneHeight = programVariables.createUniform("float", "nearPlaneHeight", (set, state) => set(state.legacyFrameCtx.nearPlaneHeight));
                                                 const minVal = `${Math.floor(pointsMaterial.minPerspectivePointSize)}.0`;
                                                 const maxVal = `${Math.floor(pointsMaterial.maxPerspectivePointSize)}.0`;
                                                 addends.push(`clamp((${nearPlaneHeight} * ${pointSize}) / gl_Position.w, ${minVal}, ${maxVal})`);
