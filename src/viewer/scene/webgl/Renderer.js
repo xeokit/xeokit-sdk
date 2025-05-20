@@ -374,7 +374,48 @@ const Renderer = function (scene, options) {
         const sao = scene.sao;
         const occlusionTexture = saoEnabled && sao.possible && (sao.numSamples >= 1) && drawSAOBuffers(params);
 
-        drawShadowMaps();
+        scene._lightsState.lights.forEach(light => {
+            const shadowRenderBuf = light.castsShadow && light.getShadowRenderBuf();
+
+            if (shadowRenderBuf) {
+                shadowRenderBuf.bind();
+
+                frameCtx.reset();
+                frameCtx.backfaces = true;
+                frameCtx.frontface = true;
+                frameCtx.viewParams.viewMatrix = light.getShadowViewMatrix();
+                frameCtx.viewParams.projMatrix = light.getShadowProjMatrix();
+
+                gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+
+                gl.clearColor(0, 0, 0, 1);
+                gl.enable(gl.DEPTH_TEST);
+                gl.disable(gl.BLEND);
+
+                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+                Object.values(drawableTypeInfo).forEach(
+                    drawableInfo => {
+                        drawableInfo.drawableList.forEach(
+                            drawable => {
+                                if ((drawable.visible !== false) && drawable.castsShadow && drawable.drawShadow) {
+                                    if (drawable.renderFlags.colorOpaque) { // Transparent objects don't cast shadows (yet)
+                                        drawable.drawShadow(frameCtx);
+                                    }
+                                }
+                            });
+                    });
+
+                shadowRenderBuf.unbind();
+            }
+        });
+
+        // const numVertexAttribs = WEBGL_INFO.MAX_VERTEX_ATTRIBS; // Fixes https://github.com/xeokit/xeokit-sdk/issues/174
+        // for (let ii = 0; ii < numVertexAttribs; ii++) {
+        //     gl.disableVertexAttribArray(ii);
+        // }
+        //
+        shadowsDirty = false;
 
         drawColor(params, occlusionTexture);
     }
@@ -460,81 +501,6 @@ const Renderer = function (scene, options) {
         }
 
         return occlusionRenderBuffer1.colorTextures[0];
-    }
-
-    function drawShadowMaps() {
-
-        let lights = scene._lightsState.lights;
-
-        for (let i = 0, len = lights.length; i < len; i++) {
-            const light = lights[i];
-            if (!light.castsShadow) {
-                continue;
-            }
-            drawShadowMap(light);
-        }
-
-        // const numVertexAttribs = WEBGL_INFO.MAX_VERTEX_ATTRIBS; // Fixes https://github.com/xeokit/xeokit-sdk/issues/174
-        // for (let ii = 0; ii < numVertexAttribs; ii++) {
-        //     gl.disableVertexAttribArray(ii);
-        // }
-        //
-        shadowsDirty = false;
-    }
-
-    function drawShadowMap(light) {
-
-        const castsShadow = light.castsShadow;
-
-        if (!castsShadow) {
-            return;
-        }
-
-        const shadowRenderBuf = light.getShadowRenderBuf();
-
-        if (!shadowRenderBuf) {
-            return;
-        }
-
-        shadowRenderBuf.bind();
-
-        frameCtx.reset();
-        frameCtx.backfaces = true;
-        frameCtx.frontface = true;
-        frameCtx.viewParams.viewMatrix = light.getShadowViewMatrix();
-        frameCtx.viewParams.projMatrix = light.getShadowProjMatrix();
-
-        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-
-        gl.clearColor(0, 0, 0, 1);
-        gl.enable(gl.DEPTH_TEST);
-        gl.disable(gl.BLEND);
-
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-        for (let type in drawableTypeInfo) {
-
-            if (drawableTypeInfo.hasOwnProperty(type)) {
-
-                const drawableInfo = drawableTypeInfo[type];
-                const drawableList = drawableInfo.drawableList;
-
-                for (let i = 0, len = drawableList.length; i < len; i++) {
-
-                    const drawable = drawableList[i];
-
-                    if (drawable.visible === false || !drawable.castsShadow || !drawable.drawShadow) {
-                        continue;
-                    }
-
-                    if (drawable.renderFlags.colorOpaque) { // Transparent objects don't cast shadows (yet)
-                        drawable.drawShadow(frameCtx);
-                    }
-                }
-            }
-        }
-
-        shadowRenderBuf.unbind();
     }
 
     function drawColor(params, occlusionTexture) {
