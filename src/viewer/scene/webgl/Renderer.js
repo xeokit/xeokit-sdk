@@ -302,71 +302,41 @@ const Renderer = function (scene, options) {
 
     function updateDrawlist() { // Prepares state-sorted array of drawables from maps of inserted drawables
         if (drawableListDirty) {
-            buildDrawableList();
+            Object.values(drawableTypeInfo).forEach(drawableInfo => {
+                const drawableListPreCull = drawableInfo.drawableListPreCull;
+                let lenDrawableList = 0;
+                Object.values(drawableInfo.drawableMap).forEach(drawable => { drawableListPreCull[lenDrawableList++] = drawable; });
+                drawableListPreCull.length = lenDrawableList;
+            });
             drawableListDirty = false;
             stateSortDirty = true;
         }
         if (stateSortDirty) {
-            sortDrawableList();
+            let lenDrawableList = 0;
+            Object.values(drawableTypeInfo).forEach(drawableInfo => {
+                drawableInfo.drawableListPreCull.forEach(drawable => { postSortDrawableList[lenDrawableList++] = drawable; });
+            });
+            postSortDrawableList.length = lenDrawableList;
+            postSortDrawableList.sort((a, b) => a.renderOrder - b.renderOrder);
             stateSortDirty = false;
             imageDirty = true;
         }
         if (imageDirty) { // Image is usually dirty because the camera moved
-            cullDrawableList();
-        }
-    }
-
-    function buildDrawableList() {
-        for (let type in drawableTypeInfo) {
-            if (drawableTypeInfo.hasOwnProperty(type)) {
-                const drawableInfo = drawableTypeInfo[type];
-                const drawableMap = drawableInfo.drawableMap;
-                const drawableListPreCull = drawableInfo.drawableListPreCull;
-                let lenDrawableList = 0;
-                for (let id in drawableMap) {
-                    if (drawableMap.hasOwnProperty(id)) {
-                        drawableListPreCull[lenDrawableList++] = drawableMap[id];
+            let lenDrawableList = 0;
+            let lenUiList       = 0;
+            postSortDrawableList.forEach(drawable => {
+                drawable.rebuildRenderFlags();
+                if (!drawable.renderFlags.culled) {
+                    if (drawable.isUI) {
+                        uiDrawableList[lenUiList++] = drawable;
+                    } else {
+                        postCullDrawableList[lenDrawableList++] = drawable;
                     }
                 }
-                drawableListPreCull.length = lenDrawableList;
-            }
+            });
+            postCullDrawableList.length = lenDrawableList;
+            uiDrawableList.length       = lenUiList;
         }
-    }
-
-    function sortDrawableList() {
-        let lenDrawableList = 0;
-        for (let type in drawableTypeInfo) {
-            if (drawableTypeInfo.hasOwnProperty(type)) {
-                const drawableInfo = drawableTypeInfo[type];
-                const drawableListPreCull = drawableInfo.drawableListPreCull;
-                for (let i = 0, len = drawableListPreCull.length; i < len; i++) {
-                    const drawable = drawableListPreCull[i];
-                    postSortDrawableList[lenDrawableList++] = drawable;
-                }
-            }
-        }
-        postSortDrawableList.length = lenDrawableList;
-        postSortDrawableList.sort((a, b) => {
-            return a.renderOrder - b.renderOrder;
-        });
-    }
-
-    function cullDrawableList() {
-        let lenDrawableList = 0;
-        let lenUiList       = 0;
-        for (let i = 0, len = postSortDrawableList.length; i < len; i++) {
-            const drawable = postSortDrawableList[i];
-            drawable.rebuildRenderFlags();
-            if (!drawable.renderFlags.culled) {
-                if (drawable.isUI) {
-                    uiDrawableList[lenUiList++] = drawable;
-                } else {
-                    postCullDrawableList[lenDrawableList++] = drawable;
-                }
-            }
-        }
-        postCullDrawableList.length = lenDrawableList;
-        uiDrawableList.length       = lenUiList;
     }
 
     function draw(params) {
