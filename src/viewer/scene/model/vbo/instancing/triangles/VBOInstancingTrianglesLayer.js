@@ -785,6 +785,17 @@ export class VBOInstancingTrianglesLayer {
         this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
     }
 
+    getData(_portionId) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+
+        return {
+            indices: this._state.indicesBuf.getData(),
+            positions: this._state.positionsBuf.getData()
+        }
+    }
+
     // ---------------------- COLOR RENDERING -----------------------------------
 
     drawColorOpaque(renderFlags, frameCtx) {

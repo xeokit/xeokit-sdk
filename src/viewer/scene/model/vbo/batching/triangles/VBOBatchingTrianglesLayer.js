@@ -869,6 +869,19 @@ export class VBOBatchingTrianglesLayer {
         return {count, offset}
     }
 
+    getData(portionId) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+
+        const portion = this._portions[portionId];
+
+        return {
+            indices: this._state.indicesBuf.getData(portion.indicesBaseIndex, portion.numIndices).map(i => i - portion.vertsBaseIndex),
+            positions: this._state.positionsBuf.getData(portion.vertsBaseIndex, portion.numVerts),
+        };
+    }
+
     // ---------------------- COLOR RENDERING -----------------------------------
 
     drawColorOpaque(renderFlags, frameCtx) {
