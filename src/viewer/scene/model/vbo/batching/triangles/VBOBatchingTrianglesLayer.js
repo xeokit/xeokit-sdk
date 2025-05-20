@@ -869,7 +869,7 @@ export class VBOBatchingTrianglesLayer {
         return {count, offset}
     }
 
-    getData(portionId) {
+    readGeometryData(portionId) {
         if (!this._finalized) {
             throw "Not finalized";
         }
