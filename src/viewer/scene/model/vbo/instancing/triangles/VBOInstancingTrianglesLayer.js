@@ -785,7 +785,7 @@ export class VBOInstancingTrianglesLayer {
         this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
     }
 
-    getData(portionId) {
+    readGeometryData(portionId) {
         if (!this._finalized) {
             throw "Not finalized";
         }
