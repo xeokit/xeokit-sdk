@@ -446,7 +446,7 @@ export declare abstract class SceneModelEntity implements Entity {
     /**
      * Gets the complete geometry of this entity.
      */
-    readGeometryData(): {indices: number[],positions:number[]}
+    getGeometryData(): {indices: number[],positions:number[]}
 
     /**
      * Returns the volume of this SceneModelEntity.
