@@ -687,7 +687,7 @@ export class SceneModelEntity {
         }
     }
 
-    readGeometryData() {
+    getGeometryData() {
         let positionsBase = 0;
         const positions = [];
         const indices = [];
