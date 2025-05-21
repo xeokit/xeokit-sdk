@@ -349,9 +349,9 @@ const Renderer = function (scene, options) {
         const occlusionTexture = saoEnabled && sao.possible && (sao.numSamples >= 1) && drawSAOBuffers(params);
 
         scene._lightsState.lights.forEach(light => {
-            const shadowRenderBuf = light.castsShadow && light.getShadowRenderBuf();
 
-            if (shadowRenderBuf) {
+            if (light.castsShadow) {
+                const shadowRenderBuf = light.getShadowRenderBuf();
                 shadowRenderBuf.bind();
 
                 frameCtx.reset();
