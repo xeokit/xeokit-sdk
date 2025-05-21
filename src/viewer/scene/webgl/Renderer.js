@@ -435,7 +435,6 @@ const Renderer = function (scene, options) {
         const occlusionRenderBuffer1 = renderBufferManager.getRenderBuffer("saoOcclusion");
         occlusionRenderBuffer1.setSize(size);
         occlusionRenderBuffer1.bind();
-        occlusionRenderBuffer1.clear();
 
         gl.viewport(0, 0, size[0], size[1]);
         gl.clearColor(0, 0, 0, 1);
@@ -454,7 +453,6 @@ const Renderer = function (scene, options) {
 
             const blurSAO = (src, dst, direction) => {
                 dst.bind();
-                dst.clear();
 
                 gl.viewport(0, 0, size[0], size[1]);
                 gl.clearColor(0, 0, 0, 1);
@@ -1517,7 +1515,6 @@ const Renderer = function (scene, options) {
             if (readPixelBuf) {
                 readPixelBuf.setSize([gl.drawingBufferWidth, gl.drawingBufferHeight]);
                 readPixelBuf.bind();
-                readPixelBuf.clear();
             }
 
             frameCtx.reset();
@@ -1566,7 +1563,7 @@ const Renderer = function (scene, options) {
     this.readPixels = function (pixels, colors, len, opaqueOnly) {
         const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
         snapshotBuffer.bind();
-        snapshotBuffer.clear();
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         this.render({force: true, opaqueOnly: opaqueOnly});
         let color;
         let i;
@@ -1598,7 +1595,7 @@ const Renderer = function (scene, options) {
                                ? [params.width, params.height]
                                : [gl.drawingBufferWidth, gl.drawingBufferHeight]);
         snapshotBuffer.bind();
-        snapshotBuffer.clear();
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         snapshotBound = true;
     };
 
@@ -1610,7 +1607,7 @@ const Renderer = function (scene, options) {
             return;
         }
         const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
-        snapshotBuffer.clear();
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         this.render({force: true, opaqueOnly: false});
         imageDirty = true;
     };
