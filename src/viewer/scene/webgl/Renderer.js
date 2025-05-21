@@ -405,7 +405,7 @@ const Renderer = function (scene, options) {
         const saoDepthRenderBuffer = renderBufferManager.getRenderBuffer("saoDepth", { depthTexture: true });
         saoDepthRenderBuffer.setSize(size);
         saoDepthRenderBuffer.bind();
-        saoDepthRenderBuffer.clear();
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         frameCtx.reset();
         frameCtx.pass = params.pass;
@@ -418,10 +418,7 @@ const Renderer = function (scene, options) {
         gl.frontFace(gl.CCW);
         gl.enable(gl.CULL_FACE);
         gl.depthMask(true);
-
-        if (params.clear !== false) {
-            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        }
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         postCullDrawableList.forEach(drawable => {
             if ((drawable.culled !== true) && (drawable.visible !== false) && drawable.drawDepth && drawable.saoEnabled && drawable.renderFlags.colorOpaque) {
