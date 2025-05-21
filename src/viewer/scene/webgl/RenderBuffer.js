@@ -148,14 +148,6 @@ class RenderBuffer {
         };
     }
 
-    clear() {
-        if (!this.bound) {
-            throw "Render buffer not bound";
-        }
-        const gl = this.gl;
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    }
-
     read(pickX, pickY, glFormat = null, glType = null, arrayType = Uint8Array, arrayMultiplier = 4, colorBufferIndex = 0) {
         const pix = new arrayType(arrayMultiplier);
         const gl = this.gl;
