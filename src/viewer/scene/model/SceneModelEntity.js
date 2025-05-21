@@ -695,7 +695,7 @@ export class SceneModelEntity {
         for (let i = 0, len = this.meshes.length; i < len; i++) {
             const mesh = this.meshes[i];
 
-            if (layer.readGeometryData) {
+            if (mesh.layer.readGeometryData) {
                 const meshGeom = mesh.layer.readGeometryData(mesh.portionId);
     
                 for (let j = 0, len = meshGeom.indices.length; j < len; j++) {
