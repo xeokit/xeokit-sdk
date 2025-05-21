@@ -12,7 +12,6 @@ export * from "./LASLoaderPlugin";
 export * from "./NavCubePlugin";
 export * from "./OBJLoaderPlugin";
 export * from "./SectionPlanesPlugin";
-export * from "./SkyboxesPlugin";
 export * from "./STLLoaderPlugin";
 export * from "./StoreyViewsPlugin";
 export * from "./TreeViewPlugin";
