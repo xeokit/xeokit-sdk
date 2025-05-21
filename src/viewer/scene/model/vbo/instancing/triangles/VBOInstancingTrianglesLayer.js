@@ -785,6 +785,64 @@ export class VBOInstancingTrianglesLayer {
         this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
     }
 
+    readGeometryData(portionId) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+
+        const state = this._state;
+        const sceneModelMatrix = this.model.matrix;
+
+        const col0 = state.modelMatrixCol0Buf.getData(portionId, 1);
+        const col1 = state.modelMatrixCol1Buf.getData(portionId, 1);
+        const col2 = state.modelMatrixCol2Buf.getData(portionId, 1);
+
+        const portionMatrix = [
+            col0[0], col1[0], col2[0], 0,
+            col0[1], col1[1], col2[1], 0,
+            col0[2], col1[2], col2[2], 0,
+            col0[3], col1[3], col2[3], 1,
+        ];
+
+        const positionsDecodeMatrix = state.positionsDecodeMatrix;
+
+        const origin = math.vec4();
+        origin.set(state.origin, 0);
+        origin[3] = 1;
+        math.mulMat4v4(sceneModelMatrix, origin, origin);
+
+        const indices = state.indicesBuf.getData();
+
+        const matrix = math.mulMat4(
+            portionMatrix,
+            positionsDecodeMatrix,
+            new Array(16)
+        );
+
+        math.mulMat4(
+            sceneModelMatrix,
+            matrix,
+            matrix
+        );
+
+        matrix[12] += origin[0];
+        matrix[13] += origin[1];
+        matrix[14] += origin[2];
+
+        const positionsQuantized = state.positionsBuf.getData();
+
+        const positions = math.transformPositions3(
+            matrix,
+            positionsQuantized,
+            new Array(positionsQuantized.length)
+        );
+
+        // const aabb = math.positions3ToAABB3(positions);
+        // console.log({aabbToniInstancing: aabb});
+
+        return { indices, positions };
+    }
+
     // ---------------------- COLOR RENDERING -----------------------------------
 
     drawColorOpaque(renderFlags, frameCtx) {
@@ -1177,6 +1235,112 @@ export class VBOInstancingTrianglesLayer {
         }
 
         return gotIntersect;
+    }
+
+    getPortionIntersections(portionId, worldRayOrigin, worldRayDir, backfaces = true) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+
+        const state = this._state;
+        const portion = this._portions[portionId];
+
+        if (!portion) {
+            this.model.error("portion not found: " + portionId);
+            return false;
+        }
+
+        if (!portion.inverseMatrix) {
+            portion.inverseMatrix = math.inverseMat4(portion.matrix, math.mat4());
+        }
+
+        if (!portion.normalMatrix) {
+            portion.normalMatrix = math.transposeMat4(portion.inverseMatrix, math.mat4());
+        }
+
+        const data = this.getData(portionId);
+
+        const quantizedPositions = data.positions;
+        const indices = data.indices;
+        const origin = state.origin;
+        const offset = portion.offset;
+
+        const rtcRayOrigin = tempVec3a;
+        const rtcRayDir = tempVec3b;
+
+        rtcRayOrigin.set(origin ? math.subVec3(worldRayOrigin, origin, tempVec3c) : worldRayOrigin);  // World -> RTC
+        rtcRayDir.set(worldRayDir);
+
+        if (offset) {
+            math.subVec3(rtcRayOrigin, offset);
+        }
+
+        math.transformRay(this.model.worldNormalMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir);
+
+        math.transformRay(portion.inverseMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir);
+
+        let a = tempVec3d;
+        let b = tempVec3e;
+        let c = tempVec3f;
+
+        const closestIntersectPos = tempVec3g;
+
+        const intersections = [];
+
+        for (let i = 0, len = indices.length; i < len; i += 3) {
+
+            const ia = indices[i + 0] * 3;
+            const ib = indices[i + 1] * 3;
+            const ic = indices[i + 2] * 3;
+
+            a[0] = quantizedPositions[ia];
+            a[1] = quantizedPositions[ia + 1];
+            a[2] = quantizedPositions[ia + 2];
+
+            b[0] = quantizedPositions[ib];
+            b[1] = quantizedPositions[ib + 1];
+            b[2] = quantizedPositions[ib + 2];
+
+            c[0] = quantizedPositions[ic];
+            c[1] = quantizedPositions[ic + 1];
+            c[2] = quantizedPositions[ic + 2];
+
+            const positionsDecodeMatrix = this._state.positionsDecodeMatrix;
+
+            math.decompressPosition(a, positionsDecodeMatrix);
+            math.decompressPosition(b, positionsDecodeMatrix);
+            math.decompressPosition(c, positionsDecodeMatrix);
+
+            if (!math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, closestIntersectPos) &&
+                (!backfaces || !math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, b, a, c, closestIntersectPos))) {
+                continue;
+            }
+
+            math.transformPoint3(portion.matrix, closestIntersectPos, closestIntersectPos);
+
+            math.transformPoint3(this.model.worldMatrix, closestIntersectPos, closestIntersectPos);
+
+            if (offset) {
+                math.addVec3(closestIntersectPos, offset);
+            }
+
+            if (origin) {
+                math.addVec3(closestIntersectPos, origin);
+            }
+
+            const worldNormal = math.triangleNormal(a, b, c, math.vec3());
+            math.transformVec3(portion.normalMatrix, worldNormal, worldNormal);
+            math.transformVec3(this.model.worldNormalMatrix, worldNormal, worldNormal);
+            math.normalizeVec3(worldNormal);
+
+            intersections.push({
+                worldSurfacePos: math.vec3(closestIntersectPos),
+                worldNormal: worldNormal,
+            });
+
+        }
+
+        return intersections;
     }
 
     destroy() {

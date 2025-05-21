@@ -869,6 +869,50 @@ export class VBOBatchingTrianglesLayer {
         return {count, offset}
     }
 
+    readGeometryData(portionId) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+
+        const portion = this._portions[portionId];
+        const state = this._state;
+        const sceneModelMatrix = this.model.matrix;
+        const positionsDecodeMatrix = state.positionsDecodeMatrix;
+
+        const origin = math.vec4();
+        origin.set(state.origin, 0); origin[3] = 1;
+        math.mulMat4v4(sceneModelMatrix, origin, origin);
+
+        const indices = state.indicesBuf.getData(
+            portion.indicesBaseIndex, portion.numIndices
+        ).map(i => i - portion.vertsBaseIndex);
+
+        const matrix = math.mulMat4(
+            sceneModelMatrix,
+            positionsDecodeMatrix,
+            new Array(16)
+        );
+
+        matrix[12] += origin[0];
+        matrix[13] += origin[1];
+        matrix[14] += origin[2];
+
+        const positionsQuantized = state.positionsBuf.getData(
+            portion.vertsBaseIndex, portion.numVerts
+        );
+
+        const positions = math.transformPositions3(
+            matrix,
+            positionsQuantized,
+            new Array(positionsQuantized.length)
+        );
+
+        // const aabb = math.positions3ToAABB3(positions);
+        // console.log({aabbToniBatching: aabb});
+
+        return { indices, positions };
+    }
+
     // ---------------------- COLOR RENDERING -----------------------------------
 
     drawColorOpaque(renderFlags, frameCtx) {
@@ -1253,6 +1297,91 @@ export class VBOBatchingTrianglesLayer {
         }
 
         return gotIntersect;
+    }
+
+    getPortionIntersections(portionId, worldRayOrigin, worldRayDir, backfaces = true) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+
+        const state = this._state;
+
+        const {
+            positions,
+            indices,
+        } = this.getData(portionId);
+
+        const origin = state.origin;
+        const offset = undefined;
+
+        const rtcRayOrigin = tempVec3a;
+        const rtcRayDir = tempVec3b;
+
+        rtcRayOrigin.set(origin ? math.subVec3(worldRayOrigin, origin, tempVec3c) : worldRayOrigin);  // World -> RTC
+        rtcRayDir.set(worldRayDir);
+
+        if (offset) {
+            math.subVec3(rtcRayOrigin, offset);
+        }
+
+        math.transformRay(this.model.worldNormalMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir); // RTC -> local
+
+        let a = tempVec3d;
+        let b = tempVec3e;
+        let c = tempVec3f;
+
+        const closestIntersectPos = tempVec3g;
+
+        const intersections = [];
+
+        for (let i = 0, len = indices.length; i < len; i += 3) {
+
+            const ia = indices[i] * 3;
+            const ib = indices[i + 1] * 3;
+            const ic = indices[i + 2] * 3;
+
+            a[0] = positions[ia];
+            a[1] = positions[ia + 1];
+            a[2] = positions[ia + 2];
+
+            b[0] = positions[ib];
+            b[1] = positions[ib + 1];
+            b[2] = positions[ib + 2];
+
+            c[0] = positions[ic];
+            c[1] = positions[ic + 1];
+            c[2] = positions[ic + 2];
+
+            math.decompressPosition(a, state.positionsDecodeMatrix);
+            math.decompressPosition(b, state.positionsDecodeMatrix);
+            math.decompressPosition(c, state.positionsDecodeMatrix);
+
+            if (!math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, closestIntersectPos) &&
+                (!backfaces || !math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, b, a, c, closestIntersectPos))) {
+                continue;
+            }
+
+            math.transformPoint3(this.model.worldMatrix, closestIntersectPos, closestIntersectPos);
+
+            if (offset) {
+                math.addVec3(closestIntersectPos, offset);
+            }
+
+            if (origin) {
+                math.addVec3(closestIntersectPos, origin);
+            }
+
+            const worldNormal = math.triangleNormal(a, b, c, math.vec3());
+            math.transformVec3(this.model.worldNormalMatrix, worldNormal, worldNormal);
+            math.normalizeVec3(worldNormal);
+
+            intersections.push({
+                worldSurfacePos: math.vec3(closestIntersectPos),
+                worldNormal: worldNormal,
+            });
+        }
+
+        return intersections;
     }
 
     // ---------
