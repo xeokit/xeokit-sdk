@@ -460,7 +460,7 @@ class Control {
 
         { // Keep gizmo screen size constant
             let lastDist = -1;
-            const setRootNodeScale = size => rootNode.scale = [size, size, size];
+            const setRootNodeScale = size => { if (size !== rootNode.scale[0]) { rootNode.scale = [size, size, size]; } };
             const onSceneTick = scene.on("tick", () => {
                 const dist = Math.abs(math.distVec3(camera.eye, pos));
                 if (camera.projection === "perspective") {
