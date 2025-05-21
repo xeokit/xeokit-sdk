@@ -1318,8 +1318,6 @@ const Renderer = function (scene, options) {
                 drawSnap(frameCtx);
 
                 frameCtx.snapMode = "vertex";
-                frameCtx.snapPickLayerNumber++;
-
                 drawSnap(frameCtx);
             } else {
                 frameCtx.snapMode = snapToVertex ? "vertex" : "edge";
