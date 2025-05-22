@@ -211,16 +211,9 @@ class FrameContext {
          * Collects info from SceneModel.drawSnapInit and SceneModel.drawSnap,
          * which is then used in Renderer to determine snap-picking results.
          *
-         * @type {{}}
+         * @type {[]}
          */
-        this.snapPickLayerParams = {};
-
-        /**
-         * Collects info from SceneModel.drawSnapInit and SceneModel.drawSnap,
-         * which is then used in Renderer to determine snap-picking results.
-         * @type {number}
-         */
-        this.snapPickLayerNumber = 0;
+        this.snapPickLayerParams = [];
 
         /**
          * Collects info from SceneModel.drawSnapInit and SceneModel.drawSnap,
