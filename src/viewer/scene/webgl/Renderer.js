@@ -1296,7 +1296,7 @@ const Renderer = function (scene, options) {
             gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1, gl.COLOR_ATTACHMENT2]);
 
             frameCtx.snapPickLayerParams = [];
-            frameCtx.snapPickLayerNumber = 0;
+            frameCtx.snapPickLayerParams.push(null); // This recreates previous situation, which relied on snapPickLayerNumber
             postCullDrawableList.forEach(drawable => {
                 if (!drawable.culled && drawable.visible && drawable.pickable && drawable.drawSnapInit) {
                     drawable.drawSnapInit(frameCtx);
@@ -1306,15 +1306,14 @@ const Renderer = function (scene, options) {
             const layerParamsSurface = frameCtx.snapPickLayerParams;
 
             // b) snap-pick
-            const layerParamsSnap = [];
-            frameCtx.snapPickLayerParams = layerParamsSnap;
+            frameCtx.snapPickLayerParams = [];
 
             gl.depthMask(false);
             gl.drawBuffers([gl.COLOR_ATTACHMENT0]);
 
             const drawSnap = (snapMode) => {
                 frameCtx.snapMode = snapMode;
-                frameCtx.snapPickLayerNumber = frameCtx.snapPickLayerParams.length;
+                frameCtx.snapPickLayerParams.push(null); // This recreates previous situation, which relied on snapPickLayerNumber
                 postCullDrawableList.forEach(drawable => {
                     if (!drawable.culled && drawable.visible && drawable.pickable && drawable.drawSnap) {
                         drawable.drawSnap(frameCtx);
@@ -1330,6 +1329,8 @@ const Renderer = function (scene, options) {
             }
 
             gl.depthMask(true);
+
+            const layerParamsSnap = frameCtx.snapPickLayerParams;
 
             // Read and decode the snapped coordinates
 
