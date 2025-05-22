@@ -64,10 +64,10 @@ const Renderer = function (scene, options) {
         const renderBuffersBasic  = {};
         const renderBuffersScaled = {};
         return {
-            getRenderBuffer: (id, options) => {
+            getRenderBuffer: (id, colorFormats, hasDepthTexture) => {
                 const renderBuffers = (scene.canvas.resolutionScale === 1.0) ? renderBuffersBasic : renderBuffersScaled;
                 if (! renderBuffers[id]) {
-                    renderBuffers[id] = new RenderBuffer(canvas, gl, options);
+                    renderBuffers[id] = new RenderBuffer(canvas, gl, colorFormats, hasDepthTexture);
                 }
                 return renderBuffers[id];
             },
@@ -402,7 +402,7 @@ const Renderer = function (scene, options) {
         const size = [gl.drawingBufferWidth, gl.drawingBufferHeight];
 
         // Render depth buffer
-        const saoDepthRenderBuffer = renderBufferManager.getRenderBuffer("saoDepth", { depthTexture: true });
+        const saoDepthRenderBuffer = renderBufferManager.getRenderBuffer("saoDepth", [], true);
         saoDepthRenderBuffer.setSize(size);
         saoDepthRenderBuffer.bind();
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -1156,9 +1156,9 @@ const Renderer = function (scene, options) {
                             // gpuPickWorldNormal
                             resetPickFrameCtx(3);
 
-                            const pickNormalBuffer = renderBufferManager.getRenderBuffer("pick-normal");
+                            const pickNormalBuffer = renderBufferManager.getRenderBuffer("pick-normal", [gl.RGBA32I]);
                             pickNormalBuffer.setSize([3, 3]);
-                            pickNormalBuffer.bind(gl.RGBA32I);
+                            pickNormalBuffer.bind();
 
                             gl.viewport(0, 0, pickNormalBuffer.size[0], pickNormalBuffer.size[1]);
                             gl.enable(gl.DEPTH_TEST);
@@ -1226,7 +1226,7 @@ const Renderer = function (scene, options) {
 
             const snapRadiusInPixels = snapRadius || 30;
 
-            const vertexPickBuffer = renderBufferManager.getRenderBuffer(`uniquePickColors-aabs-${snapRadiusInPixels}`, { depthTexture: true });
+            const vertexPickBuffer = renderBufferManager.getRenderBuffer(`uniquePickColors-aabs-${snapRadiusInPixels}`, [gl.RGBA32I, gl.RGBA32I, gl.RGBA8UI], true);
 
             frameCtx.pickClipPos = [
                 canvasPos ? getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth) : 0,
@@ -1241,7 +1241,7 @@ const Renderer = function (scene, options) {
             // Bind and clear the snap render target
 
             vertexPickBuffer.setSize([2 * snapRadiusInPixels + 1, 2 * snapRadiusInPixels + 1]);
-            vertexPickBuffer.bind(gl.RGBA32I, gl.RGBA32I, gl.RGBA8UI);
+            vertexPickBuffer.bind();
             gl.viewport(0, 0, vertexPickBuffer.size[0], vertexPickBuffer.size[1]);
             gl.enable(gl.DEPTH_TEST);
             gl.frontFace(gl.CCW);
