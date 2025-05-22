@@ -421,7 +421,7 @@ const Renderer = function (scene, options) {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         postCullDrawableList.forEach(drawable => {
-            if ((drawable.culled !== true) && (drawable.visible !== false) && drawable.drawDepth && drawable.saoEnabled && drawable.renderFlags.colorOpaque) {
+            if (!drawable.culled && drawable.visible && drawable.drawDepth && drawable.saoEnabled && drawable.renderFlags.colorOpaque) {
                 drawable.drawDepth(frameCtx);
             }
         });
@@ -1043,22 +1043,13 @@ const Renderer = function (scene, options) {
             const excludeEntityIds = params.excludeEntityIds;
 
             const renderDrawables = function(drawables) {
-            for (let i = 0, len = drawables.length; i < len; i++) {
-                const drawable = drawables[i];
-                if (drawable.culled === true || drawable.visible === false) {
-                    continue;
-                }
-                if (!drawable.drawPickMesh || (params.pickInvisible !== true && drawable.visible === false) || drawable.pickable === false) {
-                    continue;
-                }
-                if (includeEntityIds && !includeEntityIds[drawable.id]) { // TODO: push this logic into drawable
-                    continue;
-                }
-                if (excludeEntityIds && excludeEntityIds[drawable.id]) {
-                    continue;
-                }
-                drawable.drawPickMesh(frameCtx);
-            }
+                drawables.forEach(drawable => {
+                    if (!drawable.culled && drawable.visible && drawable.pickable && drawable.drawPickMesh // TODO: push this logic into drawable
+                        && ((! includeEntityIds) || includeEntityIds[drawable.id])
+                        && ((! excludeEntityIds) || (! excludeEntityIds[drawable.id]))) {
+                        drawable.drawPickMesh(frameCtx);
+                    }
+                });
             };
 
             renderDrawables(postCullDrawableList);
@@ -1137,33 +1128,20 @@ const Renderer = function (scene, options) {
                         const y = -(canvasPos[1] - canvas.clientHeight / 2) / (canvas.clientHeight / 2);
 
                         const origin = pickable.origin;
-                        let pvMat;
 
-                        if (origin) {
-                            const rtcPickViewMat = createRTCViewMat(pickViewMatrix, origin, tempMat4a);
-                            pvMat = math.mulMat4(pickProjMatrix, rtcPickViewMat, tempMat4c);
+                        const pvMatInverse = math.inverseMat4(math.mulMat4(pickProjMatrix, (origin ? createRTCViewMat(pickViewMatrix, origin, tempMat4a) : pickViewMatrix), tempMat4c), tempMat4d);
 
-                        } else {
-                            pvMat = math.mulMat4(pickProjMatrix, pickViewMatrix, tempMat4c);
-                        }
+                        const toWorld = (z, dst) => {
+                            dst[0] = x;
+                            dst[1] = y;
+                            dst[2] = z;
+                            dst[3] = 1;
+                            math.transformVec4(pvMatInverse, dst, dst);
+                            return math.mulVec4Scalar(dst, 1 / dst[3]);
+                        };
 
-                        const pvMatInverse = math.inverseMat4(pvMat, tempMat4d);
-
-                        tempVec4a[0] = x;
-                        tempVec4a[1] = y;
-                        tempVec4a[2] = -1;
-                        tempVec4a[3] = 1;
-
-                        let world1 = math.transformVec4(pvMatInverse, tempVec4a);
-                        world1 = math.mulVec4Scalar(world1, 1 / world1[3]);
-
-                        tempVec4b[0] = x;
-                        tempVec4b[1] = y;
-                        tempVec4b[2] = 1;
-                        tempVec4b[3] = 1;
-
-                        let world2 = math.transformVec4(pvMatInverse, tempVec4b);
-                        world2 = math.mulVec4Scalar(world2, 1 / world2[3]);
+                        const world1 = toWorld(-1, tempVec4a);
+                        const world2 = toWorld( 1, tempVec4b);
 
                         const dir = math.subVec3(world2, world1, tempVec4c);
                         const worldPos = math.addVec3(world1, math.mulVec4Scalar(dir, screenZ, tempVec4d), tempVec4e);
@@ -1183,7 +1161,6 @@ const Renderer = function (scene, options) {
                             pickNormalBuffer.bind(gl.RGBA32I);
 
                             gl.viewport(0, 0, pickNormalBuffer.size[0], pickNormalBuffer.size[1]);
-
                             gl.enable(gl.DEPTH_TEST);
                             gl.disable(gl.CULL_FACE);
                             gl.disable(gl.BLEND);
@@ -1474,16 +1451,11 @@ const Renderer = function (scene, options) {
             gl.disable(gl.BLEND);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-            for (let i = 0, len = postCullDrawableList.length; i < len; i++) {
-
-                const drawable = postCullDrawableList[i];
-
-                if (!drawable.drawOcclusion || drawable.culled === true || drawable.visible === false || drawable.pickable === false) { // TODO: Option to exclude transparent?
-                    continue;
+            postCullDrawableList.forEach(drawable => {
+                if (!drawable.culled && drawable.visible && drawable.pickable && drawable.drawOcclusion) { // TODO: Option to exclude transparent?
+                    drawable.drawOcclusion(frameCtx);
                 }
-
-                drawable.drawOcclusion(frameCtx);
-            }
+            });
 
             this._occlusionTester.drawMarkers();
 
