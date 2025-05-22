@@ -1,1 +1,1 @@
-export * from "./TransformControl;
+export * from "./TransformControl";
