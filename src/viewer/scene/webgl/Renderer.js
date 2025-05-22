@@ -1405,16 +1405,8 @@ const Renderer = function (scene, options) {
             let snapType = null;
 
             if (snapPickResult.length > 0) {
-                // vertex snap first, then edge snap
-                snapPickResult.sort((a, b) => {
-                    if (a.isVertex !== b.isVertex) {
-                        return a.isVertex ? -1 : 1;
-                    } else {
-                        return a.dist - b.dist;
-                    }
-                });
-
-                const res = snapPickResult[0];
+                // closest vertex snap first, then closest edge snap
+                const res = snapPickResult.reduce((a,b) => ((((a.isVertex-b.isVertex) || (b.dist-a.dist)) > 0) ? a : b));
                 snapType = res.isVertex ? "vertex" : "edge";
 
                 const snapPick = res.result;
