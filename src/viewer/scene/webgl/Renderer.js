@@ -1209,41 +1209,6 @@ const Renderer = function (scene, options) {
         };
     })();
 
-    function drawSnapInit(frameCtx) {
-        frameCtx.snapPickLayerParams = [];
-        frameCtx.snapPickLayerNumber = 0;
-
-        for (let i = 0, len = postCullDrawableList.length; i < len; i++) {
-
-            const drawable = postCullDrawableList[i];
-
-            if (drawable.drawSnapInit) {
-                if (!drawable.culled && drawable.visible && drawable.pickable) {
-                    drawable.drawSnapInit(frameCtx);
-                }
-            }
-        }
-        return frameCtx.snapPickLayerParams;
-    }
-
-    function drawSnap(frameCtx) {
-        frameCtx.snapPickLayerParams = frameCtx.snapPickLayerParams || [];
-        frameCtx.snapPickLayerNumber = frameCtx.snapPickLayerParams.length;
-        for (let i = 0, len = postCullDrawableList.length; i < len; i++) {
-
-            const drawable = postCullDrawableList[i];
-
-            if (drawable.drawSnapInit) {
-                if (drawable.drawSnap) {
-                    if (!drawable.culled && drawable.visible && drawable.pickable) {
-                        drawable.drawSnap(frameCtx);
-                    }
-                }
-            }
-        }
-        return frameCtx.snapPickLayerParams;
-    }
-
     function getClipPosX(pos, size) {
         return 2 * (pos / size) - 1;
     }
@@ -1329,25 +1294,39 @@ const Renderer = function (scene, options) {
 
             // a) init z-buffer
             gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1, gl.COLOR_ATTACHMENT2]);
-            const layerParamsSurface = drawSnapInit(frameCtx);
+
+            frameCtx.snapPickLayerParams = [];
+            frameCtx.snapPickLayerNumber = 0;
+            postCullDrawableList.forEach(drawable => {
+                if (!drawable.culled && drawable.visible && drawable.pickable && drawable.drawSnapInit) {
+                    drawable.drawSnapInit(frameCtx);
+                }
+            });
+
+            const layerParamsSurface = frameCtx.snapPickLayerParams;
 
             // b) snap-pick
-            const layerParamsSnap = []
+            const layerParamsSnap = [];
             frameCtx.snapPickLayerParams = layerParamsSnap;
 
             gl.depthMask(false);
             gl.drawBuffers([gl.COLOR_ATTACHMENT0]);
 
-            if (snapToVertex && snapToEdge) {
-                frameCtx.snapMode = "edge";
-                drawSnap(frameCtx);
+            const drawSnap = (snapMode) => {
+                frameCtx.snapMode = snapMode;
+                frameCtx.snapPickLayerNumber = frameCtx.snapPickLayerParams.length;
+                postCullDrawableList.forEach(drawable => {
+                    if (!drawable.culled && drawable.visible && drawable.pickable && drawable.drawSnap) {
+                        drawable.drawSnap(frameCtx);
+                    }
+                });
+            };
 
-                frameCtx.snapMode = "vertex";
-                drawSnap(frameCtx);
-            } else {
-                frameCtx.snapMode = snapToVertex ? "vertex" : "edge";
-
-                drawSnap(frameCtx);
+            if (snapToEdge) {
+                drawSnap("edge");
+            }
+            if (snapToVertex) {
+                drawSnap("vertex");
             }
 
             gl.depthMask(true);
