@@ -683,15 +683,14 @@ export class Layer {
         frameCtx.snapPickCoordinateScale = math.mulVec3Scalar(
             safeInvVec3([ aabb[3] - aabb[0], aabb[4] - aabb[1], aabb[5] - aabb[2] ]),
             math.MAX_INT);
-        frameCtx.snapPickLayerNumber++;
 
         const renderer = isSnapInit ? this._renderers.snapInitRenderer : ((frameCtx.snapMode === "edge") ? this._renderers.snapEdgeRenderer : this._renderers.snapVertexRenderer);
         this.__drawPick(renderFlags, frameCtx, renderer);
 
-        frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
+        frameCtx.snapPickLayerParams.push({
             origin: frameCtx.snapPickOrigin.slice(),
             coordinateScale: safeInvVec3(frameCtx.snapPickCoordinateScale)
-        };
+        });
     }
 
 
