@@ -1363,85 +1363,59 @@ const Renderer = function (scene, options) {
 
             // result 2) hi-precision snapped (to vertex/edge) world position
 
-            let snapPickResult = [];
-
+            const snapPickResult = [ ];
             for (let i = 0; i < snapPickResultArray.length; i += 4) {
-                if (snapPickResultArray[i + 3] > 0) {
+                const layerNumber = snapPickResultArray[i + 3];
+                if (layerNumber > 0) {
                     const pixelNumber = Math.floor(i / 4);
                     const w = vertexPickBuffer.size[0];
                     const x = pixelNumber % w - Math.floor(w / 2);
                     const y = Math.floor(pixelNumber / w) - Math.floor(w / 2);
-                    const dist = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
                     snapPickResult.push({
-                        x,
-                        y,
-                        dist,
-                        isVertex: snapToVertex && snapToEdge ? snapPickResultArray[i + 3] > layerParamsSnap.length / 2 : snapToVertex,
-                        result: [
-                            snapPickResultArray[i + 0],
-                            snapPickResultArray[i + 1],
-                            snapPickResultArray[i + 2],
-                            snapPickResultArray[i + 3],
-                        ],
-                        normal: [
-                            snapPickNormalResultArray[i + 0],
-                            snapPickNormalResultArray[i + 1],
-                            snapPickNormalResultArray[i + 2],
-                            snapPickNormalResultArray[i + 3],
-                        ],
-                        id: [
-                            snapPickIdResultArray[i + 0],
-                            snapPickIdResultArray[i + 1],
-                            snapPickIdResultArray[i + 2],
-                            snapPickIdResultArray[i + 3],
-                        ]
+                        dist:     math.lenVec2([ x, y ]),
+                        isVertex: (snapToVertex && snapToEdge) ? (layerNumber > layerParamsSnap.length / 2) : snapToVertex,
+                        result:   snapPickResultArray.subarray(i, i+4),
+                        normal:   snapPickNormalResultArray.subarray(i, i+4),
+                        id:       snapPickIdResultArray.subarray(i, i+4)
                     });
                 }
             }
 
-            let snappedWorldPos = null;
-            let snappedWorldNormal = null;
-            let snappedPickable = null;
-            let snapType = null;
+            const getPickedEntity = pickable => (pickable && pickable.delegatePickedEntity) ? pickable.delegatePickedEntity() : pickable;
 
             if (snapPickResult.length > 0) {
                 // closest vertex snap first, then closest edge snap
                 const res = snapPickResult.reduce((a,b) => ((((a.isVertex-b.isVertex) || (b.dist-a.dist)) > 0) ? a : b));
-                snapType = res.isVertex ? "vertex" : "edge";
-
                 const snapPick = res.result;
                 const pickedLayerParmas = layerParamsSnap[snapPick[3]];
-                snappedWorldPos = toWorldPos(snapPick, pickedLayerParmas.origin, pickedLayerParmas.coordinateScale);
+                const snappedWorldPos = toWorldPos(snapPick, pickedLayerParmas.origin, pickedLayerParmas.coordinateScale);
+                const snappedCanvasPos = camera.projectWorldPos(snappedWorldPos);
 
-                snappedWorldNormal = toWorldNormal(res.normal);
-                snappedPickable = pickIDs.items[pixelToInt(res.id)];
-            }
+                pickResult.reset();
+                pickResult.snappedToEdge    = !res.isVertex;
+                pickResult.snappedToVertex  = res.isVertex;
+                pickResult.worldPos         = snappedWorldPos;
+                pickResult.worldNormal      = toWorldNormal(res.normal);
+                pickResult.entity           = getPickedEntity(pickIDs.items[pixelToInt(res.id)]);
+                pickResult.canvasPos        = canvasPos || (worldPos && camera.projectWorldPos(worldPos)) || snappedCanvasPos;
+                pickResult.snappedCanvasPos = snappedCanvasPos;
+                return pickResult;
 
-            if (null === worldPos && null == snappedWorldPos) {   // If neither regular pick or snap pick, return null
+            } else if (worldPos) {
+
+                pickResult.reset();
+                pickResult.snappedToEdge    = false;
+                pickResult.snappedToVertex  = false;
+                pickResult.worldPos         = worldPos;
+                pickResult.worldNormal      = worldNormal;
+                pickResult.entity           = getPickedEntity(pickable);
+                pickResult.canvasPos        = canvasPos || camera.projectWorldPos(worldPos);
+                pickResult.snappedCanvasPos = canvasPos;
+                return pickResult;
+
+            } else {
                 return null;
             }
-
-            let snappedCanvasPos = null;
-
-            if (null !== snappedWorldPos) {
-                snappedCanvasPos = camera.projectWorldPos(snappedWorldPos);
-            }
-
-            const snappedEntity = (snappedPickable && snappedPickable.delegatePickedEntity) ? snappedPickable.delegatePickedEntity() : snappedPickable;
-            if (!snappedEntity && pickable) {
-                pickable = pickable.delegatePickedEntity ? pickable.delegatePickedEntity() : pickable;
-            }
-
-            pickResult.reset();
-            pickResult.snappedToEdge = (snapType === "edge");
-            pickResult.snappedToVertex = (snapType === "vertex");
-            pickResult.worldPos = snappedWorldPos || worldPos;
-            pickResult.worldNormal = snappedWorldNormal || worldNormal;
-            pickResult.entity = snappedEntity || pickable;
-            pickResult.canvasPos = canvasPos || camera.projectWorldPos(worldPos || snappedWorldPos);
-            pickResult.snappedCanvasPos = snappedCanvasPos || canvasPos;
-
-            return pickResult;
         };
     })();
 
