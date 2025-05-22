@@ -4,21 +4,22 @@
  */
 class RenderBuffer {
 
-    constructor(canvas, gl, options) {
+    constructor(canvas, gl, colorFormats, hasDepthTexture) {
         /** @type {WebGL2RenderingContext} */
         this.gl = gl;
         this.allocated = false;
         this.canvas = canvas;
         this.buffer = null;
         this.bound = false;
-        this._hasDepthTexture = options && options.depthTexture;
+        this._colorFormats = colorFormats;
+        this._hasDepthTexture = hasDepthTexture;
     }
 
     setSize(size) {
         this.size = size;
     }
 
-    bind(...internalformats) {
+    bind() {
         const width  = this.size[0];
         const height = this.size[1];
 
@@ -28,7 +29,7 @@ class RenderBuffer {
         }
 
         if (! this.buffer) {
-            this._allocateBuffer(width, height, ...internalformats);
+            this._allocateBuffer(width, height);
             this.bound = false;
         }
 
@@ -39,7 +40,8 @@ class RenderBuffer {
         }
     }
 
-    _allocateBuffer(width, height, ...internalformats) {
+    _allocateBuffer(width, height) {
+        const internalformats = this._colorFormats || [];
 
         const gl = this.gl;
 
