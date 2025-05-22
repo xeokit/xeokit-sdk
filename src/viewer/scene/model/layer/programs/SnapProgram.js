@@ -1,7 +1,7 @@
 import {math} from "../../../math/math.js";
 
 export const SnapProgram = function(programVariables, geometry, isSnapInit, isPoints) {
-    const layerNumber      = programVariables.createUniform("int",  "layerNumber",      (set, state) => set(state.legacyFrameCtx.snapPickLayerNumber));
+    const layerNumber      = programVariables.createUniform("int",  "layerNumber",      (set, state) => set(state.legacyFrameCtx.snapPickLayerParams.length));
     const coordinateScaler = programVariables.createUniform("vec3", "coordinateScaler", (set, state) => set(state.legacyFrameCtx.snapPickCoordinateScale));
 
     const vWorldPosition = programVariables.createVarying("vec3", "vWorldPosition", () => `${geometry.attributes.position.world}.xyz`);
