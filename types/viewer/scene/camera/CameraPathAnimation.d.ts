@@ -91,5 +91,7 @@ export declare class CameraPathAnimation extends Component {
      * Stops playing this CameraPathAnimation.
      */
     stop(): void;
+
+    destroy(): void;
 }
 

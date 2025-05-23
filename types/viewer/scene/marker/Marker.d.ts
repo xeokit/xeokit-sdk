@@ -133,4 +133,9 @@ export declare class Marker extends Component {
    * @type {Boolean}
    */
   get visible(): boolean;
+
+  /**
+   * Destroys this Marker.
+   */
+  destroy(): void;
 }

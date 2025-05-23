@@ -115,7 +115,7 @@ class NavCubePlugin extends Plugin {
             this._navCubeScene = new Scene(viewer, {
                 canvasId: cfg.canvasId,
                 canvasElement: cfg.canvasElement,
-                transparent: true
+                transparent: true,
             });
 
             this._navCubeCanvas = this._navCubeScene.canvas.canvas;
@@ -361,7 +361,7 @@ class NavCubePlugin extends Plugin {
                 }
             });
 
-            document.addEventListener("mouseup", self._onMouseUp = function (e) {
+            self._navCubeCanvas.addEventListener("mouseup", self._onMouseUp = function (e) {
                 if (e.which !== 1) {// Left button
                     return;
                 }
@@ -378,7 +378,7 @@ class NavCubePlugin extends Plugin {
                     if (hit.uv) {
                         var areaId = self._cubeTextureCanvas.getArea(hit.uv);
                         if (areaId >= 0) {
-                            document.body.style.cursor = "pointer";
+                            self._navCubeCanvas.style.cursor = "pointer";
                             if (lastAreaId >= 0) {
                                 self._cubeTextureCanvas.setAreaHighlighted(lastAreaId, false);
                                 self._repaint();
@@ -404,7 +404,7 @@ class NavCubePlugin extends Plugin {
                                             self._repaint();
                                             lastAreaId = -1;
                                         }
-                                        document.body.style.cursor = "pointer";
+                                        self._navCubeCanvas.style.cursor = "pointer";
                                         if (lastAreaId >= 0) {
                                             self._cubeTextureCanvas.setAreaHighlighted(lastAreaId, false);
                                             self._repaint();
@@ -423,7 +423,7 @@ class NavCubePlugin extends Plugin {
                 }
             });
 
-            document.addEventListener("mousemove", self._onMouseMove = function (e) {
+            self._navCubeCanvas.addEventListener("mousemove", self._onMouseMove = function (e) {
                 if (lastAreaId >= 0) {
                     self._cubeTextureCanvas.setAreaHighlighted(lastAreaId, false);
                     self._repaint();
@@ -435,7 +435,7 @@ class NavCubePlugin extends Plugin {
                 if (down) {
                     var posX = e.clientX;
                     var posY = e.clientY;
-                    document.body.style.cursor = "move";
+                    self._navCubeCanvas.style.cursor = "move";
                     actionMove(posX, posY);
                     return;
                 }
@@ -449,7 +449,7 @@ class NavCubePlugin extends Plugin {
                 });
                 if (hit) {
                     if (hit.uv) {
-                        document.body.style.cursor = "pointer";
+                        self._navCubeCanvas.style.cursor = "pointer";
                         var areaId = self._cubeTextureCanvas.getArea(hit.uv);
                         if (areaId === lastAreaId) {
                             return;
@@ -464,7 +464,7 @@ class NavCubePlugin extends Plugin {
                         }
                     }
                 } else {
-                    document.body.style.cursor = "default";
+                    self._navCubeCanvas.style.cursor = "default";
                     if (lastAreaId >= 0) {
                         self._cubeTextureCanvas.setAreaHighlighted(lastAreaId, false);
                         self._repaint();
@@ -727,8 +727,8 @@ class NavCubePlugin extends Plugin {
             this._navCubeCanvas.removeEventListener("mouseleave", this._onMouseLeave);
             this._navCubeCanvas.removeEventListener("mousedown", this._onMouseDown);
 
-            document.removeEventListener("mousemove", this._onMouseMove);
-            document.removeEventListener("mouseup", this._onMouseUp);
+            this._navCubeCanvas.removeEventListener("mousemove", this._onMouseMove);
+            this._navCubeCanvas.removeEventListener("mouseup", this._onMouseUp);
 
             this._navCubeCanvas = null;
             this._cubeTextureCanvas.destroy();

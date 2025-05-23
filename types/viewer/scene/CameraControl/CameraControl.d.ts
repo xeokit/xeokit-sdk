@@ -1,5 +1,6 @@
 import { Component } from "../Component";
 import { Entity } from "../Entity";
+import { Material } from "../materials";
 import { PickResult } from "../webgl/PickResult";
 
 /**
@@ -24,6 +25,9 @@ export declare class CameraControl extends Component {
   AXIS_VIEW_FRONT: number;
   AXIS_VIEW_TOP: number;
   AXIS_VIEW_BOTTOM: number;
+  MOUSE_PAN: number;
+  MOUSE_ROTATE: number;
+  MOUSE_DOLLY: number;
 
   /**
    * Fires when the model is loaded
@@ -239,6 +243,65 @@ export declare class CameraControl extends Component {
    * @returns {Boolean} Returns ````true```` if this ````CameraControl```` is active.
    */
   get active(): boolean;
+
+  /**
+   * Sets whether the pointer snap to vertex.
+   *
+   * @param {boolean} arg
+   */
+  set snapToVertex(arg: boolean);
+
+  /**
+   * Gets whether the pointer snap to vertex.
+   *
+   * @returns {boolean}
+   */
+  get snapToVertex(): boolean;
+
+  /**
+   * Sets whether the pointer snap to edge.
+   *
+   * @param {boolean} arg
+   */
+  set snapToEdge(arg: boolean);
+
+  /**
+   * Gets whether the pointer snap to edge.
+   *
+   * @returns {boolean}
+   */
+  get snapToEdge(): boolean;
+
+  /**
+   * Sets the current snap radius for "hoverSnapOrSurface" events, to specify whether the radius
+   * within which the pointer snaps to the nearest vertex or the nearest edge.
+   *
+   * Default value is 30 pixels.
+   *
+   * @param {Number} arg The snap radius.
+   */
+  set snapRadius(arg: number);
+
+  /**
+   * Gets the current snap radius.
+   *
+   * @returns {Number} The snap radius.
+   */
+  get snapRadius(): number;
+
+  /**
+   * If `true`, the keyboard shortcuts are enabled ONLY if the mouse is over the canvas.
+   * 
+   * @param {boolean} arg
+   */
+  set keyboardEnabledOnlyIfMouseover(arg: boolean);
+
+  /**
+   * Gets whether the keyboard shortcuts are enabled ONLY if the mouse is over the canvas or ALWAYS.
+   * 
+   * @returns {boolean}
+   */
+  get keyboardEnabledOnlyIfMouseover(): boolean;
 
   /**
    * Sets whether the {@link Camera} follows the mouse/touch pointer.
@@ -503,6 +566,47 @@ export declare class CameraControl extends Component {
   get panInertia(): number;
 
   /**
+   * Sets the keyboard layout.
+   *
+   * Supported layouts are:
+   *
+   * * ````"qwerty"```` (default)
+   * * ````"azerty"````
+   *
+   * @deprecated
+   * @param {String} arg Selects the keyboard layout.
+   */
+  set keyboardLayout(arg: string);
+
+  /**
+   * Gets the keyboard layout.
+   *
+   * Supported layouts are:
+   *
+   * * ````"qwerty"```` (default)
+   * * ````"azerty"````
+   *
+   * @deprecated
+   * @returns {String} The current keyboard layout.
+   */
+  get keyboardLayout(): string;
+
+  /**
+   * Sets a sphere as the representation of the pivot position.
+   *
+   * @param {Object} [cfg] Sphere configuration.
+   * @param {String} [cfg.size=1] Optional size factor of the sphere. Defaults to 1.
+   * @param {String} [cfg.material=PhongMaterial] Optional size factor of the sphere. Defaults to a red opaque material.
+   */
+  enablePivotSphere(cfg: {size: number, material: Material}): void;
+
+  /**
+   * Remove the sphere as the representation of the pivot position.
+   *
+   */
+  disablePivotSphere(): void;
+
+  /**
    * Sets whether mouse and touch input is enabled.
    *
    * Default is ````true````.
@@ -647,6 +751,34 @@ export declare class CameraControl extends Component {
   get panToPointer(): boolean;
 
   /**
+   * Sets whether this ````CameraControl```` is in plan-view mode.
+   *
+   * When in plan-view mode, rotation is disabled.
+   *
+   * Default is ````false````.
+   *
+   * Deprecated - use {@link CameraControl#navMode} instead.
+   *
+   * @param {Boolean} arg Set ````true```` to enable plan-view mode.
+   * @deprecated
+   */
+  set planView(arg: boolean);
+
+  /**
+   * Gets whether this ````CameraControl```` is in plan-view mode.
+   *
+   * When in plan-view mode, rotation is disabled.
+   *
+   * Default is ````false````.
+   *
+   * Deprecated - use {@link CameraControl#navMode} instead.
+   *
+   * @returns {Boolean} Returns ````true```` if plan-view mode is enabled.
+   * @deprecated
+   */
+  get planView(): boolean;
+
+  /**
    * Sets whether this ````CameraControl```` is in first-person mode.
    *
    * In "first person" mode (disabled by default) the look position rotates about the eye position. Otherwise,  {@link Camera.eye} rotates about {@link Camera.look}.
@@ -701,4 +833,40 @@ export declare class CameraControl extends Component {
    * @returns {Boolean} Returns ````true```` when pivoting by default about the selected point on the virtual sphere, or ````false```` when pivoting by default about {@link Camera.look}.
    */
   get smartPivot(): boolean;
+
+  /**
+   * Sets the double click time frame length in milliseconds.
+   * 
+   * If two mouse click events occur within this time frame, it is considered a double click. 
+   * 
+   * Default is ````250````
+   * 
+   * @param {Number} arg New double click time frame.
+   */
+  set doubleClickTimeFrame(arg: number);
+
+  /**
+   * Gets the double click time frame length in milliseconds.
+   *  
+   * Default is ````250````
+   * 
+   * @returns {Number} Current double click time frame.
+   */
+  get doubleClickTimeFrame(): number;
+
+  /**
+   * Sets whether to zoom the camera on mouse wheel
+   *
+   * Default is ````true````
+   *
+   * @param {Boolean} arg
+   */
+  set zoomOnMouseWheel(arg: boolean);
+
+  /**
+   * Gets whether to zoom the camera on mouse wheel
+   *
+   * @returns {Boolean}
+   */
+  get zoomOnMouseWheel(): boolean;
 }

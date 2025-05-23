@@ -8,6 +8,7 @@ function CubeTextureCanvas(viewer, navCubeScene, cfg = {}) {
     const cubeColor = "lightgrey";
     const cubeHighlightColor = cfg.hoverColor || "rgba(0,0,0,0.4)";
     const textColor = cfg.textColor || "black";
+    const parentNode = cfg.canvasElement || document.body;
 
     const height = 500;
     const width = height + (height / 3);
@@ -119,8 +120,7 @@ function CubeTextureCanvas(viewer, navCubeScene, cfg = {}) {
     this._textureCanvas.style.visibility = "hidden";
     this._textureCanvas.style["z-index"] = 2000000;
 
-    const body = document.getElementsByTagName("body")[0];
-    body.appendChild(this._textureCanvas);
+    parentNode.appendChild(this._textureCanvas);
 
     const context = this._textureCanvas.getContext("2d");
 

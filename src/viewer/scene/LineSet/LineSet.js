@@ -66,7 +66,7 @@ class LineSet extends Component {
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
      * @param {Number[]} cfg.positions World-space 3D vertex positions.
      * @param {Number[]} [cfg.indices] Indices to connect ````positions```` into line segments. Note that these are separate line segments, not a polyline.
-     * @param {Number[]} [cfg.color=[0,0,0]] The color of this ````LineSet````. This is both emissive and diffuse.
+     * @param {Number[]} [cfg.color=[1,1,1]] The color of this ````LineSet````. This is both emissive and diffuse.
      * @param {Boolean} [cfg.visible=true] Indicates whether or not this ````LineSet```` is visible.
      * @param {Number} [cfg.opacity=1.0] ````LineSet````'s initial opacity factor.
      */
@@ -86,6 +86,9 @@ class LineSet extends Component {
             }
         }
 
+        this._color = cfg.color || [1, 1, 1];
+        this._opacity = cfg.opacity || 1.0;
+
         this._sceneModel = new SceneModel(this, {
             isModel: false // Don't register in Scene.models
         });
@@ -94,7 +97,9 @@ class LineSet extends Component {
             id: "linesMesh",
             primitive: "lines",
             positions: this._positions,
-            indices: this._indices
+            indices: this._indices,
+            color: this._color,
+            opacity: this._opacity,
         })
 
         this._sceneModel.createEntity({

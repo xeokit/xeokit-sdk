@@ -89,7 +89,21 @@ export declare class ReadableGeometry extends Geometry {
   get obb(): number[];
 
   /**
+   * Returns the surface area of this Mesh.
+   * @returns {number}
+   */
+  get surfaceArea(): number;
+
+  /**
+   * Returns the centroid of this Mesh.
+   * @returns {number}
+   */
+  get centroid(): number;
+
+  /**
    * Approximate number of triangles in this ReadableGeometry.
    */
   get numTriangles(): number;
+
+  destroy(): void;
 }

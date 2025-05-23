@@ -22,4 +22,81 @@ export declare class DirLight extends Light {
    * @param {DirLightConfiguration} [cfg] DirLight configuration
    */
   constructor(owner: Component, cfg: DirLightConfiguration);
+
+  /**
+   * Sets the direction in which the DirLight is shining.
+   *
+   * Default value is ````[1.0, 1.0, 1.0]````.
+   *
+   * @param {Number[]} value The direction vector.
+   */
+  set dir(value: number);
+
+  /**
+   * Gets the direction in which the DirLight is shining.
+   *
+   * Default value is ````[1.0, 1.0, 1.0]````.
+   *
+   * @returns {Number[]} The direction vector.
+   */
+  get dir(): number;
+
+  /**
+   * Sets the RGB color of this DirLight.
+   *
+   * Default value is ````[0.7, 0.7, 0.8]````.
+   *
+   * @param {Number[]} color The DirLight's RGB color.
+   */
+  set color(color: number[]);
+
+  /**
+   * Gets the RGB color of this DirLight.
+   *
+   * Default value is ````[0.7, 0.7, 0.8]````.
+   *
+   * @returns {Number[]} The DirLight's RGB color.
+   */
+  get color(): number[];
+
+  /**
+   * Sets the intensity of this DirLight.
+   *
+   * Default intensity is ````1.0```` for maximum intensity.
+   *
+   * @param {Number} intensity The DirLight's intensity
+   */
+  set intensity(intensity: number);
+
+  /**
+   * Gets the intensity of this DirLight.
+   *
+   * Default value is ````1.0```` for maximum intensity.
+   *
+   * @returns {Number} The DirLight's intensity.
+   */
+  get intensity(): number;
+
+  /**
+   * Sets if this DirLight casts a shadow.
+   *
+   * Default value is ````false````.
+   *
+   * @param {Boolean} castsShadow Set ````true```` to cast shadows.
+   */
+  set castsShadow(castsShadow: boolean);
+
+  /**
+   * Gets if this DirLight casts a shadow.
+   *
+   * Default value is ````false````.
+   *
+   * @returns {Boolean} ````true```` if this DirLight casts shadows.
+   */
+  get castsShadow(): boolean;
+  
+  /**
+   * Destroys this DirLight.
+   */
+  destroy(): void;
 }

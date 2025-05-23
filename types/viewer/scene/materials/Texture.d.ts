@@ -1,77 +1,39 @@
-/**
- * @desc A 2D texture map.
- *
- * * Textures are attached to {@link Material}s, which are attached to {@link Mesh}es.
- * * To create a Texture from an image file, set {@link Texture.src} to the image file path.
- * * To create a Texture from an HTMLImageElement, set the Texture's {@link Texture.image} to the HTMLImageElement.
- *
- * ## Usage
- *
- * In this example we have a Mesh with a {@link PhongMaterial} which applies diffuse {@link Texture}, and a {@link buildTorusGeometry} which builds a {@link ReadableGeometry}.
- *
- * Note that xeokit will ignore {@link PhongMaterial.diffuse} and {@link PhongMaterial.specular}, since we override those
- * with {@link PhongMaterial.diffuseMap} and {@link PhongMaterial.specularMap}. The {@link Texture} pixel colors directly
- * provide the diffuse and specular components for each fragment across the {@link ReadableGeometry} surface.
- *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#materials_Texture)]
- *
- * ```` javascript
- * import {Viewer, Mesh, buildTorusGeometry,
- *      ReadableGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";
- *
- * const viewer = new Viewer({
- *      canvasId: "myCanvas"
- * });
- *
- * viewer.camera.eye = [0, 0, 5];
- * viewer.camera.look = [0, 0, 0];
- * viewer.camera.up = [0, 1, 0];
- *
- * new Mesh(viewer.scene, {
- *      geometry: new ReadableGeometry(viewer.scene, buildTorusGeometry({
- *          center: [0, 0, 0],
- *          radius: 1.5,
- *          tube: 0.5,
- *          radialSegments: 32,
- *          tubeSegments: 24,
- *          arc: Math.PI * 2.0
- *      }),
- *      material: new PhongMaterial(viewer.scene, {
- *          ambient: [0.9, 0.3, 0.9],
- *          shininess: 30,
- *          diffuseMap: new Texture(viewer.scene, {
- *              src: "textures/diffuse/uvGrid2.jpg"
- *          })
- *      })
- * });
- *````
- */
+import { Component } from '../Component';
+
+export declare type TextureConfiguration = {
+    /** Optional ID for this Texture, unique among all components in the parent scene, generated automatically when omitted. */
+    id?: string;
+    /** Path to image file to load into this Texture. See the {@link Texture#src} property for more info. */
+    src?: string;
+    /** HTML Image object to load into this Texture. See the {@link Texture#image} property for more info. */
+    image?: HTMLImageElement;
+    /** How the texture is sampled when a texel covers less than one pixel. */
+    minFilter?: "LinearFilter" | "LinearMipMapNearestFilter" | "NearestMipMapNearestFilter" | "NearestMipMapLinearFilter" | "LinearMipMapLinearFilter";
+    /** How the texture is sampled when a texel covers more than one pixel. Supported values are {@link LinearFilter} and {@link NearestFilter}. */
+    magFilter?: "LinearFilter" | "NearestFilter";
+    /** Wrap parameter for texture coordinate *S*. Supported values are {@link ClampToEdgeWrapping}, {@link MirroredRepeatWrapping} and {@link RepeatWrapping}. */
+    wrapS?: "ClampToEdgeWrapping" | "MirroredRepeatWrapping" | "RepeatWrapping";
+    /** Wrap parameter for texture coordinate *T*. Supported values are {@link ClampToEdgeWrapping}, {@link MirroredRepeatWrapping} and {@link RepeatWrapping}. */
+    wrapT?: "ClampToEdgeWrapping" | "MirroredRepeatWrapping" | "RepeatWrapping";
+    /** Flips this Texture's source data along its vertical axis when ````true````. */
+    flipY?: boolean;
+    /** 2D translation vector that will be added to texture's *S* and *T* coordinates. */
+    translate?: number[];
+    /** 2D scaling vector that will be applied to texture's *S* and *T* coordinates. */
+    scale?: number[];
+    /** Rotation, in degrees, that will be applied to texture's *S* and *T* coordinates. */
+    rotate?: number;
+    /** Encoding format. Supported values are {@link LinearEncoding} and {@link sRGBEncoding}. */
+    encoding?: "LinearEncoding" | "sRGBEncoding";
+}
 export declare class Texture extends Component {
     /**
      * @constructor
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this Texture as well.
-     * @param {*} [cfg] Configs
-     * @param {String} [cfg.id] Optional ID for this Texture, unique among all components in the parent scene, generated automatically when omitted.
-     * @param {String} [cfg.src=null] Path to image file to load into this Texture. See the {@link Texture.src} property for more info.
-     * @param {HTMLImageElement} [cfg.image=null] HTML Image object to load into this Texture. See the {@link Texture.image} property for more info.
-     * @param {String} [cfg.minFilter="linearMipmapLinear"] How the texture is sampled when a texel covers less than one pixel. See the {@link Texture.minFilter} property for more info.
-     * @param {String} [cfg.magFilter="linear"] How the texture is sampled when a texel covers more than one pixel. See the {@link Texture.magFilter} property for more info.
-     * @param {String} [cfg.wrapS="repeat"] Wrap parameter for texture coordinate *S*. See the {@link Texture.wrapS} property for more info.
-     * @param {String} [cfg.wrapT="repeat"] Wrap parameter for texture coordinate *S*. See the {@link Texture.wrapT} property for more info.
-     * @param {Boolean} [cfg.flipY=false] Flips this Texture's source data along its vertical axis when true.
-     * @param {Number[]} [cfg.translate=[0,0]] 2D translation vector that will be added to texture's *S* and *T* coordinates.
-     * @param {Number[]} [cfg.scale=[1,1]] 2D scaling vector that will be applied to texture's *S* and *T* coordinates.
-     * @param {Number} [cfg.rotate=0] Rotation, in degrees, that will be applied to texture's *S* and *T* coordinates.
-     * @param  {String} [cfg.encoding="linear"] Encoding format.  See the {@link Texture.encoding} property for more info.
+     * @param {TextureConfiguration} [cfg] Configs
      */
-    constructor(owner: Component, cfg?: any);
-    _state: any;
-    _src: string;
-    _image: any;
-    _translate: any;
-    _scale: any;
-    _rotate: any;
-    _matrixDirty: boolean;
+    constructor(owner: Component, cfg?: TextureConfiguration);
+    
     /**
      * Sets the 2D translation vector added to this Texture's *S* and *T* UV coordinates.
      *
@@ -152,14 +114,7 @@ export declare class Texture extends Component {
      * @type {HTMLImageElement}
      */
     get image(): HTMLImageElement;
-    _checkMinFilter(value: any): any;
-    _checkMagFilter(value: any): any;
-    _checkFilter(value: any): any;
-    _checkWrapS(value: any): any;
-    _checkWrapT(value: any): any;
-    _checkFlipY(value: any): boolean;
-    _checkEncoding(value: any): any;
-    _webglContextRestored(): void;
+    
     /**
      * Gets how this Texture is sampled when a texel covers less than one pixel.
      *
@@ -256,5 +211,8 @@ export declare class Texture extends Component {
      * @type {String}
      */
     get encoding(): string;
+    /**
+     * Destroys this Texture
+     */
+    destroy(): void;
 }
-import { Component } from "../Component.js";

@@ -12,46 +12,27 @@ import {Skybox} from "../../viewer/scene/skybox/Skybox.js"
  * });
  *
  * // Add a GLTFModelsPlugin
- * var gltfLoaderPlugin = new GLTFModelsPlugin(viewer, {
- *     id: "GLTFModels"  // Default value
- * });
+ * var xktLoaderPlugin = new XKTLoaderPlugin(viewer);
  *
  * // Add a SkyboxesPlugin
- * var skyboxesPlugin = new SkyboxesPlugin(viewer, {
- *     id: "Skyboxes" // Default value
- * });
+ * var skyboxesPlugin = new SkyboxesPlugin(viewer);
+ * 
+ * // Create a skybox
+ * skyBoxesPlugin.createSkybox({
+ *     src: [
+ *         "./assets/images/posx.jpg",
+ *         "./assets/images/negx.jpg",
+ *         "./assets/images/posy.jpg",
+ *         "./assets/images/negy.jpg",
+ *         "./assets/images/posz.jpg",
+ *         "./assets/images/negz.jpg"
+ *     ]
+ * })
  *
- * // Load a glTF model
- * const model = gltfLoaderPlugin.load({
+ * // Load an XKT model
+ * const model = xktLoaderPlugin.load({
  *     id: "myModel",
- *     src: "./models/gltf/mygltfmodel.gltf"
- * });
- *
- * // Create three directional World-space lights. "World" means that they will appear as if part
- * // of the world, instead of "View", where they move with the user's head.
- *
- * skyboxesPlugin.createLight({
- *     id: "keyLight",
- *     dir: [0.8, -0.6, -0.8],
- *     color: [1.0, 0.3, 0.3],
- *     intensity: 1.0,
- *     space: "world"
- * });
- *
- * skyboxesPlugin.createLight({
- *     id: "fillLight",
- *     dir: [-0.8, -0.4, -0.4],
- *     color: [0.3, 1.0, 0.3],
- *     intensity: 1.0,
- *     space: "world"
- * });
- *
- * skyboxesPlugin.createDirLight({
- *     id: "rimLight",
- *     dir: [0.2, -0.8, 0.8],
- *     color: [0.6, 0.6, 0.6],
- *     intensity: 1.0,
- *     space: "world"
+ *     src: "./models/xkt/myModel.xkt"
  * });
  *
  * @class SkyboxesPlugin
@@ -77,23 +58,17 @@ class SkyboxesPlugin extends Plugin {
     /**
      Creates a skybox.
 
-     @param {String} id Unique ID to assign to the skybox.
      @param {Object} params Skybox configuration.
+     @param {String} [params.id] Optional ID, unique among all components in the parent {Scene}, generated automatically when omitted.
+     @param {String | String[]} [params.src=null] Path to skybox texture
+     @param {Number} [params.encoding=LinearEncoding] Texture encoding format.  See the {@link Texture#encoding} property for more info.
+     @param {Number} [params.size=1000] Size of this Skybox, given as the distance from the center at ````[0,0,0]```` to each face.
      @param {Boolean} [params.active=true] Whether the skybox plane is initially active. Only skyboxes while this is true.
      @returns {Skybox} The new skybox.
      */
-    createSkybox(id, params) {
-        if (this.viewer.scene.components[id]) {
-            this.error("Component with this ID already exists: " + id);
-            return this;
-        }
-        var skybox = new Skybox(this.viewer.scene, {
-            id: id,
-            pos: params.pos,
-            dir: params.dir,
-            active: true || params.active
-        });
-        this.skyboxes[id] = skybox;
+    createSkybox(params) {
+        const skybox = new Skybox(this.viewer.scene, params);
+        this.skyboxes[skybox.id] = skybox;
         return skybox;
     }
 

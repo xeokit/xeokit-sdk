@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+  </head>
+<body>
+  <input type="checkbox" id="info-button"/>
+  <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+  <canvas id="myCanvas"></canvas>
+  <button style="position: absolute; left: 10px; top: 100px; width: 100px; height: 100px;" id="arrow-xeokit-button"></button>
+  <button style="position: absolute; left: 10px; top: 220px; width: 100px; height: 100px;" id="revision-cloud-xeokit-button"></button>
+  <button style="position: absolute; left: 10px; top: 340px; width: 200px; height:  50px;" id="creoox-logo"></button>
+  <button style="position: absolute; left: 10px; top: 410px; width: 200px; height:  38px;" id="xeokit-logo"></button>
+  <div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/annotation_icon.png"/>
+    <h1>2D markup example</h1>
+    <h2>Select an icon or drag an image to create a 2D markup mesh. Use middle mouse button to place it wherever you want.</h2>
+    <h3>Components Used</h3>
+    <ul>
+      <li>
+        <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+           target="_other">Viewer</a>
+      </li>
+      <li>
+        <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+           target="_other">XKTLoaderPlugin</a>
+      </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+      <li>
+        <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+           target="_other">Model source</a>
+      </li>
+    </ul>
+  </div>
+</body>
+<script type="module">
+
+import {
+    buildPlaneGeometry,
+    math,
+    Mesh,
+    PhongMaterial,
+    ReadableGeometry,
+    Texture,
+    transformToNode,
+    Viewer,
+    XKTLoaderPlugin,
+} from "../../dist/xeokit-sdk.min.es.js";
+
+const canvas = window.document.getElementById("myCanvas");
+
+const viewer = new Viewer({ canvasElement: canvas });
+
+viewer.camera.eye  = [ 15, 7, -8 ];
+viewer.camera.look = [ 10, 4,  1 ];
+viewer.camera.up   = [  0, 1,  0 ];
+
+new XKTLoaderPlugin(viewer).load({
+    id: "myModel",
+    src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
+    edges: true,
+}).on("loaded", () => viewer.cameraFlight.flyTo());
+
+
+const create2dMarkup = (img, initCanvasPos, onPlaced) => {
+    let canvasPos = initCanvasPos;
+
+    const scene = viewer.scene;
+
+    const planMesh = new Mesh(scene, {
+        visible:  false,
+        pickable: false,
+        geometry: new ReadableGeometry(scene, buildPlaneGeometry()),
+        material: new PhongMaterial(scene, {
+            alpha: 0.99,
+            diffuseMap: new Texture(scene, { image: img })
+        })
+    });
+
+    const updatePlaneMesh = () => {
+        const pickResult = canvasPos && scene.pick({ canvasPos: canvasPos, snapToEdge: window.snap, snapToVertex: window.snap, pickSurface: true });
+
+        if (pickResult) {
+            const dir = pickResult.worldNormal;
+            const res = math.identityMat4();
+            const acc = mat => math.mulMat4(mat, res, res);
+
+            // scale to reflect image aspect ratio
+            acc(math.scalingMat4v([img.width / img.height, 1, 1]));
+
+            // face front instead of up
+            acc(math.rotationMat4v(Math.PI / 2, [1,0,0], math.mat4()));
+
+            // orient along normal vector of the intersection point
+            acc(math.quaternionToMat4(math.vec3PairToQuaternion([0,0,1], dir, math.vec4()), math.mat4()));
+
+            // translate to intersection point
+            acc(math.translationMat4v(math.addVec3(pickResult.worldPos, math.mulVec3Scalar(dir, 0.01, math.vec3()), math.vec3())));
+
+            planMesh.matrix = res;
+        }
+
+        planMesh.visible = !! pickResult;
+    };
+
+    updatePlaneMesh();
+
+    const cleanups = [ ];
+    const addCanvasEventListener = (type, listener) => {
+        canvas.addEventListener(type, listener);
+        cleanups.push(() => canvas.removeEventListener(type, listener));
+    };
+
+    addCanvasEventListener("mousedown", event => {
+        if (event.which === 2) {
+            preventDefaults(event);
+            cleanups.forEach(c => c());
+            onPlaced && onPlaced();
+        }
+    });
+
+    addCanvasEventListener("mousemove", (event) => {
+        canvasPos ||= math.vec2();
+        canvasPos[0] = event.clientX;
+        canvasPos[1] = event.clientY;
+        transformToNode(canvas.ownerDocument.documentElement, canvas, canvasPos);
+        updatePlaneMesh();
+    });
+};
+
+
+// Setup drag and drop interface
+
+const preventDefaults = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+};
+
+["dragenter", "dragover", "dragleave"].forEach(eventName => canvas.addEventListener(eventName, preventDefaults));
+
+canvas.addEventListener("drop", event => {
+    preventDefaults(event);
+
+    const canvasPos = math.vec2([ event.clientX, event.clientY ]);
+    transformToNode(canvas.ownerDocument.documentElement, canvas, canvasPos);
+
+    const images = [...event.dataTransfer.files].filter(f => f.type.startsWith('image/'));
+
+    (function handleImage(i) {
+        if (i < images.length) {
+            const image = images[i];
+            const img = window.document.createElement("img");
+            img.crossOrigin = "anonymous";
+            img.src = window.URL.createObjectURL(image);
+            img.onload = () => {
+                window.URL.revokeObjectURL(img.src);
+                create2dMarkup(img, canvasPos, () => handleImage(i + 1));
+            };
+        }
+    })(0);
+});
+
+
+// Setup predefined buttons
+
+const setupButton = (elt, src) => {
+    const img = window.document.createElement("img");
+    img.style.width  = "100%";
+    img.style.height = "100%";
+    img.src = src;
+    img.onload = () => {
+        elt.onclick = () => {
+            // A dedicated img is created for its size to not be affected
+            // by the style width/height properties
+            const img = window.document.createElement("img");
+            img.crossOrigin = "anonymous";
+            img.src = src;
+            img.onload = () => create2dMarkup(img);
+        };
+    };
+    elt.appendChild(img);
+};
+
+setupButton(window.document.getElementById("arrow-xeokit-button"),          "./arrow-xeokit.svg");
+setupButton(window.document.getElementById("revision-cloud-xeokit-button"), "./revision-cloud-xeokit.svg");
+setupButton(window.document.getElementById("creoox-logo"),                  "./creoox_standard_dark.png");
+setupButton(window.document.getElementById("xeokit-logo"),                  "./xeokit_standard_dark.png");
+
+</script>
+</html>

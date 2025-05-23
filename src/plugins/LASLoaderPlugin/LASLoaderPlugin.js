@@ -430,6 +430,8 @@ class LASLoaderPlugin extends Plugin {
      * @param {String} [params.id] ID to assign to the root {@link Entity#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default.
      * @param {String} [params.src] Path to a LAS file, as an alternative to the ````las```` parameter.
      * @param {ArrayBuffer} [params.las] The LAS file data, as an alternative to the ````src```` parameter.
+     *  @param {String} [params.manifestSrc] Path or URL to a JSON manifest file that provides paths to ````.laz```` || ````.las```` files to load as parts of the model. Use this option to load models that have been split into
+     * @param {Object} [params.manifest] A JSON manifest object (as an alternative to a path or URL) that provides paths to ````.laz```` || ````.las```` files to load as parts of the model. Use this option to load models that have been split into
      * @param {Boolean} [params.loadMetadata=true] Whether to load metadata for the LAS model.
      * @param {Number[]} [params.origin=[0,0,0]] The model's World-space double-precision 3D origin. Use this to position the model within xeokit's World coordinate system, using double-precision coordinates.
      * @param {Number[]} [params.position=[0,0,0]] The model single-precision 3D position, relative to the ````origin```` parameter.
@@ -451,7 +453,7 @@ class LASLoaderPlugin extends Plugin {
             isModel: true
         }));
 
-        if (!params.src && !params.las) {
+        if (!params.src && !params.las && !params.manifest && !params.manifestSrc) {
             this.error("load() param expected: src or las");
             return sceneModel; // Return new empty model
         }
@@ -464,18 +466,77 @@ class LASLoaderPlugin extends Plugin {
             }
         };
 
+        const spinner = this.viewer.scene.canvas.spinner;
+        const done = () => {
+            sceneModel.scene.once("tick", () => {
+                if (sceneModel.destroyed) {
+                    return;
+                }
+                sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
+                sceneModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
+            });
+            spinner.processes--;
+        }
+        const error = (errMsg) => {
+            spinner.processes--;
+            this.error(errMsg);
+            sceneModel.fire("error", errMsg);
+        }
+
         if (params.src) {
             this._loadModel(params.src, params, options, sceneModel);
-        } else {
-            const spinner = this.viewer.scene.canvas.spinner;
+        } else if(params.las) {
             spinner.processes++;
-            this._parseModel(params.las, params, options, sceneModel).then(() => {
-                spinner.processes--;
-            }, (errMsg) => {
-                spinner.processes--;
-                this.error(errMsg);
-                sceneModel.fire("error", errMsg);
-            });
+            this._parseModel(params.las, params, options, sceneModel).then(done, error);
+        } else if (params.manifest || params.manifestSrc) {
+            const baseDir = params.manifestSrc ? getBaseDirectory(params.manifestSrc) : "";
+            const loadAllFiles = (lasFiles) => { 
+                let i = 0;
+                const modelsLoaded = new Array(lasFiles.length);
+                const loadNext = () => {
+                    if (sceneModel.destroyed) {
+                        done();
+                    } else if (i >= lasFiles.length) {
+                        return
+                    } else {
+                        modelsLoaded[i] = false;
+                        this._dataSource.getLAS(`${baseDir}${lasFiles[i]}`, (arrayBuffer) => {
+                            const modelParams = utils.apply(params, {isManifest: true, index: i});
+                            this._parseModel(arrayBuffer, modelParams, options, sceneModel).then(() => {
+                                modelsLoaded[modelParams.index] = true;
+                                let allLoaded = true;
+                                modelsLoaded.forEach((loaded) => {
+                                    if(!loaded) allLoaded = false;
+                                })
+                                if(allLoaded) done();
+                            });
+                            i++;
+                            this.scheduleTask(loadNext, 200);
+                        }, error);
+                    }
+                }
+                loadNext();
+            };
+            const loadManifestData = (manifestData) => {
+                if(sceneModel.destroyed) return;
+                const files = manifestData.lasFiles || manifestData.lazFiles;
+                if(!files || files.length <= 0) {
+                    this.error(`load(): Failed to load model manifest - manifest not valid`);
+                    return;
+                }
+                loadAllFiles(files);
+            }
+            if(params.manifestSrc) {
+                this._dataSource.getManifest(params.manifestSrc, (manifestData) => {
+                    loadManifestData(manifestData);
+                }, (errMsg) => {
+                    this.error(errMsg);
+                    sceneModel.fire("error", errMsg);
+                })
+            } else {
+                const manifestData = params.manifest;
+                loadManifestData(manifestData);
+            }
         }
 
         return sceneModel;
@@ -486,6 +547,13 @@ class LASLoaderPlugin extends Plugin {
         spinner.processes++;
         this._dataSource.getLAS(params.src, (arrayBuffer) => {
                 this._parseModel(arrayBuffer, params, options, sceneModel).then(() => {
+                    sceneModel.scene.once("tick", () => {
+                        if (sceneModel.destroyed) {
+                            return;
+                        }
+                        sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
+                        sceneModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
+                    });
                     spinner.processes--;
                 }, (errMsg) => {
                     spinner.processes--;
@@ -668,7 +736,7 @@ class LASLoaderPlugin extends Plugin {
                     const meshIds = [];
 
                     for (let i = 0, len = pointsChunks.length; i < len; i++) {
-                        const meshId = `pointsMesh${i}`;
+                        const meshId = `${params.isManifest ? 'model'+params.index : ''}pointsMesh${i}`;
                         meshIds.push(meshId);
                         sceneModel.createMesh({
                             id: meshId,
@@ -677,30 +745,6 @@ class LASLoaderPlugin extends Plugin {
                             colorsCompressed: (i < colorsChunks.length) ? colorsChunks[i] : null
                         });
                     }
-                    /*
-                                const pointsChunks = chunkArray(positionsValue, MAX_VERTICES * 3);
-                    const colorsChunks = chunkArray(colorsCompressed, MAX_VERTICES * 4);
-                    const meshIds = [];
-
-                    for (let i = 0, len = pointsChunks.length; i < len; i++) {
-
-                        const geometryId = `geometryMesh${i}`;
-                        const meshId = `pointsMesh${i}`;
-                        meshIds.push(meshId);
-
-                        sceneModel.createGeometry({
-                            id: geometryId,
-                            primitive: "points",
-                            positions: pointsChunks[i],
-                            colorsCompressed: (i < colorsChunks.length) ? colorsChunks[i] : null
-                        });
-
-                        sceneModel.createMesh({
-                            id: meshId,
-                            geometryId
-                        });
-                    }
-                     */
 
                     const pointsObjectId = params.entityId || math.createUUID();
 
@@ -743,14 +787,6 @@ class LASLoaderPlugin extends Plugin {
                         this.viewer.metaScene.createMetaModel(metaModelId, metadata, options);
                     }
 
-                    sceneModel.scene.once("tick", () => {
-                        if (sceneModel.destroyed) {
-                            return;
-                        }
-                        sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
-                        sceneModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
-                    });
-
                     resolve();
                 });
             } catch (e) {
@@ -770,6 +806,16 @@ function chunkArray(array, chunkSize) {
         result.push(array.slice(i, i + chunkSize));
     }
     return result;
+}
+
+function getBaseDirectory(filePath) {
+    if (filePath.indexOf('?') > -1) {
+        filePath = filePath.split('?')[0];
+    }
+
+    const pathArray = filePath.split('/');
+    pathArray.pop(); // Remove the file name or the last segment of the path
+    return pathArray.join('/') + '/';
 }
 
 export {LASLoaderPlugin};

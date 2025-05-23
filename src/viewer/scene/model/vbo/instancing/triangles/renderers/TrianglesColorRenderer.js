@@ -238,6 +238,11 @@ class TrianglesColorRenderer extends TrianglesInstancingRenderer {
             src.push("    float dy = dFdy(vFragDepth);")
             src.push("    float diff = sqrt(dx*dx+dy*dy);");
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth + diff ) * logDepthBufFC * 0.5;");
+        } else {
+            src.push("    float dx = dFdx(gl_FragCoord.z);")
+            src.push("    float dy = dFdy(gl_FragCoord.z);")
+            src.push("    float diff = sqrt(dx*dx+dy*dy);");
+            src.push("    gl_FragDepth = gl_FragCoord.z + diff;");
         }
 
         // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top

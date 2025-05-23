@@ -347,20 +347,16 @@ class Scene extends Component {
      * configures renderer logic for the specified number of SectionPlanes, eliminating the need for setting up logic with each SectionPlane creation and thereby enhancing
      * responsiveness. It is important to consider that each SectionPlane imposes rendering performance, so it is recommended to set this value to a quantity that aligns with
      * your expected usage.
-     * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
+     * @throws {String} Throws an exception when  canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      */
     constructor(viewer, cfg = {}) {
 
         super(null, cfg);
-
-        const canvas = cfg.canvasElement || document.getElementById(cfg.canvasId);
+        const canvas = cfg.canvasElement || document.querySelector(`#${cfg.canvasId}`);
 
         if (!(canvas instanceof HTMLCanvasElement)) {
             throw "Mandatory config expected: valid canvasId or canvasElement";
         }
-
-        //set the viewer version on canvas data
-        canvas.dataset.viewerVersion = viewer.version;
 
         /**
          * @type {{[key: string]: {wrapperFunc: Function, tickSubId: string}}}
