@@ -916,6 +916,12 @@ const Renderer = function (scene, options) {
         const worldSurfacePos = math.vec3();
         const worldSurfaceNormal = math.vec3();
 
+        const pickBuffer = new RenderBuffer(canvas, gl);
+        pickBuffer.setSize([1, 1]);
+
+        const pickNormalBuffer = new RenderBuffer(canvas, gl, [gl.RGBA32I]);
+        pickNormalBuffer.setSize([3, 3]);
+
         return function (params, pickResult = _pickResult) {
 
             pickResult.reset();
@@ -987,8 +993,6 @@ const Renderer = function (scene, options) {
                 canvasPos[1] = canvas.clientHeight * 0.5;
             }
 
-            const pickBuffer = renderBufferManager.getRenderBuffer("pick");
-            pickBuffer.setSize([1, 1]);
             pickBuffer.bind();
 
             const resetPickFrameCtx = (clipTransformDiv) => {
@@ -1131,8 +1135,6 @@ const Renderer = function (scene, options) {
                             // gpuPickWorldNormal
                             resetPickFrameCtx(3);
 
-                            const pickNormalBuffer = renderBufferManager.getRenderBuffer("pick-normal", [gl.RGBA32I]);
-                            pickNormalBuffer.setSize([3, 3]);
                             pickNormalBuffer.bind();
 
                             gl.viewport(0, 0, pickNormalBuffer.size[0], pickNormalBuffer.size[1]);
@@ -1181,6 +1183,18 @@ const Renderer = function (scene, options) {
 
         const _pickResult = new PickResult();
 
+        const getVertexPickBuffer = (function() {
+            const cache = { };
+            return (snapRadiusInPixels) => {
+                if (! (snapRadiusInPixels in cache)) {
+                    const buf = new RenderBuffer(canvas, gl, [gl.RGBA32I, gl.RGBA32I, gl.RGBA8UI], true);
+                    buf.setSize([2 * snapRadiusInPixels + 1, 2 * snapRadiusInPixels + 1]);
+                    cache[snapRadiusInPixels] = buf;
+                }
+                return cache[snapRadiusInPixels];
+            };
+        })();
+
         return function (params, pickResult = _pickResult) {
 
             const {canvasPos, origin, direction, snapRadius, snapToVertex, snapToEdge} = params;
@@ -1201,8 +1215,6 @@ const Renderer = function (scene, options) {
 
             const snapRadiusInPixels = snapRadius || 30;
 
-            const vertexPickBuffer = renderBufferManager.getRenderBuffer(`uniquePickColors-aabs-${snapRadiusInPixels}`, [gl.RGBA32I, gl.RGBA32I, gl.RGBA8UI], true);
-
             frameCtx.pickClipPos = [
                 canvasPos ? getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth) : 0,
                 canvasPos ? getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight) : 0,
@@ -1215,7 +1227,7 @@ const Renderer = function (scene, options) {
 
             // Bind and clear the snap render target
 
-            vertexPickBuffer.setSize([2 * snapRadiusInPixels + 1, 2 * snapRadiusInPixels + 1]);
+            const vertexPickBuffer = getVertexPickBuffer(snapRadiusInPixels);
             vertexPickBuffer.bind();
             gl.viewport(0, 0, vertexPickBuffer.size[0], vertexPickBuffer.size[1]);
             gl.enable(gl.DEPTH_TEST);
@@ -1443,6 +1455,7 @@ const Renderer = function (scene, options) {
         }
     };
 
+    const snapshotBuffer = new RenderBuffer(canvas, gl);
     /**
      * Read pixels from the renderer's current output. Performs a force-render first.
      * @param pixels
@@ -1452,7 +1465,6 @@ const Renderer = function (scene, options) {
      * @private
      */
     this.readPixels = function (pixels, colors, len, opaqueOnly) {
-        const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
         snapshotBuffer.bind();
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         this.render({force: true, opaqueOnly: opaqueOnly});
@@ -1481,7 +1493,6 @@ const Renderer = function (scene, options) {
      * Exit snapshot mode using endSnapshot().
      */
     this.beginSnapshot = function (params = {}) {
-        const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
         snapshotBuffer.setSize((params.width && params.height)
                                ? [params.width, params.height]
                                : [gl.drawingBufferWidth, gl.drawingBufferHeight]);
@@ -1497,7 +1508,6 @@ const Renderer = function (scene, options) {
         if (!snapshotBound) {
             return;
         }
-        const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         this.render({force: true, opaqueOnly: false});
         imageDirty = true;
@@ -1510,7 +1520,6 @@ const Renderer = function (scene, options) {
      * @returns {String} The image data URI.
      */
     this.readSnapshot = function (params) {
-        const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
         return snapshotBuffer.readImage(params);
     };
 
@@ -1523,7 +1532,6 @@ const Renderer = function (scene, options) {
      * @returns {HTMLCanvasElement}
      */
     this.readSnapshotAsCanvas = function () {
-        const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
         return snapshotBuffer.readImageAsCanvas();
     };
 
@@ -1536,7 +1544,6 @@ const Renderer = function (scene, options) {
         if (!snapshotBound) {
             return;
         }
-        const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
         snapshotBuffer.unbind();
         snapshotBound = false;
     };
