@@ -390,22 +390,25 @@ export declare abstract class Entity {
   /**
    * Rotate SceneModelEntity according to a pivot.
    *
-   * Default value is ````{ degrees: [0, 0, 0], pivot: [0, 0, 0] }````.
+   * Default value is ````{ quaternion: [0, 0, 0, 0], pivot: [0, 0, 0] }````.
    *
    *
-   * @param {{ radians: number[] , pivot: number[] }}
+   * @param {{ quaternion: number[] , rotationPivot: number[] }}
    */
-  rotate(arg: { radians: number[]; pivot: number[] }): void;
+  rotate(arg: {
+    quaternion: number[];
+    pivot: number[];
+  }): void;
 
   /**
-   * Rotate SceneModelEntity according to a pivot.
+   * Translate SceneModelEntity.
    *
-   * Default value is ````{ degrees: [0, 0, 0], pivot: [0, 0, 0] }````.
+   * Default value is ````{ position: [0, 0, 0], pivot: [0, 0, 0] }````.
    *
    *
-   * @param {translateDelta: number[]}
+   * @param {{ position: number[] }}
    */
-  translate(translateDelta: number[]): void;
+  translate(arg: { position: number[], pivot?: number[] }): void;
 
   /**
    * Gets the World, View and Canvas-space positions of each vertex in a callback.
