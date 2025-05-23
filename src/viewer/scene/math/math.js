@@ -9,7 +9,6 @@ const tempMat1 = new FloatArrayType(16);
 const tempMat2 = new FloatArrayType(16);
 const tempVec4 = new FloatArrayType(4);
 
-
 /**
  * @private
  */
@@ -22,47 +21,26 @@ const math = {
   },
   transformMatrix({
     matrix,
-    rotation,
-    translation,
-    scale,
-    originLocalPivot,
+    quaternion: newQuaternion,
+    position: newPosition,
+    scale: newScale,
+    pivot,
   }) {
-    const position = math.vec3();
-    const quaternion = math.vec4();
-    const currentScale = math.vec3();
+    let position = math.vec3();
+    let quaternion = math.vec4();
+    let scale = math.vec3();
 
-    // Step 1: Decompose the matrix
-    math.decomposeMat4(matrix, position, quaternion, currentScale);
+    math.decomposeMat4(matrix, position, quaternion, scale);
 
+    position = newPosition || position;
+    quaternion = newQuaternion || quaternion;
+    scale = newScale || scale;
 
-    // Step 2: Modify the components
-    const newPosition = translation || position;
-    const newRotation = rotation || quaternion;
-    const newScale = scale || currentScale;
-
-    // const signPosition = math.getSignVec3([-1, -1, 1]);
-    // math.mulVec3(newPosition, signPosition, newPosition)
-
-    // Step 3: Handle pivot (if provided)
-    // math.mulVec3Scalar(translation, -1, translation);
-    // math.addVec3(translation, [-(0.1524 * 2), -(0.1524 * 2), -(0.1524 * 2)], translation);
-
-
-
-    // const negativePivot = math.vec3([-originLocalPivot[0], -originLocalPivot[1], -originLocalPivot[2]]);
-    // const positivePivot = math.vec3(originLocalPivot);
-
-    // math.translateMat4v(negativePivot, matrix); // Translate to pivot
-    // math.translateMat4v(newPosition, matrix);  // Apply translation
-    // math.translateMat4v(positivePivot, matrix); // Translate back
-
-
-    // Step 4: Recompose the matrix
-    math.composeMat4(newPosition, newRotation, newScale, matrix);
+    math.composeMat4(position, quaternion, scale, matrix);
 
     return matrix;
   },
-  
+
     setDoublePrecisionEnabled(enable) {
         doublePrecision = enable;
         FloatArrayType = doublePrecision ? Float64Array : Float32Array;
