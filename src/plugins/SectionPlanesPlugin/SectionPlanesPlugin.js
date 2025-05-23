@@ -1,8 +1,18 @@
 import {math} from "../../viewer/scene/math/math.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {SectionPlane} from "../../viewer/scene/sectionPlane/SectionPlane.js";
-import {Control} from "./Control.js";
+import {TransformControl} from "../TransformControl/TransformControl.js";
 import {Overview} from "./Overview.js";
+
+import {buildCylinderGeometry} from "../../viewer/scene/geometry/builders/buildCylinderGeometry.js";
+import {buildSphereGeometry} from "../../viewer/scene/geometry/builders/buildSphereGeometry.js";
+import {buildTorusGeometry} from "../../viewer/scene/geometry/builders/buildTorusGeometry.js";
+import {ReadableGeometry} from "../../viewer/scene/geometry/ReadableGeometry.js";
+import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
+import {EmphasisMaterial} from "../../viewer/scene/materials/EmphasisMaterial.js";
+import {Node} from "../../viewer/scene/nodes/Node.js";
+import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
+import {worldToRTCPos} from "../../viewer/scene/math/rtcCoords.js";
 
 const tempAABB = math.AABB3();
 const tempVec3 = math.vec3();
@@ -234,7 +244,160 @@ class SectionPlanesPlugin extends Plugin {
     }
 
     _sectionPlaneCreated(sectionPlane) {
-        const control = (this._freeControls.length > 0) ? this._freeControls.pop() : new Control(this);
+        const control = ((this._freeControls.length > 0)
+                         ? this._freeControls.pop()
+                         : (() => {
+                             const scene = this.viewer.scene;
+                             const planeRoot = (function() {
+                                 const rootNode = new Node(scene, { isObject: false });
+
+                                 rootNode.addChild(new Mesh(rootNode, { // plane
+                                     geometry: new ReadableGeometry(rootNode, {
+                                         primitive: "triangles",
+                                         positions: [
+                                             0.5, 0.5, 0.0, 0.5, -0.5, 0.0, // 0
+                                             -0.5, -0.5, 0.0, -0.5, 0.5, 0.0, // 1
+                                             0.5, 0.5, -0.0, 0.5, -0.5, -0.0, // 2
+                                             -0.5, -0.5, -0.0, -0.5, 0.5, -0.0 // 3
+                                         ],
+                                         indices: [0, 1, 2, 2, 3, 0]
+                                     }),
+                                     material: new PhongMaterial(rootNode, {
+                                         emissive: [0, 0.0, 0],
+                                         diffuse: [0, 0, 0],
+                                         backfaces: true
+                                     }),
+                                     opacity: 0.6,
+                                     ghosted: true,
+                                     ghostMaterial: new EmphasisMaterial(rootNode, {
+                                         edges: false,
+                                         filled: true,
+                                         fillColor: [1, 1, 0],
+                                         edgeColor: [0, 0, 0],
+                                         fillAlpha: 0.1,
+                                         backfaces: true
+                                     }),
+                                     pickable: false,
+                                     collidable: true,
+                                     clippable: false,
+                                     visible: false,
+                                     scale: [2.4, 2.4, 1],
+                                     isObject: false
+                                 }));
+
+                                 rootNode.addChild(new Mesh(rootNode, { // Visible frame
+                                     geometry: new ReadableGeometry(rootNode, buildTorusGeometry({
+                                         center: [0, 0, 0],
+                                         radius: 1.7,
+                                         tube: 0.02,
+                                         radialSegments: 4,
+                                         tubeSegments: 4,
+                                         arc: Math.PI * 2.0
+                                     })),
+                                     material: new PhongMaterial(rootNode, {
+                                         emissive: [0, 0, 0],
+                                         diffuse: [0, 0, 0],
+                                         specular: [0, 0, 0],
+                                         shininess: 0
+                                     }),
+                                     //highlighted: true,
+                                     highlightMaterial: new EmphasisMaterial(rootNode, {
+                                         edges: false,
+                                         edgeColor: [0.0, 0.0, 0.0],
+                                         filled: true,
+                                         fillColor: [0.8, 0.8, 0.8],
+                                         fillAlpha: 1.0
+                                     }),
+                                     pickable: false,
+                                     collidable: false,
+                                     clippable: false,
+                                     visible: false,
+                                     scale: [1, 1, .1],
+                                     rotation: [0, 0, 45],
+                                     isObject: false
+                                 }));
+
+                                 return {
+                                     setPosition: (function() {
+                                         const origin = math.vec3();
+                                         const rtcPos = math.vec3();
+                                         return function(p) {
+                                             worldToRTCPos(p, origin, rtcPos);
+                                             rootNode.origin = origin;
+                                             rootNode.position = rtcPos;
+                                         };
+                                     })(),
+                                     setQuaternion: q => { rootNode.quaternion = q; },
+                                     setScale: s => { rootNode.scale = s; },
+                                     setVisible: v => { rootNode.visible = v; }
+                                 };
+                             })();
+                             let unbindSectionPlane = () => { };
+                             const ctrl = new TransformControl(this.viewer);
+
+                             let culled  = false;
+                             let visible = false;
+                             let handlers = null;
+                             const updateVisible = () => {
+                                 const vis = visible && (! culled);
+                                 planeRoot.setVisible(vis);
+                                 ctrl.setHandlers(vis && handlers);
+                             };
+
+                             return {
+                                 _destroy: () => {
+                                     unbindSectionPlane();
+                                     ctrl.destroy();
+                                 },
+                                 setCulled:  c => { culled = c;  updateVisible(); },
+                                 setVisible: v => { visible = v; updateVisible(); },
+                                 _setSectionPlane: sectionPlane => {
+                                     unbindSectionPlane();
+                                     if (sectionPlane) {
+                                         let ignoreNextSectionPlaneDirUpdate = false;
+                                         handlers = {
+                                             setPosition:   p => {
+                                                 planeRoot.setPosition(p);
+                                                 sectionPlane.pos = p;
+                                             },
+                                             setQuaternion: q => {
+                                                 planeRoot.setQuaternion(q);
+                                                 ignoreNextSectionPlaneDirUpdate = true;
+                                                 sectionPlane.quaternion = q;
+                                             },
+                                             setScreenScale: s => {
+                                                 planeRoot.setScale(s);
+                                             }
+                                         };
+
+                                         const setPosFromSectionPlane = () => {
+                                             planeRoot.setPosition(sectionPlane.pos);
+                                             ctrl.setPosition(sectionPlane.pos);
+                                         };
+                                         const setDirFromSectionPlane = () => {
+                                             planeRoot.setQuaternion(sectionPlane.quaternion);
+                                             ctrl.setQuaternion(sectionPlane.quaternion);
+                                         };
+                                         setPosFromSectionPlane();
+                                         setDirFromSectionPlane();
+                                         const onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
+                                         const onSectionPlaneDir = sectionPlane.on("dir", () => {
+                                             if (!ignoreNextSectionPlaneDirUpdate) {
+                                                 setDirFromSectionPlane();
+                                             } else {
+                                                 ignoreNextSectionPlaneDirUpdate = false;
+                                             }
+                                         });
+
+                                         unbindSectionPlane = () => {
+                                             sectionPlane.off(onSectionPlanePos);
+                                             sectionPlane.off(onSectionPlaneDir);
+                                             unbindSectionPlane = () => { };
+                                         };
+                                     }
+                                 }
+                             };
+                         })());
         control._setSectionPlane(sectionPlane);
         control.setVisible(false);
         this._controls[sectionPlane.id] = control;

@@ -16,34 +16,17 @@ const zeroVec = new Float64Array([0, 0, 1]);
 const quat = new Float64Array(4);
 
 /**
- * Controls a {@link SectionPlane} with mouse and touch input.
+ * Controls a transformation with mouse and touch input.
  *
  * @private
  */
-class Control {
+class TransformControl {
 
     /** @private */
-    constructor(plugin) {
-
-        /**
-         * ID of this Control.
-         *
-         * SectionPlaneControls are mapped by this ID in {@link SectionPlanesPlugin#sectionPlaneControls}.
-         *
-         * @property id
-         * @type {String|Number}
-         */
-        this.id = null;
-
-        const viewer = plugin.viewer;
-        const camera = viewer.camera;
+    constructor(viewer) {
         const cameraControl = viewer.cameraControl;
         const scene = viewer.scene;
         const canvas = scene.canvas.canvas;
-
-        this._visible = false;
-
-        let ignoreNextSectionPlaneDirUpdate = false;
 
         // Builds the Entities that represent this Control.
         const NO_STATE_INHERIT = false;
@@ -58,7 +41,7 @@ class Control {
         });
 
         const pos = math.vec3();
-        const setPos = (function() {
+        this._setPosition = (function() {
             const origin = math.vec3();
             const rtcPos = math.vec3();
             return function(p) {
@@ -68,6 +51,8 @@ class Control {
                 rootNode.position = rtcPos;
             };
         })();
+
+        this._setQuaternion = q => { rootNode.quaternion = q; };
 
         const arrowGeometry = (radiusBottom, height) => new ReadableGeometry(rootNode, buildCylinderGeometry({
             radiusTop: 0.001,
@@ -156,6 +141,7 @@ class Control {
                 clippable: false,
                 backfaces: true,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -168,6 +154,7 @@ class Control {
                 clippable: false,
                 backfaces: true,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -179,6 +166,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -190,6 +178,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -203,6 +192,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -222,6 +212,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -233,6 +224,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -244,6 +236,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -255,6 +248,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -266,6 +260,7 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
+                isUI: true,
                 isObject: false
             }), NO_STATE_INHERIT);
 
@@ -306,9 +301,9 @@ class Control {
                     return closestPointOnAxis(initCanvasPos, initOffset) && math.subVec3(initOffset, pos, initOffset) && ((canvasPos) => {
                         if (closestPointOnAxis(canvasPos, tempVec3)) {
                             math.subVec3(tempVec3, initOffset, tempVec3);
-                            setPos(tempVec3);
-                            if (this._sectionPlane) {
-                                this._sectionPlane.pos = tempVec3;
+                            this._setPosition(tempVec3);
+                            if (this._handlers) {
+                                this._handlers.setPosition(tempVec3);
                             }
                         }
                     });
@@ -319,9 +314,9 @@ class Control {
                 setActivated: a => hoop.visible = a,
                 initDragAction: (initCanvasPos) => {
                     const rotationFromCanvasPos = (function() {
-                        const planeCanvasPos = camera.projectWorldPos(pos);
+                        const planeCanvasPos = scene.camera.projectWorldPos(pos);
                         localToWorldVec(rgb, tempVec3);
-                        math.transformVec3(camera.normalMatrix, tempVec3, tempVec3);
+                        math.transformVec3(scene.camera.normalMatrix, tempVec3, tempVec3);
                         const axisCoeff = Math.sign(tempVec3[2]);
                         return (canvasPos) => {
                             const dx = canvasPos[0] - planeCanvasPos[0];
@@ -335,101 +330,46 @@ class Control {
                     return canvasPos => {
                         const rotation = rotationFromCanvasPos(canvasPos);
                         rootNode.rotate(rgb, (rotation - lastRotation) * 180 / Math.PI);
-                        if (this._sectionPlane) {
-                            ignoreNextSectionPlaneDirUpdate = true;
-                            this._sectionPlane.quaternion = rootNode.quaternion;
+                        if (this._handlers) {
+                            this._handlers.setQuaternion(rootNode.quaternion);
                         }
                         lastRotation = rotation;
                     };
                 }
             };
 
+            let positionActive = false;
+            let rotationActive = false;
+            let visible = false;
+
+            const updatePositionHandle = () => {
+                const v = visible && positionActive;
+                arrowHandle.visible = shaftHandle.visible = arrow.visible = shaft.visible = !!v;
+                if (! v) {
+                    bigArrowHead.visible = false;
+                }
+            };
+            const updateRotationHandle = () => {
+                const v = visible && rotationActive;
+                rotateHandle.visible = curve.visible = arrow1.visible = arrow2.visible = !!v;
+                if (! v) {
+                    hoop.visible = false;
+                }
+            };
+
             return {
+                setPositionActive: (a) => { positionActive = a; updatePositionHandle(); },
+                setRotationActive: (a) => { rotationActive = a; updateRotationHandle(); },
                 set visible(v) {
-                    arrow.visible = arrowHandle.visible = shaft.visible = shaftHandle.visible = curve.visible = rotateHandle.visible = arrow1.visible = arrow2.visible = v;
-                    if (! v) {
-                        bigArrowHead.visible = v;
-                        hoop.visible = v;
-                    }
-                },
-                set culled(c) {
-                    arrow.culled = arrowHandle.culled = shaft.culled = shaftHandle.culled = curve.culled = rotateHandle.culled = arrow1.culled = arrow2.culled = c;
-                    if (! c) {
-                        bigArrowHead.culled = c;
-                        hoop.culled = c;
-                    }
+                    visible = v;
+                    updatePositionHandle();
+                    updateRotationHandle();
                 }
             };
         };
 
-        this._displayMeshes = [ // Meshes that are always visible
-            rootNode.addChild(new Mesh(rootNode, { // plane
-                geometry: new ReadableGeometry(rootNode, {
-                    primitive: "triangles",
-                    positions: [
-                        0.5, 0.5, 0.0, 0.5, -0.5, 0.0, // 0
-                        -0.5, -0.5, 0.0, -0.5, 0.5, 0.0, // 1
-                        0.5, 0.5, -0.0, 0.5, -0.5, -0.0, // 2
-                        -0.5, -0.5, -0.0, -0.5, 0.5, -0.0 // 3
-                    ],
-                    indices: [0, 1, 2, 2, 3, 0]
-                }),
-                material: new PhongMaterial(rootNode, {
-                    emissive: [0, 0.0, 0],
-                    diffuse: [0, 0, 0],
-                    backfaces: true
-                }),
-                opacity: 0.6,
-                ghosted: true,
-                ghostMaterial: new EmphasisMaterial(rootNode, {
-                    edges: false,
-                    filled: true,
-                    fillColor: [1, 1, 0],
-                    edgeColor: [0, 0, 0],
-                    fillAlpha: 0.1,
-                    backfaces: true
-                }),
-                pickable: false,
-                collidable: true,
-                clippable: false,
-                visible: false,
-                scale: [2.4, 2.4, 1],
-                isObject: false
-            }), NO_STATE_INHERIT),
-
-            rootNode.addChild(new Mesh(rootNode, { // Visible frame
-                geometry: new ReadableGeometry(rootNode, buildTorusGeometry({
-                    center: [0, 0, 0],
-                    radius: 1.7,
-                    tube: tubeRadius * 2,
-                    radialSegments: 4,
-                    tubeSegments: 4,
-                    arc: Math.PI * 2.0
-                })),
-                material: new PhongMaterial(rootNode, {
-                    emissive: [0, 0, 0],
-                    diffuse: [0, 0, 0],
-                    specular: [0, 0, 0],
-                    shininess: 0
-                }),
-                //highlighted: true,
-                highlightMaterial: new EmphasisMaterial(rootNode, {
-                    edges: false,
-                    edgeColor: [0.0, 0.0, 0.0],
-                    filled: true,
-                    fillColor: [0.8, 0.8, 0.8],
-                    fillAlpha: 1.0
-                }),
-                pickable: false,
-                collidable: false,
-                clippable: false,
-                visible: false,
-                scale: [1, 1, .1],
-                rotation: [0, 0, 45],
-                isObject: false
-            }), NO_STATE_INHERIT),
-
-            rootNode.addChild(new Mesh(rootNode, { // center
+        this._displayMeshes = {
+            center: rootNode.addChild(new Mesh(rootNode, { // center
                 geometry: new ReadableGeometry(rootNode, buildSphereGeometry({
                     radius: 0.05
                 })),
@@ -447,21 +387,25 @@ class Control {
                 isObject: false
             }), NO_STATE_INHERIT),
 
-            //----------------------------------------------------------------------------------------------------------
-            //
-            //----------------------------------------------------------------------------------------------------------
-
-            addAxis([1,0,0], math.vec3PairToQuaternion([1,0,0], [0,0,1])),
-            addAxis([0,1,0], math.eulerToQuaternion([90,0,0], "XYZ")),
-            addAxis([0,0,1], math.identityQuaternion())
-        ];
+            x: addAxis([1,0,0], math.vec3PairToQuaternion([1,0,0], [0,0,1])),
+            y: addAxis([0,1,0], math.eulerToQuaternion([90,0,0], "XYZ")),
+            z: addAxis([0,0,1], math.identityQuaternion())
+        };
 
         const cleanups = [ ];
 
         { // Keep gizmo screen size constant
             let lastDist = -1;
-            const setRootNodeScale = size => { if (size !== rootNode.scale[0]) { rootNode.scale = [size, size, size]; } };
+            const setRootNodeScale = size => {
+                if (rootNode.scale[0] !== size) {
+                    rootNode.scale = [size, size, size];
+                    if (this._handlers && this._handlers.setScreenScale) {
+                        this._handlers.setScreenScale(rootNode.scale);
+                    }
+                }
+            };
             const onSceneTick = scene.on("tick", () => {
+                const camera = scene.camera;
                 const dist = Math.abs(math.distVec3(camera.eye, pos));
                 if (camera.projection === "perspective") {
                     if (dist !== lastDist) {
@@ -487,9 +431,11 @@ class Control {
                 transformToNode(canvas.ownerDocument.documentElement, canvas, vec2);
             };
 
+            const pickIds = Object.keys(handlers);
             const pickHandler = (e) => {
                 copyCanvasPos(e, canvasPos);
-                const pickResult = viewer.scene.pick({ canvasPos: canvasPos });
+                // This doesn't guarantee the gizmo is prioritized (as it should be) by other Scene::pick calls
+                const pickResult = scene.pick({ canvasPos: canvasPos });//, includeEntities: pickIds });
                 const pickEntity = pickResult && pickResult.entity;
                 const pickId = pickEntity && pickEntity.id;
                 return (pickId in handlers) && handlers[pickId];
@@ -522,6 +468,9 @@ class Control {
                             }
                         };
                     }
+                    return !!dragAction;
+                } else {
+                    return false;
                 }
             };
 
@@ -530,16 +479,22 @@ class Control {
                 cleanups.push(() => canvas.removeEventListener(type, listener));
             };
 
-            addCanvasEventListener("mousedown", (e) => {
+            const preventDefaultStopPropagation = e => {
                 e.preventDefault();
-                if (e.which === 1) {
-                    startDrag(e, event => (event.which === 1) && event);
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+            };
+
+            addCanvasEventListener("mousedown", (e) => {
+                if ((e.which === 1) && startDrag(e, event => (event.which === 1) && event)) {
+                    preventDefaultStopPropagation(e);
                 }
             });
 
             addCanvasEventListener("mousemove", (e) => {
                 if (currentDrag) {
                     currentDrag.onChange(e);
+                    preventDefaultStopPropagation(e);
                 } else {
                     if (deactivateActive) {
                         deactivateActive();
@@ -558,6 +513,9 @@ class Control {
                 if (currentDrag) {
                     currentDrag.onChange(e);
                     currentDrag.cleanup();
+                    // Calling preventDefaultStopPropagation would interfere with cameraControl
+                    // by making it follow the pointer until next click
+                    // preventDefaultStopPropagation(e);
                 }
             });
 
@@ -567,116 +525,75 @@ class Control {
                 if (event.touches.length === 1)
                 {
                     const touchStartId = event.touches[0].identifier;
-                    startDrag(event, event => [...event.changedTouches].find(e => e.identifier === touchStartId));
+                    if (startDrag(event, event => [...event.changedTouches].find(e => e.identifier === touchStartId))) {
+                        preventDefaultStopPropagation(event);
+                    }
                 }
             });
 
             addCanvasEventListener("touchmove", event => {
-                event.preventDefault();
-                currentDrag && currentDrag.onChange(event);
+                if (currentDrag) {
+                    currentDrag.onChange(event);
+                    preventDefaultStopPropagation(event);
+                }
             });
 
             addCanvasEventListener("touchend",  event => {
-                event.preventDefault();
                 if (currentDrag) {
                     currentDrag.onChange(event);
                     currentDrag.cleanup();
+                    // See the comment in mouseup listener
+                    // preventDefaultStopPropagation(e);
                 }
             });
         }
 
-        this._unbindSectionPlane = () => { };
-
-        this.__setSectionPlane = sectionPlane => {
-            this.id = sectionPlane.id;
-            this._sectionPlane = sectionPlane;
-            const setPosFromSectionPlane = () => setPos(sectionPlane.pos);
-            const setDirFromSectionPlane = () => rootNode.quaternion = sectionPlane.quaternion;
-            setPosFromSectionPlane();
-            setDirFromSectionPlane();
-            const onSectionPlanePos = sectionPlane.on("pos", setPosFromSectionPlane);
-            const onSectionPlaneDir = sectionPlane.on("dir", () => {
-                if (!ignoreNextSectionPlaneDirUpdate) {
-                    setDirFromSectionPlane();
-                } else {
-                    ignoreNextSectionPlaneDirUpdate = false;
-                }
-            });
-
-            this._unbindSectionPlane = () => {
-                this.id = null;
-                this._sectionPlane = null;
-                sectionPlane.off(onSectionPlanePos);
-                sectionPlane.off(onSectionPlaneDir);
-                this._unbindSectionPlane = () => { };
-            };
-        };
-
         this.__destroy = () => {
             cleanups.forEach(c => c());
-            this._unbindSectionPlane();
             rootNode.destroy();
-            this._displayMeshes = [ ];
             for (let id in handlers) {
                 delete handlers[id];
             }
         };
     }
 
-    _destroy() {
+    destroy() {
         this.__destroy();
     }
 
     /**
-     * Called by SectionPlanesPlugin to assign this Control to a SectionPlane.
-     * SectionPlanesPlugin keeps SectionPlaneControls in a reuse pool.
-     * Call with a null or undefined value to disconnect the Control ffrom whatever SectionPlane it was assigned to.
+     * Called to assign this Control to Handlers.
+     * Call with a null or undefined value to disconnect the Control from whatever Handlers it was assigned to.
      * @private
      */
-    _setSectionPlane(sectionPlane) {
-        this._unbindSectionPlane();
-        if (sectionPlane) {
-            this.__setSectionPlane(sectionPlane);
-        }
+    setHandlers(handlers) {
+        Object.values(this._displayMeshes).forEach(m => m.visible = !!handlers);
+        this._handlers = handlers;
+        this._displayMeshes.x.setPositionActive(handlers && handlers.setPosition);
+        this._displayMeshes.y.setPositionActive(handlers && handlers.setPosition);
+        this._displayMeshes.z.setPositionActive(handlers && handlers.setPosition);
+        this._displayMeshes.x.setRotationActive(handlers && handlers.setQuaternion);
+        this._displayMeshes.y.setRotationActive(handlers && handlers.setQuaternion);
+        this._displayMeshes.z.setRotationActive(handlers && handlers.setQuaternion);
     }
 
     /**
-     * Gets the {@link SectionPlane} controlled by this Control.
-     * @returns {SectionPlane} The SectionPlane.
-     */
-    get sectionPlane() {
-        return this._sectionPlane;
-    }
-
-    /**
-     * Sets if this Control is visible.
+     * Sets the World-space position of this Control.
      *
-     * @type {Boolean}
+     * @param {Number[]} value New position.
      */
-    setVisible(visible = true) {
-        if (this._visible !== visible) {
-            this._visible = visible;
-            this._displayMeshes.forEach(m => m.visible = visible);
-        }
+    setPosition(p) {
+        this._setPosition(p);
     }
 
     /**
-     * Gets if this Control is visible.
+     * Sets the quaternion of this Control.
      *
-     * @type {Boolean}
+     * @param {Number[]} value New quaternion.
      */
-    getVisible() {
-        return this._visible;
-    }
-
-    /**
-     * Sets if this Control is culled. This is called by SectionPlanesPlugin to
-     * temporarily hide the Control while a snapshot is being taken by Viewer#getSnapshot().
-     * @param culled
-     */
-    setCulled(culled) {
-        this._displayMeshes.forEach(m => m.culled = culled);
+    setQuaternion(q) {
+        this._setQuaternion(q);
     }
 }
 
-export {Control};
+export {TransformControl};
