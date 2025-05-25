@@ -1,7 +1,7 @@
-import {Queue} from './utils/Queue.js';
-import {Map} from './utils/Map.js';
-import {stats} from './stats.js';
-import {utils} from './utils.js';
+import { stats } from './stats.js';
+import { utils } from './utils.js';
+import { Map } from './utils/Map.js';
+import { Queue } from './utils/Queue.js';
 
 const scenesRenderInfo = {}; // Used for throttling FPS for each Scene
 const sceneIDMap = new Map(); // Ensures unique scene IDs
@@ -237,9 +237,10 @@ function renderScenes() {
     let id;
     for (id in scenes) {
         if (scenes.hasOwnProperty(id)) {
-
             scene = scenes[id];
             renderInfo = scenesRenderInfo[id];
+
+            if (!scene.rendering) return;
 
             if (!renderInfo) {
                 renderInfo = scenesRenderInfo[id] = {}; // FIXME
@@ -268,4 +269,4 @@ function renderScenes() {
     }
 }
 
-export {core};
+export { core };

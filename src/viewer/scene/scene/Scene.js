@@ -1,25 +1,25 @@
-import {core} from '../core.js';
-import {utils} from '../utils.js';
-import {math} from '../math/math.js';
-import {Component} from '../Component.js';
-import {Canvas} from '../canvas/Canvas.js';
-import {Renderer} from '../webgl/Renderer.js';
-import {Input} from '../input/Input.js';
-import {Viewport} from '../viewport/Viewport.js';
-import {Camera} from '../camera/Camera.js';
-import {DirLight} from '../lights/DirLight.js';
-import {AmbientLight} from '../lights/AmbientLight.js';
-import {ReadableGeometry} from "../geometry/ReadableGeometry.js";
-import {buildBoxGeometry} from '../geometry/builders/buildBoxGeometry.js';
-import {PhongMaterial} from '../materials/PhongMaterial.js';
-import {EmphasisMaterial} from '../materials/EmphasisMaterial.js';
-import {EdgeMaterial} from '../materials/EdgeMaterial.js';
-import {Metrics} from "../metriqs/Metriqs.js";
-import {SAO} from "../postfx/SAO.js";
-import {CrossSections} from "../postfx/CrossSections.js";
-import {PointsMaterial} from "../materials/PointsMaterial.js";
-import {LinesMaterial} from "../materials/LinesMaterial.js";
-import {SectionCaps} from '../sectionCaps/SectionCaps.js';
+import { Component } from '../Component.js';
+import { Camera } from '../camera/Camera.js';
+import { Canvas } from '../canvas/Canvas.js';
+import { core } from '../core.js';
+import { ReadableGeometry } from "../geometry/ReadableGeometry.js";
+import { buildBoxGeometry } from '../geometry/builders/buildBoxGeometry.js';
+import { Input } from '../input/Input.js';
+import { AmbientLight } from '../lights/AmbientLight.js';
+import { DirLight } from '../lights/DirLight.js';
+import { EdgeMaterial } from '../materials/EdgeMaterial.js';
+import { EmphasisMaterial } from '../materials/EmphasisMaterial.js';
+import { LinesMaterial } from "../materials/LinesMaterial.js";
+import { PhongMaterial } from '../materials/PhongMaterial.js';
+import { PointsMaterial } from "../materials/PointsMaterial.js";
+import { math } from '../math/math.js';
+import { Metrics } from "../metriqs/Metriqs.js";
+import { CrossSections } from "../postfx/CrossSections.js";
+import { SAO } from "../postfx/SAO.js";
+import { SectionCaps } from '../sectionCaps/SectionCaps.js';
+import { utils } from '../utils.js';
+import { Viewport } from '../viewport/Viewport.js';
+import { Renderer } from '../webgl/Renderer.js';
 
 // Enables runtime check for redundant calls to object state update methods, eg. Scene#_objectVisibilityUpdated
 const ASSERT_OBJECT_STATE_UPDATE = false;
@@ -601,6 +601,13 @@ class Scene extends Component {
          * @type {Number[]}
          */
         this.realWorldOffset = cfg.realWorldOffset || new Float64Array([0, 0, 0]);
+
+        /**
+         * Rendering state. Set to ````false```` to pause rendering.
+         * 
+         * @type {Boolean}
+         */
+        this.rendering = true;
 
         /**
          * Manages the HTML5 canvas for this Scene.
@@ -2871,4 +2878,5 @@ class Scene extends Component {
     }
 }
 
-export {Scene};
+export { Scene };
+
