@@ -1,16 +1,16 @@
 import { Component } from "../Component";
-import { Camera } from "../camera/Camera";
-import { PickResult } from "../webgl/PickResult";
-import { SAO } from "../postfx/SAO";
 import { Entity } from "../Entity";
+import { Camera } from "../camera/Camera";
 import { ReadableGeometry } from "../geometry";
-import { EdgeMaterial, EmphasisMaterial, PhongMaterial, PointsMaterial, LinesMaterial } from "../materials";
-import { Viewport } from "../viewport/Viewport";
-import { VBOSceneModel } from "../models/VBOSceneModel/VBOSceneModel";
-import { Mesh } from "../mesh";
-import { Node } from "../nodes";
 import { Input } from "../input/input";
+import { EdgeMaterial, EmphasisMaterial, LinesMaterial, PhongMaterial, PointsMaterial } from "../materials";
+import { Mesh } from "../mesh";
+import { VBOSceneModel } from "../models/VBOSceneModel/VBOSceneModel";
+import { Node } from "../nodes";
+import { SAO } from "../postfx/SAO";
 import { SectionPlane } from "../sectionPlane/SectionPlane";
+import { Viewport } from "../viewport/Viewport";
+import { PickResult } from "../webgl/PickResult";
 
 export declare type TickEvent = {
   /** The ID of this Scene. */
@@ -489,6 +489,24 @@ export declare class Scene extends Component {
   * @type {Number}
   */
   get passes(): number;
+
+  /**
+   * Gets whether or not to render this Scene.
+   * 
+   * Default value is ````true````.
+   * 
+   * @type {Boolean}
+   */
+  get rendering(): boolean;
+
+  /**
+   * Sets whether or not to render this Scene.
+   *
+   * Default value is ````true````.
+   *
+   * @type {Boolean}
+   */
+  set rendering(value: boolean);
 
   /**
   * When {@link Scene.passes} is greater than ````1````, indicates whether or not to clear the canvas before each pass (````true````) or just before the first pass (````false````).
