@@ -4,11 +4,10 @@
  */
 class RenderBuffer {
 
-    constructor(canvas, gl, colorFormats, hasDepthTexture) {
+    constructor(gl, colorFormats, hasDepthTexture) {
         /** @type {WebGL2RenderingContext} */
         this.gl = gl;
         this.allocated = false;
-        this.canvas = canvas;
         this.buffer = null;
         this.bound = false;
         this._colorFormats = colorFormats;
