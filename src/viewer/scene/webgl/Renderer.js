@@ -67,7 +67,7 @@ const Renderer = function (scene, options) {
             getRenderBuffer: (id, colorFormats, hasDepthTexture) => {
                 const renderBuffers = (scene.canvas.resolutionScale === 1.0) ? renderBuffersBasic : renderBuffersScaled;
                 if (! renderBuffers[id]) {
-                    renderBuffers[id] = new RenderBuffer(canvas, gl, colorFormats, hasDepthTexture);
+                    renderBuffers[id] = new RenderBuffer(gl, colorFormats, hasDepthTexture);
                 }
                 return renderBuffers[id];
             },
@@ -933,10 +933,10 @@ const Renderer = function (scene, options) {
         const worldSurfacePos = math.vec3();
         const worldSurfaceNormal = math.vec3();
 
-        const pickBuffer = new RenderBuffer(canvas, gl);
+        const pickBuffer = new RenderBuffer(gl);
         pickBuffer.setSize([1, 1]);
 
-        const pickNormalBuffer = new RenderBuffer(canvas, gl, [gl.RGBA32I]);
+        const pickNormalBuffer = new RenderBuffer(gl, [gl.RGBA32I]);
         pickNormalBuffer.setSize([3, 3]);
 
         return function (params, pickResult = _pickResult) {
@@ -1212,7 +1212,7 @@ const Renderer = function (scene, options) {
             const cache = { };
             return (snapRadiusInPixels) => {
                 if (! (snapRadiusInPixels in cache)) {
-                    const buf = new RenderBuffer(canvas, gl, [gl.RGBA32I, gl.RGBA32I, gl.RGBA8UI], true);
+                    const buf = new RenderBuffer(gl, [gl.RGBA32I, gl.RGBA32I, gl.RGBA8UI], true);
                     buf.setSize([2 * snapRadiusInPixels + 1, 2 * snapRadiusInPixels + 1]);
                     cache[snapRadiusInPixels] = buf;
                 }
@@ -1480,7 +1480,7 @@ const Renderer = function (scene, options) {
         }
     };
 
-    const snapshotBuffer = new RenderBuffer(canvas, gl);
+    const snapshotBuffer = new RenderBuffer(gl);
     /**
      * Read pixels from the renderer's current output. Performs a force-render first.
      * @param pixels
