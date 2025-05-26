@@ -1,7 +1,7 @@
 
-import {math} from '../math/math.js';
-import {Component} from '../Component.js';
-import {Spinner} from './Spinner.js';
+import { Component } from '../Component.js';
+import { math } from '../math/math.js';
+import { Spinner } from './Spinner.js';
 
 const WEBGL_CONTEXT_NAMES = [
     "webgl2",
@@ -482,9 +482,12 @@ class Canvas extends Component {
         // Memory leak avoidance
         this.canvas.removeEventListener("webglcontextlost", this._webglcontextlostListener);
         this.canvas.removeEventListener("webglcontextrestored", this._webglcontextrestoredListener);
+        
+        this.gl.getExtension("WEBGL_lose_context").loseContext();
         this.gl = null;
+        
         super.destroy();
     }
 }
 
-export {Canvas};
+export { Canvas };
