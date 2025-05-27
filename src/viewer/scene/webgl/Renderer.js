@@ -1234,9 +1234,6 @@ const Renderer = function (scene, options) {
                                     math.mat4()));
             resetPickFrameCtx(canvasPos, 2 * snapRadiusInPixels, camera, camera.eye, camera.projMatrix, viewMatrix, frameCtx);
 
-            frameCtx.viewParams.far  = camera.project.far;
-            frameCtx.viewParams.near = camera.project.near;
-
             // Bind and clear the snap render target
 
             const vertexPickBuffer = getVertexPickBuffer(snapRadiusInPixels);
