@@ -1116,8 +1116,6 @@ const Renderer = function (scene, options) {
                         resetFrameCtx(1);
                         frameCtx.viewParams.near = nearAndFar[0];
                         frameCtx.viewParams.far  = nearAndFar[1];
-                        frameCtx.pickElementsCount = pickable.pickElementsCount;
-                        frameCtx.pickElementsOffset = pickable.pickElementsOffset;
 
                         gl.viewport(0, 0, 1, 1);
 
