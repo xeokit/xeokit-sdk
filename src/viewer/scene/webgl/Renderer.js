@@ -903,6 +903,28 @@ const Renderer = function (scene, options) {
         }
     }
 
+    const resetPickFrameCtx = (canvasPos, clipTransformDiv, camera, eye, projMatrix, viewMatrix, frameCtx) => {
+        frameCtx.reset();
+        frameCtx.backfaces = true;
+        frameCtx.frontface = true; // "ccw"
+
+        frameCtx.viewParams.eye = eye;
+        frameCtx.viewParams.projMatrix = projMatrix;
+        frameCtx.viewParams.viewMatrix = viewMatrix;
+        frameCtx.nearPlaneHeight = getNearPlaneHeight(camera, gl.drawingBufferHeight);
+
+        const resolutionScale = scene.canvas.resolutionScale;
+        frameCtx.pickClipPos = [
+            canvasPos ? (    2 * canvasPos[0] * resolutionScale / gl.drawingBufferWidth - 1) : 0,
+            canvasPos ? (1 - 2 * canvasPos[1] * resolutionScale / gl.drawingBufferHeight)    : 0
+        ];
+
+        frameCtx.pickClipPosInv = [
+            gl.drawingBufferWidth  / clipTransformDiv,
+            gl.drawingBufferHeight / clipTransformDiv
+        ];
+    };
+
     /**
      * Picks an Entity.
      * @private
@@ -949,6 +971,7 @@ const Renderer = function (scene, options) {
             let pickViewMatrix = null;
             let pickProjMatrix = null;
             let projection = null;
+            const camera = scene.camera;
 
             pickResult.pickSurface = params.pickSurface;
 
@@ -957,12 +980,12 @@ const Renderer = function (scene, options) {
                 canvasPos[0] = params.canvasPos[0];
                 canvasPos[1] = params.canvasPos[1];
 
-                pickViewMatrix = scene.camera.viewMatrix;
-                pickProjMatrix = scene.camera.projMatrix;
-                projection     = scene.camera.projection;
+                pickViewMatrix = camera.viewMatrix;
+                pickProjMatrix = camera.projMatrix;
+                projection     = camera.projection;
 
-                nearAndFar[0] = scene.camera.project.near;
-                nearAndFar[1] = scene.camera.project.far;
+                nearAndFar[0] = camera.project.near;
+                nearAndFar[1] = camera.project.far;
 
                 pickResult.canvasPos = params.canvasPos;
 
@@ -974,11 +997,11 @@ const Renderer = function (scene, options) {
                 if (params.matrix) {
 
                     pickViewMatrix = params.matrix;
-                    pickProjMatrix = scene.camera.projMatrix;
-                    projection     = scene.camera.projection;
+                    pickProjMatrix = camera.projMatrix;
+                    projection     = camera.projection;
 
-                    nearAndFar[0] = scene.camera.project.near;
-                    nearAndFar[1] = scene.camera.project.far;
+                    nearAndFar[0] = camera.project.near;
+                    nearAndFar[1] = camera.project.far;
 
                 } else {
 
@@ -995,12 +1018,12 @@ const Renderer = function (scene, options) {
                     math.cross3Vec3(worldRayDir, randomVec3, up);
 
                     pickViewMatrix = math.lookAtMat4v(worldRayOrigin, look, up, tempMat4b);
-                    //    pickProjMatrix = scene.camera.projMatrix;
-                    pickProjMatrix = scene.camera.ortho.matrix;
+                    //    pickProjMatrix = camera.projMatrix;
+                    pickProjMatrix = camera.ortho.matrix;
                     projection     = "ortho";
 
-                    nearAndFar[0] = scene.camera.ortho.near;
-                    nearAndFar[1] = scene.camera.ortho.far;
+                    nearAndFar[0] = camera.ortho.near;
+                    nearAndFar[1] = camera.ortho.far;
 
                     pickResult.origin = worldRayOrigin;
                     pickResult.direction = worldRayDir;
@@ -1012,28 +1035,10 @@ const Renderer = function (scene, options) {
 
             pickBuffer.bind();
 
-            const resetPickFrameCtx = (clipTransformDiv) => {
-                frameCtx.reset();
-                frameCtx.backfaces = true;
-                frameCtx.frontface = true; // "ccw"
-                const camera = scene.camera;
-                frameCtx.viewParams.eye = pickResult.origin || camera.eye;
-                frameCtx.viewParams.projMatrix = pickProjMatrix || camera.projMatrix;
-                frameCtx.viewParams.viewMatrix = pickViewMatrix || camera.viewMatrix;
-                frameCtx.nearPlaneHeight = getNearPlaneHeight(camera, gl.drawingBufferHeight);
-                const resolutionScale = scene.canvas.resolutionScale;
-                frameCtx.pickClipPos = [
-                    getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
-                    getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight)
-                ];
-                frameCtx.pickClipPosInv = [
-                    gl.drawingBufferWidth  / clipTransformDiv,
-                    gl.drawingBufferHeight / clipTransformDiv
-                ];
-            };
+            const resetFrameCtx = (clipTransformDiv) => resetPickFrameCtx(canvasPos, clipTransformDiv, camera, pickResult.origin || camera.eye, pickProjMatrix || camera.projMatrix, pickViewMatrix || camera.viewMatrix, frameCtx);
 
             // gpuPickPickable
-            resetPickFrameCtx(1);
+            resetFrameCtx(1);
             frameCtx.pickInvisible = !!params.pickInvisible;
 
             gl.viewport(0, 0, 1, 1);
@@ -1084,7 +1089,7 @@ const Renderer = function (scene, options) {
                 if (pickable.canPickTriangle && pickable.canPickTriangle()) {
 
                     if (pickable.drawPickTriangles) {
-                        resetPickFrameCtx(1);
+                        resetFrameCtx(1);
                         // frameCtx.pickInvisible = !!params.pickInvisible;
 
                         gl.viewport(0, 0, 1, 1);
@@ -1108,7 +1113,7 @@ const Renderer = function (scene, options) {
                     if (pickable.canPickWorldPos && pickable.canPickWorldPos()) {
 
                         // pickWorldPos
-                        resetPickFrameCtx(1);
+                        resetFrameCtx(1);
                         frameCtx.viewParams.near = nearAndFar[0];
                         frameCtx.viewParams.far  = nearAndFar[1];
                         frameCtx.pickElementsCount = pickable.pickElementsCount;
@@ -1158,7 +1163,7 @@ const Renderer = function (scene, options) {
 
                         if (params.pickSurfaceNormal !== false) {
                             // gpuPickWorldNormal
-                            resetPickFrameCtx(3);
+                            resetFrameCtx(3);
 
                             pickNormalBuffer.bind();
 
@@ -1187,14 +1192,6 @@ const Renderer = function (scene, options) {
             return pickResult;
         };
     })();
-
-    function getClipPosX(pos, size) {
-        return 2 * (pos / size) - 1;
-    }
-
-    function getClipPosY(pos, size) {
-        return 1 - 2 * (pos / size);
-    }
 
     /**
      * @param {[number, number]} canvasPos
@@ -1229,26 +1226,18 @@ const Renderer = function (scene, options) {
             }
 
             const camera = scene.camera;
-            const resolutionScale = scene.canvas.resolutionScale;
+            const snapRadiusInPixels = snapRadius || 30;
+            const viewMatrix = (canvasPos
+                                ? camera.viewMatrix
+                                : math.lookAtMat4v(
+                                    origin,
+                                    math.addVec3(origin, direction, math.vec3()),
+                                    math.vec3([0, 1, 0]),
+                                    math.mat4()));
+            resetPickFrameCtx(canvasPos, 2 * snapRadiusInPixels, camera, camera.eye, camera.projMatrix, viewMatrix, frameCtx);
 
-            frameCtx.reset();
-            frameCtx.backfaces = true;
-            frameCtx.frontface = true; // "ccw"
             frameCtx.viewParams.far  = camera.project.far;
             frameCtx.viewParams.near = camera.project.near;
-            frameCtx.nearPlaneHeight = getNearPlaneHeight(camera, gl.drawingBufferHeight);
-
-            const snapRadiusInPixels = snapRadius || 30;
-
-            frameCtx.pickClipPos = [
-                canvasPos ? getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth) : 0,
-                canvasPos ? getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight) : 0,
-            ];
-
-            frameCtx.pickClipPosInv = [
-                gl.drawingBufferWidth  / (2 * snapRadiusInPixels),
-                gl.drawingBufferHeight / (2 * snapRadiusInPixels),
-            ];
 
             // Bind and clear the snap render target
 
@@ -1265,21 +1254,6 @@ const Renderer = function (scene, options) {
             gl.clearBufferiv(gl.COLOR, 0, new Int32Array([0, 0, 0, 0]));
             gl.clearBufferiv(gl.COLOR, 1, new Int32Array([0, 0, 0, 0]));
             gl.clearBufferuiv(gl.COLOR, 2, new Uint32Array([0, 0, 0, 0]));
-
-            //////////////////////////////////
-            // Set view and proj mats for VBO renderers
-            ///////////////////////////////////////
-
-            frameCtx.viewParams.eye = camera.eye;
-            frameCtx.viewParams.viewMatrix = (canvasPos
-                                              ? camera.viewMatrix
-                                              : math.lookAtMat4v(
-                                                  origin,
-                                                  math.addVec3(origin, direction, math.vec3()),
-                                                  math.vec3([0, 1, 0]),
-                                                  math.mat4()));
-
-            frameCtx.viewParams.projMatrix = camera.projMatrix;
 
             // a) init z-buffer
             gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1, gl.COLOR_ATTACHMENT2]);
