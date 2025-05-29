@@ -931,6 +931,7 @@ const Renderer = function (scene, options) {
     this.pick = (function () {
 
         const tempVec3a = math.vec3();
+        const tempVec3b = math.vec3();
         const tempVec4a = math.vec4();
         const tempVec4b = math.vec4();
         const tempVec4c = math.vec4();
@@ -941,8 +942,7 @@ const Renderer = function (scene, options) {
         const tempMat4c = math.mat4();
         const tempMat4d = math.mat4();
 
-        const randomVec3 = math.vec3();
-        const up = math.vec3([0, 1, 0]);
+        const upVec = math.vec3([0, 1, 0]);
         const _pickResult = new PickResult();
 
         const nearAndFar = math.vec2();
@@ -966,7 +966,6 @@ const Renderer = function (scene, options) {
 
             updateDrawlist();
 
-            let look;
             let pickViewMatrix = null;
             let pickProjMatrix = null;
             let projection = null;
@@ -1007,14 +1006,18 @@ const Renderer = function (scene, options) {
                     worldRayOrigin.set(params.origin || [0, 0, 0]);
                     worldRayDir.set(params.direction || [0, 0, 1]);
 
-                    look = math.addVec3(worldRayOrigin, worldRayDir, tempVec3a);
+                    const look = math.addVec3(worldRayOrigin, worldRayDir, tempVec3a);
+                    const up = tempVec3b;
 
-                    randomVec3[0] = Math.random();
-                    randomVec3[1] = Math.random();
-                    randomVec3[2] = Math.random();
-
-                    math.normalizeVec3(randomVec3);
-                    math.cross3Vec3(worldRayDir, randomVec3, up);
+                    if (Math.abs(math.dotVec3(worldRayDir, upVec)) > (1 - 1e-6)) { // worldRayDir aligned with Y axis
+                        up[0] = 0;
+                        up[1] = 0;
+                        up[2] = Math.sign(worldRayDir[1]);
+                    } else {
+                        math.cross3Vec3(worldRayDir, upVec, up);
+                        math.cross3Vec3(up, worldRayDir, up);
+                        math.normalizeVec3(up, up);
+                    }
 
                     pickViewMatrix = math.lookAtMat4v(worldRayOrigin, look, up, tempMat4b);
                     //    pickProjMatrix = camera.projMatrix;
