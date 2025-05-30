@@ -1,6 +1,6 @@
 import { Plugin } from "../../viewer/Plugin.js";
 import { GLTFLoaderPlugin } from "../GLTFLoaderPlugin/GLTFLoaderPlugin.js";
-import { ifc2gltf } from "@creooxag/cx-converter";
+import { ifc2gltf } from "@creooxag/cxconverter";
 
 /**
  * Fetches a file from the given URL and returns its contents as text.
@@ -22,7 +22,7 @@ async function fetchFile(url) {
 }
 
 /**
- * {@link Viewer} plugin that uses [CxConverter](https://github.com/Creoox/cxconverter) to load BIM models directly from IFC files, using its WebAssembly buid from [npm package](https://www.npmjs.com/package/@creooxag/cx-converter).
+ * {@link Viewer} plugin that uses [CxConverter](https://github.com/Creoox/cxconverter) to load BIM models directly from IFC files, using its WebAssembly buid from [npm package](https://www.npmjs.com/package/@creooxag/cxconverter).
  *
  * ## Overview
  * The WebAssembly build of CxConverter is still in alfa stage, so it may not work as expected. This documentation will be updated as the library and the plugin evolve. The example below shows how to use the plugin:
