@@ -3,16 +3,16 @@
 */
 
 import {utils} from "../../../viewer/scene/utils.js";
-import * as p from "./lib/pako.js";
+import pako from 'pako/dist/pako.esm.mjs';
 import {math} from "../../../viewer/scene/math/math.js";
 import {geometryCompressionUtils} from "../../../viewer/scene/math/geometryCompressionUtils.js";
 import {JPEGMediaType, PNGMediaType} from "../../../viewer/scene/constants/constants.js";
 import { buildVectorTextGeometry } from "../../../viewer/index.js";
 
-let pako = window.pako || p;
-if (!pako.inflate) {  // See https://github.com/nodeca/pako/issues/97
-    pako = pako.default;
-}
+// let pako = window.pako || p;
+// if (!pako.inflate) {  // See https://github.com/nodeca/pako/issues/97
+//    pako = pako.default;
+// }
 
 const tempVec4a = math.vec4();
 const tempVec4b = math.vec4();
@@ -526,11 +526,11 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                                     text: axisLabel,
                                     size: 2
                                 });
-                                
+
                                 geometryArrays.decompressedPositions = ifcLabel.positions;
                                 geometryArrays.geometryIndices = ifcLabel.indices;
                                 geometryArrays.geometryPositions = null;
-    
+
                                 geometryValid = (geometryArrays.decompressedPositions.length > 0 && geometryArrays.geometryIndices.length > 0);
                                 break;
                             default:
@@ -564,7 +564,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                                     }
                                     geometryArrays.geometryPositions = null;
                                 }
-                                
+
                                 geometryArraysCache[geometryId] = geometryArrays;
                             }
                         }
@@ -723,7 +723,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                                 text: axisLabel,
                                 size: 2
                             });
-                            
+
                             geometryPositions = ifcLabel.positions;
                             geometryIndices = ifcLabel.indices;
 

@@ -1,1 +1,1 @@
-export * from "./CxConverterIFCLoaderPlugin.js";
+// export * from "./CxConverterIFCLoaderPlugin.js";

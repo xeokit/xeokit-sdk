@@ -7,13 +7,13 @@ Parser for .XKT Format V3
  */
 
 import {utils} from "../../../viewer/scene/utils.js";
-import * as p from "./lib/pako.js";
+import pako from 'pako/dist/pako.esm.mjs';
 import {math} from "../../../viewer/scene/math/math.js";
 
-let pako = window.pako || p;
-if (!pako.inflate) {  // See https://github.com/nodeca/pako/issues/97
-    pako = pako.default;
-}
+// let pako = window.pako || p;
+// if (!pako.inflate) {  // See https://github.com/nodeca/pako/issues/97
+//    pako = pako.default;
+// }
 
 function extract(elements) {
     return {

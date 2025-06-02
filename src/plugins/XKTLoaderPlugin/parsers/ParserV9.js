@@ -5,14 +5,14 @@
  */
 
 import {utils} from "../../../viewer/scene/utils.js";
-import * as p from "./lib/pako.js";
+import pako from 'pako/dist/pako.esm.mjs';
 import {math} from "../../../viewer/scene/math/math.js";
 import {geometryCompressionUtils} from "../../../viewer/scene/math/geometryCompressionUtils.js";
 
-let pako = window.pako || p;
-if (!pako.inflate) {  // See https://github.com/nodeca/pako/issues/97
-    pako = pako.default;
-}
+// let pako = window.pako || p;
+// if (!pako.inflate) {  // See https://github.com/nodeca/pako/issues/97
+//    pako = pako.default;
+// }
 
 const tempVec4a = math.vec4();
 const tempVec4b = math.vec4();
