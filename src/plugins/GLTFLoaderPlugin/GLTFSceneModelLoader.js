@@ -1,10 +1,10 @@
-import {math} from "../../viewer/scene/math/math.js";
-import {utils} from "../../viewer/scene/utils.js";
-import {core} from "../../viewer/scene/core.js";
-import {sRGBEncoding} from "../../viewer/scene/constants/constants.js";
-import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords.js";
-import {parse} from '@loaders.gl/core';
-import {GLTFLoader, postProcessGLTF} from '@loaders.gl/gltf';
+import { parse } from '@loaders.gl/core';
+import { GLTFLoader, postProcessGLTF } from '@loaders.gl/gltf';
+import { sRGBEncoding } from "../../viewer/scene/constants/constants.js";
+import { core } from "../../viewer/scene/core.js";
+import { math } from "../../viewer/scene/math/math.js";
+import { worldToRTCPositions } from "../../viewer/scene/math/rtcCoords.js";
+import { utils } from "../../viewer/scene/utils.js";
 
 import {
     ClampToEdgeWrapping,
@@ -98,7 +98,7 @@ function getBasePath(src) {
     return (i !== 0) ? src.substring(0, i + 1) : "";
 }
 
-function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok) {
+function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok, error) {
     const spinner = plugin.viewer.scene.canvas.spinner;
     spinner.processes++;
     parse(gltf, GLTFLoader, {
@@ -146,6 +146,8 @@ function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok) {
         }
         spinner.processes--;
         ok();
+    }).catch((err) => {
+        if (error) error(err);
     });
 }
 
@@ -606,4 +608,5 @@ function error(ctx, msg) {
     ctx.plugin.error(msg);
 }
 
-export {GLTFSceneModelLoader};
+export { GLTFSceneModelLoader };
+
