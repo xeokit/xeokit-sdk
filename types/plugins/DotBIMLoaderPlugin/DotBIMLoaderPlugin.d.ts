@@ -77,7 +77,7 @@ export declare class DotBIMLoaderPlugin extends Plugin {
    *
    * Default value is {@link DotBIMDefaultDataSource}, which loads via an XMLHttpRequest.
    *
-   * @type {IXKTDefaultDataSource}
+   * @type {IDotBIMDefaultDataSource}
    */
   set dataSource(arg: IDotBIMDefaultDataSource);
 
@@ -86,7 +86,7 @@ export declare class DotBIMLoaderPlugin extends Plugin {
    *
    * Default value is {@link DotBIMDefaultDataSource}, which loads via an XMLHttpRequest.
    *
-   * @type {IXKTDefaultDataSource}
+   * @type {IDotBIMDefaultDataSource}
    */
   get dataSource(): IDotBIMDefaultDataSource;
 
