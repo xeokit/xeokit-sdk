@@ -77,7 +77,7 @@ export declare class DotBIMLoaderPlugin extends Plugin {
    *
    * Default value is {@link DotBIMDefaultDataSource}, which loads via an XMLHttpRequest.
    *
-   * @type {IXKTDefaultDataSource}
+   * @type {IDotBIMDefaultDataSource}
    */
   set dataSource(arg: IDotBIMDefaultDataSource);
 
@@ -86,7 +86,7 @@ export declare class DotBIMLoaderPlugin extends Plugin {
    *
    * Default value is {@link DotBIMDefaultDataSource}, which loads via an XMLHttpRequest.
    *
-   * @type {IXKTDefaultDataSource}
+   * @type {IDotBIMDefaultDataSource}
    */
   get dataSource(): IDotBIMDefaultDataSource;
 
@@ -103,13 +103,6 @@ export declare class DotBIMLoaderPlugin extends Plugin {
    * @type {IFCObjectDefaults}
    */
   get objectDefaults(): IFCObjectDefaults;
-
-  /**
-   * Loads a .BIM model from a file into this DotBIMLoaderPlugin's {@link Viewer}.
-   *
-   * @param {LoadBIMModel} params Loading parameters.
-   * @returns {VBOSceneModel} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
-   */
 
   /**
    * Loads a .BIM model from a file into this DotBIMLoaderPlugin's {@link Viewer}.
