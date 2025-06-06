@@ -107,13 +107,6 @@ export declare class DotBIMLoaderPlugin extends Plugin {
   /**
    * Loads a .BIM model from a file into this DotBIMLoaderPlugin's {@link Viewer}.
    *
-   * @param {LoadBIMModel} params Loading parameters.
-   * @returns {VBOSceneModel} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
-   */
-
-  /**
-   * Loads a .BIM model from a file into this DotBIMLoaderPlugin's {@link Viewer}.
-   *
    * @param {LoadDotBIMModel} params Loading parameters.
    * @returns {VBOSceneModel} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}.
    */
