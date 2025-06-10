@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+
+<body>
+    <input type="checkbox" id="info-button" />
+    
+    <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+    <canvas id="myCanvas"></canvas>
+    
+    <div class="slideout-sidebar">
+        <h1>SphereMap</h1>
+        <p>In this example, we are rendering a 360 degree equirectangular image.</p>
+        <h3>Components Used</h3>
+        <ul>
+            <li>
+                <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html" target="_other">Viewer</a>
+            </li>
+            <li>
+                <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+                    target="_other">XKTLoaderPlugin</a>
+            </li>
+        </ul>
+
+        <h3>Assets</h3>
+        <ul>
+            <li>
+                <a href="https://unsplash.com/photos/blue-and-gray-docks-luufnHoChRU" target="_other">Lake Chelan by Timothy Oldfield</a>
+            </li>
+        </ul>
+    </div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import { createSphereMapMesh, Texture, Viewer, XKTLoaderPlugin } from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        dtxEnabled: true
+    });
+
+    viewer.camera.eye = [-3.93, 2.85, 27.01];
+    viewer.camera.look = [4.40, 3.72, 8.89];
+    viewer.camera.up = [0, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create Spheremap
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sphereMap = createSphereMapMesh(
+        viewer.scene,
+        new Texture(viewer.scene, {
+            src: "../../assets/images/lake_chelan.jpg",
+            flipY: true,
+        }));
+    sphereMap.scale = [2000,2000,2000];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load an xkt model
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
+        edges: true
+    });
+
+</script>
+</html>
