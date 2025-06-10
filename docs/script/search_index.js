@@ -210,6 +210,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/cxconverterifcloaderplugin/cxconverterifcloaderplugin.js~cxconverterifcloaderplugin",
+    "class/src/plugins/CxConverterIFCLoaderPlugin/CxConverterIFCLoaderPlugin.js~CxConverterIFCLoaderPlugin.html",
+    "<span>CxConverterIFCLoaderPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/CxConverterIFCLoaderPlugin/CxConverterIFCLoaderPlugin.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/utils/loadingmanager.js~defaultloadingmanager",
     "variable/index.html#static-variable-DefaultLoadingManager",
     "<span>DefaultLoadingManager</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/utils/LoadingManager.js</span>",
@@ -1104,18 +1110,6 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/skybox/skybox.js~skybox",
-    "class/src/viewer/scene/skybox/Skybox.js~Skybox.html",
-    "<span>Skybox</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/skybox/Skybox.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin",
-    "class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html",
-    "<span>SkyboxesPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js</span>",
-    "class"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/specularmaterial.js~specularmaterial",
     "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html",
     "<span>SpecularMaterial</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/SpecularMaterial.js</span>",
@@ -1368,6 +1362,18 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js~addmousepresslistener",
+    "function/index.html#static-function-addMousePressListener",
+    "<span>addMousePressListener</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js~addtouchpresslistener",
+    "function/index.html#static-function-addTouchPressListener",
+    "<span>addTouchPressListener</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildboxgeometry.js~buildboxgeometry",
     "function/index.html#static-function-buildBoxGeometry",
     "<span>buildBoxGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildBoxGeometry.js</span>",
@@ -1440,6 +1446,24 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/extras/skybox/skybox.js~createcombinedtexture",
+    "function/index.html#static-function-createCombinedTexture",
+    "<span>createCombinedTexture</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/extras/Skybox/Skybox.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/extras/skybox/skybox.js~createskyboxmesh",
+    "function/index.html#static-function-createSkyboxMesh",
+    "<span>createSkyboxMesh</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/extras/Skybox/Skybox.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/extras/spheremap/spheremap.js~createspheremapmesh",
+    "function/index.html#static-function-createSphereMapMesh",
+    "<span>createSphereMapMesh</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/extras/SphereMap/SphereMap.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/lines/datatextureramstats.js~datatextureramstats",
     "variable/index.html#static-variable-dataTextureRamStats",
     "<span>dataTextureRamStats</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/lines/dataTextureRamStats.js</span>",
@@ -1482,6 +1506,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js~marker3d",
+    "function/index.html#static-function-marker3D",
+    "<span>marker3D</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/math/meshsurfacearea.js~meshsurfacearea",
     "variable/index.html#static-variable-meshSurfaceArea",
     "<span>meshSurfaceArea</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/MeshSurfaceArea.js</span>",
@@ -1518,6 +1548,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js~startpolygoncreate",
+    "function/index.html#static-function-startPolygonCreate",
+    "<span>startPolygonCreate</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/stats.js~stats",
     "variable/index.html#static-variable-stats",
     "<span>stats</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/stats.js</span>",
@@ -1536,9 +1572,21 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js~triangulateearclipping",
+    "function/index.html#static-function-triangulateEarClipping",
+    "<span>triangulateEarClipping</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/model/calculateuniquepositions.js~uniquifypositions",
     "function/index.html#static-function-uniquifyPositions",
     "<span>uniquifyPositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/calculateUniquePositions.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js~wire3d",
+    "function/index.html#static-function-wire3D",
+    "<span>wire3D</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js</span>",
     "function"
   ],
   [
@@ -2175,6 +2223,30 @@ window.esdocSearchIndex = [
     "src/extras/pointerlens/index.js",
     "file/src/extras/PointerLens/index.js.html",
     "src/extras/PointerLens/index.js",
+    "file"
+  ],
+  [
+    "src/extras/skybox/skybox.js",
+    "file/src/extras/Skybox/Skybox.js.html",
+    "src/extras/Skybox/Skybox.js",
+    "file"
+  ],
+  [
+    "src/extras/skybox/index.js",
+    "file/src/extras/Skybox/index.js.html",
+    "src/extras/Skybox/index.js",
+    "file"
+  ],
+  [
+    "src/extras/spheremap/spheremap.js",
+    "file/src/extras/SphereMap/SphereMap.js.html",
+    "src/extras/SphereMap/SphereMap.js",
+    "file"
+  ],
+  [
+    "src/extras/spheremap/index.js",
+    "file/src/extras/SphereMap/index.js.html",
+    "src/extras/SphereMap/index.js",
     "file"
   ],
   [
@@ -3057,6 +3129,36 @@ window.esdocSearchIndex = [
     "src/plugins/cityjsonloaderplugin/index.js",
     "file/src/plugins/CityJSONLoaderPlugin/index.js.html",
     "src/plugins/CityJSONLoaderPlugin/index.js",
+    "file"
+  ],
+  [
+    "src/plugins/cxconverterifcloaderplugin/cxconverterifcloaderplugin.js",
+    "file/src/plugins/CxConverterIFCLoaderPlugin/CxConverterIFCLoaderPlugin.js.html",
+    "src/plugins/CxConverterIFCLoaderPlugin/CxConverterIFCLoaderPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/cxconverterifcloaderplugin/cxconverterifcloaderplugin.js~cxconverterifcloaderplugin#constructor",
+    "class/src/plugins/CxConverterIFCLoaderPlugin/CxConverterIFCLoaderPlugin.js~CxConverterIFCLoaderPlugin.html#instance-constructor-constructor",
+    "src/plugins/CxConverterIFCLoaderPlugin/CxConverterIFCLoaderPlugin.js~CxConverterIFCLoaderPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/cxconverterifcloaderplugin/cxconverterifcloaderplugin.js~cxconverterifcloaderplugin#gltfloader",
+    "class/src/plugins/CxConverterIFCLoaderPlugin/CxConverterIFCLoaderPlugin.js~CxConverterIFCLoaderPlugin.html#instance-member-gltfLoader",
+    "src/plugins/CxConverterIFCLoaderPlugin/CxConverterIFCLoaderPlugin.js~CxConverterIFCLoaderPlugin#gltfLoader",
+    "member"
+  ],
+  [
+    "src/plugins/cxconverterifcloaderplugin/cxconverterifcloaderplugin.js~cxconverterifcloaderplugin#load",
+    "class/src/plugins/CxConverterIFCLoaderPlugin/CxConverterIFCLoaderPlugin.js~CxConverterIFCLoaderPlugin.html#instance-method-load",
+    "src/plugins/CxConverterIFCLoaderPlugin/CxConverterIFCLoaderPlugin.js~CxConverterIFCLoaderPlugin#load",
+    "method"
+  ],
+  [
+    "src/plugins/cxconverterifcloaderplugin/index.js",
+    "file/src/plugins/CxConverterIFCLoaderPlugin/index.js.html",
+    "src/plugins/CxConverterIFCLoaderPlugin/index.js",
     "file"
   ],
   [
@@ -4272,6 +4374,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/lasloaderplugin/lasdefaultdatasource.js~lasdefaultdatasource#getmanifest",
+    "class/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource.html#instance-method-getManifest",
+    "src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource#getManifest",
+    "method"
+  ],
+  [
     "src/plugins/lasloaderplugin/lasloaderplugin.js",
     "file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html",
     "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js",
@@ -4626,12 +4734,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/plugins/sectionplanesplugin/control.js",
-    "file/src/plugins/SectionPlanesPlugin/Control.js.html",
-    "src/plugins/SectionPlanesPlugin/Control.js",
-    "file"
-  ],
-  [
     "src/plugins/sectionplanesplugin/overview.js",
     "file/src/plugins/SectionPlanesPlugin/Overview.js.html",
     "src/plugins/SectionPlanesPlugin/Overview.js",
@@ -4725,54 +4827,6 @@ window.esdocSearchIndex = [
     "src/plugins/sectionplanesplugin/index.js",
     "file/src/plugins/SectionPlanesPlugin/index.js.html",
     "src/plugins/SectionPlanesPlugin/index.js",
-    "file"
-  ],
-  [
-    "src/plugins/skyboxesplugin/skyboxesplugin.js",
-    "file/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js.html",
-    "src/plugins/SkyboxesPlugin/SkyboxesPlugin.js",
-    "file"
-  ],
-  [
-    "src/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#clear",
-    "class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-clear",
-    "src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#clear",
-    "method"
-  ],
-  [
-    "src/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#constructor",
-    "class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-constructor-constructor",
-    "src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#createskybox",
-    "class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-createSkybox",
-    "src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#createSkybox",
-    "method"
-  ],
-  [
-    "src/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#destroy",
-    "class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-destroy",
-    "src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#destroy",
-    "method"
-  ],
-  [
-    "src/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#destroyskybox",
-    "class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-destroySkybox",
-    "src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#destroySkybox",
-    "method"
-  ],
-  [
-    "src/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#skyboxes",
-    "class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-member-skyboxes",
-    "src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#skyboxes",
-    "member"
-  ],
-  [
-    "src/plugins/skyboxesplugin/index.js",
-    "file/src/plugins/SkyboxesPlugin/index.js.html",
-    "src/plugins/SkyboxesPlugin/index.js",
     "file"
   ],
   [
@@ -4974,6 +5028,18 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/plugins/transformcontrol/transformcontrol.js",
+    "file/src/plugins/TransformControl/TransformControl.js.html",
+    "src/plugins/TransformControl/TransformControl.js",
+    "file"
+  ],
+  [
+    "src/plugins/transformcontrol/index.js",
+    "file/src/plugins/TransformControl/index.js.html",
+    "src/plugins/TransformControl/index.js",
+    "file"
+  ],
+  [
     "src/plugins/treeviewplugin/renderservice.js",
     "file/src/plugins/TreeViewPlugin/RenderService.js.html",
     "src/plugins/TreeViewPlugin/RenderService.js",
@@ -4989,6 +5055,12 @@ window.esdocSearchIndex = [
     "src/plugins/treeviewplugin/renderservice.js~renderservice#collapse",
     "class/src/plugins/TreeViewPlugin/RenderService.js~RenderService.html#instance-method-collapse",
     "src/plugins/TreeViewPlugin/RenderService.js~RenderService#collapse",
+    "method"
+  ],
+  [
+    "src/plugins/treeviewplugin/renderservice.js~renderservice#constructor",
+    "class/src/plugins/TreeViewPlugin/RenderService.js~RenderService.html#instance-constructor-constructor",
+    "src/plugins/TreeViewPlugin/RenderService.js~RenderService#constructor",
     "method"
   ],
   [
@@ -5955,6 +6027,12 @@ window.esdocSearchIndex = [
     "src/plugins/lib/ui/index.js~label3d#sethighlighted",
     "class/src/plugins/lib/ui/index.js~Label3D.html#instance-method-setHighlighted",
     "src/plugins/lib/ui/index.js~Label3D#setHighlighted",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~label3d#setpos",
+    "class/src/plugins/lib/ui/index.js~Label3D.html#instance-method-setPos",
+    "src/plugins/lib/ui/index.js~Label3D#setPos",
     "method"
   ],
   [
@@ -7566,6 +7644,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/camera/camera.js~camera#offseteyefromlook",
+    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-offsetEyeFromLook",
+    "src/viewer/scene/camera/Camera.js~Camera#offsetEyeFromLook",
+    "member"
+  ],
+  [
+    "src/viewer/scene/camera/camera.js~camera#offseteyefromlook",
+    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-offsetEyeFromLook",
+    "src/viewer/scene/camera/Camera.js~Camera#offsetEyeFromLook",
+    "member"
+  ],
+  [
     "src/viewer/scene/camera/camera.js~camera#orbitpitch",
     "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-method-orbitPitch",
     "src/viewer/scene/camera/Camera.js~Camera#orbitPitch",
@@ -8442,6 +8532,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/geometry/readablegeometry.js~readablegeometry#centroid",
+    "class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-centroid",
+    "src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry#centroid",
+    "member"
+  ],
+  [
     "src/viewer/scene/geometry/readablegeometry.js~readablegeometry#colors",
     "class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-colors",
     "src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry#colors",
@@ -8517,6 +8613,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/geometry/readablegeometry.js~readablegeometry#primitive",
     "class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-primitive",
     "src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry#primitive",
+    "member"
+  ],
+  [
+    "src/viewer/scene/geometry/readablegeometry.js~readablegeometry#surfacearea",
+    "class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-surfaceArea",
+    "src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry#surfaceArea",
     "member"
   ],
   [
@@ -11751,6 +11853,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/mesh/mesh.js~mesh#isstatesortable",
     "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-isStateSortable",
     "src/viewer/scene/mesh/Mesh.js~Mesh#isStateSortable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/mesh/mesh.js~mesh#isui",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-isUI",
+    "src/viewer/scene/mesh/Mesh.js~Mesh#isUI",
     "member"
   ],
   [
@@ -15747,48 +15855,6 @@ window.esdocSearchIndex = [
     "src/viewer/scene/sectionplane/index.js",
     "file/src/viewer/scene/sectionPlane/index.js.html",
     "src/viewer/scene/sectionPlane/index.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/skybox/skybox.js",
-    "file/src/viewer/scene/skybox/Skybox.js.html",
-    "src/viewer/scene/skybox/Skybox.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/skybox/skybox.js~skybox#active",
-    "class/src/viewer/scene/skybox/Skybox.js~Skybox.html#instance-set-active",
-    "src/viewer/scene/skybox/Skybox.js~Skybox#active",
-    "member"
-  ],
-  [
-    "src/viewer/scene/skybox/skybox.js~skybox#active",
-    "class/src/viewer/scene/skybox/Skybox.js~Skybox.html#instance-get-active",
-    "src/viewer/scene/skybox/Skybox.js~Skybox#active",
-    "member"
-  ],
-  [
-    "src/viewer/scene/skybox/skybox.js~skybox#constructor",
-    "class/src/viewer/scene/skybox/Skybox.js~Skybox.html#instance-constructor-constructor",
-    "src/viewer/scene/skybox/Skybox.js~Skybox#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/scene/skybox/skybox.js~skybox#size",
-    "class/src/viewer/scene/skybox/Skybox.js~Skybox.html#instance-set-size",
-    "src/viewer/scene/skybox/Skybox.js~Skybox#size",
-    "member"
-  ],
-  [
-    "src/viewer/scene/skybox/skybox.js~skybox#size",
-    "class/src/viewer/scene/skybox/Skybox.js~Skybox.html#instance-get-size",
-    "src/viewer/scene/skybox/Skybox.js~Skybox#size",
-    "member"
-  ],
-  [
-    "src/viewer/scene/skybox/index.js",
-    "file/src/viewer/scene/skybox/index.js.html",
-    "src/viewer/scene/skybox/index.js",
     "file"
   ],
   [
