@@ -254,6 +254,16 @@ const math = {
     },
 
     /**
+     * Returns true if the two 2-element vectors are the same.
+     * @param v1
+     * @param v2
+     * @returns {Boolean}
+     */
+    compareVec2(v1, v2) {
+        return (v1[0] === v2[0] && v1[1] === v2[1]);
+    },
+
+    /**
      * Returns true if the two 3-element vectors are the same.
      * @param v1
      * @param v2
@@ -347,6 +357,24 @@ const math = {
         dest[1] = v[1] + s;
         dest[2] = v[2] + s;
         dest[3] = v[3] + s;
+        return dest;
+    },
+
+    /**
+     * Adds one two-element vector to another.
+     * @method addVec3
+     * @static
+     * @param {Array(Number)} u First vector
+     * @param {Array(Number)} v Second vector
+     * @param  {Array(Number)} [dest] Destination vector
+     * @return {Array(Number)} dest if specified, u otherwise
+     */
+    addVec2(u, v, dest) {
+        if (!dest) {
+            dest = u;
+        }
+        dest[0] = u[0] + v[0];
+        dest[1] = u[1] + v[1];
         return dest;
     },
 
@@ -504,8 +532,26 @@ const math = {
     },
 
     /**
-     * Multiplies one three-element vector by another.
-     * @method mulVec3
+     * Multiplies one two-element vector by another.
+     * @method mulVec2
+     * @static
+     * @param {Array(Number)} u First vector
+     * @param {Array(Number)} v Second vector
+     * @param  {Array(Number)} [dest] Destination vector
+     * @return {Array(Number)} dest if specified, u otherwise
+     */
+    mulVec2(u, v, dest) {
+        if (!dest) {
+            dest = u;
+        }
+        dest[0] = u[0] * v[0];
+        dest[1] = u[1] * v[1];
+        return dest;
+    },
+
+    /**
+     * Multiplies one four-element vector by another.
+     * @method mulVec4
      * @static
      * @param {Array(Number)} u First vector
      * @param {Array(Number)} v Second vector
