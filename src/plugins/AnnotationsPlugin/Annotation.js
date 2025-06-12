@@ -245,7 +245,6 @@ class Annotation extends Marker {
      */
     _updateIfWidthsChanged() {
         let needsUpdate = false;
-        if (!this._marker) return;
         const markerWidth = this._marker.getBoundingClientRect().width;
         if (this._curMarkerWidth !== markerWidth) {
             this._curMarkerWidth = markerWidth;
@@ -470,6 +469,7 @@ class Annotation extends Marker {
      * You can also call {@link AnnotationsPlugin#destroyAnnotation}.
      */
     destroy() {
+        window.clearTimeout(this._widthTimeout);
         if (this._marker) {
             if (!this._markerExternal) {
                 this._marker.parentNode.removeChild(this._marker);
