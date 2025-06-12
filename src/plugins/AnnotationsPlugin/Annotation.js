@@ -1,6 +1,6 @@
-import {math} from '../../viewer/scene/math/math.js';
-import {Marker} from "../../viewer/scene/marker/Marker.js";
-import {utils} from "../../viewer/scene/utils.js";
+import { Marker } from "../../viewer/scene/marker/Marker.js";
+import { math } from '../../viewer/scene/math/math.js';
+import { utils } from "../../viewer/scene/utils.js";
 import { addContextMenuListener } from '../lib/html/MenuEvent.js';
 
 const tempVec3a = math.vec3();
@@ -244,6 +244,7 @@ class Annotation extends Marker {
      * @private
      */
     _updateIfWidthsChanged() {
+        if (!this._marker) return;
         let needsUpdate = false;
         const markerWidth = this._marker.getBoundingClientRect().width;
         if (this._curMarkerWidth !== markerWidth) {
@@ -492,4 +493,4 @@ class Annotation extends Marker {
     }
 }
 
-export {Annotation};
+export { Annotation };
