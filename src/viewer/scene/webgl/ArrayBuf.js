@@ -10,6 +10,7 @@ class ArrayBuf {
         this._gl = gl;
         this.type = type;
         this.allocated = false;
+        this.ConstructorType = data.constructor;
 
         switch (data.constructor) {
 
@@ -92,6 +93,25 @@ class ArrayBuf {
             }
             this._gl.bindBuffer(this.type, null);
         }
+    }
+
+    getData(baseIndex = 0, length = (this.numItems) - baseIndex) {
+        if (!this.allocated) {
+            return [];
+        }
+
+        const array = new (this.ConstructorType)(length * this.itemSize);
+
+        this._gl.bindBuffer(this.type, this._handle);
+        this._gl.getBufferSubData(
+            this.type,
+            baseIndex * this.itemByteSize * this.itemSize,
+            array,
+            0,
+            length * this.itemSize
+        );
+
+        return array;
     }
 
     bind() {
