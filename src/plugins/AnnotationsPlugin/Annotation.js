@@ -244,8 +244,8 @@ class Annotation extends Marker {
      * @private
      */
     _updateIfWidthsChanged() {
-        if (!this._marker) return;
         let needsUpdate = false;
+        if (!this._marker) return;
         const markerWidth = this._marker.getBoundingClientRect().width;
         if (this._curMarkerWidth !== markerWidth) {
             this._curMarkerWidth = markerWidth;
