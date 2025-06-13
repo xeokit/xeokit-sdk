@@ -12,6 +12,7 @@ const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
 const tempVec3c = math.vec3();
 const tempVec3d = math.vec3();
+const planeOff  = math.vec3();
 
 function pointsEqual(p1, p2) {
     return (
@@ -520,9 +521,7 @@ class SectionCaps {
                     this._prevIntersectionModelsMap[sceneModel.id] = new Map();
 
                 // Cache plane direction values
-                const offsetX = plane.dir[0] * 0.001;
-                const offsetY = plane.dir[1] * 0.001;
-                const offsetZ = plane.dir[2] * 0.001;
+                math.mulVec3Scalar(plane.dir, 0.001, planeOff); // Use dedicated planeOff, as tempVec* are overwritten by _createUVs
 
                 geometryData.forEach((geometries, objectId) => {
                     const modelOrigin = this._sceneModelsData[sceneModel.id].modelOrigin;
@@ -534,12 +533,6 @@ class SectionCaps {
                         const indices = geometry.indices;
                         const verticesLength = vertices.length;
 
-                        for (let i = 0; i < verticesLength; i += 3) {
-                            vertices[i] += offsetX;
-                            vertices[i + 1] += offsetY;
-                            vertices[i + 2] +=  offsetZ;
-                        }
-                        
                         // Build normals and UVs in parallel if possible
                         const meshNormals = math.buildNormals(vertices, indices);
                         const uvs = this._createUVs(vertices, plane, modelOrigin);
@@ -554,7 +547,7 @@ class SectionCaps {
                                 normals: meshNormals,
                                 uv: uvs
                             }),
-                            origin:   modelOrigin,
+                            origin:   math.addVec3(modelOrigin, planeOff, tempVec3a),
                             position: [0, 0, 0],
                             rotation: [0, 0, 0],
                             material: sceneModel.objects[objectId].capMaterial
