@@ -5,6 +5,7 @@ import { execSync } from 'child_process';
 import banner from 'rollup-plugin-banner';
 import replace from '@rollup/plugin-replace';
 import { terser } from "rollup-plugin-terser";
+import commonjs from '@rollup/plugin-commonjs';
 
 const pkg = JSON.parse(readFileSync('./package.json', 'utf8'));
 
@@ -21,10 +22,6 @@ const versionInfo = `xeokit-sdk v${pkg.version}\n Commit: ${gitCommitHash}\n Bui
 
 // Common configuration for both standard and minified builds
 const input = './src/index.js';
-const nodeResolvePlugin = nodeResolve({
-    browser: true,
-    preferBuiltins: false
-});
 const bannerPlugin = banner(versionInfo);
 const replacePlugin = replace({
     'import.meta.url': 'typeof document === "undefined" ? "" : document.currentScript.src',
@@ -47,21 +44,19 @@ const standardBuildConfig = {
         },
         {
             file: './dist/xeokit-sdk.es5.js',
-            format: 'es',
+            format: 'umd',
             name: 'xeokit',
+            sourcemap: true,
             plugins: [
                 getBabelOutputPlugin({
                     allowAllFormats: true,
                     presets: [
                         ['@babel/preset-env', {
                             targets: {
-                                browsers: [
-                                    '> 1%',
-                                    'last 2 versions',
-                                    'Firefox ESR',
-                                    'not dead',
-                                    'ie 11'
-                                ]
+                                ie: '11',
+                                chrome: '58',
+                                firefox: '54',
+                                safari: '10'
                             },
                             modules: false,
                             useBuiltIns: 'entry',
@@ -74,10 +69,11 @@ const standardBuildConfig = {
     ],
     plugins: [
         replacePlugin,
-         nodeResolve({
+        nodeResolve({
             browser: true,
             preferBuiltins: false
         }),
+        commonjs(),
         bannerPlugin
     ]
 };
@@ -98,37 +94,37 @@ const minifiedBuildConfig = {
         },
         {
             file: './dist/xeokit-sdk.min.es5.js',
-            format: 'es',
-            name: 'bundle',
-        plugins: [
+            format: 'umd',
+            name: 'xeokit',
+            sourcemap: true,
+            plugins: [
                 getBabelOutputPlugin({
                     allowAllFormats: true,
                     presets: [
                         ['@babel/preset-env', {
                             targets: {
-                                browsers: [
-                                    '> 1%',
-                                    'last 2 versions',
-                                    'Firefox ESR',
-                                    'not dead',
-                                    'ie 11'
-                                ]
+                                ie: '11',
+                                chrome: '58',
+                                firefox: '54',
+                                safari: '10'
                             },
                             modules: false,
                             useBuiltIns: 'entry',
                             corejs: { version: 3, proposals: true }
                         }]
                     ]
-                })
+                }),
+                terser()
             ]
         }
     ],
     plugins: [
         replacePlugin,
-         nodeResolve({
+        nodeResolve({
             browser: true,
             preferBuiltins: false
         }),
+        commonjs(),
         terser(),
         bannerPlugin
     ]
