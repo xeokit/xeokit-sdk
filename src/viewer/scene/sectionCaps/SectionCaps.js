@@ -215,9 +215,9 @@ class SectionCaps {
                 const objects = sceneModel.objects;
                 // Preallocate arrays for triangle vertices to avoid repeated allocation
                 const triangle = [
-                    new Float32Array(3),
-                    new Float32Array(3),
-                    new Float32Array(3)
+                    math.vec3(),
+                    math.vec3(),
+                    math.vec3()
                 ];
 
                 this._dirtyMap[sceneModel.id].forEach((isDirty, objectId) => {
