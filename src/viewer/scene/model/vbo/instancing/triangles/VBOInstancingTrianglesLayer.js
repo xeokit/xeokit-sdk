@@ -785,64 +785,6 @@ export class VBOInstancingTrianglesLayer {
         this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
     }
 
-    readGeometryData(portionId) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-
-        const state = this._state;
-        const sceneModelMatrix = this.model.matrix;
-
-        const col0 = state.modelMatrixCol0Buf.getData(portionId, 1);
-        const col1 = state.modelMatrixCol1Buf.getData(portionId, 1);
-        const col2 = state.modelMatrixCol2Buf.getData(portionId, 1);
-
-        const portionMatrix = [
-            col0[0], col1[0], col2[0], 0,
-            col0[1], col1[1], col2[1], 0,
-            col0[2], col1[2], col2[2], 0,
-            col0[3], col1[3], col2[3], 1,
-        ];
-
-        const positionsDecodeMatrix = state.positionsDecodeMatrix;
-
-        const origin = math.vec4();
-        origin.set(state.origin, 0);
-        origin[3] = 1;
-        math.mulMat4v4(sceneModelMatrix, origin, origin);
-
-        const indices = state.indicesBuf.getData();
-
-        const matrix = math.mulMat4(
-            portionMatrix,
-            positionsDecodeMatrix,
-            new Array(16)
-        );
-
-        math.mulMat4(
-            sceneModelMatrix,
-            matrix,
-            matrix
-        );
-
-        matrix[12] += origin[0];
-        matrix[13] += origin[1];
-        matrix[14] += origin[2];
-
-        const positionsQuantized = state.positionsBuf.getData();
-
-        const positions = math.transformPositions3(
-            matrix,
-            positionsQuantized,
-            new Array(positionsQuantized.length)
-        );
-
-        // const aabb = math.positions3ToAABB3(positions);
-        // console.log({aabbToniInstancing: aabb});
-
-        return { indices, positions };
-    }
-
     // ---------------------- COLOR RENDERING -----------------------------------
 
     drawColorOpaque(renderFlags, frameCtx) {
