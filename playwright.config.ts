@@ -32,6 +32,10 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
+  snapshotPathTemplate: ((process.env.PLAYWRIGHT_LOCAL && (process.env.PLAYWRIGHT_LOCAL !== "0"))
+                         ? '{testDir}/snapshots/{testFilePath}_{arg}_{projectName}{ext}'
+                         : undefined),
+
   /* Configure projects for major browsers */
   projects: [
     {
