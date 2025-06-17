@@ -492,12 +492,6 @@ class Entity {
     }
 
     /**
-     * Gets the complete geometry of this entity.
-     */
-    getGeometryData() {
-    }
-
-    /**
      * Destroys this Entity.
      */
     destroy() {

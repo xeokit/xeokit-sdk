@@ -395,11 +395,6 @@ export declare abstract class Entity {
   getEachVertex(callback: any): void;
 
   /**
-   * Gets the complete geometry of this entity.
-   */
-  getGeometryData(): {indices: number[],positions:number[]}
-
-  /**
    * Destroys this Entity.
    */
   destroy(): void;

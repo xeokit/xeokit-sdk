@@ -869,50 +869,6 @@ export class VBOBatchingTrianglesLayer {
         return {count, offset}
     }
 
-    readGeometryData(portionId) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-
-        const portion = this._portions[portionId];
-        const state = this._state;
-        const sceneModelMatrix = this.model.matrix;
-        const positionsDecodeMatrix = state.positionsDecodeMatrix;
-
-        const origin = math.vec4();
-        origin.set(state.origin, 0); origin[3] = 1;
-        math.mulMat4v4(sceneModelMatrix, origin, origin);
-
-        const indices = state.indicesBuf.getData(
-            portion.indicesBaseIndex, portion.numIndices
-        ).map(i => i - portion.vertsBaseIndex);
-
-        const matrix = math.mulMat4(
-            sceneModelMatrix,
-            positionsDecodeMatrix,
-            new Array(16)
-        );
-
-        matrix[12] += origin[0];
-        matrix[13] += origin[1];
-        matrix[14] += origin[2];
-
-        const positionsQuantized = state.positionsBuf.getData(
-            portion.vertsBaseIndex, portion.numVerts
-        );
-
-        const positions = math.transformPositions3(
-            matrix,
-            positionsQuantized,
-            new Array(positionsQuantized.length)
-        );
-
-        // const aabb = math.positions3ToAABB3(positions);
-        // console.log({aabbToniBatching: aabb});
-
-        return { indices, positions };
-    }
-
     // ---------------------- COLOR RENDERING -----------------------------------
 
     drawColorOpaque(renderFlags, frameCtx) {
