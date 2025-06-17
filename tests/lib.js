@@ -28,7 +28,7 @@ const testPage = ((process.env.PLAYWRIGHT_LOCAL && (process.env.PLAYWRIGHT_LOCAL
                                   await callWithPage(page);
                               }
 
-                              await percySnapshot(page, pageName, { widths: [1280] });
+                              await percySnapshot(page, pageName.replaceAll("/", "_"), { widths: [1280] });
                           });
                       };
                   })());

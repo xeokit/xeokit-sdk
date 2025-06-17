@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../css/pageStyle.css" rel="stylesheet" />
+  </head>
+  <body>
+    <canvas id="myCanvas"></canvas>
+  </body>
+
+  <script id="source" type="module">
+
+    import { signalTestComplete } from "../lib/utils.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, Mesh, buildTorusGeometry, ReadableGeometry, LambertMaterial} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    viewer.scene.camera.eye = [0, 0, 5];
+    viewer.scene.camera.look = [0, 0, 0];
+    viewer.scene.camera.up = [0, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with torus shape and LambertMaterial
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildTorusGeometry({
+            center: [0, 0, 0],
+            radius: 1.5,
+            tube: 0.5,
+            radialSegments: 12,
+            tubeSegments: 8,
+            arc: Math.PI * 2.0
+        })),
+        material: new LambertMaterial(viewer.scene, {
+            ambient: [0.3, 0.3, 0.3],
+            color: [0.5, 0.5, 0.0],
+            alpha: 1.0, // Default
+            lineWidth: 1,
+            pointSize: 1,
+            backfaces: false,
+            frontFace: "ccw"
+        })
+    });
+
+    signalTestComplete(viewer);
+
+  </script>
+</html>
