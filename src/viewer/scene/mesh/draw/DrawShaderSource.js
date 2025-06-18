@@ -216,13 +216,6 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
                 src.push("#define EPSILON 1e-6");
 
                 src.push("#define saturate(a) clamp( a, 0.0, 1.0 )");
-
-                src.push("struct Material {");
-                src.push("   vec3    diffuseColor;");
-                src.push("   float   specularRoughness;");
-                src.push("   vec3    specularColor;");
-                src.push("   float   shine;"); // Only used for Phong
-                src.push("};");
             } // geometry.normals
         },
         appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => {
@@ -299,27 +292,24 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
                 src.push("   discard;"); // TODO: Discard earlier within this shader?
                 src.push("}");
 
-                // PREPARE INPUTS FOR SHADER FUNCTIONS
-                src.push("Material       material;");
+                src.push("vec3 material_diffuseColor;");
 
                 if (phongMaterial) {
-                    src.push("material.diffuseColor      = diffuseColor;");
-                    src.push("material.specularColor     = specular;");
-                    src.push("material.shine             = shininess;");
+                    src.push("material_diffuseColor = diffuseColor;");
+                    src.push("roughness = 0.0;");
                 }
 
                 if (specularMaterial) {
                     src.push("float oneMinusSpecularStrength = 1.0 - max(max(specular.r, specular.g ),specular.b);"); // Energy conservation
-                    src.push("material.diffuseColor      = diffuseColor * oneMinusSpecularStrength;");
-                    src.push("material.specularRoughness = clamp( 1.0 - glossiness, 0.04, 1.0 );");
-                    src.push("material.specularColor     = specular;");
+                    src.push("material_diffuseColor = diffuseColor * oneMinusSpecularStrength;");
+                    src.push("roughness = clamp(1.0 - glossiness, 0.04, 1.0);");
                 }
 
                 if (metallicMaterial) {
                     src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
-                    src.push("material.diffuseColor      = diffuseColor * (1.0 - dielectricSpecular) * (1.0 - metallic);");
-                    src.push("material.specularRoughness = clamp(roughness, 0.04, 1.0);");
-                    src.push("material.specularColor     = mix(vec3(dielectricSpecular), diffuseColor, metallic);");
+                    src.push("material_diffuseColor = diffuseColor * (1.0 - dielectricSpecular) * (1.0 - metallic);");
+                    src.push("roughness = clamp(roughness, 0.04, 1.0);");
+                    src.push("specular = mix(vec3(dielectricSpecular), diffuseColor, metallic);");
                 }
 
                 // ENVIRONMENT AND REFLECTION MAP SHADING
@@ -335,8 +325,8 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
                         const spec = (phongMaterial
                                       ? `0.2 * PI * ${lightSetup.getReflection(reflectVec)}`
                                       : (function() {
-                                          const blinnExpFromRoughness = `2.0 / pow(material.specularRoughness + 0.0001, 2.0) - 2.0`;
-                                          const specularBRDFContrib = `${BRDF_Specular_GGX_Environment}(viewNormal, viewEyeDir, material.specularColor, material.specularRoughness)`;
+                                          const blinnExpFromRoughness = `2.0 / pow(roughness + 0.0001, 2.0) - 2.0`;
+                                          const specularBRDFContrib = `${BRDF_Specular_GGX_Environment}(viewNormal, viewEyeDir, specular, roughness)`;
 
                                           const viewReflectVec = `normalize((vec4(${reflectVec}, 0.0) * ${geometry.viewMatrix}).xyz)`;
                                           const maxMIPLevelScalar = "4.0";
@@ -373,14 +363,14 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
                         src.push(`vec3 irradiance${i} = ${dotNL} * lightColor${i};`);
                         src.push(`reflDiff += irradiance${i};`);
                         const spec = (phongMaterial
-                                      ? `lightColor${i} * material.specularColor * pow(max(dot(reflect(-lightDirection${i}, -viewNormal), viewEyeDir), 0.0), material.shine)`
-                                      : `irradiance${i} * PI * ${BRDF_Specular_GGX}(lightDirection${i}, viewNormal, viewEyeDir, material.specularColor, material.specularRoughness)`);
+                                      ? `lightColor${i} * specular * pow(max(dot(reflect(-lightDirection${i}, -viewNormal), viewEyeDir), 0.0), shininess)`
+                                      : `irradiance${i} * PI * ${BRDF_Specular_GGX}(lightDirection${i}, viewNormal, viewEyeDir, specular, roughness)`);
                         src.push(`reflSpec += ${spec};`);
                     });
                 }
 
                 const ambient = phongMaterial && `${lightSetup.getAmbientColor()} * diffuseColor`;
-                src.push("vec3 outgoingLight = emissiveColor + occlusion * (reflDiff * material.diffuseColor + reflSpec)" + (ambient ? (" + " + ambient) : "") + ";");
+                src.push("vec3 outgoingLight = emissiveColor + occlusion * (reflDiff * material_diffuseColor + reflSpec)" + (ambient ? (" + " + ambient) : "") + ";");
             } else {
                 src.push(`vec3 ambientColor = ${(phongMaterial && materialAmbient) || "vec3(1.0)"};`);
                 phongMaterial && ambientMap && src.push(`ambientColor *= ${ambientMap(texturePos)}.rgb;`);
