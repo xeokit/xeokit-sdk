@@ -276,16 +276,11 @@
         i++;
     }
 
-    sceneModel.createGeometry({
-        id: "pointsGeometry",
-        primitive: "points",
-        positions: positions,
-        colors: colors
-    });
-
     sceneModel.createMesh({
         id: "pointsMesh",
-        geometryId: "pointsGeometry",
+        primitive: "points",
+        positions: positions,
+        colors: colors,
         position: [-7, 0, 0],
         scale: [4, 4, 4],
         rotation: [0, 0, 0]

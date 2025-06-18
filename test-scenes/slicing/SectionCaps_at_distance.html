@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../css/pageStyle.css" rel="stylesheet" />
+  </head>
+  <body>
+    <canvas id="myCanvas"></canvas>
+  </body>
+
+  <script type="module">
+
+    import { signalTestComplete } from "../lib/utils.js";
+
+    // Without the fix introduced for XCD-306 the SectionCaps will render off
+    const testOrigin = [10000000.5, -10000000.5, -10000000.5];
+
+    import { buildBoxGeometry, math, PhongMaterial, SceneModel, SectionPlanesPlugin, Texture, Viewer } from "../../dist/xeokit-sdk.min.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        readableGeometryEnabled: true
+    });
+
+    const cameraControl = viewer.cameraControl;
+    cameraControl.navMode = "orbit";
+    cameraControl.followPointer = true;
+
+    const sceneModel = new SceneModel(viewer.scene, { isModel: true });
+
+    const box = buildBoxGeometry({ center: testOrigin });
+
+    const boxMesh = sceneModel.createMesh({
+        id: "box",
+        primitive: "solid",
+        indices:   box.indices,
+        positions: box.positions,
+        uv:        box.uvs,
+        color:     [0,1,0]
+    });
+
+    sceneModel.createEntity({
+        id: boxMesh.id + "_Entity",
+        isObject: true,
+        meshIds: [ boxMesh.id ]
+    });
+
+    sceneModel.finalize();
+
+    const capMaterial = new PhongMaterial(viewer.scene, {
+        backfaces: true,
+        diffuseMap: new Texture(viewer.scene, {
+            src: "../../assets/textures/diffuse/uvGrid2.jpg"
+        }),
+    });
+    Object.values(sceneModel.objects).forEach(entity => { entity.capMaterial = capMaterial; });
+
+    const sectionPlanes = new SectionPlanesPlugin(viewer);
+
+    const sectionPlane2 = sectionPlanes.createSectionPlane({
+        id: "mySectionPlane2",
+        pos: math.addVec3([5,4.7,-5], testOrigin),
+        dir: [0.3419620945030424, -0.8758176019282808, -0.3405957340832203]
+    });
+    sectionPlanes.showControl(sectionPlane2.id);
+
+    const camera = viewer.camera;
+    camera.eye  = math.addVec3([-3,3,3], testOrigin);
+    camera.look = math.addVec3([0,0,0], testOrigin);
+    camera.up   = [0,1,0];
+
+    signalTestComplete(viewer);
+
+  </script>
+</html>
