@@ -191,7 +191,11 @@ export const createProgramVariablesState = function() {
             const isPerspective = programVariables.createVarying("float", "isPerspective", () => `(${cfg.projMatrix}[2][3] == -1.0) ? 1.0 : 0.0`);
             const logDepthBufFC = programVariables.createUniform("float", "logDepthBufFC", (set, state) => set(2.0 / (Math.log(state.view.far + 1.0) / Math.LN2)));
             const vFragDepth    = programVariables.createVarying("float", "vFragDepth",    () => "1.0 + clipPos.w");
-            getLogDepth && fragmentOutputs.push(`gl_FragDepth = ${cfg.testPerspectiveForGl_FragDepth ? `${isPerspective} == 0.0 ? gl_FragCoord.z : ` : ""}log2(${getLogDepth(vFragDepth)}) * ${logDepthBufFC} * 0.5;`);
+            if (getLogDepth) {
+                fragmentOutputs.push(`gl_FragDepth = ${cfg.testPerspectiveForGl_FragDepth ? `${isPerspective} == 0.0 ? gl_FragCoord.z : ` : ""}log2(${getLogDepth(vFragDepth)}) * ${logDepthBufFC} * 0.5;`);
+            } else if (cfg.cleanerEdges) {
+                fragmentOutputs.push(`gl_FragDepth = gl_FragCoord.z + length(vec2(dFdx(gl_FragCoord.z), dFdy(gl_FragCoord.z)));`);
+            }
 
             const linearToGamma = programVariables.createFragmentDefinition(
                 "linearToGamma",
