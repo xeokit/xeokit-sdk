@@ -7,7 +7,7 @@ test.describe("Test geometry data", async () => {
             `getGeometryData_${pageName}`,
             `${pageName}.html`,
             async page => {
-                const data = await page.evaluate(() => JSON.stringify(Object.values(window.viewer.scene.models).map(model => model.entityList.map(entity => entity.getGeometryData()))));
+                const data = await page.evaluate(() => JSON.stringify(window.model.entityList.map(entity => entity.getGeometryData()), null, 4));
                 expect(data).toMatchSnapshot();
             });
     };
