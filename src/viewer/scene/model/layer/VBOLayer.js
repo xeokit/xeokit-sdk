@@ -224,7 +224,10 @@ export class VBOLayer extends Layer {
         const meshMatrix = cfg.meshMatrix;
 
         const appendPortion = (portionBase, portionSize, indices, quantizedPositions, meshMatrix) => {
+            const prevPortion = (this._portions.length > 0) && this._portions[this._portions.length - 1];
             const portion = {
+                indicesBaseIndex: prevPortion ? (prevPortion.indicesBaseIndex + prevPortion.numIndices) : 0,
+                numIndices: indices ? indices.length : 0,
                 portionBase: portionBase,
                 portionSize: portionSize,
                 retainedGeometry: scene.readableGeometryEnabled && (primitive !== "points") && (primitive !== "lines") && {
@@ -372,17 +375,18 @@ export class VBOLayer extends Layer {
 
         const cleanups = [ ];
 
-        const createGlBuffer = (srcData, target, usage) => {
+        const createGlBuffer = (target, srcData, size, usage) => {
             if (srcData.length > 0) {
-                const type = ({
-                    [Uint8Array]:   gl.UNSIGNED_BYTE,
-                    [Int8Array]:    gl.BYTE,
-                    [Uint16Array]:  gl.UNSIGNED_SHORT,
-                    [Int16Array]:   gl.SHORT,
-                    [Uint32Array]:  gl.UNSIGNED_INT,
-                    [Int32Array]:   gl.INT,
-                    [Float32Array]: gl.FLOAT
-                })[srcData.constructor];
+                const srcDataConstructor = srcData.constructor;
+                const [byteSize, type] = ({
+                    [Uint8Array]:   [1, gl.UNSIGNED_BYTE],
+                    [Int8Array]:    [1, gl.BYTE],
+                    [Uint16Array]:  [2, gl.UNSIGNED_SHORT],
+                    [Int16Array]:   [2, gl.SHORT],
+                    [Uint32Array]:  [4, gl.UNSIGNED_INT],
+                    [Int32Array]:   [4, gl.INT],
+                    [Float32Array]: [4, gl.FLOAT]
+                })[srcDataConstructor];
 
                 const buffer = gl.createBuffer();
                 cleanups.push(() => gl.deleteBuffer(buffer));
@@ -395,8 +399,16 @@ export class VBOLayer extends Layer {
                 setData(srcData);
 
                 const bytesPerElement = srcData.BYTES_PER_ELEMENT;
+                const numItems = srcData.length / size;
                 return {
                     bindBuffer: bindBuffer,
+                    getData: (baseIndex = 0, length = numItems - baseIndex) => {
+                        bindBuffer();
+                        const array = new srcDataConstructor(length * size);
+                        gl.getBufferSubData(target, baseIndex * byteSize * size, array, 0, length * size);
+                        return array;
+                    },
+                    numItems: numItems,
                     setData: setData,
                     setSubData: (data, offset) => {
                         bindBuffer();
@@ -410,9 +422,10 @@ export class VBOLayer extends Layer {
         };
 
         const maybeCreateBuffer = (srcData, size, usage, setDivisor = false, normalized = false) => {
-            const buf = createGlBuffer(srcData, gl.ARRAY_BUFFER, usage);
+            const buf = createGlBuffer(gl.ARRAY_BUFFER, srcData, size, usage);
             return buf && {
-                numItems: srcData.length / size,
+                getData: buf.getData,
+                numItems: buf.numItems,
                 setData: buf.setData,
                 setSubData: buf.setSubData,
                 attributeDivisor: setDivisor && 1,
@@ -424,8 +437,9 @@ export class VBOLayer extends Layer {
         };
 
         const maybeCreateIndicesBuffer = srcData => {
-            const buf = createGlBuffer(srcData, gl.ELEMENT_ARRAY_BUFFER, gl.STATIC_DRAW);
+            const buf = createGlBuffer(gl.ELEMENT_ARRAY_BUFFER, srcData, 1, gl.STATIC_DRAW);
             return buf && {
+                getData: buf.getData,
                 bindIndicesBuffer: buf.bindBuffer,
                 indicesCount: srcData.length,
                 indicesType: buf.type
@@ -646,6 +660,47 @@ export class VBOLayer extends Layer {
                     }
                 }
             },
+            readGeometryData: (primitive !== "points") && (primitive !== "lines") && ((portionId) => {
+                const portion = (! instancing) && portions[portionId];
+                const indices = (portion
+                                 ? indicesBuf.getData(portion.indicesBaseIndex, portion.numIndices).map(i => i - portion.portionBase)
+                                 : indicesBuf.getData());
+
+                const sceneModelMatrix = model.matrix;
+
+                const origin4 = math.vec4();
+                origin4.set(origin, 0); origin4[3] = 1;
+                math.mulMat4v4(sceneModelMatrix, origin4, origin4);
+
+                const instanceMatrix = modelMatrixColBufs && math.mat4();
+                if (instanceMatrix) {
+                    const col0 = modelMatrixColBufs[0].getData(portionId, 1);
+                    const col1 = modelMatrixColBufs[1].getData(portionId, 1);
+                    const col2 = modelMatrixColBufs[2].getData(portionId, 1);
+                    instanceMatrix.set([
+                        col0[0], col1[0], col2[0], 0,
+                        col0[1], col1[1], col2[1], 0,
+                        col0[2], col1[2], col2[2], 0,
+                        col0[3], col1[3], col2[3], 1,
+                    ]);
+                }
+
+                const matrix = math.mat4();
+                math.mulMat4(sceneModelMatrix, instanceMatrix ? math.mulMat4(instanceMatrix, positionsDecodeMatrix, matrix) : positionsDecodeMatrix, matrix);
+
+                matrix[12] += origin4[0];
+                matrix[13] += origin4[1];
+                matrix[14] += origin4[2];
+
+                const positionsQuantized = portion ? positionsBuf.getData(portion.portionBase, portion.portionSize) : positionsBuf.getData();
+
+                const positions = math.transformPositions3(
+                    matrix,
+                    positionsQuantized,
+                    new Float64Array(positionsQuantized.length));
+
+                return { indices, positions };
+            }),
             precisionRayPickSurface: (portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) => {
                 const retainedGeometry = portions[portionId].retainedGeometry;
                 if (! retainedGeometry) {
