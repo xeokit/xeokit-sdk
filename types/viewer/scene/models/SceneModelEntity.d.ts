@@ -444,6 +444,11 @@ export declare abstract class SceneModelEntity implements Entity {
     getEachIndex(callback: any): void;
 
     /**
+     * Gets the complete geometry of this entity.
+     */
+    getGeometryData(): {indices: number[],positions:number[]}
+
+    /**
      * Returns the volume of this SceneModelEntity.
      *
      * Only works when {@link Scene.readableGeometryEnabled | Scene.readableGeometryEnabled} is `true` and the
