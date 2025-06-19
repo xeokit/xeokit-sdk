@@ -6,6 +6,7 @@ export const FlatColorProgram = function(programVariables, geometry, logarithmic
     return {
         programName: "FlatColor",
         getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao"],
+        cleanerEdges: true,
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 0,      // COLOR_OPAQUE | COLOR_TRANSPARENT
         appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord, sliceColorOr) => {
