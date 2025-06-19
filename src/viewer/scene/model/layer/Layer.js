@@ -467,6 +467,7 @@ export class Layer {
 
             this.getEachIndex = this._compiledPortions.getEachIndex;
             this.getEachVertex = this._compiledPortions.getEachVertex;
+            this.readGeometryData = this._compiledPortions.readGeometryData;
             this.precisionRayPickSurface = this._compiledPortions.precisionRayPickSurface;
 
             // These counts are used to avoid unnecessary render passes
