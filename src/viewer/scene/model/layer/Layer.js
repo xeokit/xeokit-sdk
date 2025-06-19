@@ -154,6 +154,7 @@ export const getRenderers = (function() {
                                 layerType + " " + primitive + " " + programSetup.programName,
                                 {
                                     appendFragmentOutputs:          programSetup.appendFragmentOutputs,
+                                    cleanerEdges:                   programSetup.cleanerEdges,
                                     clipPos:                        clipPos,
                                     clippableTest:                  (function() {
                                         const vClippable = programVariables.createVarying("float", "vClippable", () => `${attributes.clippable} ? 1.0 : 0.0`, "flat");
