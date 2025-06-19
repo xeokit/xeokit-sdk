@@ -687,6 +687,32 @@ export class SceneModelEntity {
         }
     }
 
+    getGeometryData() {
+        let positionsBase = 0;
+        const positions = [];
+        const indices = [];
+
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
+            const mesh = this.meshes[i];
+
+            if (mesh.layer.readGeometryData) {
+                const meshGeom = mesh.layer.readGeometryData(mesh.portionId);
+
+                for (let j = 0, len = meshGeom.indices.length; j < len; j++) {
+                    indices.push(meshGeom.indices[j]+positionsBase);
+                }
+
+                for (let j = 0, len = meshGeom.positions.length; j < len; j++) {
+                    positions.push(meshGeom.positions[j]);
+                }
+
+                positionsBase += meshGeom.positions.length / 3;
+            }
+        }
+
+        return { indices, positions };
+    }
+
     /**
      * Returns the volume of this SceneModelEntity.
      *
