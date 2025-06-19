@@ -244,7 +244,7 @@ export class VBOBatchingPointsLayer {
 
         const positions = (this._preCompressedPositionsExpected
                            ? buffer.positions.compileBuffer(Uint16Array)
-                           : (quantizePositions(buffer.positions.compileBuffer(Float32Array), this._modelAABB, state.positionsDecodeMatrix)));
+                           : (quantizePositions(buffer.positions.compileBuffer(Float64Array), this._modelAABB, state.positionsDecodeMatrix)));
         state.positionsBuf  = maybeCreateGlBuffer(positions, 3, gl.STATIC_DRAW);
 
         state.flagsBuf      = maybeCreateGlBuffer(new Float32Array(this._buffer.vertsIndex), 1, gl.DYNAMIC_DRAW); // Because we build flags arrays here, get their length from the positions array
