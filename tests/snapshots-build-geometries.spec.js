@@ -24,5 +24,7 @@ test.describe("Build a scene model", async () => {
         testPage("vbo_instancing_geometries");
         testPage("vbo_instancing_precompressed_triangles");
         testPage("vbo_instancing_precompressed_triangles_rtc");
+
+        testPage("vbo_batching_flat_geometries_lights");
     });
 });
