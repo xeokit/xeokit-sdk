@@ -159,6 +159,78 @@
     ]
   },
   {
+    "name": "TransformControl#setPosition",
+    "filePath": "src/plugins/TransformControl/TransformControl.js",
+    "lines": [
+      {
+        "lineNumber": 579,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 580,
+        "line": "     * Sets the World-space position of this Control."
+      },
+      {
+        "lineNumber": 581,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 582,
+        "line": "     * @param {Number[]} value New position."
+      },
+      {
+        "lineNumber": 583,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 584,
+        "line": "    setPosition(p) {"
+      }
+    ],
+    "codeParams": [
+      "p"
+    ],
+    "docParams": [
+      "value"
+    ]
+  },
+  {
+    "name": "TransformControl#setQuaternion",
+    "filePath": "src/plugins/TransformControl/TransformControl.js",
+    "lines": [
+      {
+        "lineNumber": 588,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 589,
+        "line": "     * Sets the quaternion of this Control."
+      },
+      {
+        "lineNumber": 590,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 591,
+        "line": "     * @param {Number[]} value New quaternion."
+      },
+      {
+        "lineNumber": 592,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 593,
+        "line": "    setQuaternion(q) {"
+      }
+    ],
+    "codeParams": [
+      "q"
+    ],
+    "docParams": [
+      "value"
+    ]
+  },
+  {
     "name": "MetaModel#loadData",
     "filePath": "src/viewer/metadata/MetaModel.js",
     "lines": [

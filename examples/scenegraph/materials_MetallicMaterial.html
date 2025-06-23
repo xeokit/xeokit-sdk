@@ -53,6 +53,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     import {
+        sRGBEncoding,
         Viewer,
         Mesh,
         loadOBJGeometry,
@@ -123,7 +124,7 @@
 
                         baseColorMap: new Texture(viewer.scene, {
                             src: "../../assets/models/obj/fireHydrant/fire_hydrant_Base_Color.png",
-                            encoding: "sRGB"
+                            encoding: sRGBEncoding
                         }),
                         normalMap: new Texture(viewer.scene, {
                             src: "../../assets/models/obj/fireHydrant/fire_hydrant_Normal_OpenGL.png"

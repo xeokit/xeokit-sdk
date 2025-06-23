@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../css/pageStyle.css" rel="stylesheet" />
+  </head>
+  <body>
+    <canvas id="myCanvas"></canvas>
+  </body>
+
+  <script id="source" type="module">
+
+    import { signalTestComplete } from "../lib/utils.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {
+        Viewer,
+        Mesh,
+        buildTorusGeometry,
+        ReadableGeometry,
+        PhongMaterial,
+        Texture,
+        Fresnel
+    } from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.scene.camera.eye = [0, 0, 5];
+    viewer.scene.camera.look = [0, 0, 0];
+    viewer.scene.camera.up = [0, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with torus shape and PhongMaterial
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildTorusGeometry({
+            center: [0, 0, 0],
+            radius: 1.5,
+            tube: 0.5,
+            radialSegments: 32,
+            tubeSegments: 24,
+            arc: Math.PI * 2.0
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            alpha: 0.9,
+            alphaMode: "blend",
+            ambient: [0.0, 0.0, 0.0],
+            shininess: 30,
+            diffuseMap: new Texture(viewer.scene, {
+                src: "../../assets/textures/diffuse/uvGrid2.jpg"
+            }),
+            alphaFresnel: new Fresnel(viewer.scene, {
+                edgeBias: 0.2,
+                centerBias: 0.8,
+                edgeColor: [1.0, 1.0, 1.0],
+                centerColor: [0.0, 0.0, 0.0],
+                power: 2
+            })
+        })
+    });
+
+    signalTestComplete(viewer);
+
+  </script>
+</html>
