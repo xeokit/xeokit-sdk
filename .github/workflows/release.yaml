@@ -27,10 +27,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Use Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          registry-url: https://registry.npmjs.org/
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+          always-auth: true
 
       - name: Restore
         run: npm ci
@@ -46,10 +47,10 @@ jobs:
 
       - name: Publish to NPM
         run: |
-          npm publish
+          npm publish --access public --tag next
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
+
       - name: Upload NPM package file
         uses: actions/upload-release-asset@v1
         env:
