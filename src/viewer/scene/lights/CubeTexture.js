@@ -89,19 +89,6 @@ class CubeTexture extends Component {
         return value;
     }
 
-    _webglContextRestored() {
-        const gl = this.scene.canvas.gl;
-        this._state.texture = null;
-        // if (this._images.length > 0) {
-        //     this._state.texture = new xeokit.renderer.Texture2D(gl, gl.TEXTURE_CUBE_MAP);
-        //     this._state.texture.setImage(this._images, this._state);
-        //     this._state.texture.setProps(this._state);
-        // } else
-        if (this._src) {
-            this._loadSrc(this._src);
-        }
-    }
-
     _loadSrc(src) {
         const self = this;
         const gl = this.scene.canvas.gl;
