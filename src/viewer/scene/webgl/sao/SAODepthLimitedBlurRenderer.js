@@ -28,7 +28,7 @@ const sampleWeights = new Float32Array(iota(KERNEL_RADIUS + 1).map(i => gaussian
  */
 export class SAODepthLimitedBlurRenderer {
 
-    init(gl) {
+    constructor(gl) {
         const programVariablesState = createProgramVariablesState();
 
         const programVariables = programVariablesState.programVariables;
