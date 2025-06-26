@@ -81,11 +81,9 @@ const Renderer = function (scene, options) {
     let snapshotBound = false;
 
     const saoOcclusionRenderer = (function() {
-        let gl = null;
         let currentRenrerer = null;
         let curNumSamples = null;
         return {
-            setGL: _gl => { gl = _gl; },
             destroy: () => currentRenrerer && currentRenrerer.destroy(),
             render: (viewportSize, project, sao, depthTexture) => {
                 const numSamples = Math.floor(sao.numSamples);
@@ -98,10 +96,8 @@ const Renderer = function (scene, options) {
             }
         };
     })();
-    saoOcclusionRenderer.setGL(gl);
 
-    const saoDepthLimitedBlurRenderer = new SAODepthLimitedBlurRenderer();
-    saoDepthLimitedBlurRenderer.init(gl);
+    const saoDepthLimitedBlurRenderer = new SAODepthLimitedBlurRenderer(gl);
 
     const getSceneCameraViewParams = (function() {
         let params = null; // scene.camera not defined yet
@@ -175,16 +171,6 @@ const Renderer = function (scene, options) {
     };
 
     this.webglContextLost = function () {
-    };
-
-    this.webglContextRestored = function (gl) {
-
-        // renderBufferManager.webglContextRestored(gl);
-
-        saoOcclusionRenderer.setGL(gl);
-        saoDepthLimitedBlurRenderer.init(gl);
-
-        imageDirty = true;
     };
 
     /**
