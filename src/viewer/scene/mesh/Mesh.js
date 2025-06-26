@@ -351,10 +351,9 @@ export class Mesh extends Component {
                 }
             };
             return {
-                get: ensureInstance,
-                getId: () => instance.id,
-                webglContextRestored: () => { if (instance) {                                  instance.delete();   instance = null; } },
-                put:                  () => { if (instance) { if (--instance.useCount === 0) { instance.delete(); } instance = null; } },
+                get:      ensureInstance,
+                getId:    () => instance.id,
+                put:      () => { if (instance) { if (--instance.useCount === 0) { instance.delete(); } instance = null; } },
                 drawMesh: (frameCtx, mesh, material) => {
                     ensureInstance();
                     instance && instance.drawMesh(frameCtx, mesh, material);
@@ -1499,10 +1498,6 @@ export class Mesh extends Component {
         }
         this._buildAABB(this.worldMatrix, this._aabb); // Mesh or VBOSceneModel
         this._aabbDirty = false;
-    }
-
-    _webglContextRestored() {
-        Object.values(this._renderers).forEach(r => r.webglContextRestored());
     }
 
     _buildAABB(worldMatrix, aabb) {
