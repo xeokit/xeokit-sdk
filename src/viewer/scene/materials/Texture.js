@@ -212,15 +212,6 @@ class Texture extends Component {
         return value;
     }
 
-    _webglContextRestored() {
-        this._state.texture = new Texture2D({gl: this.scene.canvas.gl});
-        if (this._image) {
-            this.image = this._image;
-        } else if (this._src) {
-            this.src = this._src;
-        }
-    }
-
     _update() {
         const state = this._state;
         if (this._matrixDirty) {
