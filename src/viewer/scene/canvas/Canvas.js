@@ -123,7 +123,6 @@ class Canvas extends Component {
         const self = this;
 
         this.canvas.addEventListener("webglcontextlost", this._webglcontextlostListener = function (event) {
-                console.time("webglcontextrestored");
                 self.scene._webglContextLost();
                 /**
                  * Fired whenever the WebGL context has been lost
@@ -131,22 +130,6 @@ class Canvas extends Component {
                  */
                 self.fire("webglcontextlost");
                 event.preventDefault();
-            },
-            false);
-
-        this.canvas.addEventListener("webglcontextrestored", this._webglcontextrestoredListener = function (event) {
-                self._initWebGL();
-                if (self.gl) {
-                    self.scene._webglContextRestored(self.gl);
-                    /**
-                     * Fired whenever the WebGL context has been restored again after having previously being lost
-                     * @event webglContextRestored
-                     * @param value The WebGL context object
-                     */
-                    self.fire("webglcontextrestored", self.gl);
-                    event.preventDefault();
-                }
-                console.timeEnd("webglcontextrestored");
             },
             false);
 
@@ -477,8 +460,7 @@ class Canvas extends Component {
         this._spinner._destroy();
         // Memory leak avoidance
         this.canvas.removeEventListener("webglcontextlost", this._webglcontextlostListener);
-        this.canvas.removeEventListener("webglcontextrestored", this._webglcontextrestoredListener);
-        
+
         // this.gl.getExtension("WEBGL_lose_context").loseContext(); // disabled because of XCD-306 and XEOK-295
         this.gl = null;
         

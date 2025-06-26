@@ -1251,7 +1251,6 @@ class Scene extends Component {
 
     _webglContextLost() {
         //  this.loading++;
-        this.canvas.spinner.processes++;
         for (const id in this.components) {
             if (this.components.hasOwnProperty(id)) {
                 const component = this.components[id];
@@ -1261,21 +1260,6 @@ class Scene extends Component {
             }
         }
         this._renderer.webglContextLost();
-    }
-
-    _webglContextRestored() {
-        const gl = this.canvas.gl;
-        for (const id in this.components) {
-            if (this.components.hasOwnProperty(id)) {
-                const component = this.components[id];
-                if (component._webglContextRestored) {
-                    component._webglContextRestored(gl);
-                }
-            }
-        }
-        this._renderer.webglContextRestored(gl);
-        //this.loading--;
-        this.canvas.spinner.processes--;
     }
 
     /**
