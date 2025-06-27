@@ -10,7 +10,6 @@
     "dev-build": "rollup --config rollup.dev.config.js",
     "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc",
     "typedocs": "rm -Rf ./docs/*; typedoc --tsconfig tsconfig.json",
-    "publish": "npm publish --access public",
     "changelog": "git fetch; auto-changelog --commit-limit false --package --template changelog-template.hbs",
     "test": "npx percy exec -- npx playwright test"
   },
