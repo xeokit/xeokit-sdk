@@ -1260,10 +1260,18 @@ const Renderer = function (scene, options) {
             const layerParamsSnap = frameCtx.snapPickLayerParams;
 
             // Read and decode the snapped coordinates
+            const readSnapPickBuffer = (source, arrayType, glType) => {
+                const w = vertexPickBuffer.buffer.width;
+                const h = vertexPickBuffer.buffer.height;
+                const pix = new arrayType(4 * w * h);
+                gl.readBuffer(source);
+                gl.readPixels(0, 0, w, h, gl.RGBA_INTEGER, glType, pix, 0);
+                return pix;
+            };
 
-            const snapPickResultArray = vertexPickBuffer.readArray(gl.RGBA_INTEGER, gl.INT, Int32Array, 4);
-            const snapPickNormalResultArray = vertexPickBuffer.readArray(gl.RGBA_INTEGER, gl.INT, Int32Array, 4, 1);
-            const snapPickIdResultArray = vertexPickBuffer.readArray(gl.RGBA_INTEGER, gl.UNSIGNED_INT, Uint32Array, 4, 2);
+            const snapPickResultArray       = readSnapPickBuffer(gl.COLOR_ATTACHMENT0, Int32Array,  gl.INT);
+            const snapPickNormalResultArray = readSnapPickBuffer(gl.COLOR_ATTACHMENT1, Int32Array,  gl.INT);
+            const snapPickIdResultArray     = readSnapPickBuffer(gl.COLOR_ATTACHMENT2, Uint32Array, gl.UNSIGNED_INT);
 
             vertexPickBuffer.unbind();
 
