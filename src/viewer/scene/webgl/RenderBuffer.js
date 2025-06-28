@@ -157,101 +157,6 @@ class RenderBuffer {
         return pix;
     }
 
-    /**
-     * Returns an HTMLCanvas containing the contents of the RenderBuffer as an image.
-     *
-     * - The HTMLCanvas has a CanvasRenderingContext2D.
-     * - Expects the caller to draw more things on the HTMLCanvas (annotations etc).
-     *
-     * @returns {HTMLCanvasElement}
-     */
-    readImageAsCanvas() {
-        const gl = this.gl;
-        const imageDataCache = this._getImageDataCache();
-        const pixelData = imageDataCache.pixelData;
-        const canvas = imageDataCache.canvas;
-        const imageData = imageDataCache.imageData;
-        const context = imageDataCache.context;
-        const width  = this.buffer.width;
-        const height = this.buffer.height;
-        gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixelData);
-        const halfHeight = height / 2 | 0;  // the | 0 keeps the result an int
-        const bytesPerRow = width * 4;
-        const temp = new Uint8Array(width * 4);
-        for (let y = 0; y < halfHeight; ++y) {
-            const topOffset = y * bytesPerRow;
-            const bottomOffset = (height - y - 1) * bytesPerRow;
-            temp.set(pixelData.subarray(topOffset, topOffset + bytesPerRow));
-            pixelData.copyWithin(topOffset, bottomOffset, bottomOffset + bytesPerRow);
-            pixelData.set(temp, bottomOffset);
-        }
-        imageData.data.set(pixelData);
-        context.putImageData(imageData, 0, 0);
-        return canvas;
-    }
-
-    readImage(params) {
-        const gl = this.gl;
-        const imageDataCache = this._getImageDataCache();
-        const pixelData = imageDataCache.pixelData;
-        const canvas = imageDataCache.canvas;
-        const imageData = imageDataCache.imageData;
-        const context = imageDataCache.context;
-        const width  = this.buffer.width;
-        const height = this.buffer.height;
-        gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixelData);
-        imageData.data.set(pixelData);
-        context.putImageData(imageData, 0, 0);
-
-        // flip Y
-        context.save();
-        context.globalCompositeOperation = 'copy';
-        context.scale(1, -1);
-        context.drawImage(canvas, 0, -height, width, height);
-        context.restore();
-
-        let format = params.format || "png";
-        if (format !== "jpeg" && format !== "png" && format !== "bmp") {
-            console.error("Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'png'");
-            format = "png";
-        }
-        return canvas.toDataURL(`image/${format}`);
-    }
-
-    _getImageDataCache(type = Uint8Array, multiplier = 4) {
-
-        const bufferWidth = this.buffer.width;
-        const bufferHeight = this.buffer.height;
-
-        let imageDataCache = this._imageDataCache;
-
-        if (imageDataCache) {
-            if (imageDataCache.width !== bufferWidth || imageDataCache.height !== bufferHeight) {
-                this._imageDataCache = null;
-                imageDataCache = null;
-            }
-        }
-
-        if (!imageDataCache) {
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.width = bufferWidth;
-            canvas.height = bufferHeight;
-            imageDataCache = {
-                pixelData: new type(bufferWidth * bufferHeight * multiplier),
-                canvas: canvas,
-                context: context,
-                imageData: context.createImageData(bufferWidth, bufferHeight),
-                width: bufferWidth,
-                height: bufferHeight
-            };
-
-            this._imageDataCache = imageDataCache;
-        }
-        imageDataCache.context.resetTransform(); // Prevents strange scale-accumulation effect with html2canvas
-        return imageDataCache;
-    }
-
     unbind() {
         const gl = this.gl;
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -265,7 +170,6 @@ class RenderBuffer {
             this.buffer = null;
             this.bound = false;
         }
-        this._imageDataCache = null;
         this.colorTextures = null;
         this.depthTexture = null;
     }

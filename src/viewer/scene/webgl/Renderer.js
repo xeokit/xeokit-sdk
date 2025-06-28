@@ -1427,6 +1427,37 @@ const Renderer = function (scene, options) {
     this.snapshot = (() => {
         let snapshotBound = false;
         const snapshotBuffer = new RenderBuffer(gl);
+        let imageDataCache = null;
+
+        const getImageDataCache = () => {
+            const bufferWidth  = snapshotBuffer.buffer.width;
+            const bufferHeight = snapshotBuffer.buffer.height;
+
+            if (imageDataCache) {
+                if (imageDataCache.width !== bufferWidth || imageDataCache.height !== bufferHeight) {
+                    imageDataCache = null;
+                }
+            }
+
+            if (!imageDataCache) {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.width = bufferWidth;
+                canvas.height = bufferHeight;
+                imageDataCache = {
+                    pixelData: new Uint8Array(bufferWidth * bufferHeight * 4),
+                    canvas: canvas,
+                    context: context,
+                    imageData: context.createImageData(bufferWidth, bufferHeight),
+                    width: bufferWidth,
+                    height: bufferHeight
+                };
+            }
+
+            imageDataCache.context.resetTransform(); // Prevents strange scale-accumulation effect with html2canvas
+            return imageDataCache;
+        };
+
         return {
             /**
              * Read pixels from the renderer's current output. Performs a force-render first.
@@ -1487,7 +1518,32 @@ const Renderer = function (scene, options) {
              * @private
              * @returns {String} The image data URI.
              */
-            readSnapshot: (params) => snapshotBuffer.readImage(params),
+            readSnapshot: (params) => {
+                const imageDataCache = getImageDataCache();
+                const pixelData = imageDataCache.pixelData;
+                const canvas = imageDataCache.canvas;
+                const imageData = imageDataCache.imageData;
+                const context = imageDataCache.context;
+                const width  = snapshotBuffer.buffer.width;
+                const height = snapshotBuffer.buffer.height;
+                gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixelData);
+                imageData.data.set(pixelData);
+                context.putImageData(imageData, 0, 0);
+
+                // flip Y
+                context.save();
+                context.globalCompositeOperation = 'copy';
+                context.scale(1, -1);
+                context.drawImage(canvas, 0, -height, width, height);
+                context.restore();
+
+                let format = params.format || "png";
+                if (format !== "jpeg" && format !== "png" && format !== "bmp") {
+                    console.error("Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'png'");
+                    format = "png";
+                }
+                return canvas.toDataURL(`image/${format}`);
+            },
 
             /**
              * Returns an HTMLCanvas containing an image of the snapshot canvas.
@@ -1497,7 +1553,29 @@ const Renderer = function (scene, options) {
              *
              * @returns {HTMLCanvasElement}
              */
-            readSnapshotAsCanvas: () => snapshotBuffer.readImageAsCanvas(),
+            readSnapshotAsCanvas: () => {
+                const imageDataCache = getImageDataCache();
+                const pixelData = imageDataCache.pixelData;
+                const canvas = imageDataCache.canvas;
+                const imageData = imageDataCache.imageData;
+                const context = imageDataCache.context;
+                const width  = snapshotBuffer.buffer.width;
+                const height = snapshotBuffer.buffer.height;
+                gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixelData);
+                const halfHeight = Math.floor(height / 2);
+                const bytesPerRow = width * 4;
+                const temp = new Uint8Array(width * 4);
+                for (let y = 0; y < halfHeight; ++y) {
+                    const topOffset = y * bytesPerRow;
+                    const bottomOffset = (height - y - 1) * bytesPerRow;
+                    temp.set(pixelData.subarray(topOffset, topOffset + bytesPerRow));
+                    pixelData.copyWithin(topOffset, bottomOffset, bottomOffset + bytesPerRow);
+                    pixelData.set(temp, bottomOffset);
+                }
+                imageData.data.set(pixelData);
+                context.putImageData(imageData, 0, 0);
+                return canvas;
+            },
 
             /**
              * Exists snapshot mode.
