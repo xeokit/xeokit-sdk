@@ -1425,6 +1425,8 @@ const Renderer = function (scene, options) {
         }
     };
 
+    this.snapshot = { };
+
     const snapshotBuffer = new RenderBuffer(gl);
     /**
      * Read pixels from the renderer's current output. Performs a force-render first.
@@ -1433,7 +1435,7 @@ const Renderer = function (scene, options) {
      * @param len
      * @private
      */
-    this.readPixels = function (pixels, colors, len) {
+    this.snapshot.readPixels = (pixels, colors, len) => {
         snapshotBuffer.bind();
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         this.render({force: true});
@@ -1461,7 +1463,7 @@ const Renderer = function (scene, options) {
      *
      * Exit snapshot mode using endSnapshot().
      */
-    this.beginSnapshot = function (params = {}) {
+    this.snapshot.beginSnapshot = (params = {}) => {
         snapshotBuffer.setSize((params.width && params.height)
                                ? [params.width, params.height]
                                : [gl.drawingBufferWidth, gl.drawingBufferHeight]);
@@ -1470,10 +1472,12 @@ const Renderer = function (scene, options) {
         snapshotBound = true;
     };
 
+    this.snapshot.render = () => this.render({force: true});
+
     /**
      * When in snapshot mode, renders a frame of the current Scene state to the snapshot canvas.
      */
-    this.renderSnapshot = function () {
+    this.snapshot.renderSnapshot = () => {
         if (!snapshotBound) {
             return;
         }
@@ -1488,7 +1492,7 @@ const Renderer = function (scene, options) {
      * @private
      * @returns {String} The image data URI.
      */
-    this.readSnapshot = function (params) {
+    this.snapshot.readSnapshot = (params) => {
         return snapshotBuffer.readImage(params);
     };
 
@@ -1500,7 +1504,7 @@ const Renderer = function (scene, options) {
      *
      * @returns {HTMLCanvasElement}
      */
-    this.readSnapshotAsCanvas = function () {
+    this.snapshot.readSnapshotAsCanvas = () => {
         return snapshotBuffer.readImageAsCanvas();
     };
 
@@ -1509,7 +1513,7 @@ const Renderer = function (scene, options) {
      *
      * Switches rendering back to the main canvas.
      */
-    this.endSnapshot = function () {
+    this.snapshot.endSnapshot = () => {
         if (!snapshotBound) {
             return;
         }
