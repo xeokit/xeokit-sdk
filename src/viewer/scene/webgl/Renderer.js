@@ -1461,16 +1461,12 @@ const Renderer = function (scene, options) {
              *
              * Exit snapshot mode using endSnapshot().
              */
-            beginSnapshot: (params = {}) => {
-                snapshotBuffer.setSize((params.width && params.height)
-                                       ? [params.width, params.height]
-                                       : [gl.drawingBufferWidth, gl.drawingBufferHeight]);
+            beginSnapshot: () => {
+                snapshotBuffer.setSize([gl.drawingBufferWidth, gl.drawingBufferHeight]);
                 snapshotBuffer.bind();
                 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
                 snapshotBound = true;
             },
-
-            render: () => this.render({force: true}),
 
             /**
              * Returns an HTMLCanvas containing an image of the snapshot canvas.
@@ -1541,6 +1537,7 @@ const Renderer = function (scene, options) {
                     snapshotBuffer.unbind();
                     snapshotBound = false;
                 }
+                this.render({force: true});
             }
         };
     })();
