@@ -430,7 +430,7 @@ class Canvas extends Component {
      * @param {Number} size
      */
     readPixels(pixels, colors, size) {
-        return this.scene._renderer.readPixels(pixels, colors, size);
+        return this.scene._renderer.snapshot.readPixels(pixels, colors, size);
     }
 
     /**
