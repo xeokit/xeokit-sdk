@@ -78,8 +78,6 @@ const Renderer = function (scene, options) {
         };
     })();
 
-    let snapshotBound = false;
-
     const saoOcclusionRenderer = (function() {
         let currentRenrerer = null;
         let curNumSamples = null;
@@ -1426,101 +1424,94 @@ const Renderer = function (scene, options) {
         }
     };
 
-    this.snapshot = { };
+    this.snapshot = (() => {
+        let snapshotBound = false;
+        const snapshotBuffer = new RenderBuffer(gl);
+        return {
+            /**
+             * Read pixels from the renderer's current output. Performs a force-render first.
+             * @param pixels
+             * @param colors
+             * @param len
+             * @private
+             */
+            readPixels: (pixels, colors, len) => {
+                snapshotBuffer.bind();
+                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+                this.render({force: true});
+                for (let i = 0; i < len; i++) {
+                    const j = i * 2;
+                    const k = i * 4;
+                    const color = snapshotBuffer.read(pixels[j], pixels[j + 1]);
+                    colors[k] = color[0];
+                    colors[k + 1] = color[1];
+                    colors[k + 2] = color[2];
+                    colors[k + 3] = color[3];
+                }
+                snapshotBuffer.unbind();
+                imageDirty = true;
+            },
 
-    const snapshotBuffer = new RenderBuffer(gl);
-    /**
-     * Read pixels from the renderer's current output. Performs a force-render first.
-     * @param pixels
-     * @param colors
-     * @param len
-     * @private
-     */
-    this.snapshot.readPixels = (pixels, colors, len) => {
-        snapshotBuffer.bind();
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        this.render({force: true});
-        let color;
-        let i;
-        let j;
-        let k;
-        for (i = 0; i < len; i++) {
-            j = i * 2;
-            k = i * 4;
-            color = snapshotBuffer.read(pixels[j], pixels[j + 1]);
-            colors[k] = color[0];
-            colors[k + 1] = color[1];
-            colors[k + 2] = color[2];
-            colors[k + 3] = color[3];
-        }
-        snapshotBuffer.unbind();
-        imageDirty = true;
-    };
+            /**
+             * Enter snapshot mode.
+             *
+             * Switches rendering to a hidden snapshot canvas.
+             *
+             * Exit snapshot mode using endSnapshot().
+             */
+            beginSnapshot: (params = {}) => {
+                snapshotBuffer.setSize((params.width && params.height)
+                                       ? [params.width, params.height]
+                                       : [gl.drawingBufferWidth, gl.drawingBufferHeight]);
+                snapshotBuffer.bind();
+                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+                snapshotBound = true;
+            },
 
-    /**
-     * Enter snapshot mode.
-     *
-     * Switches rendering to a hidden snapshot canvas.
-     *
-     * Exit snapshot mode using endSnapshot().
-     */
-    this.snapshot.beginSnapshot = (params = {}) => {
-        snapshotBuffer.setSize((params.width && params.height)
-                               ? [params.width, params.height]
-                               : [gl.drawingBufferWidth, gl.drawingBufferHeight]);
-        snapshotBuffer.bind();
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        snapshotBound = true;
-    };
+            render: () => this.render({force: true}),
 
-    this.snapshot.render = () => this.render({force: true});
+            /**
+             * When in snapshot mode, renders a frame of the current Scene state to the snapshot canvas.
+             */
+            renderSnapshot: () => {
+                if (snapshotBound) {
+                    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+                    this.render({force: true});
+                    imageDirty = true;
+                }
+            },
 
-    /**
-     * When in snapshot mode, renders a frame of the current Scene state to the snapshot canvas.
-     */
-    this.snapshot.renderSnapshot = () => {
-        if (!snapshotBound) {
-            return;
-        }
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        this.render({force: true});
-        imageDirty = true;
-    };
+            /**
+             * When in snapshot mode, gets an image of the snapshot canvas.
+             *
+             * @private
+             * @returns {String} The image data URI.
+             */
+            readSnapshot: (params) => snapshotBuffer.readImage(params),
 
-    /**
-     * When in snapshot mode, gets an image of the snapshot canvas.
-     *
-     * @private
-     * @returns {String} The image data URI.
-     */
-    this.snapshot.readSnapshot = (params) => {
-        return snapshotBuffer.readImage(params);
-    };
+            /**
+             * Returns an HTMLCanvas containing an image of the snapshot canvas.
+             *
+             * - The HTMLCanvas has a CanvasRenderingContext2D.
+             * - Expects the caller to draw more things on the HTMLCanvas (annotations etc).
+             *
+             * @returns {HTMLCanvasElement}
+             */
+            readSnapshotAsCanvas: () => snapshotBuffer.readImageAsCanvas(),
 
-    /**
-     * Returns an HTMLCanvas containing an image of the snapshot canvas.
-     *
-     * - The HTMLCanvas has a CanvasRenderingContext2D.
-     * - Expects the caller to draw more things on the HTMLCanvas (annotations etc).
-     *
-     * @returns {HTMLCanvasElement}
-     */
-    this.snapshot.readSnapshotAsCanvas = () => {
-        return snapshotBuffer.readImageAsCanvas();
-    };
-
-    /**
-     * Exists snapshot mode.
-     *
-     * Switches rendering back to the main canvas.
-     */
-    this.snapshot.endSnapshot = () => {
-        if (!snapshotBound) {
-            return;
-        }
-        snapshotBuffer.unbind();
-        snapshotBound = false;
-    };
+            /**
+             * Exists snapshot mode.
+             *
+             * Switches rendering back to the main canvas.
+             */
+            endSnapshot: () => {
+                if (snapshotBound) {
+                    snapshotBuffer.unbind();
+                    snapshotBound = false;
+                }
+            }
+        };
+    })();
 
     /**
      * Destroys this renderer.
