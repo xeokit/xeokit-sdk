@@ -366,9 +366,12 @@ class Viewer {
         // firing "rendering" is necessary to trigger DTX{Lines,Triangles}Layer::_uploadDeferredFlags
         this.scene.fire("rendering", { }, true);
 
-        this.scene._renderer.snapshot.renderSnapshot();
-
-        const imageDataURI = this.scene._renderer.snapshot.readSnapshot(params);
+        let format = params.format || "png";
+        if (format !== "jpeg" && format !== "png" && format !== "bmp") {
+            console.error("Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'png'");
+            format = "png";
+        }
+        const imageDataURI = this.scene._renderer.snapshot.renderSnapshotToCanvas().toDataURL(`image/${format}`);
 
         if (resize) {
             canvas.width = saveWidth;
@@ -449,9 +452,7 @@ class Viewer {
             this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
         }
 
-        this.scene._renderer.snapshot.renderSnapshot();
-
-        const snapshotCanvas = this.scene._renderer.snapshot.readSnapshotAsCanvas();
+        const snapshotCanvas = this.scene._renderer.snapshot.renderSnapshotToCanvas();
 
         if (resize) {
             canvas.width = saveWidth;
