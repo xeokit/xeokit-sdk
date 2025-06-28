@@ -157,14 +157,6 @@ class RenderBuffer {
         return pix;
     }
 
-    readArray(glFormat = null, glType = null, arrayType = Uint8Array, arrayMultiplier = 4, colorBufferIndex = 0) {
-        const pix = new arrayType(this.buffer.width*this.buffer.height * arrayMultiplier);
-        const gl = this.gl;
-        gl.readBuffer(gl.COLOR_ATTACHMENT0 + colorBufferIndex);
-        gl.readPixels(0, 0, this.buffer.width, this.buffer.height, glFormat || gl.RGBA, glType || gl.UNSIGNED_BYTE, pix, 0);
-        return pix;
-    }
-
     /**
      * Returns an HTMLCanvas containing the contents of the RenderBuffer as an image.
      *
