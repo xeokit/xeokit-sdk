@@ -314,7 +314,7 @@ class Viewer {
         if (this._snapshotBegun) {
             return;
         }
-        this.scene._renderer.beginSnapshot();
+        this.scene._renderer.snapshot.beginSnapshot();
         this._snapshotBegun = true;
     }
 
@@ -366,9 +366,9 @@ class Viewer {
         // firing "rendering" is necessary to trigger DTX{Lines,Triangles}Layer::_uploadDeferredFlags
         this.scene.fire("rendering", { }, true);
 
-        this.scene._renderer.renderSnapshot();
+        this.scene._renderer.snapshot.renderSnapshot();
 
-        const imageDataURI = this.scene._renderer.readSnapshot(params);
+        const imageDataURI = this.scene._renderer.snapshot.readSnapshot(params);
 
         if (resize) {
             canvas.width = saveWidth;
@@ -449,9 +449,9 @@ class Viewer {
             this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
         }
 
-        this.scene._renderer.renderSnapshot();
+        this.scene._renderer.snapshot.renderSnapshot();
 
-        const snapshotCanvas = this.scene._renderer.readSnapshotAsCanvas();
+        const snapshotCanvas = this.scene._renderer.snapshot.readSnapshotAsCanvas();
 
         if (resize) {
             canvas.width = saveWidth;
@@ -526,8 +526,8 @@ class Viewer {
         if (!this._snapshotBegun) {
             return;
         }
-        this.scene._renderer.endSnapshot();
-        this.scene._renderer.render({force: true});
+        this.scene._renderer.snapshot.endSnapshot();
+        this.scene._renderer.snapshot.render();
         this._snapshotBegun = false;
     }
 
