@@ -479,7 +479,6 @@ class Viewer {
     endSnapshot() {
         if (this._snapshotBegun) {
             this.scene._renderer.snapshot.endSnapshot();
-            this.scene._renderer.snapshot.render();
             this._snapshotBegun = false;
         }
     }
