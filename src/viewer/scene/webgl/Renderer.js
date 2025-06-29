@@ -1441,13 +1441,12 @@ const Renderer = function (scene, options) {
      * @param pixels
      * @param colors
      * @param len
-     * @param opaqueOnly
      * @private
      */
-    this.readPixels = function (pixels, colors, len, opaqueOnly) {
+    this.readPixels = function (pixels, colors, len) {
         snapshotBuffer.bind();
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        this.render({force: true, opaqueOnly: opaqueOnly});
+        this.render({force: true});
         let color;
         let i;
         let j;
@@ -1489,7 +1488,7 @@ const Renderer = function (scene, options) {
             return;
         }
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        this.render({force: true, opaqueOnly: false});
+        this.render({force: true});
         imageDirty = true;
     };
 
