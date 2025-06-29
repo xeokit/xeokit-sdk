@@ -80,9 +80,6 @@ const Renderer = function (scene, options) {
 
     let snapshotBound = false;
 
-    const bindOutputFrameBuffer = null;
-    const unbindOutputFrameBuffer = null;
-
     const saoOcclusionRenderer = (function() {
         let gl = null;
         let currentRenrerer = null;
@@ -269,13 +266,7 @@ const Renderer = function (scene, options) {
             const backgroundColor = scene.canvas.backgroundColorFromAmbientLight ? this.lights.getAmbientColorAndIntensity() : scene.canvas.backgroundColor;
             gl.clearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], 1.0);
         }
-        if (bindOutputFrameBuffer) {
-            bindOutputFrameBuffer(params.pass);
-        }
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        if (unbindOutputFrameBuffer) {
-            unbindOutputFrameBuffer(params.pass);
-        }
     };
 
     /**
@@ -533,10 +524,6 @@ const Renderer = function (scene, options) {
         let drawable;
 
         const startTime = Date.now();
-
-        if (bindOutputFrameBuffer) {
-            bindOutputFrameBuffer(params.pass);
-        }
 
         if (params.clear !== false) {
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -896,10 +883,6 @@ const Renderer = function (scene, options) {
         const numVertexAttribs = WEBGL_INFO.MAX_VERTEX_ATTRIBS; // Fixes https://github.com/xeokit/xeokit-sdk/issues/174
         for (let ii = 0; ii < numVertexAttribs; ii++) {
             gl.disableVertexAttribArray(ii);
-        }
-
-        if (unbindOutputFrameBuffer) {
-            unbindOutputFrameBuffer(params.pass);
         }
     }
 
