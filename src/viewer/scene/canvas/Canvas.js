@@ -448,12 +448,9 @@ class Canvas extends Component {
      *
      * ````JavaScript
      *
-     * // Ignore transparent pixels (default is false)
-     * var opaqueOnly = true;
-     *
      * var colors = new Float32Array(8);
      *
-     * viewer.scene.canvas.readPixels([ 100, 22, 12, 33 ], colors, 2, opaqueOnly);
+     * viewer.scene.canvas.readPixels([ 100, 22, 12, 33 ], colors, 2);
      * ````
      *
      * Then the r,g,b components of the colors will be set to the colors at those pixels.
@@ -461,10 +458,9 @@ class Canvas extends Component {
      * @param {Number[]} pixels
      * @param {Number[]} colors
      * @param {Number} size
-     * @param {Boolean} opaqueOnly
      */
-    readPixels(pixels, colors, size, opaqueOnly) {
-        return this.scene._renderer.readPixels(pixels, colors, size, opaqueOnly);
+    readPixels(pixels, colors, size) {
+        return this.scene._renderer.readPixels(pixels, colors, size);
     }
 
     /**
