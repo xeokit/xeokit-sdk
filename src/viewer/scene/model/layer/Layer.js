@@ -429,7 +429,6 @@ export const getRenderers = (function() {
             compile();
             scene.on("compile", compile);
             scene.on("destroyed", () => {
-                revalidateAll(true);
                 delete cache[sceneId];
             });
         }
