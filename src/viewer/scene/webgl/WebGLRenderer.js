@@ -343,16 +343,13 @@ export const createProgramVariablesState = function() {
                 if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
                     return [ shader ];
                 } else {
-                    return [
-                        null,
-                        (gl.isContextLost()
-                         ? [ ] // Handled explicitly elsewhere, so won't re-handle here
-                         : [
-                             "Failed to compile",
-                             gl.getShaderInfoLog(shader),
-                             src.split("\n").map((line, i) => (i + 1) + ": " + line + "\n").join("")
-                         ])
-                    ];
+                    return [ null,
+                             [
+                                 "Failed to compile",
+                                 gl.getShaderInfoLog(shader),
+                                 src.split("\n").map((line, i) => (i + 1) + ": " + line + "\n").join("")
+                             ]
+                           ];
                 }
             };
 
