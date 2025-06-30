@@ -118,20 +118,7 @@ class Canvas extends Component {
 
         this._initWebGL(cfg);
 
-        // Bind context loss and recovery handlers
-
         const self = this;
-
-        this.canvas.addEventListener("webglcontextlost", this._webglcontextlostListener = function (event) {
-                self.scene._webglContextLost();
-                /**
-                 * Fired whenever the WebGL context has been lost
-                 * @event webglcontextlost
-                 */
-                self.fire("webglcontextlost");
-                event.preventDefault();
-            },
-            false);
 
         // Attach to resize events on the canvas
         let dirtyBoundary = true; // make sure we publish the 1st boundary event
@@ -458,12 +445,7 @@ class Canvas extends Component {
     destroy() {
         this.scene.off(this._tick);
         this._spinner._destroy();
-        // Memory leak avoidance
-        this.canvas.removeEventListener("webglcontextlost", this._webglcontextlostListener);
-
-        // this.gl.getExtension("WEBGL_lose_context").loseContext(); // disabled because of XCD-306 and XEOK-295
         this.gl = null;
-        
         super.destroy();
     }
 }
