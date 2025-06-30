@@ -170,9 +170,6 @@ const Renderer = function (scene, options) {
         imageDirty = true;
     };
 
-    this.webglContextLost = function () {
-    };
-
     /**
      * Inserts a drawable into this renderer.
      *  @private
