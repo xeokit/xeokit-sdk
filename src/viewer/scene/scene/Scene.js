@@ -1482,12 +1482,7 @@ class Scene extends Component {
 
         renderEvent.sceneId = this.id;
 
-        const passes = this._passes;
-        const clearEachPass = this._clearEachPass;
-        let pass;
-        let clear;
-
-        for (pass = 0; pass < passes; pass++) {
+        for (let pass = 0; pass < this._passes; pass++) {
 
             renderEvent.pass = pass;
 
@@ -1500,9 +1495,10 @@ class Scene extends Component {
              */
             this.fire("rendering", renderEvent, true);
 
-            clear = clearEachPass || (pass === 0);
-
-            this._renderer.render({pass: pass, clear: clear, force: forceRender});
+            if (forceRender) {
+                this._renderer.imageDirty();
+            }
+            this._renderer.render(pass, this._clearEachPass || (pass === 0));
 
             /**
              * Fired when we have just rendered a frame for a Scene.
