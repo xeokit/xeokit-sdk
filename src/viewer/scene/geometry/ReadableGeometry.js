@@ -332,12 +332,6 @@ class ReadableGeometry extends Geometry {
         // memoryStats.colors += this._pickVertexColorsBuf.numItems;
     }
 
-    _webglContextLost() {
-        if (this._sceneVertexBufs) {
-            this._sceneVertexBufs.webglContextLost();
-        }
-    }
-
     /**
      * Gets the Geometry's primitive type.
 
