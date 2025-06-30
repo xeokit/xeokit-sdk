@@ -1,6 +1,68 @@
 import {createProgramVariablesState} from "../WebGLRenderer.js";
 import {ArrayBuf} from "./../ArrayBuf.js";
 
+const SAOProgram = (gl, name, programVariablesState, createOutColorDefinition) => {
+    const programVariables = programVariablesState.programVariables;
+
+    const uViewportInv   = programVariables.createUniform("vec2", "uViewportInv");
+    const uCameraNear    = programVariables.createUniform("float", "uCameraNear");
+    const uCameraFar     = programVariables.createUniform("float", "uCameraFar");
+    const uDepthTexture  = programVariables.createUniform("sampler2D", "uDepthTexture");
+
+    const uv       = programVariables.createAttribute("vec2", "uv");
+    const vUV      = programVariables.createVarying("vec2", "vUV", () => uv);
+    const outColor = programVariables.createOutput("vec4", "outColor");
+
+    const getOutColor = programVariables.createFragmentDefinition(
+        "getOutColor",
+        (name, src) => {
+            const getDepth = "getDepth";
+            src.push(`
+                float ${getDepth}(const in vec2 uv) {
+                    return texture(${uDepthTexture}, uv).r;
+                }
+            `);
+            src.push(createOutColorDefinition(name, vUV, uViewportInv, uCameraNear, uCameraFar, getDepth));
+        });
+
+    const [program, errors] = programVariablesState.buildProgram(
+        gl,
+        name,
+        {
+            clipPos: `vec4(2.0 * ${uv} - 1.0, 0.0, 1.0)`,
+            appendFragmentOutputs: (src) => src.push(`${outColor} = ${getOutColor}();`)
+        });
+
+    if (errors) {
+        console.error(errors.join("\n"));
+        throw errors;
+    } else {
+        const uvs = new Float32Array([1,1, 0,1, 0,0, 1,0]);
+        const uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, uvs, uvs.length, 2, gl.STATIC_DRAW);
+
+        // Mitigation: if Uint8Array is used, the geometry is corrupted on OSX when using Chrome with data-textures
+        const indices = new Uint32Array([0, 1, 2, 0, 2, 3]);
+        const indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, indices.length, 1, gl.STATIC_DRAW);
+
+        return {
+            destroy: program.destroy,
+            bind:    (viewportSize, project, depthTexture) => {
+                program.bind();
+                uViewportInv.setInputValue([1 / viewportSize[0], 1 / viewportSize[1]]);
+                uCameraNear.setInputValue(project.near);
+                uCameraFar.setInputValue(project.far);
+                uDepthTexture.setInputValue(depthTexture);
+
+                uv.setInputValue(uvBuf);
+            },
+            draw:    () => {
+                indicesBuf.bind();
+                gl.drawElements(gl.TRIANGLES, indicesBuf.numItems, indicesBuf.itemType, 0);
+            }
+        };
+    }
+};
+
 const iota = (n) => { const ret = [ ]; for (let i = 0; i < n; ++i) ret.push(i); return ret; };
 
 const blurStdDev = 4;
@@ -33,24 +95,18 @@ export class SAODepthLimitedBlurRenderer {
 
         const programVariables = programVariablesState.programVariables;
 
-        const uViewportInv   = programVariables.createUniform("vec2", "uViewportInv");
-        const uCameraNear    = programVariables.createUniform("float", "uCameraNear");
-        const uCameraFar     = programVariables.createUniform("float", "uCameraFar");
         const uDepthCutoff   = programVariables.createUniform("float", "uDepthCutoff");
         const uSampleOffsets = programVariables.createUniformArray("vec2",  "uSampleOffsets", KERNEL_RADIUS + 1);
         const uSampleWeights = programVariables.createUniformArray("float", "uSampleWeights", KERNEL_RADIUS + 1);
 
-        const uDepthTexture  = programVariables.createUniform("sampler2D", "uDepthTexture");
         const uOcclusionTex  = programVariables.createUniform("sampler2D", "uOcclusionTex");
 
-        const uv       = programVariables.createAttribute("vec2", "uv");
-        const vUV      = programVariables.createVarying("vec2", "vUV", () => uv);
-        const outColor = programVariables.createOutput("vec4", "outColor");
-
-        const getOutColor = programVariables.createFragmentDefinition(
-            "getOutColor",
-            (name, src) => {
-                src.push(`
+        const program = SAOProgram(
+            gl,
+            "SAODepthLimitedBlurRenderer",
+            programVariablesState,
+            (name, vUV, uViewportInv, uCameraNear, uCameraFar, getDepth) => {
+                return `
                 #define EPSILON 1e-6
 
                 const vec3 packFactors = vec3(256. * 256. * 256., 256. * 256., 256.);
@@ -59,10 +115,6 @@ export class SAODepthLimitedBlurRenderer {
                     vec4 r = vec4(fract(v * packFactors), v);
                     r.yzw -= r.xyz / 256.;
                     return r * 256. / 255.;
-                }
-
-                float getDepth(const in vec2 uv) {
-                    return texture(${uDepthTexture}, uv).r;
                 }
 
                 float getOcclusion(const in vec2 uv) {
@@ -75,7 +127,7 @@ export class SAODepthLimitedBlurRenderer {
                 }
 
                 vec4 ${name}() {
-                    float centerDepth = getDepth(${vUV});
+                    float centerDepth = ${getDepth}(${vUV});
                     if (centerDepth >= (1.0 - EPSILON)) {
                         discard;
                     }
@@ -93,7 +145,7 @@ export class SAODepthLimitedBlurRenderer {
 
                         if (! rBreak) {
                             vec2 rSampleUV = ${vUV} + sampleUVOffset;
-                            if (abs(centerViewZ - getViewZ(getDepth(rSampleUV))) > ${uDepthCutoff}) {
+                            if (abs(centerViewZ - getViewZ(${getDepth}(rSampleUV))) > ${uDepthCutoff}) {
                                 rBreak = true;
                             } else {
                                 occlusionSum += getOcclusion(rSampleUV) * sampleWeight;
@@ -103,7 +155,7 @@ export class SAODepthLimitedBlurRenderer {
 
                         if (! lBreak) {
                             vec2 lSampleUV = ${vUV} - sampleUVOffset;
-                            if (abs(centerViewZ - getViewZ(getDepth(lSampleUV))) > ${uDepthCutoff}) {
+                            if (abs(centerViewZ - getViewZ(${getDepth}(lSampleUV))) > ${uDepthCutoff}) {
                                 lBreak = true;
                             } else {
                                 occlusionSum += getOcclusion(lSampleUV) * sampleWeight;
@@ -113,47 +165,20 @@ export class SAODepthLimitedBlurRenderer {
                     }
 
                     return packFloatToRGBA(occlusionSum / weightSum);
-                }`);
+                }`;
             });
 
-        const [program, errors] = programVariablesState.buildProgram(
-            gl,
-            "SAODepthLimitedBlurRenderer",
-            {
-                clipPos: `vec4(2.0 * ${uv} - 1.0, 0.0, 1.0)`,
-                appendFragmentOutputs: (src) => src.push(`${outColor} = ${getOutColor}();`)
-            });
+        this.destroy = program.destroy;
 
-        if (errors) {
-            console.error(errors.join("\n"));
-            throw errors;
-        } else {
-            const uvs = new Float32Array([1,1, 0,1, 0,0, 1,0]);
-            const uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, uvs, uvs.length, 2, gl.STATIC_DRAW);
+        this.render = (viewportSize, project, direction, depthTexture, occlusionTexture) => {
+            program.bind(viewportSize, project, depthTexture);
 
-            // Mitigation: if Uint8Array is used, the geometry is corrupted on OSX when using Chrome with data-textures
-            const indices = new Uint32Array([0, 1, 2, 0, 2, 3]);
-            const indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, indices.length, 1, gl.STATIC_DRAW);
+            uDepthCutoff.setInputValue(blurDepthCutoff);
+            uSampleOffsets.setInputValue((direction === 0) ? sampleOffsetsHor : sampleOffsetsVer);
+            uSampleWeights.setInputValue(sampleWeights);
+            uOcclusionTex.setInputValue(occlusionTexture);
 
-            this.destroy = program.destroy;
-            this.render = (viewportSize, project, direction, depthTexture, occlusionTexture) => {
-                program.bind();
-
-                uViewportInv.setInputValue([1 / viewportSize[0], 1 / viewportSize[1]]);
-                uCameraNear.setInputValue(project.near);
-                uCameraFar.setInputValue(project.far);
-                uDepthCutoff.setInputValue(blurDepthCutoff);
-                uSampleOffsets.setInputValue((direction === 0) ? sampleOffsetsHor : sampleOffsetsVer);
-                uSampleWeights.setInputValue(sampleWeights);
-
-                uDepthTexture.setInputValue(depthTexture);
-                uOcclusionTex.setInputValue(occlusionTexture);
-
-                uv.setInputValue(uvBuf);
-
-                indicesBuf.bind();
-                gl.drawElements(gl.TRIANGLES, indicesBuf.numItems, indicesBuf.itemType, 0);
-            };
-        }
+            program.draw();
+        };
     }
 }
