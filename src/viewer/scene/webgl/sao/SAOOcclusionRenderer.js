@@ -2,6 +2,68 @@ import {createProgramVariablesState} from "../WebGLRenderer.js";
 import {ArrayBuf} from "./../ArrayBuf.js";
 import {math} from "../../math/math.js";
 
+const SAOProgram = (gl, name, programVariablesState, createOutColorDefinition) => {
+    const programVariables = programVariablesState.programVariables;
+
+    const uViewportInv   = programVariables.createUniform("vec2", "uViewportInv");
+    const uCameraNear    = programVariables.createUniform("float", "uCameraNear");
+    const uCameraFar     = programVariables.createUniform("float", "uCameraFar");
+    const uDepthTexture  = programVariables.createUniform("sampler2D", "uDepthTexture");
+
+    const uv       = programVariables.createAttribute("vec2", "uv");
+    const vUV      = programVariables.createVarying("vec2", "vUV", () => uv);
+    const outColor = programVariables.createOutput("vec4", "outColor");
+
+    const getOutColor = programVariables.createFragmentDefinition(
+        "getOutColor",
+        (name, src) => {
+            const getDepth = "getDepth";
+            src.push(`
+                float ${getDepth}(const in vec2 uv) {
+                    return texture(${uDepthTexture}, uv).r;
+                }
+            `);
+            src.push(createOutColorDefinition(name, vUV, uViewportInv, uCameraNear, uCameraFar, getDepth));
+        });
+
+    const [program, errors] = programVariablesState.buildProgram(
+        gl,
+        name,
+        {
+            clipPos: `vec4(2.0 * ${uv} - 1.0, 0.0, 1.0)`,
+            appendFragmentOutputs: (src) => src.push(`${outColor} = ${getOutColor}();`)
+        });
+
+    if (errors) {
+        console.error(errors.join("\n"));
+        throw errors;
+    } else {
+        const uvs = new Float32Array([1,1, 0,1, 0,0, 1,0]);
+        const uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, uvs, uvs.length, 2, gl.STATIC_DRAW);
+
+        // Mitigation: if Uint8Array is used, the geometry is corrupted on OSX when using Chrome with data-textures
+        const indices = new Uint32Array([0, 1, 2, 0, 2, 3]);
+        const indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, indices.length, 1, gl.STATIC_DRAW);
+
+        return {
+            destroy: program.destroy,
+            bind:    (viewportSize, project, depthTexture) => {
+                program.bind();
+                uViewportInv.setInputValue([1 / viewportSize[0], 1 / viewportSize[1]]);
+                uCameraNear.setInputValue(project.near);
+                uCameraFar.setInputValue(project.far);
+                uDepthTexture.setInputValue(depthTexture);
+
+                uv.setInputValue(uvBuf);
+            },
+            draw:    () => {
+                indicesBuf.bind();
+                gl.drawElements(gl.TRIANGLES, indicesBuf.numItems, indicesBuf.itemType, 0);
+            }
+        };
+    }
+};
+
 /**
  * SAO implementation inspired from previous SAO work in THREE.js by ludobaka / ludobaka.github.io and bhouston
  * @private
@@ -14,9 +76,6 @@ export class SAOOcclusionRenderer {
 
         const programVariables = programVariablesState.programVariables;
 
-        const uViewportInv   = programVariables.createUniform("vec2", "uViewportInv");
-        const uCameraNear    = programVariables.createUniform("float", "uCameraNear");
-        const uCameraFar     = programVariables.createUniform("float", "uCameraFar");
         const uProjectMatrix = programVariables.createUniform("mat4", "uProjectMatrix");
         const uInvProjMatrix = programVariables.createUniform("mat4", "uInvProjMatrix");
         const uPerspective   = programVariables.createUniform("bool", "uPerspective");
@@ -26,16 +85,13 @@ export class SAOOcclusionRenderer {
         const uKernelRadius  = programVariables.createUniform("float", "uKernelRadius");
         const uMinResolution = programVariables.createUniform("float", "uMinResolution");
         const uRandomSeed    = programVariables.createUniform("float", "uRandomSeed");
-        const uDepthTexture  = programVariables.createUniform("sampler2D", "uDepthTexture");
 
-        const uv       = programVariables.createAttribute("vec2", "uv");
-        const vUV      = programVariables.createVarying("vec2", "vUV", () => uv);
-        const outColor = programVariables.createOutput("vec4", "outColor");
-
-        const getOutColor = programVariables.createFragmentDefinition(
-            "getOutColor",
-            (name, src) => {
-                src.push(`
+        const program = SAOProgram(
+            gl,
+            "SAOOcclusionRenderer",
+            programVariablesState,
+            (name, vUV, uViewportInv, uCameraNear, uCameraFar, getDepth) => {
+                return `
                 #define EPSILON 1e-6
                 #define PI 3.14159265359
                 #define PI2 6.28318530718
@@ -48,10 +104,6 @@ export class SAOOcclusionRenderer {
                     vec4 r = vec4(fract(v * packFactors), v);
                     r.yzw -= r.xyz / 256.;
                     return r * 256. / 255.;
-                }
-
-                float getDepth(const in vec2 uv) {
-                    return texture(${uDepthTexture}, uv).r;
                 }
 
                 highp float rand(const in vec2 uv) {
@@ -70,7 +122,7 @@ export class SAOOcclusionRenderer {
                 }
 
                 vec4 ${name}() {
-                    float centerDepth = getDepth(${vUV});
+                    float centerDepth = ${getDepth}(${vUV});
                     if (centerDepth >= (1.0 - EPSILON)) {
                         discard;
                     }
@@ -93,7 +145,7 @@ export class SAOOcclusionRenderer {
                         radius += radiusStep;
                         angle += angleStep;
 
-                        float sampleDepth = getDepth(sampleUv);
+                        float sampleDepth = ${getDepth}(sampleUv);
                         if (sampleDepth >= (1.0 - EPSILON)) {
                             continue;
                         }
@@ -106,52 +158,24 @@ export class SAOOcclusionRenderer {
                     }
 
                     return packFloatToRGBA(1.0 - occlusionSum * ${uIntensity} / weightSum);
-                }`);
+                }`;
             });
 
-        const [program, errors] = programVariablesState.buildProgram(
-            gl,
-            "SAOOcclusionRenderer",
-            {
-                clipPos: `vec4(2.0 * ${uv} - 1.0, 0.0, 1.0)`,
-                appendFragmentOutputs: (src) => src.push(`${outColor} = ${getOutColor}();`)
-            });
+        this.destroy = program.destroy;
+        this.render = (viewportSize, project, sao, depthTexture) => {
+            program.bind(viewportSize, project, depthTexture);
 
-        if (errors) {
-            console.error(errors.join("\n"));
-            throw errors;
-        } else {
-            const uvs = new Float32Array([1,1, 0,1, 0,0, 1,0]);
-            const uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, uvs, uvs.length, 2, gl.STATIC_DRAW);
+            uProjectMatrix.setInputValue(project.matrix);
+            uInvProjMatrix.setInputValue(project.inverseMatrix);
+            uPerspective.setInputValue(project.type === "Perspective");
+            uScale.setInputValue(sao.scale * project.far / 5);
+            uIntensity.setInputValue(sao.intensity);
+            uBias.setInputValue(sao.bias);
+            uKernelRadius.setInputValue(sao.kernelRadius);
+            uMinResolution.setInputValue(sao.minResolution);
+            uRandomSeed.setInputValue(Math.random());
 
-            // Mitigation: if Uint8Array is used, the geometry is corrupted on OSX when using Chrome with data-textures
-            const indices = new Uint32Array([0, 1, 2, 0, 2, 3]);
-            const indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, indices.length, 1, gl.STATIC_DRAW);
-
-            this.destroy = program.destroy;
-            this.render = (viewportSize, project, sao, depthTexture) => {
-                program.bind();
-
-                uViewportInv.setInputValue([1 / viewportSize[0], 1 / viewportSize[1]]);
-                uCameraNear.setInputValue(project.near);
-                uCameraFar.setInputValue(project.far);
-                uProjectMatrix.setInputValue(project.matrix);
-                uInvProjMatrix.setInputValue(project.inverseMatrix);
-                uPerspective.setInputValue(project.type === "Perspective");
-                uScale.setInputValue(sao.scale * project.far / 5);
-                uIntensity.setInputValue(sao.intensity);
-                uBias.setInputValue(sao.bias);
-                uKernelRadius.setInputValue(sao.kernelRadius);
-                uMinResolution.setInputValue(sao.minResolution);
-                uRandomSeed.setInputValue(Math.random());
-
-                uDepthTexture.setInputValue(depthTexture);
-
-                uv.setInputValue(uvBuf);
-
-                indicesBuf.bind();
-                gl.drawElements(gl.TRIANGLES, indicesBuf.numItems, indicesBuf.itemType, 0);
-            };
-        }
+            program.draw();
+        };
     }
 }
