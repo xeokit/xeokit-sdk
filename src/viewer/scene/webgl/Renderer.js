@@ -263,14 +263,10 @@ const Renderer = function (scene, options) {
      * Renders inserted drawables.
      *  @private
      */
-    this.render = function (params) {
-        params = params || {};
-        if (params.force) {
-            imageDirty = true;
-        }
+    this.render = function(pass, clear) {
         updateDrawlist();
         if (imageDirty) {
-            draw(params);
+            draw(pass, clear);
             stats.frame.frameCount++;
             imageDirty = false;
         }
@@ -315,10 +311,10 @@ const Renderer = function (scene, options) {
         }
     }
 
-    function draw(params) {
+    function draw(pass, clear) {
 
         const sao = scene.sao;
-        const occlusionTexture = saoEnabled && sao.possible && (sao.numSamples >= 1) && drawSAOBuffers(params);
+        const occlusionTexture = saoEnabled && sao.possible && (sao.numSamples >= 1) && drawSAOBuffers(pass);
 
         scene._lightsState.lights.forEach(light => {
 
@@ -364,10 +360,10 @@ const Renderer = function (scene, options) {
         //
         shadowsDirty = false;
 
-        drawColor(params, occlusionTexture);
+        drawColor(pass, clear, occlusionTexture);
     }
 
-    function drawSAOBuffers(params) {
+    function drawSAOBuffers(pass) {
 
         const sao = scene.sao;
 
@@ -380,7 +376,7 @@ const Renderer = function (scene, options) {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         frameCtx.reset();
-        frameCtx.pass = params.pass;
+        frameCtx.pass = pass;
         frameCtx.viewParams = getSceneCameraViewParams();
         frameCtx.nearPlaneHeight = getNearPlaneHeight(scene.camera, gl.drawingBufferHeight);
 
@@ -446,7 +442,7 @@ const Renderer = function (scene, options) {
         return occlusionRenderBuffer1.colorTextures[0];
     }
 
-    function drawColor(params, occlusionTexture) {
+    function drawColor(pass, clear, occlusionTexture) {
 
         const normalDrawSAOBin = [];
         const normalEdgesOpaqueBin = [];
@@ -472,7 +468,7 @@ const Renderer = function (scene, options) {
         const ambientColorAndIntensity = scene._lightsState.getAmbientColorAndIntensity();
 
         frameCtx.reset();
-        frameCtx.pass = params.pass;
+        frameCtx.pass = pass;
         frameCtx.withSAO = false;
         frameCtx.pbrEnabled = pbrEnabled && !!scene.pbrEnabled;
         frameCtx.colorTextureEnabled = colorTextureEnabled && !!scene.colorTextureEnabled;
@@ -506,7 +502,7 @@ const Renderer = function (scene, options) {
 
         const startTime = Date.now();
 
-        if (params.clear !== false) {
+        if (clear) {
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         }
 
@@ -1440,7 +1436,8 @@ const Renderer = function (scene, options) {
             readPixels: (pixels, colors, len) => {
                 snapshotBuffer.bind();
                 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-                this.render({force: true});
+                imageDirty = true;
+                this.render();
                 for (let i = 0; i < len; i++) {
                     const j = i * 2;
                     const k = i * 4;
@@ -1520,7 +1517,8 @@ const Renderer = function (scene, options) {
 
                 if (snapshotBound) {
                     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-                    this.render({force: true});
+                    imageDirty = true;
+                    this.render();
                     imageDirty = true;
                 }
 
@@ -1537,7 +1535,8 @@ const Renderer = function (scene, options) {
                     snapshotBuffer.unbind();
                     snapshotBound = false;
                 }
-                this.render({force: true});
+                imageDirty = true;
+                this.render();
             }
         };
     })();
