@@ -789,6 +789,7 @@ class BCFViewpointsPlugin extends Plugin {
             }
 
             if (bcfViewpoint.components.coloring) {
+                scene.setObjectsColorized(scene.colorizedObjectIds, null);
                 bcfViewpoint.components.coloring.forEach(coloring => {
 
                     let color = coloring.color;
