@@ -1,6 +1,18 @@
 ## xeokit-sdk Changelog
 
-# [v2.6.67](https://github.com/xeokit/xeokit-sdk/compare/v2.6.66...v2.6.67)
+## [v2.6.83-beta.1](https://github.com/xeokit/xeokit-sdk/compare/v2.6.82...v2.6.82)
+
+### 07 May 2025
+
+- chore: Release v2.6.81 dist files [`ea1e4e2`](https://github.com/xeokit/xeokit-sdk/commit/ea1e4e201947b1cc54e9f9e58f758dff01aac2d8)
+- Rebuild [`80a6458`](https://github.com/xeokit/xeokit-sdk/commit/80a64586da2504c5e8c25befca093df18a63efaa)
+- Rebuild [`709be0c`](https://github.com/xeokit/xeokit-sdk/commit/709be0c64d1d5cddbdbf65e6c493104a953c760c)
+- npm bump [`8e2cef7`](https://github.com/xeokit/xeokit-sdk/commit/8e2cef7bd1346e14315953130b1b658f40367b1b)
+- npm bump [`f3a4cf1`](https://github.com/xeokit/xeokit-sdk/commit/f3a4cf1711c2b1a5e646115fa2705469ecf2c964)
+- [XCD-309] Clear colorization when loading BCF [`004c124`](https://github.com/xeokit/xeokit-sdk/commit/004c124d2afd7fc773d0836f72ae520b5dc262b2)
+
+
+## [v2.6.67](https://github.com/xeokit/xeokit-sdk/compare/v2.6.66...v2.6.67)
 
 ### 27 February 2025
 
