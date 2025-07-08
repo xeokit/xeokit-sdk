@@ -1,5 +1,11 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.83](https://github.com/xeokit/xeokit-sdk/compare/v2.6.82...v2.6.83)
+
+### 8 July 2025
+
+- Technical release aiming to rollout new CI mechanism. No other code changes.
+
 # [v2.6.67](https://github.com/xeokit/xeokit-sdk/compare/v2.6.66...v2.6.67)
 
 ### 27 February 2025

@@ -91,6 +91,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to NPM
-        run: npm publish --access public
+        run: |
+          if [ "${{ inputs.branch }}" != "master" ]; then
+            npm publish --access public --tag next
+          else
+            npm publish --access public
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
