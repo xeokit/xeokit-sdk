@@ -1,5 +1,13 @@
 ## xeokit-sdk Changelog
 
+
+## [v2.6.83-beta.2](https://github.com/xeokit/xeokit-sdk/compare/v2.6.82...v2.6.82)
+
+### 07 July 2025
+
+- chore: nothing interesting
+- chore: did it for testing
+
 ## [v2.6.83-beta.1](https://github.com/xeokit/xeokit-sdk/compare/v2.6.82...v2.6.82)
 
 ### 07 May 2025
