@@ -949,8 +949,13 @@ class ContextMenu {
         const menuWidth = menuElement.offsetWidth;
 
         const offsetRect = this._offsetParent.getBoundingClientRect();
-        
-        const bottomContainerBorder = offsetRect.bottom + window.scrollY;
+
+        // A regression occurred, that positions the menu horizontally above the client viewport
+        // at 6188de17ddca5c069b75a7673c1cda1aa1e74d07 when window.innerHeight has been replaced by offsetRect.bottom
+        // Reported originally at XCD-332
+        // Reproducible with examples/measurement/distance_createWithMouse_snapping.html
+        // Dirty hack introduced as XEOK-306, to be improved in the future to a more general solution
+        const bottomContainerBorder = ((this._offsetParent === window.document.body) && (offsetRect.bottom === 0)) ? window.innerHeight : (offsetRect.bottom + window.scrollY);
         const rightContainerBorder = offsetRect.right + window.scrollX;
         if ((pageY + menuHeight) > bottomContainerBorder) {
             pageY = bottomContainerBorder- menuHeight;
