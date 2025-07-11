@@ -1,8 +1,5 @@
-name: Build
+name: Run visual tests
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master

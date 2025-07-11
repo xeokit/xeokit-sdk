@@ -58,9 +58,9 @@ jobs:
             ESCAPED_VERSION=$(echo "$VERSION" | sed 's/[[\.*^$()+?{|]/\\&/g')
             # Extract content between version headers
             NOTES=$(awk "
-              /^## \[v${ESCAPED_VERSION}\]/ { found=1; next }
-              found && /^## \[v[0-9]/ { exit }
-              found && /^## \[.*\]/ { exit }
+              /^#+ \[v${ESCAPED_VERSION}\]/ { found=1; next }
+              found && /^#+ \[v[0-9]/ { exit }
+              found && /^#+ \[.*\]/ { exit }
               found { print }
             " CHANGELOG.md | sed '/^$/d')
             if [ -z "$NOTES" ]; then
