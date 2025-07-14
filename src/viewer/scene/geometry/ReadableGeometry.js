@@ -224,12 +224,6 @@ class ReadableGeometry extends Geometry {
 
         memoryStats.meshes++;
 
-        this._buildVBOs();
-    }
-
-    _buildVBOs() {
-        const state = this._state;
-        const gl = this.scene.canvas.gl;
         if (state.indices) {
             state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, state.indices, state.indices.length, 1, gl.STATIC_DRAW);
             memoryStats.indices += state.indicesBuf.numItems;
@@ -336,25 +330,6 @@ class ReadableGeometry extends Geometry {
         // this._pickVertexColorsBuf = new xeokit.renderer.ArrayBuf(gl, gl.ARRAY_BUFFER, pickColors, pickColors.length, 4, gl.STATIC_DRAW, true);
         // memoryStats.positions += this._pickVertexPositionsBuf.numItems;
         // memoryStats.colors += this._pickVertexColorsBuf.numItems;
-    }
-
-    _webglContextLost() {
-        if (this._sceneVertexBufs) {
-            this._sceneVertexBufs.webglContextLost();
-        }
-    }
-
-    _webglContextRestored() {
-        if (this._sceneVertexBufs) {
-            this._sceneVertexBufs.webglContextRestored();
-        }
-        this._buildVBOs();
-        this._edgeIndicesBuf = null;
-        this._pickVertexPositionsBuf = null;
-        this._pickTrianglePositionsBuf = null;
-        this._pickTriangleColorsBuf = null;
-        this._pickVertexPositionsBuf = null;
-        this._pickVertexColorsBuf = null;
     }
 
     /**
