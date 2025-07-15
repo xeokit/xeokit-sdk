@@ -483,7 +483,7 @@ class Canvas extends Component {
         this.canvas.removeEventListener("webglcontextlost", this._webglcontextlostListener);
         this.canvas.removeEventListener("webglcontextrestored", this._webglcontextrestoredListener);
         
-        this.gl.getExtension("WEBGL_lose_context").loseContext();
+        // this.gl.getExtension("WEBGL_lose_context").loseContext(); // disabled because of XCD-306 and XEOK-295
         this.gl = null;
         
         super.destroy();
