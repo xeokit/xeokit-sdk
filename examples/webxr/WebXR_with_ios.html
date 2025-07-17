@@ -1,0 +1,476 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>xeokit WebXR with iOS USDZ Support Example</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                background: #000;
+                color: #fff;
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Arial,
+                    sans-serif;
+                overflow: hidden;
+            }
+
+            #myCanvas {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: transparent;
+            }
+
+            .controls {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                z-index: 1000;
+                background: rgba(0, 0, 0, 0.9);
+                padding: 20px;
+                border-radius: 12px;
+                backdrop-filter: blur(20px);
+                max-width: 320px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .controls h3 {
+                margin: 0 0 15px 0;
+                color: #007bff;
+                font-size: 18px;
+            }
+
+            .model-selector {
+                margin: 15px 0;
+            }
+
+            .model-selector label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+            }
+
+            .model-selector select {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #444;
+                border-radius: 6px;
+                background: #222;
+                color: #fff;
+                font-size: 14px;
+            }
+
+            .controls button {
+                display: block;
+                width: 100%;
+                margin: 10px 0;
+                padding: 12px;
+                background: linear-gradient(135deg, #007bff, #0056b3);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 500;
+                transition: all 0.2s ease;
+            }
+
+            .controls button:hover:not(:disabled) {
+                background: linear-gradient(135deg, #0056b3, #004085);
+                transform: translateY(-1px);
+            }
+
+            .controls button:disabled {
+                background: #6c757d;
+                cursor: not-allowed;
+                opacity: 0.6;
+            }
+
+            .controls button.ios-specific {
+                background: linear-gradient(135deg, #28a745, #1e7e34);
+            }
+
+            .controls button.ios-specific:hover:not(:disabled) {
+                background: linear-gradient(135deg, #1e7e34, #155724);
+            }
+
+            .status-panel {
+                position: absolute;
+                bottom: 20px;
+                left: 20px;
+                z-index: 1000;
+                background: rgba(0, 0, 0, 0.9);
+                padding: 15px;
+                border-radius: 10px;
+                backdrop-filter: blur(20px);
+                max-width: 280px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .status-panel h4 {
+                margin: 0 0 10px 0;
+                color: #17a2b8;
+                font-size: 16px;
+            }
+
+            .status-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 8px 0;
+                font-size: 13px;
+            }
+
+            .status-indicator {
+                padding: 3px 8px;
+                border-radius: 12px;
+                font-size: 11px;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            .status-indicator.supported {
+                background: #28a745;
+                color: white;
+            }
+
+            .status-indicator.unsupported {
+                background: #dc3545;
+                color: white;
+            }
+
+            .status-indicator.active {
+                background: #17a2b8;
+                color: white;
+            }
+
+            .status-indicator.inactive {
+                background: #6c757d;
+                color: white;
+            }
+
+            .device-info {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                z-index: 1000;
+                background: rgba(0, 0, 0, 0.9);
+                padding: 15px;
+                border-radius: 10px;
+                backdrop-filter: blur(20px);
+                max-width: 250px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                font-size: 12px;
+            }
+
+            .device-info h4 {
+                margin: 0 0 10px 0;
+                color: #ffc107;
+                font-size: 14px;
+            }
+
+            .device-info .info-item {
+                margin: 5px 0;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .device-info .info-label {
+                color: #aaa;
+            }
+
+            .device-info .info-value {
+                color: #fff;
+                font-weight: 500;
+            }
+
+            .ios-badge {
+                display: inline-block;
+                background: linear-gradient(135deg, #007bff, #28a745);
+                color: white;
+                padding: 4px 8px;
+                border-radius: 12px;
+                font-size: 10px;
+                font-weight: bold;
+                margin-left: 8px;
+            }
+
+            .quick-look-section {
+                margin: 20px 0;
+                padding: 15px;
+                border: 2px solid #28a745;
+                border-radius: 8px;
+                background: rgba(40, 167, 69, 0.1);
+            }
+
+            .quick-look-section h4 {
+                margin: 0 0 10px 0;
+                color: #28a745;
+                font-size: 14px;
+            }
+
+            .usdz-input {
+                width: 100%;
+                padding: 8px;
+                margin: 8px 0;
+                border: 1px solid #28a745;
+                border-radius: 4px;
+                background: rgba(0, 0, 0, 0.5);
+                color: #fff;
+                font-size: 12px;
+            }
+
+            .ar-modes {
+                margin: 15px 0;
+            }
+
+            .ar-modes label {
+                display: block;
+                margin: 8px 0;
+                font-size: 13px;
+            }
+
+            .ar-modes input[type="checkbox"] {
+                margin-right: 8px;
+            }
+
+            .toast {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0, 0, 0, 0.95);
+                color: white;
+                padding: 20px 30px;
+                border-radius: 10px;
+                border: 2px solid #007bff;
+                z-index: 3000;
+                display: none;
+                text-align: center;
+                backdrop-filter: blur(20px);
+            }
+
+            .toast.success {
+                border-color: #28a745;
+            }
+
+            .toast.error {
+                border-color: #dc3545;
+            }
+
+            .toast.warning {
+                border-color: #ffc107;
+            }
+
+            @media (max-width: 768px) {
+                .controls,
+                .status-panel,
+                .device-info {
+                    max-width: 280px;
+                    font-size: 12px;
+                }
+
+                .controls h3 {
+                    font-size: 16px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <canvas id="myCanvas"></canvas>
+
+        <div class="controls">
+            <button id="enterARBtn" disabled>Enter AR</button>
+        </div>
+
+        <div class="toast" id="toast">
+            <div id="toastMessage"></div>
+        </div>
+
+        <script type="module">
+            import {
+                Viewer,
+                WebXRPlugin,
+                GLTFLoaderPlugin,
+            } from "../../dist/xeokit-sdk.min.es.js";
+
+            let viewer;
+            let webxr;
+            let gltfLoader;
+            let currentModel;
+
+            // UI elements
+            const enterARBtn = document.getElementById("enterARBtn");
+
+            let webxrSupported = false;
+            let quickLookSupported = false;
+
+            function showToast(message, type = "info") {
+                const toast = document.getElementById("toast");
+                const toastMessage = document.getElementById("toastMessage");
+
+                toastMessage.textContent = message;
+                toast.className = `toast ${type}`;
+                toast.style.display = "block";
+
+                setTimeout(() => {
+                    toast.style.display = "none";
+                }, 3000);
+            }
+
+            try {
+                viewer = new Viewer({
+                    canvasId: "myCanvas",
+                    transparent: true,
+                    backgroundColor: [0, 0, 0, 0],
+                    antialias: true,
+                });
+
+                viewer.camera.eye = [0, 2, 5];
+                viewer.camera.look = [0, 0, 0];
+                viewer.camera.up = [0, 1, 0];
+            } catch (error) {
+                console.error("Failed to initialize viewer:", error);
+                showToast(
+                    "Failed to initialize 3D viewer: " + error.message,
+                    "error",
+                );
+            }
+
+            try {
+                gltfLoader = new GLTFLoaderPlugin(viewer);
+
+                // Initialize WebXR with iOS support
+                webxr = new WebXRPlugin(viewer, {
+                    buttonEnabled: true,
+                    autoHideButton: true,
+                    hitTestEnabled: true,
+                    referenceSpace: "local-floor",
+                    arModes: ["webxr", "quick-look"],
+                    iosQuickLookEnabled: true,
+                });
+            } catch (error) {
+                console.error("Failed to initialize plugins:", error);
+                showToast(
+                    "Failed to initialize AR functionality: " + error.message,
+                    "error",
+                );
+            }
+
+            function checkARSupport() {
+                if (webxr) {
+                    webxr.supported
+                        .then(() => {
+                            webxrSupported = true;
+                            updateARButton();
+                        })
+                        .catch(() => {
+                            webxrSupported = false;
+                            updateARButton();
+                        });
+
+                    quickLookSupported = webxr.isQuickLookSupported();
+                }
+            }
+
+            function updateARButton() {
+                enterARBtn.disabled = !webxrSupported && !quickLookSupported;
+            }
+
+            function loadModel() {
+                const modelConfig = {
+                    id: "astronaut",
+                    name: "Astronaut",
+                    gltfSrc:
+                        window.location.origin +
+                        "/assets/models/gltf/ToyCar/ToyCar.glb",
+                    usdzSrc:
+                        window.location.origin +
+                        "/assets/models/usdz/ToyCar/ToyCar.usdz",
+                    scale: [1.0, 1.0, 1.0],
+                };
+
+                const model = gltfLoader.load({
+                    id: modelConfig.id,
+                    src: modelConfig.gltfSrc,
+                    edges: true,
+                    scale: modelConfig.scale,
+                    position: [0, 0, 0],
+                    visible: true,
+                });
+
+                model.on("loaded", () => {
+                    if (webxr && modelConfig.usdzSrc) {
+                        webxr.setIOSSrc(modelConfig.usdzSrc);
+                    }
+
+                    updateARButton();
+                    viewer.cameraFlight.flyTo(model);
+                });
+
+                model.on("error", (error) => {
+                    console.error("Model loading error:", error);
+                    showToast(
+                        "Failed to load model: " + error.message,
+                        "error",
+                    );
+                });
+            }
+
+            function enterAR() {
+                if (!webxr) {
+                    showToast("WebXR plugin not available", "error");
+                    return;
+                }
+
+                webxr.setARModes(["webxr", "quick-look"]);
+
+                webxr.startAR().catch((error) => {
+                    console.error("Failed to start AR:", error);
+                    showToast("Failed to start AR: " + error.message, "error");
+                });
+            }
+
+            enterARBtn.addEventListener("click", enterAR);
+
+            // WebXR events
+            if (webxr) {
+                webxr.on("sessionStarted", (event) => {
+                    enterARBtn.textContent = "Exit AR";
+
+                    const mode = event.mode || "webxr";
+                    showToast(`AR session started (${mode})`, "success");
+                });
+
+                webxr.on("sessionEnded", (event) => {
+                    console.log("sessionEnded", { event });
+                    enterARBtn.textContent = "Enter AR";
+
+                    const mode = event.mode || "webxr";
+                    showToast(`AR session ended (${mode})`, "info");
+                });
+
+                webxr.on("error", (error) => {
+                    console.error("WebXR error:", error);
+                    showToast("AR error: " + error.message, "error");
+                });
+            }
+
+            checkARSupport();
+
+            // Load default model after a delay
+            setTimeout(() => {
+                loadModel();
+            }, 1000);
+
+            console.log("WebXR iOS USDZ Example initialized");
+            console.log("Viewer:", viewer);
+            console.log("WebXR Plugin:", webxr);
+        </script>
+    </body>
+</html>
