@@ -1,14 +1,13 @@
-
-import { Component } from '../Component.js';
-import { math } from '../math/math.js';
-import { Spinner } from './Spinner.js';
+import { Component } from "../Component.js";
+import { math } from "../math/math.js";
+import { Spinner } from "./Spinner.js";
 
 const WEBGL_CONTEXT_NAMES = [
     "webgl2",
     "experimental-webgl",
     "webkit-3d",
     "moz-webgl",
-    "moz-glweb20"
+    "moz-glweb20",
 ];
 
 /**
@@ -18,20 +17,20 @@ const WEBGL_CONTEXT_NAMES = [
  * * Has a {@link Spinner}, provided at {@link Canvas#spinner}, which manages the loading progress indicator.
  */
 class Canvas extends Component {
-
     /**
      * @constructor
      * @private
      */
     constructor(owner, cfg = {}) {
-
         super(owner, cfg);
 
         this._backgroundColor = math.vec3([
             cfg.backgroundColor ? cfg.backgroundColor[0] : 1,
             cfg.backgroundColor ? cfg.backgroundColor[1] : 1,
-            cfg.backgroundColor ? cfg.backgroundColor[2] : 1]);
-        this._backgroundColorFromAmbientLight = !!cfg.backgroundColorFromAmbientLight;
+            cfg.backgroundColor ? cfg.backgroundColor[2] : 1,
+        ]);
+        this._backgroundColorFromAmbientLight =
+            !!cfg.backgroundColorFromAmbientLight;
 
         /**
          * The HTML canvas.
@@ -78,18 +77,25 @@ class Canvas extends Component {
         this.contextAttr = cfg.contextAttr || {};
         this.contextAttr.alpha = this.transparent;
 
-        this.contextAttr.preserveDrawingBuffer = !!this.contextAttr.preserveDrawingBuffer;
+        this.contextAttr.preserveDrawingBuffer =
+            !!this.contextAttr.preserveDrawingBuffer;
         this.contextAttr.stencil = false;
-        this.contextAttr.premultipliedAlpha = (!!this.contextAttr.premultipliedAlpha);  // False by default: https://github.com/xeokit/xeokit-sdk/issues/251
-        this.contextAttr.antialias = (this.contextAttr.antialias !== false);
+        this.contextAttr.premultipliedAlpha =
+            !!this.contextAttr.premultipliedAlpha; // False by default: https://github.com/xeokit/xeokit-sdk/issues/251
+        this.contextAttr.antialias = this.contextAttr.antialias !== false;
+        this.contextAttr.xrCompatible = !!this.contextAttr.xrCompatible;
 
         // If the canvas uses css styles to specify the sizes make sure the basic
         // width and height attributes match or the WebGL context will use 300 x 150
 
         this.resolutionScale = cfg.resolutionScale;
 
-        this.canvas.width = Math.round(this.canvas.clientWidth * this._resolutionScale);
-        this.canvas.height = Math.round(this.canvas.clientHeight * this._resolutionScale);
+        this.canvas.width = Math.round(
+            this.canvas.clientWidth * this._resolutionScale,
+        );
+        this.canvas.height = Math.round(
+            this.canvas.clientHeight * this._resolutionScale,
+        );
 
         /**
          * Boundary of the Canvas in absolute browser window coordinates.
@@ -110,8 +116,10 @@ class Canvas extends Component {
          * @final
          */
         this.boundary = [
-            this.canvas.offsetLeft, this.canvas.offsetTop,
-            this.canvas.clientWidth, this.canvas.clientHeight
+            this.canvas.offsetLeft,
+            this.canvas.offsetTop,
+            this.canvas.clientWidth,
+            this.canvas.clientHeight,
         ];
 
         // Get WebGL context
@@ -122,7 +130,9 @@ class Canvas extends Component {
 
         const self = this;
 
-        this.canvas.addEventListener("webglcontextlost", this._webglcontextlostListener = function (event) {
+        this.canvas.addEventListener(
+            "webglcontextlost",
+            (this._webglcontextlostListener = function (event) {
                 console.time("webglcontextrestored");
                 self.scene._webglContextLost();
                 /**
@@ -131,10 +141,13 @@ class Canvas extends Component {
                  */
                 self.fire("webglcontextlost");
                 event.preventDefault();
-            },
-            false);
+            }),
+            false,
+        );
 
-        this.canvas.addEventListener("webglcontextrestored", this._webglcontextrestoredListener = function (event) {
+        this.canvas.addEventListener(
+            "webglcontextrestored",
+            (this._webglcontextrestoredListener = function (event) {
                 self._initWebGL();
                 if (self.gl) {
                     self.scene._webglContextRestored(self.gl);
@@ -147,8 +160,9 @@ class Canvas extends Component {
                     event.preventDefault();
                 }
                 console.timeEnd("webglcontextrestored");
-            },
-            false);
+            }),
+            false,
+        );
 
         // Attach to resize events on the canvas
         let dirtyBoundary = true; // make sure we publish the 1st boundary event
@@ -173,8 +187,12 @@ class Canvas extends Component {
             dirtyBoundary = false;
 
             // Set the real size of the canvas (the drawable w*h)
-            self.canvas.width = Math.round(self.canvas.clientWidth * self._resolutionScale);
-            self.canvas.height = Math.round(self.canvas.clientHeight * self._resolutionScale);
+            self.canvas.width = Math.round(
+                self.canvas.clientWidth * self._resolutionScale,
+            );
+            self.canvas.height = Math.round(
+                self.canvas.clientHeight * self._resolutionScale,
+            );
 
             // Publish the boundary change
             self.boundary[0] = self.canvas.offsetLeft;
@@ -187,7 +205,7 @@ class Canvas extends Component {
 
         this._spinner = new Spinner(this.scene, {
             canvas: this.canvas,
-            elementId: cfg.spinnerElementId
+            elementId: cfg.spinnerElementId,
         });
     }
 
@@ -227,7 +245,8 @@ class Canvas extends Component {
      * @type {Boolean}
      */
     set backgroundColorFromAmbientLight(backgroundColorFromAmbientLight) {
-        this._backgroundColorFromAmbientLight = (backgroundColorFromAmbientLight !== false);
+        this._backgroundColorFromAmbientLight =
+            backgroundColorFromAmbientLight !== false;
         this.glRedraw();
     }
 
@@ -312,10 +331,9 @@ class Canvas extends Component {
      * @private
      */
     _createCanvas() {
-
         const canvasId = "xeokit-canvas-" + math.createUUID();
         const body = document.getElementsByTagName("body")[0];
-        const div = document.createElement('div');
+        const div = document.createElement("div");
 
         const style = div.style;
         style.height = "100%";
@@ -330,7 +348,10 @@ class Canvas extends Component {
         style.opacity = "1.0";
         style["z-index"] = "-10000";
 
-        div.innerHTML += '<canvas id="' + canvasId + '" style="width: 100%; height: 100%; float: left; margin: 0; padding: 0;"></canvas>';
+        div.innerHTML +=
+            '<canvas id="' +
+            canvasId +
+            '" style="width: 100%; height: 100%; float: left; margin: 0; padding: 0;"></canvas>';
 
         body.appendChild(div);
 
@@ -338,13 +359,14 @@ class Canvas extends Component {
     }
 
     _getElementXY(e) {
-        let x = 0, y = 0;
+        let x = 0,
+            y = 0;
         while (e) {
-            x += (e.offsetLeft - e.scrollLeft);
-            y += (e.offsetTop - e.scrollTop);
+            x += e.offsetLeft - e.scrollLeft;
+            y += e.offsetTop - e.scrollTop;
             e = e.offsetParent;
         }
-        return {x: x, y: y};
+        return { x: x, y: y };
     }
 
     /**
@@ -352,21 +374,23 @@ class Canvas extends Component {
      * @private
      */
     _initWebGL() {
-
         // Default context attribute values
 
         if (!this.gl) {
             for (let i = 0; !this.gl && i < WEBGL_CONTEXT_NAMES.length; i++) {
                 try {
-                    this.gl = this.canvas.getContext(WEBGL_CONTEXT_NAMES[i], this.contextAttr);
-                } catch (e) { // Try with next context name
+                    this.gl = this.canvas.getContext(
+                        WEBGL_CONTEXT_NAMES[i],
+                        this.contextAttr,
+                    );
+                } catch (e) {
+                    // Try with next context name
                 }
             }
         }
 
         if (!this.gl) {
-
-            this.error('Failed to get a WebGL context');
+            this.error("Failed to get a WebGL context");
 
             /**
              * Fired whenever the canvas failed to get a WebGL context, which probably means that WebGL
@@ -391,7 +415,7 @@ class Canvas extends Component {
 
                 lastTextureUnit = arg1;
 
-                originalActiveTexture.call (this, arg1);
+                originalActiveTexture.call(this, arg1);
             };
 
             let lastBindTexture = {};
@@ -401,16 +425,15 @@ class Canvas extends Component {
             let avoidedRebinds = 0;
 
             gl.bindTexture = function (arg1, arg2) {
-                if (lastBindTexture[lastTextureUnit] === arg2)
-                {
+                if (lastBindTexture[lastTextureUnit] === arg2) {
                     avoidedRebinds++;
                     return;
                 }
 
                 lastBindTexture[lastTextureUnit] = arg2;
 
-                originalBindTexture.call (this, arg1, arg2);
-            }
+                originalBindTexture.call(this, arg1, arg2);
+            };
 
             // setInterval (
             //     () => {
@@ -424,7 +447,10 @@ class Canvas extends Component {
         if (this.gl) {
             // Setup extension (if necessary) and hints for fragment shader derivative functions
             if (this.webgl2) {
-                this.gl.hint(this.gl.FRAGMENT_SHADER_DERIVATIVE_HINT, this.gl.FASTEST);
+                this.gl.hint(
+                    this.gl.FRAGMENT_SHADER_DERIVATIVE_HINT,
+                    this.gl.FASTEST,
+                );
 
                 // data-textures: not using standard-derivatives
                 if (!(this.gl instanceof WebGL2RenderingContext)) {
@@ -464,7 +490,12 @@ class Canvas extends Component {
      * @param {Boolean} opaqueOnly
      */
     readPixels(pixels, colors, size, opaqueOnly) {
-        return this.scene._renderer.readPixels(pixels, colors, size, opaqueOnly);
+        return this.scene._renderer.readPixels(
+            pixels,
+            colors,
+            size,
+            opaqueOnly,
+        );
     }
 
     /**
@@ -480,12 +511,18 @@ class Canvas extends Component {
         this.scene.off(this._tick);
         this._spinner._destroy();
         // Memory leak avoidance
-        this.canvas.removeEventListener("webglcontextlost", this._webglcontextlostListener);
-        this.canvas.removeEventListener("webglcontextrestored", this._webglcontextrestoredListener);
-        
-        // this.gl.getExtension("WEBGL_lose_context").loseContext(); // disabled because of XCD-306 and XEOK-295
+        this.canvas.removeEventListener(
+            "webglcontextlost",
+            this._webglcontextlostListener,
+        );
+        this.canvas.removeEventListener(
+            "webglcontextrestored",
+            this._webglcontextrestoredListener,
+        );
+
+        this.gl.getExtension("WEBGL_lose_context").loseContext();
         this.gl = null;
-        
+
         super.destroy();
     }
 }
