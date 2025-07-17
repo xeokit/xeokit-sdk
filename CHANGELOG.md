@@ -1,5 +1,11 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.84](https://github.com/xeokit/xeokit-sdk/compare/v2.6.83...v2.6.84)
+
+### 16 July 2025
+
+- FIX ContextMenu horizontal position if parented by document.body (XEOK-306)
+
 # [v2.6.83](https://github.com/xeokit/xeokit-sdk/compare/v2.6.82...v2.6.83)
 
 ### 8 July 2025
