@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+        #mySectionPlanesOverviewCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 70px;
+            right: 10px;
+            z-index: 200000;
+        }
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<canvas id="mySectionPlanesOverviewCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/section_plane_icon.png"/>
+    <h1>SectionPlanesPlugin</h1>
+    <h2>Slices models open to reveal internal structures</h2>
+    <p>This example demonstrates how to create section planes with mouse clicks. It also has existing measurement
+    in the model. To remove the section press [r] button.</p>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html"
+               target="_other">SectionPlanesPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {math, Viewer, SectionPlanesPlugin, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+
+        // Enhances the efficiency of SectionPlane creation by proactively allocating and caching Viewer resources
+        // for a specified quantity of SectionPlanes. Introducing this parameter streamlines the initial
+        // creation speed of SectionPlanes, particularly up to the designated quantity. This parameter
+        // internally configures renderer logic for the specified number of SectionPlanes, eliminating
+        // the need for setting up logic with each SectionPlane creation and thereby enhancing responsiveness.
+        // It is important to consider that each SectionPlane imposes rendering performance, so it is
+        // recommended to set this value to a quantity that aligns with your expected usage.
+
+        numCachedSectionPlanes: 4
+    });
+
+    viewer.camera.eye = [-5.02, 2.22, 15.09];
+    viewer.camera.look = [4.97, 2.79, 9.89];
+    viewer.camera.up = [-0.05, 0.99, 0.02];
+    viewer.camera.project.fov = 70;
+
+    viewer.camera.zoom(5);
+
+    viewer.cameraControl.followPointer = true;
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a XKTModelsPlugin - we'll use this to load the model geometry
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a SectionPlanesPlugin - we'll use this to create cross-section planes
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sectionPlanes = new SectionPlanesPlugin(viewer, {
+        overviewCanvasId: "mySectionPlanesOverviewCanvas",
+        overviewVisible: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load the .xkt model and IFC metadata
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        edges: true,
+        backfaces: true // Sometimes it's best to show backfaces, so that sliced objects look less odd
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Use the DistanceMeasurementsPlugin to create a distance measurement
+    //------------------------------------------------------------------------------------------------------------------
+
+    const distanceMeasurementsPlugin = new DistanceMeasurementsPlugin(viewer, {
+        zIndex: 100000 // If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
+    });
+
+    sceneModel.on("loaded", () => {
+        distanceMeasurementsPlugin.createMeasurement({
+            id: "distanceMeasurement",
+            origin: {
+                entity: viewer.scene.objects["0jf0rYHfX3RAB3bSIRjmoa"],
+                worldPos: [0.04815268516540527, 6.0054426193237305, 17.76587677001953]
+            },
+            target: {
+                entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FLOH"],
+                worldPos: [4.70150089263916, 3.09493088722229, 17.766956329345703]
+            },
+            visible: true,
+            wireVisible: true
+        });
+    });
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Use the SectionPlanesPlugin to create a section plane wherever we click on an object
+    //------------------------------------------------------------------------------------------------------------------
+
+    var i = 1;
+
+    viewer.scene.input.on("mouseclicked", (coords) => {
+
+        var pickResult = viewer.scene.pick({
+            canvasPos: coords,
+            pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
+        });
+
+        if (pickResult && pickResult.worldNormal) { // Disallow SectionPlanes on point clouds, because points don't have normals
+
+            if (pickResult.entity) {
+                if (!pickResult.entity.isObject) {
+                    return;
+                }
+            }
+
+            const sectionPlane = sectionPlanes.createSectionPlane({
+                pos: pickResult.worldPos,
+                dir: math.mulVec3Scalar(pickResult.worldNormal, -1),
+                id: i
+            });
+
+            sectionPlanes.showControl(sectionPlane.id);
+
+            i++;
+        }
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Removing the last section plane by [r] pressing
+    //------------------------------------------------------------------------------------------------------------------
+
+    window.document.addEventListener("keydown", event => {
+        switch (event.key) {
+            case "r":
+                event.preventDefault();
+
+                if (sectionPlanes.sectionPlanes[i-1]){
+                    sectionPlanes.sectionPlanes[i-1].destroy();
+                    i--;
+                }
+
+                break;
+        }
+    });
+
+    window.viewer = viewer;
+
+</script>
+
+</html>
