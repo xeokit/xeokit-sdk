@@ -999,7 +999,6 @@ class Scene extends Component {
         this.scene._sectionPlanesState.addSectionPlane(sectionPlane._state);
         this.scene.fire("sectionPlaneCreated", sectionPlane, true /* Don't retain event */);
         this._needRecompile = true;
-        this._camera._update();
     }
 
     _bitmapCreated(bitmap) {
@@ -1035,7 +1034,6 @@ class Scene extends Component {
         this.scene._sectionPlanesState.removeSectionPlane(sectionPlane._state);
         this.scene.fire("sectionPlaneDestroyed", sectionPlane, true /* Don't retain event */);
         this._needRecompile = true;
-        this._camera._update();
     }
 
     _bitmapDestroyed(bitmap) {
