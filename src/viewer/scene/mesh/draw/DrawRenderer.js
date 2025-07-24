@@ -571,6 +571,7 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     }
 
     gl.uniform3fv(this._uOffset, meshState.offset);
+    gl.uniform3fv(this._uScale, mesh.scale);
 
     // Bind VBOs
 
@@ -890,6 +891,7 @@ DrawRenderer.prototype._allocate = function (mesh) {
     this._uClippable = program.getLocation("clippable");
     this._uColorize = program.getLocation("colorize");
     this._uOffset = program.getLocation("offset");
+    this._uScale = program.getLocation("scale");
 
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
