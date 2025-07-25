@@ -83,6 +83,7 @@ function buildVertexLambert(mesh) {
     src.push("uniform mat4 projMatrix;");
     src.push("uniform vec4 colorize;");
     src.push("uniform vec3 offset;");
+    src.push("uniform vec3 scale;");
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
     }
@@ -137,12 +138,12 @@ function buildVertexLambert(mesh) {
     }
     if (billboard === "spherical" || billboard === "cylindrical") {
         src.push("void billboard(inout mat4 mat) {");
-        src.push("   mat[0][0] = 1.0;");
+        src.push("   mat[0][0] = scale[0];");
         src.push("   mat[0][1] = 0.0;");
         src.push("   mat[0][2] = 0.0;");
         if (billboard === "spherical") {
             src.push("   mat[1][0] = 0.0;");
-            src.push("   mat[1][1] = 1.0;");
+            src.push("   mat[1][1] = scale[1];");
             src.push("   mat[1][2] = 0.0;");
         }
         src.push("   mat[2][0] = 0.0;");
@@ -351,6 +352,7 @@ function buildVertexDraw(mesh) {
     src.push("uniform  mat4 projMatrix;");
     src.push("out  vec3 vViewPosition;");
     src.push("uniform  vec3 offset;");
+    src.push("uniform  vec3 scale;");
     if (clipping) {
         src.push("out vec4 vWorldPosition;");
     }
@@ -415,12 +417,12 @@ function buildVertexDraw(mesh) {
     }
     if (billboard === "spherical" || billboard === "cylindrical") {
         src.push("void billboard(inout mat4 mat) {");
-        src.push("   mat[0][0] = 1.0;");
+        src.push("   mat[0][0] = scale[0];");
         src.push("   mat[0][1] = 0.0;");
         src.push("   mat[0][2] = 0.0;");
         if (billboard === "spherical") {
             src.push("   mat[1][0] = 0.0;");
-            src.push("   mat[1][1] = 1.0;");
+            src.push("   mat[1][1] = scale[1];");
             src.push("   mat[1][2] = 0.0;");
         }
         src.push("   mat[2][0] = 0.0;");
