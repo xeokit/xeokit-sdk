@@ -1,5 +1,12 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.86](https://github.com/xeokit/xeokit-sdk/compare/v2.6.85...v2.6.86)
+
+### 29 July 2025
+
+- XCD-332 Change addContextMenuListener to listen to touch events on iPads
+- XCD-341 Apply x and y scale for billboards
+
 # [v2.6.84](https://github.com/xeokit/xeokit-sdk/compare/v2.6.83...v2.6.84)
 
 ### 16 July 2025
