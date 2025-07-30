@@ -310,8 +310,16 @@ class NavCubePlugin extends Plugin {
                     totalOffsetTop += element.offsetTop;
                     element = element.offsetParent;
                 }
-                coords[0] = event.pageX - totalOffsetLeft;
-                coords[1] = event.pageY - totalOffsetTop;
+                if (event.touches && event.touches.length > 0) {
+                    // Touch event
+                    var touch = event.touches[0];
+                    coords[0] = touch.pageX - totalOffsetLeft;
+                    coords[1] = touch.pageY - totalOffsetTop;
+                } else {
+                    // Mouse event
+                    coords[0] = event.pageX - totalOffsetLeft;
+                    coords[1] = event.pageY - totalOffsetTop;
+                }
             }
             return coords;
         }
@@ -331,6 +339,7 @@ class NavCubePlugin extends Plugin {
             var lastX;
             var lastY;
 
+            var touchedElement = null
 
             self._navCubeCanvas.addEventListener("mouseenter", self._onMouseEnter = function (e) {
                 over = true;
@@ -471,6 +480,53 @@ class NavCubePlugin extends Plugin {
                         lastAreaId = -1;
                     }
                 }
+            });
+            
+            self._navCubeCanvas.addEventListener("touchstart", self._onTouchStart = function (e) {
+                if (e.touches.length > 0) {
+                    downX = e.touches[0].clientX;
+                    downY = e.touches[0].clientY;
+                    lastX = e.touches[0].clientX;
+                    lastY = e.touches[0].clientY;
+                    var canvasPos = getCoordsWithinElement(e);
+                    var hit = navCubeScene.pick({
+                        canvasPos: canvasPos
+                    });
+                    if (hit) {
+                        down = true;
+                    } else {
+                        down = false;
+                    }
+                    touchedElement = e.target;
+                }
+            });
+
+            self._navCubeCanvas.addEventListener("touchmove", self._onTouchMove = function (e) {
+                e.preventDefault();
+                var touch = e.touches[0];
+                var posX = touch.clientX;
+                var posY = touch.clientY;
+
+                var currentElement = document.elementFromPoint(posX, posY);
+                over = touchedElement.contains(currentElement);
+
+                if (!over) {
+                    return;
+                }
+                if (down) {
+                    actionMove(posX, posY);
+                    return;
+                }
+            });
+
+            self._navCubeCanvas.addEventListener("touchend", self._onTouchEnd = function (e) {
+                down = false;
+                if (touchedElement) {
+                    touchedElement = null;
+                }
+                if (downX === null) {
+                    return;
+                } 
             });
 
             var flyTo = (function () {
@@ -730,6 +786,10 @@ class NavCubePlugin extends Plugin {
             this._navCubeCanvas.removeEventListener("mousemove", this._onMouseMove);
             this._navCubeCanvas.removeEventListener("mouseup", this._onMouseUp);
 
+            this._navCubeCanvas.removeEventListener("touchstart", this._onTouchStart);
+            this._navCubeCanvas.removeEventListener("touchmove", this._onTouchMove);
+            this._navCubeCanvas.removeEventListener("touchend", this._onTouchEnd);
+
             this._navCubeCanvas = null;
             this._cubeTextureCanvas.destroy();
             this._cubeTextureCanvas = null;
@@ -739,6 +799,10 @@ class NavCubePlugin extends Plugin {
             this._onMouseDown = null;
             this._onMouseMove = null;
             this._onMouseUp = null;
+
+            this._onTouchStart = null;
+            this._onTouchMove = null;
+            this._onTouchEnd = null;
         }
 
         this._navCubeScene.destroy();
