@@ -1,5 +1,11 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.87](https://github.com/xeokit/xeokit-sdk/compare/v2.6.86...v2.6.87)
+
+### 31 July 2025
+
+- XCD-345 Don't trigger touch rightClick when cameraControl is not active - [#1927](https://github.com/xeokit/xeokit-sdk/pull/1927)
+
 # [v2.6.86](https://github.com/xeokit/xeokit-sdk/compare/v2.6.85...v2.6.86)
 
 ### 29 July 2025
