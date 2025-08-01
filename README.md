@@ -16,8 +16,8 @@ high-detail, full-precision 3D engineering and BIM models in the browser.
 * [API Docs](https://xeokit.github.io/xeokit-sdk/docs/)
 * [Features](https://xeokit.io/index.html?foo=1#features)
 * [Changelog](https://github.com/xeokit/xeokit-sdk/blob/master/CHANGELOG.md)
-* [FAQ](https://xeokit.io/index.html?foo=1#faq)
-* [License](https://xeokit.io/index.html#pricing)
+* [FAQ](https://xeokit.io/#faq)
+* [License](https://xeokit.io/#pricing)
 
 ---
 If you are interested in a **ready-to-use 3D/BIM Viewing Ecosystem for Your Own Solution**, be sure to also check out:
@@ -114,4 +114,4 @@ xeokit SDK is licensed under **AGPLv3**, which requires that any modifications o
 
 🪧 **Need a commercial license?** If your company requires xeokit SDK under a different licensing model for **proprietary or closed-source** applications, we offer **flexible commercial licensing options**.
 
-📩 **Contact us** at [contact@creoox.com](mailto:contact@creoox.com) or visit [xeokit.io](https://xeokit.io/index.html#pricing) for more information.
+📩 **Contact us** at [contact@creoox.com](mailto:contact@creoox.com) or visit [xeokit.io](https://xeokit.io/#pricing) for more information.
