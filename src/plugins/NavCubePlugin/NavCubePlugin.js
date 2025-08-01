@@ -339,7 +339,7 @@ class NavCubePlugin extends Plugin {
             var lastX;
             var lastY;
 
-            var touchedElement = null
+            var touchedElement = null;
 
             self._navCubeCanvas.addEventListener("mouseenter", self._onMouseEnter = function (e) {
                 over = true;
@@ -508,7 +508,7 @@ class NavCubePlugin extends Plugin {
                 var posY = touch.clientY;
 
                 var currentElement = document.elementFromPoint(posX, posY);
-                over = touchedElement.contains(currentElement);
+                over = touchedElement && touchedElement.contains(currentElement);
 
                 if (!over) {
                     return;
@@ -517,6 +517,9 @@ class NavCubePlugin extends Plugin {
                     actionMove(posX, posY);
                     return;
                 }
+            }, 
+            {
+                passive: false
             });
 
             self._navCubeCanvas.addEventListener("touchend", self._onTouchEnd = function (e) {
