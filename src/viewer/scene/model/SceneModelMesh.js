@@ -125,7 +125,7 @@ export class SceneModelMesh {
 
     _sceneModelDirty() {
         this._aabbWorldDirty = true;
-        this.layer.aabbDirty = true;
+        this.layer.aabbChanged();
     }
 
     _transformDirty() {
@@ -135,7 +135,7 @@ export class SceneModelMesh {
             this._matrixUpdateScheduled = true;
         }
         this._aabbWorldDirty = true;
-        this.layer.aabbDirty = true;
+        this.layer.aabbChanged();
         if (this.entity) {
             this.entity._transformDirty();
         }
@@ -264,7 +264,7 @@ export class SceneModelMesh {
      * @private
      */
     precisionRayPickSurface(worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal) {
-        return this.layer.precisionRayPickSurface ? this.layer.precisionRayPickSurface(this.portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal) : false;
+        return this.layer.precisionRayPickSurface(this.portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal);
     }
 
     /**
