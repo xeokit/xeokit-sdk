@@ -295,7 +295,7 @@ class NavCubePlugin extends Plugin {
             lastY = posY;
         }
 
-        function getCoordsWithinElement(event) {
+        function getCoordsWithinElement(event, touch) {
             var coords = [0, 0];
             if (!event) {
                 event = window.event;
@@ -303,22 +303,15 @@ class NavCubePlugin extends Plugin {
                 coords[1] = event.y;
             } else {
                 var element = event.target;
-                var totalOffsetLeft = 0;
-                var totalOffsetTop = 0;
-                while (element.offsetParent) {
-                    totalOffsetLeft += element.offsetLeft;
-                    totalOffsetTop += element.offsetTop;
-                    element = element.offsetParent;
-                }
-                if (event.touches && event.touches.length > 0) {
+                var { left, top } = element.getBoundingClientRect();
+                if (touch) {
                     // Touch event
-                    var touch = event.touches[0];
-                    coords[0] = touch.pageX - totalOffsetLeft;
-                    coords[1] = touch.pageY - totalOffsetTop;
+                    coords[0] = touch.pageX - left;
+                    coords[1] = touch.pageY - top;
                 } else {
                     // Mouse event
-                    coords[0] = event.pageX - totalOffsetLeft;
-                    coords[1] = event.pageY - totalOffsetTop;
+                    coords[0] = event.pageX - left;
+                    coords[1] = event.pageY - top;
                 }
             }
             return coords;
@@ -488,7 +481,7 @@ class NavCubePlugin extends Plugin {
                     downY = e.touches[0].clientY;
                     lastX = e.touches[0].clientX;
                     lastY = e.touches[0].clientY;
-                    var canvasPos = getCoordsWithinElement(e);
+                    var canvasPos = getCoordsWithinElement(e, e.touches[0]);
                     var hit = navCubeScene.pick({
                         canvasPos: canvasPos
                     });
