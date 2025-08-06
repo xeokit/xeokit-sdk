@@ -67,7 +67,7 @@ export function addContextMenuListener(elem, callback, failCallback = () => {}) 
         event.stopPropagation();
     };
     
-    if (os.isIphoneSafari()) {
+    if (os.isIphoneOrIpadSafari()) {
         elem.addEventListener('touchstart', touchStartHandler);
         elem.addEventListener('touchmove', touchMoveHandler);
         elem.addEventListener('touchend', touchEndHandler);
@@ -77,7 +77,7 @@ export function addContextMenuListener(elem, callback, failCallback = () => {}) 
     }
 
     return function removeContextMenuListener() {
-        if (os.isIphoneSafari()) {
+        if (os.isIphoneOrIpadSafari()) {
             elem.removeEventListener('touchstart', touchStartHandler);
             elem.removeEventListener('touchmove', touchMoveHandler);
             elem.removeEventListener('touchend', touchEndHandler);

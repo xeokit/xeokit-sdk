@@ -29,6 +29,7 @@ function buildVertex(mesh) {
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
     src.push("uniform vec3 offset;");
+    src.push("uniform vec3 scale;");
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
     }
@@ -45,12 +46,12 @@ function buildVertex(mesh) {
     }
     if (billboard === "spherical" || billboard === "cylindrical") {
         src.push("void billboard(inout mat4 mat) {");
-        src.push("   mat[0][0] = 1.0;");
+        src.push("   mat[0][0] = scale[0];");
         src.push("   mat[0][1] = 0.0;");
         src.push("   mat[0][2] = 0.0;");
         if (billboard === "spherical") {
             src.push("   mat[1][0] = 0.0;");
-            src.push("   mat[1][1] = 1.0;");
+            src.push("   mat[1][1] = scale[1];");
             src.push("   mat[1][2] = 0.0;");
         }
         src.push("   mat[2][0] = 0.0;");

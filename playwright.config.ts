@@ -8,6 +8,8 @@ import { defineConfig, devices } from '@playwright/test';
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+const isLocal = process.env.PLAYWRIGHT_LOCAL && (process.env.PLAYWRIGHT_LOCAL !== "0");
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -31,6 +33,11 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
+
+  updateSnapshots: isLocal ? 'none' : 'missing', // Prevents writing new local snapshots, unless requested by "--update-snapshots"
+  snapshotPathTemplate: (isLocal
+                         ? '{testDir}/snapshots/{testFilePath}_{arg}_{projectName}{ext}'
+                         : undefined),
 
   /* Configure projects for major browsers */
   projects: [

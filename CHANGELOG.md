@@ -1,5 +1,30 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.87](https://github.com/xeokit/xeokit-sdk/compare/v2.6.86...v2.6.87)
+
+### 31 July 2025
+
+- XCD-345 Don't trigger touch rightClick when cameraControl is not active - [#1927](https://github.com/xeokit/xeokit-sdk/pull/1927)
+
+# [v2.6.86](https://github.com/xeokit/xeokit-sdk/compare/v2.6.85...v2.6.86)
+
+### 29 July 2025
+
+- XCD-332 Change addContextMenuListener to listen to touch events on iPads
+- XCD-341 Apply x and y scale for billboards
+
+# [v2.6.84](https://github.com/xeokit/xeokit-sdk/compare/v2.6.83...v2.6.84)
+
+### 16 July 2025
+
+- FIX ContextMenu horizontal position if parented by document.body (XEOK-306)
+
+# [v2.6.83](https://github.com/xeokit/xeokit-sdk/compare/v2.6.82...v2.6.83)
+
+### 8 July 2025
+
+- Technical release aiming to rollout new CI mechanism. No other code changes.
+
 # [v2.6.67](https://github.com/xeokit/xeokit-sdk/compare/v2.6.66...v2.6.67)
 
 ### 27 February 2025

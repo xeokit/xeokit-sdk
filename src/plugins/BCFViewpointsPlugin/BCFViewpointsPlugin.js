@@ -789,6 +789,7 @@ class BCFViewpointsPlugin extends Plugin {
             }
 
             if (bcfViewpoint.components.coloring) {
+                scene.setObjectsColorized(scene.colorizedObjectIds, null);
                 bcfViewpoint.components.coloring.forEach(coloring => {
 
                     let color = coloring.color;
@@ -796,7 +797,7 @@ class BCFViewpointsPlugin extends Plugin {
                     let alphaDefined = false;
 
                     if (color.length === 8) {
-                        alpha = parseInt(color.substring(0, 2), 16) / 256;
+                        alpha = parseInt(color.substring(0, 2), 16) / 255;
                         if (alpha <= 1.0 && alpha >= 0.95) {
                             alpha = 1.0;
                         }
@@ -805,9 +806,9 @@ class BCFViewpointsPlugin extends Plugin {
                     }
 
                     const colorize = [
-                        parseInt(color.substring(0, 2), 16) / 256,
-                        parseInt(color.substring(2, 4), 16) / 256,
-                        parseInt(color.substring(4, 6), 16) / 256
+                        parseInt(color.substring(0, 2), 16) / 255,
+                        parseInt(color.substring(2, 4), 16) / 255,
+                        parseInt(color.substring(4, 6), 16) / 255
                     ];
 
                     coloring.components.map(component =>

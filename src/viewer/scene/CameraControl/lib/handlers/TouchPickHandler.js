@@ -92,12 +92,13 @@ class TouchPickHandler {
                 const rightClickPageY = touches[0].pageY;
 
                 states.longTouchTimeout = setTimeout(() => {
-                    controllers.cameraControl.fire("rightClick", { // For context menus
-                        pagePos: [Math.round(rightClickPageX), Math.round(rightClickPageY)],
-                        canvasPos: [Math.round(rightClickClientX), Math.round(rightClickClientY)],
-                        event: e
-                    }, true);
-
+                    if (configs.active && configs.pointerEnabled) {
+                        controllers.cameraControl.fire("rightClick", { // For context menus
+                            pagePos: [Math.round(rightClickPageX), Math.round(rightClickPageY)],
+                            canvasPos: [Math.round(rightClickClientX), Math.round(rightClickClientY)],
+                            event: e
+                        }, true);
+                    }
                     states.longTouchTimeout = null;
                 }, configs.longTapTimeout);
 

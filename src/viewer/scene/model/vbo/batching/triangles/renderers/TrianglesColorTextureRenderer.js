@@ -229,7 +229,7 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
                 }
             } else if (light.type === "point") {
                 if (light.space === "view") {
-                    src.push("viewLightDir = -normalize(lightPos" + i + " - viewPosition.xyz);");
+                    src.push("viewLightDir = -normalize(lightPos" + i + " - vViewPosition.xyz);");
                 } else {
                     src.push("viewLightDir = -normalize((viewMatrix * vec4(lightPos" + i + ", 0.0)).xyz);");
                 }

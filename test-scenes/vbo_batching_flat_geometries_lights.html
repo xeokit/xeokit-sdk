@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>xeokit visual test</title>
+    <link href="css/pageStyle.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <canvas id="myCanvas"></canvas>
+  </body>
+
+  <script type="module">
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {
+      Viewer,
+      SceneModel,
+      buildSphereGeometry,
+      buildBoxGeometry,
+      buildCylinderGeometry,
+      buildTorusGeometry,
+      buildBoxLinesGeometry,
+      buildGridGeometry,
+      buildVectorTextGeometry,
+      AmbientLight,
+      PointLight,
+    } from "../../dist/xeokit-sdk.min.es.js";
+    import { signalTestComplete } from "./lib/utils.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+      canvasId: "myCanvas",
+      transparent: true,
+    });
+
+    viewer.scene.clearLights();
+
+    new AmbientLight(viewer.scene, {
+        id: "myAmbientLight",
+        color: [1, 1, 1],
+        intensity: 0.8,
+        space: "view"
+    });
+
+     new PointLight(viewer.scene, {
+        id: "fillLight",
+        pos: [80, 40, 40],
+        color: [1.0, 1.0, 1.0],
+        intensity: 0.6,
+        space: "view"
+    });
+
+    viewer.scene.camera.eye = [
+      -10.970825516832445, 12.854221661021146, 24.950601235099196,
+    ];
+    viewer.scene.camera.look = [8.500572204589844, 2.190000057220459, 0];
+    viewer.scene.camera.up = [0.18, 0.93, -0.25];
+
+    viewer.cameraControl.navMode = "orbit";
+    viewer.cameraControl.followPointer = true;
+
+    viewer.scene.pointsMaterial.roundPoints = true;
+    viewer.scene.pointsMaterial.perspectivePoints = true;
+    viewer.scene.pointsMaterial.pointSize = 2;
+    viewer.scene.pointsMaterial.minPerspectivePointSize = 2;
+    viewer.scene.pointsMaterial.maxPerspectivePointSize = 6;
+
+    viewer.scene.linesMaterial.lineWidth = 1;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a SceneModel containing an assortment of the available geometry primitive types
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sceneModel = new SceneModel(viewer.scene, {
+      id: "myGeometries",
+    });
+
+    // Box triangles
+
+    const box = buildBoxGeometry({
+      xSize: 1,
+      ySize: 1,
+      zSize: 1,
+    });
+
+    sceneModel.createMesh({
+      id: "boxMesh",
+      primitive: "triangles",
+      positions: box.positions,
+      // normals: box.normals,
+      indices: box.indices,
+      position: [0, 0, 0],
+      color: [1, 0, 0],
+    });
+
+    // Box lines
+
+    const boxLines = buildBoxLinesGeometry({
+      xSize: 1,
+      ySize: 1,
+      zSize: 1,
+    });
+
+    sceneModel.createMesh({
+      id: "boxLinesMesh",
+      primitive: "lines",
+      positions: boxLines.positions,
+      indices: boxLines.indices,
+      position: [3, 0, 0],
+      color: [0, 0, 1],
+    });
+
+    // Sphere triangles
+
+    const sphere = buildSphereGeometry({
+      center: [0, 0, 0],
+      radius: 1.5,
+      heightSegments: 60,
+      widthSegments: 60,
+    });
+
+    sceneModel.createMesh({
+      id: "sphereMesh",
+      primitive: "triangles",
+      positions: sphere.positions,
+      // normals: sphere.normals,
+      indices: sphere.indices,
+      position: [7, 0, 0],
+      color: [0, 0.5, 1],
+    });
+
+    // Torus triangles
+
+    const torus = buildTorusGeometry({
+      center: [0, 0, 0],
+      radius: 1.5,
+      tube: 0.5,
+      radialSegments: 32,
+      tubeSegments: 24,
+      arc: Math.PI * 2.0,
+    });
+
+    sceneModel.createMesh({
+      id: "torusMesh",
+      primitive: "triangles",
+      positions: torus.positions,
+      // normals: torus.normals,
+      indices: torus.indices,
+      position: [11, 0, 0],
+      color: [0.7, 0, 1],
+    });
+
+    // Cylinder triangles
+
+    const cylinder = buildCylinderGeometry({
+      center: [0, 0, 0],
+      radiusTop: 1.0,
+      radiusBottom: 2.0,
+      height: 2.5,
+      radialSegments: 20,
+      heightSegments: 1,
+      openEnded: false,
+    });
+
+    sceneModel.createMesh({
+      id: "cylinderMesh",
+      primitive: "triangles",
+      positions: cylinder.positions,
+      // normals: cylinder.normals,
+      indices: cylinder.indices,
+      position: [16, 0, 0],
+      color: [1, 0.6, 0],
+    });
+
+    // Grid lines
+
+    const grid = buildGridGeometry({
+      size: 10,
+      divisions: 10,
+    });
+
+    sceneModel.createMesh({
+      id: "gridMesh",
+      primitive: "lines",
+      positions: grid.positions,
+      indices: grid.indices,
+      position: [25, 0, 0],
+      color: [0, 1, 0],
+    });
+
+    // Text
+
+    const text = buildVectorTextGeometry({
+      origin: [0, 0, 0],
+      text: "An assortment of geometry\nprogrammatically generated\nwithin a SceneModel\nusing batched geometry",
+    });
+
+    sceneModel.createMesh({
+      id: "textMesh",
+      primitive: "lines",
+      positions: text.positions,
+      indices: text.indices,
+      position: [0, 7.5, 0],
+      color: [0, 0, 0],
+    });
+
+    // Points
+
+    const positions = [];
+    const colors = [];
+
+    for (let x = 0; x <= 1; x += 0.07) {
+      for (let y = 0; y <= 1; y += 0.07) {
+        for (let z = 0; z <= 1; z += 0.07) {
+          positions.push(x);
+          positions.push(y);
+          positions.push(z);
+
+          colors.push(x);
+          colors.push(y);
+          colors.push(z);
+          colors.push(1);
+        }
+      }
+    }
+
+    sceneModel.createMesh({
+      id: "pointsMesh",
+      primitive: "points",
+      position: [-6, -2, -2],
+      positions: positions,
+      scale: [4, 4, 4],
+      rotation: [0, 0, 0],
+      colors: colors,
+    });
+
+    // One entity contains all our meshes
+
+    sceneModel.createEntity({
+      id: "geometries",
+      meshIds: [
+        "boxMesh",
+        "boxLinesMesh",
+        "sphereMesh",
+        "torusMesh",
+        "cylinderMesh",
+        "gridMesh",
+        "textMesh",
+        "pointsMesh",
+      ],
+    });
+
+    sceneModel.finalize();
+
+    window.viewer = viewer;
+    window.model = sceneModel;
+
+    signalTestComplete(viewer);
+  </script>
+</html>

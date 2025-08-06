@@ -1366,7 +1366,7 @@ class Node extends Component {
         }
         if (this._children.length) {
             // Clone the _children before iterating, so our children don't mess us up when calling removeChild().
-            const tempChildList = this._children.splice();
+            const tempChildList = this._children.splice(0);
             let child;
             for (let i = 0, len = tempChildList.length; i < len; i++) {
                 child = tempChildList[i];

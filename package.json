@@ -1,6 +1,6 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "2.6.78-rc1",
+  "version": "2.6.87",
   "description": "3D BIM IFC Viewer SDK for AEC engineering applications. Open Source JavaScript Toolkit based on pure WebGL for top performance, real-world coordinates and full double precision",
   "module": "./dist/xeokit-sdk.es.js",
   "main": "./dist/xeokit-sdk.cjs.js",
@@ -52,13 +52,16 @@
   },
   "homepage": "https://xeokit.io",
   "dependencies": {
-    "@creooxag/cx-converter": "^0.0.12-alpha",
+    "@creooxag/cxconverter": "^0.0.3-alpha",
     "@loaders.gl/core": "^4.3.3",
     "@loaders.gl/gltf": "^4.3.3",
     "@loaders.gl/las": "^4.3.3",
     "@rollup/plugin-replace": "^6.0.2",
     "core-js": "^3.42.0",
+    "@rollup/plugin-replace": "^6.0.2",
+    "core-js": "^3.42.0",
     "html2canvas": "^1.4.1",
+    "pako": "^2.1.0",
     "pako": "^2.1.0"
   },
   "devDependencies": {

@@ -12,6 +12,7 @@ const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
 const tempVec3c = math.vec3();
 const tempVec3d = math.vec3();
+const planeOff  = math.vec3();
 
 function pointsEqual(p1, p2) {
     return (
@@ -215,9 +216,9 @@ class SectionCaps {
                 const objects = sceneModel.objects;
                 // Preallocate arrays for triangle vertices to avoid repeated allocation
                 const triangle = [
-                    new Float32Array(3),
-                    new Float32Array(3),
-                    new Float32Array(3)
+                    math.vec3(),
+                    math.vec3(),
+                    math.vec3()
                 ];
 
                 this._dirtyMap[sceneModel.id].forEach((isDirty, objectId) => {
@@ -230,20 +231,29 @@ class SectionCaps {
                     if(!this._doesPlaneIntersectBoundingBox(object.aabb, plane)) return;
 
                     if(!this._sceneModelsData[sceneModel.id]) {
+                        const aabb = sceneModel.aabb;
                         this._sceneModelsData[sceneModel.id] = {
                             verticesMap: new Map(),
-                            indicesMap:  new Map()
+                            indicesMap:  new Map(),
+                            // modelOrigin is critical to use when handling models with large coordinates.
+                            // See XCD-306 and examples/slicing/SectionCaps_at_distance.html for more details.
+                            modelOrigin: math.vec3([
+                                (aabb[0] + aabb[3]) / 2,
+                                (aabb[1] + aabb[4]) / 2,
+                                (aabb[2] + aabb[5]) / 2
+                            ])
                         };
                     }
 
                     const sceneModelData = this._sceneModelsData[sceneModel.id];
+                    const modelOrigin = sceneModelData.modelOrigin;
 
                     if(!sceneModelData.verticesMap.has(objectId)) {
                         const isSolid = object.meshes[0].isSolid();
                         const vertices = [ ];
                         const indices  = [ ];
                         if(isSolid && object.capMaterial) {
-                            object.getEachVertex(v => vertices.push(v[0], v[1], v[2]));
+                            object.getEachVertex(v => vertices.push(v[0]-modelOrigin[0], v[1]-modelOrigin[1], v[2]-modelOrigin[2]));
                             object.getEachIndex(i  => indices.push(i));
                         }
                         sceneModelData.verticesMap.set(objectId, vertices);
@@ -252,6 +262,7 @@ class SectionCaps {
 
                     const vertices = sceneModelData.verticesMap.get(objectId);
                     const indices  = sceneModelData.indicesMap.get(objectId);
+                    const planeDist = -math.dotVec3(math.subVec3(plane.pos, modelOrigin, tempVec3a), plane.dir);
 
                     const capSegments = [];
                     const vertCount = indices.length;
@@ -273,8 +284,8 @@ class SectionCaps {
                             const p1 = triangle[i];
                             const p2 = triangle[(i + 1) % 3];
 
-                            const d1 = plane.dist + math.dotVec3(plane.dir, p1);
-                            const d2 = plane.dist + math.dotVec3(plane.dir, p2);
+                            const d1 = planeDist + math.dotVec3(plane.dir, p1);
+                            const d2 = planeDist + math.dotVec3(plane.dir, p2);
 
                             if (d1 * d2 > 0) continue;
 
@@ -364,6 +375,7 @@ class SectionCaps {
                 const caps = new Map();
                 let arr;
                 projectedSegments.forEach((segment, segmentId) => {
+                    const modelOrigin = this._sceneModelsData[sceneModel.id].modelOrigin;
                     arr = [];
                     const loops = segment;
 
@@ -446,7 +458,7 @@ class SectionCaps {
                             for (let j = 0; j < 3; j++) {
                                 const idx = triangles[i + j] * 2;
                                 const point2D = [vertices[idx], vertices[idx + 1]];
-                                const point3D = this._convertTo3D(point2D, plane);
+                                const point3D = this._convertTo3D(point2D, plane, modelOrigin);
                                 triangle.push(point3D);
                             }
 
@@ -509,11 +521,10 @@ class SectionCaps {
                     this._prevIntersectionModelsMap[sceneModel.id] = new Map();
 
                 // Cache plane direction values
-                const offsetX = plane.dir[0] * 0.001;
-                const offsetY = plane.dir[1] * 0.001;
-                const offsetZ = plane.dir[2] * 0.001;
+                math.mulVec3Scalar(plane.dir, 0.001, planeOff); // Use dedicated planeOff, as tempVec* are overwritten by _createUVs
 
                 geometryData.forEach((geometries, objectId) => {
+                    const modelOrigin = this._sceneModelsData[sceneModel.id].modelOrigin;
                     const meshArray = new Array(geometries.size); // Pre-allocate array with known size
                     let meshIndex = 0;
 
@@ -522,16 +533,10 @@ class SectionCaps {
                         const indices = geometry.indices;
                         const verticesLength = vertices.length;
 
-                        for (let i = 0; i < verticesLength; i += 3) {
-                            vertices[i] += offsetX;
-                            vertices[i + 1] += offsetY;
-                            vertices[i + 2] +=  offsetZ;
-                        }
-                        
                         // Build normals and UVs in parallel if possible
                         const meshNormals = math.buildNormals(vertices, indices);
-                        const uvs = this._createUVs(vertices, plane);
-                        
+                        const uvs = this._createUVs(vertices, plane, modelOrigin);
+
                         // Create mesh with transformed vertices
                         meshArray[meshIndex++] = new Mesh(this.scene, {
                             id: `${plane.id}-${objectId}-${index}`,
@@ -542,6 +547,7 @@ class SectionCaps {
                                 normals: meshNormals,
                                 uv: uvs
                             }),
+                            origin:   math.addVec3(modelOrigin, planeOff, tempVec3a),
                             position: [0, 0, 0],
                             rotation: [0, 0, 0],
                             material: sceneModel.objects[objectId].capMaterial
@@ -651,7 +657,7 @@ class SectionCaps {
         return inside;
     }
 
-    _convertTo3D(point2D, plane) {
+    _convertTo3D(point2D, plane, origin) {
         // Reconstruct the same basis vectors used in _projectTo2D
         let u, normal = plane.dir, planePosition = plane.pos;
         if (Math.abs(normal[0]) > Math.abs(normal[1])) {
@@ -677,9 +683,9 @@ class SectionCaps {
         // Project the point onto the cutting plane
 
         const t = math.dotVec3(normal, [
-            planePosition[0] - result[0],
-            planePosition[1] - result[1],
-            planePosition[2] - result[2]
+            planePosition[0] - result[0] - origin[0],
+            planePosition[1] - result[1] - origin[1],
+            planePosition[2] - result[2] - origin[2]
         ]);
 
         return [
@@ -708,7 +714,7 @@ class SectionCaps {
 
     }
 
-    _createUVs(vertices, plane) {
+    _createUVs(vertices, plane, origin) {
         const O = plane.pos;
         const D = tempVec3a;
         D.set(plane.dir);
@@ -717,9 +723,9 @@ class SectionCaps {
 
         const uvs = [ ];
         for (let i = 0; i < vertices.length; i += 3) {
-            P[0] = vertices[i];
-            P[1] = vertices[i + 1];
-            P[2] = vertices[i + 2];
+            P[0] = vertices[i]     + origin[0];
+            P[1] = vertices[i + 1] + origin[1];
+            P[2] = vertices[i + 2] + origin[2];
 
             // Project P onto the plane
             const OP = math.subVec3(P, O, tempVec3c);

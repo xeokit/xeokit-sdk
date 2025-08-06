@@ -1,6 +1,6 @@
-import {math} from '../../viewer/scene/math/math.js';
-import {Marker} from "../../viewer/scene/marker/Marker.js";
-import {utils} from "../../viewer/scene/utils.js";
+import { Marker } from "../../viewer/scene/marker/Marker.js";
+import { math } from '../../viewer/scene/math/math.js';
+import { utils } from "../../viewer/scene/utils.js";
 import { addContextMenuListener } from '../lib/html/MenuEvent.js';
 
 const tempVec3a = math.vec3();
@@ -469,6 +469,7 @@ class Annotation extends Marker {
      * You can also call {@link AnnotationsPlugin#destroyAnnotation}.
      */
     destroy() {
+        window.clearTimeout(this._widthTimeout);
         if (this._marker) {
             if (!this._markerExternal) {
                 this._marker.parentNode.removeChild(this._marker);
@@ -492,4 +493,4 @@ class Annotation extends Marker {
     }
 }
 
-export {Annotation};
+export { Annotation };

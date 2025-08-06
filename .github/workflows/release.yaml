@@ -1,62 +1,101 @@
 name: Release
 
 on:
-  release:
-    types: [published]
-
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to release from'
+        required: true
+        type: string
+        default: 'master'
 
 jobs:
-  setup:
-    permissions:
-      contents: none
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.trim.outputs.version }}
-    steps:
-      - id: trim
-        run: echo "::set-output name=version::${TAG:1}"
-        env:
-          TAG: ${{ github.event.release.tag_name }}
-
   release:
     permissions:
-      contents: write  # for actions/upload-release-asset to upload release asset
-    needs: setup
+      contents: write
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Use Node.js
-        uses: actions/setup-node@v3
+      - name: Checkout branch
+        uses: actions/checkout@v4
         with:
-          registry-url: https://registry.npmjs.org/
+          ref: ${{ inputs.branch }}
+          fetch-depth: 0
 
-      - name: Restore
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+          always-auth: true
+
+      - name: Install dependencies
         run: npm ci
 
-      - name: Setup and build
+      - name: Build
+        run: npm run build
+
+      - name: Get version from package.json
+        id: version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Configure Git
         run: |
-          npm install -g json
-          json -I -f package.json -e "this.version=\"$VERSION\""
-          npm run build
-          npm pack
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push dist files
+        run: |
+          git add -A
+          git commit -m "chore: Release v${{ steps.version.outputs.version }} dist files" || echo "No changes to commit"
+          git push origin ${{ inputs.branch }}
+
+      - name: Extract release notes from CHANGELOG.md
+        id: changelog
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          # Extract notes for this version from CHANGELOG.md
+          if [ -f "CHANGELOG.md" ]; then
+            ESCAPED_VERSION=$(echo "$VERSION" | sed 's/[[\.*^$()+?{|]/\\&/g')
+            # Extract content between version headers
+            NOTES=$(awk "
+              /^#+ \[v${ESCAPED_VERSION}\]/ { found=1; next }
+              found && /^#+ \[v[0-9]/ { exit }
+              found && /^#+ \[.*\]/ { exit }
+              found { print }
+            " CHANGELOG.md | sed '/^$/d')
+            if [ -z "$NOTES" ]; then
+              NOTES="Release v${VERSION}"
+            fi
+          else
+            NOTES="Release v${VERSION}"
+          fi
+          # Save notes to file for multiline support
+          echo "$NOTES" > release_notes.txt
+          echo "notes_file=release_notes.txt" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub release
+        run: |
+          if [ "${{ inputs.branch }}" != "master" ]; then
+            gh release create "v${{ steps.version.outputs.version }}" \
+              --title "Release v${{ steps.version.outputs.version }}" \
+              --notes-file ${{ steps.changelog.outputs.notes_file }} \
+              --target ${{ inputs.branch }} \
+              --prerelease
+          else
+            gh release create "v${{ steps.version.outputs.version }}" \
+              --title "Release v${{ steps.version.outputs.version }}" \
+              --notes-file ${{ steps.changelog.outputs.notes_file }} \
+              --target ${{ inputs.branch }}
+          fi
         env:
-          VERSION: ${{ needs.setup.outputs.version }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to NPM
         run: |
-          npm publish
+          if [ "${{ inputs.branch }}" != "master" ]; then
+            npm publish --access public --tag next
+          else
+            npm publish --access public
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
-      - name: Upload NPM package file
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ needs.setup.outputs.version }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ format('@xeokit/xeokit-sdk-{0}.tgz', needs.setup.outputs.version) }}
-          asset_name: ${{ format('@xeokit/xeokit-sdk-{0}.tgz', needs.setup.outputs.version) }}
-          asset_content_type: application/gzip

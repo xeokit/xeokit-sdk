@@ -229,6 +229,7 @@ class Camera extends Component {
         super(owner, cfg);
 
         this._state = new RenderState({
+            offsetEyeFromLook: true, // TODO: treat as legacy and get rid of at some later point
             deviceMatrix: math.mat4(),
             hasDeviceMatrix: false, // True when deviceMatrix set to other than identity
             matrix: math.mat4(),
@@ -289,7 +290,7 @@ class Camera extends Component {
         // the front off the view (not a problem with perspective, since objects close enough
         // to be clipped by the front plane are usually too big to see anything of their cross-sections).
         let eye;
-        if (this.projection === "ortho") {
+        if (this.projection === "ortho" && this._state.offsetEyeFromLook) {
             math.subVec3(this._eye, this._look, eyeLookVec);
             math.normalizeVec3(eyeLookVec, eyeLookVecNorm);
             math.mulVec3Scalar(eyeLookVecNorm, 1000.0, eyeLookOffset);
@@ -869,6 +870,25 @@ class Camera extends Component {
      */
     get project() {
         return this._project;
+    }
+
+    /**
+     * Gets whether to offset the ortho camera's effective eye from its look
+     *
+     * Default value for legacy reasons is ````true````.
+     */
+    get offsetEyeFromLook() {
+        return this._state.offsetEyeFromLook;
+    }
+
+    /**
+     * Offsets the ortho camera's effective eye from its look
+     *
+     * Default value for legacy reasons is ````true````.
+     */
+    set offsetEyeFromLook(v) {
+        this._state.offsetEyeFromLook = v;
+        this._needUpdate(0); // Ensure matrix built on next "tick"
     }
 
     /**
