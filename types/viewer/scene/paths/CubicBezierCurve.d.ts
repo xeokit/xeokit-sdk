@@ -33,105 +33,44 @@ export declare class CubicBezierCurve extends Curve {
     constructor(owner: Component, cfg?: CubicBezierCurveConfiguration);
 
     /**
-     * Sets the starting point on this CubicBezierCurve.
+     * The starting point on this CubicBezierCurve.
      *
      * Default value is ````[0.0, 0.0, 0.0]````
-     *
-     * @param {Number[]} value The starting point.
      */
-    set v0(value: number[]);
+    v0: number[];
 
     /**
-     * Gets the starting point on this CubicBezierCurve.
+     * The first control point on this CubicBezierCurve.
      *
      * Default value is ````[0.0, 0.0, 0.0]````
-     *
-     * @returns {Number[]} The starting point.
      */
-    get v0(): number[];
+    v1: number[];
 
     /**
-     * Sets the first control point on this CubicBezierCurve.
+     * The second control point on this CubicBezierCurve.
      *
      * Default value is ````[0.0, 0.0, 0.0]````
-     *
-     * @param {Number[]} value The first control point.
      */
-    set v1(value: number[]);
+    v2: number[];
 
     /**
-     * Gets the first control point on this CubicBezierCurve.
-     *
-     * Fires a {@link CubicBezierCurve#v1:event} event on change.
+     * The end point on this CubicBezierCurve.
      *
      * Default value is ````[0.0, 0.0, 0.0]````
-     *
-     * @returns {Number[]} The first control point.
      */
-    get v1(): number[];
+    v3: number[];
 
     /**
-     * Sets the second control point on this CubicBezierCurve.
-     *
-     * Default value is ````[0.0, 0.0, 0.0]````
-     *
-     * @param {Number[]} value The second control point.
-     */
-    set v2(value: number[]);
-
-    /**
-     * Gets the second control point on this CubicBezierCurve.
-     *
-     * Default value is ````[0.0, 0.0, 0.0]````
-     *
-     * @returns {Number[]} The second control point.
-     */
-    get v2(): number[];
-
-    /**
-     * Sets the end point on this CubicBezierCurve.
-     *
-     * Fires a {@link CubicBezierCurve#v3:event} event on change.
-     *
-     * Default value is ````[0.0, 0.0, 0.0]````
-     *
-     * @param {Number[]} value The end point.
-     */
-    set v3(value: number[]);
-
-    /**
-     * Gets the end point on this CubicBezierCurve.
-     *
-     * Fires a {@link CubicBezierCurve#v3:event} event on change.
-     *
-     * Default value is ````[0.0, 0.0, 0.0]````
-     *
-     * @returns {Number[]} The end point.
-     */
-    get v3(): number[];
-
-    /**
-     * Sets the current position of progress along this CubicBezierCurve.
+     * The current position of progress along this CubicBezierCurve.
      *
      * Automatically clamps to range ````[0..1]````.
-     *
-     * @param {Number} value New progress time value.
      */
-    set t(value: number);
+    t: number;
 
     /**
-     * Gets the current position of progress along this CubicBezierCurve.
-     *
-     * @returns {Number} Current progress time value.
+     * Point on this CubicBezierCurve at the given position.
      */
-    get t(): number;
-
-    /**
-     * Returns point on this CubicBezierCurve at the given position.
-     *
-     * @returns {Number[]} The point at the given position.
-     */
-    get point(): number[];
+    readonly point: number[];
 
     /**
      * Returns point on this CubicBezierCurve at the given position.

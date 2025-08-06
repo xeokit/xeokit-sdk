@@ -71,25 +71,16 @@ export declare class PhongMaterial extends Material {
   constructor(owner: Component, cfg?: any);
 
   /**
-   * Sets the PhongMaterial's ambient color.
+   * PhongMaterial's ambient color.
    *
    * Default value is ````[0.3, 0.3, 0.3]````.
    *
    * @type {Number[]}
    */
-  set ambient(arg: number[]);
+  ambient: number[];
 
   /**
-   * Gets the PhongMaterial's ambient color.
-   *
-   * Default value is ````[0.3, 0.3, 0.3]````.
-   *
-   * @type {Number[]}
-   */
-  get ambient(): number[];
-
-  /**
-   * Sets the PhongMaterial's diffuse color.
+   * PhongMaterial's diffuse color.
    *
    * Multiplies by {@link PhongMaterial.diffuseMap}.
    *
@@ -97,59 +88,29 @@ export declare class PhongMaterial extends Material {
    *
    * @type {Number[]}
    */
-  set diffuse(arg: number[]);
+  diffuse: number[];
 
   /**
-   * Sets the PhongMaterial's diffuse color.
-   *
-   * Multiplies by {@link PhongMaterial.diffuseMap}.
-   *
-   * Default value is ````[1.0, 1.0, 1.0]````.
-   *
-   * @type {Number[]}
-   */
-  get diffuse(): number[];
-
-  /**
-   * Sets the PhongMaterial's specular color.
+   * PhongMaterial's specular color.
    *
    * Multiplies by {@link PhongMaterial.specularMap}.
    * Default value is ````[1.0, 1.0, 1.0]````.
    * @type {Number[]}
    */
-  set specular(arg: number[]);
+  specular: number[];
 
   /**
-   * Gets the PhongMaterial's specular color.
-   *
-   * Multiplies by {@link PhongMaterial.specularMap}.
-   * Default value is ````[1.0, 1.0, 1.0]````.
-   * @type {Number[]}
-   */
-  get specular(): number[];
-
-  /**
-   * Sets the PhongMaterial's emissive color.
+   * PhongMaterial's emissive color.
    *
    * Multiplies by {@link PhongMaterial.emissiveMap}.
    *
    * Default value is ````[0.0, 0.0, 0.0]````.
    * @type {Number[]}
    */
-  set emissive(arg: number[]);
+  emissive: number[];
 
   /**
-   * Gets the PhongMaterial's emissive color.
-   *
-   * Multiplies by {@link PhongMaterial.emissiveMap}.
-   *
-   * Default value is ````[0.0, 0.0, 0.0]````.
-   * @type {Number[]}
-   */
-  get emissive(): number[];
-
-  /**
-   * Sets the PhongMaterial alpha.
+   * PhongMaterial alpha.
    *
    * This is a factor in the range [0..1] indicating how transparent the PhongMaterial is.
    *
@@ -161,25 +122,10 @@ export declare class PhongMaterial extends Material {
    *
    * @type {Number}
    */
-  set alpha(arg: number);
+  alpha: number;
 
   /**
-   * Gets the PhongMaterial alpha.
-   *
-   * This is a factor in the range [0..1] indicating how transparent the PhongMaterial is.
-   *
-   * A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
-   *
-   * Multiplies by {@link PhongMaterial.alphaMap}.
-   *
-   * Default value is ````1.0````.
-   *
-   * @type {Number}
-   */
-  get alpha(): number;
-
-  /**
-   * Sets the PhongMaterial shininess.
+   * PhongMaterial shininess.
    *
    * This is a factor in range [0..128] that determines the size and sharpness of the specular highlights create by this PhongMaterial.
    *
@@ -191,25 +137,10 @@ export declare class PhongMaterial extends Material {
    *
    * @type {Number}
    */
-  set shininess(arg: number);
+  shininess: number;
 
   /**
-   * Gets the PhongMaterial shininess.
-   *
-   * This is a factor in range [0..128] that determines the size and sharpness of the specular highlights create by this PhongMaterial.
-   *
-   * Larger values produce smaller, sharper highlights. A value of 0.0 gives very large highlights that are almost never
-   * desirable. Try values close to 10 for a larger, fuzzier highlight and values of 100 or more for a small, sharp
-   * highlight.
-   *
-   * Default value is ```` 80.0````.
-   *
-   * @type {Number}
-   */
-  get shininess(): number;
-
-  /**
-   * Sets how much {@link ReflectionMap} is reflected by this PhongMaterial.
+   * How much {@link ReflectionMap} is reflected by this PhongMaterial.
    *
    * This is a scalar in range ````[0-1]````. Default value is ````1.0````.
    *
@@ -219,23 +150,10 @@ export declare class PhongMaterial extends Material {
    *
    * @type {Number}
    */
-  set reflectivity(arg: number);
+  reflectivity: number;
 
   /**
-   * Gets how much {@link ReflectionMap} is reflected by this PhongMaterial.
-   *
-   * This is a scalar in range ````[0-1]````. Default value is ````1.0````.
-   *
-   * The surface will be non-reflective when this is ````0````, and completely mirror-like when it is ````1.0````.
-   *
-   * Multiplies by {@link PhongMaterial.reflectivityMap}.
-   *
-   * @type {Number}
-   */
-  get reflectivity(): number;
-
-  /**
-   * Sets the PhongMaterial's line width.
+   * PhongMaterial's line width.
    *
    * This is not supported by WebGL implementations based on DirectX [2019].
    *
@@ -243,39 +161,19 @@ export declare class PhongMaterial extends Material {
    *
    * @type {Number}
    */
-  set lineWidth(arg: number);
+  lineWidth: number;
 
   /**
-   * Gets the PhongMaterial's line width.
-   *
-   * This is not supported by WebGL implementations based on DirectX [2019].
-   *
-   * Default value is ````1.0````.
-   *
-   * @type {Number}
-   */
-  get lineWidth(): number;
-
-  /**
-   * Sets the PhongMaterial's point size.
+   * PhongMaterial's point size.
    *
    * Default value is 1.0.
    *
    * @type {Number}
    */
-  set pointSize(arg: number);
+  pointSize: number;
 
   /**
-   * Gets the PhongMaterial's point size.
-   *
-   * Default value is 1.0.
-   *
-   * @type {Number}
-   */
-  get pointSize(): number;
-
-  /**
-   * Sets the PhongMaterial's alpha rendering mode.
+   * PhongMaterial's alpha rendering mode.
    *
    * This governs how alpha is treated. Alpha is the combined result of {@link PhongMaterial.alpha} and {@link PhongMaterial.alphaMap}.
    *
@@ -287,17 +185,10 @@ export declare class PhongMaterial extends Material {
    *
    *@type {String}
     */
-  set alphaMode(arg: "opaque"| "blend" | "mask");
+  alphaMode: "opaque"| "blend" | "mask";
 
   /**
-   * Gets the PhongMaterial's alpha rendering mode.
-   *
-   *@type {String}
-    */
-  get alphaMode(): "opaque"| "blend" | "mask";
-
-  /**
-   * Sets the PhongMaterial's alpha cutoff value.
+   * PhongMaterial's alpha cutoff value.
    *
    * This specifies the cutoff threshold when {@link PhongMaterial.alphaMode} equals "mask". If the alpha is greater than or equal to this value then it is rendered as fully
    * opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0 will render the entire material as fully transparent. This value is ignored for other modes.
@@ -308,17 +199,10 @@ export declare class PhongMaterial extends Material {
    *
    * @type {Number}
    */
-  set alphaCutoff(arg: number);
+  alphaCutoff: number;
 
   /**
-   * Gets the PhongMaterial's alpha cutoff value.
-   *
-   * @type {Number}
-   */
-  get alphaCutoff(): number;
-
-  /**
-   * Sets whether backfaces are visible on attached {@link Mesh}es.
+   * Whether backfaces are visible on attached {@link Mesh}es.
    *
    * The backfaces will belong to {@link Geometry} compoents that are also attached to the {@link Mesh}es.
    *
@@ -326,145 +210,128 @@ export declare class PhongMaterial extends Material {
    *
    * @type {Boolean}
    */
-  set backfaces(arg: boolean);
+  backfaces: boolean;
 
   /**
-   * Gets whether backfaces are visible on attached {@link Mesh}es.
-   *
-   * Default is ````false````.
-   *
-   * @type {Boolean}
-   */
-  get backfaces(): boolean;
-
-  /**
-   * Sets the winding direction of geometry front faces.
+   * Winding direction of geometry front faces.
    *
    * Default is ````"ccw"````.
    * @type {String}
    */
-  set frontface(arg: "cw" | "ccw");
+  frontface: "cw" | "ccw";
 
   /**
-   * Gets the winding direction of front faces on attached {@link Mesh}es.
-   *
-   * Default is ````"ccw"````.
-   * @type {String}
-   */
-  get frontface(): "cw" | "ccw";
-
-  /**
-   * Gets the PhongMaterials's normal map {@link Texture}.
+   * PhongMaterials's normal map {@link Texture}.
    *
    * @type {Texture}
    */
-  get normalMap(): Texture;
+  readonly normalMap: Texture;
 
   /**
-   * Gets the PhongMaterials's ambient {@link Texture}.
+   * PhongMaterials's ambient {@link Texture}.
    *
    * Multiplies by {@link PhongMaterial.ambient}.
    *
    * @type {Texture}
    */
-  get ambientMap(): Texture;
+  readonly ambientMap: Texture;
 
   /**
-   * Gets the PhongMaterials's diffuse {@link Texture}.
+   * PhongMaterials's diffuse {@link Texture}.
    *
    * Multiplies by {@link PhongMaterial.diffuse}.
    *
    * @type {Texture}
    */
-  get diffuseMap(): Texture;
+  readonly diffuseMap: Texture;
 
   /**
-   * Gets the PhongMaterials's specular {@link Texture}.
+   * PhongMaterials's specular {@link Texture}.
    *
    * Multiplies by {@link PhongMaterial.specular}.
    *
    * @type {Texture}
    */
-  get specularMap(): Texture;
+  readonly specularMap: Texture;
 
   /**
-   * Gets the PhongMaterials's emissive {@link Texture}.
+   * PhongMaterials's emissive {@link Texture}.
    *
    * Multiplies by {@link PhongMaterial.emissive}.
    *
    * @type {Texture}
    */
-  get emissiveMap(): Texture;
+  readonly emissiveMap: Texture;
 
   /**
-   * Gets the PhongMaterials's alpha {@link Texture}.
+   * PhongMaterials's alpha {@link Texture}.
    *
    * Multiplies by {@link PhongMaterial.alpha}.
    *
    * @type {Texture}
    */
-  get alphaMap(): Texture;
+  readonly alphaMap: Texture;
 
   /**
-   * Gets the PhongMaterials's reflectivity {@link Texture}.
+   * PhongMaterials's reflectivity {@link Texture}.
    *
    * Multiplies by {@link PhongMaterial.reflectivity}.
    *
    * @type {Texture}
    */
-  get reflectivityMap(): Texture;
+  readonly reflectivityMap: Texture;
 
   /**
-   * Gets the PhongMaterials's ambient occlusion {@link Texture}.
+   * PhongMaterials's ambient occlusion {@link Texture}.
    *
    * @type {Texture}
    */
-  get occlusionMap(): Texture;
+  readonly occlusionMap: Texture;
 
   /**
-   * Gets the PhongMaterials's diffuse {@link Fresnel}.
+   * PhongMaterials's diffuse {@link Fresnel}.
    *
    * Applies to {@link PhongMaterial.diffuse}.
    *
    * @type {Fresnel}
    */
-  get diffuseFresnel(): Fresnel;
+  readonly diffuseFresnel: Fresnel;
 
   /**
-   * Gets the PhongMaterials's specular {@link Fresnel}.
+   * PhongMaterials's specular {@link Fresnel}.
    *
    * Applies to {@link PhongMaterial.specular}.
    *
    * @type {Fresnel}
    */
-  get specularFresnel(): Fresnel;
+  readonly specularFresnel: Fresnel;
 
   /**
-   * Gets the PhongMaterials's emissive {@link Fresnel}.
+   * PhongMaterials's emissive {@link Fresnel}.
    *
    * Applies to {@link PhongMaterial.emissive}.
    *
    * @type {Fresnel}
    */
-  get emissiveFresnel(): Fresnel;
+  readonly emissiveFresnel: Fresnel;
 
   /**
-   * Gets the PhongMaterials's alpha {@link Fresnel}.
+   * PhongMaterials's alpha {@link Fresnel}.
    *
    * Applies to {@link PhongMaterial.alpha}.
    *
    * @type {Fresnel}
    */
-  get alphaFresnel(): Fresnel;
+  readonly alphaFresnel: Fresnel;
 
   /**
-   * Gets the PhongMaterials's reflectivity {@link Fresnel}.
+   * PhongMaterials's reflectivity {@link Fresnel}.
    *
    * Applies to {@link PhongMaterial.reflectivity}.
    *
    * @type {Fresnel}
    */
-  get reflectivityFresnel(): Fresnel;
+  readonly reflectivityFresnel: Fresnel;
 
   /**
    * Destroys this PhongMaterial.

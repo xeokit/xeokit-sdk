@@ -51,7 +51,7 @@ export abstract class Component {
      * @property owner
      * @type {Component}
      */
-    get owner(): Component;
+    readonly owner: Component;
 
     /**
      * Tests if this component is of the given type, or is a subclass of the given type.

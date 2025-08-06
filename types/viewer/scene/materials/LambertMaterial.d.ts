@@ -38,61 +38,34 @@ export declare class LambertMaterial extends Material {
     constructor(owner: Component, cfg?: LambertMaterialConfiguration);
   
     /**
-    * Sets the LambertMaterial's ambient color.
+    * LambertMaterial's ambient color.
     *
     * Default value is ````[0.3, 0.3, 0.3]````.
     *
     * @type {Number[]}
     */
-    set ambient(value: number[]);
+    ambient: number[];
 
     /**
-    * Gets the LambertMaterial's ambient color.
-    *
-    * Default value is ````[0.3, 0.3, 0.3]````.
-    *
-    * @type {Number[]}
-    */
-    get ambient(): number[];
-
-    /**
-    * Sets the LambertMaterial's diffuse color.
+    * LambertMaterial's diffuse color.
     *
     * Default value is ````[1.0, 1.0, 1.0]````.
     *
     * @type {Number[]}
     */
-    set color(value: number[]);
-
-    /**
-    * Gets the LambertMaterial's diffuse color.
-    *
-    * Default value is ````[1.0, 1.0, 1.0]````.
-    *
-    * @type {Number[]}
-    */
-    get color(): number[];
+    color: number[];
    
     /**
-    * Sets the LambertMaterial's emissive color.
+    * LambertMaterial's emissive color.
     *
     * Default value is ````[0.0, 0.0, 0.0]````.
     *
     * @type {Number[]}
     */
-    set emissive(value: number[]);
+    emissive: number[];
 
     /**
-    * Gets the LambertMaterial's emissive color.
-    *
-    * Default value is ````[0.0, 0.0, 0.0]````.
-    *
-    * @type {Number[]}
-    */
-    get emissive(): number[];
-
-    /**
-    * Sets factor in the range ````[0..1]```` indicating how transparent the LambertMaterial is.
+    * Factor in the range ````[0..1]```` indicating how transparent the LambertMaterial is.
     *
     * A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
     *
@@ -100,21 +73,10 @@ export declare class LambertMaterial extends Material {
     *
     * @type {Number}
     */
-    set alpha(value: number);
+    alpha: number;
 
     /**
-    * Gets factor in the range ````[0..1]```` indicating how transparent the LambertMaterial is.
-    *
-    * A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
-    *
-    * Default value is ````1.0````
-    *
-    * @type {Number}
-    */
-    get alpha(): number;
-
-    /**
-    * Sets the LambertMaterial's line width.
+    * LambertMaterial's line width.
     *
     * This is not supported by WebGL implementations based on DirectX [2019].
     *
@@ -122,68 +84,32 @@ export declare class LambertMaterial extends Material {
     *
     * @type {Number}
     */
-    set lineWidth(value: number);
+    lineWidth: number;
 
     /**
-    * Gets the LambertMaterial's line width.
-    *
-    * This is not supported by WebGL implementations based on DirectX [2019].
+    * LambertMaterial's point size.
     *
     * Default value is ````1.0````.
     *
     * @type {Number}
     */
-    get lineWidth(): number;
+    pointSize: number;
 
     /**
-    * Sets the LambertMaterial's point size.
-    *
-    * Default value is ````1.0````.
-    *
-    * @type {Number}
-    */
-    set pointSize(value: number);
-
-    /**
-    * Gets the LambertMaterial's point size.
-    *
-    * Default value is ````1.0````.
-    *
-    * @type {Number}
-    */
-    get pointSize(): number;
-
-    /**
-    * Sets whether backfaces are visible on attached {@link Mesh}es.
+    * Whether backfaces are visible on attached {@link Mesh}es.
     *
     * @type {Boolean}
     */
-    set backfaces(value: boolean);
+    backfaces: boolean;
 
     /**
-    * Gets whether backfaces are visible on attached {@link Mesh}es.
-    *
-    * @type {Boolean}
-    */
-    get backfaces(): boolean;
-
-    /**
-    * Sets the winding direction of front faces of {@link Geometry} of attached {@link Mesh}es.
+    * Winding direction of front faces of {@link Geometry} of attached {@link Mesh}es.
     *
     * Default value is ````"ccw"````.
     *
     * @type {String}
     */
-    set frontface(value: "cw" | "ccw");
-
-    /**
-    * Gets the winding direction of front faces of {@link Geometry} of attached {@link Mesh}es.
-    *
-    * Default value is ````"ccw"````.
-    *
-    * @type {String}
-    */
-    get frontface(): "cw" | "ccw";
+    frontface: "cw" | "ccw";
 
     /**
     * Destroys this LambertMaterial.

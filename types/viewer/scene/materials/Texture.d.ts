@@ -35,88 +35,48 @@ export declare class Texture extends Component {
     constructor(owner: Component, cfg?: TextureConfiguration);
     
     /**
-     * Sets the 2D translation vector added to this Texture's *S* and *T* UV coordinates.
+     * 2D translation vector added to this Texture's *S* and *T* UV coordinates.
      *
      * Default value is ````[0, 0]````.
      *
      * @type {Number[]}
      */
-    set translate(arg: number[]);
+    translate: number[];
     /**
-     * Gets the 2D translation vector added to this Texture's *S* and *T* UV coordinates.
-     *
-     * Default value is ````[0, 0]````.
-     *
-     * @type {Number[]}
-     */
-    get translate(): number[];
-    /**
-     * Sets the 2D scaling vector that will be applied to this Texture's *S* and *T* UV coordinates.
+     * 2D scaling vector that will be applied to this Texture's *S* and *T* UV coordinates.
      *
      * Default value is ````[1, 1]````.
      *
      * @type {Number[]}
      */
-    set scale(arg: number[]);
+    scale: number[];
     /**
-     * Gets the 2D scaling vector that will be applied to this Texture's *S* and *T* UV coordinates.
-     *
-     * Default value is ````[1, 1]````.
-     *
-     * @type {Number[]}
-     */
-    get scale(): number[];
-    /**
-     * Sets the rotation angles, in degrees, that will be applied to this Texture's *S* and *T* UV coordinates.
+     * Rotation angles, in degrees, that will be applied to this Texture's *S* and *T* UV coordinates.
      *
      * Default value is ````0````.
      *
      * @type {Number}
      */
-    set rotate(arg: number);
+    rotate: number;
     /**
-     * Gets the rotation angles, in degrees, that will be applied to this Texture's *S* and *T* UV coordinates.
-     *
-     * Default value is ````0````.
-     *
-     * @type {Number}
-     */
-    get rotate(): number;
-    /**
-     * Sets path to an image file to source this Texture from.
+     * Path to an image file to source this Texture from.
      *
      * Sets {@link Texture.image} null.
      *
      * @type {String}
      */
-    set src(arg: string);
+    src: string;
     /**
-     * Gets path to the image file this Texture from, if any.
-     *
-     * Returns null if not set.
-     *
-     * @type {String}
-     */
-    get src(): string;
-    /**
-     * Sets an HTML DOM Image object to source this Texture from.
+     * HTML DOM Image object to source this Texture from.
      *
      * Sets {@link Texture.src} null.
      *
      * @type {HTMLImageElement}
      */
-    set image(arg: HTMLImageElement);
-    /**
-     * Gets HTML DOM Image object this Texture is sourced from, if any.
-     *
-     * Returns null if not set.
-     *
-     * @type {HTMLImageElement}
-     */
-    get image(): HTMLImageElement;
+    image: HTMLImageElement;
     
     /**
-     * Gets how this Texture is sampled when a texel covers less than one pixel.
+     * How this Texture is sampled when a texel covers less than one pixel.
      *
      * Options are:
      *
@@ -151,9 +111,9 @@ export declare class Texture extends Component {
      *
      *  @type {String}
      */
-    get minFilter(): string;
+    readonly minFilter: string;
     /**
-     * Gets how this Texture is sampled when a texel covers more than one pixel.
+     * How this Texture is sampled when a texel covers more than one pixel.
      *
      * * "nearest" - Uses the value of the texture element that is nearest
      * (in Manhattan distance) to the center of the pixel being textured.
@@ -164,9 +124,9 @@ export declare class Texture extends Component {
      *
      * @type {String}
      */
-    get magFilter(): string;
+    readonly magFilter: string;
     /**
-     * Gets the wrap parameter for this Texture's *S* coordinate.
+     * Wrap parameter for this Texture's *S* coordinate.
      *
      * Values can be:
      *
@@ -181,9 +141,9 @@ export declare class Texture extends Component {
      *
      * @type {String}
      */
-    get wrapS(): string;
+    readonly wrapS: string;
     /**
-     * Gets the wrap parameter for this Texture's *T* coordinate.
+     * Wrap parameter for this Texture's *T* coordinate.
      *
      * Values can be:
      *
@@ -198,19 +158,19 @@ export declare class Texture extends Component {
      *
      * @type {String}
      */
-    get wrapT(): string;
+    readonly wrapT: string;
     /**
-     * Gets if this Texture's source data is flipped along its vertical axis.
+     * Whether this Texture's source data is flipped along its vertical axis.
      *
      * @type {Boolean}
      */
-    get flipY(): boolean;
+    readonly flipY: boolean;
     /**
-     * Gets the Texture's encoding format.
+     * Texture's encoding format.
      *
      * @type {String}
      */
-    get encoding(): string;
+    readonly encoding: string;
     /**
      * Destroys this Texture
      */

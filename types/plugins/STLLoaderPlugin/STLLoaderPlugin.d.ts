@@ -10,9 +10,7 @@ export declare interface ISTLDefaultDataSource {
    */
   getSTL(src: string | number, ok: Function, error: Function): void;
 
-  get cacheBuster(): boolean;
-
-  set cacheBuster(value: boolean);
+  cacheBuster: boolean;
 }
 
 export declare type STLLoaderPluginCOnfiguration = {
@@ -65,22 +63,13 @@ export declare class STLLoaderPlugin extends Plugin {
   constructor(viewer: Viewer, cfg?: STLLoaderPluginCOnfiguration);
 
   /**
-   * Sets a custom data source through which the STLLoaderPlugin can load STL files.
+   * Custom data source through which the STLLoaderPlugin can load STL files.
    *
    * Default value is {@link STLDefaultDataSource}, which loads via an XMLHttpRequest.
    *
    * @type {ISTLDefaultDataSource}
    */
-  set dataSource(arg: ISTLDefaultDataSource);
-
-  /**
-   * Gets the custom data source through which the STLLoaderPlugin can load STL files.
-   *
-   * Default value is {@link STLDefaultDataSource}, which loads via an XMLHttpRequest.
-   *
-   * @type {ISTLDefaultDataSource}
-   */
-  get dataSource(): ISTLDefaultDataSource;
+  dataSource: ISTLDefaultDataSource;
 
   /**
    * Loads an STL model from a file into this STLLoaderPlugin's {@link Viewer}.

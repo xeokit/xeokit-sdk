@@ -40,70 +40,66 @@ export declare class ReadableGeometry extends Geometry {
   constructor(owner: Component, cfg?: ReadableGeometryConfiguration);
 
   /**
-   * Gets the Geometry"s primitive type.
+   * Geometry's primitive type.
    */
-  get primitive(): "points" | "lines"| "line-loop"| "line-strip"| "triangles"| "triangle-strip" | "triangle-fan";
+  readonly primitive: "points" | "lines"| "line-loop"| "line-strip"| "triangles"| "triangle-strip" | "triangle-fan";
 
   /**
-   * Indicates if this Geometry is quantized.
+   * Whether this Geometry is quantized.
    */
-  get compressGeometry(): boolean;
+  readonly compressGeometry: boolean;
 
   /**
-   * The Geometry's vertex positions.
+   * Geometry's vertex positions.
    */
-  get positions(): number[];
-  set positions(arg: number[]);
+  positions: number[];
 
   /**
-   * The Geometry's vertex normals.
+   * Geometry's vertex normals.
    */
-  get normals(): number[];
-  set normals(arg: number[]);
+  normals: number[];
 
   /**
-   The Geometry's UV coordinates.
+   * Geometry's UV coordinates.
    */
-  get uv(): number[];
-  set uv(arg: number[]);
+  uv: number[];
 
   /**
-   * The Geometry's vertex colors.
+   * Geometry's vertex colors.
    */
-  get colors(): number[];
-  set colors(arg: number[]);
+  colors: number[];
 
   /**
-   * The Geometry's indices.
+   * Geometry's indices.
    */
-  get indices(): Uint16Array | Uint32Array;
+  readonly indices: Uint16Array | Uint32Array;
 
   /**
    * Local-space axis-aligned 3D boundary (AABB) of this geometry.
    */
-  get aabb(): number[];
+  readonly aabb: number[];
 
   /**
    * Local-space oriented 3D boundary (OBB) of this geometry.
    */
-  get obb(): number[];
+  readonly obb: number[];
 
   /**
-   * Returns the surface area of this Mesh.
+   * Surface area of this Mesh.
    * @returns {number}
    */
-  get surfaceArea(): number;
+  readonly surfaceArea: number;
 
   /**
-   * Returns the centroid of this Mesh.
+   * Centroid of this Mesh.
    * @returns {number}
    */
-  get centroid(): number;
+  readonly centroid: number;
 
   /**
    * Approximate number of triangles in this ReadableGeometry.
    */
-  get numTriangles(): number;
+  readonly numTriangles: number;
 
   destroy(): void;
 }

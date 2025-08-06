@@ -12,7 +12,7 @@ export declare abstract class Entity {
    * @type {Number|String}
    * @abstract
    */
-  get id(): string | number;
+  readonly id: string | number;
 
   /**
    * ID of the corresponding object within the originating system, if any.
@@ -24,14 +24,14 @@ export declare abstract class Entity {
    *
    * @type {String}
    */
-  get originalSystemId(): string;
+  readonly originalSystemId: string;
 
   /**
    * Returns true to indicate that this is an Entity.
    *
    * @returns {Boolean}
    */
-  get isEntity(): boolean;
+  readonly isEntity: boolean;
 
   /**
    * Returns ````true```` if this Entity represents a model.
@@ -42,7 +42,7 @@ export declare abstract class Entity {
    * @type {Boolean}
    * @abstract
    */
-  get isModel(): boolean;
+  readonly isModel: boolean;
 
   /**
    * Returns ````true```` if this Entity represents an object.
@@ -53,26 +53,18 @@ export declare abstract class Entity {
    * @type {Boolean}
    * @abstract
    */
-  get isObject(): boolean;
+  readonly isObject: boolean;
 
   /** Returns the parent Entity, if any. */
-  get parent(): void;
+  readonly parent: void;
 
   /**
-   * Sets the 3D World-space origin for this Entity.
+   * The 3D World-space origin for this Entity.
    *
    * @type {Float64Array}
    * @abstract
    */
-  set origin(arg: Float64Array);
-
-  /**
-   * Gets the 3D World-space origin for this Entity.
-   *
-   * @type {Float64Array}
-   * @abstract
-   */
-  get origin(): Float64Array;
+  origin: Float64Array;
 
   /**
    * World-space 3D axis-aligned bounding box (AABB) of this Entity.
@@ -83,7 +75,7 @@ export declare abstract class Entity {
    * @type {Float64Array}
    * @abstract
    */
-  get aabb(): number[];
+  readonly aabb: number[];
 
   /**
    * The approximate number of triangles in this Entity.
@@ -91,10 +83,10 @@ export declare abstract class Entity {
    * @type {Number}
    * @abstract
    */
-  get numTriangles(): number;
+  readonly numTriangles: number;
 
   /**
-   * Sets if this Entity is visible.
+   * Whether this Entity is visible.
    *
    * Only rendered when {@link Entity.visible} is ````true```` and {@link Entity.culled} is ````false````.
    *
@@ -104,23 +96,10 @@ export declare abstract class Entity {
    * @type {Boolean}
    * @abstract
    */
-  set visible(arg: boolean);
+  visible: boolean;
 
   /**
-   * Gets if this Entity is visible.
-   *
-   * Only rendered when {@link Entity.visible} is ````true```` and {@link Entity.culled} is ````false````.
-   *
-   * When {@link Entity.isObject} and {@link Entity.visible} are both ````true```` the Entity will be
-   * registered by {@link Entity.id} in {@link Scene.visibleObjects}.
-   *
-   * @type {Boolean}
-   * @abstract
-   */
-  get visible(): boolean;
-
-  /**
-   * Sets if this Entity is xrayed.
+   * Whether this Entity is xrayed.
    *
    * When {@link Entity.isObject} and {@link Entity.xrayed} are both ````true``` the Entity will be
    * registered by {@link Entity.id} in {@link Scene.xrayedObjects}.
@@ -128,21 +107,10 @@ export declare abstract class Entity {
    * @type {Boolean}
    * @abstract
    */
-  set xrayed(arg: boolean);
+  xrayed: boolean;
 
   /**
-   * Gets if this Entity is xrayed.
-   *
-   * When {@link Entity.isObject} and {@link Entity.xrayed} are both ````true``` the Entity will be
-   * registered by {@link Entity.id} in {@link Scene.xrayedObjects}.
-   *
-   * @type {Boolean}
-   * @abstract
-   */
-  get xrayed(): boolean;
-
-  /**
-   * Sets if this Entity is highlighted.
+   * Whether this Entity is highlighted.
    *
    * When {@link Entity.isObject} and {@link Entity.highlighted} are both ````true```` the Entity will be
    * registered by {@link Entity.id} in {@link Scene.highlightedObjects}.
@@ -150,21 +118,10 @@ export declare abstract class Entity {
    * @type {Boolean}
    * @abstract
    */
-  set highlighted(arg: boolean);
+  highlighted: boolean;
 
   /**
-   * Gets if this Entity is highlighted.
-   *
-   * When {@link Entity.isObject} and {@link Entity.highlighted} are both ````true```` the Entity will be
-   * registered by {@link Entity.id} in {@link Scene.highlightedObjects}.
-   *
-   * @type {Boolean}
-   * @abstract
-   */
-  get highlighted(): boolean;
-
-  /**
-   * Sets if this Entity is selected.
+   * Whether this Entity is selected.
    *
    * When {@link Entity.isObject} and {@link Entity.selected} are both ````true``` the Entity will be
    * registered by {@link Entity.id} in {@link Scene.selectedObjects}.
@@ -172,195 +129,102 @@ export declare abstract class Entity {
    * @type {Boolean}
    * @abstract
    */
-  set selected(arg: boolean);
+  selected: boolean;
 
   /**
-   * Gets if this Entity is selected.
-   *
-   * When {@link Entity.isObject} and {@link Entity.selected} are both ````true``` the Entity will be
-   * registered by {@link Entity.id} in {@link Scene.selectedObjects}.
+   * Whether this Entity's edges are enhanced.
    *
    * @type {Boolean}
    * @abstract
    */
-  get selected(): boolean;
+  edges: boolean;
 
   /**
-   * Sets if this Entity's edges are enhanced.
-   *
-   * @type {Boolean}
-   * @abstract
-   */
-  set edges(arg: boolean);
-
-  /**
-   * Gets if this Entity's edges are enhanced.
-   *
-   * @type {Boolean}
-   * @abstract
-   */
-  get edges(): boolean;
-
-  /**
-   * Sets if this Entity is culled.
+   * Whether this Entity is culled.
    *
    * Only rendered when {@link Entity.visible} is ````true```` and {@link Entity.culled} is ````false````.
    *
    * @type {Boolean}
    * @abstract
    */
-  set culled(arg: boolean);
+  culled: boolean;
 
   /**
-   * Gets if this Entity is culled.
-   *
-   * Only rendered when {@link Entity.visible} is ````true```` and {@link Entity.culled} is ````false````.
-   *
-   * @type {Boolean}
-   * @abstract
-   */
-  get culled(): boolean;
-
-  /**
-   * Sets if this Entity is clippable.
+   * Whether this Entity is clippable.
    *
    * Clipping is done by the {@link SectionPlane}s in {@link Scene.sectionPlanes}.
    *
    * @type {Boolean}
    * @abstract
    */
-  set clippable(arg: boolean);
+  clippable: boolean;
 
   /**
-   * Gets if this Entity is clippable.
-   *
-   * Clipping is done by the {@link SectionPlane}s in {@link Scene.sectionPlanes}.
+   * Whether this Entity is included in boundary calculations.
    *
    * @type {Boolean}
    * @abstract
    */
-  get clippable(): boolean;
+  collidable: boolean;
 
   /**
-   * Sets if this Entity is included in boundary calculations.
-   *
-   * @type {Boolean}
-   * @abstract
-   */
-  set collidable(arg: boolean);
-
-  /**
-   * Gets if this Entity is included in boundary calculations.
-   *
-   * @type {Boolean}
-   * @abstract
-   */
-  get collidable(): boolean;
-
-  /**
-   * Sets if this Entity is pickable.
+   * Whether this Entity is pickable.
    *
    * Picking is done via calls to {@link Scene.pick}.
    *
    * @type {Boolean}
    * @abstract
    */
-  set pickable(arg: boolean);
+  pickable: boolean;
 
   /**
-   * Gets if this Entity is pickable.
-   *
-   * Picking is done via calls to {@link Scene.pick}.
-   *
-   * @type {Boolean}
-   * @abstract
-   */
-  get pickable(): boolean;
-
-  /**
-   * Sets the Entity's RGB colorize color, multiplies by the Entity's rendered fragment colors.
+   * The Entity's RGB colorize color, multiplies by the Entity's rendered fragment colors.
    *
    * Each element of the color is in range ````[0..1]````.
    *
    * @type {Number[]}
    * @abstract
    */
-  set colorize(arg: number[]);
+  colorize: number[];
 
   /**
-   * Gets the Entity's RGB colorize color, multiplies by the Entity's rendered fragment colors.
-   *
-   * Each element of the color is in range ````[0..1]````.
-   *
-   * @type {Number[]}
-   * @abstract
-   */
-  get colorize(): number[];
-
-  /**
-   * Sets the Entity's opacity factor, multiplies by the Entity's rendered fragment alphas.
+   * The Entity's opacity factor, multiplies by the Entity's rendered fragment alphas.
    *
    * This is a factor in range ````[0..1]````.
    *
    * @type {Number}
    * @abstract
    */
-  set opacity(arg: number);
+  opacity: number;
 
   /**
-   * Gets the Entity's opacity factor.
-   *
-   * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
-   *
-   * @type {Number}
-   * @abstract
-   */
-  get opacity(): number;
-
-  /**
-   * Sets if this Entity casts shadows.
+   * Whether this Entity casts shadows.
    *
    * @type {Boolean}
    * @abstract
    */
-  set castsShadow(arg: boolean);
+  castsShadow: boolean;
 
   /**
-   * Gets if this Entity casts shadows.
+   * Whether this Entity can have shadows cast upon it
    *
    * @type {Boolean}
    * @abstract
    */
-  get castsShadow(): boolean;
+  receivesShadow: boolean;
 
   /**
-   * Sets if to this Entity can have shadows cast upon it
-   *
-   * @type {Boolean}
-   * @abstract
-   */
-  set receivesShadow(arg: boolean);
-
-  /**
-   * Gets if this Entity can have shadows cast upon it
-   *
-   * @type {Boolean}
-   * @abstract
-   */
-  get receivesShadow(): boolean;
-
-  /**
-   * Gets if this Entity can have Scalable Ambient Obscurance (SAO) applied to it.
+   * Whether this Entity can have Scalable Ambient Obscurance (SAO) applied to it.
    *
    * SAO is configured by {@link SAO}.
    *
    * @type {Boolean}
    * @abstract
    */
-  get saoEnabled(): boolean;
+  readonly saoEnabled: boolean;
 
   /**
-   * Sets the Entity's 3D World-space offset.
+   * The Entity's 3D World-space offset.
    *
    * Since offsetting Entities comes with memory and rendering overhead on some systems, this feature
    * only works when {@link Viewer} is configured with ````entityOffsetsEnabled: true````.
@@ -375,17 +239,7 @@ export declare abstract class Entity {
    * @abstract
    * @type {Number[]}
    */
-  set offset(arg: number[]);
-
-  /**
-   * Gets the Entity's 3D World-space offset.
-   *
-   * Default value is ````[0,0,0]````.
-   *
-   * @abstract
-   * @type {Number[]}
-   */
-  get offset(): number[];
+  offset: number[];
 
   /**
    * Gets the World, View and Canvas-space positions of each vertex in a callback.

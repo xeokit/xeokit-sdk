@@ -11,9 +11,7 @@ export declare interface ICityJSONDefaultDataSource {
    */
   getCityJSON(src: string | number, ok: (json: any)=> void, error: (e: Error)=> void): void;
 
-  get cacheBuster(): boolean;
-
-  set cacheBuster(value: boolean);
+  cacheBuster: boolean;
 }
 
 export declare type CityJSONLoaderPluginConfiguration = {
@@ -59,22 +57,13 @@ export declare class CityJSONLoaderPlugin extends Plugin {
   constructor(viewer: Viewer, cfg?: CityJSONLoaderPluginConfiguration);
 
   /**
-   * Sets a custom data source through which the CityJSONLoaderPlugin can load CityJSON files.
+   * Custom data source through which the CityJSONLoaderPlugin can load CityJSON files.
    *
    * Default value is {@link CityJSONDefaultDataSource}, which loads via HTTP.
    *
    * @type {Object}
    */
-  set dataSource(arg: ICityJSONDefaultDataSource);
-
-  /**
-   * Gets the custom data source through which the CityJSONLoaderPlugin can load CityJSON files.
-   *
-   * Default value is {@link CityJSONDefaultDataSource}, which loads via HTTP.
-   *
-   * @type {Object}
-   */
-  get dataSource(): ICityJSONDefaultDataSource;
+  dataSource: ICityJSONDefaultDataSource;
 
   /**
    * Loads an ````CityJSON```` model into this CityJSONLoaderPlugin's {@link Viewer}.

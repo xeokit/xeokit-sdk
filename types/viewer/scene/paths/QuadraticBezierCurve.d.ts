@@ -31,86 +31,39 @@ export declare class QuadraticBezierCurve extends Curve {
     constructor(owner: Component, cfg?: QuadraticBezierCurveConfiguration);
 
     /**
-     * Sets the starting point on this QuadraticBezierCurve.
+     * The starting point on this QuadraticBezierCurve.
      *
      * Default value is ````[0.0, 0.0, 0.0]````.
-     *
-     * @param {Number[]} value New starting point.
      */
-    set v0(value: number[]);
+    v0: number[];
 
     /**
-     * Gets the starting point on this QuadraticBezierCurve.
+     * The middle control point on this QuadraticBezierCurve.
      *
      * Default value is ````[0.0, 0.0, 0.0]````.
-     *
-     * @returns {Number[]} The starting point.
      */
-    get v0(): number[];
+    v1: number[];
 
     /**
-     * Sets the middle control point on this QuadraticBezierCurve.
+     * The end point on this QuadraticBezierCurve.
      *
      * Default value is ````[0.0, 0.0, 0.0]````.
-     *
-     * @param {Number[]} value New middle control point.
      */
-    set v1(value: number[]);
+    v2: number[];
 
     /**
-     * Gets the middle control point on this QuadraticBezierCurve.
-     *
-     * Default value is ````[0.0, 0.0, 0.0]````.
-     *
-     * @returns {Number[]} The middle control point.
-     */
-    get v1(): number[];
-
-    /**
-     * Sets the end point on this QuadraticBezierCurve.
-     *
-     * Default value is ````[0.0, 0.0, 0.0]````.
-     *
-     * @param {Number[]} value The new end point.
-     */
-    set v2(value: number[]);
-
-    /**
-     * Gets the end point on this QuadraticBezierCurve.
-     *
-     * Default value is ````[0.0, 0.0, 0.0]````.
-     *
-     * @returns {Number[]} The end point.
-     */
-    get v2(): number[];
-
-    /**
-     * Sets the progress along this QuadraticBezierCurve.
+     * The progress along this QuadraticBezierCurve.
      *
      * Automatically clamps to range [0..1].
      *
      * Default value is ````0````.
-     *
-     * @param {Number} value The new progress location.
      */
-    set t(value: number);
+    t: number;
 
     /**
-     * Gets the progress along this QuadraticBezierCurve.
-     *
-     * Default value is ````0````.
-     *
-     * @returns {Number} The current progress location.
+     * Point on this QuadraticBezierCurve at position {@link QuadraticBezierCurve/t}.
      */
-    get t(): number;
-
-    /**
-     Point on this QuadraticBezierCurve at position {@link QuadraticBezierCurve/t}.
-
-     @property point
-     @type {Number[]}
-     */
-    get point(): number[];
+    readonly point: number[];
 
     /**
      * Returns the point on this QuadraticBezierCurve at the given position.

@@ -5,88 +5,39 @@ import { Component } from "../Component";
  */
 export declare class CameraFlightAnimation extends Component {
   /**
-   * Sets the flight duration, in seconds, when calling {@link CameraFlightAnimation.flyTo}.
+   * The flight duration, in seconds, when calling {@link CameraFlightAnimation.flyTo}.
    *
    * Stops any flight currently in progress.
    *
    * default value is ````0.5````.
-   *
-   * @param {Number} value New duration value.
    */
-  set duration(arg: number);
+  duration: number;
 
   /**
-   * Gets the flight duration, in seconds, when calling {@link CameraFlightAnimation.flyTo}.
-   *
-   * default value is ````0.5````.
-   *
-   * @returns {Number} New duration value.
-   */
-  get duration(): number;
-
-  /**
-   * Sets if, when CameraFlightAnimation is flying to a boundary, it will always adjust the distance between the
+   * Whether, when CameraFlightAnimation is flying to a boundary, it will always adjust the distance between the
    * {@link Camera.eye} and {@link Camera.look} so as to ensure that the target boundary is always filling the view volume.
    *
    * When false, the eye will remain at its current distance from the look position.
    *
    * Default value is ````true````.
-   *
-   * @param {Boolean} value Set ````true```` to activate this behaviour.
    */
-  set fit(arg: boolean);
+  fit: boolean;
 
   /**
-   * Gets if, when CameraFlightAnimation is flying to a boundary, it will always adjust the distance between the
-   * {@link Camera.eye} and {@link Camera.look} so as to ensure that the target boundary is always filling the view volume.
-   *
-   * When false, the eye will remain at its current distance from the look position.
-   *
-   * Default value is ````true````.
-   *
-   * @returns {Boolean} value Set ````true```` to activate this behaviour.
-   */
-  get fit(): boolean;
-
-  /**
-   * Sets how much of the perspective field-of-view, in degrees, that a target {@link Entity.aabb} should
+   * How much of the perspective field-of-view, in degrees, that a target {@link Entity.aabb} should
    * fill the canvas when calling {@link CameraFlightAnimation.flyTo} or {@link CameraFlightAnimation.jumpTo}.
    *
    * Default value is ````45````.
-   *
-   * @param {Number} value New FOV value.
    */
-  set fitFOV(arg: number);
+  fitFOV: number;
 
   /**
-   * Gets how much of the perspective field-of-view, in degrees, that a target {@link Entity.aabb} should
-   * fill the canvas when calling {@link CameraFlightAnimation.flyTo} or {@link CameraFlightAnimation.jumpTo}.
-   *
-   * Default value is ````45````.
-   *
-   * @returns {Number} Current FOV value.
-   */
-  get fitFOV(): number;
-
-  /**
-   * Sets if this CameraFlightAnimation to point the {@link Camera}
+   * Whether this CameraFlightAnimation points the {@link Camera}
    * in the direction that it is travelling when flying to a target after calling {@link CameraFlightAnimation.flyTo}.
    *
    * Default value is ````true````.
-   *
-   * @param {Boolean} value Set ````true```` to activate trailing behaviour.
    */
-  set trail(arg: boolean);
-
-  /**
-   * Gets if this CameraFlightAnimation points the {@link Camera}
-   * in the direction that it is travelling when flying to a target after calling {@link CameraFlightAnimation.flyTo}.
-   *
-   * Default value is ````true````.
-   *
-   * @returns {Boolean} True if trailing behaviour is active.
-   */
-  get trail(): boolean;
+  trail: boolean;
 
   /**
    * Flies the {@link Camera} to a target.

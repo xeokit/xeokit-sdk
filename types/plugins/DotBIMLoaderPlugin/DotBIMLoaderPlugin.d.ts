@@ -10,9 +10,7 @@ export declare interface IDotBIMDefaultDataSource {
    */
   getDotBIM(dotBIMSrc: string | number, ok: (buffer: ArrayBuffer) => void, error: (e: Error) => void): void;
 
-  get cacheBuster(): boolean;
-
-  set cacheBuster(value: boolean);
+  cacheBuster: boolean;
 }
 
 export declare type DotBIMLoaderPluginConfiguration = {
@@ -73,36 +71,20 @@ export declare class DotBIMLoaderPlugin extends Plugin {
   constructor(viewer: Viewer, cfg?: DotBIMLoaderPluginConfiguration);
 
   /**
-   * Sets a custom data source through which the DotBIMLoaderPlugin can .BIM files.
+   * Custom data source through which the DotBIMLoaderPlugin can load .BIM files.
    *
    * Default value is {@link DotBIMDefaultDataSource}, which loads via an XMLHttpRequest.
    *
    * @type {IDotBIMDefaultDataSource}
    */
-  set dataSource(arg: IDotBIMDefaultDataSource);
+  dataSource: IDotBIMDefaultDataSource;
 
   /**
-   * Gets the custom data source through which the DotBIMLoaderPlugin can load .BIM files.
-   *
-   * Default value is {@link DotBIMDefaultDataSource}, which loads via an XMLHttpRequest.
-   *
-   * @type {IDotBIMDefaultDataSource}
-   */
-  get dataSource(): IDotBIMDefaultDataSource;
-
-  /**
-     * Sets map of initial default states for each loaded {@link Entity} that represents an object.
-     *
-     * @type {IFCObjectDefaults}
-     */
-  set objectDefaults(arg: IFCObjectDefaults);
-
-  /**
-   * Gets map of initial default states for each loaded {@link Entity} that represents an object.
+   * Map of initial default states for each loaded {@link Entity} that represents an object.
    *
    * @type {IFCObjectDefaults}
    */
-  get objectDefaults(): IFCObjectDefaults;
+  objectDefaults: IFCObjectDefaults;
 
   /**
    * Loads a .BIM model from a file into this DotBIMLoaderPlugin's {@link Viewer}.

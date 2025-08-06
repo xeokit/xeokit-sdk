@@ -36,30 +36,30 @@ export declare class VBOGeometry extends Geometry {
   constructor(owner: Component, cfg?: VBOGeometryConfiguration);
 
   /**
-   * Gets the primitive type.
+   * Primitive type.
    */
-  get primitive(): "points" | "lines"| "line-loop"| "line-strip"| "triangles"| "triangle-strip" | "triangle-fan";
+  readonly primitive: "points" | "lines"| "line-loop"| "line-strip"| "triangles"| "triangle-strip" | "triangle-fan";
 
   /**
-   * Gets the local-space axis-aligned 3D boundary (AABB).
+   * Local-space axis-aligned 3D boundary (AABB).
    *
    * The AABB is represented by a six-element Float64Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
    */
-  get aabb(): Number[];
+  readonly aabb: Number[];
 
   /**
-   * Gets the local-space oriented 3D boundary (OBB).
+   * Local-space oriented 3D boundary (OBB).
    *
    * The OBB is represented by a 32-element Float64Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.
    */
-  get obb(): Number[];
+  readonly obb: Number[];
 
   /**
    * Approximate number of triangles in this VBOGeometry.
    *
    * Will be zero if {@link VBOGeometry#primitive} is not 'triangles', 'triangle-strip' or 'triangle-fan'.
    */
-  get numTriangles(): Number;
+  readonly numTriangles: Number;
 
   destroy(): void;
 }

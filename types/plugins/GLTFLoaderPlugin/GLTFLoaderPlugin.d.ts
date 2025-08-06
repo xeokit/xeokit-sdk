@@ -32,9 +32,7 @@ export declare interface IGLTFDefaultDataSource {
    */
   getArrayBuffer(glTFSrc: string | number, binarySrc: string | number, ok: Function, error: Function): void;
 
-  get cacheBuster(): boolean;
-
-  set cacheBuster(value: boolean);
+  cacheBuster: boolean;
 }
 
 export declare type GLTFLoaderPluginConfiguration =  {
@@ -101,40 +99,22 @@ export declare class GLTFLoaderPlugin extends Plugin {
   constructor(viewer: Viewer, cfg?:GLTFLoaderPluginConfiguration);
 
   /**
-   * Sets a custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments.
+   * Custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments.
    *
    * Default value is {@link GLTFDefaultDataSource}, which loads via an XMLHttpRequest.
    *
    * @type {Object}
    */
-  set dataSource(arg: IGLTFDefaultDataSource);
+  dataSource: IGLTFDefaultDataSource;
 
   /**
-   * Gets the custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments.
-   *
-   * Default value is {@link GLTFDefaultDataSource}, which loads via an XMLHttpRequest.
-   *
-   * @type {Object}
-   */
-  get dataSource(): IGLTFDefaultDataSource;
-
-  /**
-   * Sets map of initial default states for each loaded {@link Entity} that represents an object.
+   * Map of initial default states for each loaded {@link Entity} that represents an object.
    *
    * Default value is {@link IFCObjectDefaults}.
    *
    * @type {IFCObjectDefaults}
    */
-  set objectDefaults(arg: IFCObjectDefaults);
-
-  /**
-   * Gets map of initial default states for each loaded {@link Entity} that represents an object.
-   *
-   * Default value is {@link IFCObjectDefaults}.
-   *
-   * @type {IFCObjectDefaults}
-   */
-  get objectDefaults(): IFCObjectDefaults;
+  objectDefaults: IFCObjectDefaults;
 
   /**
    * Loads a glTF model from a file into this GLTFLoaderPlugin's {@link Viewer}.

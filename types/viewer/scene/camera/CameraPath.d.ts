@@ -28,29 +28,24 @@ export declare class CameraPath extends Component {
   constructor(owner?: Component, cfg?: CameraPathConfiguration);
 
   /**
-   * Gets the camera frames in this CameraPath.
-   *
-   * @returns {{t:Number, eye:Object, look:Object, up: Object}[]} The frames on this CameraPath.
+   * The camera frames in this CameraPath.
    */
-  get frames(): Frame[];
+  readonly frames: Frame[];
 
   /**
-   * Gets the {@link SplineCurve} along which {@link Camera#eye} travels.
-   * @returns {SplineCurve} The SplineCurve for {@link Camera#eye}.
+   * The {@link SplineCurve} along which {@link Camera#eye} travels.
    */
-  get eyeCurve(): SplineCurve;
+  readonly eyeCurve: SplineCurve;
 
   /**
-   * Gets the {@link SplineCurve} along which {@link Camera#look} travels.
-   * @returns {SplineCurve} The SplineCurve for {@link Camera#look}.
+   * The {@link SplineCurve} along which {@link Camera#look} travels.
    */
-  get lookCurve(): SplineCurve;
+  readonly lookCurve: SplineCurve;
 
   /**
-   * Gets the {@link SplineCurve} along which {@link Camera#up} travels.
-   * @returns {SplineCurve} The SplineCurve for {@link Camera#up}.
+   * The {@link SplineCurve} along which {@link Camera#up} travels.
    */
-  get upCurve(): SplineCurve;
+  readonly upCurve: SplineCurve;
 
   /**
    * Adds a frame to this CameraPath, given as the current position of the {@link Camera}.

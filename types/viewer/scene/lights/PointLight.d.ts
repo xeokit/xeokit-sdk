@@ -30,134 +30,55 @@ export declare class PointLight extends Light {
    constructor(owner: Component, cfg: PointLightConfiguration);
 
   /**
-   * Sets the position of this PointLight.
+   * The position of this PointLight.
    *
    * This will be either World- or View-space, depending on the value of {@link PointLight#space}.
    *
    * Default value is ````[1.0, 1.0, 1.0]````.
-   *
-   * @param {Number[]} pos The position.
    */
-  set pos(pos: number[]);
+  pos: number[];
 
   /**
-   * Gets the position of this PointLight.
-   *
-   * This will be either World- or View-space, depending on the value of {@link PointLight#space}.
-   *
-   * Default value is ````[1.0, 1.0, 1.0]````.
-   *
-   * @returns {Number[]} The position.
-   */
-  get pos(): number[];
-
-  /**
-   * Sets the RGB color of this PointLight.
+   * The RGB color of this PointLight.
    *
    * Default value is ````[0.7, 0.7, 0.8]````.
-   *
-   * @param {Number[]} color The PointLight's RGB color.
    */
-  set color(color: number[]);
+  color: number[];
 
   /**
-   * Gets the RGB color of this PointLight.
-   *
-   * Default value is ````[0.7, 0.7, 0.8]````.
-   *
-   * @returns {Number[]} The PointLight's RGB color.
-   */
-  get color(): number[];
-
-  /**
-   * Sets the intensity of this PointLight.
-   *
-   * Default intensity is ````1.0```` for maximum intensity.
-   *
-   * @param {Number} intensity The PointLight's intensity
-   */
-  set intensity(intensity: number);
-
-  /**
-   * Gets the intensity of this PointLight.
+   * The intensity of this PointLight.
    *
    * Default value is ````1.0```` for maximum intensity.
-   *
-   * @returns {Number} The PointLight's intensity.
    */
-  get intensity(): number;
+  intensity: number;
 
   /**
-   * Sets the constant attenuation factor for this PointLight.
+   * The constant attenuation factor for this PointLight.
    *
    * Default value is ````0````.
-   *
-   * @param {Number} value The constant attenuation factor.
    */
-  set constantAttenuation(value: number);
+  constantAttenuation: number;
 
   /**
-   * Gets the constant attenuation factor for this PointLight.
+   * The linear attenuation factor for this PointLight.
    *
    * Default value is ````0````.
-   *
-   * @returns {Number} The constant attenuation factor.
    */
-  get constantAttenuation(): number;
+  linearAttenuation: number;
 
   /**
-   * Sets the linear attenuation factor for this PointLight.
+   * The quadratic attenuation factor for this PointLight.
    *
    * Default value is ````0````.
-   *
-   * @param {Number} value The linear attenuation factor.
    */
-  set linearAttenuation(value: number);
+  quadraticAttenuation: number;
 
   /**
-   * Gets the linear attenuation factor for this PointLight.
-   *
-   * Default value is ````0````.
-   *
-   * @returns {Number} The linear attenuation factor.
-   */
-  get linearAttenuation(): number;
-
-  /**
-   * Sets the quadratic attenuation factor for this PointLight.
-   *
-   * Default value is ````0````.
-   *
-   * @param {Number} value The quadratic attenuation factor.
-   */
-  set quadraticAttenuation(value: number);
-
-  /**
-   * Gets the quadratic attenuation factor for this PointLight.
-   *
-   * Default value is ````0````.
-   *
-   * @returns {Number} The quadratic attenuation factor.
-   */
-  get quadraticAttenuation(): number;
-
-  /**
-   * Sets if this PointLight casts a shadow.
+   * Whether this PointLight casts a shadow.
    *
    * Default value is ````false````.
-   *
-   * @param {Boolean} castsShadow Set ````true```` to cast shadows.
    */
-  set castsShadow(castsShadow: boolean);
-
-  /**
-   * Gets if this PointLight casts a shadow.
-   *
-   * Default value is ````false````.
-   *
-   * @returns {Boolean} ````true```` if this PointLight casts shadows.
-   */
-  get castsShadow(): boolean;
+  castsShadow: boolean;
 
   /**
    * Destroys this PointLight.

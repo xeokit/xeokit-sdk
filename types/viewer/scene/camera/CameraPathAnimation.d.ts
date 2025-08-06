@@ -19,32 +19,14 @@ export declare class CameraPathAnimation extends Component {
     constructor(owner?: Component, cfg?: CameraPathAnimationConfiguration);
 
     /**
-     * Sets the {@link CameraPath} animated by this CameraPathAnimation.
-     *
-     @param {CameraPath} value The new CameraPath.
+     * The {@link CameraPath} animated by this CameraPathAnimation.
      */
-    set cameraPath(arg: CameraPath);
+    cameraPath: CameraPath;
 
     /**
-     * Gets the {@link CameraPath} animated by this CameraPathAnimation.
-     *
-     @returns {CameraPath} The CameraPath.
+     * The rate at which the CameraPathAnimation animates the {@link Camera} along the {@link CameraPath}.
      */
-    get cameraPath(): CameraPath;
-
-    /**
-     * Sets the rate at which the CameraPathAnimation animates the {@link Camera} along the {@link CameraPath}.
-     *
-     *  @param {Number} value The amount of progress per second.
-     */
-    set rate(arg: number);
-
-    /**
-     * Gets the rate at which the CameraPathAnimation animates the {@link Camera} along the {@link CameraPath}.
-     *
-     * @returns {*|number} The current playing rate.
-     */
-    get rate(): number;
+    rate: number;
 
     /**
      * Begins animating the {@link Camera} along CameraPathAnimation's {@link CameraPath} from the beginning.

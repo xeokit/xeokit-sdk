@@ -11,38 +11,23 @@ export declare class CustomProjection extends Component {
   camera: Camera;
 
   /**
-   * Sets the CustomProjection's projection transform matrix.
+   * The CustomProjection's projection transform matrix.
    *
    * Fires a "matrix" event on change.
-
-    * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
-    *
-    * @param {Number[]} matrix New value for the CustomProjection's matrix.
-    */
-  set matrix(arg: number[]);
-
-  /**
-   * Gets the CustomProjection's projection transform matrix.
    *
    * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
-   *
-   * @return {Number[]} New value for the CustomProjection's matrix.
    */
-  get matrix(): number[];
+  matrix: number[];
 
   /**
-   * Gets the inverse of {@link CustomProjection.matrix}.
-   *
-   * @returns {Number[]} The inverse of {@link CustomProjection.matrix}.
+   * The inverse of {@link CustomProjection.matrix}.
    */
-  get inverseMatrix(): number[];
+  readonly inverseMatrix: number[];
 
   /**
-   * Gets the transpose of {@link CustomProjection.matrix}.
-   *
-   * @returns {Number[]} The transpose of {@link CustomProjection.matrix}.
+   * The transpose of {@link CustomProjection.matrix}.
    */
-  get transposedMatrix(): number[];
+  readonly transposedMatrix: number[];
 
   /**
    * Un-projects the given Canvas-space coordinates, using this CustomProjection.

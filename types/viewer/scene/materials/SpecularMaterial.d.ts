@@ -55,33 +55,26 @@ export declare class SpecularMaterial extends Material {
     constructor(owner: Component, cfg?: SpecularMaterialConfiguration)
 
     /**
-     * Sets the RGB diffuse color of this SpecularMaterial.
+     * RGB diffuse color of this SpecularMaterial.
      *
      * Multiplies by the *RGB* components of {@link SpecularMaterial#diffuseMap}.
      *
      * Default value is ````[1.0, 1.0, 1.0]````.
      * @type {Number[]}
      */
-    set diffuse(value: number[]);
+    diffuse: number[];
 
     /**
-     * Gets the RGB diffuse color of this SpecularMaterial.
-     *
-     * @type {Number[]}
-     */
-    get diffuse(): number[];
-
-    /**
-     * Gets the RGB {@link Texture} containing the diffuse color of this SpecularMaterial, with optional *A* component for alpha.
+     * RGB {@link Texture} containing the diffuse color of this SpecularMaterial, with optional *A* component for alpha.
      *
      * The *RGB* components multipliues by the {@link SpecularMaterial#diffuse} property, while the *A* component, if present, multiplies by the {@link SpecularMaterial#alpha} property.
      *
      * @type {Texture}
      */
-    get diffuseMap(): Texture;
+    readonly diffuseMap: Texture;
 
     /**
-     * Sets the RGB specular color of this SpecularMaterial.
+     * RGB specular color of this SpecularMaterial.
      *
      * Multiplies by {@link SpecularMaterial#specularMap} and the *A* component of {@link SpecularMaterial#specularGlossinessMap}.
      *
@@ -89,35 +82,28 @@ export declare class SpecularMaterial extends Material {
      *
      * @type {Number[]}
      */
-    set specular(value: number[]);
+    specular: number[];
 
     /**
-     * Gets the RGB specular color of this SpecularMaterial.
-     *
-     * @type {Number[]}
-     */
-    get specular(): number[];
-
-    /**
-     * Gets the RGB texture containing the specular color of this SpecularMaterial.
+     * RGB texture containing the specular color of this SpecularMaterial.
      *
      * Multiplies by {@link SpecularMaterial#specular}.
      *
      * @type {Texture}
      */
-    get specularMap(): Texture;
+    readonly specularMap: Texture;
 
     /**
-     * Gets the RGBA texture containing this SpecularMaterial's specular color in its *RGB* components and glossiness in its *A* component.
+     * RGBA texture containing this SpecularMaterial's specular color in its *RGB* components and glossiness in its *A* component.
      *
      * The *RGB* components multiplies {@link SpecularMaterial#specular}, while the *A* component multiplies by {@link SpecularMaterial#glossiness}.
      *
      * @type {Texture}
      */
-    get specularGlossinessMap(): Texture;
+    readonly specularGlossinessMap: Texture;
 
     /**
-     * Sets the Factor in the range [0..1] indicating how glossy this SpecularMaterial is.
+     * Factor in the range [0..1] indicating how glossy this SpecularMaterial is.
      *
      * ````0```` is no glossiness, ````1```` is full glossiness.
      *
@@ -127,40 +113,27 @@ export declare class SpecularMaterial extends Material {
      *
      * @type {Number}
      */
-    set glossiness(value: number);
+    glossiness: number;
 
     /**
-     * Gets the Factor in the range ````[0..1]```` indicating how glossy this SpecularMaterial is.
-     * @type {Number}
-     */
-    get glossiness(): number;
-
-    /**
-     * Gets the RGB texture containing this SpecularMaterial's glossiness in its *R* component.
+     * RGB texture containing this SpecularMaterial's glossiness in its *R* component.
      *
      * The *R* component multiplies by {@link SpecularMaterial#glossiness}.
-     ** @type {Texture}
+     * @type {Texture}
      */
-    get glossinessMap(): Texture;
+    readonly glossinessMap: Texture;
 
     /**
-     * Sets the factor in the range ````[0..1]```` indicating amount of specular Fresnel.
+     * Factor in the range ````[0..1]```` indicating amount of specular Fresnel.
      *
      * Default value is ````0.0````.
      *
      * @type {Number}
      */
-    set specularF0(value: number);
+    specularF0: number;
 
     /**
-     * Gets the factor in the range ````[0..1]```` indicating amount of specular Fresnel.
-     *
-     * @type {Number}
-     */
-    get specularF0(): number;
-
-    /**
-     * Sets the RGB emissive color of this SpecularMaterial.
+     * RGB emissive color of this SpecularMaterial.
      *
      * Multiplies by {@link SpecularMaterial#emissiveMap}.
 
@@ -168,26 +141,19 @@ export declare class SpecularMaterial extends Material {
      *
      * @type {Number[]}
      */
-    set emissive(value: number[]);
+    emissive: number[];
 
     /**
-     * Gets the RGB emissive color of this SpecularMaterial.
-     *
-     * @type {Number[]}
-     */
-    get emissive(): number[];
-
-    /**
-     * Gets the RGB texture containing the emissive color of this SpecularMaterial.
+     * RGB texture containing the emissive color of this SpecularMaterial.
      *
      * Multiplies by {@link SpecularMaterial#emissive}.
      *
      * @type {Texture}
      */
-    get emissiveMap(): Texture;
+    readonly emissiveMap: Texture;
 
     /**
-     * Sets the factor in the range [0..1] indicating how transparent this SpecularMaterial is.
+     * Factor in the range [0..1] indicating how transparent this SpecularMaterial is.
      *
      * A value of ````0.0```` is fully transparent, while ````1.0```` is fully opaque.
      *
@@ -197,42 +163,35 @@ export declare class SpecularMaterial extends Material {
      *
      * @type {Number}
      */
-    set alpha(value: number);
+    alpha: number;
 
     /**
-     * Gets the factor in the range [0..1] indicating how transparent this SpecularMaterial is.
-     *
-     * @type {Number}
-     */
-    get alpha(): number;
-
-    /**
-     * Gets the RGB {@link Texture} with alpha in its *R* component.
+     * RGB {@link Texture} with alpha in its *R* component.
      *
      * The *R* component multiplies by the {@link SpecularMaterial#alpha} property.
      *
      * @type {Texture}
      */
-    get alphaMap(): Texture;
+    readonly alphaMap: Texture;
 
     /**
-     * Gets the RGB tangent-space normal {@link Texture} attached to this SpecularMaterial.
+     * RGB tangent-space normal {@link Texture} attached to this SpecularMaterial.
      *
      * @type {Texture}
      */
-    get normalMap(): Texture;
+    readonly normalMap: Texture;
 
     /**
-     * Gets the RGB ambient occlusion {@link Texture} attached to this SpecularMaterial.
+     * RGB ambient occlusion {@link Texture} attached to this SpecularMaterial.
      *
      * Multiplies by the specular and diffuse light reflected by surfaces.
      *
      * @type {Texture}
      */
-    get occlusionMap(): Texture;
+    readonly occlusionMap: Texture;
 
     /**
-     * Sets the alpha rendering mode.
+     * Alpha rendering mode.
      *
      * This governs how alpha is treated. Alpha is the combined result of the {@link SpecularMaterial#alpha} and {@link SpecularMaterial#alphaMap} properties.
      *
@@ -244,10 +203,10 @@ export declare class SpecularMaterial extends Material {
      *
      * @type {String}
      */
-    set alphaMode(alphaMode: "opaque" | "blend" | "mask");
+    alphaMode: "opaque" | "blend" | "mask";
 
     /**
-     * Sets the alpha cutoff value.
+     * Alpha cutoff value.
      *
      * Specifies the cutoff threshold when {@link SpecularMaterial#alphaMode} equals "mask". If the alpha is greater than or equal to this value then it is rendered as fully opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0 will render the entire material as fully transparent. This value is ignored for other modes.
      *
@@ -257,17 +216,10 @@ export declare class SpecularMaterial extends Material {
      *
      * @type {Number}
      */
-    set alphaCutoff(alphaCutoff: number);
+    alphaCutoff: number;
 
     /**
-     * Gets the alpha cutoff value.
-
-     * @type {Number}
-     */
-    get alphaCutoff(): number;
-
-    /**
-     * Sets whether backfaces are visible on attached {@link Mesh}es.
+     * Whether backfaces are visible on attached {@link Mesh}es.
      *
      * The backfaces will belong to {@link ReadableGeometry} compoents that are also attached to the {@link Mesh}es.
      *
@@ -275,33 +227,19 @@ export declare class SpecularMaterial extends Material {
      *
      * @type {Boolean}
      */
-    set backfaces(value: boolean);
+    backfaces: boolean;
 
     /**
-     * Gets whether backfaces are visible on attached {@link Mesh}es.
-     *
-     * @type {Boolean}
-     */
-    get backfaces(): boolean;
-
-    /**
-     * Sets the winding direction of front faces of {@link Geometry} of attached {@link Mesh}es.
+     * Winding direction of front faces of {@link Geometry} of attached {@link Mesh}es.
      *
      * Default value is ````"ccw"````.
      *
      * @type {String}
      */
-    set frontface(value: "cw" | "ccw");
+    frontface: "cw" | "ccw";
 
     /**
-     * Gets the winding direction of front faces of {@link Geometry} of attached {@link Mesh}es.
-     *
-     * @type {String}
-     */
-    get frontface(): "cw" | "ccw";
-
-    /**
-     * Sets the SpecularMaterial's line width.
+     * SpecularMaterial's line width.
      *
      * This is not supported by WebGL implementations based on DirectX [2019].
      *
@@ -309,30 +247,16 @@ export declare class SpecularMaterial extends Material {
      *
      * @type {Number}
      */
-    set lineWidth(value: number);
+    lineWidth: number;
 
     /**
-     * Gets the SpecularMaterial's line width.
-     *
-     * @type {Number}
-     */
-    get lineWidth(): number;
-
-    /**
-     * Sets the SpecularMaterial's point size.
+     * SpecularMaterial's point size.
      *
      * Default value is ````1.0````.
      *
      * @type {Number}
      */
-    set pointSize(value: number);
-
-    /**
-     * Sets the SpecularMaterial's point size.
-     *
-     * @type {Number}
-     */
-    get pointSize(): number;
+    pointSize: number;
 
     /**
      * Destroys this SpecularMaterial.

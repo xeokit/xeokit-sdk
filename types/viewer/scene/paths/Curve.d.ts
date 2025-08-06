@@ -16,36 +16,23 @@ export declare class Curve extends Component {
     constructor(owner?: Component, cfg?: CurveConfiguration);
 
     /**
-     * Sets the progress along this Curve.
+     * The progress along this Curve.
      *
      * Automatically clamps to range ````[0..1]````.
      *
      * Default value is ````0````.
-     *
-     * @param {Number} value The progress value.
      */
-    set t(value: number);
+    t: number;
 
     /**
-     * Gets the progress along this Curve.
-     *
-     * @returns {Number} The progress value.
+     * The tangent on this Curve at position {@link Curve#t}.
      */
-    get t(): number;
+    readonly tangent: number[];
 
     /**
-     * Gets the tangent on this Curve at position {@link Curve#t}.
-     *
-     * @returns {Number[]} The tangent.
+     * The length of this Curve.
      */
-    get tangent(): number[];
-
-    /**
-     * Gets the length of this Curve.
-     *
-     * @returns {Number} The Curve length.
-     */
-    get length(): number;
+    readonly length: number;
 
     /**
      * Returns a normalized tangent vector on this Curve at the given position.

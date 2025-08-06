@@ -11,9 +11,7 @@ export declare interface ILASDefaultDataSource {
    */
   getLAS(src: string | number, ok: (LAS: ArrayBuffer) => void, error: (e: Error) => void): void;
 
-  get cacheBuster(): boolean;
-
-  set cacheBuster(value: boolean);
+  cacheBuster: boolean;
 }
 
 export declare type LASLoaderPluginConfiguration = {
@@ -77,58 +75,31 @@ export declare class LASLoaderPlugin extends Plugin {
   constructor(viewer: Viewer, cfg?: LASLoaderPluginConfiguration);
 
   /**
-   * Sets a custom data source through which the LASLoaderPlugin can load LAS files.
+   * Custom data source through which the LASLoaderPlugin can load LAS files.
    *
    * Default value is {@link LASDefaultDataSource}, which loads via HTTP.
    *
    * @type {ILASDefaultDataSource}
    */
-  set dataSource(arg: ILASDefaultDataSource);
-
-  /**
-   * Gets the custom data source through which the LASLoaderPlugin can load LAS files.
-   *
-   * Default value is {@link LASDefaultDataSource}, which loads via HTTP.
-   *
-   * @type {ILASDefaultDataSource}
-   */
-  get dataSource(): ILASDefaultDataSource;
+  dataSource: ILASDefaultDataSource;
 
   /**
    * Configures LASLoaderPlugin to load every **n** points.
    *
    * Default value is ````1````.
    *
-   * @param {Number} value The **n**th point that LASLoaderPlugin will read.
+   * @type {Number}
    */
-  set skip(value: number);
-
-  /**
-   * When LASLoaderPlugin is configured to load every **n** points, returns the value of **n**.
-   *
-   * Default value is ````1````.
-   *
-   * @returns {Number} The **n**th point that LASLoaderPlugin will read.
-   */
-  get skip(): number;
+  skip: number;
 
   /**
    * Configures if LASLoaderPlugin assumes that LAS positions are stored in 64-bit floats instead of 32-bit.
    *
    * Default value is ````false````.
    *
-   * @param {Boolean} value True if LASLoaderPlugin assumes that positions are stored in 64-bit floats instead of 32-bit.
+   * @type {Boolean}
    */
-  set fp64(value: boolean);
-
-  /**
-   * Gets if LASLoaderPlugin assumes that LAS positions are stored in 64-bit floats instead of 32-bit.
-   *
-   * Default value is ````false````.
-   *
-   * @returns {Boolean} True if LASLoaderPlugin assumes that positions are stored in 64-bit floats instead of 32-bit.
-   */
-  get fp64(): boolean;
+  fp64: boolean;
 
   /**
    * Configures whether LASLoaderPlugin assumes that LAS colors are encoded using 8 or 16 bits.
@@ -137,31 +108,9 @@ export declare class LASLoaderPlugin extends Plugin {
    *
    * Note: LAS specification recommends 16 bits.
    *
-   * @param {Number|String} value Valid values are 8, 16 and "auto".
+   * @type {Number|String}
    */
-  set colorDepth(value: 8 | 16 | "auto");
-
-  /**
-   * Gets whether LASLoaderPlugin assumes that LAS colors are encoded using 8 or 16 bits.
-   *
-   * Default value is ````8````.
-   *
-   * Note: LAS specification recommends 16 bits.
-   *
-   * @returns {Number|String} Possible returned values are 8, 16 and "auto".
-   */
-  get colorDepth(): 8 | 16 | "auto";
-
-  /**
-   * Gets if LASLoaderPlugin immediately centers LAS positions.
-   *
-   * If this is ````true```` then centering is the first thing that happens to LAS positions as they are loaded.
-   *
-   * Default value is ````false````.
-   *
-   * @returns {Boolean} True if LASLoaderPlugin immediately centers LAS positions.
-   */
-  get center():number[];
+  colorDepth: 8 | 16 | "auto";
 
   /**
    * Configures if LASLoaderPlugin immediately centers LAS positions.
@@ -170,69 +119,40 @@ export declare class LASLoaderPlugin extends Plugin {
    *
    * Default value is ````false````.
    *
-   * @param {Boolean} value True if LASLoaderPlugin immediately centers LAS positions.
+   * @type {Number[]}
    */
-  set center(value:number[]);
+  center: number[];
 
   /**
-   * Gets the current transformation to apply to LAS positions as they are loaded.
+   * Current transformation to apply to LAS positions as they are loaded.
    *
    * If this is ````true```` then LAS positions will be transformed right after they are centered.
    *
    * Default value is null.
    *
-   * @returns {Number[]|null} A 16-element array containing a 4x4 transformation matrix.
+   * @type {Number[]|null}
    */
-  get transform(): number[];
+  transform: number[];
 
   /**
-   * Sets the current transformation to apply to LAS positions as they are loaded.
-   *
-   * Default value is null.
-   *
-   * @param {Number[]|null} transform A 16-element array containing a 4x4 transformation matrix.
-   */
-  set transform(transform: number[]);
-
-  /**
-   * Gets the current rotations to apply to LAS positions as they are loaded.
+   * Current rotations to apply to LAS positions as they are loaded.
    *
    * Rotations are an array of three Euler angles in degrees, for each of the X, Y and Z axis, applied in that order.
    *
    * Default value is null.
    *
-   * @returns {Number[]|null} If defined, an array of three Euler angles in degrees, for each of the X, Y and Z axis. Null if undefined.
+   * @type {Number[]|null}
    */
-  get rotate():number[];
+  rotate: number[];
 
   /**
-   * Sets the current rotations to apply to LAS positions as they are loaded.
-   *
-   * Rotations are an array of three Euler angles in degrees, for each of the X, Y and Z axis, applied in that order.
-   *
-   * Default value is null.
-   *
-   * @param {Number[]|null} rotate Array of three Euler angles in degrees, for each of the X, Y and Z axis.
-   */
-  set rotate(rotate:number[]) ;
-
-  /**
-   * Gets if LAS positions are rotated 90 degrees about X as they are loaded.
+   * Configures if LAS positions are rotated 90 degrees about X as they are loaded.
    *
    * Default value is ````false````.
    *
-   * @returns {*}
+   * @type {Boolean}
    */
-  get rotateX() :boolean;
-
-  /**
-   * Sets if LAS positions are rotated 90 degrees about X as they are loaded.
-   *
-   * Default value is ````false````.
-   *
-   * @param rotateX
-   */
-  set rotateX(rotateX:boolean);
+  rotateX: boolean;
 
   /**
    * Loads an ````LAS```` model into this LASLoaderPlugin's {@link Viewer}.

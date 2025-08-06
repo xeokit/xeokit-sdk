@@ -92,7 +92,7 @@ export declare class Scene extends Component {
   /**
    * The epoch time (in milliseconds since 1970) when this Scene was instantiated.
    */
-  get startTime(): Date;
+  readonly startTime: Date;
 
   /**
    * Map of {@link Entity}s that represent models.
@@ -100,7 +100,7 @@ export declare class Scene extends Component {
    * Each {@link Entity} is mapped here by {@link Entity.id} when {@link Entity.isModel} is ````true````.
    * @type {{String:Entity}}
    */
-  get models(): {[key: string]: Entity};
+  readonly models: {[key: string]: Entity};
 
   /**
    * Map of {@link Entity}s that represents objects.
@@ -109,7 +109,7 @@ export declare class Scene extends Component {
    * @final
    * @type {{String:Entity}}
    */
-  get objects(): {[key: string]: Entity};
+  readonly objects: {[key: string]: Entity};
 
   /**
    * Map of {@link SectionPlane}s that represent sliced section planes.
@@ -117,7 +117,7 @@ export declare class Scene extends Component {
    * Each {@link SectionPlane} is mapped here by {@link SectionPlane.id}.
    * @type {{String:SectionPlane}}
    */
-  get sectionPlanes(): { [key: string]: SectionPlane };
+  readonly sectionPlanes: { [key: string]: SectionPlane };
 
   /**
    * Map of currently visible {@link Entity}s that represent objects.
@@ -125,7 +125,7 @@ export declare class Scene extends Component {
    * An Entity represents an object if {@link Entity.isObject} is ````true````, and is visible when {@link Entity.visible} is true.
    * @type {{String:Object}}
    */
-  get visibleObjects(): {[key: string]: Entity};
+  readonly visibleObjects: {[key: string]: Entity};
 
   /**
    * Map of currently xrayed {@link Entity}s that represent objects.
@@ -136,7 +136,7 @@ export declare class Scene extends Component {
    *
    * @type {{String:Object}}
    */
-  get xrayedObjects(): {[key: string]: Entity};
+  readonly xrayedObjects: {[key: string]: Entity};
 
   /**
    * Map of currently highlighted {@link Entity}s that represent objects.
@@ -147,7 +147,7 @@ export declare class Scene extends Component {
    *
    * @type {{String:Object}}
    */
-  get highlightedObjects(): {[key: string]: Entity};
+  readonly highlightedObjects: {[key: string]: Entity};
 
   /**
    * Map of currently selected {@link Entity}s that represent objects.
@@ -158,7 +158,7 @@ export declare class Scene extends Component {
    *
    * @type {{String:Object}}
    */
-  get selectedObjects(): {[key: string]: Entity};
+  readonly selectedObjects: {[key: string]: Entity};
 
   /**
    * Map of currently colorized {@link Entity}s that represent objects.
@@ -169,7 +169,7 @@ export declare class Scene extends Component {
    *
    * @type {{String:Object}}
    */
-  get colorizedObjects(): {[key: string]: Entity};
+  readonly colorizedObjects: {[key: string]: Entity};
 
   /**
    * Map of {@link Entity}s that represent objects whose opacity was updated.
@@ -180,7 +180,7 @@ export declare class Scene extends Component {
    *
    * @type {{String:Object}}
    */
-  get opacityObjects(): {[key: string]: Entity};
+  readonly opacityObjects: {[key: string]: Entity};
 
   /**
    * Map of {@link Entity}s that represent objects whose {@link Entity.offset}s were updated.
@@ -193,7 +193,7 @@ export declare class Scene extends Component {
    * @final
    * @type {{String:Object}}
    */
-  get offsetObjects(): {[key: string]: Entity};
+  readonly offsetObjects: {[key: string]: Entity};
 
   /**
    * Whether {@link Entity.offset} is enabled.
@@ -202,7 +202,7 @@ export declare class Scene extends Component {
    *
    * @returns {Boolean} True if {@link Entity.offset} is enabled.
    */
-  get entityOffsetsEnabled(): boolean;
+  readonly entityOffsetsEnabled: boolean;
 
   /**
    * Whether geometry is readable.
@@ -215,7 +215,7 @@ export declare class Scene extends Component {
    *
    * @returns {Boolean} True if geometry is readable.
    */
-  get readableGeometryEnabled(): boolean;
+  readonly readableGeometryEnabled: boolean;
 
   /**
    * Whether precision surface picking is enabled.
@@ -228,7 +228,7 @@ export declare class Scene extends Component {
    *
    * @returns {Boolean} True if precision picking is enabled.
    */
-  get pickSurfacePrecisionEnabled(): boolean;
+  readonly pickSurfacePrecisionEnabled: boolean;
 
   /**
    * Whether logarithmic depth buffer is enabled.
@@ -237,10 +237,10 @@ export declare class Scene extends Component {
    *
    * @returns {Boolean} True if logarithmic depth buffer is enabled.
    */
-  get logarithmicDepthBufferEnabled(): boolean;
+  readonly logarithmicDepthBufferEnabled: boolean;
 
   /**
-   * Sets the number of {@link SectionPlane}s for which this Scene pre-caches resources.
+   * The number of {@link SectionPlane}s for which this Scene pre-caches resources.
    *
    * This property enhances the efficiency of SectionPlane creation by proactively allocating and caching Viewer resources for a specified quantity
    * of SectionPlanes. Introducing this parameter streamlines the initial creation speed of SectionPlanes, particularly up to the designated quantity. This parameter internally
@@ -250,40 +250,19 @@ export declare class Scene extends Component {
    *
    * Default is ````0````.
    */
-  set numCachedSectionPlanes(numCachedSectionPlanes: number);
+  numCachedSectionPlanes: number;
 
   /**
-   * Gets the number of {@link SectionPlane}s for which this Scene pre-caches resources.
-   *
-   * This property enhances the efficiency of SectionPlane creation by proactively allocating and caching Viewer resources for a specified quantity
-   * of SectionPlanes. Introducing this parameter streamlines the initial creation speed of SectionPlanes, particularly up to the designated quantity. This parameter internally
-   * configures renderer logic for the specified number of SectionPlanes, eliminating the need for setting up logic with each SectionPlane creation and thereby enhancing
-   * responsiveness. It is important to consider that each SectionPlane impacts rendering performance, so it is recommended to set this value to a quantity that aligns with
-   * your expected usage.
-   *
-   * Default is ````0````.
-   *
-   * @returns {number} The number of {@link SectionPlane}s for which this Scene pre-caches resources.
-   */
-  get numCachedSectionPlanes(): number;
-
-  /**
-   * Sets whether physically-based rendering is enabled.
-   *
-   */
-  set pbrEnabled(value: boolean);
-
-  /**
-   * Gets whether quality rendering is enabled.
+   * Whether physically-based rendering is enabled.
    *
    * Default is ````false````.
    *
    * @returns {Boolean} True if quality rendering is enabled.
    */
-  get pbrEnabled(): boolean
+  pbrEnabled: boolean;
 
   /**
-   * Sets whether data texture scene representation (DTX) is enabled for the {@link Scene}.
+   * Whether data texture scene representation (DTX) is enabled for the {@link Scene}.
    *
    * Even when enabled, DTX will only work if supported.
    *
@@ -291,37 +270,19 @@ export declare class Scene extends Component {
    *
    * @type {Boolean}
    */
-  set dtxEnabled(value: boolean);
+  dtxEnabled: boolean;
 
   /**
-   * Gets whether data texture-based scene representation (DTX) is enabled for the {@link Scene}.
-   *
-   * Even when enabled, DTX will only apply if supported.
-   *
-   * Default value is ````false````.
-   *
-   * @type {Boolean}
-   */
-  get dtxEnabled(): boolean;
-
-  /**
-   * Sets whether basic color texture rendering is enabled.
-   *
-   * Default is ````true````.
-   */
-  set colorTextureEnabled(colorTextureEnabled: boolean);
-
-  /**
-   * Gets whether basic color texture rendering is enabled.
+   * Whether basic color texture rendering is enabled.
    *
    * Default is ````true````.
    *
    * @returns {Boolean} True if basic color texture rendering is enabled.
    */
-  get colorTextureEnabled(): boolean;
+  colorTextureEnabled: boolean;
 
   /**
-   * Gets the Z value of offset for Marker's OcclusionTester.
+   * The Z value of offset for Marker's OcclusionTester.
    * The closest the value is to 0.000 the more precise OcclusionTester will be, but at the same time the less
    * precise it will behave for Markers that are located exactly on the Surface.
    *
@@ -329,166 +290,139 @@ export declare class Scene extends Component {
    *
    * @returns {Number} Z offset for Marker
    */
-  get markerZOffset(): number
+  readonly markerZOffset: number;
 
   /**
-   * Gets the IDs of the {@link Entity}s in {@link Scene.models}.
+   * The IDs of the {@link Entity}s in {@link Scene.models}.
    *
    * @type {String[]}
    */
-  get modelIds(): string[];
+  readonly modelIds: string[];
 
   /**
-   * Gets the number of {@link Entity}s in {@link Scene.objects}.
+   * The number of {@link Entity}s in {@link Scene.objects}.
    *
    * @type {Number}
    */
-  get numObjects(): number;
+  readonly numObjects: number;
 
   /**
-   * Gets the IDs of the {@link Entity}s in {@link Scene.objects}.
+   * The IDs of the {@link Entity}s in {@link Scene.objects}.
    *
    * @type {String[]}
    */
-  get objectIds(): string[];
+  readonly objectIds: string[];
 
   /**
-  * Gets the number of {@link Entity}s in {@link Scene.visibleObjects}.
+  * The number of {@link Entity}s in {@link Scene.visibleObjects}.
   *
   * @type {Number}
   */
-  get numVisibleObjects(): number;
+  readonly numVisibleObjects: number;
 
   /**
-  * Gets the IDs of the {@link Entity}s in {@link Scene.visibleObjects}.
+  * The IDs of the {@link Entity}s in {@link Scene.visibleObjects}.
   *
   * @type {String[]}
   */
-  get visibleObjectIds(): string[];
+  readonly visibleObjectIds: string[];
 
   /**
-  * Gets the number of {@link Entity}s in {@link Scene.xrayedObjects}.
+  * The number of {@link Entity}s in {@link Scene.xrayedObjects}.
   *
   * @type {Number}
   */
-  get numXRayedObjects(): number;
+  readonly numXRayedObjects: number;
 
   /**
-  * Gets the IDs of the {@link Entity}s in {@link Scene.xrayedObjects}.
+  * The IDs of the {@link Entity}s in {@link Scene.xrayedObjects}.
   *
   * @type {String[]}
   */
-  get xrayedObjectIds(): string[];
+  readonly xrayedObjectIds: string[];
 
   /**
-  * Gets the number of {@link Entity}s in {@link Scene.highlightedObjects}.
+  * The number of {@link Entity}s in {@link Scene.highlightedObjects}.
   *
   * @type {Number}
   */
-  get numHighlightedObjects(): number;
+  readonly numHighlightedObjects: number;
 
   /**
-  * Gets the IDs of the {@link Entity}s in {@link Scene.highlightedObjects}.
+  * The IDs of the {@link Entity}s in {@link Scene.highlightedObjects}.
   *
   * @type {String[]}
   */
-  get highlightedObjectIds(): string[];
+  readonly highlightedObjectIds: string[];
 
   /**
-  * Gets the number of {@link Entity}s in {@link Scene.selectedObjects}.
+  * The number of {@link Entity}s in {@link Scene.selectedObjects}.
   *
   * @type {Number}
   */
-  get numSelectedObjects(): number;
+  readonly numSelectedObjects: number;
 
   /**
-  * Gets the IDs of the {@link Entity}s in {@link Scene.selectedObjects}.
+  * The IDs of the {@link Entity}s in {@link Scene.selectedObjects}.
   *
   * @type {String[]}
   */
-  get selectedObjectIds(): string[];
+  readonly selectedObjectIds: string[];
 
   /**
-  * Gets the number of {@link Entity}s in {@link Scene.colorizedObjects}.
+  * The number of {@link Entity}s in {@link Scene.colorizedObjects}.
   *
   * @type {Number}
   */
-  get numColorizedObjects(): number;
+  readonly numColorizedObjects: number;
 
   /**
-  * Gets the IDs of the {@link Entity}s in {@link Scene.colorizedObjects}.
+  * The IDs of the {@link Entity}s in {@link Scene.colorizedObjects}.
   *
   * @type {String[]}
   */
-  get colorizedObjectIds(): string[];
+  readonly colorizedObjectIds: string[];
 
   /**
-  * Gets the IDs of the {@link Entity}s in {@link Scene.opacityObjects}.
+  * The IDs of the {@link Entity}s in {@link Scene.opacityObjects}.
   *
   * @type {String[]}
   */
-  get opacityObjectIds(): string[];
+  readonly opacityObjectIds: string[];
 
   /**
-  * Gets the IDs of the {@link Entity}s in {@link Scene.offsetObjects}.
+  * The IDs of the {@link Entity}s in {@link Scene.offsetObjects}.
   *
   * @type {String[]}
   */
-  get offsetObjectIds(): string[];
+  readonly offsetObjectIds: string[];
 
   /**
-  * Sets the number of "ticks" that happen between each render or this Scene.
+  * The number of "ticks" that happen between each render or this Scene.
   *
   * Default value is ````1````.
   *
   * @type {Number}
   */
-  set ticksPerRender(value: number);
+  ticksPerRender: number;
 
   /**
-  * Gets the number of "ticks" that happen between each render or this Scene.
-  *
-  * Default value is ````1````.
-  *
-  * @type {Number}
-  */
-  get ticksPerRender(): number;
-
-  /**
-  * Sets the number of "ticks" that happen between occlusion testing for {@link Marker}s.
+  * The number of "ticks" that happen between occlusion testing for {@link Marker}s.
   *
   * Default value is ````20````.
   *
   * @type {Number}
   */
-  set ticksPerOcclusionTest(value: number);
+  ticksPerOcclusionTest: number;
 
   /**
-  * Gets the number of "ticks" that happen between each render of this Scene.
+  * The number of times this Scene renders per frame.
   *
   * Default value is ````1````.
   *
   * @type {Number}
   */
-  get ticksPerOcclusionTest(): number;
-
-  /**
-  * Sets the number of times this Scene renders per frame.
-  *
-  * Default value is ````1````.
-  *
-  * @type {Number}
-  */
-  set passes(value: number)
-
-  /**
-  * Gets the number of times this Scene renders per frame.
-  *
-  * Default value is ````1````.
-  *
-  * @type {Number}
-  */
-  get passes(): number;
+  passes: number;
 
   /**
   * When {@link Scene.passes} is greater than ````1````, indicates whether or not to clear the canvas before each pass (````true````) or just before the first pass (````false````).
@@ -497,73 +431,37 @@ export declare class Scene extends Component {
   *
   * @type {Boolean}
   */
-  set clearEachPass(value: boolean);
+  clearEachPass: boolean;
 
   /**
-  * When {@link Scene.passes} is greater than ````1````, indicates whether or not to clear the canvas before each pass (````true````) or just before the first pass (````false````).
+  * Whether or not {@link Scene} should expect all {@link Texture}s and colors to have pre-multiplied gamma.
   *
   * Default value is ````false````.
   *
   * @type {Boolean}
   */
-  get clearEachPass(): boolean;
+  gammaInput: boolean;
 
   /**
-  * Sets whether or not {@link Scene} should expect all {@link Texture}s and colors to have pre-multiplied gamma.
+  * Whether or not to render pixels with pre-multiplied gama.
   *
   * Default value is ````false````.
   *
   * @type {Boolean}
   */
-  set gammaInput(value: boolean);
+  gammaOutput: boolean;
 
   /**
-  * Gets whether or not {@link Scene} should expect all {@link Texture}s and colors to have pre-multiplied gamma.
-  *
-  * Default value is ````false````.
-  *
-  * @type {Boolean}
-  */
-  get gammaInput(): boolean;
-
-  /**
-  * Sets whether or not to render pixels with pre-multiplied gama.
-  *
-  * Default value is ````false````.
-  *
-  * @type {Boolean}
-  */
-  set gammaOutput(value: boolean);
-
-  /**
-  * Gets whether or not to render pixels with pre-multiplied gama.
-  *
-  * Default value is ````true````.
-  *
-  * @type {Boolean}
-  */
-  get gammaOutput(): boolean;
-
-  /**
-  * Sets the gamma factor to use when {@link Scene.gammaOutput} is set true.
+  * The gamma factor to use when {@link Scene.gammaOutput} is set true.
   *
   * Default value is ````2.2````.
   *
   * @type {Number}
   */
-  set gammaFactor(value: number);
+  gammaFactor: number;
 
   /**
-  * Gets the gamma factor to use when {@link Scene.gammaOutput} is set true.
-  *
-  * Default value is ````2.2````.
-  *
-  * @type {Number}
-  */
-  get gammaFactor(): number;
-
-  /**
-  * Gets the default {@link Geometry} for this Scene, which is a {@link ReadableGeometry} with a unit-sized box shape.
+  * The default {@link Geometry} for this Scene, which is a {@link ReadableGeometry} with a unit-sized box shape.
   *
   * Has {@link ReadableGeometry.id} set to "default.geometry".
   *
@@ -571,10 +469,10 @@ export declare class Scene extends Component {
   *
   * @type {ReadableGeometry}
   */
-  get geometry(): ReadableGeometry;
+  readonly geometry: ReadableGeometry;
 
   /**
-  * Gets the default {@link Material} for this Scene, which is a {@link PhongMaterial}.
+  * The default {@link Material} for this Scene, which is a {@link PhongMaterial}.
   *
   * Has {@link PhongMaterial.id} set to "default.material".
   *
@@ -582,10 +480,10 @@ export declare class Scene extends Component {
   *
   * @type {PhongMaterial}
   */
-  get material(): PhongMaterial;
+  readonly material: PhongMaterial;
 
   /**
-  * Gets the default xraying {@link EmphasisMaterial} for this Scene.
+  * The default xraying {@link EmphasisMaterial} for this Scene.
   *
   * Has {@link EmphasisMaterial.id} set to "default.xrayMaterial".
   *
@@ -595,10 +493,10 @@ export declare class Scene extends Component {
   *
   * @type {EmphasisMaterial}
   */
-  get xrayMaterial(): EmphasisMaterial;
+  readonly xrayMaterial: EmphasisMaterial;
 
   /**
-  * Gets the default highlight {@link EmphasisMaterial} for this Scene.
+  * The default highlight {@link EmphasisMaterial} for this Scene.
   *
   * Has {@link EmphasisMaterial.id} set to "default.highlightMaterial".
   *
@@ -608,10 +506,10 @@ export declare class Scene extends Component {
   *
   * @type {EmphasisMaterial}
   */
-  get highlightMaterial(): EmphasisMaterial;
+  readonly highlightMaterial: EmphasisMaterial;
 
   /**
-  * Gets the default selection {@link EmphasisMaterial} for this Scene.
+  * The default selection {@link EmphasisMaterial} for this Scene.
   *
   * Has {@link EmphasisMaterial.id} set to "default.selectedMaterial".
   *
@@ -621,10 +519,10 @@ export declare class Scene extends Component {
   *
   * @type {EmphasisMaterial}
   */
-  get selectedMaterial(): EmphasisMaterial;
+  readonly selectedMaterial: EmphasisMaterial;
 
   /**
-  * Gets the default {@link EdgeMaterial} for this Scene.
+  * The default {@link EdgeMaterial} for this Scene.
   *
   * Has {@link EdgeMaterial.id} set to "default.edgeMaterial".
   *
@@ -634,45 +532,45 @@ export declare class Scene extends Component {
   *
   * @type {EdgeMaterial}
   */
-  get edgeMaterial(): EdgeMaterial;
+  readonly edgeMaterial: EdgeMaterial;
 
   /**
-  * Gets the {@link PointsMaterial} for this Scene.
+  * The {@link PointsMaterial} for this Scene.
   *
   * @type {PointsMaterial}
   */
-  get pointsMaterial(): PointsMaterial
+  readonly pointsMaterial: PointsMaterial;
 
   /**
-  * Gets the {@link LinesMaterial} for this Scene.
+  * The {@link LinesMaterial} for this Scene.
   *
   * @type {LinesMaterial}
   */
-  get linesMaterial(): LinesMaterial
+  readonly linesMaterial: LinesMaterial;
 
   /**
-  * Gets the {@link Viewport} for this Scene.
+  * The {@link Viewport} for this Scene.
   *
   * @type Viewport
   */
-  get viewport(): Viewport
+  readonly viewport: Viewport;
 
   /**
-  * Gets the {@link Camera} for this Scene.
+  * The {@link Camera} for this Scene.
   *
   * @type {Camera}
   */
-  get camera(): Camera;
+  readonly camera: Camera;
 
   /**
-  * Gets the World-space 3D center of this Scene.
+  * The World-space 3D center of this Scene.
   *
   *@type {Number[]}
   */
-  get center(): number[];
+  readonly center: number[];
 
   /**
-  * Gets the World-space axis-aligned 3D boundary (AABB) of this Scene.
+  * The World-space axis-aligned 3D boundary (AABB) of this Scene.
   *
   * The AABB is represented by a six-element Float64Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
   *
@@ -680,11 +578,11 @@ export declare class Scene extends Component {
   *
   * @type {Number[]}
   */
-  get aabb(): number[];
+  readonly aabb: number[];
 
-  get sao(): SAO;
+  readonly sao: SAO;
 
-  get input(): Input;
+  readonly input: Input;
 
   /**
    * Performs an occlusion test on all {@link Marker}s in this {@link Scene}.

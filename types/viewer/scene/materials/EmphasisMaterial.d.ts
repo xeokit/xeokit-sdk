@@ -38,68 +38,41 @@ export declare class EmphasisMaterial extends Material {
   constructor(owner: Component, cfg?: EmphasisMaterialConfiguration);
 
   /**
-   * Gets available EmphasisMaterial presets.
+   * Available EmphasisMaterial presets.
    *
    * @type {Object}
    */
-  get presets(): any;
+  readonly presets: any;
 
   /**
-   * Selects a preset EmphasisMaterial configuration.
+   * Preset EmphasisMaterial configuration.
    *
    * Default value is "default".
    *
    * @type {String}
    */
-  set preset(arg: string);
+  preset: string;
 
   /**
-   * Gets the current preset EmphasisMaterial configuration.
-   *
-   * Default value is "default".
-   *
-   * @type {String}
-   */
-  get preset(): string;
-
-  /**
-   * Sets if surfaces are filled with color.
+   * Whether surfaces are filled with color.
    *
    * Default is ````true````.
    *
    * @type {Boolean}
    */
-  set fill(arg: boolean);
+  fill: boolean;
 
   /**
-   * Gets if surfaces are filled with color.
-   *
-   * Default is ````true````.
-   *
-   * @type {Boolean}
-   */
-  get fill(): boolean;
-
-  /**
-   * Sets the RGB color of filled faces.
+   * RGB color of filled faces.
    *
    * Default is ````[0.4, 0.4, 0.4]````.
    *
    * @type {Number[]}
    */
-  set fillColor(arg: number[]);
+  fillColor: number[];
 
   /**
-   * Gets the RGB color of filled faces.
-   *
-   * Default is ````[0.4, 0.4, 0.4]````.
-   *
-   * @type {Number[]}
-   */
-  get fillColor(): number[];
-
-  /**
-   * Sets the transparency of filled faces.
+   * Transparency of filled faces.
    *
    * A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
    *
@@ -107,58 +80,28 @@ export declare class EmphasisMaterial extends Material {
    *
    * @type {Number}
    */
-  set fillAlpha(arg: number);
+  fillAlpha: number;
 
   /**
-   * Gets the transparency of filled faces.
-   *
-   * A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
-   *
-   * Default is ````0.2````.
-   *
-   * @type {Number}
-   */
-
-  get fillAlpha(): number;
-
-  /**
-   * Sets if edges are visible.
+   * Whether edges are visible.
    *
    * Default is ````true````.
    *
    * @type {Boolean}
    */
-  set edges(arg: boolean);
+  edges: boolean;
 
   /**
-   * Gets if edges are visible.
-   *
-   * Default is ````true````.
-   *
-   * @type {Boolean}
-   */
-  get edges(): boolean;
-
-  /**
-   * Sets the RGB color of edges.
+   * RGB color of edges.
    *
    * Default is ```` [0.2, 0.2, 0.2]````.
    *
    * @type {Number[]}
    */
-  set edgeColor(arg: number[]);
+  edgeColor: number[];
 
   /**
-   * Gets the RGB color of edges.
-   *
-   * Default is ```` [0.2, 0.2, 0.2]````.
-   *
-   * @type {Number[]}
-   */
-  get edgeColor(): number[];
-
-  /**
-   * Sets the transparency of edges.
+   * Transparency of edges.
    *
    * A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
    *
@@ -166,21 +109,10 @@ export declare class EmphasisMaterial extends Material {
    *
    * @type {Number}
    */
-  set edgeAlpha(arg: number);
+  edgeAlpha: number;
 
   /**
-   * Gets the transparency of edges.
-   *
-   * A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
-   *
-   * Default is ````0.2````.
-   *
-   * @type {Number}
-   */
-  get edgeAlpha(): number;
-
-  /**
-   * Sets edge width.
+   * Edge width.
    *
    * This is not supported by WebGL implementations based on DirectX [2019].
    *
@@ -188,39 +120,19 @@ export declare class EmphasisMaterial extends Material {
    *
    * @type {Number}
    */
-  set edgeWidth(arg: number);
+  edgeWidth: number;
 
   /**
-   * Gets edge width.
-   *
-   * This is not supported by WebGL implementations based on DirectX [2019].
-   *
-   * Default value is ````1.0```` pixels.
-   *
-   * @type {Number}
-   */
-  get edgeWidth(): number;
-
-  /**
-   * Sets whether to render backfaces when {@link EmphasisMaterial.fill} is ````true````.
+   * Whether to render backfaces when {@link EmphasisMaterial.fill} is ````true````.
    *
    * Default is ````false````.
    *
    * @type {Boolean}
    */
-  set backfaces(arg: boolean);
+  backfaces: boolean;
 
   /**
-   * Gets whether to render backfaces when {@link EmphasisMaterial.fill} is ````true````.
-   *
-   * Default is ````true````.
-   *
-   * @type {Boolean}
-   */
-  get backfaces(): boolean;
-
-  /**
-   * Sets whether to render emphasized objects over the top of other objects, as if they were "glowing through".
+   * Whether to render emphasized objects over the top of other objects, as if they were "glowing through".
    *
    * Default is ````true````.
    *
@@ -228,16 +140,7 @@ export declare class EmphasisMaterial extends Material {
    *
    * @type {Boolean}
    */
-  set glowThrough(arg: boolean);
-
-  /**
-   * Sets whether to render emphasized objects over the top of other objects, as if they were "glowing through".
-   *
-   * Default is ````true````.
-   *
-   * @type {Boolean}
-   */
-  get glowThrough(): boolean;
+  glowThrough: boolean;
 
   /**
    * Destroys this EmphasisMaterial.

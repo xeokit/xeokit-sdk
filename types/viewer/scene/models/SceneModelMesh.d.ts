@@ -73,15 +73,15 @@ export declare class SceneModelMesh {
     isSolid(): boolean;
 
     /**
-     * Returns the volume of this SceneModelMesh.
+     * The volume of this SceneModelMesh.
      * @returns {number}
      */
-    get volume(): number;
+    readonly volume: number;
 
     /**
-     * Returns the surface area of this SceneModelMesh.
+     * The surface area of this SceneModelMesh.
      * @returns {number}
      */
-    get surfaceArea(): number;
+    readonly surfaceArea: number;
 
 }

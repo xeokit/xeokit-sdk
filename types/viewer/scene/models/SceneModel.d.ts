@@ -31,7 +31,7 @@ export declare class SceneModel extends Component {
      * Returns true to indicate that this Component is a SceneModel.
      * @type {Boolean}
      */
-    get isPerformanceModel(): boolean;
+    readonly isPerformanceModel: boolean;
 
     /**
      * The {@link SceneModelTransform}s in this SceneModel.
@@ -40,7 +40,7 @@ export declare class SceneModel extends Component {
      *
      * @returns {*|{}}
      */
-    get transforms(): { [key: string]: SceneModelTransform }
+    readonly transforms: { [key: string]: SceneModelTransform };
 
     /**
      * The {@link SceneModelTexture}s in this SceneModel.
@@ -50,7 +50,7 @@ export declare class SceneModel extends Component {
      *
      * @returns {*|{}}
      */
-    get textures(): { [key: string]: SceneModelTexture }
+    readonly textures: { [key: string]: SceneModelTexture };
 
     /**
      * The {@link SceneModelTextureSet}s in this SceneModel.
@@ -59,7 +59,7 @@ export declare class SceneModel extends Component {
      *
      * @returns {*|{}}
      */
-    get textureSets(): { [key: string]: SceneModelTextureSet }
+    readonly textureSets: { [key: string]: SceneModelTextureSet };
 
     /**
      * The {@link SceneModelMesh}es in this SceneModel.
@@ -68,16 +68,16 @@ export declare class SceneModel extends Component {
      *
      * @returns {*|{}}
      */
-    get meshes(): { [key: string]: SceneModelMesh }
+    readonly meshes: { [key: string]: SceneModelMesh };
 
     /**
-     * Returns the {@link SceneModelEntity}s in this SceneModel.
+     * The {@link SceneModelEntity}s in this SceneModel.
      * @returns {*|{}}
      */
-    get objects(): { [key: string]: SceneModelEntity }
+    readonly objects: { [key: string]: SceneModelEntity };
 
     /**
-     * Gets the 3D World-space origin for this SceneModel.
+     * The 3D World-space origin for this SceneModel.
      *
      * Each geometry or mesh origin, if supplied, is relative to this origin.
      *
@@ -85,140 +85,86 @@ export declare class SceneModel extends Component {
      *
      * @type {number[]}
      */
-    get origin(): number[];
+    readonly origin: number[];
 
     /**
-     * Sets the SceneModel's local translation.
+     * The SceneModel's local translation.
      *
      * Default value is ````[0,0,0]````.
      *
      * @type {number[]}
      */
-    set position(value: number[]);
+    position: number[];
 
     /**
-     * Gets the SceneModel's local translation.
+     * The SceneModel's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      *
      * Default value is ````[0,0,0]````.
      *
      * @type {number[]}
      */
-    get position(): number[];
+    rotation: number[];
 
     /**
-     * Sets the SceneModel's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @type {number[]}
-     */
-    set rotation(value: number[]);
-
-    /**
-     * Gets the SceneModel's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @type {number[]}
-     */
-    get rotation(): number[];
-
-    /**
-     * Sets the SceneModel's local rotation quaternion.
+     * The SceneModel's local rotation quaternion.
      *
      * Default value is ````[0,0,0,1]````.
      *
      * @type {number[]}
      */
-    set quaternion(value: number[]);
+    quaternion: number[];
 
     /**
-     * Gets the VBOSceneModels's local rotation quaternion.
-     *
-     * Default value is ````[0,0,0,1]````.
-     *
-     * @type {number[]}
-     */
-    get quaternion(): number[];
-
-    /**
-     * Sets the SceneModel's local scale.
+     * The SceneModel's local scale.
      *
      * Default value is ````[1,1,1]````.
      *
      * @type {number[]}
      * @deprecated
      */
-    set scale(value: number[]);
+    scale: number[];
 
     /**
-     * Gets the SceneModel's local scale.
-     *
-     * Default value is ````[1,1,1]````.
-     *
-     * @type {number[]}
-     */
-    get scale(): number[];
-
-    /**
-     * Sets the SceneModel's local modeling transform matrix.
+     * The SceneModel's local modeling transform matrix.
      *
      * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
      *
      * @type {number[]}
      */
-    set matrix(value: number[])
+    matrix: number[];
 
     /**
-     * Gets the SceneModel's local modeling transform matrix.
-     *
-     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
+     * The SceneModel's local modeling rotation transform matrix.
      *
      * @type {number[]}
      */
-    get matrix(): number[];
+    readonly rotationMatrix: number[];
 
     /**
-     * Gets the SceneModel's local modeling rotation transform matrix.
-     *
-     * @type {number[]}
-     */
-    get rotationMatrix(): number[];
-
-    /**
-     * Gets the conjugate of the SceneModel's local modeling rotation transform matrix.
+     * The conjugate of the SceneModel's local modeling rotation transform matrix.
      *
      * This is used for RTC view matrix management in renderers.
      *
      * @type {Number[]}
      */
-    get rotationMatrixConjugate(): number[];
+    readonly rotationMatrixConjugate: number[];
 
     /**
-     * Gets the SceneModel's World matrix.
+     * The SceneModel's World matrix.
      *
      * @type {number[]}
      */
-    get worldMatrix(): number[];
+    readonly worldMatrix: number[];
 
     /**
-     * Gets the SceneModel's World normal matrix.
+     * The SceneModel's World normal matrix.
      *
      * @type {number[]}
      */
-    get worldNormalMatrix(): number[];
+    readonly worldNormalMatrix: number[];
 
     /**
-     * Sets if backfaces are rendered for this SceneModel.
-     *
-     * Default is ````false````.
-     *
-     * @type {Boolean}
-     */
-    get backfaces(): boolean;
-
-    /**
-     * Sets if backfaces are rendered for this SceneModel.
+     * Whether backfaces are rendered for this SceneModel.
      *
      * Default is ````false````.
      *
@@ -233,20 +179,20 @@ export declare class SceneModel extends Component {
      *
      * @type {Boolean}
      */
-    set backfaces(backfaces: boolean);
+    backfaces: boolean;
 
     /**
-     * Gets the list of {@link SceneModelEntity}s within this SceneModel.
+     * The list of {@link SceneModelEntity}s within this SceneModel.
      *
      * @returns {SceneModelEntity[]}
      */
-    get entityList(): SceneModelEntity[];
+    readonly entityList: SceneModelEntity[];
 
     /**
      * Returns true to indicate that SceneModel is an {@link SceneModelEntity}.
      * @type {Boolean}
      */
-    get isEntity(): boolean;
+    readonly isEntity: boolean;
 
     /**
      * Returns ````true```` if this SceneModel represents a model.
@@ -256,199 +202,119 @@ export declare class SceneModel extends Component {
      *
      * @type {Boolean}
      */
-    get isModel(): boolean;
+    readonly isModel: boolean;
 
     /**
      * Returns ````false```` to indicate that SceneModel never represents an object.
      *
      * @type {Boolean}
      */
-    get isObject(): boolean;
+    readonly isObject: boolean;
 
     /**
-     * Gets the SceneModel's World-space 3D axis-aligned bounding box.
+     * The SceneModel's World-space 3D axis-aligned bounding box.
      *
      * Represented by a six-element Float64Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
      * @type {number[]}
      */
-    get aabb(): number[];
+    readonly aabb: number[];
 
     /**
      * The approximate number of triangle primitives in this SceneModel.
      *
      * @type {number}
      */
-    get numTriangles(): number;
+    readonly numTriangles: number;
 
     /**
      * The approximate number of line primitives in this SceneModel.
      *
      * @type {number}
      */
-    get numLines(): number;
+    readonly numLines: number;
 
     /**
      * The approximate number of point primitives in this SceneModel.
      *
      * @type {number}
      */
-    get numPoints(): number;
+    readonly numPoints: number;
 
     /**
-     * Gets if any {@link SceneModelEntity}s in this SceneModel are visible.
+     * Whether this SceneModel is visible.
      *
      * The SceneModel is only rendered when {@link SceneModel.visible} is ````true```` and {@link SceneModel.culled} is ````false````.
      *
      * @type {Boolean}
      */
-    get visible(): boolean;
+    visible: boolean;
 
     /**
-     * Sets if this SceneModel is visible.
-     *
-     * The SceneModel is only rendered when {@link SceneModel.visible} is ````true```` and {@link SceneModel.culled} is ````false````.
-     **
-     * @type {Boolean}
-     */
-    set visible(visible: boolean);
-
-    /**
-     * Gets if any {@link SceneModelEntity}s in this SceneModel are xrayed.
+     * Whether any {@link SceneModelEntity}s in this SceneModel are xrayed.
      *
      * @type {Boolean}
      */
-    get xrayed(): boolean
+    xrayed: boolean;
 
     /**
-     * Sets if all {@link SceneModelEntity}s in this SceneModel are xrayed.
+     * Whether any {@link SceneModelEntity}s in this SceneModel are highlighted.
      *
      * @type {Boolean}
      */
-    set xrayed(xrayed: boolean);
+    highlighted: boolean;
 
     /**
-     * Gets if any {@link SceneModelEntity}s in this SceneModel are highlighted.
+     * Whether any {@link SceneModelEntity}s in this SceneModel are selected.
      *
      * @type {Boolean}
      */
-    get highlighted(): boolean;
+    selected: boolean;
 
     /**
-     * Sets if all {@link SceneModelEntity}s in this SceneModel are highlighted.
+     * Whether any {@link SceneModelEntity}s in this SceneModel have edges emphasised.
      *
      * @type {Boolean}
      */
-    set highlighted(highlighted: boolean);
+    edges: boolean;
 
     /**
-     * Gets if any {@link SceneModelEntity}s in this SceneModel are selected.
-     *
-     * @type {Boolean}
-     */
-    get selected(): boolean;
-
-    /**
-     * Sets if all {@link SceneModelEntity}s in this SceneModel are selected.
-     *
-     * @type {Boolean}
-     */
-    set selected(selected: boolean);
-
-    /**
-     * Gets if any {@link SceneModelEntity}s in this SceneModel have edges emphasised.
-     *
-     * @type {Boolean}
-     */
-    get edges(): boolean;
-
-    /**
-     * Sets if all {@link SceneModelEntity}s in this SceneModel have edges emphasised.
-     *
-     * @type {Boolean}
-     */
-    set edges(edges: boolean);
-
-    /**
-     * Gets if this SceneModel is culled from view.
+     * Whether this SceneModel is culled from view.
      *
      * The SceneModel is only rendered when {@link SceneModel.visible} is true and {@link SceneModel.culled} is false.
      *
      * @type {Boolean}
      */
-    get culled(): boolean;
+    culled: boolean;
 
     /**
-     * Sets if this SceneModel is culled from view.
-     *
-     * The SceneModel is only rendered when {@link SceneModel.visible} is true and {@link SceneModel.culled} is false.
-     *
-     * @type {Boolean}
-     */
-    set culled(culled: boolean);
-
-    /**
-     * Gets if {@link SceneModelEntity}s in this SceneModel are clippable.
+     * Whether {@link SceneModelEntity}s in this SceneModel are clippable.
      *
      * Clipping is done by the {@link SectionPlane}s in {@link Scene.sectionPlanes}.
      *
      * @type {Boolean}
      */
-    get clippable(): boolean;
+    clippable: boolean;
 
     /**
-     * Sets if {@link SceneModelEntity}s in this SceneModel are clippable.
-     *
-     * Clipping is done by the {@link SectionPlane}s in {@link Scene.sectionPlanes}.
+     * Whether {@link SceneModelEntity}s in this SceneModel are collidable.
      *
      * @type {Boolean}
      */
-    set clippable(clippable: boolean);
+    collidable: boolean;
 
     /**
-     * Gets if this SceneModel is collidable.
-     *
-     * @type {Boolean}
-     */
-    get collidable(): boolean;
-
-    /**
-     * Sets if {@link SceneModelEntity}s in this SceneModel are collidable.
-     *
-     * @type {Boolean}
-     */
-    set collidable(collidable: boolean);
-
-    /**
-     * Gets if this SceneModel is pickable.
+     * Whether {@link SceneModelEntity}s in this SceneModel are pickable.
      *
      * Picking is done via calls to {@link Scene.pick}.
      *
      * @type {Boolean}
      */
-    get pickable(): boolean;
+    pickable: boolean;
 
     /**
-     * Sets if {@link SceneModelEntity}s in this SceneModel are pickable.
-     *
-     * Picking is done via calls to {@link Scene.pick}.
-     *
-     * @type {Boolean}
-     */
-    set pickable(pickable: boolean);
-
-    /**
-     * Gets the RGB colorize color for this SceneModel.
-     *
-     * Each element of the color is in range ````[0..1]````.
-     *
-     * @type {number[]}
-     */
-    get colorize(): number[];
-
-    /**
-     * Sets the RGB colorize color for this SceneModel.
+     * The RGB colorize color for this SceneModel.
      *
      * Multiplies by rendered fragment colors.
      *
@@ -456,56 +322,33 @@ export declare class SceneModel extends Component {
      *
      * @type {number[]}
      */
-    set colorize(colorize: number[]);
+    colorize: number[];
 
     /**
-     * Gets this SceneModel's opacity factor.
+     * The opacity factor for this SceneModel.
      *
      * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
      *
      * @type {number}
      */
-    get opacity(): number;
+    opacity: number;
 
     /**
-     * Sets the opacity factor for this SceneModel.
-     *
-     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
-     *
-     * @type {number}
-     */
-    set opacity(opacity: number);
-
-    /**
-     * Gets if this SceneModel casts a shadow.
+     * Whether this SceneModel casts a shadow.
      *
      * @type {Boolean}
      */
-    get castsShadow(): boolean;
+    castsShadow: boolean;
 
     /**
-     * Sets if this SceneModel casts a shadow.
+     * Whether this SceneModel can have shadow cast upon it.
      *
      * @type {Boolean}
      */
-    set castsShadow(castsShadow: boolean);
+    receivesShadow: boolean;
 
     /**
-     * Sets if this SceneModel can have shadow cast upon it.
-     *
-     * @type {Boolean}
-     */
-    get receivesShadow(): boolean;
-
-    /**
-     * Sets if this SceneModel can have shadow cast upon it.
-     *
-     * @type {Boolean}
-     */
-    set receivesShadow(receivesShadow: boolean);
-
-    /**
-     * Gets if Scalable Ambient Obscurance (SAO) will apply to this SceneModel.
+     * Whether Scalable Ambient Obscurance (SAO) will apply to this SceneModel.
      *
      * SAO is configured by the Scene's {@link SAO} component.
      *
@@ -513,32 +356,32 @@ export declare class SceneModel extends Component {
      *
      * @type {Boolean}
      */
-    get saoEnabled(): boolean;
+    readonly saoEnabled: boolean;
 
     /**
-     * Gets if physically-based rendering (PBR) is enabled for this SceneModel.
+     * Whether physically-based rendering (PBR) is enabled for this SceneModel.
      *
      * Only works when {@link Scene.pbrEnabled} is also true.
      *
      * @type {Boolean}
      */
-    get pbrEnabled(): boolean;
+    readonly pbrEnabled: boolean;
 
     /**
-     * Gets if color textures are enabled for this SceneModel.
+     * Whether color textures are enabled for this SceneModel.
      *
      * Only works when {@link Scene#colorTextureEnabled} is also true.
      *
      * @type {Boolean}
      */
-    get colorTextureEnabled(): boolean;
+    readonly colorTextureEnabled: boolean;
 
     /**
      * Returns true to indicate that SceneModel is implements {@link Drawable}.
      *
      * @type {Boolean}
      */
-    get isDrawable(): boolean;
+    readonly isDrawable: boolean;
 
     /**
      * Configures the appearance of xrayed {@link SceneModelEntity}s within this SceneModel.
@@ -547,7 +390,7 @@ export declare class SceneModel extends Component {
      *
      * @type {EmphasisMaterial}
      */
-    get xrayMaterial(): EmphasisMaterial;
+    readonly xrayMaterial: EmphasisMaterial;
 
     /**
      * Configures the appearance of highlighted {@link SceneModelEntity}s within this SceneModel.
@@ -556,7 +399,7 @@ export declare class SceneModel extends Component {
      *
      * @type {EmphasisMaterial}
      */
-    get highlightMaterial(): EmphasisMaterial;
+    readonly highlightMaterial: EmphasisMaterial;
 
     /**
      * Configures the appearance of selected {@link SceneModelEntity}s within this SceneModel.
@@ -565,7 +408,7 @@ export declare class SceneModel extends Component {
      *
      * @type {EmphasisMaterial}
      */
-    get selectedMaterial(): EmphasisMaterial;
+    readonly selectedMaterial: EmphasisMaterial;
 
     /**
      * Configures the appearance of edges of {@link SceneModelEntity}s within this SceneModel.
@@ -574,7 +417,7 @@ export declare class SceneModel extends Component {
      *
      * @type {EdgeMaterial}
      */
-    get edgeMaterial(): EdgeMaterial;
+    readonly edgeMaterial: EdgeMaterial;
 
     /**
      *

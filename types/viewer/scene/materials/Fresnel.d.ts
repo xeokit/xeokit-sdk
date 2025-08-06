@@ -24,85 +24,45 @@ export declare class Fresnel extends Component {
     constructor(owner: Component, cfg?: FresnelMaterialConfiguration);
 
     /**
-     * Sets the Fresnel's edge color.
+     * Fresnel's edge color.
      *
      * Default value is ````[0.0, 0.0, 0.0]````.
      *
      * @type {Number[]}
      */
-    set edgeColor(arg: number[]);
+    edgeColor: number[];
     /**
-     * Gets the Fresnel's edge color.
-     *
-     * Default value is ````[0.0, 0.0, 0.0]````.
-     *
-     * @type {Number[]}
-     */
-    get edgeColor(): number[];
-    /**
-     * Sets the Fresnel's center color.
+     * Fresnel's center color.
      *
      * Default value is ````[1.0, 1.0, 1.0]````.
      *
      * @type {Number[]}
      */
-    set centerColor(arg: number[]);
+    centerColor: number[];
     /**
-     * Gets the Fresnel's center color.
-     *
-     * Default value is ````[1.0, 1.0, 1.0]````.
-     *
-     * @type {Number[]}
-     */
-    get centerColor(): number[];
-    /**
-     * Sets the Fresnel's edge bias.
+     * Fresnel's edge bias.
      *
      * Default value is ````0````.
      *
      * @type {Number}
      */
-    set edgeBias(arg: number);
+    edgeBias: number;
     /**
-     * Gets the Fresnel's edge bias.
-     *
-     * Default value is ````0````.
-     *
-     * @type {Number}
-     */
-    get edgeBias(): number;
-    /**
-     * Sets the Fresnel's center bias.
+     * Fresnel's center bias.
      *
      * Default value is ````1````.
      *
      * @type {Number}
      */
-    set centerBias(arg: number);
+    centerBias: number;
     /**
-     * Gets the Fresnel's center bias.
+     * Fresnel's power.
      *
      * Default value is ````1````.
      *
      * @type {Number}
      */
-    get centerBias(): number;
-    /**
-     * Sets the Fresnel's power.
-     *
-     * Default value is ````1````.
-     *
-     * @type {Number}
-     */
-    set power(arg: number);
-    /**
-     * Gets the Fresnel's power.
-     *
-     * Default value is ````1````.
-     *
-     * @type {Number}
-     */
-    get power(): number;
+    power: number;
 
     /**
      * Destroys this Fresnel.

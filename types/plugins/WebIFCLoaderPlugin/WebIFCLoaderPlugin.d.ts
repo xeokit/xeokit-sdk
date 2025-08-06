@@ -14,9 +14,7 @@ import { ModelStats } from "../index";
    */
   getIFC(src: string | number, ok: (buffer: ArrayBuffer)=> void, error: (e: Error)=> void): void;
   
-  get cacheBuster(): boolean;
-
-  set cacheBuster(value: boolean);
+  cacheBuster: boolean;
 }
 
 export declare type WebIFCLoaderPluginConfiguration = {
@@ -84,43 +82,25 @@ export declare class WebIFCLoaderPlugin extends Plugin {
   constructor(viewer: Viewer, cfg?: WebIFCLoaderPluginConfiguration);
 
   /**
-   * Sets a custom data source through which the WebIFCLoaderPlugin can load IFC files.
+   * Custom data source through which the WebIFCLoaderPlugin can load IFC files.
    *
    * Default value is {@link WebIFCDefaultDataSource}, which loads via HTTP.
    *
    * @type {Object}
    */
-  set dataSource(arg: IWebIFCDefaultDataSource);
+  dataSource: IWebIFCDefaultDataSource;
 
   /**
-   * Gets the custom data source through which the WebIFCLoaderPlugin can load IFC files.
-   *
-   * Default value is {@link WebIFCDefaultDataSource}, which loads via HTTP.
-   *
-   * @type {Object}
-   */
-  get dataSource(): IWebIFCDefaultDataSource;
-
-  /**
-   * Sets map of initial default states for each loaded {@link Entity} that represents an object.
+   * Map of initial default states for each loaded {@link Entity} that represents an object.
    *
    * Default value is {@link IFCObjectDefaults}.
    *
    * @type {IFCObjectDefaults}
    */
-  set objectDefaults(arg: IFCObjectDefaults);
+  objectDefaults: IFCObjectDefaults;
 
   /**
-   * Gets map of initial default states for each loaded {@link Entity} that represents an object.
-   *
-   * Default value is {@link IFCObjectDefaults}.
-   *
-   * @type {IFCObjectDefaults}
-   */
-  get objectDefaults(): IFCObjectDefaults;
-
-  /**
-   * Sets the whitelist of the IFC types loaded by this WebIFCLoaderPlugin.
+   * Whitelist of the IFC types loaded by this WebIFCLoaderPlugin.
    *
    * When loading IFC models, causes this WebIFCLoaderPlugin to only load objects whose types are in this
    * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
@@ -129,34 +109,10 @@ export declare class WebIFCLoaderPlugin extends Plugin {
    *
    * @type {String[]}
    */
-  set includeTypes(arg: string[]);
+  includeTypes: string[];
 
   /**
-   * Gets the whitelist of the IFC types loaded by this WebIFCLoaderPlugin.
-   *
-   * When loading IFC models, causes this WebIFCLoaderPlugin to only load objects whose types are in this
-   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
-   *
-   * Default value is ````undefined````.
-   *
-   * @type {String[]}
-   */
-  get includeTypes(): string[];
-
-  /**
-   * Sets the blacklist of IFC types that are never loaded by this WebIFCLoaderPlugin.
-   *
-   * When IFC models, causes this WebIFCLoaderPlugin to **not** load objects whose types are in this
-   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
-   *
-   * Default value is ````undefined````.
-   *
-   * @type {String[]}
-   */
-  set excludeTypes(arg: string[]);
-
-  /**
-   * Gets the blacklist of IFC types that are never loaded by this WebIFCLoaderPlugin.
+   * Blacklist of IFC types that are never loaded by this WebIFCLoaderPlugin.
    *
    * When loading IFC models, causes this WebIFCLoaderPlugin to **not** load objects whose types are in this
    * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
@@ -165,10 +121,10 @@ export declare class WebIFCLoaderPlugin extends Plugin {
    *
    * @type {String[]}
    */
-  get excludeTypes(): string[];
+  excludeTypes: string[];
 
   /**
-   * Sets whether we load objects that don't have IFC types.
+   * Whether to load objects that don't have IFC types.
    *
    * When loading IFC models and this is ````true````, WebIFCLoaderPlugin will not load objects
    * that don't have IFC types.
@@ -177,33 +133,21 @@ export declare class WebIFCLoaderPlugin extends Plugin {
    *
    * @type {Boolean}
    */
-  set excludeUnclassifiedObjects(arg: boolean);
+  excludeUnclassifiedObjects: boolean;
 
   /**
-   * Gets whether we load objects that don't have IFC types.
-   *
-   * When loading IFC models and this is ````true````, WebIFCLoaderPlugin will not load objects
-   * that don't have IFC types.
-   *
-   * Default value is ````false````.
-   *
-   * @type {Boolean}
+   * The ````IFC```` format versions supported by this WebIFCLoaderPlugin.
+   * @type {string[]}
    */
-  get excludeUnclassifiedObjects(): boolean;
+  readonly supportedVersions: string[];
 
   /**
-   * Gets the ````IFC```` format versions supported by this WebIFCLoaderPlugin.
-   * @returns {string[]}
-   */
-  get supportedVersions(): string[];
-
-  /**
-   * Sets whether WebIFCLoaderPlugin globalizes each {@link Entity.id} and {@link MetaObject.id} as it loads a model.
+   * Whether WebIFCLoaderPlugin globalizes each {@link Entity.id} and {@link MetaObject.id} as it loads a model.
    *
-   * Set  this ````true```` when you need to load multiple instances of the same model, to avoid ID clashes
+   * Set this ````true```` when you need to load multiple instances of the same model, to avoid ID clashes
    * between the objects in the different instances.
    *
-   * When we load a model with this set ````true````, then each {@link Entity.id} and {@link MetaObject.id} will be
+   * When loading a model with this set ````true````, then each {@link Entity.id} and {@link MetaObject.id} will be
    * prefixed by the ID of the model, ie. ````<modelId>.<objectId>````.
    *
    * {@link Entity.originalSystemId} and {@link MetaObject.originalSystemId} will always hold the original, un-prefixed, ID values.
@@ -214,16 +158,7 @@ export declare class WebIFCLoaderPlugin extends Plugin {
    *
    * @type {Boolean}
    */
-  set globalizeObjectIds(arg: boolean);
-
-  /**
-   * Gets whether WebIFCLoaderPlugin globalizes each {@link Entity.id} and {@link MetaObject.id} as it loads a model.
-   *
-   * Default value is ````false````.
-   *
-   * @type {Boolean}
-   */
-  get globalizeObjectIds(): boolean;
+  globalizeObjectIds: boolean;
 
   /**
    * Loads an ````IFC```` model into this WebIFCLoaderPlugin's {@link Viewer}.

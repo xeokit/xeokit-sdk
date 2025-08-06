@@ -17,7 +17,7 @@ export declare abstract class SceneModelEntity implements Entity {
      * @type {number|string}
      * @abstract
      */
-    get id(): string;
+    readonly id: string;
 
     /**
      * ID of the corresponding object within the originating system, if any.
@@ -29,14 +29,14 @@ export declare abstract class SceneModelEntity implements Entity {
      *
      * @type {string}
      */
-    get originalSystemId(): string;
+    readonly originalSystemId: string;
 
     /**
      * Returns true to indicate that this is an SceneModelEntity.
      *
      * @returns {Boolean}
      */
-    get isEntity(): boolean;
+    readonly isEntity: boolean;
 
     /**
      * Returns ````true```` if this SceneModelEntity represents a model.
@@ -47,7 +47,7 @@ export declare abstract class SceneModelEntity implements Entity {
      * @type {Boolean}
      * @abstract
      */
-    get isModel(): boolean;
+    readonly isModel: boolean;
 
     /**
      * Returns ````true```` if this SceneModelEntity represents an object.
@@ -58,26 +58,18 @@ export declare abstract class SceneModelEntity implements Entity {
      * @type {Boolean}
      * @abstract
      */
-    get isObject(): boolean;
+    readonly isObject: boolean;
 
     /** Returns the parent SceneModelEntity, if any. */
-    get parent(): void;
+    readonly parent: void;
 
     /**
-     * Sets the 3D World-space origin for this SceneModelEntity.
+     * The 3D World-space origin for this SceneModelEntity.
      *
      * @type {Float64Array}
      * @abstract
      */
-    set origin(arg: Float64Array);
-
-    /**
-     * Gets the 3D World-space origin for this SceneModelEntity.
-     *
-     * @type {Float64Array}
-     * @abstract
-     */
-    get origin(): Float64Array;
+    origin: Float64Array;
 
     /**
      * World-space 3D axis-aligned bounding box (AABB) of this SceneModelEntity.
@@ -88,12 +80,12 @@ export declare abstract class SceneModelEntity implements Entity {
      * @type {Float64Array}
      * @abstract
      */
-    get aabb(): number[];
+    readonly aabb: number[];
 
     /**
      * The approximate number of primitives in this SceneModelEntity
      */
-    get numPrimitives(): number;
+    readonly numPrimitives: number;
 
     /**
      * The approximate number of triangles in this SceneModelEntity.
@@ -101,10 +93,10 @@ export declare abstract class SceneModelEntity implements Entity {
      * @type {number}
      * @abstract
      */
-    get numTriangles(): number;
+    readonly numTriangles: number;
 
     /**
-     * Sets if this SceneModelEntity is visible.
+     * Whether this SceneModelEntity is visible.
      *
      * Only rendered when {@link SceneModelEntity.visible} is ````true```` and {@link SceneModelEntity.culled} is ````false````.
      *
@@ -114,23 +106,10 @@ export declare abstract class SceneModelEntity implements Entity {
      * @type {Boolean}
      * @abstract
      */
-    set visible(arg: boolean);
+    visible: boolean;
 
     /**
-     * Gets if this SceneModelEntity is visible.
-     *
-     * Only rendered when {@link SceneModelEntity.visible} is ````true```` and {@link SceneModelEntity.culled} is ````false````.
-     *
-     * When {@link SceneModelEntity.isObject} and {@link SceneModelEntity.visible} are both ````true```` the SceneModelEntity will be
-     * registered by {@link SceneModelEntity.id} in {@link Scene.visibleObjects}.
-     *
-     * @type {Boolean}
-     * @abstract
-     */
-    get visible(): boolean;
-
-    /**
-     * Sets if this SceneModelEntity is xrayed.
+     * Whether this SceneModelEntity is xrayed.
      *
      * When {@link SceneModelEntity.isObject} and {@link SceneModelEntity.xrayed} are both ````true``` the SceneModelEntity will be
      * registered by {@link SceneModelEntity.id} in {@link Scene.xrayedObjects}.
@@ -138,21 +117,10 @@ export declare abstract class SceneModelEntity implements Entity {
      * @type {Boolean}
      * @abstract
      */
-    set xrayed(arg: boolean);
+    xrayed: boolean;
 
     /**
-     * Gets if this SceneModelEntity is xrayed.
-     *
-     * When {@link SceneModelEntity.isObject} and {@link SceneModelEntity.xrayed} are both ````true``` the SceneModelEntity will be
-     * registered by {@link SceneModelEntity.id} in {@link Scene.xrayedObjects}.
-     *
-     * @type {Boolean}
-     * @abstract
-     */
-    get xrayed(): boolean;
-
-    /**
-     * Sets if this SceneModelEntity is highlighted.
+     * Whether this SceneModelEntity is highlighted.
      *
      * When {@link SceneModelEntity.isObject} and {@link SceneModelEntity.highlighted} are both ````true```` the SceneModelEntity will be
      * registered by {@link SceneModelEntity.id} in {@link Scene.highlightedObjects}.
@@ -160,21 +128,10 @@ export declare abstract class SceneModelEntity implements Entity {
      * @type {Boolean}
      * @abstract
      */
-    set highlighted(arg: boolean);
+    highlighted: boolean;
 
     /**
-     * Gets if this SceneModelEntity is highlighted.
-     *
-     * When {@link SceneModelEntity.isObject} and {@link SceneModelEntity.highlighted} are both ````true```` the SceneModelEntity will be
-     * registered by {@link SceneModelEntity.id} in {@link Scene.highlightedObjects}.
-     *
-     * @type {Boolean}
-     * @abstract
-     */
-    get highlighted(): boolean;
-
-    /**
-     * Sets if this SceneModelEntity is selected.
+     * Whether this SceneModelEntity is selected.
      *
      * When {@link SceneModelEntity.isObject} and {@link SceneModelEntity.selected} are both ````true``` the SceneModelEntity will be
      * registered by {@link SceneModelEntity.id} in {@link Scene.selectedObjects}.
@@ -182,229 +139,121 @@ export declare abstract class SceneModelEntity implements Entity {
      * @type {Boolean}
      * @abstract
      */
-    set selected(arg: boolean);
+    selected: boolean;
 
     /**
-     * Gets if this SceneModelEntity is selected.
-     *
-     * When {@link SceneModelEntity.isObject} and {@link SceneModelEntity.selected} are both ````true``` the SceneModelEntity will be
-     * registered by {@link SceneModelEntity.id} in {@link Scene.selectedObjects}.
+     * Whether this SceneModelEntity's edges are enhanced.
      *
      * @type {Boolean}
      * @abstract
      */
-    get selected(): boolean;
+    edges: boolean;
 
     /**
-     * Sets if this SceneModelEntity's edges are enhanced.
-     *
-     * @type {Boolean}
-     * @abstract
+     * Whether View Frustum Culling is enabled
      */
-    set edges(arg: boolean);
+    culledVFC: boolean;
 
     /**
-     * Gets if this SceneModelEntity's edges are enhanced.
-     *
-     * @type {Boolean}
-     * @abstract
+     * Whether Level of Detail Culling is enabled
      */
-    get edges(): boolean;
+    culledLOD: boolean;
 
     /**
-     * Toggle View Frustum Culling
-     */
-    set culledVFC(arg: boolean);
-
-    /**
-     * Gets View Frustum Culling
-     */
-    get culledVFC(): boolean;
-
-    /**
-     * Toggle Level of Detail Culling
-     */
-    set culledLOD(arg: boolean);
-
-    /**
-     * Gets level of detail culling
-     */
-    get culledLOD(): boolean;
-
-    /**
-     * Sets if this SceneModelEntity is culled.
+     * Whether this SceneModelEntity is culled.
      *
      * Only rendered when {@link SceneModelEntity.visible} is ````true```` and {@link SceneModelEntity.culled} is ````false````.
      *
      * @type {Boolean}
      * @abstract
      */
-    set culled(arg: boolean);
+    culled: boolean;
 
     /**
-     * Gets if this SceneModelEntity is culled.
-     *
-     * Only rendered when {@link SceneModelEntity.visible} is ````true```` and {@link SceneModelEntity.culled} is ````false````.
-     *
-     * @type {Boolean}
-     * @abstract
-     */
-    get culled(): boolean;
-
-    /**
-     * Sets if this SceneModelEntity is clippable.
+     * Whether this SceneModelEntity is clippable.
      *
      * Clipping is done by the {@link SectionPlane}s in {@link Scene.sectionPlanes}.
      *
      * @type {Boolean}
      * @abstract
      */
-    set clippable(arg: boolean);
+    clippable: boolean;
 
     /**
-     * Gets if this SceneModelEntity is clippable.
-     *
-     * Clipping is done by the {@link SectionPlane}s in {@link Scene.sectionPlanes}.
+     * Whether this SceneModelEntity is included in boundary calculations.
      *
      * @type {Boolean}
      * @abstract
      */
-    get clippable(): boolean;
+    collidable: boolean;
 
     /**
-     * Sets if this SceneModelEntity is included in boundary calculations.
-     *
-     * @type {Boolean}
-     * @abstract
-     */
-    set collidable(arg: boolean);
-
-    /**
-     * Gets if this SceneModelEntity is included in boundary calculations.
-     *
-     * @type {Boolean}
-     * @abstract
-     */
-    get collidable(): boolean;
-
-    /**
-     * Sets if this SceneModelEntity is pickable.
+     * Whether this SceneModelEntity is pickable.
      *
      * Picking is done via calls to {@link Scene.pick}.
      *
      * @type {Boolean}
      * @abstract
      */
-    set pickable(arg: boolean);
+    pickable: boolean;
 
     /**
-     * Gets if this SceneModelEntity is pickable.
-     *
-     * Picking is done via calls to {@link Scene.pick}.
-     *
-     * @type {Boolean}
-     * @abstract
-     */
-    get pickable(): boolean;
-
-    /**
-     * Sets the SceneModelEntity's RGB colorize color, multiplies by the SceneModelEntity's rendered fragment colors.
+     * The SceneModelEntity's RGB colorize color, multiplies by the SceneModelEntity's rendered fragment colors.
      *
      * Each element of the color is in range ````[0..1]````.
      *
      * @type {number[]}
      * @abstract
      */
-    set colorize(arg: number[]);
+    colorize: number[];
 
     /**
-     * Gets the SceneModelEntity's RGB colorize color, multiplies by the SceneModelEntity's rendered fragment colors.
-     *
-     * Each element of the color is in range ````[0..1]````.
-     *
-     * @type {number[]}
-     * @abstract
-     */
-    get colorize(): number[];
-
-    /**
-     * Sets the SceneModelEntity's opacity factor, multiplies by the SceneModelEntity's rendered fragment alphas.
+     * The SceneModelEntity's opacity factor, multiplies by the SceneModelEntity's rendered fragment alphas.
      *
      * This is a factor in range ````[0..1]````.
      *
      * @type {number}
      * @abstract
      */
-    set opacity(arg: number);
+    opacity: number;
 
     /**
-     * Gets the SceneModelEntity's opacity factor.
-     *
-     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
-     *
-     * @type {number}
-     * @abstract
-     */
-    get opacity(): number;
-
-    /**
-     * Sets if this SceneModelEntity casts shadows.
+     * Whether this SceneModelEntity casts shadows.
      *
      * @type {Boolean}
      * @abstract
      */
-    set castsShadow(arg: boolean);
+    castsShadow: boolean;
 
     /**
-     * Gets if this SceneModelEntity casts shadows.
+     * Whether this SceneModelEntity can have shadows cast upon it
      *
      * @type {Boolean}
      * @abstract
      */
-    get castsShadow(): boolean;
+    receivesShadow: boolean;
 
     /**
-     * Sets if to this SceneModelEntity can have shadows cast upon it
-     *
-     * @type {Boolean}
-     * @abstract
-     */
-    set receivesShadow(arg: boolean);
-
-    /**
-     * Gets if this SceneModelEntity can have shadows cast upon it
-     *
-     * @type {Boolean}
-     * @abstract
-     */
-    get receivesShadow(): boolean;
-
-    /**
-     * Gets if this SceneModelEntity can have Scalable Ambient Obscurance (SAO) applied to it.
+     * Whether this SceneModelEntity can have Scalable Ambient Obscurance (SAO) applied to it.
      *
      * SAO is configured by {@link SAO}.
      *
      * @type {Boolean}
      * @abstract
      */
-    get saoEnabled(): boolean;
+    readonly saoEnabled: boolean;
 
     /**
-     * Sets the material for this SceneModelEntity that will be used on the caps 
+     * The material for this SceneModelEntity that will be used on the caps 
      * when the objects of this entity are sliced
      * 
      * If there is no capMaterial attached to a SceneModelEntity then its objects
      * will not be capped when sliced
      */
-    set capMaterial(value: Material);
+    capMaterial: Material;
 
     /**
-     * Gets the cap material attached to this SceneModelEntity
-     */
-    get capMaterial(): Material;
-
-    /**
-     * Sets the SceneModelEntity's 3D World-space offset.
+     * The SceneModelEntity's 3D World-space offset.
      *
      * Since offsetting Entities comes with memory and rendering overhead on some systems, this feature
      * only works when {@link Viewer} is configured with ````entityOffsetsEnabled: true````.
@@ -419,17 +268,7 @@ export declare abstract class SceneModelEntity implements Entity {
      * @abstract
      * @type {number[]}
      */
-    set offset(arg: number[]);
-
-    /**
-     * Gets the SceneModelEntity's 3D World-space offset.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @abstract
-     * @type {number[]}
-     */
-    get offset(): number[];
+    offset: number[];
 
     /**
      * Gets the World, View and Canvas-space positions of each vertex in a callback.
@@ -456,17 +295,17 @@ export declare abstract class SceneModelEntity implements Entity {
      *
      * @returns {number}
      */
-    get volume(): number;
+    readonly volume: number;
 
     /**
-     * Returns the surface area of this SceneModelEntity.
+     * The surface area of this SceneModelEntity.
      *
      * Only works when {@link Scene.readableGeometryEnabled | Scene.readableGeometryEnabled} is `true` and the
      * SceneModelEntity contains triangle meshes; returns `0` otherwise.
      *
      * @returns {number}
      */
-    get surfaceArea(): number;
+    readonly surfaceArea: number;
 
     /**
      * The {@link SceneModel} to which this SceneModelEntity belongs.

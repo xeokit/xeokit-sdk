@@ -103,9 +103,7 @@ export declare interface IXKTDefaultDataSource {
      */
     getXKT(src: string | number, ok: (buffer: ArrayBuffer) => void, error: (e: Error) => void): void;
 
-    get cacheBuster(): boolean;
-
-    set cacheBuster(value: boolean);
+    cacheBuster: boolean;
 }
 
 /**
@@ -122,39 +120,23 @@ export declare class XKTLoaderPlugin extends Plugin {
     constructor(viewer: Viewer, cfg?: XKTLoaderPluginConfiguration);
 
     /**
-     * Sets a custom data source through which the XKTLoaderPlugin can load models and metadata.
+     * Custom data source through which the XKTLoaderPlugin can load models and metadata.
      *
      * Default value is {@link XKTDefaultDataSource}, which loads via HTTP.
      *
      * @type {IXKTDefaultDataSource}
      */
-    set dataSource(arg: IXKTDefaultDataSource);
+    dataSource: IXKTDefaultDataSource;
 
     /**
-     * Gets the custom data source through which the XKTLoaderPlugin can load models and metadata.
-     *
-     * Default value is {@link XKTDefaultDataSource}, which loads via HTTP.
-     *
-     * @type {IXKTDefaultDataSource}
-     */
-    get dataSource(): IXKTDefaultDataSource;
-
-    /**
-     * Sets map of initial default states for each loaded {@link Entity} that represents an object.
+     * Map of initial default states for each loaded {@link Entity} that represents an object.
      *
      * @type {IFCObjectDefaults}
      */
-    set objectDefaults(arg: IFCObjectDefaults);
+    objectDefaults: IFCObjectDefaults;
 
     /**
-     * Gets map of initial default states for each loaded {@link Entity} that represents an object.
-     *
-     * @type {IFCObjectDefaults}
-     */
-    get objectDefaults(): IFCObjectDefaults;
-
-    /**
-     * Sets the whitelist of the IFC types loaded by this XKTLoaderPlugin.
+     * The whitelist of the IFC types loaded by this XKTLoaderPlugin.
      *
      * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose types are in this
      * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
@@ -163,23 +145,10 @@ export declare class XKTLoaderPlugin extends Plugin {
      *
      * @type {String[]}
      */
-    set includeTypes(arg: string[]);
+    includeTypes: string[];
 
     /**
-     * Gets the whitelist of the IFC types loaded by this XKTLoaderPlugin.
-     *
-     * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose types are in this
-     * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
-     *
-     * Default value is ````undefined````.
-     *
-     * @type {String[]}
-     */
-
-    get includeTypes(): string[];
-
-    /**
-     * Sets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.
+     * The blacklist of IFC types that are never loaded by this XKTLoaderPlugin.
      *
      * When loading models with metadata, causes this XKTLoaderPlugin to **not** load objects whose types are in this
      * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
@@ -188,22 +157,10 @@ export declare class XKTLoaderPlugin extends Plugin {
      *
      * @type {String[]}
      */
-    set excludeTypes(arg: string[]);
+    excludeTypes: string[];
 
     /**
-     * Gets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.
-     *
-     * When loading models with metadata, causes this XKTLoaderPlugin to **not** load objects whose types are in this
-     * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
-     *
-     * Default value is ````undefined````.
-     *
-     * @type {String[]}
-     */
-    get excludeTypes(): string[];
-
-    /**
-     * Sets the whitelist of the specified elements by this XKTLoaderPlugin.
+     * The whitelist of the specified elements loaded by this XKTLoaderPlugin.
      *
      * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose ids are in this
      * list. An object's id is indicated by its {@link MetaObject}'s {@link MetaObject#id}.
@@ -212,22 +169,10 @@ export declare class XKTLoaderPlugin extends Plugin {
      *
      * @type {String[]}
      */
-    set includeIds(arg: string[]);
+    includeIds: string[];
 
     /**
-     * Gets the whitelist of the specified elements loaded by this XKTLoaderPlugin.
-     *
-     * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose ids are in this
-     * list. An object's id is indicated by its {@link MetaObject}'s {@link MetaObject#id}.
-     *
-     * Default value is ````undefined````.
-     *
-     * @type {String[]}
-     */
-    get includeIds(): string[];
-
-    /**
-     * Sets whether we load objects that don't have IFC types.
+     * Whether to exclude objects that don't have IFC types.
      *
      * When loading models with metadata and this is ````true````, XKTLoaderPlugin will not load objects
      * that don't have IFC types.
@@ -236,22 +181,10 @@ export declare class XKTLoaderPlugin extends Plugin {
      *
      * @type {Boolean}
      */
-    set excludeUnclassifiedObjects(arg: boolean);
+    excludeUnclassifiedObjects: boolean;
 
     /**
-     * Gets whether we load objects that don't have IFC types.
-     *
-     * When loading models with metadata and this is ````true````, XKTLoaderPlugin will not load objects
-     * that don't have IFC types.
-     *
-     * Default value is ````false````.
-     *
-     * @type {Boolean}
-     */
-    get excludeUnclassifiedObjects(): boolean;
-
-    /**
-     * Sets whether XKTLoaderPlugin enables geometry reuse when loading models.
+     * Whether XKTLoaderPlugin enables geometry reuse when loading models.
      *
      * Default value is ````true````.
      *
@@ -265,27 +198,18 @@ export declare class XKTLoaderPlugin extends Plugin {
      *
      * @type {Boolean}
      */
-    set reuseGeometries(arg: boolean);
+    reuseGeometries: boolean;
 
     /**
-     * Gets whether XKTLoaderPlugin enables geometry reuse when loading models.
-     *
-     * Default value is ````true````.
-     *
-     * @type {Boolean}
+     * The ````.xkt```` format versions supported by this XKTLoaderPlugin.
+     * @type {string[]}
      */
-    get reuseGeometries(): boolean;
+    readonly supportedVersions: string[];
 
     /**
-     * Gets the ````.xkt```` format versions supported by this XKTLoaderPlugin/
-     * @returns {string[]}
-     */
-    get supportedVersions(): string[];
-
-    /**
-     * Sets whether XKTLoaderPlugin globalizes each {@link Entity.id} and {@link MetaObject.id} as it loads a model.
+     * Whether XKTLoaderPlugin globalizes each {@link Entity.id} and {@link MetaObject.id} as it loads a model.
      *
-     * Set  this ````true```` when you need to load multiple instances of the same model, to avoid ID clashes
+     * Set this ````true```` when you need to load multiple instances of the same model, to avoid ID clashes
      * between the objects in the different instances.
      *
      * When we load a model with this set ````true````, then each {@link Entity.id} and {@link MetaObject.id} will be
@@ -299,16 +223,7 @@ export declare class XKTLoaderPlugin extends Plugin {
      *
      * @type {Boolean}
      */
-    set globalizeObjectIds(arg: boolean);
-
-    /**
-     * Gets whether XKTLoaderPlugin globalizes each {@link Entity.id} and {@link MetaObject.id} as it loads a model.
-     *
-     * Default value is ````false````.
-     *
-     * @type {Boolean}
-     */
-    get globalizeObjectIds(): boolean;
+    globalizeObjectIds: boolean;
 
 
     /**

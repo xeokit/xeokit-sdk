@@ -41,90 +41,75 @@ export declare class PickResult {
 
   /**
    * Canvas coordinates when picking with a 2D pointer.
-   * @property canvasPos
-   * @type {Number[]}
    */
-  get canvasPos(): number[];
+  readonly canvasPos: number[];
 
   /**
    * World-space 3D ray origin when raypicked.
-   * @type {Number[]}
    */
-  get origin(): number[];
+  readonly origin: number[];
 
   /**
    * World-space 3D ray direction when raypicked.
-   * @type {Number[]}
    */
-  get direction(): number[];
+  readonly direction: number[];
 
   /**
    * Picked triangle's vertex indices.
    * Only defined when an entity and triangle was picked.
-   * @type {Int32Array}
    */
-  get indices(): Int32Array;
+  readonly indices: Int32Array;
 
   /**
    * Picked Local-space point on surface.
    * Only defined when an entity and a point on its surface was picked.
-   * @type {Number[]}
    */
-  get localPos(): number[];
+  readonly localPos: number[];
 
   /**
    * Canvas cursor coordinates, snapped when snap picking, otherwise same as {@link PickResult#pointerPos}.
-   * @property snappedCanvasPos
-   * @type {Number[]}
    */
-  get snappedCanvasPos(): number[];
+  readonly snappedCanvasPos: number[];
 
   /**
    * Picked World-space point on surface.
    * Only defined when an entity and a point on its surface was picked.
-   * @type {Number[]}
    */
-  get worldPos(): number[];
+  readonly worldPos: number[];
 
   /**
    * Picked View-space point on surface.
    * Only defined when an entity and a point on its surface was picked.
-   * @type {Number[]}
    */
-  get viewPos(): number[];
+  readonly viewPos: number[];
 
   /**
    * Barycentric coordinate within picked triangle.
    * Only defined when an entity and a point on its surface was picked.
-   * @type {Number[]}
    */
-  get bary(): number[];
+  readonly bary: number[];
 
   /**
    * Normal vector at picked position on surface.
    * Only defined when an entity and a point on its surface was picked.
-   * @type {Number[]}
    */
-  get worldNormal(): number[];
+  readonly worldNormal: number[];
 
   /**
    * UV coordinates at picked position on surface.
    * Only defined when an entity and a point on its surface was picked.
-   * @type {Number[]}
    */
-  get uv(): number[];
+  readonly uv: number[];
 
   /**
    * True if snapped to edge or vertex.
-   * @returns {boolean}
    */
-  get snapped(): boolean;
+  readonly snapped: boolean;
 
   /**
    * True when snapped to the nearest vertex position.
-   * @type {boolean}
    */
-  snappedToVertex : false;
+  snappedToVertex: boolean;
 
   /**
    * True when snapped to the nearest edge.

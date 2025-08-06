@@ -21,51 +21,33 @@ export declare class LinesMaterial extends Material {
    */
   constructor(owner: Component, cfg?: LinesMaterialConfiguration);
   /**
-   * Gets available LinesMaterial presets.
+   * Available LinesMaterial presets.
    *
    * @type {Object}
    */
-  get presets(): any;
+  readonly presets: any;
 
   /**
-   * Selects a preset LinesMaterial configuration.
+   * Preset LinesMaterial configuration.
    *
    * Default value is ````"default"````.
    *
    * @type {String}
    */
-  set preset(arg: string);
+  preset: string;
 
   /**
-   * The current preset LinesMaterial configuration.
-   *
-   * Default value is ````"default"````.
-   *
-   * @type {String}
-   */
-  get preset(): string;
-
-  /**
-   * Sets line width.
+   * Line width.
    *
    * Default value is ````1```` pixels.
    *
    * @type {Number}
    */
-  set lineWidth(arg: number);
-
-  /**
-   * Gets the line width.
-   *
-   * Default value is ````1```` pixels.
-   *
-   * @type {Number}
-   */
-  get lineWidth(): number;
+  lineWidth: number;
 
   /**
    * @private
    * @return {string}
    */
-  private get hash();
+  private readonly hash: string;
 }

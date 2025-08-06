@@ -15,113 +15,59 @@ export declare class Perspective extends Component {
   camera: Camera;
 
   /**
-   * Sets the Perspective's field-of-view angle (FOV).
+   * The Perspective's field-of-view angle (FOV).
    *
    * Fires an "fov" event on change.
-
-    * Default value is ````60.0````.
-    *
-    * @param {Number} value New field-of-view.
-    */
-  set fov(arg: number);
-
-  /**
-   * Gets the Perspective's field-of-view angle (FOV).
    *
    * Default value is ````60.0````.
-   *
-   * @returns {Number} Current field-of-view.
    */
-  get fov(): number;
+  fov: number;
 
   /**
-   * Sets the Perspective's FOV axis.
+   * The Perspective's FOV axis.
    *
    * Options are ````"x"````, ````"y"```` or ````"min"````, to use the minimum axis.
    *
    * Fires an "fovAxis" event on change.
-
-    * Default value ````"min"````.
-    *
-    * @param {String} value New FOV axis value.
-    */
-  set fovAxis(arg: string);
+   *
+   * Default value is ````"min"````.
+   */
+  fovAxis: string;
 
   /**
-   * Gets the Perspective's FOV axis.
-   *
-   * Options are ````"x"````, ````"y"```` or ````"min"````, to use the minimum axis.
-   *
-   * Fires an "fovAxis" event on change.
-
-    * Default value is ````"min"````.
-    *
-    * @returns {String} The current FOV axis value.
-    */
-  get fovAxis(): string;
-
-  /**
-   * Sets the position of the Perspective's near plane on the positive View-space Z-axis.
+   * The position of the Perspective's near plane on the positive View-space Z-axis.
    *
    * Fires a "near" event on change.
    *
    * Default value is ````0.1````.
-   *
-   * @param {Number} value New Perspective near plane position.
    */
-  set near(arg: number);
+  near: number;
 
   /**
-   * Gets the position of the Perspective's near plane on the positive View-space Z-axis.
-   *
-   * Fires an "emits" emits on change.
-   *
-   * Default value is ````0.1````.
-   *
-   * @returns The Perspective's near plane position.
-   */
-  get near(): number;
-
-  /**
-   * Sets the position of this Perspective's far plane on the positive View-space Z-axis.
+   * The position of this Perspective's far plane on the positive View-space Z-axis.
    *
    * Fires a "far" event on change.
-   *
-   * @param {Number} value New Perspective far plane position.
    */
-  set far(arg: number);
+  far: number;
 
   /**
-   * Gets the position of this Perspective's far plane on the positive View-space Z-axis.
-   *
-   * @return {Number} The Perspective's far plane position.
-   */
-  get far(): number;
-
-  /**
-   * Gets the Perspective's projection transform matrix.
+   * The Perspective's projection transform matrix.
    *
    * Fires a "matrix" event on change.
    *
    * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
-   *
-   * @returns {Number[]} The Perspective's projection matrix.
    */
-  get matrix(): number[];
+  readonly matrix: number[];
 
   /**
-   * Gets the inverse of {@link Perspective.matrix}.
-   *
-   * @returns {Number[]} The inverse of {@link Perspective.matrix}.
+   * The inverse of {@link Perspective.matrix}.
    */
-  get inverseMatrix(): number[];
+  readonly inverseMatrix: number[];
 
   /**
-   * Gets the transpose of {@link Perspective.matrix}.
-   *
-   * @returns {Number[]} The transpose of {@link Perspective.matrix}.
+   * The transpose of {@link Perspective.matrix}.
    */
-  get transposedMatrix(): number[];
+  readonly transposedMatrix: number[];
 
   /**
    * Un-projects the given Canvas-space coordinates and Screen-space depth, using this Perspective projection.

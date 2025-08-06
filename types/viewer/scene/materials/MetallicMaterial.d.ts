@@ -56,36 +56,26 @@ export declare class MetallicMaterial extends Material {
     constructor(owner: Component, cfg?: MetallicMaterialConfiguration);
 
     /**
-     * Sets the RGB diffuse color.
+     * RGB diffuse color.
      *
      * Multiplies by the RGB components of {@link MetallicMaterial#baseColorMap}.
      *
      * Default value is ````[1.0, 1.0, 1.0]````.
      * @type {Number[]}
      */
-    set baseColor(value: number[]);
+    baseColor: number[];
 
     /**
-     * Gets the RGB diffuse color.
-     *
-     * Multiplies by the RGB components of {@link MetallicMaterial#baseColorMap}.
-     *
-     * Default value is ````[1.0, 1.0, 1.0]````.
-     * @type {Number[]}
-     */
-    get baseColor(): number[];
-
-    /**
-     * Gets the RGB {@link Texture} containing the diffuse color of this MetallicMaterial, with optional *A* component for alpha.
+     * RGB {@link Texture} containing the diffuse color of this MetallicMaterial, with optional *A* component for alpha.
      *
      * The RGB components multiply by {@link MetallicMaterial#baseColor}, while the *A* component, if present, multiplies by {@link MetallicMaterial#alpha}.
      *
      * @type {Texture}
      */
-    get baseColorMap(): Texture;
+    readonly baseColorMap: Texture;
 
     /**
-     * Sets the metallic factor.
+     * Metallic factor.
      *
      * This is in the range ````[0..1]```` and indicates how metallic this MetallicMaterial is.
      *
@@ -97,26 +87,19 @@ export declare class MetallicMaterial extends Material {
      *
      * @type {Number}
      */
-    set metallic(value: number);
+    metallic: number;
 
     /**
-     * Gets the metallic factor.
-     *
-     * @type {Number}
-     */
-    get metallic(): number;
-
-    /**
-     * Gets the RGB {@link Texture} containing this MetallicMaterial's metallic factor in its *R* component.
+     * RGB {@link Texture} containing this MetallicMaterial's metallic factor in its *R* component.
      *
      * The *R* component multiplies by {@link MetallicMaterial#metallic}.
      *
      * @type {Texture}
      */
-    get metallicMap(): Texture;
+    readonly metallicMap: Texture;
 
     /**
-     *  Sets the roughness factor.
+     * Roughness factor.
      *
      *  This factor is in the range ````[0..1]````, where ````0```` is fully smooth,````1```` is fully rough.
      *
@@ -126,51 +109,37 @@ export declare class MetallicMaterial extends Material {
      *
      * @type {Number}
      */
-    set roughness(value: number);
+    roughness: number;
 
     /**
-     * Gets the roughness factor.
-     *
-     * @type {Number}
-     */
-    get roughness(): number;
-
-    /**
-     * Gets the RGB {@link Texture} containing this MetallicMaterial's roughness factor in its *R* component.
+     * RGB {@link Texture} containing this MetallicMaterial's roughness factor in its *R* component.
      *
      * The *R* component multiplies by {@link MetallicMaterial#roughness}.
      *
      * @type {Texture}
      */
-    get roughnessMap(): Texture;
+    readonly roughnessMap: Texture;
 
     /**
-     * Gets the RGB {@link Texture} containing this MetallicMaterial's metalness in its *R* component and roughness in its *G* component.
+     * RGB {@link Texture} containing this MetallicMaterial's metalness in its *R* component and roughness in its *G* component.
      *
      * Its *B* component multiplies by the {@link MetallicMaterial#metallic} property, while its *G* component multiplies by the {@link MetallicMaterial#roughness} property.
      *
      * @type {Texture}
      */
-    get metallicRoughnessMap(): Texture;
+    readonly metallicRoughnessMap: Texture;
 
     /**
-     * Sets the factor in the range [0..1] indicating specular Fresnel value.
+     * Factor in the range [0..1] indicating specular Fresnel value.
      *
      * Default value is ````0.0````.
      *
      * @type {Number}
      */
-    set specularF0(value: number);
+    specularF0: number;
 
     /**
-     * Gets the factor in the range [0..1] indicating specular Fresnel value.
-     *
-     * @type {Number}
-     */
-    get specularF0(): number;
-
-    /**
-     * Sets the RGB emissive color.
+     * RGB emissive color.
      *
      * Multiplies by {@link MetallicMaterial#emissiveMap}.
      *
@@ -178,35 +147,28 @@ export declare class MetallicMaterial extends Material {
      *
      * @type {Number[]}
      */
-    set emissive(value: number[]);
+    emissive: number[];
 
     /**
-     * Gets the RGB emissive color.
-     *
-     * @type {Number[]}
-     */
-    get emissive(): number[];
-
-    /**
-     * Gets the RGB emissive map.
+     * RGB emissive map.
      *
      * Multiplies by {@link MetallicMaterial#emissive}.
      *
      * @type {Texture}
      */
-    get emissiveMap(): Texture;
+    readonly emissiveMap: Texture;
 
     /**
-     * Gets the RGB ambient occlusion map.
+     * RGB ambient occlusion map.
      *
      * Multiplies by the specular and diffuse light reflected by surfaces.
      *
      * @type {Texture}
      */
-    get occlusionMap(): Texture;
+    readonly occlusionMap: Texture;
 
     /**
-     * Sets factor in the range ````[0..1]```` that indicates the alpha value.
+     * Factor in the range ````[0..1]```` that indicates the alpha value.
      *
      * Multiplies by the *R* component of {@link MetallicMaterial#alphaMap} and the *A* component, if present, of {@link MetallicMaterial#baseColorMap}.
      *
@@ -216,33 +178,26 @@ export declare class MetallicMaterial extends Material {
      *
      * @type {Number}
      */
-    set alpha(value: number);
+    alpha: number;
 
     /**
-     * Gets factor in the range ````[0..1]```` that indicates the alpha value.
-     *
-     * @type {Number}
-     */
-    get alpha(): number;
-
-    /**
-     * Gets the RGB {@link Texture} containing this MetallicMaterial's alpha in its *R* component.
+     * RGB {@link Texture} containing this MetallicMaterial's alpha in its *R* component.
      *
      * The *R* component multiplies by the {@link MetallicMaterial#alpha} property.
      *
      * @type {Texture}
      */
-    get alphaMap(): Texture;
+    readonly alphaMap: Texture;
 
     /**
-     * Gets the RGB tangent-space normal map {@link Texture}.
+     * RGB tangent-space normal map {@link Texture}.
      *
      * @type {Texture}
      */
-    get normalMap(): Texture;
+    readonly normalMap: Texture;
 
     /**
-     * Sets the alpha rendering mode.
+     * Alpha rendering mode.
      *
      * This specifies how alpha is interpreted. Alpha is the combined result of the {@link MetallicMaterial#alpha} and {@link MetallicMaterial#alphaMap} properties.
      *
@@ -254,17 +209,10 @@ export declare class MetallicMaterial extends Material {
      *
      * @type {String}
      */
-    set alphaMode(alphaMode: string);
+    alphaMode: string;
 
     /**
-     * Gets the alpha rendering mode.
-     *
-     * @type {String}
-     */
-    get alphaMode(): string;
-
-    /**
-     * Sets the alpha cutoff value.
+     * Alpha cutoff value.
      *
      * Specifies the cutoff threshold when {@link MetallicMaterial#alphaMode} equals "mask". If the alpha is greater than or equal to this value then it is rendered as fully opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0 will render the entire
      * material as fully transparent. This value is ignored for other modes.
@@ -275,17 +223,10 @@ export declare class MetallicMaterial extends Material {
      *
      * @type {Number}
      */
-    set alphaCutoff(alphaCutoff: number);
+    alphaCutoff: number;
 
     /**
-     * Gets the alpha cutoff value.
-     *
-     * @type {Number}
-     */
-    get alphaCutoff(): number;
-
-    /**
-     * Sets whether backfaces are visible on attached {@link Mesh}es.
+     * Whether backfaces are visible on attached {@link Mesh}es.
      *
      * The backfaces will belong to {@link ReadableGeometry} compoents that are also attached to the {@link Mesh}es.
      *
@@ -293,33 +234,19 @@ export declare class MetallicMaterial extends Material {
      *
      * @type {Boolean}
      */
-    set backfaces(value: boolean);
+    backfaces: boolean;
 
     /**
-     * Gets whether backfaces are visible on attached {@link Mesh}es.
-     *
-     * @type {Boolean}
-     */
-    get backfaces(): boolean;
-
-    /**
-     * Sets the winding direction of front faces of {@link Geometry} of attached {@link Mesh}es.
+     * Winding direction of front faces of {@link Geometry} of attached {@link Mesh}es.
      *
      * Default value is ````"ccw"````.
      *
      * @type {String}
      */
-    set frontface(value: "cw" | "ccw");
+    frontface: "cw" | "ccw";
 
     /**
-     * Gets the winding direction of front faces of {@link Geometry} of attached {@link Mesh}es.
-     * 
-     * @type {String}
-     */
-    get frontface(): string;
-
-    /**
-     * Sets the MetallicMaterial's line width.
+     * MetallicMaterial's line width.
      *
      * This is not supported by WebGL implementations based on DirectX [2019].
      *
@@ -327,30 +254,16 @@ export declare class MetallicMaterial extends Material {
      *
      * @type {Number}
      */
-    set lineWidth(value: number);
+    lineWidth: number;
 
     /**
-     * Gets the MetallicMaterial's line width.
-     *
-     * @type {Number}
-     */
-    get lineWidth(): number;
-
-    /**
-     * Sets the MetallicMaterial's point size.
+     * MetallicMaterial's point size.
      *
      * Default value is ````1.0````.
      *
      * @type {Number}
      */
-    set pointSize(value: number);
-
-    /**
-     * Gets the MetallicMaterial's point size.
-     *
-     * @type {Number}
-     */
-    get pointSize(): number;
+    pointSize: number;
 
     /**
      * Destroys this MetallicMaterial.

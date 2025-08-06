@@ -23,112 +23,67 @@ export declare class SceneModelTransform {
      *
      * @type {SceneModelTransform}
      */
-    get parentTransform(): SceneModelTransform | null;
+    readonly parentTransform: SceneModelTransform | null;
 
     /**
      * The {@link SceneModelMesh}es transformed by this SceneModelTransform.
      *
      * @returns {[]}
      */
-    get meshes(): SceneModelMesh[];
+    readonly meshes: SceneModelMesh[];
 
     /**
-     * Sets the SceneModelTransform's local translation.
+     * The SceneModelTransform's local translation.
      *
      * Default value is ````[0,0,0]````.
      *
      * @type {number[]}
      */
-    set position(value: number[]);
+    position: number[];
 
     /**
-     * Gets the SceneModelTransform's translation.
+     * The SceneModelTransform's rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      *
      * Default value is ````[0,0,0]````.
      *
      * @type {number[]}
      */
-    get position(): number[];
+    rotation: number[];
 
     /**
-     * Sets the SceneModelTransform's rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @type {number[]}
-     */
-    set rotation(value: number[]);
-
-    /**
-     * Gets the SceneModelTransform's rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @type {number[]}
-     */
-    get rotation(): number[];
-
-    /**
-     * Sets the SceneModelTransform's rotation quaternion.
+     * The SceneModelTransform's rotation quaternion.
      *
      * Default value is ````[0,0,0,1]````.
      *
      * @type {number[]}
      */
-    set quaternion(value: number[]);
+    quaternion: number[];
 
     /**
-     * Gets the SceneModelTransform's rotation quaternion.
-     *
-     * Default value is ````[0,0,0,1]````.
-     *
-     * @type {number[]}
-     */
-    get quaternion(): number[];
-
-    /**
-     * Sets the SceneModelTransform's scale.
+     * The SceneModelTransform's scale.
      *
      * Default value is ````[1,1,1]````.
      *
      * @type {number[]}
      */
-    set scale(value: number[]);
+    scale: number[];
 
     /**
-     * Gets the SceneModelTransform's scale.
-     *
-     * Default value is ````[1,1,1]````.
-     *
-     * @type {number[]}
-     */
-    get scale(): number[];
-
-    /**
-     * Sets the SceneModelTransform's transform matrix.
+     * The SceneModelTransform's transform matrix.
      *
      * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
      *
      * @type {number[]}
      */
-    set matrix(value: number[]);
+    matrix: number[];
 
     /**
-     * Gets the SceneModelTransform's transform matrix.
-     *
-     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
-     *
-     * @type {number[]}
-     */
-    get matrix(): number[];
-
-    /**
-     * Gets the SceneModelTransform's World matrix.
+     * The SceneModelTransform's World matrix.
      *
      * @property worldMatrix
      * @type {number[]}
      */
-    get worldMatrix(): number[];
+    readonly worldMatrix: number[];
 
     /**
      * Rotates the SceneModelTransform about the given axis by the given increment.

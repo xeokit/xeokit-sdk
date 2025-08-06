@@ -26,58 +26,33 @@ export declare class EdgeMaterial extends Material {
   constructor(owner: Component, cfg?: EdgeMaterialConfiguration);
 
   /**
-   * Gets available EdgeMaterial presets.
+   * Available EdgeMaterial presets.
    */
-  get presets(): any;
+  readonly presets: any;
 
   /**
-   * Selects a preset EdgeMaterial configuration.
+   * Preset EdgeMaterial configuration.
    * @type {String}
    */
-  set preset(arg: string);
+  preset: string;
 
   /**
-   * The current preset EdgeMaterial configuration.
+   * RGB edge color.
    */
-  get preset(): string;
+  edgeColor: number[];
 
   /**
-   * Sets RGB edge color.
+   * Edge transparency.
    */
-  set edgeColor(arg: number[]);
+  edgeAlpha: number;
 
   /**
-   * Gets RGB edge color.
+   * Edge width.
    */
-  get edgeColor(): number[];
+  edgeWidth: number;
 
   /**
-   * Sets edge transparency.
+   * Whether edges are visible.
    */
-  set edgeAlpha(arg: number);
-
-  /**
-   * Gets edge transparency.
-   */
-  get edgeAlpha(): number;
-
-  /**
-   * Sets edge width.
-   */
-  set edgeWidth(arg: number);
-
-  /**
-   * Gets edge width.
-   */
-  get edgeWidth(): number;
-
-  /**
-   * Sets if edges are visible.
-   */
-  set edges(arg: boolean);
-
-  /**
-   * Gets if edges are visible.
-   */
-  get edges(): boolean;
+  edges: boolean;
 }

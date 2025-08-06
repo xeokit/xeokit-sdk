@@ -13,146 +13,64 @@ export declare class AngleMeasurement extends Component {
   plugin: AngleMeasurementsPlugin;
   
   /**
-   * Sets whether this AngleMeasurement indicates that its measurement is approximate.
+   * Whether this AngleMeasurement indicates that its measurement is approximate.
    *
    * This is ````true```` by default.
-   *
-   * @type {Boolean}
    */
-  set approximate(arg: boolean);
+  approximate: boolean;
   /**
-   * Gets whether this AngleMeasurement indicates that its measurement is approximate.
-   *
-   * This is ````true```` by default.
-   *
-   * @type {Boolean}
+   * Whether this AngleMeasurement is visible or not.
    */
-  get approximate(): boolean;
-  /**
-   * Sets whether this AngleMeasurement is visible or not.
-   *
-   * @type {Boolean}
-   */
-  set visible(arg: boolean);
-  /**
-   * Gets whether this AngleMeasurement is visible or not.
-   *
-   * @type {Boolean}
-   */
-  get visible(): boolean;
+  visible: boolean;
 
   /**
-   * Sets whether this AngleMeasurement is highlighted or not.
-   *
-   * @type {Boolean}
+   * Whether this AngleMeasurement is highlighted or not.
    */
-  set highlighted(arg: boolean);
-  /**
-   * Gets whether this AngleMeasurement is highlighted or not.
-   *
-   * @type {Boolean}
-   */
-  get highlighted(): boolean;
+  highlighted: boolean;
 
   /**
-   * Sets if the origin {@link Marker} is visible.
-   *
-   * @type {Boolean}
+   * Whether the origin {@link Marker} is visible.
    */
-  set originVisible(arg: boolean);
+  originVisible: boolean;
   /**
-   * Gets if the origin {@link Marker} is visible.
-   *
-   * @type {Boolean}
+   * Whether the corner {@link Marker} is visible.
    */
-  get originVisible(): boolean;
+  cornerVisible: boolean;
   /**
-   * Sets if the corner {@link Marker} is visible.
-   *
-   * @type {Boolean}
+   * Whether the target {@link Marker} is visible.
    */
-  set cornerVisible(arg: boolean);
+  targetVisible: boolean;
   /**
-   * Gets if the corner {@link Marker} is visible.
-   *
-   * @type {Boolean}
+   * Whether the wire between the origin and the corner is visible.
    */
-  get cornerVisible(): boolean;
+  originWireVisible: boolean;
   /**
-   * Sets if the target {@link Marker} is visible.
-   *
-   * @type {Boolean}
+   * Whether the wire between the target and the corner is visible.
    */
-  set targetVisible(arg: boolean);
+  targetWireVisible: boolean;
   /**
-   * Gets if the target {@link Marker} is visible.
-   *
-   * @type {Boolean}
+   * Whether the angle label is visible.
    */
-  get targetVisible(): boolean;
-  /**
-   * Sets if the wire between the origin and the corner is visible.
-   *
-   * @type {Boolean}
-   */
-  set originWireVisible(arg: boolean);
-  /**
-   * Gets if the wire between the origin and the corner is visible.
-   *
-   * @type {Boolean}
-   */
-  get originWireVisible(): boolean;
-  /**
-   * Sets if the wire between the target and the corner is visible.
-   *
-   * @type {Boolean}
-   */
-  set targetWireVisible(arg: boolean);
-  /**
-   * Gets if the wire between the target and the corner is visible.
-   *
-   * @type {Boolean}
-   */
-  get targetWireVisible(): boolean;
-  /**
-   * Sets if the angle label is visible.
-   *
-   * @type {Boolean}
-   */
-  set angleVisible(arg: boolean);
-  /**
-   * Gets if the angle label is visible.
-   *
-   * @type {Boolean}
-   */
-  get angleVisible(): boolean;
+  angleVisible: boolean;
   
   /**
-   * Gets the origin {@link Marker}.
-   *
-   * @type {Marker}
+   * The origin {@link Marker}.
    */
-  get origin(): Marker;
+  readonly origin: Marker;
 
   /**
-   * Gets the corner {@link Marker}.
-   *
-   * @type {Marker}
+   * The corner {@link Marker}.
    */
-  get corner(): Marker;
+  readonly corner: Marker;
 
   /**
-   * Gets the target {@link Marker}.
-   *
-   * @type {Marker}
+   * The target {@link Marker}.
    */
-  get target(): Marker;
+  readonly target: Marker;
 
   /**
-   * Gets the angle between two connected 3D line segments, given
+   * The angle between two connected 3D line segments, given
    * as three positions on the surface(s) of one or more {@link Entity}s.
-   *
-   * @type {Number}
    */
-  get angle(): number;
+  readonly angle: number;
 }

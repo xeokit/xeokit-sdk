@@ -25,51 +25,25 @@ export declare class SplineCurve extends Curve {
     constructor(owner?: Component, cfg?: SplineCurveConfiguration);
 
     /**
-     * Sets the control points on this SplineCurve.
+     * The control points on this SplineCurve.
      *
      * Default value is ````[]````.
-     *
-     * @param {Number[]} value New control points.
      */
-    set points(value: number);
+    points: number[];
 
     /**
-     * Gets the control points on this SplineCurve.
-     *
-     * Default value is ````[]````.
-     *
-     * @returns {Number[]} The control points.
-     */
-    get points(): number[];
-
-    /**
-     * Sets the progress along this SplineCurve.
+     * The progress along this SplineCurve.
      *
      * Automatically clamps to range ````[0..1]````.
      *
      * Default value is ````0````.
-     *
-     * @param {Number} value The new progress.
      */
-    set t(value: number);
+    t: number;
 
     /**
-     * Gets the progress along this SplineCurve.
-     *
-     * Automatically clamps to range ````[0..1]````.
-     *
-     * Default value is ````0````.
-     *
-     * @returns {Number} The new progress.
+     * The point on this SplineCurve at position {@link SplineCurve#t}.
      */
-    get t(): number;
-
-    /**
-     * Gets the point on this SplineCurve at position {@link SplineCurve#t}.
-     *
-     * @returns {Number[]} The point at {@link SplineCurve#t}.
-     */
-    get point(): number;
+    readonly point: number[];
 
     /**
      * Returns point on this SplineCurve at the given position.
