@@ -28,6 +28,7 @@ const replacePlugin = replace({
     preventAssignment: true
 });
 
+
 // Standard build configuration
 const standardBuildConfig = {
     input,
@@ -46,7 +47,7 @@ const standardBuildConfig = {
             file: './dist/xeokit-sdk.es5.js',
             format: 'umd',
             name: 'xeokit',
-            sourcemap: true,
+            sourcemap: false,
             plugins: [
                 getBabelOutputPlugin({
                     allowAllFormats: true,
@@ -96,7 +97,7 @@ const minifiedBuildConfig = {
             file: './dist/xeokit-sdk.min.es5.js',
             format: 'umd',
             name: 'xeokit',
-            sourcemap: true,
+            sourcemap: false,
             plugins: [
                 getBabelOutputPlugin({
                     allowAllFormats: true,
