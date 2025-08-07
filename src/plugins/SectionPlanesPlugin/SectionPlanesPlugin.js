@@ -329,7 +329,8 @@ class SectionPlanesPlugin extends Plugin {
                                      })(),
                                      setQuaternion: q => { rootNode.quaternion = q; },
                                      setScale: s => { rootNode.scale = s; },
-                                     setVisible: v => { rootNode.visible = v; }
+                                     setVisible: v => { rootNode.visible = v; },
+                                     destroy: () => { rootNode.destroy() }
                                  };
                              })();
                              let unbindSectionPlane = () => { };
@@ -348,6 +349,7 @@ class SectionPlanesPlugin extends Plugin {
                                  _destroy: () => {
                                      unbindSectionPlane();
                                      ctrl.destroy();
+                                     planeRoot.destroy();
                                  },
                                  setCulled:  c => { culled = c;  updateVisible(); },
                                  setVisible: v => { visible = v; updateVisible(); },
