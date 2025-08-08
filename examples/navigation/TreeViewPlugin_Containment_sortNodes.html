@@ -220,7 +220,7 @@
     // Sort the nodes in the tree
     //------------------------------------------------------------------------------------------------------------------
 
-    new TreeViewPlugin(viewer, {
+    const treeView = new TreeViewPlugin(viewer, {
         containerElement: document.getElementById("treeViewContainer"),
         autoExpandDepth: 3, // Initially expand tree three storeys deep
         hierarchy: "containment",

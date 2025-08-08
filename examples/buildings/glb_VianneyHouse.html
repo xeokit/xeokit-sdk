@@ -44,7 +44,7 @@
 </body>
 <script type="module">
 
-    import {Viewer, GLTFLoaderPlugin, ReflectionMap, LightMap} from "../../dist/xeokit-sdk.min.es.js";
+    import {Viewer, GLTFLoaderPlugin, ReflectionMap, LightMap, sRGBEncoding} from "../../dist/xeokit-sdk.min.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -72,7 +72,7 @@
     //         "../../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PZ.png",
     //         "../../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NZ.png"
     //     ],
-    //     encoding: "sRGB"
+    //     encoding: sRGBEncoding
     // });
     //
     // new LightMap(viewer.scene, {
@@ -84,7 +84,7 @@
     //         "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
     //         "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
     //     ],
-    //     encoding: "sRGB"
+    //     encoding: sRGBEncoding
     // });
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
