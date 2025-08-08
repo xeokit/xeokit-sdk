@@ -1,6 +1,5 @@
 import { Plugin } from "../../viewer/Plugin.js";
 import { GLTFLoaderPlugin } from "../GLTFLoaderPlugin/GLTFLoaderPlugin.js";
-import { ifc2gltf } from "@creooxag/cxconverter";
 
 /**
  * Fetches a file from the given URL and returns its contents as text.
@@ -51,6 +50,15 @@ class CxConverterIFCLoaderPlugin extends Plugin {
          * @type {GLTFLoaderPlugin}
          */
         this.gltfLoader = new GLTFLoaderPlugin(this.viewer);
+        this.cxConverterModule = null;
+    }
+
+    /**
+     * Sets the CxConverter module to be used by this plugin.
+     * @param {Object} module The CxConverter module.
+     */
+    setCxConverterModule(module) {
+        this.cxConverterModule = module;
     }
 
     /**
@@ -63,11 +71,14 @@ class CxConverterIFCLoaderPlugin extends Plugin {
      * @returns {Promise<SceneModel>} A promise that resolves to the loaded SceneModel.
      */
     async load(params = {}) {
+        if (!this.cxConverterModule) {
+            throw new Error("CxConverter module is not set. Use setCxConverterModule() to set it.");
+        }
         if (!params.src) {
             this.error("load() param expected: src");
         }
         const data = await fetchFile(params.src);
-        const { gltf, metaData } = await ifc2gltf(
+        const { gltf, metaData } = await this.cxConverterModule.ifc2gltf(
             data,
             {
                 remote: true,
