@@ -1,5 +1,17 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.88](https://github.com/xeokit/xeokit-sdk/compare/v2.6.87...v2.6.88)
+
+### 11 August 2025
+
+- fix: Update links in README and index.html for consistency; change image source in getSnapshot example
+- feat: XCD-343 Add touch event support for NavCube interactions
+- XCD-349 Remove rootNode when destroy
+- refactor: update type definitions for touchPointSelector to be generic
+- fix(XEOK-168): DotBIMLoaderPlugin - update mesh ID generation to include dbMeshId for uniqueness
+- refactor(XEOK-321) : remove @creooxag/cxconverter-dependency
+- Xeok 168 errors inside examples set 1
+
 # [v2.6.87](https://github.com/xeokit/xeokit-sdk/compare/v2.6.86...v2.6.87)
 
 ### 31 July 2025
