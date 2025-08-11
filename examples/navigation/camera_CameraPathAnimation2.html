@@ -68,8 +68,7 @@
         ReadableGeometry,
         buildPlaneGeometry,
         PhongMaterial,
-        XKTLoaderPlugin,
-        Skybox
+        XKTLoaderPlugin
     } from "../../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
@@ -114,11 +113,6 @@
         id: "myModel",
         src: "../../assets/models/xkt/v8/ifc/OTCConferenceCenter.ifc.xkt",
         edges: true
-    });
-
-    new Skybox(viewer.scene, {
-        src: "../../assets/textures/skybox/cloudySkyBox.jpg",
-        size: 1000
     });
 
     //----------------------------------------------------------------------------------------------------------------------
