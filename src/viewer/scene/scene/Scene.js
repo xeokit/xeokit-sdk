@@ -619,6 +619,10 @@ class Scene extends Component {
             premultipliedAlpha: cfg.premultipliedAlpha
         });
 
+        const onContextLost = (event) => this.viewer.destroy();
+        canvas.addEventListener("webglcontextlost", onContextLost, false);
+        this._removeWebglcontextlostListener = () => canvas.removeEventListener("webglcontextlost", onContextLost, false);
+
         this.canvas.on("boundary", () => {
             this.glRedraw();
         });
@@ -1249,35 +1253,6 @@ class Scene extends Component {
         this._offsetObjectIds = null; // Lazy regenerate
     }
 
-    _webglContextLost() {
-        //  this.loading++;
-        this.canvas.spinner.processes++;
-        for (const id in this.components) {
-            if (this.components.hasOwnProperty(id)) {
-                const component = this.components[id];
-                if (component._webglContextLost) {
-                    component._webglContextLost();
-                }
-            }
-        }
-        this._renderer.webglContextLost();
-    }
-
-    _webglContextRestored() {
-        const gl = this.canvas.gl;
-        for (const id in this.components) {
-            if (this.components.hasOwnProperty(id)) {
-                const component = this.components[id];
-                if (component._webglContextRestored) {
-                    component._webglContextRestored(gl);
-                }
-            }
-        }
-        this._renderer.webglContextRestored(gl);
-        //this.loading--;
-        this.canvas.spinner.processes--;
-    }
-
     /**
      * Returns the capabilities of this Scene.
      *
@@ -1507,12 +1482,7 @@ class Scene extends Component {
 
         renderEvent.sceneId = this.id;
 
-        const passes = this._passes;
-        const clearEachPass = this._clearEachPass;
-        let pass;
-        let clear;
-
-        for (pass = 0; pass < passes; pass++) {
+        for (let pass = 0; pass < this._passes; pass++) {
 
             renderEvent.pass = pass;
 
@@ -1525,9 +1495,10 @@ class Scene extends Component {
              */
             this.fire("rendering", renderEvent, true);
 
-            clear = clearEachPass || (pass === 0);
-
-            this._renderer.render({pass: pass, clear: clear, force: forceRender});
+            if (forceRender) {
+                this._renderer.imageDirty();
+            }
+            this._renderer.render(pass, this._clearEachPass || (pass === 0));
 
             /**
              * Fired when we have just rendered a frame for a Scene.
@@ -2348,6 +2319,11 @@ class Scene extends Component {
      */
     pick(params, pickResult) {
 
+        if (! this.canvas) {
+            this.error("Picking not allowed on a destroyed Scene");
+            return null;
+        }
+
         if (this.canvas.boundary[2] === 0 || this.canvas.boundary[3] === 0) {
             this.error("Picking not allowed while canvas has zero width or height");
             return null;
@@ -2401,6 +2377,10 @@ class Scene extends Component {
      * @deprecated
      */
     snapPick(params) {
+        if (! this.canvas) {
+            this.error("Picking not allowed on a destroyed Scene");
+            return null;
+        }
         if (undefined === this._warnSnapPickDeprecated) {
             this._warnSnapPickDeprecated = true;
             this.warn("Scene.snapPick() is deprecated since v2.4.2 - use Scene.pick() instead")
@@ -2828,6 +2808,9 @@ class Scene extends Component {
     destroy() {
 
         super.destroy();
+
+        this._removeWebglcontextlostListener();
+        // this.canvas.gl.getExtension("WEBGL_lose_context").loseContext(); // disabled because of XCD-306 and XEOK-295
 
         for (const id in this.components) {
             if (this.components.hasOwnProperty(id)) {

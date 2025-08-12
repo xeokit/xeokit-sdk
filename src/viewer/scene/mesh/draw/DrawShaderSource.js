@@ -1,755 +1,126 @@
-/**
- * @private
- */
+import {createLightSetup, setupTexture} from "../../webgl/WebGLRenderer.js";
+import {math} from "../../math/math.js";
+const tempVec4 = math.vec4();
 
-import {LinearEncoding, sRGBEncoding} from "../../constants/constants.js";
-
-const DrawShaderSource = function (mesh) {
-    if (mesh._material._state.type === "LambertMaterial") {
-        this.vertex = buildVertexLambert(mesh);
-        this.fragment = buildFragmentLambert(mesh);
-    } else {
-        this.vertex = buildVertexDraw(mesh);
-        this.fragment = buildFragmentDraw(mesh);
-    }
-};
-
-const TEXTURE_DECODE_FUNCS = {};
-TEXTURE_DECODE_FUNCS[LinearEncoding] = "linearToLinear";
-TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
-
-function getReceivesShadow(mesh) {
-    if (!mesh.receivesShadow) {
-        return false;
-    }
-    const lights = mesh.scene._lightsState.lights;
-    if (!lights || lights.length === 0) {
-        return false;
-    }
-    for (let i = 0, len = lights.length; i < len; i++) {
-        if (lights[i].castsShadow) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function hasTextures(mesh) {
-    if (!mesh._geometry._state.uvBuf) {
-        return false;
-    }
-    const material = mesh._material;
-    return !!(material._ambientMap ||
-        material._occlusionMap ||
-        material._baseColorMap ||
-        material._diffuseMap ||
-        material._alphaMap ||
-        material._specularMap ||
-        material._glossinessMap ||
-        material._specularGlossinessMap ||
-        material._emissiveMap ||
-        material._metallicMap ||
-        material._roughnessMap ||
-        material._metallicRoughnessMap ||
-        material._reflectivityMap ||
-        material._normalMap);
-}
-
-function hasNormals(mesh) {
-    const primitive = mesh._geometry._state.primitiveName;
-    if ((mesh._geometry._state.autoVertexNormals || mesh._geometry._state.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan")) {
-        return true;
-    }
-    return false;
-}
-
-function buildVertexLambert(mesh) {
-
-    const scene = mesh.scene;
-    const sectionPlanesState = mesh.scene._sectionPlanesState;
-    const lightsState = mesh.scene._lightsState;
-    const geometryState = mesh._geometry._state;
-    const billboard = mesh._state.billboard;
-    const stationary = mesh._state.stationary;
-    const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
-    const quantizedGeometry = !!geometryState.compressGeometry;
-
-    const src = [];
-    src.push("#version 300 es");
-    src.push("// Lambertian drawing vertex shader");
-    src.push("in vec3 position;");
-    src.push("uniform mat4 modelMatrix;");
-    src.push("uniform mat4 viewMatrix;");
-    src.push("uniform mat4 projMatrix;");
-    src.push("uniform vec4 colorize;");
-    src.push("uniform vec3 offset;");
-    src.push("uniform vec3 scale;");
-    if (quantizedGeometry) {
-        src.push("uniform mat4 positionsDecodeMatrix;");
-    }
-    if (scene.logarithmicDepthBufferEnabled) {
-        src.push("uniform float logDepthBufFC;");
-        src.push("out float vFragDepth;");
-        src.push("bool isPerspectiveMatrix(mat4 m) {");
-        src.push("    return (m[2][3] == - 1.0);");
-        src.push("}");
-        src.push("out float isPerspective;");
-    }
-    if (clipping) {
-        src.push("out vec4 vWorldPosition;");
-    }
-    src.push("uniform vec4 lightAmbient;");
-    src.push("uniform vec4 materialColor;");
-    src.push("uniform vec3 materialEmissive;");
-    if (geometryState.normalsBuf) {
-        src.push("in vec3 normal;");
-        src.push("uniform mat4 modelNormalMatrix;");
-        src.push("uniform mat4 viewNormalMatrix;");
-        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-            const light = lightsState.lights[i];
-            if (light.type === "ambient") {
-                continue;
-            }
-            src.push("uniform vec4 lightColor" + i + ";");
-            if (light.type === "dir") {
-                src.push("uniform vec3 lightDir" + i + ";");
-            }
-            if (light.type === "point") {
-                src.push("uniform vec3 lightPos" + i + ";");
-            }
-            if (light.type === "spot") {
-                src.push("uniform vec3 lightPos" + i + ";");
-                src.push("uniform vec3 lightDir" + i + ";");
-            }
-        }
-        if (quantizedGeometry) {
-            src.push("vec3 octDecode(vec2 oct) {");
-            src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
-            src.push("    if (v.z < 0.0) {");
-            src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
-            src.push("    }");
-            src.push("    return normalize(v);");
-            src.push("}");
-        }
-    }
-    src.push("out vec4 vColor;");
-    if (geometryState.primitiveName === "points") {
-        src.push("uniform float pointSize;");
-    }
-    if (billboard === "spherical" || billboard === "cylindrical") {
-        src.push("void billboard(inout mat4 mat) {");
-        src.push("   mat[0][0] = scale[0];");
-        src.push("   mat[0][1] = 0.0;");
-        src.push("   mat[0][2] = 0.0;");
-        if (billboard === "spherical") {
-            src.push("   mat[1][0] = 0.0;");
-            src.push("   mat[1][1] = scale[1];");
-            src.push("   mat[1][2] = 0.0;");
-        }
-        src.push("   mat[2][0] = 0.0;");
-        src.push("   mat[2][1] = 0.0;");
-        src.push("   mat[2][2] =1.0;");
-        src.push("}");
-    }
-    src.push("void main(void) {");
-    src.push("vec4 localPosition = vec4(position, 1.0); ");
-    src.push("vec4 worldPosition;");
-    if (quantizedGeometry) {
-        src.push("localPosition = positionsDecodeMatrix * localPosition;");
-    }
-    if (geometryState.normalsBuf) {
-        if (quantizedGeometry) {
-            src.push("vec4 localNormal = vec4(octDecode(normal.xy), 0.0); ");
-        } else {
-            src.push("vec4 localNormal = vec4(normal, 0.0); ");
-        }
-        src.push("mat4 modelNormalMatrix2 = modelNormalMatrix;");
-        src.push("mat4 viewNormalMatrix2 = viewNormalMatrix;");
-    }
-    src.push("mat4 viewMatrix2 = viewMatrix;");
-    src.push("mat4 modelMatrix2 = modelMatrix;");
-    if (stationary) {
-        src.push("viewMatrix2[3][0] = viewMatrix2[3][1] = viewMatrix2[3][2] = 0.0;")
-    }
-    if (billboard === "spherical" || billboard === "cylindrical") {
-        src.push("mat4 modelViewMatrix = viewMatrix2 * modelMatrix2;");
-        src.push("billboard(modelMatrix2);");
-        src.push("billboard(viewMatrix2);");
-        src.push("billboard(modelViewMatrix);");
-        if (geometryState.normalsBuf) {
-            src.push("mat4 modelViewNormalMatrix =  viewNormalMatrix2 * modelNormalMatrix2;");
-            src.push("billboard(modelNormalMatrix2);");
-            src.push("billboard(viewNormalMatrix2);");
-            src.push("billboard(modelViewNormalMatrix);");
-        }
-        src.push("worldPosition = modelMatrix2 * localPosition;");
-        src.push("worldPosition.xyz = worldPosition.xyz + offset;");
-        src.push("vec4 viewPosition = modelViewMatrix * localPosition;");
-    } else {
-        src.push("worldPosition = modelMatrix2 * localPosition;");
-        src.push("worldPosition.xyz = worldPosition.xyz + offset;");
-        src.push("vec4 viewPosition  = viewMatrix2 * worldPosition; ");
-    }
-    if (geometryState.normalsBuf) {
-        src.push("vec3 viewNormal = normalize((viewNormalMatrix2 * modelNormalMatrix2 * localNormal).xyz);");
-    }
-    src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-    src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
-    src.push("float lambertian = 1.0;");
-    if (geometryState.normalsBuf) {
-        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-            const light = lightsState.lights[i];
-            if (light.type === "ambient") {
-                continue;
-            }
-            if (light.type === "dir") {
-                if (light.space === "view") {
-                    src.push("viewLightDir = normalize(lightDir" + i + ");");
-                } else {
-                    src.push("viewLightDir = normalize((viewMatrix2 * vec4(lightDir" + i + ", 0.0)).xyz);");
-                }
-            } else if (light.type === "point") {
-                if (light.space === "view") {
-                    src.push("viewLightDir = -normalize(lightPos" + i + " - viewPosition.xyz);");
-                } else {
-                    src.push("viewLightDir = -normalize((viewMatrix2 * vec4(lightPos" + i + ", 0.0)).xyz);");
-                }
-            } else if (light.type === "spot") {
-                if (light.space === "view") {
-                    src.push("viewLightDir = normalize(lightDir" + i + ");");
-                } else {
-                    src.push("viewLightDir = normalize((viewMatrix2 * vec4(lightDir" + i + ", 0.0)).xyz);");
-                }
-            } else {
-                continue;
-            }
-            src.push("lambertian = max(dot(-viewNormal, viewLightDir), 0.0);");
-            src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
-        }
-    }
-    src.push("vColor = vec4((lightAmbient.rgb * lightAmbient.a * materialColor.rgb) + materialEmissive.rgb + (reflectedColor * materialColor.rgb), materialColor.a) * colorize;"); // TODO: How to have ambient bright enough for canvas BG but not too bright for scene?
-    if (clipping) {
-        src.push("vWorldPosition = worldPosition;");
-    }
-    if (geometryState.primitiveName === "points") {
-        src.push("gl_PointSize = pointSize;");
-    }
-    src.push("vec4 clipPos = projMatrix * viewPosition;");
-    if (scene.logarithmicDepthBufferEnabled) {
-        src.push("vFragDepth = 1.0 + clipPos.w;");
-        src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
-    }
-    src.push("gl_Position = clipPos;");
-    src.push("}");
-    return src;
-}
-
-function buildFragmentLambert(mesh) {
-    const scene = mesh.scene;
-    const sectionPlanesState = scene._sectionPlanesState;
-    const materialState = mesh._material._state;
-    const geometryState = mesh._geometry._state;
-    const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
-    const solid = false && materialState.backfaces;
-    const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
-    const src = [];
-    src.push("#version 300 es");
-    src.push("// Lambertian drawing fragment shader");
-    src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
-    src.push("precision highp float;");
-    src.push("precision highp int;");
-    src.push("#else");
-    src.push("precision mediump float;");
-    src.push("precision mediump int;");
-    src.push("#endif");
-    if (scene.logarithmicDepthBufferEnabled) {
-        src.push("in float isPerspective;");
-        src.push("uniform float logDepthBufFC;");
-        src.push("in float vFragDepth;");
-    }
-    if (clipping) {
-        src.push("in vec4 vWorldPosition;");
-        src.push("uniform bool clippable;");
-        for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
-            src.push("uniform bool sectionPlaneActive" + i + ";");
-            src.push("uniform vec3 sectionPlanePos" + i + ";");
-            src.push("uniform vec3 sectionPlaneDir" + i + ";");
-        }
-    }
-    src.push("in vec4 vColor;");
-    if (gammaOutput) {
-        src.push("uniform float gammaFactor;");
-        src.push("    vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
-        src.push("    return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
-        src.push("}");
-    }
-    src.push("out vec4 outColor;");
-    src.push("void main(void) {");
-    if (clipping) {
-        src.push("if (clippable) {");
-        src.push("  float dist = 0.0;");
-        for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
-            src.push("if (sectionPlaneActive" + i + ") {");
-            src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
-            src.push("}");
-        }
-        src.push("  if (dist > 0.0) { discard; }");
-        if (solid) {
-            src.push("  if (gl_FrontFacing == false) {");
-            src.push("     outColor = vec4(1.0, 0.0, 0.0, 1.0);");
-            src.push("     return;");
-            src.push("  }");
-        }
-        src.push("}");
-    }
-    if (geometryState.primitiveName === "points") {
-        src.push("vec2 cxy = 2.0 * gl_PointCoord - 1.0;");
-        src.push("float r = dot(cxy, cxy);");
-        src.push("if (r > 1.0) {");
-        src.push("   discard;");
-        src.push("}");
-
-    }
-    if (scene.logarithmicDepthBufferEnabled) {
-        src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
-    }
-    if (gammaOutput) {
-        src.push("outColor = linearToGamma(vColor, gammaFactor);");
-    } else {
-        src.push("outColor = vColor;");
-    }
-    src.push("}");
-    return src;
-}
-
-function buildVertexDraw(mesh) {
-    const scene = mesh.scene;
-    const material = mesh._material;
-    const meshState = mesh._state;
-    const sectionPlanesState = scene._sectionPlanesState;
-    const geometryState = mesh._geometry._state;
-    const lightsState = scene._lightsState;
-    let i;
-    let len;
-    let light;
-    const billboard = meshState.billboard;
-    const background = meshState.background;
-    const stationary = meshState.stationary;
-    const texturing = hasTextures(mesh);
-    const normals = hasNormals(mesh);
-    const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
-    const receivesShadow = getReceivesShadow(mesh);
-    const quantizedGeometry = !!geometryState.compressGeometry;
-    const src = [];
-    src.push("#version 300 es");
-    src.push("// Drawing vertex shader");
-    src.push("in  vec3 position;");
-    if (quantizedGeometry) {
-        src.push("uniform mat4 positionsDecodeMatrix;");
-    }
-    src.push("uniform  mat4 modelMatrix;");
-    src.push("uniform  mat4 viewMatrix;");
-    src.push("uniform  mat4 projMatrix;");
-    src.push("out  vec3 vViewPosition;");
-    src.push("uniform  vec3 offset;");
-    src.push("uniform  vec3 scale;");
-    if (clipping) {
-        src.push("out vec4 vWorldPosition;");
-    }
-    if (scene.logarithmicDepthBufferEnabled) {
-        src.push("uniform float logDepthBufFC;");
-        src.push("out float vFragDepth;");
-        src.push("bool isPerspectiveMatrix(mat4 m) {");
-        src.push("    return (m[2][3] == - 1.0);");
-        src.push("}");
-        src.push("out float isPerspective;");
-    }
-    if (lightsState.lightMaps.length > 0) {
-        src.push("out    vec3 vWorldNormal;");
-    }
-    if (normals) {
-        src.push("in  vec3 normal;");
-        src.push("uniform    mat4 modelNormalMatrix;");
-        src.push("uniform    mat4 viewNormalMatrix;");
-        src.push("out    vec3 vViewNormal;");
-        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-            light = lightsState.lights[i];
-            if (light.type === "ambient") {
-                continue;
-            }
-            if (light.type === "dir") {
-                src.push("uniform vec3 lightDir" + i + ";");
-            }
-            if (light.type === "point") {
-                src.push("uniform vec3 lightPos" + i + ";");
-            }
-            if (light.type === "spot") {
-                src.push("uniform vec3 lightPos" + i + ";");
-                src.push("uniform vec3 lightDir" + i + ";");
-            }
-            if (!(light.type === "dir" && light.space === "view")) {
-                src.push("out vec4 vViewLightReverseDirAndDist" + i + ";");
-            }
-        }
-        if (quantizedGeometry) {
-            src.push("vec3 octDecode(vec2 oct) {");
-            src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
-            src.push("    if (v.z < 0.0) {");
-            src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
-            src.push("    }");
-            src.push("    return normalize(v);");
-            src.push("}");
-        }
-    }
-    if (texturing) {
-        src.push("in vec2 uv;");
-        src.push("out vec2 vUV;");
-        if (quantizedGeometry) {
-            src.push("uniform mat3 uvDecodeMatrix;")
-        }
-    }
-    if (geometryState.colors) {
-        src.push("in vec4 color;");
-        src.push("out vec4 vColor;");
-    }
-    if (geometryState.primitiveName === "points") {
-        src.push("uniform float pointSize;");
-    }
-    if (billboard === "spherical" || billboard === "cylindrical") {
-        src.push("void billboard(inout mat4 mat) {");
-        src.push("   mat[0][0] = scale[0];");
-        src.push("   mat[0][1] = 0.0;");
-        src.push("   mat[0][2] = 0.0;");
-        if (billboard === "spherical") {
-            src.push("   mat[1][0] = 0.0;");
-            src.push("   mat[1][1] = scale[1];");
-            src.push("   mat[1][2] = 0.0;");
-        }
-        src.push("   mat[2][0] = 0.0;");
-        src.push("   mat[2][1] = 0.0;");
-        src.push("   mat[2][2] =1.0;");
-        src.push("}");
-    }
-    if (receivesShadow) {
-        src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
-        for (let i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
-            if (lightsState.lights[i].castsShadow) {
-                src.push("uniform mat4 shadowViewMatrix" + i + ";");
-                src.push("uniform mat4 shadowProjMatrix" + i + ";");
-                src.push("out vec4 vShadowPosFromLight" + i + ";");
-            }
-        }
-    }
-    src.push("void main(void) {");
-    src.push("vec4 localPosition = vec4(position, 1.0); ");
-    src.push("vec4 worldPosition;");
-    if (quantizedGeometry) {
-        src.push("localPosition = positionsDecodeMatrix * localPosition;");
-    }
-    if (normals) {
-        if (quantizedGeometry) {
-            src.push("vec4 localNormal = vec4(octDecode(normal.xy), 0.0); ");
-        } else {
-            src.push("vec4 localNormal = vec4(normal, 0.0); ");
-        }
-        src.push("mat4 modelNormalMatrix2    = modelNormalMatrix;");
-        src.push("mat4 viewNormalMatrix2     = viewNormalMatrix;");
-    }
-    src.push("mat4 viewMatrix2           = viewMatrix;");
-    src.push("mat4 modelMatrix2          = modelMatrix;");
-    if (stationary) {
-        src.push("viewMatrix2[3][0] = viewMatrix2[3][1] = viewMatrix2[3][2] = 0.0;")
-    } else if (background) {
-        src.push("viewMatrix2[3] = vec4(0.0, 0.0, 0.0 ,1.0);");
-    }
-    if (billboard === "spherical" || billboard === "cylindrical") {
-        src.push("mat4 modelViewMatrix = viewMatrix2 * modelMatrix2;");
-        src.push("billboard(modelMatrix2);");
-        src.push("billboard(viewMatrix2);");
-        src.push("billboard(modelViewMatrix);");
-        if (normals) {
-            src.push("mat4 modelViewNormalMatrix =  viewNormalMatrix2 * modelNormalMatrix2;");
-            src.push("billboard(modelNormalMatrix2);");
-            src.push("billboard(viewNormalMatrix2);");
-            src.push("billboard(modelViewNormalMatrix);");
-        }
-        src.push("worldPosition = modelMatrix2 * localPosition;");
-        src.push("worldPosition.xyz = worldPosition.xyz + offset;");
-        src.push("vec4 viewPosition = modelViewMatrix * localPosition;");
-    } else {
-        src.push("worldPosition = modelMatrix2 * localPosition;");
-        src.push("worldPosition.xyz = worldPosition.xyz + offset;");
-        src.push("vec4 viewPosition  = viewMatrix2 * worldPosition; ");
-    }
-    if (normals) {
-        src.push("vec3 worldNormal = (modelNormalMatrix2 * localNormal).xyz; ");
-        if (lightsState.lightMaps.length > 0) {
-            src.push("vWorldNormal = worldNormal;");
-        }
-        src.push("vViewNormal = normalize((viewNormalMatrix2 * vec4(worldNormal, 1.0)).xyz);");
-        src.push("vec3 tmpVec3;");
-        src.push("float lightDist;");
-        for (let i = 0, len = lightsState.lights.length; i < len; i++) { // Lights
-            light = lightsState.lights[i];
-            if (light.type === "ambient") {
-                continue;
-            }
-            if (light.type === "dir") {
-                if (light.space === "world") {
-                    src.push("tmpVec3 = vec3(viewMatrix2 * vec4(lightDir" + i + ", 0.0) ).xyz;");
-                    src.push("vViewLightReverseDirAndDist" + i + " = vec4(-tmpVec3, 0.0);");
-                }
-            }
-            if (light.type === "point") {
-                if (light.space === "world") {
-                    src.push("tmpVec3 = (viewMatrix2 * vec4(lightPos" + i + ", 1.0)).xyz - viewPosition.xyz;");
-                    src.push("lightDist = abs(length(tmpVec3));");
-                } else {
-                    src.push("tmpVec3 = lightPos" + i + ".xyz - viewPosition.xyz;");
-                    src.push("lightDist = abs(length(tmpVec3));");
-                }
-                src.push("vViewLightReverseDirAndDist" + i + " = vec4(tmpVec3, lightDist);");
-            }
-        }
-    }
-    if (texturing) {
-        if (quantizedGeometry) {
-            src.push("vUV = (uvDecodeMatrix * vec3(uv, 1.0)).xy;");
-        } else {
-            src.push("vUV = uv;");
-        }
-    }
-    if (geometryState.colors) {
-        src.push("vColor = color;");
-    }
-    if (geometryState.primitiveName === "points") {
-        src.push("gl_PointSize = pointSize;");
-    }
-    if (clipping) {
-        src.push("vWorldPosition = worldPosition;");
-    }
-    src.push("   vViewPosition = viewPosition.xyz;");
-    src.push("vec4 clipPos = projMatrix * viewPosition;");
-    if (scene.logarithmicDepthBufferEnabled) {
-        src.push("vFragDepth = 1.0 + clipPos.w;");
-        src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
-    }
-    if (background) {
-        src.push("clipPos.z = clipPos.w;");
-    }
-    src.push("gl_Position = clipPos;");
-    if (receivesShadow) {
-        src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
-        src.push("vec4 tempx; ");
-        for (let i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
-            if (lightsState.lights[i].castsShadow) {
-                src.push("vShadowPosFromLight" + i + " = texUnitConverter * shadowProjMatrix" + i + " * (shadowViewMatrix" + i + " * worldPosition); ");
-            }
-        }
-    }
-    src.push("}");
-    return src;
-}
-
-function buildFragmentDraw(mesh) {
-
-    const scene = mesh.scene;
-    const gl = scene.canvas.gl;
-    const material = mesh._material;
-    const geometryState = mesh._geometry._state;
-    const sectionPlanesState = mesh.scene._sectionPlanesState;
-    const lightsState = mesh.scene._lightsState;
-    const materialState = mesh._material._state;
-    const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
-    const normals = hasNormals(mesh);
-    const uvs = geometryState.uvBuf;
-    const solid = false && materialState.backfaces;
-    const phongMaterial = (materialState.type === "PhongMaterial");
+export const DrawShaderSource = function(meshDrawHash, programVariables, geometry, material, scene) {
+    const materialState = material._state;
+    const phongMaterial    = (materialState.type === "PhongMaterial");
     const metallicMaterial = (materialState.type === "MetallicMaterial");
     const specularMaterial = (materialState.type === "SpecularMaterial");
-    const receivesShadow = getReceivesShadow(mesh);
-    const gammaInput = scene.gammaInput; // If set, then it expects that all textures and colors are premultiplied gamma. Default is false.
-    const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
 
-    let light;
-    const src = [];
-    src.push("#version 300 es");
-    src.push("// Drawing fragment shader");
+    const attributes = geometry.attributes;
+    const lightSetup = createLightSetup(programVariables, scene._lightsState);
 
-    src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
-    src.push("precision highp float;");
-    src.push("precision highp int;");
-    src.push("#else");
-    src.push("precision mediump float;");
-    src.push("precision mediump int;");
-    src.push("#endif");
+    const colorize = programVariables.createUniform("vec4", "colorize", (set, state) => set(state.meshColorize));
 
-    if (scene.logarithmicDepthBufferEnabled) {
-        src.push("in float isPerspective;");
-        src.push("uniform float logDepthBufFC;");
-        src.push("in float vFragDepth;");
-    }
-
-    if (receivesShadow) {
-        src.push("float unpackDepth (vec4 color) {");
-        src.push("  const vec4 bitShift = vec4(1.0, 1.0/256.0, 1.0/(256.0 * 256.0), 1.0/(256.0*256.0*256.0));");
-        src.push("  return dot(color, bitShift);");
-        src.push("}");
-    }
-
-    //--------------------------------------------------------------------------------
-    // GAMMA CORRECTION
-    //--------------------------------------------------------------------------------
-
-    src.push("uniform float gammaFactor;");
-    src.push("vec4 linearToLinear( in vec4 value ) {");
-    src.push("  return value;");
-    src.push("}");
-    src.push("vec4 sRGBToLinear( in vec4 value ) {");
-    src.push("  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );");
-    src.push("}");
-    src.push("vec4 gammaToLinear( in vec4 value) {");
-    src.push("  return vec4( pow( value.xyz, vec3( gammaFactor ) ), value.w );");
-    src.push("}");
-    if (gammaOutput) {
-        src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
-        src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
-        src.push("}");
-    }
-
-    //--------------------------------------------------------------------------------
-    // USER CLIP PLANES
-    //--------------------------------------------------------------------------------
-
-    if (clipping) {
-        src.push("in vec4 vWorldPosition;");
-        src.push("uniform bool clippable;");
-        for (var i = 0; i < sectionPlanesState.getNumAllocatedSectionPlanes(); i++) {
-            src.push("uniform bool sectionPlaneActive" + i + ";");
-            src.push("uniform vec3 sectionPlanePos" + i + ";");
-            src.push("uniform vec3 sectionPlaneDir" + i + ";");
-        }
-    }
-
-    if (normals) {
-
-        //--------------------------------------------------------------------------------
-        // LIGHT AND REFLECTION MAP INPUTS
-        // Define here so available globally to shader functions
-        //--------------------------------------------------------------------------------
-
-        if (lightsState.lightMaps.length > 0) {
-            src.push("uniform samplerCube lightMap;");
-            src.push("uniform mat4 viewNormalMatrix;");
-        }
-        if (lightsState.reflectionMaps.length > 0) {
-            src.push("uniform samplerCube reflectionMap;");
-        }
-        if (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0) {
-            src.push("uniform mat4 viewMatrix;");
-        }
-
-        //--------------------------------------------------------------------------------
-        // SHADING FUNCTIONS
-        //--------------------------------------------------------------------------------
-
-        // CONSTANT DEFINITIONS
-
-        src.push("#define PI 3.14159265359");
-        src.push("#define RECIPROCAL_PI 0.31830988618");
-        src.push("#define RECIPROCAL_PI2 0.15915494");
-        src.push("#define EPSILON 1e-6");
-
-        src.push("#define saturate(a) clamp( a, 0.0, 1.0 )");
-
-        // UTILITY DEFINITIONS
-
-        src.push("vec3 inverseTransformDirection(in vec3 dir, in mat4 matrix) {");
-        src.push("   return normalize( ( vec4( dir, 0.0 ) * matrix ).xyz );");
-        src.push("}");
-
-        // STRUCTURES
-
-        src.push("struct IncidentLight {");
-        src.push("   vec3 color;");
-        src.push("   vec3 direction;");
-        src.push("};");
-
-        src.push("struct ReflectedLight {");
-        src.push("   vec3 diffuse;");
-        src.push("   vec3 specular;");
-        src.push("};");
-
-        src.push("struct Geometry {");
-        src.push("   vec3 position;");
-        src.push("   vec3 viewNormal;");
-        src.push("   vec3 worldNormal;");
-        src.push("   vec3 viewEyeDir;");
-        src.push("};");
-
-        src.push("struct Material {");
-        src.push("   vec3    diffuseColor;");
-        src.push("   float   specularRoughness;");
-        src.push("   vec3    specularColor;");
-        src.push("   float   shine;"); // Only used for Phong
-        src.push("};");
-
-        // COMMON UTILS
-
-        if (phongMaterial) {
-
-            if (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0) {
-
-                src.push("void computePhongLightMapping(const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
-
-                if (lightsState.lightMaps.length > 0) {
-                    src.push("   vec3 irradiance = " + TEXTURE_DECODE_FUNCS[lightsState.lightMaps[0].encoding] + "(texture(lightMap, geometry.worldNormal)).rgb;");
-                    src.push("   irradiance *= PI;");
-                    src.push("   vec3 diffuseBRDFContrib = (RECIPROCAL_PI * material.diffuseColor);");
-                    src.push("   reflectedLight.diffuse += irradiance * diffuseBRDFContrib;");
-                }
-                if (lightsState.reflectionMaps.length > 0) {
-                    src.push("   vec3 reflectVec             = reflect(-geometry.viewEyeDir, geometry.viewNormal);");
-                    src.push("   vec3 radiance               = texture(reflectionMap, reflectVec).rgb * 0.2;");
-                    src.push("   radiance *= PI;");
-                    src.push("   reflectedLight.specular     += radiance;");
-                }
-                src.push("}");
-            }
-
-            src.push("void computePhongLighting(const in IncidentLight directLight, const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
-            src.push("   float dotNL     = saturate(dot(geometry.viewNormal, directLight.direction));");
-            src.push("   vec3 irradiance = dotNL * directLight.color * PI;");
-            src.push("   reflectedLight.diffuse  += irradiance * (RECIPROCAL_PI * material.diffuseColor);");
-            src.push("   reflectedLight.specular += directLight.color * material.specularColor * pow(max(dot(reflect(-directLight.direction, -geometry.viewNormal), geometry.viewEyeDir), 0.0), material.shine);");
+    const fresnel = programVariables.createFragmentDefinition(
+        "fresnel",
+        (name, src) => {
+            src.push(`float ${name}(vec3 eyeDir, vec3 normal, float edgeBias, float centerBias, float power) {`);
+            src.push("    float fr = abs(dot(eyeDir, normal));");
+            src.push("    float finalFr = clamp((fr - edgeBias) / (centerBias - edgeBias), 0.0, 1.0);");
+            src.push("    return pow(finalFr, power);");
             src.push("}");
+        });
+
+    const setupFresnel = (name, colorSwizzle, getMaterialValue) => {
+        const fresnelUniform = (type, namePostfix, getParameterValue) => {
+            return programVariables.createUniform(type, name + "Fresnel" + namePostfix, (set, state) => set(getParameterValue(getMaterialValue(state.material))));
+        };
+        const edgeBias    = fresnelUniform("float", "EdgeBias",    (fresnelValue => fresnelValue.edgeBias));
+        const centerBias  = fresnelUniform("float", "CenterBias",  (fresnelValue => fresnelValue.centerBias));
+        const power       = fresnelUniform("float", "Power",       (fresnelValue => fresnelValue.power));
+        const edgeColor   = fresnelUniform("vec3",  "EdgeColor",   (fresnelValue => fresnelValue.edgeColor));
+        const centerColor = fresnelUniform("vec3",  "CenterColor", (fresnelValue => fresnelValue.centerColor));
+
+        return getMaterialValue(material) && ((viewEyeDir, viewNormal) => {
+                const f = `${fresnel}(${viewEyeDir}, ${viewNormal}, ${edgeBias}, ${centerBias}, ${power})`;
+                return `mix(${edgeColor + colorSwizzle}, ${centerColor + colorSwizzle}, ${f})`;
+        });
+    };
+
+    const diffuseFresnel  = setupFresnel("diffuse",  "",   mtl => mtl._diffuseFresnel);
+    const specularFresnel = setupFresnel("specular", "",   mtl => mtl._specularFresnel);
+    const emissiveFresnel = setupFresnel("emissive", "",   mtl => mtl._emissiveFresnel);
+    const alphaFresnel    = setupFresnel("alpha",    ".r", mtl => mtl._alphaFresnel);
+
+
+    const setup2dTexture = (name, getMaterialValue) => {
+        const initTex = attributes.uv && getMaterialValue(material);
+        const tex = initTex && setupTexture(programVariables, "sampler2D", name, initTex.encoding, (set, state) => set(getMaterialValue(state.material)._state.texture));
+        return tex && (function() {
+            const matrix = initTex._state.matrix && programVariables.createUniform("mat4", name + "MapMatrix", (set, state) => set(getMaterialValue(state.material)._state.matrix));
+            const getTexCoordExpression = matrix ? (texPos => `(${matrix} * ${texPos}).st`) : (texPos => `${texPos}.st`);
+            const sample = (texturePos, bias) => tex(getTexCoordExpression(texturePos, bias));
+            sample.getTexCoordExpression = getTexCoordExpression;
+            return sample;
+        })();
+    };
+
+    const ambientMap            = setup2dTexture("ambient",            mtl => mtl._ambientMap);
+    const baseColorMap          = setup2dTexture("baseColor",          mtl => mtl._baseColorMap);
+    const diffuseMap            = setup2dTexture("diffuse",            mtl => mtl._diffuseMap);
+    const emissiveMap           = setup2dTexture("emissive",           mtl => mtl._emissiveMap);
+    const occlusionMap          = setup2dTexture("occlusion",          mtl => mtl._occlusionMap);
+    const alphaMap              = setup2dTexture("alpha",              mtl => mtl._alphaMap);
+    const metallicMap           = setup2dTexture("metallic",           mtl => mtl._metallicMap);
+    const roughnessMap          = setup2dTexture("roughness",          mtl => mtl._roughnessMap);
+    const metallicRoughnessMap  = setup2dTexture("metallicRoughness",  mtl => mtl._metallicRoughnessMap);
+    const specularMap           = setup2dTexture("specular",           mtl => mtl._specularMap);
+    const glossinessMap         = setup2dTexture("glossiness",         mtl => mtl._glossinessMap);
+    const specularGlossinessMap = setup2dTexture("specularGlossiness", mtl => mtl._specularGlossinessMap);
+    const normalMap             = setup2dTexture("normal",             mtl => mtl._normalMap);
+
+
+    const setupUniform = (name, type, getMaterialValue) => {
+        const initValue = getMaterialValue(material);
+        const isDefined = (type === "float") ? ((initValue !== undefined) && (initValue !== null)) : initValue;
+        return isDefined && programVariables.createUniform(type, name, (set, state) => set(getMaterialValue(state.material)));
+    };
+
+    const materialAmbient         = setupUniform("materialAmbient",    "vec3",  mtl => mtl.ambient);
+    const materialDiffuse         = setupUniform("materialDiffuse",    "vec3",  mtl => mtl.diffuse);
+    const materialBaseColor       = setupUniform("materialBaseColor",  "vec3",  mtl => mtl.baseColor);
+    const materialEmissive        = setupUniform("materialEmissive",   "vec3",  mtl => mtl.emissive);
+    const materialSpecular        = setupUniform("materialSpecular",   "vec3",  mtl => mtl.specular);
+    const materialGlossiness      = setupUniform("materialGlossiness", "float", mtl => mtl.glossiness);
+    const materialMetallic        = setupUniform("materialMetallic",   "float", mtl => mtl.metallic);
+    const materialRoughness       = setupUniform("materialRoughness",  "float", mtl => mtl.roughness);
+    const materialShininess       = setupUniform("materialShininess",  "float", mtl => mtl.shininess);
+    const materialSpecularF0      = setupUniform("materialSpecularF0", "float", mtl => mtl.specularF0);
+    const materialAlphaModeCutoff = setupUniform("materialAlphaModeCutoff", "vec4",  mtl => {
+        const alpha = mtl.alpha;
+        if ((alpha !== undefined) && (alpha !== null)) {
+            tempVec4[0] = alpha;
+            tempVec4[1] = (mtl.alphaMode === 1 ? 1 : 0);
+            tempVec4[2] = mtl.alphaCutoff;
+            return tempVec4;
+        } else {
+            return null;
         }
+    });
 
-        if (metallicMaterial || specularMaterial) {
+    const vViewPosition = programVariables.createVarying("vec3", "vViewPosition", () => `${attributes.position.view}.xyz`);
+    const texturePos = programVariables.createVarying("vec4", "texturePos", () => `vec4(${attributes.uv}, 1.0, 1.0)`);
+    const vColor = attributes.color && programVariables.createVarying("vec4", "vColor", () => attributes.color);
 
-            // IRRADIANCE EVALUATION
+    const vViewNormal = programVariables.createVarying("vec3", "vViewNormal", () => attributes.normal.view);
+    const texUnitConverter = `mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0)`;
+    const vDirectionals = lightSetup.directionalLights.map((light, i) => ({
+        vViewLightReverseDir: programVariables.createVarying("vec3", `vViewLightReverseDir${i}`, () => light.getDirection(geometry.viewMatrix, null)),
+        vShadowPosFromLight:  programVariables.createVarying("vec3", `vShadowPosFromLight${i}`, () => `(${texUnitConverter} * ${light.shadowParameters.getShadowProjMatrix()} * (${light.shadowParameters.getShadowViewMatrix()} * ${attributes.position.world})).xyz`)
+    }));
+    const vWorldNormal = programVariables.createVarying("vec3", "vWorldNormal", () => attributes.normal.world);
 
-            src.push("float GGXRoughnessToBlinnExponent(const in float ggxRoughness) {");
-            src.push("   float r = ggxRoughness + 0.0001;");
-            src.push("   return (2.0 / (r * r) - 2.0);");
-            src.push("}");
+    const outColor = programVariables.createOutput("vec4", "outColor");
 
-            src.push("float getSpecularMIPLevel(const in float blinnShininessExponent, const in int maxMIPLevel) {");
-            src.push("   float maxMIPLevelScalar = float( maxMIPLevel );");
-            src.push("   float desiredMIPLevel = maxMIPLevelScalar - 0.79248 - 0.5 * log2( ( blinnShininessExponent * blinnShininessExponent ) + 1.0 );");
-            src.push("   return clamp( desiredMIPLevel, 0.0, maxMIPLevelScalar );");
-            src.push("}");
+    const saturate = programVariables.createFragmentDefinition(
+        "saturate",
+        (name, src) => src.push(`float ${name}(const in float a) { return clamp(a, 0.0, 1.0); }`));
 
-            if (lightsState.reflectionMaps.length > 0) {
-                src.push("vec3 getLightProbeIndirectRadiance(const in vec3 reflectVec, const in float blinnShininessExponent, const in int maxMIPLevel) {");
-                src.push("   float mipLevel = 0.5 * getSpecularMIPLevel(blinnShininessExponent, maxMIPLevel);"); //TODO: a random factor - fix this
-                src.push("   vec3 envMapColor = " + TEXTURE_DECODE_FUNCS[lightsState.reflectionMaps[0].encoding] + "(texture(reflectionMap, reflectVec, mipLevel)).rgb;");
-                src.push("  return envMapColor;");
-                src.push("}");
-            }
-
-            // SPECULAR BRDF EVALUATION
-
+    const BRDF_Specular_GGX = programVariables.createFragmentDefinition(
+        "BRDF_Specular_GGX",
+        (name, src) => {
             src.push("vec3 F_Schlick(const in vec3 specularColor, const in float dotLH) {");
             src.push("   float fresnel = exp2( ( -5.55473 * dotLH - 6.98316 ) * dotLH );");
             src.push("   return ( 1.0 - specularColor ) * fresnel + specularColor;");
@@ -766,30 +137,34 @@ function buildFragmentDraw(mesh) {
             src.push("   float a2 = ( alpha * alpha );");
             src.push("   float gv = dotNL * sqrt( a2 + ( 1.0 - a2 ) * ( dotNV * dotNV ) );");
             src.push("   float gl = dotNV * sqrt( a2 + ( 1.0 - a2 ) * ( dotNL * dotNL ) );");
-            src.push("   return 0.5 / max( gv + gl, EPSILON );");
+            src.push("   return 0.5 / max( gv + gl, 1e-6 );");
             src.push("}");
 
             src.push("float D_GGX(const in float alpha, const in float dotNH) {");
             src.push("   float a2 = ( alpha * alpha );");
             src.push("   float denom = ( dotNH * dotNH) * ( a2 - 1.0 ) + 1.0;");
-            src.push("   return RECIPROCAL_PI * a2 / ( denom * denom);");
+            src.push("   return 0.31830988618 * a2 / ( denom * denom);"); // 1/PI
             src.push("}");
 
-            src.push("vec3 BRDF_Specular_GGX(const in IncidentLight incidentLight, const in Geometry geometry, const in vec3 specularColor, const in float roughness) {");
+            src.push(`vec3 ${name}(const in vec3 incidentLightDirection, const in vec3 viewNormal, const in vec3 viewEyeDir, const in vec3 specularColor, const in float roughness) {`);
             src.push("   float alpha = ( roughness * roughness );");
-            src.push("   vec3 halfDir = normalize( incidentLight.direction + geometry.viewEyeDir );");
-            src.push("   float dotNL = saturate( dot( geometry.viewNormal, incidentLight.direction ) );");
-            src.push("   float dotNV = saturate( dot( geometry.viewNormal, geometry.viewEyeDir ) );");
-            src.push("   float dotNH = saturate( dot( geometry.viewNormal, halfDir ) );");
-            src.push("   float dotLH = saturate( dot( incidentLight.direction, halfDir ) );");
+            src.push("   vec3 halfDir = normalize( incidentLightDirection + viewEyeDir );");
+            src.push(`   float dotNL = ${saturate}( dot( viewNormal, incidentLightDirection ) );`);
+            src.push(`   float dotNV = ${saturate}( dot( viewNormal, viewEyeDir ) );`);
+            src.push(`   float dotNH = ${saturate}( dot( viewNormal, halfDir ) );`);
+            src.push(`   float dotLH = ${saturate}( dot( incidentLightDirection, halfDir ) );`);
             src.push("   vec3  F = F_Schlick( specularColor, dotLH );");
             src.push("   float G = G_GGX_SmithCorrelated( alpha, dotNL, dotNV );");
             src.push("   float D = D_GGX( alpha, dotNH );");
             src.push("   return F * (G * D);");
             src.push("}");
+        });
 
-            src.push("vec3 BRDF_Specular_GGX_Environment(const in Geometry geometry, const in vec3 specularColor, const in float roughness) {");
-            src.push("   float dotNV = saturate(dot(geometry.viewNormal, geometry.viewEyeDir));");
+    const BRDF_Specular_GGX_Environment = programVariables.createFragmentDefinition(
+        "BRDF_Specular_GGX_Environment",
+        (name, src) => {
+            src.push(`vec3 ${name}(const in vec3 viewNormal, const in vec3 viewEyeDir, const in vec3 specularColor, const in float roughness) {`);
+            src.push(`   float dotNV = ${saturate}(dot(viewNormal, viewEyeDir));`);
             src.push("   const vec4 c0 = vec4( -1, -0.0275, -0.572,  0.022);");
             src.push("   const vec4 c1 = vec4(  1,  0.0425,   1.04, -0.04);");
             src.push("   vec4 r = roughness * c0 + c1;");
@@ -797,776 +172,202 @@ function buildFragmentDraw(mesh) {
             src.push("   vec2 AB    = vec2(-1.04, 1.04) * a004 + r.zw;");
             src.push("   return specularColor * AB.x + AB.y;");
             src.push("}");
+        });
 
-            if (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0) {
-
-                src.push("void computePBRLightMapping(const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
-                if (lightsState.lightMaps.length > 0) {
-                    src.push("   vec3 irradiance = sRGBToLinear(texture(lightMap, geometry.worldNormal)).rgb;");
-                    src.push("   irradiance *= PI;");
-                    src.push("   vec3 diffuseBRDFContrib = (RECIPROCAL_PI * material.diffuseColor);");
-                    src.push("   reflectedLight.diffuse += irradiance * diffuseBRDFContrib;");
-                    //   src.push("   reflectedLight.diffuse = vec3(1.0, 0.0, 0.0);");
-                }
-                if (lightsState.reflectionMaps.length > 0) {
-                    src.push("   vec3 reflectVec             = reflect(-geometry.viewEyeDir, geometry.viewNormal);");
-                    src.push("   reflectVec                  = inverseTransformDirection(reflectVec, viewMatrix);");
-                    src.push("   float blinnExpFromRoughness = GGXRoughnessToBlinnExponent(material.specularRoughness);");
-                    src.push("   vec3 radiance               = getLightProbeIndirectRadiance(reflectVec, blinnExpFromRoughness, 8);");
-                    src.push("   vec3 specularBRDFContrib    = BRDF_Specular_GGX_Environment(geometry, material.specularColor, material.specularRoughness);");
-                    src.push("   reflectedLight.specular     += radiance * specularBRDFContrib;");
-                }
-                src.push("}");
-            }
-
-            // MAIN LIGHTING COMPUTATION FUNCTION
-
-            src.push("void computePBRLighting(const in IncidentLight incidentLight, const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
-            src.push("   float dotNL     = saturate(dot(geometry.viewNormal, incidentLight.direction));");
-            src.push("   vec3 irradiance = dotNL * incidentLight.color * PI;");
-            src.push("   reflectedLight.diffuse  += irradiance * (RECIPROCAL_PI * material.diffuseColor);");
-            src.push("   reflectedLight.specular += irradiance * BRDF_Specular_GGX(incidentLight, geometry, material.specularColor, material.specularRoughness);");
+    const perturbNormal2Arb = programVariables.createFragmentDefinition(
+        "perturbNormal2Arb",
+        (name, src) => {
+            src.push(`vec3 ${name}( vec3 eye_pos, vec3 surf_norm, vec2 uv, vec4 texel ) {`);
+            src.push("      vec3 q0 = vec3( dFdx( eye_pos.x ), dFdx( eye_pos.y ), dFdx( eye_pos.z ) );");
+            src.push("      vec3 q1 = vec3( dFdy( eye_pos.x ), dFdy( eye_pos.y ), dFdy( eye_pos.z ) );");
+            src.push("      vec2 st0 = dFdx( uv.st );");
+            src.push("      vec2 st1 = dFdy( uv.st );");
+            src.push("      vec3 S = normalize( q0 * st1.t - q1 * st0.t );");
+            src.push("      vec3 T = normalize( -q0 * st1.s + q1 * st0.s );");
+            src.push("      vec3 N = normalize( surf_norm );");
+            src.push("      vec3 mapN = texel.xyz * 2.0 - 1.0;");
+            src.push("      mat3 tsn = mat3( S, T, N );");
+            //     src.push("      mapN *= 3.0;");
+            src.push("      return normalize( tsn * mapN );");
             src.push("}");
+        });
 
-        } // (metallicMaterial || specularMaterial)
+    return {
+        getHash: () => [
+            meshDrawHash,
+            scene.gammaOutput ? "go" : "",
+            lightSetup.getHash(),
+            material._state.hash
+        ],
+        programName: "Draw",
+        canActAsBackground: true,
+        discardPoints: true,
+        setupPointSize: true,
+        setsLineWidth: true,
+        appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => {
+            const hasNonAmbientLighting = attributes.normal && ((lightSetup.directionalLights.length > 0) || lightSetup.getIrradiance || lightSetup.getReflection);
+            src.push(`vec3 diffuseColor = ${(hasNonAmbientLighting && (phongMaterial || specularMaterial) && materialDiffuse) || (metallicMaterial && materialBaseColor) || "vec3(1.0)"};`);
+            src.push(`vec4 alphaModeCutoff = ${((phongMaterial || metallicMaterial || specularMaterial) && materialAlphaModeCutoff) || "vec4(1.0, 0.0, 0.0, 0.0)"};`);
+            src.push("float alpha = alphaModeCutoff[0];");
+            (phongMaterial || metallicMaterial || specularMaterial) && alphaMap && src.push(`alpha *= ${alphaMap(texturePos)}.r;`);
 
-    } // geometry.normals
-
-    //--------------------------------------------------------------------------------
-    // GEOMETRY INPUTS
-    //--------------------------------------------------------------------------------
-
-    src.push("in vec3 vViewPosition;");
-
-    if (geometryState.colors) {
-        src.push("in vec4 vColor;");
-    }
-
-    if (uvs &&
-        ((normals && material._normalMap)
-            || material._ambientMap
-            || material._baseColorMap
-            || material._diffuseMap
-            || material._emissiveMap
-            || material._metallicMap
-            || material._roughnessMap
-            || material._metallicRoughnessMap
-            || material._specularMap
-            || material._glossinessMap
-            || material._specularGlossinessMap
-            || material._occlusionMap
-            || material._alphaMap)) {
-        src.push("in vec2 vUV;");
-    }
-
-    if (normals) {
-        if (lightsState.lightMaps.length > 0) {
-            src.push("in vec3 vWorldNormal;");
-        }
-        src.push("in vec3 vViewNormal;");
-    }
-
-    //--------------------------------------------------------------------------------
-    // MATERIAL CHANNEL INPUTS
-    //--------------------------------------------------------------------------------
-
-    if (materialState.ambient) {
-        src.push("uniform vec3 materialAmbient;");
-    }
-    if (materialState.baseColor) {
-        src.push("uniform vec3 materialBaseColor;");
-    }
-    if (materialState.alpha !== undefined && materialState.alpha !== null) {
-        src.push("uniform vec4 materialAlphaModeCutoff;"); // [alpha, alphaMode, alphaCutoff]
-    }
-    if (materialState.emissive) {
-        src.push("uniform vec3 materialEmissive;");
-    }
-    if (materialState.diffuse) {
-        src.push("uniform vec3 materialDiffuse;");
-    }
-    if (materialState.glossiness !== undefined && materialState.glossiness !== null) {
-        src.push("uniform float materialGlossiness;");
-    }
-    if (materialState.shininess !== undefined && materialState.shininess !== null) {
-        src.push("uniform float materialShininess;");  // Phong channel
-    }
-    if (materialState.specular) {
-        src.push("uniform vec3 materialSpecular;");
-    }
-    if (materialState.metallic !== undefined && materialState.metallic !== null) {
-        src.push("uniform float materialMetallic;");
-    }
-    if (materialState.roughness !== undefined && materialState.roughness !== null) {
-        src.push("uniform float materialRoughness;");
-    }
-    if (materialState.specularF0 !== undefined && materialState.specularF0 !== null) {
-        src.push("uniform float materialSpecularF0;");
-    }
-
-    //--------------------------------------------------------------------------------
-    // MATERIAL TEXTURE INPUTS
-    //--------------------------------------------------------------------------------
-
-    if (uvs && material._ambientMap) {
-        src.push("uniform sampler2D ambientMap;");
-        if (material._ambientMap._state.matrix) {
-            src.push("uniform mat4 ambientMapMatrix;");
-        }
-    }
-    if (uvs && material._baseColorMap) {
-        src.push("uniform sampler2D baseColorMap;");
-        if (material._baseColorMap._state.matrix) {
-            src.push("uniform mat4 baseColorMapMatrix;");
-        }
-    }
-    if (uvs && material._diffuseMap) {
-        src.push("uniform sampler2D diffuseMap;");
-        if (material._diffuseMap._state.matrix) {
-            src.push("uniform mat4 diffuseMapMatrix;");
-        }
-    }
-    if (uvs && material._emissiveMap) {
-        src.push("uniform sampler2D emissiveMap;");
-        if (material._emissiveMap._state.matrix) {
-            src.push("uniform mat4 emissiveMapMatrix;");
-        }
-    }
-    if (normals && uvs && material._metallicMap) {
-        src.push("uniform sampler2D metallicMap;");
-        if (material._metallicMap._state.matrix) {
-            src.push("uniform mat4 metallicMapMatrix;");
-        }
-    }
-    if (normals && uvs && material._roughnessMap) {
-        src.push("uniform sampler2D roughnessMap;");
-        if (material._roughnessMap._state.matrix) {
-            src.push("uniform mat4 roughnessMapMatrix;");
-        }
-    }
-    if (normals && uvs && material._metallicRoughnessMap) {
-        src.push("uniform sampler2D metallicRoughnessMap;");
-        if (material._metallicRoughnessMap._state.matrix) {
-            src.push("uniform mat4 metallicRoughnessMapMatrix;");
-        }
-    }
-    if (normals && material._normalMap) {
-        src.push("uniform sampler2D normalMap;");
-        if (material._normalMap._state.matrix) {
-            src.push("uniform mat4 normalMapMatrix;");
-        }
-        src.push("vec3 perturbNormal2Arb( vec3 eye_pos, vec3 surf_norm, vec2 uv ) {");
-        src.push("      vec3 q0 = vec3( dFdx( eye_pos.x ), dFdx( eye_pos.y ), dFdx( eye_pos.z ) );");
-        src.push("      vec3 q1 = vec3( dFdy( eye_pos.x ), dFdy( eye_pos.y ), dFdy( eye_pos.z ) );");
-        src.push("      vec2 st0 = dFdx( uv.st );");
-        src.push("      vec2 st1 = dFdy( uv.st );");
-        src.push("      vec3 S = normalize( q0 * st1.t - q1 * st0.t );");
-        src.push("      vec3 T = normalize( -q0 * st1.s + q1 * st0.s );");
-        src.push("      vec3 N = normalize( surf_norm );");
-        src.push("      vec3 mapN = texture( normalMap, uv ).xyz * 2.0 - 1.0;");
-        src.push("      mat3 tsn = mat3( S, T, N );");
-        //     src.push("      mapN *= 3.0;");
-        src.push("      return normalize( tsn * mapN );");
-        src.push("}");
-    }
-    if (uvs && material._occlusionMap) {
-        src.push("uniform sampler2D occlusionMap;");
-        if (material._occlusionMap._state.matrix) {
-            src.push("uniform mat4 occlusionMapMatrix;");
-        }
-    }
-    if (uvs && material._alphaMap) {
-        src.push("uniform sampler2D alphaMap;");
-        if (material._alphaMap._state.matrix) {
-            src.push("uniform mat4 alphaMapMatrix;");
-        }
-    }
-    if (normals && uvs && material._specularMap) {
-        src.push("uniform sampler2D specularMap;");
-        if (material._specularMap._state.matrix) {
-            src.push("uniform mat4 specularMapMatrix;");
-        }
-    }
-    if (normals && uvs && material._glossinessMap) {
-        src.push("uniform sampler2D glossinessMap;");
-        if (material._glossinessMap._state.matrix) {
-            src.push("uniform mat4 glossinessMapMatrix;");
-        }
-    }
-    if (normals && uvs && material._specularGlossinessMap) {
-        src.push("uniform sampler2D materialSpecularGlossinessMap;");
-        if (material._specularGlossinessMap._state.matrix) {
-            src.push("uniform mat4 materialSpecularGlossinessMapMatrix;");
-        }
-    }
-
-    //--------------------------------------------------------------------------------
-    // MATERIAL FRESNEL INPUTS
-    //--------------------------------------------------------------------------------
-
-    if (normals && (material._diffuseFresnel ||
-        material._specularFresnel ||
-        material._alphaFresnel ||
-        material._emissiveFresnel ||
-        material._reflectivityFresnel)) {
-        src.push("float fresnel(vec3 eyeDir, vec3 normal, float edgeBias, float centerBias, float power) {");
-        src.push("    float fr = abs(dot(eyeDir, normal));");
-        src.push("    float finalFr = clamp((fr - edgeBias) / (centerBias - edgeBias), 0.0, 1.0);");
-        src.push("    return pow(finalFr, power);");
-        src.push("}");
-        if (material._diffuseFresnel) {
-            src.push("uniform float  diffuseFresnelCenterBias;");
-            src.push("uniform float  diffuseFresnelEdgeBias;");
-            src.push("uniform float  diffuseFresnelPower;");
-            src.push("uniform vec3   diffuseFresnelCenterColor;");
-            src.push("uniform vec3   diffuseFresnelEdgeColor;");
-        }
-        if (material._specularFresnel) {
-            src.push("uniform float  specularFresnelCenterBias;");
-            src.push("uniform float  specularFresnelEdgeBias;");
-            src.push("uniform float  specularFresnelPower;");
-            src.push("uniform vec3   specularFresnelCenterColor;");
-            src.push("uniform vec3   specularFresnelEdgeColor;");
-        }
-        if (material._alphaFresnel) {
-            src.push("uniform float  alphaFresnelCenterBias;");
-            src.push("uniform float  alphaFresnelEdgeBias;");
-            src.push("uniform float  alphaFresnelPower;");
-            src.push("uniform vec3   alphaFresnelCenterColor;");
-            src.push("uniform vec3   alphaFresnelEdgeColor;");
-        }
-        if (material._reflectivityFresnel) {
-            src.push("uniform float  materialSpecularF0FresnelCenterBias;");
-            src.push("uniform float  materialSpecularF0FresnelEdgeBias;");
-            src.push("uniform float  materialSpecularF0FresnelPower;");
-            src.push("uniform vec3   materialSpecularF0FresnelCenterColor;");
-            src.push("uniform vec3   materialSpecularF0FresnelEdgeColor;");
-        }
-        if (material._emissiveFresnel) {
-            src.push("uniform float  emissiveFresnelCenterBias;");
-            src.push("uniform float  emissiveFresnelEdgeBias;");
-            src.push("uniform float  emissiveFresnelPower;");
-            src.push("uniform vec3   emissiveFresnelCenterColor;");
-            src.push("uniform vec3   emissiveFresnelEdgeColor;");
-        }
-    }
-
-    //--------------------------------------------------------------------------------
-    // LIGHT SOURCES
-    //--------------------------------------------------------------------------------
-
-    src.push("uniform vec4   lightAmbient;");
-
-    if (normals) {
-        for (let i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
-            const light = lightsState.lights[i];
-            if (light.type === "ambient") {
-                continue;
+            if (vColor) {
+                src.push(`diffuseColor *= ${vColor}.rgb;`);
+                src.push(`alpha *= ${vColor}.a;`);
             }
-            src.push("uniform vec4 lightColor" + i + ";");
-            if (light.type === "point") {
-                src.push("uniform vec3 lightAttenuation" + i + ";");
+            if (metallicMaterial && baseColorMap) {
+                src.push("vec4 baseColorTexel = " + baseColorMap(texturePos) + ";");
+                src.push("diffuseColor *= baseColorTexel.rgb;");
+                src.push("alpha *= baseColorTexel.a;");
             }
-            if (light.type === "dir" && light.space === "view") {
-                src.push("uniform vec3 lightDir" + i + ";");
-            }
-            if (light.type === "point" && light.space === "view") {
-                src.push("uniform vec3 lightPos" + i + ";");
-            } else {
-                src.push("in vec4 vViewLightReverseDirAndDist" + i + ";");
-            }
-        }
-    }
-
-    if (receivesShadow) {
-
-        // Variance castsShadow mapping filter
-
-        // src.push("float linstep(float low, float high, float v){");
-        // src.push("      return clamp((v-low)/(high-low), 0.0, 1.0);");
-        // src.push("}");
-        //
-        // src.push("float VSM(sampler2D depths, vec2 uv, float compare){");
-        // src.push("      vec2 moments = texture(depths, uv).xy;");
-        // src.push("      float p = smoothstep(compare-0.02, compare, moments.x);");
-        // src.push("      float variance = max(moments.y - moments.x*moments.x, -0.001);");
-        // src.push("      float d = compare - moments.x;");
-        // src.push("      float p_max = linstep(0.2, 1.0, variance / (variance + d*d));");
-        // src.push("      return clamp(max(p, p_max), 0.0, 1.0);");
-        // src.push("}");
-
-        for (let i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
-            if (lightsState.lights[i].castsShadow) {
-                src.push("in vec4 vShadowPosFromLight" + i + ";");
-                src.push("uniform sampler2D shadowMap" + i + ";");
-            }
-        }
-    }
-
-    src.push("uniform vec4 colorize;");
-
-    //================================================================================
-    // MAIN
-    //================================================================================
-    src.push("out vec4 outColor;");
-    src.push("void main(void) {");
-
-    if (clipping) {
-        src.push("if (clippable) {");
-        src.push("  float dist = 0.0;");
-        for (var i = 0; i < sectionPlanesState.getNumAllocatedSectionPlanes(); i++) {
-            src.push("if (sectionPlaneActive" + i + ") {");
-            src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
-            src.push("}");
-        }
-        src.push("  if (dist > 0.0) { discard; }");
-        if (solid) {
-            src.push("  if (gl_FrontFacing == false) {");
-            src.push("     outColor = vec4(1.0, 0.0, 0.0, 1.0);");
-            src.push("     return;");
-            src.push("  }");
-        }
-        src.push("}");
-    }
-
-    if (geometryState.primitiveName === "points") {
-        src.push("vec2 cxy = 2.0 * gl_PointCoord - 1.0;");
-        src.push("float r = dot(cxy, cxy);");
-        src.push("if (r > 1.0) {");
-        src.push("   discard;");
-        src.push("}");
-    }
-
-    src.push("float occlusion = 1.0;");
-
-    if (materialState.ambient) {
-        src.push("vec3 ambientColor = materialAmbient;");
-    } else {
-        src.push("vec3 ambientColor = vec3(1.0, 1.0, 1.0);");
-    }
-
-    if (materialState.diffuse) {
-        src.push("vec3 diffuseColor = materialDiffuse;");
-    } else if (materialState.baseColor) {
-        src.push("vec3 diffuseColor = materialBaseColor;");
-    } else {
-        src.push("vec3 diffuseColor = vec3(1.0, 1.0, 1.0);");
-    }
-
-    if (geometryState.colors) {
-        src.push("diffuseColor *= vColor.rgb;");
-    }
-
-    if (materialState.emissive) {
-        src.push("vec3 emissiveColor = materialEmissive;"); // Emissive default is (0,0,0), so initializing here
-    } else {
-        src.push("vec3  emissiveColor = vec3(0.0, 0.0, 0.0);");
-    }
-
-    if (materialState.specular) {
-        src.push("vec3 specular = materialSpecular;");
-    } else {
-        src.push("vec3 specular = vec3(1.0, 1.0, 1.0);");
-    }
-
-    if (materialState.alpha !== undefined) {
-        src.push("float alpha = materialAlphaModeCutoff[0];");
-    } else {
-        src.push("float alpha = 1.0;");
-    }
-
-    if (geometryState.colors) {
-        src.push("alpha *= vColor.a;");
-    }
-
-    if (materialState.glossiness !== undefined) {
-        src.push("float glossiness = materialGlossiness;");
-    } else {
-        src.push("float glossiness = 1.0;");
-    }
-
-    if (materialState.metallic !== undefined) {
-        src.push("float metallic = materialMetallic;");
-    } else {
-        src.push("float metallic = 1.0;");
-    }
-
-    if (materialState.roughness !== undefined) {
-        src.push("float roughness = materialRoughness;");
-    } else {
-        src.push("float roughness = 1.0;");
-    }
-
-    if (materialState.specularF0 !== undefined) {
-        src.push("float specularF0 = materialSpecularF0;");
-    } else {
-        src.push("float specularF0 = 1.0;");
-    }
-
-    //--------------------------------------------------------------------------------
-    // TEXTURING
-    //--------------------------------------------------------------------------------
-
-    if (uvs && ((normals && material._normalMap)
-        || material._ambientMap
-        || material._baseColorMap
-        || material._diffuseMap
-        || material._occlusionMap
-        || material._emissiveMap
-        || material._metallicMap
-        || material._roughnessMap
-        || material._metallicRoughnessMap
-        || material._specularMap
-        || material._glossinessMap
-        || material._specularGlossinessMap
-        || material._alphaMap)) {
-        src.push("vec4 texturePos = vec4(vUV.s, vUV.t, 1.0, 1.0);");
-        src.push("vec2 textureCoord;");
-    }
-
-    if (uvs && material._ambientMap) {
-        if (material._ambientMap._state.matrix) {
-            src.push("textureCoord = (ambientMapMatrix * texturePos).xy;");
-        } else {
-            src.push("textureCoord = texturePos.xy;");
-        }
-        src.push("vec4 ambientTexel = texture(ambientMap, textureCoord).rgb;");
-        src.push("ambientTexel = " + TEXTURE_DECODE_FUNCS[material._ambientMap._state.encoding] + "(ambientTexel);");
-        src.push("ambientColor *= ambientTexel.rgb;");
-    }
-
-    if (uvs && material._diffuseMap) {
-        if (material._diffuseMap._state.matrix) {
-            src.push("textureCoord = (diffuseMapMatrix * texturePos).xy;");
-        } else {
-            src.push("textureCoord = texturePos.xy;");
-        }
-        src.push("vec4 diffuseTexel = texture(diffuseMap, textureCoord);");
-        src.push("diffuseTexel = " + TEXTURE_DECODE_FUNCS[material._diffuseMap._state.encoding] + "(diffuseTexel);");
-        src.push("diffuseColor *= diffuseTexel.rgb;");
-        src.push("alpha *= diffuseTexel.a;");
-    }
-
-    if (uvs && material._baseColorMap) {
-        if (material._baseColorMap._state.matrix) {
-            src.push("textureCoord = (baseColorMapMatrix * texturePos).xy;");
-        } else {
-            src.push("textureCoord = texturePos.xy;");
-        }
-        src.push("vec4 baseColorTexel = texture(baseColorMap, textureCoord);");
-        src.push("baseColorTexel = " + TEXTURE_DECODE_FUNCS[material._baseColorMap._state.encoding] + "(baseColorTexel);");
-        src.push("diffuseColor *= baseColorTexel.rgb;");
-        src.push("alpha *= baseColorTexel.a;");
-    }
-
-    if (uvs && material._emissiveMap) {
-        if (material._emissiveMap._state.matrix) {
-            src.push("textureCoord = (emissiveMapMatrix * texturePos).xy;");
-        } else {
-            src.push("textureCoord = texturePos.xy;");
-        }
-        src.push("vec4 emissiveTexel = texture(emissiveMap, textureCoord);");
-        src.push("emissiveTexel = " + TEXTURE_DECODE_FUNCS[material._emissiveMap._state.encoding] + "(emissiveTexel);");
-        src.push("emissiveColor = emissiveTexel.rgb;");
-    }
-
-    if (uvs && material._alphaMap) {
-        if (material._alphaMap._state.matrix) {
-            src.push("textureCoord = (alphaMapMatrix * texturePos).xy;");
-        } else {
-            src.push("textureCoord = texturePos.xy;");
-        }
-        src.push("alpha *= texture(alphaMap, textureCoord).r;");
-    }
-
-    if (uvs && material._occlusionMap) {
-        if (material._occlusionMap._state.matrix) {
-            src.push("textureCoord = (occlusionMapMatrix * texturePos).xy;");
-        } else {
-            src.push("textureCoord = texturePos.xy;");
-        }
-        src.push("occlusion *= texture(occlusionMap, textureCoord).r;");
-    }
-
-    if (normals && ((lightsState.lights.length > 0) || lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0)) {
-
-        //--------------------------------------------------------------------------------
-        // SHADING
-        //--------------------------------------------------------------------------------
-
-        if (uvs && material._normalMap) {
-            if (material._normalMap._state.matrix) {
-                src.push("textureCoord = (normalMapMatrix * texturePos).xy;");
-            } else {
-                src.push("textureCoord = texturePos.xy;");
-            }
-            src.push("vec3 viewNormal = perturbNormal2Arb( vViewPosition, normalize(vViewNormal), textureCoord );");
-        } else {
-            src.push("vec3 viewNormal = normalize(vViewNormal);");
-        }
-
-        if (uvs && material._specularMap) {
-            if (material._specularMap._state.matrix) {
-                src.push("textureCoord = (specularMapMatrix * texturePos).xy;");
-            } else {
-                src.push("textureCoord = texturePos.xy;");
-            }
-            src.push("specular *= texture(specularMap, textureCoord).rgb;");
-        }
-
-        if (uvs && material._glossinessMap) {
-            if (material._glossinessMap._state.matrix) {
-                src.push("textureCoord = (glossinessMapMatrix * texturePos).xy;");
-            } else {
-                src.push("textureCoord = texturePos.xy;");
-            }
-            src.push("glossiness *= texture(glossinessMap, textureCoord).r;");
-        }
-
-        if (uvs && material._specularGlossinessMap) {
-            if (material._specularGlossinessMap._state.matrix) {
-                src.push("textureCoord = (materialSpecularGlossinessMapMatrix * texturePos).xy;");
-            } else {
-                src.push("textureCoord = texturePos.xy;");
-            }
-            src.push("vec4 specGlossRGB = texture(materialSpecularGlossinessMap, textureCoord).rgba;"); // TODO: what if only RGB texture?
-            src.push("specular *= specGlossRGB.rgb;");
-            src.push("glossiness *= specGlossRGB.a;");
-        }
-
-        if (uvs && material._metallicMap) {
-            if (material._metallicMap._state.matrix) {
-                src.push("textureCoord = (metallicMapMatrix * texturePos).xy;");
-            } else {
-                src.push("textureCoord = texturePos.xy;");
-            }
-            src.push("metallic *= texture(metallicMap, textureCoord).r;");
-        }
-
-        if (uvs && material._roughnessMap) {
-            if (material._roughnessMap._state.matrix) {
-                src.push("textureCoord = (roughnessMapMatrix * texturePos).xy;");
-            } else {
-                src.push("textureCoord = texturePos.xy;");
-            }
-            src.push("roughness *= texture(roughnessMap, textureCoord).r;");
-        }
-
-        if (uvs && material._metallicRoughnessMap) {
-            if (material._metallicRoughnessMap._state.matrix) {
-                src.push("textureCoord = (metallicRoughnessMapMatrix * texturePos).xy;");
-            } else {
-                src.push("textureCoord = texturePos.xy;");
-            }
-            src.push("vec3 metalRoughRGB = texture(metallicRoughnessMap, textureCoord).rgb;");
-            src.push("metallic *= metalRoughRGB.b;");
-            src.push("roughness *= metalRoughRGB.g;");
-        }
-
-        src.push("vec3 viewEyeDir = normalize(-vViewPosition);");
-
-        if (material._diffuseFresnel) {
-            src.push("float diffuseFresnel = fresnel(viewEyeDir, viewNormal, diffuseFresnelEdgeBias, diffuseFresnelCenterBias, diffuseFresnelPower);");
-            src.push("diffuseColor *= mix(diffuseFresnelEdgeColor, diffuseFresnelCenterColor, diffuseFresnel);");
-        }
-        if (material._specularFresnel) {
-            src.push("float specularFresnel = fresnel(viewEyeDir, viewNormal, specularFresnelEdgeBias, specularFresnelCenterBias, specularFresnelPower);");
-            src.push("specular *= mix(specularFresnelEdgeColor, specularFresnelCenterColor, specularFresnel);");
-        }
-        if (material._alphaFresnel) {
-            src.push("float alphaFresnel = fresnel(viewEyeDir, viewNormal, alphaFresnelEdgeBias, alphaFresnelCenterBias, alphaFresnelPower);");
-            src.push("alpha *= mix(alphaFresnelEdgeColor.r, alphaFresnelCenterColor.r, alphaFresnel);");
-        }
-        if (material._emissiveFresnel) {
-            src.push("float emissiveFresnel = fresnel(viewEyeDir, viewNormal, emissiveFresnelEdgeBias, emissiveFresnelCenterBias, emissiveFresnelPower);");
-            src.push("emissiveColor *= mix(emissiveFresnelEdgeColor, emissiveFresnelCenterColor, emissiveFresnel);");
-        }
-
-        src.push("if (materialAlphaModeCutoff[1] == 1.0 && alpha < materialAlphaModeCutoff[2]) {"); // ie. (alphaMode == "mask" && alpha < alphaCutoff)
-        src.push("   discard;"); // TODO: Discard earlier within this shader?
-        src.push("}");
-
-        // PREPARE INPUTS FOR SHADER FUNCTIONS
-
-        src.push("IncidentLight  light;");
-        src.push("Material       material;");
-        src.push("Geometry       geometry;");
-        src.push("ReflectedLight reflectedLight = ReflectedLight(vec3(0.0,0.0,0.0), vec3(0.0,0.0,0.0));");
-        src.push("vec3           viewLightDir;");
-
-        if (phongMaterial) {
-            src.push("material.diffuseColor      = diffuseColor;");
-            src.push("material.specularColor     = specular;");
-            src.push("material.shine             = materialShininess;");
-        }
-
-        if (specularMaterial) {
-            src.push("float oneMinusSpecularStrength = 1.0 - max(max(specular.r, specular.g ),specular.b);"); // Energy conservation
-            src.push("material.diffuseColor      = diffuseColor * oneMinusSpecularStrength;");
-            src.push("material.specularRoughness = clamp( 1.0 - glossiness, 0.04, 1.0 );");
-            src.push("material.specularColor     = specular;");
-        }
-
-        if (metallicMaterial) {
-            src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
-            src.push("material.diffuseColor      = diffuseColor * (1.0 - dielectricSpecular) * (1.0 - metallic);");
-            src.push("material.specularRoughness = clamp(roughness, 0.04, 1.0);");
-            src.push("material.specularColor     = mix(vec3(dielectricSpecular), diffuseColor, metallic);");
-        }
-
-        src.push("geometry.position      = vViewPosition;");
-        if (lightsState.lightMaps.length > 0) {
-            src.push("geometry.worldNormal   = normalize(vWorldNormal);");
-        }
-        src.push("geometry.viewNormal    = viewNormal;");
-        src.push("geometry.viewEyeDir    = viewEyeDir;");
-
-        // ENVIRONMENT AND REFLECTION MAP SHADING
-
-        if ((phongMaterial) && (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0)) {
-            src.push("computePhongLightMapping(geometry, material, reflectedLight);");
-        }
-
-        if ((specularMaterial || metallicMaterial) && (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0)) {
-            src.push("computePBRLightMapping(geometry, material, reflectedLight);");
-        }
-
-        // LIGHT SOURCE SHADING
-
-        src.push("float shadow = 1.0;");
-
-        // if (receivesShadow) {
-        //
-        //     src.push("float lightDepth2 = clamp(length(lightPos)/40.0, 0.0, 1.0);");
-        //     src.push("float illuminated = VSM(sLightDepth, lightUV, lightDepth2);");
-        //
-        src.push("float shadowAcneRemover = 0.007;");
-        src.push("vec3 fragmentDepth;");
-        src.push("float texelSize = 1.0 / 1024.0;");
-        src.push("float amountInLight = 0.0;");
-        src.push("vec3 shadowCoord;");
-        src.push('vec4 rgbaDepth;');
-        src.push("float depth;");
-        // }
-
-        const numShadows = 0;
-        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-
-            const light = lightsState.lights[i];
-
-            if (light.type === "ambient") {
-                continue;
-            }
-            if (light.type === "dir" && light.space === "view") {
-                src.push("viewLightDir = -normalize(lightDir" + i + ");");
-            } else if (light.type === "point" && light.space === "view") {
-                src.push("viewLightDir = normalize(lightPos" + i + " - vViewPosition);");
-                //src.push("tmpVec3 = lightPos" + i + ".xyz - viewPosition.xyz;");
-                //src.push("lightDist = abs(length(tmpVec3));");
-            } else {
-                src.push("viewLightDir = normalize(vViewLightReverseDirAndDist" + i + ".xyz);"); // If normal mapping, the fragment->light vector will be in tangent space
+            if ((phongMaterial || specularMaterial) && diffuseMap) {
+                src.push("vec4 diffuseTexel = " + diffuseMap(texturePos) + ";");
+                src.push("diffuseColor *= diffuseTexel.rgb;");
+                src.push("alpha *= diffuseTexel.a;");
             }
 
-            if (receivesShadow && light.castsShadow) {
+            src.push(`vec3 emissiveColor = ${((phongMaterial || metallicMaterial || specularMaterial) && materialEmissive) || "vec3(0.0)"};`);
+            (phongMaterial || metallicMaterial || specularMaterial) && emissiveMap && src.push(`emissiveColor = ${emissiveMap(texturePos)}.rgb;`);
 
-                // if (true) {
-                //     src.push('shadowCoord = (vShadowPosFromLight' + i + '.xyz/vShadowPosFromLight' + i + '.w)/2.0 + 0.5;');
-                //     src.push("lightDepth2 = clamp(length(vec3[0.0, 20.0, 20.0])/40.0, 0.0, 1.0);");
-                //     src.push("castsShadow *= VSM(shadowMap' + i + ', shadowCoord, lightDepth2);");
-                // }
-                //
-                // if (false) {
-                //
-                // PCF
+            if (hasNonAmbientLighting) {
 
-                src.push("shadow = 0.0;");
+                src.push(`vec3 specular    = ${((phongMaterial || specularMaterial) && materialSpecular)   || "vec3(1.0)"};`);
+                src.push(`float glossiness = ${(specularMaterial && materialGlossiness) || "1.0"};`);
+                src.push(`float metallic   = ${(metallicMaterial && materialMetallic)   || "1.0"};`);
+                src.push(`float roughness  = ${((metallicMaterial || specularMaterial) && materialRoughness)  || "1.0"};`);
+                src.push(`float shininess  = ${(phongMaterial && materialShininess)|| "1.0"};`);
+                src.push(`float specularF0 = ${(metallicMaterial && materialSpecularF0) || "1.0"};`);
+                src.push(`float occlusion  = ${((phongMaterial || metallicMaterial || specularMaterial) && occlusionMap) ? `${occlusionMap(texturePos)}.r` : "1.0"};`);
 
-                src.push("fragmentDepth = vShadowPosFromLight" + i + ".xyz;");
-                src.push("fragmentDepth.z -= shadowAcneRemover;");
-                src.push("for (int x = -3; x <= 3; x++) {");
-                src.push("  for (int y = -3; y <= 3; y++) {");
-                src.push("      float texelDepth = unpackDepth(texture(shadowMap" + i + ", fragmentDepth.xy + vec2(x, y) * texelSize));");
-                src.push("      if (fragmentDepth.z < texelDepth) {");
-                src.push("          shadow += 1.0;");
-                src.push("      }");
-                src.push("  }");
+                //--------------------------------------------------------------------------------
+                // SHADING
+                //--------------------------------------------------------------------------------
+
+                metallicMaterial && metallicMap  && src.push(`metallic  *= ${metallicMap(texturePos)}.r;`);
+                metallicMaterial && roughnessMap && src.push(`roughness *= ${roughnessMap(texturePos)}.r;`);
+
+                if (metallicMaterial && metallicRoughnessMap) {
+                    src.push("vec4 metalRoughTexel = " + metallicRoughnessMap(texturePos) + ";");
+                    src.push("metallic  *= metalRoughTexel.b;");
+                    src.push("roughness *= metalRoughTexel.g;");
+                }
+
+                (phongMaterial || specularMaterial) && specularMap && src.push(`specular *= ${specularMap(texturePos)}.rgb;`);
+                specularMaterial && glossinessMap && src.push(`glossiness *= ${glossinessMap(texturePos)}.r;`);
+
+                if (specularMaterial && specularGlossinessMap) {
+                    src.push("vec4 specGlossTexel = " + specularGlossinessMap(texturePos) + ";"); // TODO: what if only RGB texture?
+                    src.push("specular   *= specGlossTexel.rgb;");
+                    src.push("glossiness *= specGlossTexel.a;");
+                }
+
+                const vViewNormalized = `normalize(${vViewNormal})`;
+                const viewNormal = (((phongMaterial || metallicMaterial || specularMaterial) && normalMap)
+                                    ? `${perturbNormal2Arb}(${vViewPosition}, ${vViewNormalized}, ${normalMap.getTexCoordExpression(texturePos)}, ${normalMap(texturePos)})`
+                                    : vViewNormalized);
+                src.push(`vec3 viewNormal = ${viewNormal};`);
+
+                src.push(`vec3 viewEyeDir = normalize(-${vViewPosition});`);
+
+                diffuseFresnel  && src.push(`diffuseColor  *= ${diffuseFresnel ("viewEyeDir", "viewNormal")};`);
+                specularFresnel && src.push(`specular      *= ${specularFresnel("viewEyeDir", "viewNormal")};`);
+                emissiveFresnel && src.push(`emissiveColor *= ${emissiveFresnel("viewEyeDir", "viewNormal")};`);
+                alphaFresnel    && src.push(`alpha         *= ${alphaFresnel   ("viewEyeDir", "viewNormal")};`);
+
+                src.push("if (alphaModeCutoff[1] == 1.0 && alpha < alphaModeCutoff[2]) {"); // ie. (alphaMode == "mask" && alpha < alphaCutoff)
+                src.push("   discard;"); // TODO: Discard earlier within this shader?
                 src.push("}");
 
-                src.push("shadow = shadow / 9.0;");
+                src.push("vec3 material_diffuseColor;");
 
-                src.push("light.color =  lightColor" + i + ".rgb * (lightColor" + i + ".a * shadow);"); // a is intensity
-                //
-                // }
-                //
-                // if (false){
-                //
-                //     src.push("shadow = 1.0;");
-                //
-                //     src.push('shadowCoord = (vShadowPosFromLight' + i + '.xyz/vShadowPosFromLight' + i + '.w)/2.0 + 0.5;');
-                //
-                //     src.push('shadow -= (shadowCoord.z > unpackDepth(texture(shadowMap' + i + ', shadowCoord.xy + vec2( -0.94201624, -0.39906216 ) / 700.0)) + 0.0015) ? 0.2 : 0.0;');
-                //     src.push('shadow -= (shadowCoord.z > unpackDepth(texture(shadowMap' + i + ', shadowCoord.xy + vec2( 0.94558609, -0.76890725 ) / 700.0)) + 0.0015) ? 0.2 : 0.0;');
-                //     src.push('shadow -= (shadowCoord.z > unpackDepth(texture(shadowMap' + i + ', shadowCoord.xy + vec2( -0.094184101, -0.92938870 ) / 700.0)) + 0.0015) ? 0.2 : 0.0;');
-                //     src.push('shadow -= (shadowCoord.z > unpackDepth(texture(shadowMap' + i + ', shadowCoord.xy + vec2( 0.34495938, 0.29387760 ) / 700.0)) + 0.0015) ? 0.2 : 0.0;');
-                //
-                //     src.push("light.color =  lightColor" + i + ".rgb * (lightColor" + i + ".a * shadow);");
-                // }
+                if (phongMaterial) {
+                    src.push("material_diffuseColor = diffuseColor;");
+                    src.push("roughness = 0.0;");
+                }
+
+                if (specularMaterial) {
+                    src.push("float oneMinusSpecularStrength = 1.0 - max(max(specular.r, specular.g ),specular.b);"); // Energy conservation
+                    src.push("material_diffuseColor = diffuseColor * oneMinusSpecularStrength;");
+                    src.push("roughness = clamp(1.0 - glossiness, 0.04, 1.0);");
+                }
+
+                if (metallicMaterial) {
+                    src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
+                    src.push("material_diffuseColor = diffuseColor * (1.0 - dielectricSpecular) * (1.0 - metallic);");
+                    src.push("roughness = clamp(roughness, 0.04, 1.0);");
+                    src.push("specular = mix(vec3(dielectricSpecular), diffuseColor, metallic);");
+                }
+
+                // ENVIRONMENT AND REFLECTION MAP SHADING
+
+                if (phongMaterial || metallicMaterial || specularMaterial) {
+                    src.push("const float PI = 3.14159265359;");
+                    src.push("vec3 reflDiff = vec3(0.0);");
+                    src.push("vec3 reflSpec = vec3(0.0);");
+
+                    lightSetup.getIrradiance && src.push(`reflDiff += ${lightSetup.getIrradiance(`normalize(${vWorldNormal})`)};`);
+
+                    if (lightSetup.getReflection) {
+                        const reflectVec = `reflect(-viewEyeDir, viewNormal)`;
+                        const spec = (phongMaterial
+                                      ? `0.2 * PI * ${lightSetup.getReflection(reflectVec)}`
+                                      : (function() {
+                                          const blinnExpFromRoughness = `2.0 / pow(roughness + 0.0001, 2.0) - 2.0`;
+                                          const specularBRDFContrib = `${BRDF_Specular_GGX_Environment}(viewNormal, viewEyeDir, specular, roughness)`;
+
+                                          const viewReflectVec = `normalize((vec4(${reflectVec}, 0.0) * ${geometry.viewMatrix}).xyz)`;
+                                          const maxMIPLevelScalar = "4.0";
+                                          const desiredMIPLevel = `${maxMIPLevelScalar} - 0.39624 - 0.25 * log2(pow(${blinnExpFromRoughness}, 2.0) + 1.0)`;
+                                          const mipLevel = `clamp(${desiredMIPLevel}, 0.0, ${maxMIPLevelScalar})`; //TODO: a random factor - fix this
+                                          return `${specularBRDFContrib} * ${lightSetup.getReflection(viewReflectVec, mipLevel)}`;
+                                      })());
+                        src.push(`reflSpec += ${spec};`);
+                    }
+                    if (lightSetup.directionalLights.some(ligth => ligth.shadowParameters)) {
+                        src.push("const vec4 bitShift = vec4(1.0, 1.0/256.0, 1.0/(256.0 * 256.0), 1.0/(256.0*256.0*256.0));");
+                        src.push("const float texelSize = 1.0 / 1024.0;");
+                        src.push("float shadow;");
+                        src.push("float fragmentDepth;");
+                    }
+                    lightSetup.directionalLights.forEach((light, i) => {
+                        if (light.shadowParameters) {
+                            const shadowAcneRemover = "0.007";
+                            src.push(`fragmentDepth = ${vDirectionals[i].vShadowPosFromLight}.z - ${shadowAcneRemover};`);
+                            src.push("shadow = 0.0;");
+                            src.push("for (int x = -3; x <= 3; x++) {");
+                            src.push("  for (int y = -3; y <= 3; y++) {");
+                            src.push(`      float texelDepth = dot(texture(${light.getShadowMap()}, ${vDirectionals[i].vShadowPosFromLight}.xy + vec2(x, y) * texelSize), bitShift);`);
+                            src.push(`      if (fragmentDepth < texelDepth) {`);
+                            src.push("          shadow += 1.0;");
+                            src.push("      }");
+                            src.push("  }");
+                            src.push("}");
+                            src.push("shadow /= 9.0;");
+                        }
+                        src.push(`vec3 lightColor${i} = ${light.getColor()}${light.shadowParameters ? (" * " + "shadow") : ""};`);
+                        src.push(`vec3 lightDirection${i} = ${light.isWorldSpace ? vDirectionals[i].vViewLightReverseDir : light.getDirection(null, vViewPosition)};`);
+                        const dotNL = `${saturate}(dot(viewNormal, lightDirection${i}))`;
+                        src.push(`vec3 irradiance${i} = ${dotNL} * lightColor${i};`);
+                        src.push(`reflDiff += irradiance${i};`);
+                        const spec = (phongMaterial
+                                      ? `lightColor${i} * specular * pow(max(dot(reflect(-lightDirection${i}, -viewNormal), viewEyeDir), 0.0), shininess)`
+                                      : `irradiance${i} * PI * ${BRDF_Specular_GGX}(lightDirection${i}, viewNormal, viewEyeDir, specular, roughness)`);
+                        src.push(`reflSpec += ${spec};`);
+                    });
+                }
+
+                const ambient = phongMaterial && `${lightSetup.getAmbientColor()} * diffuseColor`;
+                src.push("vec3 outgoingLight = emissiveColor + occlusion * (reflDiff * material_diffuseColor + reflSpec)" + (ambient ? (" + " + ambient) : "") + ";");
             } else {
-                src.push("light.color =  lightColor" + i + ".rgb * (lightColor" + i + ".a );"); // a is intensity
+                src.push(`vec3 ambientColor = ${(phongMaterial && materialAmbient) || "vec3(1.0)"};`);
+                phongMaterial && ambientMap && src.push(`ambientColor *= ${ambientMap(texturePos)}.rgb;`);
+                src.push(`ambientColor *= ${lightSetup.getAmbientColor()};`);
+                src.push("vec3 outgoingLight = emissiveColor + ambientColor;");
             }
 
-            src.push("light.direction = viewLightDir;");
+            src.push(`vec4 fragColor = ${colorize} * vec4(outgoingLight, alpha);`);
 
-            if (phongMaterial) {
-                src.push("computePhongLighting(light, geometry, material, reflectedLight);");
-            }
-
-            if (specularMaterial || metallicMaterial) {
-                src.push("computePBRLighting(light, geometry, material, reflectedLight);");
-            }
+            src.push(`${outColor} = ${getGammaOutputExpression ? getGammaOutputExpression("fragColor") : "fragColor"};`);
         }
-
-        if (numShadows > 0) {
-            //src.push("shadow /= " + (9 * numShadows) + ".0;");
-        }
-
-        //src.push("reflectedLight.diffuse *= shadow;");
-
-        // COMBINE TERMS
-
-        if (phongMaterial) {
-            src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * diffuseColor) + ((occlusion * (( reflectedLight.diffuse + reflectedLight.specular)))) + emissiveColor;");
-
-        } else {
-            src.push("vec3 outgoingLight = (occlusion * (reflectedLight.diffuse)) + (occlusion * reflectedLight.specular) + emissiveColor;");
-        }
-
-    } else {
-
-        //--------------------------------------------------------------------------------
-        // NO SHADING - EMISSIVE and AMBIENT ONLY
-        //--------------------------------------------------------------------------------
-
-        src.push("ambientColor *= (lightAmbient.rgb * lightAmbient.a);");
-
-        src.push("vec3 outgoingLight = emissiveColor + ambientColor;");
-    }
-
-    src.push("vec4 fragColor = vec4(outgoingLight, alpha) * colorize;");
-
-    if (gammaOutput) {
-        src.push("fragColor = linearToGamma(fragColor, gammaFactor);");
-    }
-
-    src.push("outColor = fragColor;");
-
-    if (scene.logarithmicDepthBufferEnabled) {
-        src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
-    }
-
-    src.push("}");
-
-    return src;
-}
-
-export {DrawShaderSource};
+    };
+};
