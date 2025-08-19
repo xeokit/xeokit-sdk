@@ -123,9 +123,35 @@ class SectionCaps {
         this.scene = scene;
         let destroy = null;
 
+        const deletePreviousModels = () => {
+            for (const sceneModelId in this._prevIntersectionModelsMap) {
+                const objects = this._prevIntersectionModelsMap[sceneModelId];
+                objects.forEach((value, objectId) => {
+                    if (this._dirtyMap[sceneModelId].get(objectId)) {
+                        value.forEach(mesh => mesh.destroy());
+                        this._prevIntersectionModelsMap[sceneModelId].delete(objectId);
+                    }
+                });
+                if (this._prevIntersectionModelsMap[sceneModelId].size <= 0)
+                    delete this._prevIntersectionModelsMap[sceneModelId];
+            }
+        };
+
         this.destroy = () => {
-            this._deletePreviousModels();
+            deletePreviousModels();
             destroy && destroy();
+        };
+
+        let updateTimeout = null;
+
+        const update = () => {
+            deletePreviousModels();
+            clearTimeout(updateTimeout);
+            updateTimeout = setTimeout(() => {
+                const sceneModels = Object.values(this.scene.models).filter(sceneModel => sceneModel.visible);
+                this._addHatches(sceneModels, this._sectionPlanes.filter(sectionPlane => sectionPlane.active));
+                this._setAllDirty(false);
+            }, 100);
         };
 
         this._onCapMaterialUpdated = (entityId, modelId) => {
@@ -135,12 +161,12 @@ class SectionCaps {
                 this._dirtyMap = {};
                 this._prevIntersectionModelsMap = {};
                 this._sectionPlaneTimeout = null;
-                this._updateTimeout = null;
+                updateTimeout = null;
 
                 const handleSectionPlane = (sectionPlane) => {
                     const onSectionPlaneUpdated = () => {
                         this._setAllDirty(true);
-                        this._update();
+                        update();
                     };
                     this._sectionPlanes.push(sectionPlane);
                     sectionPlane.on('pos', onSectionPlaneUpdated);
@@ -150,7 +176,7 @@ class SectionCaps {
                         const sectionPlaneId = sectionPlane.id;
                         if (sectionPlaneId) {
                             this._sectionPlanes = this._sectionPlanes.filter((sectionPlane) => sectionPlane.id !== sectionPlaneId);
-                            this._update();
+                            update();
                         }
                     }).bind(this));
                 };
@@ -175,7 +201,7 @@ class SectionCaps {
                         }
                     }
                     if (dirty) {
-                        this._update();
+                        update();
                     }
                 });
                 destroy = () => {
@@ -188,19 +214,8 @@ class SectionCaps {
                 this._dirtyMap[modelId] = new Map();
 
             this._dirtyMap[modelId].set(entityId, true);
-            this._update();
+            update();
         };
-    }
-
-    _update() {
-        clearTimeout(this._updateTimeout);
-        this._deletePreviousModels();
-        this._updateTimeout = setTimeout(() => {
-            clearTimeout(this._updateTimeout);
-            const sceneModels = Object.values(this.scene.models).filter(sceneModel => sceneModel.visible);
-            this._addHatches(sceneModels, this._sectionPlanes.filter(sectionPlane => sectionPlane.active));
-            this._setAllDirty(false);
-        }, 100);
     }
 
     _setAllDirty(value) {
@@ -700,25 +715,6 @@ class SectionCaps {
             result[1] + normal[1] * t,
             result[2] + normal[2] * t
         ];
-    }
-
-    _deletePreviousModels() {
-
-        for(const sceneModelId in this._prevIntersectionModelsMap) {
-            const objects = this._prevIntersectionModelsMap[sceneModelId];
-            objects.forEach((value, objectId) => {
-                if(this._dirtyMap[sceneModelId].get(objectId)) {
-                    value.forEach((mesh) => {
-                        mesh.destroy();
-                    })
-                    this._prevIntersectionModelsMap[sceneModelId].delete(objectId);
-                }
-            })
-            if(this._prevIntersectionModelsMap[sceneModelId].size <= 0)
-                delete this._prevIntersectionModelsMap[sceneModelId];
-
-        }
-
     }
 
     _createUVs(vertices, plane, origin) {
