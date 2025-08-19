@@ -120,26 +120,29 @@ class SectionCaps {
      * @constructor
      */
     constructor(scene) {
-        this.scene = scene;
         let destroy = null;
+        const dirtyMap = { };
+        const prevIntersectionModelsMap = { };
+        const sceneModelsData = { };
+        const sectionPlanes = [ ];
 
         const deletePreviousModels = () => {
-            for (const sceneModelId in this._prevIntersectionModelsMap) {
-                const objects = this._prevIntersectionModelsMap[sceneModelId];
+            for (const sceneModelId in prevIntersectionModelsMap) {
+                const objects = prevIntersectionModelsMap[sceneModelId];
                 objects.forEach((value, objectId) => {
-                    if (this._dirtyMap[sceneModelId].get(objectId)) {
+                    if (dirtyMap[sceneModelId].get(objectId)) {
                         value.forEach(mesh => mesh.destroy());
-                        this._prevIntersectionModelsMap[sceneModelId].delete(objectId);
+                        prevIntersectionModelsMap[sceneModelId].delete(objectId);
                     }
                 });
-                if (this._prevIntersectionModelsMap[sceneModelId].size <= 0)
-                    delete this._prevIntersectionModelsMap[sceneModelId];
+                if (prevIntersectionModelsMap[sceneModelId].size <= 0)
+                    delete prevIntersectionModelsMap[sceneModelId];
             }
         };
 
         const setAllDirty = (value) => {
-            for (const key in this._dirtyMap) {
-                this._dirtyMap[key].forEach((_, key2) => this._dirtyMap[key].set(key2, value));
+            for (const key in dirtyMap) {
+                dirtyMap[key].forEach((_, key2) => dirtyMap[key].set(key2, value));
             }
         };
 
@@ -214,11 +217,11 @@ class SectionCaps {
             deletePreviousModels();
             clearTimeout(updateTimeout);
             updateTimeout = setTimeout(() => {
-                const sceneModels = Object.values(this.scene.models).filter(sceneModel => sceneModel.visible);
-                this._sectionPlanes.forEach((plane) => {
+                const sceneModels = Object.values(scene.models).filter(sceneModel => sceneModel.visible);
+                sectionPlanes.forEach((plane) => {
                     if (plane.active) {
                         sceneModels.forEach((sceneModel) => {
-                            if (doesPlaneIntersectBoundingBox(sceneModel.aabb, plane) && this._dirtyMap[sceneModel.id]) {
+                            if (doesPlaneIntersectBoundingBox(sceneModel.aabb, plane) && dirtyMap[sceneModel.id]) {
                                 // calculating segments in unsorted way
                                 // we calculate the segments by intersecting plane with each triangle
                                 const unsortedSegments = new Map();
@@ -230,13 +233,13 @@ class SectionCaps {
                                     math.vec3()
                                 ];
 
-                                this._dirtyMap[sceneModel.id].forEach((isDirty, objectId) => {
+                                dirtyMap[sceneModel.id].forEach((isDirty, objectId) => {
                                     if (isDirty) {
                                         const object = objects[objectId];
                                         if (doesPlaneIntersectBoundingBox(object.aabb, plane)) {
-                                            if (!this._sceneModelsData[sceneModel.id]) {
+                                            if (! sceneModelsData[sceneModel.id]) {
                                                 const aabb = sceneModel.aabb;
-                                                this._sceneModelsData[sceneModel.id] = {
+                                                sceneModelsData[sceneModel.id] = {
                                                     verticesMap: new Map(),
                                                     indicesMap:  new Map(),
                                                     // modelOrigin is critical to use when handling models with large coordinates.
@@ -249,10 +252,10 @@ class SectionCaps {
                                                 };
                                             }
 
-                                            const sceneModelData = this._sceneModelsData[sceneModel.id];
-                                            const modelOrigin = sceneModelData.modelOrigin;
+                                            const modelData = sceneModelsData[sceneModel.id];
+                                            const modelOrigin = modelData.modelOrigin;
 
-                                            if (!sceneModelData.verticesMap.has(objectId)) {
+                                            if (!modelData.verticesMap.has(objectId)) {
                                                 const isSolid = object.meshes[0].isSolid();
                                                 const vertices = [ ];
                                                 const indices  = [ ];
@@ -260,12 +263,12 @@ class SectionCaps {
                                                     object.getEachVertex(v => vertices.push(v[0]-modelOrigin[0], v[1]-modelOrigin[1], v[2]-modelOrigin[2]));
                                                     object.getEachIndex(i  => indices.push(i));
                                                 }
-                                                sceneModelData.verticesMap.set(objectId, vertices);
-                                                sceneModelData.indicesMap.set(objectId, indices);
+                                                modelData.verticesMap.set(objectId, vertices);
+                                                modelData.indicesMap.set(objectId, indices);
                                             }
 
-                                            const vertices = sceneModelData.verticesMap.get(objectId);
-                                            const indices  = sceneModelData.indicesMap.get(objectId);
+                                            const vertices = modelData.verticesMap.get(objectId);
+                                            const indices  = modelData.indicesMap.get(objectId);
                                             const planeDist = -math.dotVec3(math.subVec3(plane.pos, modelOrigin, tempVec3a), plane.dir);
 
                                             const capSegments = [];
@@ -375,7 +378,7 @@ class SectionCaps {
                                 const caps = new Map();
                                 let arr;
                                 projectedSegments.forEach((segment, segmentId) => {
-                                    const modelOrigin = this._sceneModelsData[sceneModel.id].modelOrigin;
+                                    const modelOrigin = sceneModelsData[sceneModel.id].modelOrigin;
                                     arr = [];
                                     const loops = segment;
 
@@ -542,14 +545,14 @@ class SectionCaps {
                                 });
 
                                 // adding meshes to the scene
-                                if (!this._prevIntersectionModelsMap[sceneModel.id])
-                                    this._prevIntersectionModelsMap[sceneModel.id] = new Map();
+                                if (!prevIntersectionModelsMap[sceneModel.id])
+                                    prevIntersectionModelsMap[sceneModel.id] = new Map();
 
                                 // Cache plane direction values
                                 math.mulVec3Scalar(plane.dir, 0.001, planeOff);
 
                                 geometryData.forEach((geometries, objectId) => {
-                                    const modelOrigin = this._sceneModelsData[sceneModel.id].modelOrigin;
+                                    const modelOrigin = sceneModelsData[sceneModel.id].modelOrigin;
                                     const meshArray = new Array(geometries.size); // Pre-allocate array with known size
                                     let meshIndex = 0;
 
@@ -592,9 +595,9 @@ class SectionCaps {
                                         }
 
                                         // Create mesh with transformed vertices
-                                        meshArray[meshIndex++] = new Mesh(this.scene, {
+                                        meshArray[meshIndex++] = new Mesh(scene, {
                                             id: `${plane.id}-${objectId}-${index}`,
-                                            geometry: new ReadableGeometry(this.scene, {
+                                            geometry: new ReadableGeometry(scene, {
                                                 primitive: 'triangles',
                                                 positions: vertices, // Only copy what we need
                                                 indices,
@@ -608,11 +611,11 @@ class SectionCaps {
                                         });
                                     });
 
-                                    if (this._prevIntersectionModelsMap[sceneModel.id].has(objectId)) {
-                                        this._prevIntersectionModelsMap[sceneModel.id].get(objectId).push(...meshArray);
+                                    if (prevIntersectionModelsMap[sceneModel.id].has(objectId)) {
+                                        prevIntersectionModelsMap[sceneModel.id].get(objectId).push(...meshArray);
                                     }
                                     else
-                                        this._prevIntersectionModelsMap[sceneModel.id].set(objectId, meshArray);
+                                        prevIntersectionModelsMap[sceneModel.id].set(objectId, meshArray);
                                 });
                             }
                         });
@@ -624,11 +627,6 @@ class SectionCaps {
 
         this._onCapMaterialUpdated = (entityId, modelId) => {
             if (! destroy) {
-                this._sectionPlanes = [];
-                this._sceneModelsData = {};
-                this._dirtyMap = {};
-                this._prevIntersectionModelsMap = {};
-                this._sectionPlaneTimeout = null;
                 updateTimeout = null;
 
                 const handleSectionPlane = (sectionPlane) => {
@@ -636,17 +634,17 @@ class SectionCaps {
                         setAllDirty(true);
                         update();
                     };
-                    this._sectionPlanes.push(sectionPlane);
-                    sectionPlane.on('pos', onSectionPlaneUpdated);
-                    sectionPlane.on('dir', onSectionPlaneUpdated);
+                    sectionPlanes.push(sectionPlane);
+                    sectionPlane.on('pos',    onSectionPlaneUpdated);
+                    sectionPlane.on('dir',    onSectionPlaneUpdated);
                     sectionPlane.on('active', onSectionPlaneUpdated);
-                    sectionPlane.once('destroyed', (() => {
-                        const sectionPlaneId = sectionPlane.id;
-                        if (sectionPlaneId) {
-                            this._sectionPlanes = this._sectionPlanes.filter((sectionPlane) => sectionPlane.id !== sectionPlaneId);
+                    sectionPlane.once('destroyed', () => {
+                        const idx = sectionPlanes.indexOf(sectionPlane);
+                        if (idx >= 0) {
+                            sectionPlanes.splice(idx, 1);
                             update();
                         }
-                    }).bind(this));
+                    });
                 };
 
                 for (const key in scene.sectionPlanes){
@@ -659,12 +657,12 @@ class SectionCaps {
                     //on ticks we only check if there is a model that we have saved vertices for,
                     //but it's no more available on the scene, or if its visibility changed
                     let dirty = false;
-                    for(const sceneModelId in this._sceneModelsData) {
+                    for (const sceneModelId in sceneModelsData) {
                         if (! scene.models[sceneModelId]){
-                            delete this._sceneModelsData[sceneModelId];
+                            delete sceneModelsData[sceneModelId];
                             dirty = true;
-                        } else if (this._sceneModelsData[sceneModelId].visible !== (!!scene.models[sceneModelId].visible)) {
-                            this._sceneModelsData[sceneModelId].visible = !!scene.models[sceneModelId].visible;
+                        } else if (sceneModelsData[sceneModelId].visible !== (!!scene.models[sceneModelId].visible)) {
+                            sceneModelsData[sceneModelId].visible = !!scene.models[sceneModelId].visible;
                             dirty = true;
                         }
                     }
@@ -678,10 +676,10 @@ class SectionCaps {
                 };
             }
 
-            if(!this._dirtyMap[modelId])
-                this._dirtyMap[modelId] = new Map();
+            if (! dirtyMap[modelId])
+                dirtyMap[modelId] = new Map();
 
-            this._dirtyMap[modelId].set(entityId, true);
+            dirtyMap[modelId].set(entityId, true);
             update();
         };
     }
