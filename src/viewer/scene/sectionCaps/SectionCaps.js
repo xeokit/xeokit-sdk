@@ -366,18 +366,13 @@ class SectionCaps {
                                 });
 
                                 orderedSegments.forEach((orderedSegment, objectId) => {
-                                    const loops = [];
-                                    for (let i = 0; i < orderedSegment.length; i++) {
-                                        loops.push([]);
-                                        orderedSegment[i].forEach((seg) => {
-                                            loops[i].push([
-                                                projectTo2D(seg[0], plane.dir),
-                                                projectTo2D(seg[1], plane.dir)
-                                            ]);
-                                        });
-                                    }
+                                    const loops = orderedSegment.map(segments => {
+                                        return segments.map(seg => [
+                                            projectTo2D(seg[0], plane.dir),
+                                            projectTo2D(seg[1], plane.dir)
+                                        ]);
+                                    });
 
-                                    // creating caps using earcut and then projecting them back to 3D
                                     const modelOrigin = sceneModelsData[sceneModel.id].modelOrigin;
 
                                     // Group related loops (outer boundaries with their holes)
