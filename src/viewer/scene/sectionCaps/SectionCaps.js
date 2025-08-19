@@ -487,27 +487,20 @@ class SectionCaps {
                                         let curVertexIndex = 0;
 
                                         capTriangles.forEach(triangle => {
-                                            const triangleIndices = [];
-
-                                            // Process each vertex of the triangle
-                                            triangle.forEach(vertex => {
+                                            indices.push(...triangle.map(vertex => {
                                                 // Create a key for the vertex to check for duplicates
                                                 const vertexKey = `${vertex[0].toFixed(6)},${vertex[1].toFixed(6)},${vertex[2].toFixed(6)}`;
 
                                                 if (vertexMap.has(vertexKey)) {
                                                     // Reuse existing vertex
-                                                    triangleIndices.push(vertexMap.get(vertexKey));
+                                                    return vertexMap.get(vertexKey);
                                                 } else {
                                                     // Add new vertex
                                                     positions.push(vertex[0], vertex[1], vertex[2]);
                                                     vertexMap.set(vertexKey, curVertexIndex);
-                                                    triangleIndices.push(curVertexIndex);
-                                                    curVertexIndex++;
+                                                    return curVertexIndex++;
                                                 }
-                                            });
-
-                                            // Add triangle indices
-                                            indices.push(...triangleIndices);
+                                            }));
                                         });
 
                                         // Build normals and UVs in parallel if possible
