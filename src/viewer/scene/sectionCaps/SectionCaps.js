@@ -410,42 +410,39 @@ class SectionCaps {
 
                                     prevIntersection.get(entityId).push(...groupedLoops.map((group, index) => {
                                         // Convert the segments into a flat array of vertices and find holes
-                                        const vertices = [];
-                                        const holes = [];
-                                        let currentIndex = 0;
 
                                         // First, determine which loop has the largest area - this will be our outer boundary
-                                        const areas = group.map(loop => {
-                                            let area = 0;
+                                        let outerLoopIndex = -1;
+                                        let largestDoubleArea = -window.Infinity;
+                                        group.forEach((loop, idx) => {
+                                            let doubleArea = 0;
                                             for (let i = 0; i < loop.length; i++) {
                                                 const j = (i + 1) % loop.length;
-                                                area += loop[i][0][0] * loop[j][0][1];
-                                                area -= loop[j][0][0] * loop[i][0][1];
+                                                doubleArea += loop[i][0][0] * loop[j][0][1];
+                                                doubleArea -= loop[j][0][0] * loop[i][0][1];
                                             }
-                                            return Math.abs(area) / 2;
+                                            doubleArea = Math.abs(doubleArea);
+                                            if (largestDoubleArea < doubleArea) {
+                                                largestDoubleArea = doubleArea;
+                                                outerLoopIndex = idx;
+                                            }
                                         });
 
-                                        // Find index of the loop with maximum area
-                                        const outerLoopIndex = areas.indexOf(Math.max(...areas));
+                                        const vertices = [ ];
+                                        const appendSegmentVertices = segment => vertices.push(segment[0][0], segment[0][1]);
 
                                         // Add the outer boundary first
-                                        group[outerLoopIndex].forEach(segment => {
-                                            vertices.push(segment[0][0], segment[0][1]);
-                                            currentIndex += 2;
-                                        });
+                                        group[outerLoopIndex].forEach(appendSegmentVertices);
 
                                         // Then add all other loops as holes
-                                        for (let i = 0; i < group.length; i++) {
+                                        const holes = [];
+                                        group.forEach((loop, i) => {
                                             if (i !== outerLoopIndex) {
                                                 // Store the starting vertex index for this hole
-                                                holes.push(currentIndex / 2);
-
-                                                group[i].forEach(segment => {
-                                                    vertices.push(segment[0][0], segment[0][1]);
-                                                    currentIndex += 2;
-                                                });
+                                                holes.push(vertices.length / 2);
+                                                loop.forEach(appendSegmentVertices);
                                             }
-                                        }
+                                        });
 
                                         // Triangulate using earcut
                                         const triangles = earcut(vertices, holes);
@@ -454,6 +451,7 @@ class SectionCaps {
                                         const vertexMap = new Map();
                                         const positions = [];
                                         const indices = [];
+                                        const uvs = [ ];
                                         let curVertexIndex = 0;
 
                                         // Convert triangulated 2D points back to 3D
@@ -491,57 +489,36 @@ class SectionCaps {
                                                     positions.push(vertex[0], vertex[1], vertex[2]);
                                                     vertexMap.set(vertexKey, curVertexIndex);
                                                     indices.push(curVertexIndex++);
+
+                                                    const P = math.addVec3(modelOrigin, vertex, tempVec3b);
+                                                    // Project P onto the plane
+                                                    const dist = math.dotVec3(planeDir, math.subVec3(planePos, P, tempVec3c));
+                                                    math.addVec3(P, math.mulVec3Scalar(planeDir, dist, tempVec3c), P);
+
+                                                    const right = ((Math.abs(math.dotVec3(planeDir, worldUp)) < 0.999)
+                                                                   ? math.cross3Vec3(planeDir, worldUp, tempVec3c)
+                                                                   : worldRight);
+                                                    const v = math.normalizeVec3(math.cross3Vec3(planeDir, right, tempVec3c));
+
+                                                    const OP_proj = math.subVec3(P, planePos, P);
+                                                    uvs.push(
+                                                        math.dotVec3(OP_proj, math.normalizeVec3(math.cross3Vec3(v, planeDir, tempVec3d))),
+                                                        math.dotVec3(OP_proj, v));
                                                 }
                                             }
                                         }
 
-                                        // Build normals and UVs in parallel if possible
-                                        const meshNormals = math.buildNormals(positions, indices);
-
-                                        // create uvs
-                                        const O = plane.pos;
-                                        const D = tempVec3a;
-                                        D.set(plane.dir);
-                                        math.normalizeVec3(D);
-                                        const P = tempVec3b;
-
-                                        const uvs = [ ];
-                                        for (let i = 0; i < positions.length; i += 3) {
-                                            P[0] = positions[i]     + modelOrigin[0];
-                                            P[1] = positions[i + 1] + modelOrigin[1];
-                                            P[2] = positions[i + 2] + modelOrigin[2];
-
-                                            // Project P onto the plane
-                                            const OP = math.subVec3(O, P, tempVec3c);
-                                            const dist = math.dotVec3(OP, D);
-                                            math.addVec3(P, math.mulVec3Scalar(D, dist, tempVec3c), P);
-
-                                            const right = ((Math.abs(math.dotVec3(D, worldUp)) < 0.999)
-                                                           ? math.cross3Vec3(D, worldUp, tempVec3c)
-                                                           : worldRight);
-                                            const v = math.cross3Vec3(D, right, tempVec3c);
-                                            math.normalizeVec3(v, v);
-
-                                            const OP_proj = math.subVec3(P, O, P);
-                                            uvs.push(
-                                                math.dotVec3(OP_proj, math.normalizeVec3(math.cross3Vec3(v, D, tempVec3d))),
-                                                math.dotVec3(OP_proj, v));
-                                        }
-
-                                        // Create mesh with transformed positions
                                         return new Mesh(scene, {
-                                            id: `${plane.id}-${entityId}-${index}`,
-                                            geometry: new ReadableGeometry(scene, {
-                                                primitive: 'triangles',
-                                                positions: positions, // Only copy what we need
-                                                indices,
-                                                normals: meshNormals,
-                                                uv: uvs
-                                            }),
+                                            id:       `${plane.id}-${entityId}-${index}`,
+                                            material: sceneModelObjects[entityId].capMaterial,
                                             origin:   math.addVec3(modelOrigin, math.mulVec3Scalar(plane.dir, 0.001, tempVec3a), tempVec3a),
-                                            position: [0, 0, 0],
-                                            rotation: [0, 0, 0],
-                                            material: sceneModelObjects[entityId].capMaterial
+                                            geometry: new ReadableGeometry(scene, {
+                                                primitive: "triangles",
+                                                indices:   indices,
+                                                positions: positions,
+                                                normals:   math.buildNormals(positions, indices),
+                                                uv:        uvs
+                                            })
                                         });
                                     }));
                                 });
