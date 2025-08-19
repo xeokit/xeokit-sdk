@@ -353,7 +353,7 @@ class SectionCaps {
 
                                         if (! newSegment) {
                                             if (pointsEqual(lastPoint, curSegments[0][0]) && (unsortedSegment.length > 1)) {
-                                                segments.push([ unsortedSegments.get(entityId)[0] ]);
+                                                segments.push([ unsortedSegment[0] ]);
                                                 unsortedSegment.splice(0, 1);
                                                 index++;
                                             } else {
