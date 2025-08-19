@@ -311,49 +311,36 @@ class SectionCaps {
                                 // sorting the segments
                                 const orderedSegments = new Map();
                                 unsortedSegments.forEach((unsortedSegment, segmentedId) => {
-                                    orderedSegments.set(segmentedId, [
-                                        [
-                                            unsortedSegment[0] //this is also an array of two vectors
-                                        ]
-                                    ]);
+                                    const segments = [ [ unsortedSegment[0] ] ]; // an array of two vectors
+                                    orderedSegments.set(segmentedId, segments);
                                     unsortedSegment.splice(0, 1);
                                     let index = 0;
                                     while (unsortedSegment.length > 0) {
-                                        const lastPoint = orderedSegments.get(segmentedId)[index][orderedSegments.get(segmentedId)[index].length - 1][1];
-                                        let found = false;
+                                        const curSegments = segments[index];
+                                        const lastPoint = curSegments[curSegments.length - 1][1];
 
+                                        let newSegment = null;
                                         for (let i = 0; i < unsortedSegment.length; i++) {
                                             const [start, end] = unsortedSegment[i];
-                                            if (pointsEqual(lastPoint, start)) {
-                                                orderedSegments.get(segmentedId)[index].push(unsortedSegment[i]);
+                                            newSegment = ((pointsEqual(lastPoint, start) && [start, end])
+                                                          ||
+                                                          (pointsEqual(lastPoint, end)   && [end, start]));
+                                            if (newSegment) {
+                                                curSegments.push(newSegment);
                                                 unsortedSegment.splice(i, 1);
-                                                found = true;
-                                                break;
-                                            } else if (pointsEqual(lastPoint, end)) {
-                                                orderedSegments.get(segmentedId)[index].push([end, start]);
-                                                unsortedSegment.splice(i, 1);
-                                                found = true;
                                                 break;
                                             }
                                         }
 
-                                        if (!found) {
-                                            if (pointsEqual(lastPoint, orderedSegments.get(segmentedId)[index][0][0])) {
-                                                if (unsortedSegment.length > 1) {
-                                                    orderedSegments.get(segmentedId).push([
-                                                        unsortedSegments.get(segmentedId)[0]
-                                                    ]);
-                                                    unsortedSegment.splice(0, 1);
-                                                    index++;
-                                                    continue;
-                                                }
-
+                                        if (! newSegment) {
+                                            if (pointsEqual(lastPoint, curSegments[0][0]) && (unsortedSegment.length > 1)) {
+                                                segments.push([ unsortedSegments.get(segmentedId)[0] ]);
+                                                unsortedSegment.splice(0, 1);
+                                                index++;
+                                            } else {
+                                                // console.error(`Could not find a matching segment. Loop may not be closed. Key: ${key}`);
+                                                break;
                                             }
-                                        }
-
-                                        if (!found) {
-                                            // console.error(`Could not find a matching segment. Loop may not be closed. Key: ${key}`);
-                                            break;
                                         }
                                     }
                                 });
