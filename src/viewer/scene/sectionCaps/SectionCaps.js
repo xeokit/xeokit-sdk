@@ -457,8 +457,36 @@ class SectionCaps {
                                             for (let j = 0; j < 3; j++) {
                                                 const idx = triangles[i + j] * 2;
                                                 const point2D = [vertices[idx], vertices[idx + 1]];
-                                                const point3D = this._convertTo3D(point2D, plane, modelOrigin);
-                                                triangle.push(point3D);
+                                                // Reconstruct the same basis vectors used in projectTo2D
+                                                const planeDir = plane.dir;
+                                                const planePos = plane.pos;
+
+                                                const u = math.normalizeVec3((Math.abs(planeDir[0]) > Math.abs(planeDir[1]))
+                                                                             ? [-planeDir[2], 0, planeDir[0]]
+                                                                             : [0, planeDir[2], -planeDir[1]]);
+                                                const v = math.normalizeVec3(math.cross3Vec3(planeDir, u, math.vec3()));
+
+                                                // Reconstruct 3D point using the basis vectors
+                                                const x = point2D[0];
+                                                const y = point2D[1];
+                                                const result = [
+                                                    u[0] * x + v[0] * y,
+                                                    u[1] * x + v[1] * y,
+                                                    u[2] * x + v[2] * y
+                                                ];
+
+                                                // Project the point onto the cutting plane
+                                                const t = math.dotVec3(planeDir, [
+                                                    planePos[0] - result[0] - modelOrigin[0],
+                                                    planePos[1] - result[1] - modelOrigin[1],
+                                                    planePos[2] - result[2] - modelOrigin[2]
+                                                ]);
+
+                                                triangle.push([
+                                                    result[0] + planeDir[0] * t,
+                                                    result[1] + planeDir[1] * t,
+                                                    result[2] + planeDir[2] * t
+                                                ]);
                                             }
 
                                             cap3D.push(triangle);
@@ -649,44 +677,6 @@ class SectionCaps {
             }
 
         }
-    }
-
-    _convertTo3D(point2D, plane, origin) {
-        // Reconstruct the same basis vectors used in projectTo2D
-        let u, normal = plane.dir, planePosition = plane.pos;
-        if (Math.abs(normal[0]) > Math.abs(normal[1])) {
-            u = [-normal[2], 0, normal[0]];
-        } else {
-            u = [0, normal[2], -normal[1]];
-        }
-
-        u = math.normalizeVec3(u);
-        const normalTemp = math.vec3(normal);
-        const cross = math.cross3Vec3(normalTemp, u);
-        const v = math.normalizeVec3(cross);
-
-        // Reconstruct 3D point using the basis vectors
-        const x = point2D[0];
-        const y = point2D[1];
-        const result = [
-            u[0] * x + v[0] * y,
-            u[1] * x + v[1] * y,
-            u[2] * x + v[2] * y
-        ];
-
-        // Project the point onto the cutting plane
-
-        const t = math.dotVec3(normal, [
-            planePosition[0] - result[0] - origin[0],
-            planePosition[1] - result[1] - origin[1],
-            planePosition[2] - result[2] - origin[2]
-        ]);
-
-        return [
-            result[0] + normal[0] * t,
-            result[1] + normal[1] * t,
-            result[2] + normal[2] * t
-        ];
     }
 
     _createUVs(vertices, plane, origin) {
