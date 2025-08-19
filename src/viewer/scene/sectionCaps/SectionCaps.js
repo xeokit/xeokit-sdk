@@ -255,7 +255,6 @@ class SectionCaps {
                                 const modelOrigin = modelData.modelOrigin;
                                 const planeDist = math.dotVec3(planeDir, math.subVec3(modelOrigin, planePos, tempVec3a));
 
-                                const unsortedSegments = [ ];
                                 dirtyMap[sceneModel.id].forEach((isDirty, entityId) => {
                                     if (isDirty) {
                                         const entity = sceneModelObjects[entityId];
@@ -304,193 +303,187 @@ class SectionCaps {
                                             }
 
                                             if (unsortedSegment.length > 0) {
-                                                unsortedSegments.push({ entityId: entityId, unsortedSegment: unsortedSegment });
-                                            }
-                                        }
-                                    }
-                                });
-
-                                unsortedSegments.forEach(unsortedEntitySegment => {
-                                    // sorting the segments
-                                    const unsortedSegment = unsortedEntitySegment.unsortedSegment;
-                                    const segments = [ [ unsortedSegment[0] ] ]; // an array of two vectors
-                                    unsortedSegment.splice(0, 1);
-                                    let index = 0;
-                                    while (unsortedSegment.length > 0) {
-                                        const curSegments = segments[index];
-                                        const lastPoint = curSegments[curSegments.length - 1][1];
-
-                                        let newSegment = null;
-                                        for (let i = 0; i < unsortedSegment.length; i++) {
-                                            const [start, end] = unsortedSegment[i];
-                                            newSegment = ((pointsEqual(lastPoint, start) && [start, end])
-                                                          ||
-                                                          (pointsEqual(lastPoint, end)   && [end, start]));
-                                            if (newSegment) {
-                                                curSegments.push(newSegment);
-                                                unsortedSegment.splice(i, 1);
-                                                break;
-                                            }
-                                        }
-
-                                        if (! newSegment) {
-                                            if (pointsEqual(lastPoint, curSegments[0][0]) && (unsortedSegment.length > 1)) {
-                                                segments.push([ unsortedSegment[0] ]);
+                                                // sorting the segments
+                                                const segments = [ [ unsortedSegment[0] ] ]; // an array of two vectors
                                                 unsortedSegment.splice(0, 1);
-                                                index++;
-                                            } else {
-                                                // console.error(`Could not find a matching segment. Loop may not be closed. Key: ${key}`);
-                                                break;
-                                            }
-                                        }
-                                    }
+                                                let index = 0;
+                                                while (unsortedSegment.length > 0) {
+                                                    const curSegments = segments[index];
+                                                    const lastPoint = curSegments[curSegments.length - 1][1];
 
-                                    const loops = segments.map(segments => {
-                                        return segments.map(seg => [
-                                            projectTo2D(seg[0], plane.dir),
-                                            projectTo2D(seg[1], plane.dir)
-                                        ]);
-                                    });
+                                                    let newSegment = null;
+                                                    for (let i = 0; i < unsortedSegment.length; i++) {
+                                                        const [start, end] = unsortedSegment[i];
+                                                        newSegment = ((pointsEqual(lastPoint, start) && [start, end])
+                                                                      ||
+                                                                      (pointsEqual(lastPoint, end)   && [end, start]));
+                                                        if (newSegment) {
+                                                            curSegments.push(newSegment);
+                                                            unsortedSegment.splice(i, 1);
+                                                            break;
+                                                        }
+                                                    }
 
-                                    const modelOrigin = sceneModelsData[sceneModel.id].modelOrigin;
-
-                                    // Group related loops (outer boundaries with their holes)
-                                    const groupedLoops = [];
-                                    const used = new Set();
-
-                                    for (let i = 0; i < loops.length; i++) {
-                                        if (! used.has(i)) {
-                                            const group = [loops[i]];
-                                            used.add(i);
-
-                                            // Check remaining loops
-                                            for (let j = i + 1; j < loops.length; j++) {
-                                                if (! used.has(j)) {
-                                                    if (isLoopInside(loops[i], loops[j]) || isLoopInside(loops[j], loops[i])) {
-                                                        group.push(loops[j]);
-                                                        used.add(j);
+                                                    if (! newSegment) {
+                                                        if (pointsEqual(lastPoint, curSegments[0][0]) && (unsortedSegment.length > 1)) {
+                                                            segments.push([ unsortedSegment[0] ]);
+                                                            unsortedSegment.splice(0, 1);
+                                                            index++;
+                                                        } else {
+                                                            // console.error(`Could not find a matching segment. Loop may not be closed. Key: ${key}`);
+                                                            break;
+                                                        }
                                                     }
                                                 }
-                                            }
 
-                                            groupedLoops.push(group);
+                                                const loops = segments.map(segments => {
+                                                    return segments.map(seg => [
+                                                        projectTo2D(seg[0], planeDir),
+                                                        projectTo2D(seg[1], planeDir)
+                                                    ]);
+                                                });
+
+                                                const modelOrigin = sceneModelsData[sceneModel.id].modelOrigin;
+
+                                                // Group related loops (outer boundaries with their holes)
+                                                const groupedLoops = [];
+                                                const used = new Set();
+
+                                                for (let i = 0; i < loops.length; i++) {
+                                                    if (! used.has(i)) {
+                                                        const group = [loops[i]];
+                                                        used.add(i);
+
+                                                        // Check remaining loops
+                                                        for (let j = i + 1; j < loops.length; j++) {
+                                                            if (! used.has(j)) {
+                                                                if (isLoopInside(loops[i], loops[j]) || isLoopInside(loops[j], loops[i])) {
+                                                                    group.push(loops[j]);
+                                                                    used.add(j);
+                                                                }
+                                                            }
+                                                        }
+
+                                                        groupedLoops.push(group);
+                                                    }
+                                                }
+
+                                                modelEntityToCapMeshes[sceneModel.id].set(entityId, groupedLoops.map((group, index) => {
+                                                    // Convert the segments into a flat array of vertices and find holes
+
+                                                    // First, determine which loop has the largest area - this will be our outer boundary
+                                                    let outerLoopIndex = -1;
+                                                    let largestDoubleArea = -window.Infinity;
+                                                    group.forEach((loop, idx) => {
+                                                        let doubleArea = 0;
+                                                        for (let i = 0; i < loop.length; i++) {
+                                                            const j = (i + 1) % loop.length;
+                                                            doubleArea += loop[i][0][0] * loop[j][0][1];
+                                                            doubleArea -= loop[j][0][0] * loop[i][0][1];
+                                                        }
+                                                        doubleArea = Math.abs(doubleArea);
+                                                        if (largestDoubleArea < doubleArea) {
+                                                            largestDoubleArea = doubleArea;
+                                                            outerLoopIndex = idx;
+                                                        }
+                                                    });
+
+                                                    const vertices = [ ];
+                                                    const appendSegmentVertices = segment => vertices.push(segment[0][0], segment[0][1]);
+
+                                                    // Add the outer boundary first
+                                                    group[outerLoopIndex].forEach(appendSegmentVertices);
+
+                                                    // Then add all other loops as holes
+                                                    const holes = [];
+                                                    group.forEach((loop, i) => {
+                                                        if (i !== outerLoopIndex) {
+                                                            // Store the starting vertex index for this hole
+                                                            holes.push(vertices.length / 2);
+                                                            loop.forEach(appendSegmentVertices);
+                                                        }
+                                                    });
+
+                                                    // Triangulate using earcut
+                                                    const triangles = earcut(vertices, holes);
+
+                                                    // Create a vertex map to reuse vertices
+                                                    const vertexMap = new Map();
+                                                    const positions = [];
+                                                    const indices = [];
+                                                    const uvs = [ ];
+                                                    let curVertexIndex = 0;
+
+                                                    // Convert triangulated 2D points back to 3D
+                                                    for (let i = 0; i < triangles.length; i += 3) {
+                                                        for (let j = 0; j < 3; j++) {
+                                                            const idx = triangles[i + j] * 2;
+                                                            const x = vertices[idx];
+                                                            const y = vertices[idx + 1];
+
+                                                            // Reconstruct the same basis vectors used in projectTo2D
+                                                            const u = math.normalizeVec3((Math.abs(planeDir[0]) > Math.abs(planeDir[1]))
+                                                                                         ? [-planeDir[2], 0, planeDir[0]]
+                                                                                         : [0, planeDir[2], -planeDir[1]]);
+                                                            const v = math.normalizeVec3(math.cross3Vec3(planeDir, u, tempVec3a));
+
+                                                            // Reconstruct 3D point using the basis vectors
+                                                            const result = [
+                                                                u[0] * x + v[0] * y,
+                                                                u[1] * x + v[1] * y,
+                                                                u[2] * x + v[2] * y
+                                                            ];
+
+                                                            // Project the point onto the cutting plane
+                                                            const t = math.dotVec3(planeDir, math.subVec3(planePos, math.addVec3(modelOrigin, result, tempVec3a), tempVec3a));
+                                                            const vertex = math.addVec3(result, math.mulVec3Scalar(planeDir, t, tempVec3a), tempVec3a);
+
+                                                            // Create a key for the vertex to check for duplicates
+                                                            const vertexKey = `${vertex[0].toFixed(6)},${vertex[1].toFixed(6)},${vertex[2].toFixed(6)}`;
+
+                                                            if (vertexMap.has(vertexKey)) {
+                                                                // Reuse existing vertex
+                                                                indices.push(vertexMap.get(vertexKey));
+                                                            } else {
+                                                                // Add new vertex
+                                                                positions.push(vertex[0], vertex[1], vertex[2]);
+                                                                vertexMap.set(vertexKey, curVertexIndex);
+                                                                indices.push(curVertexIndex++);
+
+                                                                const P = math.addVec3(modelOrigin, vertex, tempVec3b);
+                                                                // Project P onto the plane
+                                                                const dist = math.dotVec3(planeDir, math.subVec3(planePos, P, tempVec3c));
+                                                                math.addVec3(P, math.mulVec3Scalar(planeDir, dist, tempVec3c), P);
+
+                                                                const right = ((Math.abs(math.dotVec3(planeDir, worldUp)) < 0.999)
+                                                                               ? math.cross3Vec3(planeDir, worldUp, tempVec3c)
+                                                                               : worldRight);
+                                                                const v = math.normalizeVec3(math.cross3Vec3(planeDir, right, tempVec3c));
+
+                                                                const OP_proj = math.subVec3(P, planePos, P);
+                                                                uvs.push(
+                                                                    math.dotVec3(OP_proj, math.normalizeVec3(math.cross3Vec3(v, planeDir, tempVec3d))),
+                                                                    math.dotVec3(OP_proj, v));
+                                                            }
+                                                        }
+                                                    }
+
+                                                    return new Mesh(scene, {
+                                                        id:       `${plane.id}-${entityId}-${index}`,
+                                                        material: sceneModelObjects[entityId].capMaterial,
+                                                        origin:   math.addVec3(modelOrigin, math.mulVec3Scalar(planeDir, 0.001, tempVec3a), tempVec3a),
+                                                        geometry: new ReadableGeometry(scene, {
+                                                            primitive: "triangles",
+                                                            indices:   indices,
+                                                            positions: positions,
+                                                            normals:   math.buildNormals(positions, indices),
+                                                            uv:        uvs
+                                                        })
+                                                    });
+                                                }));
+                                            }
                                         }
                                     }
-
-                                    const entityId = unsortedEntitySegment.entityId;
-                                    modelEntityToCapMeshes[sceneModel.id].set(entityId, groupedLoops.map((group, index) => {
-                                        // Convert the segments into a flat array of vertices and find holes
-
-                                        // First, determine which loop has the largest area - this will be our outer boundary
-                                        let outerLoopIndex = -1;
-                                        let largestDoubleArea = -window.Infinity;
-                                        group.forEach((loop, idx) => {
-                                            let doubleArea = 0;
-                                            for (let i = 0; i < loop.length; i++) {
-                                                const j = (i + 1) % loop.length;
-                                                doubleArea += loop[i][0][0] * loop[j][0][1];
-                                                doubleArea -= loop[j][0][0] * loop[i][0][1];
-                                            }
-                                            doubleArea = Math.abs(doubleArea);
-                                            if (largestDoubleArea < doubleArea) {
-                                                largestDoubleArea = doubleArea;
-                                                outerLoopIndex = idx;
-                                            }
-                                        });
-
-                                        const vertices = [ ];
-                                        const appendSegmentVertices = segment => vertices.push(segment[0][0], segment[0][1]);
-
-                                        // Add the outer boundary first
-                                        group[outerLoopIndex].forEach(appendSegmentVertices);
-
-                                        // Then add all other loops as holes
-                                        const holes = [];
-                                        group.forEach((loop, i) => {
-                                            if (i !== outerLoopIndex) {
-                                                // Store the starting vertex index for this hole
-                                                holes.push(vertices.length / 2);
-                                                loop.forEach(appendSegmentVertices);
-                                            }
-                                        });
-
-                                        // Triangulate using earcut
-                                        const triangles = earcut(vertices, holes);
-
-                                        // Create a vertex map to reuse vertices
-                                        const vertexMap = new Map();
-                                        const positions = [];
-                                        const indices = [];
-                                        const uvs = [ ];
-                                        let curVertexIndex = 0;
-
-                                        // Convert triangulated 2D points back to 3D
-                                        for (let i = 0; i < triangles.length; i += 3) {
-                                            for (let j = 0; j < 3; j++) {
-                                                const idx = triangles[i + j] * 2;
-                                                const x = vertices[idx];
-                                                const y = vertices[idx + 1];
-
-                                                // Reconstruct the same basis vectors used in projectTo2D
-                                                const u = math.normalizeVec3((Math.abs(planeDir[0]) > Math.abs(planeDir[1]))
-                                                                             ? [-planeDir[2], 0, planeDir[0]]
-                                                                             : [0, planeDir[2], -planeDir[1]]);
-                                                const v = math.normalizeVec3(math.cross3Vec3(planeDir, u, tempVec3a));
-
-                                                // Reconstruct 3D point using the basis vectors
-                                                const result = [
-                                                    u[0] * x + v[0] * y,
-                                                    u[1] * x + v[1] * y,
-                                                    u[2] * x + v[2] * y
-                                                ];
-
-                                                // Project the point onto the cutting plane
-                                                const t = math.dotVec3(planeDir, math.subVec3(planePos, math.addVec3(modelOrigin, result, tempVec3a), tempVec3a));
-                                                const vertex = math.addVec3(result, math.mulVec3Scalar(planeDir, t, tempVec3a), tempVec3a);
-
-                                                // Create a key for the vertex to check for duplicates
-                                                const vertexKey = `${vertex[0].toFixed(6)},${vertex[1].toFixed(6)},${vertex[2].toFixed(6)}`;
-
-                                                if (vertexMap.has(vertexKey)) {
-                                                    // Reuse existing vertex
-                                                    indices.push(vertexMap.get(vertexKey));
-                                                } else {
-                                                    // Add new vertex
-                                                    positions.push(vertex[0], vertex[1], vertex[2]);
-                                                    vertexMap.set(vertexKey, curVertexIndex);
-                                                    indices.push(curVertexIndex++);
-
-                                                    const P = math.addVec3(modelOrigin, vertex, tempVec3b);
-                                                    // Project P onto the plane
-                                                    const dist = math.dotVec3(planeDir, math.subVec3(planePos, P, tempVec3c));
-                                                    math.addVec3(P, math.mulVec3Scalar(planeDir, dist, tempVec3c), P);
-
-                                                    const right = ((Math.abs(math.dotVec3(planeDir, worldUp)) < 0.999)
-                                                                   ? math.cross3Vec3(planeDir, worldUp, tempVec3c)
-                                                                   : worldRight);
-                                                    const v = math.normalizeVec3(math.cross3Vec3(planeDir, right, tempVec3c));
-
-                                                    const OP_proj = math.subVec3(P, planePos, P);
-                                                    uvs.push(
-                                                        math.dotVec3(OP_proj, math.normalizeVec3(math.cross3Vec3(v, planeDir, tempVec3d))),
-                                                        math.dotVec3(OP_proj, v));
-                                                }
-                                            }
-                                        }
-
-                                        return new Mesh(scene, {
-                                            id:       `${plane.id}-${entityId}-${index}`,
-                                            material: sceneModelObjects[entityId].capMaterial,
-                                            origin:   math.addVec3(modelOrigin, math.mulVec3Scalar(plane.dir, 0.001, tempVec3a), tempVec3a),
-                                            geometry: new ReadableGeometry(scene, {
-                                                primitive: "triangles",
-                                                indices:   indices,
-                                                positions: positions,
-                                                normals:   math.buildNormals(positions, indices),
-                                                uv:        uvs
-                                            })
-                                        });
-                                    }));
                                 });
                             }
                         });
