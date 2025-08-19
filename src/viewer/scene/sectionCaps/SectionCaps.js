@@ -129,9 +129,9 @@ class SectionCaps {
         const deletePreviousModels = () => {
             for (const sceneModelId in prevIntersectionModelsMap) {
                 const objects = prevIntersectionModelsMap[sceneModelId];
-                objects.forEach((value, objectId) => {
+                objects.forEach((meshes, objectId) => {
                     if (dirtyMap[sceneModelId].get(objectId)) {
-                        value.forEach(mesh => mesh.destroy());
+                        meshes.forEach(mesh => mesh.destroy());
                         prevIntersectionModelsMap[sceneModelId].delete(objectId);
                     }
                 });
@@ -365,13 +365,6 @@ class SectionCaps {
                                     }
                                 });
 
-                                // adding meshes to the scene
-                                if (!prevIntersectionModelsMap[sceneModel.id])
-                                    prevIntersectionModelsMap[sceneModel.id] = new Map();
-
-                                // Cache plane direction values
-                                math.mulVec3Scalar(plane.dir, 0.001, planeOff);
-
                                 orderedSegments.forEach((orderedSegment, objectId) => {
                                     const loops = [];
                                     for (let i = 0; i < orderedSegment.length; i++) {
@@ -410,8 +403,15 @@ class SectionCaps {
                                         }
                                     }
 
-                                    // Process each group separately
-                                    const meshArray = groupedLoops.map((group, index) => {
+                                    if (! prevIntersectionModelsMap[sceneModel.id])
+                                        prevIntersectionModelsMap[sceneModel.id] = new Map();
+
+                                    const prevIntersection = prevIntersectionModelsMap[sceneModel.id];
+                                    if (! prevIntersection.has(objectId)) {
+                                        prevIntersection.set(objectId, [ ]);
+                                    }
+
+                                    prevIntersection.get(objectId).push(...groupedLoops.map((group, index) => {
                                         // Convert the segments into a flat array of vertices and find holes
                                         const vertices = [];
                                         const holes = [];
@@ -566,18 +566,12 @@ class SectionCaps {
                                                 normals: meshNormals,
                                                 uv: uvs
                                             }),
-                                            origin:   math.addVec3(modelOrigin, planeOff, tempVec3a),
+                                            origin:   math.addVec3(modelOrigin, math.mulVec3Scalar(plane.dir, 0.001, tempVec3a), tempVec3a),
                                             position: [0, 0, 0],
                                             rotation: [0, 0, 0],
                                             material: sceneModel.objects[objectId].capMaterial
                                         });
-                                    });
-
-                                    if (prevIntersectionModelsMap[sceneModel.id].has(objectId)) {
-                                        prevIntersectionModelsMap[sceneModel.id].get(objectId).push(...meshArray);
-                                    }
-                                    else
-                                        prevIntersectionModelsMap[sceneModel.id].set(objectId, meshArray);
+                                    }));
                                 });
                             }
                         });
