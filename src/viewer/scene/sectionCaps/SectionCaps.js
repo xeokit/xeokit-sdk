@@ -148,6 +148,39 @@ class SectionCaps {
             destroy && destroy();
         };
 
+        const doesPlaneIntersectBoundingBox = (bb, plane) => {
+            const min = [bb[0], bb[1], bb[2]];
+            const max = [bb[3], bb[4], bb[5]];
+
+            const corners = [
+                [min[0], min[1], min[2]], // 000
+                [max[0], min[1], min[2]], // 100
+                [min[0], max[1], min[2]], // 010
+                [max[0], max[1], min[2]], // 110
+                [min[0], min[1], max[2]], // 001
+                [max[0], min[1], max[2]], // 101
+                [min[0], max[1], max[2]], // 011
+                [max[0], max[1], max[2]]  // 111
+            ];
+
+            // Calculate distance from each corner to the plane
+            let hasPositive = false;
+            let hasNegative = false;
+
+            for (const corner of corners) {
+                const distance = plane.dist + math.dotVec3(plane.dir, corner);
+
+                if (distance > 0) hasPositive = true;
+                if (distance < 0) hasNegative = true;
+
+                // If we found points on both sides, the plane intersects the box
+                if (hasPositive && hasNegative) return true;
+            }
+
+            // If all points are on the same side, no intersection
+            return false;
+        };
+
         let updateTimeout = null;
 
         const update = () => {
@@ -158,7 +191,7 @@ class SectionCaps {
                 this._sectionPlanes.forEach((plane) => {
                     if (plane.active) {
                         sceneModels.forEach((sceneModel) => {
-                            if (this._doesPlaneIntersectBoundingBox(sceneModel.aabb, plane) && this._dirtyMap[sceneModel.id]) {
+                            if (doesPlaneIntersectBoundingBox(sceneModel.aabb, plane) && this._dirtyMap[sceneModel.id]) {
                                 // calculating segments in unsorted way
                                 // we calculate the segments by intersecting plane with each triangle
                                 const unsortedSegments = new Map();
@@ -173,7 +206,7 @@ class SectionCaps {
                                 this._dirtyMap[sceneModel.id].forEach((isDirty, objectId) => {
                                     if (isDirty) {
                                         const object = objects[objectId];
-                                        if (this._doesPlaneIntersectBoundingBox(object.aabb, plane)) {
+                                        if (doesPlaneIntersectBoundingBox(object.aabb, plane)) {
                                             if (!this._sceneModelsData[sceneModel.id]) {
                                                 const aabb = sceneModel.aabb;
                                                 this._sceneModelsData[sceneModel.id] = {
@@ -567,39 +600,6 @@ class SectionCaps {
             this._dirtyMap[modelId].set(entityId, true);
             update();
         };
-    }
-
-    _doesPlaneIntersectBoundingBox(bb, plane) {
-        const min = [bb[0], bb[1], bb[2]];
-        const max = [bb[3], bb[4], bb[5]];
-
-        const corners = [
-            [min[0], min[1], min[2]], // 000
-            [max[0], min[1], min[2]], // 100
-            [min[0], max[1], min[2]], // 010
-            [max[0], max[1], min[2]], // 110
-            [min[0], min[1], max[2]], // 001
-            [max[0], min[1], max[2]], // 101
-            [min[0], max[1], max[2]], // 011
-            [max[0], max[1], max[2]]  // 111
-        ]
-
-        // Calculate distance from each corner to the plane
-        let hasPositive = false;
-        let hasNegative = false;
-
-        for (const corner of corners) {
-            const distance = plane.dist + math.dotVec3(plane.dir, corner);
-
-            if (distance > 0) hasPositive = true;
-            if (distance < 0) hasNegative = true;
-
-            // If we found points on both sides, the plane intersects the box
-            if (hasPositive && hasNegative) return true;
-        }
-
-        // If all points are on the same side, no intersection
-        return false;
     }
 
     //not used but kept for debugging
