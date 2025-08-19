@@ -197,7 +197,7 @@ class SectionCaps {
     }
 
     _setAllDirty(value) {
-        for(const key in this._dirty) {
+        for(const key in this._dirtyMap) {
             this._dirtyMap[key].forEach((_, key2) => this._dirtyMap[key].set(key2, value));
         }
     }
