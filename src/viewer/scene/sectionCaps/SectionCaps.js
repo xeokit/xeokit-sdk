@@ -512,9 +512,9 @@ class SectionCaps {
                                             P[2] = positions[i + 2] + modelOrigin[2];
 
                                             // Project P onto the plane
-                                            const OP = math.subVec3(P, O, tempVec3c);
+                                            const OP = math.subVec3(O, P, tempVec3c);
                                             const dist = math.dotVec3(OP, D);
-                                            math.subVec3(P, math.mulVec3Scalar(D, dist, tempVec3c), P);
+                                            math.addVec3(P, math.mulVec3Scalar(D, dist, tempVec3c), P);
 
                                             const right = ((Math.abs(math.dotVec3(D, worldUp)) < 0.999)
                                                            ? math.cross3Vec3(D, worldUp, tempVec3c)
