@@ -121,21 +121,15 @@ class SectionCaps {
      */
     constructor(scene) {
         this.scene = scene;
-        this._resourcesAllocated = false;
+        let destroy = null;
 
         this.destroy = () => {
             this._deletePreviousModels();
-            if (this._resourcesAllocated) {
-                this.scene.off(this._onModelLoaded);
-                this.scene.off(this._onModelUnloaded);
-                this.scene.off(this._onSectionPlaneCreated);
-                this.scene.off(this._onTick);
-            }
+            destroy && destroy();
         };
 
         this._onCapMaterialUpdated = (entityId, modelId) => {
-            if(!this._resourcesAllocated) {
-                this._resourcesAllocated = true;
+            if (! destroy) {
                 this._sectionPlanes = [];
                 this._sceneModelsData = {};
                 this._dirtyMap = {};
@@ -144,7 +138,6 @@ class SectionCaps {
                 this._updateTimeout = null;
 
                 const handleSectionPlane = (sectionPlane) => {
-
                     const onSectionPlaneUpdated = () => {
                         this._setAllDirty(true);
                         this._update();
@@ -162,22 +155,22 @@ class SectionCaps {
                     }).bind(this));
                 };
 
-                for(const key in this.scene.sectionPlanes){
-                    handleSectionPlane(this.scene.sectionPlanes[key]);
+                for (const key in scene.sectionPlanes){
+                    handleSectionPlane(scene.sectionPlanes[key]);
                 }
 
-                this._onSectionPlaneCreated = this.scene.on('sectionPlaneCreated', handleSectionPlane);
+                const onSectionPlaneCreated = scene.on('sectionPlaneCreated', handleSectionPlane);
 
-                this._onTick = this.scene.on("tick", () => {
+                const onTick = scene.on("tick", () => {
                     //on ticks we only check if there is a model that we have saved vertices for,
                     //but it's no more available on the scene, or if its visibility changed
                     let dirty = false;
                     for(const sceneModelId in this._sceneModelsData) {
-                        if(!this.scene.models[sceneModelId]){
+                        if (! scene.models[sceneModelId]){
                             delete this._sceneModelsData[sceneModelId];
                             dirty = true;
-                        } else if (this._sceneModelsData[sceneModelId].visible !== (!!this.scene.models[sceneModelId].visible)) {
-                            this._sceneModelsData[sceneModelId].visible = !!this.scene.models[sceneModelId].visible;
+                        } else if (this._sceneModelsData[sceneModelId].visible !== (!!scene.models[sceneModelId].visible)) {
+                            this._sceneModelsData[sceneModelId].visible = !!scene.models[sceneModelId].visible;
                             dirty = true;
                         }
                     }
@@ -185,6 +178,10 @@ class SectionCaps {
                         this._update();
                     }
                 });
+                destroy = () => {
+                    scene.off(onSectionPlaneCreated);
+                    scene.off(onTick);
+                };
             }
 
             if(!this._dirtyMap[modelId])
