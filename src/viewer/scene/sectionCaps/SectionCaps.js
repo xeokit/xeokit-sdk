@@ -181,6 +181,23 @@ class SectionCaps {
             return false;
         };
 
+        const isLoopInside = (loop1, loop2) => {
+            // Simple point-in-polygon test using the first point of loop1
+            const point = loop1[0][0];  // First point of first segment
+            let inside = false;
+            for (let i = 0, j = loop2.length - 1; i < loop2.length; j = i++) {
+                const xi = loop2[i][0][0], yi = loop2[i][0][1];
+                const xj = loop2[j][0][0], yj = loop2[j][0][1];
+
+                if (((yi > point[1]) !== (yj > point[1]))
+                    &&
+                    (point[0] < (xj - xi) * (point[1] - yi) / (yj - yi) + xi)) { // if intersect
+                    inside = !inside;
+                }
+            }
+            return inside;
+        };
+
         const projectTo2D = (point, normal) => {
             const u = math.normalizeVec3((Math.abs(normal[0]) > Math.abs(normal[1]))
                                          ? [-normal[2], 0, normal[0]]
@@ -375,8 +392,7 @@ class SectionCaps {
                                             // Check remaining loops
                                             for (let j = i + 1; j < loops.length; j++) {
                                                 if (! used.has(j)) {
-                                                    if (this._isLoopInside(loops[i], loops[j]) ||
-                                                        this._isLoopInside(loops[j], loops[i])) {
+                                                    if (isLoopInside(loops[i], loops[j]) || isLoopInside(loops[j], loops[i])) {
                                                         group.push(loops[j]);
                                                         used.add(j);
                                                     }
@@ -633,23 +649,6 @@ class SectionCaps {
             }
 
         }
-    }
-
-    _isLoopInside(loop1, loop2) {
-        // Simple point-in-polygon test using the first point of loop1
-        const point = loop1[0][0];  // First point of first segment
-        let inside = false;
-        for (let i = 0, j = loop2.length - 1; i < loop2.length; j = i++) {
-            const xi = loop2[i][0][0], yi = loop2[i][0][1];
-            const xj = loop2[j][0][0], yj = loop2[j][0][1];
-
-            const intersect = ((yi > point[1]) !== (yj > point[1]))
-                && (point[0] < (xj - xi) * (point[1] - yi) / (yj - yi) + xi);
-
-            if (intersect) inside = !inside;
-        }
-
-        return inside;
     }
 
     _convertTo3D(point2D, plane, origin) {
