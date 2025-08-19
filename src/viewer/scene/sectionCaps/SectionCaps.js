@@ -365,8 +365,14 @@ class SectionCaps {
                                     }
                                 });
 
-                                const geometryData = new Map();
-                                orderedSegments.forEach((orderedSegment, segmentId) => {
+                                // adding meshes to the scene
+                                if (!prevIntersectionModelsMap[sceneModel.id])
+                                    prevIntersectionModelsMap[sceneModel.id] = new Map();
+
+                                // Cache plane direction values
+                                math.mulVec3Scalar(plane.dir, 0.001, planeOff);
+
+                                orderedSegments.forEach((orderedSegment, objectId) => {
                                     const loops = [];
                                     for (let i = 0; i < orderedSegment.length; i++) {
                                         loops.push([]);
@@ -496,7 +502,7 @@ class SectionCaps {
                                     });
 
                                     // converting caps to geometry
-                                    geometryData.set(segmentId, cap.map(capTriangles => {
+                                    const meshArray = cap.map((capTriangles, index) => {
                                         // Create a vertex map to reuse vertices
                                         const vertexMap = new Map();
                                         const vertices = [];
@@ -526,30 +532,6 @@ class SectionCaps {
                                             // Add triangle indices
                                             indices.push(...triangleIndices);
                                         });
-
-                                        return {
-                                            positions: vertices,
-                                            indices: indices
-                                        };
-                                    }));
-                                });
-
-                                // adding meshes to the scene
-                                if (!prevIntersectionModelsMap[sceneModel.id])
-                                    prevIntersectionModelsMap[sceneModel.id] = new Map();
-
-                                // Cache plane direction values
-                                math.mulVec3Scalar(plane.dir, 0.001, planeOff);
-
-                                geometryData.forEach((geometries, objectId) => {
-                                    const modelOrigin = sceneModelsData[sceneModel.id].modelOrigin;
-                                    const meshArray = new Array(geometries.size); // Pre-allocate array with known size
-                                    let meshIndex = 0;
-
-                                    geometries.forEach((geometry, index) => {
-                                        const vertices = geometry.positions;
-                                        const indices = geometry.indices;
-                                        const verticesLength = vertices.length;
 
                                         // Build normals and UVs in parallel if possible
                                         const meshNormals = math.buildNormals(vertices, indices);
@@ -585,7 +567,7 @@ class SectionCaps {
                                         }
 
                                         // Create mesh with transformed vertices
-                                        meshArray[meshIndex++] = new Mesh(scene, {
+                                        return new Mesh(scene, {
                                             id: `${plane.id}-${objectId}-${index}`,
                                             geometry: new ReadableGeometry(scene, {
                                                 primitive: 'triangles',
