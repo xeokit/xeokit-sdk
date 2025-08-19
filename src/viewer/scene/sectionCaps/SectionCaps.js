@@ -427,10 +427,13 @@ class SectionCaps {
                                         // Triangulate using earcut
                                         const triangles = earcut(vertices, holes);
 
-                                        // // Convert triangulated 2D points back to 3D
-                                        const capTriangles = [];
+                                        // Create a vertex map to reuse vertices
+                                        const vertexMap = new Map();
+                                        const positions = [];
+                                        const indices = [];
+                                        let curVertexIndex = 0;
 
-                                        // Process each triangle
+                                        // Convert triangulated 2D points back to 3D
                                         for (let i = 0; i < triangles.length; i += 3) {
                                             const triangle = [];
 
@@ -470,17 +473,6 @@ class SectionCaps {
                                                 ]);
                                             }
 
-                                            capTriangles.push(triangle);
-                                        }
-
-                                        // converting caps to geometry
-                                        // Create a vertex map to reuse vertices
-                                        const vertexMap = new Map();
-                                        const positions = [];
-                                        const indices = [];
-                                        let curVertexIndex = 0;
-
-                                        capTriangles.forEach(triangle => {
                                             indices.push(...triangle.map(vertex => {
                                                 // Create a key for the vertex to check for duplicates
                                                 const vertexKey = `${vertex[0].toFixed(6)},${vertex[1].toFixed(6)},${vertex[2].toFixed(6)}`;
@@ -495,7 +487,7 @@ class SectionCaps {
                                                     return curVertexIndex++;
                                                 }
                                             }));
-                                        });
+                                        }
 
                                         // Build normals and UVs in parallel if possible
                                         const meshNormals = math.buildNormals(positions, indices);
