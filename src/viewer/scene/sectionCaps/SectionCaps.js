@@ -155,7 +155,352 @@ class SectionCaps {
             clearTimeout(updateTimeout);
             updateTimeout = setTimeout(() => {
                 const sceneModels = Object.values(this.scene.models).filter(sceneModel => sceneModel.visible);
-                this._addHatches(sceneModels, this._sectionPlanes.filter(sectionPlane => sectionPlane.active));
+                this._sectionPlanes.forEach((plane) => {
+                    if (plane.active) {
+                        sceneModels.forEach((sceneModel) => {
+                            if (this._doesPlaneIntersectBoundingBox(sceneModel.aabb, plane) && this._dirtyMap[sceneModel.id]) {
+                                // calculating segments in unsorted way
+                                // we calculate the segments by intersecting plane with each triangle
+                                const unsortedSegments = new Map();
+                                const objects = sceneModel.objects;
+                                // Preallocate arrays for triangle vertices to avoid repeated allocation
+                                const triangle = [
+                                    math.vec3(),
+                                    math.vec3(),
+                                    math.vec3()
+                                ];
+
+                                this._dirtyMap[sceneModel.id].forEach((isDirty, objectId) => {
+                                    if (isDirty) {
+                                        const object = objects[objectId];
+                                        if (this._doesPlaneIntersectBoundingBox(object.aabb, plane)) {
+                                            if (!this._sceneModelsData[sceneModel.id]) {
+                                                const aabb = sceneModel.aabb;
+                                                this._sceneModelsData[sceneModel.id] = {
+                                                    verticesMap: new Map(),
+                                                    indicesMap:  new Map(),
+                                                    // modelOrigin is critical to use when handling models with large coordinates.
+                                                    // See XCD-306 and examples/slicing/SectionCaps_at_distance.html for more details.
+                                                    modelOrigin: math.vec3([
+                                                        (aabb[0] + aabb[3]) / 2,
+                                                        (aabb[1] + aabb[4]) / 2,
+                                                        (aabb[2] + aabb[5]) / 2
+                                                    ])
+                                                };
+                                            }
+
+                                            const sceneModelData = this._sceneModelsData[sceneModel.id];
+                                            const modelOrigin = sceneModelData.modelOrigin;
+
+                                            if (!sceneModelData.verticesMap.has(objectId)) {
+                                                const isSolid = object.meshes[0].isSolid();
+                                                const vertices = [ ];
+                                                const indices  = [ ];
+                                                if (isSolid && object.capMaterial) {
+                                                    object.getEachVertex(v => vertices.push(v[0]-modelOrigin[0], v[1]-modelOrigin[1], v[2]-modelOrigin[2]));
+                                                    object.getEachIndex(i  => indices.push(i));
+                                                }
+                                                sceneModelData.verticesMap.set(objectId, vertices);
+                                                sceneModelData.indicesMap.set(objectId, indices);
+                                            }
+
+                                            const vertices = sceneModelData.verticesMap.get(objectId);
+                                            const indices  = sceneModelData.indicesMap.get(objectId);
+                                            const planeDist = -math.dotVec3(math.subVec3(plane.pos, modelOrigin, tempVec3a), plane.dir);
+
+                                            const capSegments = [];
+                                            const vertCount = indices.length;
+
+                                            for (let i = 0; i < vertCount; i += 3) {
+                                                // Reuse triangle buffer instead of creating new arrays
+                                                for (let j = 0; j < 3; j++) {
+                                                    const idx = indices[i + j] * 3;
+                                                    triangle[j][0] = vertices[idx];
+                                                    triangle[j][1] = vertices[idx + 1];
+                                                    triangle[j][2] = vertices[idx + 2];
+                                                }
+
+                                                // Early null check
+                                                if (triangle[0][0] || triangle[0][1] || triangle[0][2]) {
+                                                    const intersections = [];
+                                                    for (let i = 0; i < 3; i++) {
+                                                        const p1 = triangle[i];
+                                                        const p2 = triangle[(i + 1) % 3];
+                                                        const d1 = planeDist + math.dotVec3(plane.dir, p1);
+                                                        const d2 = planeDist + math.dotVec3(plane.dir, p2);
+                                                        if (d1 * d2 <= 0) {
+                                                            intersections.push(math.lerpVec3(-d1 / (d2 - d1), 0, 1, p1, p2, math.vec3()));
+                                                        }
+                                                    }
+
+                                                    if (intersections.length === 2)
+                                                        capSegments.push(intersections);
+                                                }
+                                            }
+
+                                            if (capSegments.length > 0) {
+                                                unsortedSegments.set(objectId, capSegments);
+                                            }
+                                        }
+                                    }
+                                });
+
+                                // sorting the segments
+                                const orderedSegments = new Map();
+                                unsortedSegments.forEach((unsortedSegment, segmentedId) => {
+                                    orderedSegments.set(segmentedId, [
+                                        [
+                                            unsortedSegment[0] //this is also an array of two vectors
+                                        ]
+                                    ]);
+                                    unsortedSegment.splice(0, 1);
+                                    let index = 0;
+                                    while (unsortedSegment.length > 0) {
+                                        const lastPoint = orderedSegments.get(segmentedId)[index][orderedSegments.get(segmentedId)[index].length - 1][1];
+                                        let found = false;
+
+                                        for (let i = 0; i < unsortedSegment.length; i++) {
+                                            const [start, end] = unsortedSegment[i];
+                                            if (pointsEqual(lastPoint, start)) {
+                                                orderedSegments.get(segmentedId)[index].push(unsortedSegment[i]);
+                                                unsortedSegment.splice(i, 1);
+                                                found = true;
+                                                break;
+                                            } else if (pointsEqual(lastPoint, end)) {
+                                                orderedSegments.get(segmentedId)[index].push([end, start]);
+                                                unsortedSegment.splice(i, 1);
+                                                found = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if (!found) {
+                                            if (pointsEqual(lastPoint, orderedSegments.get(segmentedId)[index][0][0])) {
+                                                if (unsortedSegment.length > 1) {
+                                                    orderedSegments.get(segmentedId).push([
+                                                        unsortedSegments.get(segmentedId)[0]
+                                                    ]);
+                                                    unsortedSegment.splice(0, 1);
+                                                    index++;
+                                                    continue;
+                                                }
+
+                                            }
+                                        }
+
+                                        if (!found) {
+                                            // console.error(`Could not find a matching segment. Loop may not be closed. Key: ${key}`);
+                                            break;
+                                        }
+                                    }
+                                });
+
+                                // projecting the segments to 2D
+                                const projectedSegments = new Map();
+                                orderedSegments.forEach((orderedSegment, key) => {
+                                    const arr = [];
+                                    for (let i = 0; i < orderedSegment.length; i++) {
+                                        arr.push([]);
+                                        orderedSegment[i].forEach((segment) => {
+                                            arr[i].push([
+                                                this._projectTo2D(segment[0], plane.dir),
+                                                this._projectTo2D(segment[1], plane.dir)
+                                            ]);
+                                        });
+                                    }
+                                    projectedSegments.set(key, arr);
+                                });
+
+                                // creating caps using earcut and then projecting them back to 3D
+                                const caps = new Map();
+                                let arr;
+                                projectedSegments.forEach((segment, segmentId) => {
+                                    const modelOrigin = this._sceneModelsData[sceneModel.id].modelOrigin;
+                                    arr = [];
+                                    const loops = segment;
+
+                                    // Group related loops (outer boundaries with their holes)
+
+                                    const groupedLoops = [];
+                                    const used = new Set();
+
+                                    for (let i = 0; i < loops.length; i++) {
+                                        if (! used.has(i)) {
+                                            const group = [loops[i]];
+                                            used.add(i);
+
+                                            // Check remaining loops
+                                            for (let j = i + 1; j < loops.length; j++) {
+                                                if (! used.has(j)) {
+                                                    if (this._isLoopInside(loops[i], loops[j]) ||
+                                                        this._isLoopInside(loops[j], loops[i])) {
+                                                        group.push(loops[j]);
+                                                        used.add(j);
+                                                    }
+                                                }
+                                            }
+
+                                            groupedLoops.push(group);
+                                        }
+                                    }
+
+                                    // Process each group separately
+                                    groupedLoops.forEach(group => {
+                                        // Convert the segments into a flat array of vertices and find holes
+                                        const vertices = [];
+                                        const holes = [];
+                                        let currentIndex = 0;
+
+                                        // First, determine which loop has the largest area - this will be our outer boundary
+                                        const areas = group.map(loop => {
+                                            let area = 0;
+                                            for (let i = 0; i < loop.length; i++) {
+                                                const j = (i + 1) % loop.length;
+                                                area += loop[i][0][0] * loop[j][0][1];
+                                                area -= loop[j][0][0] * loop[i][0][1];
+                                            }
+                                            return Math.abs(area) / 2;
+                                        });
+
+                                        // Find index of the loop with maximum area
+                                        const outerLoopIndex = areas.indexOf(Math.max(...areas));
+
+                                        // Add the outer boundary first
+                                        group[outerLoopIndex].forEach(segment => {
+                                            vertices.push(segment[0][0], segment[0][1]);
+                                            currentIndex += 2;
+                                        });
+
+                                        // Then add all other loops as holes
+                                        for (let i = 0; i < group.length; i++) {
+                                            if (i !== outerLoopIndex) {
+                                                // Store the starting vertex index for this hole
+                                                holes.push(currentIndex / 2);
+
+                                                group[i].forEach(segment => {
+                                                    vertices.push(segment[0][0], segment[0][1]);
+                                                    currentIndex += 2;
+                                                });
+                                            }
+                                        }
+
+                                        // Triangulate using earcut
+                                        const triangles = earcut(vertices, holes);
+
+                                        // // Convert triangulated 2D points back to 3D
+                                        const cap3D = [];
+
+                                        // Process each triangle
+                                        for (let i = 0; i < triangles.length; i += 3) {
+                                            const triangle = [];
+
+                                            // Convert each vertex
+                                            for (let j = 0; j < 3; j++) {
+                                                const idx = triangles[i + j] * 2;
+                                                const point2D = [vertices[idx], vertices[idx + 1]];
+                                                const point3D = this._convertTo3D(point2D, plane, modelOrigin);
+                                                triangle.push(point3D);
+                                            }
+
+                                            cap3D.push(triangle);
+                                        }
+                                        arr.push(cap3D);
+                                    });
+                                    caps.set(segmentId, arr);
+                                });
+
+                                // converting caps to geometry
+                                const geometryData = new Map();
+
+                                caps.forEach((cap, capId) => {
+                                    arr = [];
+                                    cap.forEach(capTriangles => {
+                                        // Create a vertex map to reuse vertices
+                                        const vertexMap = new Map();
+                                        const vertices = [];
+                                        const indices = [];
+                                        let currentIndex = 0;
+
+                                        capTriangles.forEach(triangle => {
+                                            const triangleIndices = [];
+
+                                            // Process each vertex of the triangle
+                                            triangle.forEach(vertex => {
+                                                // Create a key for the vertex to check for duplicates
+                                                const vertexKey = `${vertex[0].toFixed(6)},${vertex[1].toFixed(6)},${vertex[2].toFixed(6)}`;
+
+                                                if (vertexMap.has(vertexKey)) {
+                                                    // Reuse existing vertex
+                                                    triangleIndices.push(vertexMap.get(vertexKey));
+                                                } else {
+                                                    // Add new vertex
+                                                    vertices.push(vertex[0], vertex[1], vertex[2]);
+                                                    vertexMap.set(vertexKey, currentIndex);
+                                                    triangleIndices.push(currentIndex);
+                                                    currentIndex++;
+                                                }
+                                            });
+
+                                            // Add triangle indices
+                                            indices.push(...triangleIndices);
+                                        });
+
+                                        arr.push({
+                                            positions: vertices,
+                                            indices: indices
+                                        });
+                                    });
+
+                                    geometryData.set(capId, arr);
+                                });
+
+                                // adding meshes to the scene
+                                if (!this._prevIntersectionModelsMap[sceneModel.id])
+                                    this._prevIntersectionModelsMap[sceneModel.id] = new Map();
+
+                                // Cache plane direction values
+                                math.mulVec3Scalar(plane.dir, 0.001, planeOff); // Use dedicated planeOff, as tempVec* are overwritten by _createUVs
+
+                                geometryData.forEach((geometries, objectId) => {
+                                    const modelOrigin = this._sceneModelsData[sceneModel.id].modelOrigin;
+                                    const meshArray = new Array(geometries.size); // Pre-allocate array with known size
+                                    let meshIndex = 0;
+
+                                    geometries.forEach((geometry, index) => {
+                                        const vertices = geometry.positions;
+                                        const indices = geometry.indices;
+                                        const verticesLength = vertices.length;
+
+                                        // Build normals and UVs in parallel if possible
+                                        const meshNormals = math.buildNormals(vertices, indices);
+                                        const uvs = this._createUVs(vertices, plane, modelOrigin);
+
+                                        // Create mesh with transformed vertices
+                                        meshArray[meshIndex++] = new Mesh(this.scene, {
+                                            id: `${plane.id}-${objectId}-${index}`,
+                                            geometry: new ReadableGeometry(this.scene, {
+                                                primitive: 'triangles',
+                                                positions: vertices, // Only copy what we need
+                                                indices,
+                                                normals: meshNormals,
+                                                uv: uvs
+                                            }),
+                                            origin:   math.addVec3(modelOrigin, planeOff, tempVec3a),
+                                            position: [0, 0, 0],
+                                            rotation: [0, 0, 0],
+                                            material: sceneModel.objects[objectId].capMaterial
+                                        });
+                                    });
+                                    if (this._prevIntersectionModelsMap[sceneModel.id].has(objectId)) {
+                                        this._prevIntersectionModelsMap[sceneModel.id].get(objectId).push(...meshArray);
+                                    }
+                                    else
+                                        this._prevIntersectionModelsMap[sceneModel.id].set(objectId, meshArray);
+                                });
+                            }
+                        });
+                    }
+                });
                 setAllDirty(false);
             }, 100);
         };
@@ -222,370 +567,6 @@ class SectionCaps {
             this._dirtyMap[modelId].set(entityId, true);
             update();
         };
-    }
-
-    _addHatches(sceneModels, planes) {
-
-        planes.forEach((plane) => {
-            sceneModels.forEach((sceneModel) => {
-                if(!this._doesPlaneIntersectBoundingBox(sceneModel.aabb, plane)) return;
-
-                if(!this._dirtyMap[sceneModel.id]) return;
-
-                //#region calculating segments in unsorted way
-                //we calculate the segments by intersecting plane with each triangle
-                const unsortedSegments = new Map();
-                const objects = sceneModel.objects;
-                // Preallocate arrays for triangle vertices to avoid repeated allocation
-                const triangle = [
-                    math.vec3(),
-                    math.vec3(),
-                    math.vec3()
-                ];
-
-                this._dirtyMap[sceneModel.id].forEach((isDirty, objectId) => {
-                    if (!isDirty) {
-                        return;
-                    }
-
-                    const object = objects[objectId];
-
-                    if(!this._doesPlaneIntersectBoundingBox(object.aabb, plane)) return;
-
-                    if(!this._sceneModelsData[sceneModel.id]) {
-                        const aabb = sceneModel.aabb;
-                        this._sceneModelsData[sceneModel.id] = {
-                            verticesMap: new Map(),
-                            indicesMap:  new Map(),
-                            // modelOrigin is critical to use when handling models with large coordinates.
-                            // See XCD-306 and examples/slicing/SectionCaps_at_distance.html for more details.
-                            modelOrigin: math.vec3([
-                                (aabb[0] + aabb[3]) / 2,
-                                (aabb[1] + aabb[4]) / 2,
-                                (aabb[2] + aabb[5]) / 2
-                            ])
-                        };
-                    }
-
-                    const sceneModelData = this._sceneModelsData[sceneModel.id];
-                    const modelOrigin = sceneModelData.modelOrigin;
-
-                    if(!sceneModelData.verticesMap.has(objectId)) {
-                        const isSolid = object.meshes[0].isSolid();
-                        const vertices = [ ];
-                        const indices  = [ ];
-                        if(isSolid && object.capMaterial) {
-                            object.getEachVertex(v => vertices.push(v[0]-modelOrigin[0], v[1]-modelOrigin[1], v[2]-modelOrigin[2]));
-                            object.getEachIndex(i  => indices.push(i));
-                        }
-                        sceneModelData.verticesMap.set(objectId, vertices);
-                        sceneModelData.indicesMap.set(objectId, indices);
-                    }
-
-                    const vertices = sceneModelData.verticesMap.get(objectId);
-                    const indices  = sceneModelData.indicesMap.get(objectId);
-                    const planeDist = -math.dotVec3(math.subVec3(plane.pos, modelOrigin, tempVec3a), plane.dir);
-
-                    const capSegments = [];
-                    const vertCount = indices.length;
-
-                    for (let i = 0; i < vertCount; i += 3) {
-                        // Reuse triangle buffer instead of creating new arrays
-                        for (let j = 0; j < 3; j++) {
-                            const idx = indices[i + j] * 3;
-                            triangle[j][0] = vertices[idx];
-                            triangle[j][1] = vertices[idx + 1];
-                            triangle[j][2] = vertices[idx + 2];
-                        }
-                        
-                        // Early null check
-                        if (!triangle[0][0] && !triangle[0][1] && !triangle[0][2]) continue;
-                        
-                        const intersections = [];
-                        for (let i = 0; i < 3; i++) {
-                            const p1 = triangle[i];
-                            const p2 = triangle[(i + 1) % 3];
-
-                            const d1 = planeDist + math.dotVec3(plane.dir, p1);
-                            const d2 = planeDist + math.dotVec3(plane.dir, p2);
-
-                            if (d1 * d2 > 0) continue;
-
-                            const t = -d1 / (d2 - d1);
-
-                            intersections.push(math.lerpVec3(t, 0, 1, p1, p2, math.vec3()));
-                        }
-
-                        if(intersections.length === 2) capSegments.push(intersections);
-                    }
-
-                    if (capSegments.length > 0) {
-                        unsortedSegments.set(objectId, capSegments);
-                    }
-                })
-                //#endregion
-
-                //#region sorting the segments
-                const orderedSegments = new Map();
-                unsortedSegments.forEach((unsortedSegment, segmentedId) => {
-                    orderedSegments.set(segmentedId, [
-                        [
-                            unsortedSegment[0] //this is also an array of two vectors
-                        ]
-                    ]);
-                    unsortedSegment.splice(0, 1);
-                    let index = 0;
-                    while (unsortedSegment.length > 0) {
-                        const lastPoint = orderedSegments.get(segmentedId)[index][orderedSegments.get(segmentedId)[index].length - 1][1];
-                        let found = false;
-
-                        for (let i = 0; i < unsortedSegment.length; i++) {
-                            const [start, end] = unsortedSegment[i];
-                            if (pointsEqual(lastPoint, start)) {
-                                orderedSegments.get(segmentedId)[index].push(unsortedSegment[i]);
-                                unsortedSegment.splice(i, 1);
-                                found = true;
-                                break;
-                            } else if (pointsEqual(lastPoint, end)) {
-                                orderedSegments.get(segmentedId)[index].push([end, start]);
-                                unsortedSegment.splice(i, 1);
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (!found) {
-                            if (pointsEqual(lastPoint, orderedSegments.get(segmentedId)[index][0][0])) {
-                                if (unsortedSegment.length > 1) {
-                                    orderedSegments.get(segmentedId).push([
-                                        unsortedSegments.get(segmentedId)[0]
-                                    ]);
-                                    unsortedSegment.splice(0, 1);
-                                    index++;
-                                    continue;
-                                }
-
-                            }
-                        }
-
-                        if (!found) {
-                            // console.error(`Could not find a matching segment. Loop may not be closed. Key: ${key}`);
-                            break;
-                        }
-                    }
-                })
-                //#endregion
-                
-                //#region projecting the segments to 2D
-                const projectedSegments = new Map();
-                orderedSegments.forEach((orderedSegment, key) => {
-                    const arr = [];
-                    for (let i = 0; i < orderedSegment.length; i++) {
-                        arr.push([]);
-                        orderedSegment[i].forEach((segment) => {
-                            arr[i].push([
-                                this._projectTo2D(segment[0], plane.dir),
-                                this._projectTo2D(segment[1], plane.dir)
-                            ])
-                        })
-                    }
-                    projectedSegments.set(key, arr);
-                })
-                //#endregion
-                
-                //#region creating caps using earcut and then projecting them back to 3D
-                const caps = new Map();
-                let arr;
-                projectedSegments.forEach((segment, segmentId) => {
-                    const modelOrigin = this._sceneModelsData[sceneModel.id].modelOrigin;
-                    arr = [];
-                    const loops = segment;
-
-                    // Group related loops (outer boundaries with their holes)
-
-                    const groupedLoops = [];
-                    const used = new Set();
-
-                    for (let i = 0; i < loops.length; i++) {
-                        if (used.has(i)) continue;
-
-                        const group = [loops[i]];
-                        used.add(i);
-
-                        // Check remaining loops
-                        for (let j = i + 1; j < loops.length; j++) {
-                            if (used.has(j)) continue;
-
-                            if (this._isLoopInside(loops[i], loops[j]) ||
-                                this._isLoopInside(loops[j], loops[i])) {
-                                group.push(loops[j]);
-                                used.add(j);
-                            }
-                        }
-
-                        groupedLoops.push(group);
-                    }
-
-                    // Process each group separately
-                    groupedLoops.forEach(group => {
-                        // Convert the segments into a flat array of vertices and find holes
-                        const vertices = [];
-                        const holes = [];
-                        let currentIndex = 0;
-
-                        // First, determine which loop has the largest area - this will be our outer boundary
-                        const areas = group.map(loop => {
-                            let area = 0;
-                            for (let i = 0; i < loop.length; i++) {
-                                const j = (i + 1) % loop.length;
-                                area += loop[i][0][0] * loop[j][0][1];
-                                area -= loop[j][0][0] * loop[i][0][1];
-                            }
-                            return Math.abs(area) / 2;
-                        });
-
-                        // Find index of the loop with maximum area
-                        const outerLoopIndex = areas.indexOf(Math.max(...areas));
-
-                        // Add the outer boundary first
-                        group[outerLoopIndex].forEach(segment => {
-                            vertices.push(segment[0][0], segment[0][1]);
-                            currentIndex += 2;
-                        });
-
-                        // Then add all other loops as holes
-                        for (let i = 0; i < group.length; i++) {
-                            if (i !== outerLoopIndex) {
-                                // Store the starting vertex index for this hole
-                                holes.push(currentIndex / 2);
-
-                                group[i].forEach(segment => {
-                                    vertices.push(segment[0][0], segment[0][1]);
-                                    currentIndex += 2;
-                                });
-                            }
-                        }
-
-                        // Triangulate using earcut
-                        const triangles = earcut(vertices, holes);
-
-                        // // Convert triangulated 2D points back to 3D
-                        const cap3D = [];
-
-                        // Process each triangle
-                        for (let i = 0; i < triangles.length; i += 3) {
-                            const triangle = [];
-
-                            // Convert each vertex
-                            for (let j = 0; j < 3; j++) {
-                                const idx = triangles[i + j] * 2;
-                                const point2D = [vertices[idx], vertices[idx + 1]];
-                                const point3D = this._convertTo3D(point2D, plane, modelOrigin);
-                                triangle.push(point3D);
-                            }
-
-                            cap3D.push(triangle);
-                        }
-                        arr.push(cap3D);
-                    });
-                    caps.set(segmentId, arr);
-                })
-                //#endregion
-
-                //#region converting caps to geometry
-                const geometryData = new Map();
-
-                caps.forEach((cap, capId) => {
-                    arr = [];
-                    cap.forEach(capTriangles => {
-                        // Create a vertex map to reuse vertices
-                        const vertexMap = new Map();
-                        const vertices = [];
-                        const indices = [];
-                        let currentIndex = 0;
-
-                        capTriangles.forEach(triangle => {
-                            const triangleIndices = [];
-
-                            // Process each vertex of the triangle
-                            triangle.forEach(vertex => {
-                                // Create a key for the vertex to check for duplicates
-                                const vertexKey = `${vertex[0].toFixed(6)},${vertex[1].toFixed(6)},${vertex[2].toFixed(6)}`;
-
-                                if (vertexMap.has(vertexKey)) {
-                                    // Reuse existing vertex
-                                    triangleIndices.push(vertexMap.get(vertexKey));
-                                } else {
-                                    // Add new vertex
-                                    vertices.push(vertex[0], vertex[1], vertex[2]);
-                                    vertexMap.set(vertexKey, currentIndex);
-                                    triangleIndices.push(currentIndex);
-                                    currentIndex++;
-                                }
-                            });
-
-                            // Add triangle indices
-                            indices.push(...triangleIndices);
-                        });
-
-                        arr.push({
-                            positions: vertices,
-                            indices: indices
-                        });
-                    });
-
-                    geometryData.set(capId, arr);
-                })
-                //#endregion
-
-                //#region adding meshes to the scene
-                if(!this._prevIntersectionModelsMap[sceneModel.id])
-                    this._prevIntersectionModelsMap[sceneModel.id] = new Map();
-
-                // Cache plane direction values
-                math.mulVec3Scalar(plane.dir, 0.001, planeOff); // Use dedicated planeOff, as tempVec* are overwritten by _createUVs
-
-                geometryData.forEach((geometries, objectId) => {
-                    const modelOrigin = this._sceneModelsData[sceneModel.id].modelOrigin;
-                    const meshArray = new Array(geometries.size); // Pre-allocate array with known size
-                    let meshIndex = 0;
-
-                    geometries.forEach((geometry, index) => {
-                        const vertices = geometry.positions;
-                        const indices = geometry.indices;
-                        const verticesLength = vertices.length;
-
-                        // Build normals and UVs in parallel if possible
-                        const meshNormals = math.buildNormals(vertices, indices);
-                        const uvs = this._createUVs(vertices, plane, modelOrigin);
-
-                        // Create mesh with transformed vertices
-                        meshArray[meshIndex++] = new Mesh(this.scene, {
-                            id: `${plane.id}-${objectId}-${index}`,
-                            geometry: new ReadableGeometry(this.scene, {
-                                primitive: 'triangles',
-                                positions: vertices, // Only copy what we need
-                                indices,
-                                normals: meshNormals,
-                                uv: uvs
-                            }),
-                            origin:   math.addVec3(modelOrigin, planeOff, tempVec3a),
-                            position: [0, 0, 0],
-                            rotation: [0, 0, 0],
-                            material: sceneModel.objects[objectId].capMaterial
-                        });
-                    })
-                    if(this._prevIntersectionModelsMap[sceneModel.id].has(objectId)) {
-                        this._prevIntersectionModelsMap[sceneModel.id].get(objectId).push(...meshArray)
-                    }
-                    else
-                        this._prevIntersectionModelsMap[sceneModel.id].set(objectId, meshArray);
-                })
-                //#endregion
-            })
-            
-        })
-
     }
 
     _doesPlaneIntersectBoundingBox(bb, plane) {
