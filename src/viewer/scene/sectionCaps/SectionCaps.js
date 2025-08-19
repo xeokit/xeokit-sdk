@@ -181,6 +181,16 @@ class SectionCaps {
             return false;
         };
 
+        const projectTo2D = (point, normal) => {
+            const u = math.normalizeVec3((Math.abs(normal[0]) > Math.abs(normal[1]))
+                                         ? [-normal[2], 0, normal[0]]
+                                         : [0, normal[2], -normal[1]]);
+            return [
+                math.dotVec3(point, u),
+                math.dotVec3(point, math.normalizeVec3(math.cross3Vec3(normal, u, math.vec3())))
+            ];
+        };
+
         let updateTimeout = null;
 
         const update = () => {
@@ -336,8 +346,8 @@ class SectionCaps {
                                         arr.push([]);
                                         orderedSegment[i].forEach((segment) => {
                                             arr[i].push([
-                                                this._projectTo2D(segment[0], plane.dir),
-                                                this._projectTo2D(segment[1], plane.dir)
+                                                projectTo2D(segment[0], plane.dir),
+                                                projectTo2D(segment[1], plane.dir)
                                             ]);
                                         });
                                     }
@@ -625,24 +635,6 @@ class SectionCaps {
         }
     }
 
-    _projectTo2D(point, normal) {
-        let u;
-        if (Math.abs(normal[0]) > Math.abs(normal[1]))
-            u = [-normal[2], 0, normal[0]];
-        else
-            u = [0, normal[2], -normal[1]];
-
-        u = math.normalizeVec3(u);
-        const normalTemp = math.vec3(normal);
-        const cross = math.cross3Vec3(normalTemp, u)
-        const v = math.normalizeVec3(cross);
-        const x = math.dotVec3(point, u);
-        const y = math.dotVec3(point, v);
-
-        return [x, y]
-
-    }
-
     _isLoopInside(loop1, loop2) {
         // Simple point-in-polygon test using the first point of loop1
         const point = loop1[0][0];  // First point of first segment
@@ -661,7 +653,7 @@ class SectionCaps {
     }
 
     _convertTo3D(point2D, plane, origin) {
-        // Reconstruct the same basis vectors used in _projectTo2D
+        // Reconstruct the same basis vectors used in projectTo2D
         let u, normal = plane.dir, planePosition = plane.pos;
         if (Math.abs(normal[0]) > Math.abs(normal[1])) {
             u = [-normal[2], 0, normal[0]];
