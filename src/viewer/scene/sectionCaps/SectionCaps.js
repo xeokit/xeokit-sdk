@@ -221,12 +221,14 @@ class SectionCaps {
                     if (plane.active) {
                         sceneModels.forEach((sceneModel) => {
                             if (doesPlaneIntersectBoundingBox(sceneModel.aabb, plane) && dirtyMap[sceneModel.id]) {
+                                if (! modelEntityToCapMeshes[sceneModel.id])
+                                    modelEntityToCapMeshes[sceneModel.id] = new Map();
+
                                 const planeDir = plane.dir;
                                 const planePos = plane.pos;
 
                                 // calculating segments in unsorted way
                                 // we calculate the segments by intersecting plane with each triangle
-                                const unsortedSegments = new Map();
                                 const sceneModelObjects = sceneModel.objects;
                                 // Preallocate arrays for triangle vertices to avoid repeated allocation
                                 const triangle = [
@@ -253,6 +255,7 @@ class SectionCaps {
                                 const modelOrigin = modelData.modelOrigin;
                                 const planeDist = math.dotVec3(planeDir, math.subVec3(modelOrigin, planePos, tempVec3a));
 
+                                const unsortedSegments = [ ];
                                 dirtyMap[sceneModel.id].forEach((isDirty, entityId) => {
                                     if (isDirty) {
                                         const entity = sceneModelObjects[entityId];
@@ -301,17 +304,16 @@ class SectionCaps {
                                             }
 
                                             if (capSegments.length > 0) {
-                                                unsortedSegments.set(entityId, capSegments);
+                                                unsortedSegments.push({ entityId: entityId, capSegments: capSegments });
                                             }
                                         }
                                     }
                                 });
 
                                 // sorting the segments
-                                const orderedSegments = new Map();
-                                unsortedSegments.forEach((unsortedSegment, entityId) => {
+                                const orderedSegments = unsortedSegments.map(unsortedEntitySegment => {
+                                    const unsortedSegment = unsortedEntitySegment.capSegments;
                                     const segments = [ [ unsortedSegment[0] ] ]; // an array of two vectors
-                                    orderedSegments.set(entityId, segments);
                                     unsortedSegment.splice(0, 1);
                                     let index = 0;
                                     while (unsortedSegment.length > 0) {
@@ -342,10 +344,11 @@ class SectionCaps {
                                             }
                                         }
                                     }
+                                    return { entityId: unsortedEntitySegment.entityId, segments: segments };
                                 });
 
-                                orderedSegments.forEach((orderedSegment, entityId) => {
-                                    const loops = orderedSegment.map(segments => {
+                                orderedSegments.forEach((orderedEntitySegment) => {
+                                    const loops = orderedEntitySegment.segments.map(segments => {
                                         return segments.map(seg => [
                                             projectTo2D(seg[0], plane.dir),
                                             projectTo2D(seg[1], plane.dir)
@@ -377,9 +380,7 @@ class SectionCaps {
                                         }
                                     }
 
-                                    if (! modelEntityToCapMeshes[sceneModel.id])
-                                        modelEntityToCapMeshes[sceneModel.id] = new Map();
-
+                                    const entityId = orderedEntitySegment.entityId;
                                     const prevIntersection = modelEntityToCapMeshes[sceneModel.id];
                                     if (! prevIntersection.has(entityId)) {
                                         prevIntersection.set(entityId, [ ]);
