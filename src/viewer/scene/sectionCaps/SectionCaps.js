@@ -274,7 +274,7 @@ class SectionCaps {
                                             const indices  = entityGeometry.indices;
                                             const vertices = entityGeometry.vertices;
 
-                                            const capSegments = [];
+                                            const unsortedSegment = [];
 
                                             for (let i = 0; i < indices.length; i += 3) {
                                                 // Reuse triangle buffer instead of creating new arrays
@@ -299,20 +299,20 @@ class SectionCaps {
                                                     }
 
                                                     if (intersections.length === 2)
-                                                        capSegments.push(intersections);
+                                                        unsortedSegment.push(intersections);
                                                 }
                                             }
 
-                                            if (capSegments.length > 0) {
-                                                unsortedSegments.push({ entityId: entityId, capSegments: capSegments });
+                                            if (unsortedSegment.length > 0) {
+                                                unsortedSegments.push({ entityId: entityId, unsortedSegment: unsortedSegment });
                                             }
                                         }
                                     }
                                 });
 
-                                // sorting the segments
-                                const orderedSegments = unsortedSegments.map(unsortedEntitySegment => {
-                                    const unsortedSegment = unsortedEntitySegment.capSegments;
+                                unsortedSegments.forEach(unsortedEntitySegment => {
+                                    // sorting the segments
+                                    const unsortedSegment = unsortedEntitySegment.unsortedSegment;
                                     const segments = [ [ unsortedSegment[0] ] ]; // an array of two vectors
                                     unsortedSegment.splice(0, 1);
                                     let index = 0;
@@ -344,11 +344,8 @@ class SectionCaps {
                                             }
                                         }
                                     }
-                                    return { entityId: unsortedEntitySegment.entityId, segments: segments };
-                                });
 
-                                orderedSegments.forEach((orderedEntitySegment) => {
-                                    const loops = orderedEntitySegment.segments.map(segments => {
+                                    const loops = segments.map(segments => {
                                         return segments.map(seg => [
                                             projectTo2D(seg[0], plane.dir),
                                             projectTo2D(seg[1], plane.dir)
@@ -380,7 +377,7 @@ class SectionCaps {
                                         }
                                     }
 
-                                    const entityId = orderedEntitySegment.entityId;
+                                    const entityId = unsortedEntitySegment.entityId;
                                     modelEntityToCapMeshes[sceneModel.id].set(entityId, groupedLoops.map((group, index) => {
                                         // Convert the segments into a flat array of vertices and find holes
 
