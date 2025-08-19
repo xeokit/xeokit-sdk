@@ -221,6 +221,9 @@ class SectionCaps {
                     if (plane.active) {
                         sceneModels.forEach((sceneModel) => {
                             if (doesPlaneIntersectBoundingBox(sceneModel.aabb, plane) && dirtyMap[sceneModel.id]) {
+                                const planeDir = plane.dir;
+                                const planePos = plane.pos;
+
                                 // calculating segments in unsorted way
                                 // we calculate the segments by intersecting plane with each triangle
                                 const unsortedSegments = new Map();
@@ -435,24 +438,18 @@ class SectionCaps {
 
                                         // Convert triangulated 2D points back to 3D
                                         for (let i = 0; i < triangles.length; i += 3) {
-                                            const triangle = [];
-
-                                            // Convert each vertex
                                             for (let j = 0; j < 3; j++) {
                                                 const idx = triangles[i + j] * 2;
-                                                const point2D = [vertices[idx], vertices[idx + 1]];
-                                                // Reconstruct the same basis vectors used in projectTo2D
-                                                const planeDir = plane.dir;
-                                                const planePos = plane.pos;
+                                                const x = vertices[idx];
+                                                const y = vertices[idx + 1];
 
+                                                // Reconstruct the same basis vectors used in projectTo2D
                                                 const u = math.normalizeVec3((Math.abs(planeDir[0]) > Math.abs(planeDir[1]))
                                                                              ? [-planeDir[2], 0, planeDir[0]]
                                                                              : [0, planeDir[2], -planeDir[1]]);
-                                                const v = math.normalizeVec3(math.cross3Vec3(planeDir, u, math.vec3()));
+                                                const v = math.normalizeVec3(math.cross3Vec3(planeDir, u, tempVec3a));
 
                                                 // Reconstruct 3D point using the basis vectors
-                                                const x = point2D[0];
-                                                const y = point2D[1];
                                                 const result = [
                                                     u[0] * x + v[0] * y,
                                                     u[1] * x + v[1] * y,
@@ -460,33 +457,22 @@ class SectionCaps {
                                                 ];
 
                                                 // Project the point onto the cutting plane
-                                                const t = math.dotVec3(planeDir, [
-                                                    planePos[0] - result[0] - modelOrigin[0],
-                                                    planePos[1] - result[1] - modelOrigin[1],
-                                                    planePos[2] - result[2] - modelOrigin[2]
-                                                ]);
+                                                const t = math.dotVec3(planeDir, math.subVec3(planePos, math.addVec3(modelOrigin, result, tempVec3a), tempVec3a));
+                                                const vertex = math.addVec3(result, math.mulVec3Scalar(planeDir, t, tempVec3a), tempVec3a);
 
-                                                triangle.push([
-                                                    result[0] + planeDir[0] * t,
-                                                    result[1] + planeDir[1] * t,
-                                                    result[2] + planeDir[2] * t
-                                                ]);
-                                            }
-
-                                            indices.push(...triangle.map(vertex => {
                                                 // Create a key for the vertex to check for duplicates
                                                 const vertexKey = `${vertex[0].toFixed(6)},${vertex[1].toFixed(6)},${vertex[2].toFixed(6)}`;
 
                                                 if (vertexMap.has(vertexKey)) {
                                                     // Reuse existing vertex
-                                                    return vertexMap.get(vertexKey);
+                                                    indices.push(vertexMap.get(vertexKey));
                                                 } else {
                                                     // Add new vertex
                                                     positions.push(vertex[0], vertex[1], vertex[2]);
                                                     vertexMap.set(vertexKey, curVertexIndex);
-                                                    return curVertexIndex++;
+                                                    indices.push(curVertexIndex++);
                                                 }
-                                            }));
+                                            }
                                         }
 
                                         // Build normals and UVs in parallel if possible
