@@ -365,7 +365,7 @@ class SectionCaps {
                                     }
                                 });
 
-                                const caps = new Map();
+                                const geometryData = new Map();
                                 orderedSegments.forEach((orderedSegment, segmentId) => {
                                     const loops = [];
                                     for (let i = 0; i < orderedSegment.length; i++) {
@@ -405,7 +405,7 @@ class SectionCaps {
                                     }
 
                                     // Process each group separately
-                                    caps.set(segmentId, groupedLoops.map(group => {
+                                    const cap = groupedLoops.map(group => {
                                         // Convert the segments into a flat array of vertices and find holes
                                         const vertices = [];
                                         const holes = [];
@@ -493,15 +493,10 @@ class SectionCaps {
                                             cap3D.push(triangle);
                                         }
                                         return cap3D;
-                                    }));
-                                });
+                                    });
 
-                                // converting caps to geometry
-                                const geometryData = new Map();
-
-                                caps.forEach((cap, capId) => {
-                                    const arr = [];
-                                    cap.forEach(capTriangles => {
+                                    // converting caps to geometry
+                                    geometryData.set(segmentId, cap.map(capTriangles => {
                                         // Create a vertex map to reuse vertices
                                         const vertexMap = new Map();
                                         const vertices = [];
@@ -532,13 +527,11 @@ class SectionCaps {
                                             indices.push(...triangleIndices);
                                         });
 
-                                        arr.push({
+                                        return {
                                             positions: vertices,
                                             indices: indices
-                                        });
-                                    });
-
-                                    geometryData.set(capId, arr);
+                                        };
+                                    }));
                                 });
 
                                 // adding meshes to the scene
