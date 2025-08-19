@@ -685,28 +685,5 @@ class SectionCaps {
             update();
         };
     }
-
-    //not used but kept for debugging
-    _buildLines(sortedSegments) {
-        for (const key in sortedSegments) {
-            for (let i = 0; i < sortedSegments[key].length; i++) {
-                const segments = sortedSegments[key][i];
-                if (segments.length <= 0) continue;
-                segments.forEach((segment, index) => {
-                    new Mesh(this.scene, {
-                        clippable: false,
-                        geometry: new ReadableGeometry(this.scene, buildLineGeometry({
-                            startPoint: segment[0],
-                            endPoint: segment[1],
-                        })),
-                        material: new PhongMaterial(this.scene, {
-                            emissive: [1, 0, 0]
-                        })
-                    });
-                })
-            }
-
-        }
-    }
 }
 export { SectionCaps };
