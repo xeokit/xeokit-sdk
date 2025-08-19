@@ -137,6 +137,12 @@ class SectionCaps {
             }
         };
 
+        const setAllDirty = (value) => {
+            for (const key in this._dirtyMap) {
+                this._dirtyMap[key].forEach((_, key2) => this._dirtyMap[key].set(key2, value));
+            }
+        };
+
         this.destroy = () => {
             deletePreviousModels();
             destroy && destroy();
@@ -150,7 +156,7 @@ class SectionCaps {
             updateTimeout = setTimeout(() => {
                 const sceneModels = Object.values(this.scene.models).filter(sceneModel => sceneModel.visible);
                 this._addHatches(sceneModels, this._sectionPlanes.filter(sectionPlane => sectionPlane.active));
-                this._setAllDirty(false);
+                setAllDirty(false);
             }, 100);
         };
 
@@ -165,7 +171,7 @@ class SectionCaps {
 
                 const handleSectionPlane = (sectionPlane) => {
                     const onSectionPlaneUpdated = () => {
-                        this._setAllDirty(true);
+                        setAllDirty(true);
                         update();
                     };
                     this._sectionPlanes.push(sectionPlane);
@@ -216,12 +222,6 @@ class SectionCaps {
             this._dirtyMap[modelId].set(entityId, true);
             update();
         };
-    }
-
-    _setAllDirty(value) {
-        for(const key in this._dirtyMap) {
-            this._dirtyMap[key].forEach((_, key2) => this._dirtyMap[key].set(key2, value));
-        }
     }
 
     _addHatches(sceneModels, planes) {
