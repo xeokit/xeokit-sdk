@@ -122,21 +122,20 @@ class SectionCaps {
     constructor(scene) {
         let destroy = null;
         const dirtyMap = { };
-        const prevIntersectionModelsMap = { };
+        const modelEntityToCapMeshes = { };
         const sceneModelsData = { };
         const sectionPlanes = [ ];
 
         const deletePreviousModels = () => {
-            for (const sceneModelId in prevIntersectionModelsMap) {
-                const objects = prevIntersectionModelsMap[sceneModelId];
-                objects.forEach((meshes, objectId) => {
-                    if (dirtyMap[sceneModelId].get(objectId)) {
+            for (const sceneModelId in modelEntityToCapMeshes) {
+                modelEntityToCapMeshes[sceneModelId].forEach((meshes, entityId) => {
+                    if (dirtyMap[sceneModelId].get(entityId)) {
                         meshes.forEach(mesh => mesh.destroy());
-                        prevIntersectionModelsMap[sceneModelId].delete(objectId);
+                        modelEntityToCapMeshes[sceneModelId].delete(entityId);
                     }
                 });
-                if (prevIntersectionModelsMap[sceneModelId].size <= 0)
-                    delete prevIntersectionModelsMap[sceneModelId];
+                if (modelEntityToCapMeshes[sceneModelId].size <= 0)
+                    delete modelEntityToCapMeshes[sceneModelId];
             }
         };
 
@@ -245,7 +244,7 @@ class SectionCaps {
                                 // calculating segments in unsorted way
                                 // we calculate the segments by intersecting plane with each triangle
                                 const unsortedSegments = new Map();
-                                const objects = sceneModel.objects;
+                                const sceneModelObjects = sceneModel.objects;
                                 // Preallocate arrays for triangle vertices to avoid repeated allocation
                                 const triangle = [
                                     math.vec3(),
@@ -253,9 +252,9 @@ class SectionCaps {
                                     math.vec3()
                                 ];
 
-                                dirtyMap[sceneModel.id].forEach((isDirty, objectId) => {
+                                dirtyMap[sceneModel.id].forEach((isDirty, entityId) => {
                                     if (isDirty) {
-                                        const object = objects[objectId];
+                                        const object = sceneModelObjects[entityId];
                                         if (doesPlaneIntersectBoundingBox(object.aabb, plane)) {
                                             if (! sceneModelsData[sceneModel.id]) {
                                                 const aabb = sceneModel.aabb;
@@ -275,7 +274,7 @@ class SectionCaps {
                                             const modelData = sceneModelsData[sceneModel.id];
                                             const modelOrigin = modelData.modelOrigin;
 
-                                            if (!modelData.verticesMap.has(objectId)) {
+                                            if (!modelData.verticesMap.has(entityId)) {
                                                 const isSolid = object.meshes[0].isSolid();
                                                 const vertices = [ ];
                                                 const indices  = [ ];
@@ -283,12 +282,12 @@ class SectionCaps {
                                                     object.getEachVertex(v => vertices.push(v[0]-modelOrigin[0], v[1]-modelOrigin[1], v[2]-modelOrigin[2]));
                                                     object.getEachIndex(i  => indices.push(i));
                                                 }
-                                                modelData.verticesMap.set(objectId, vertices);
-                                                modelData.indicesMap.set(objectId, indices);
+                                                modelData.verticesMap.set(entityId, vertices);
+                                                modelData.indicesMap.set(entityId, indices);
                                             }
 
-                                            const vertices = modelData.verticesMap.get(objectId);
-                                            const indices  = modelData.indicesMap.get(objectId);
+                                            const vertices = modelData.verticesMap.get(entityId);
+                                            const indices  = modelData.indicesMap.get(entityId);
                                             const planeDist = -math.dotVec3(math.subVec3(plane.pos, modelOrigin, tempVec3a), plane.dir);
 
                                             const capSegments = [];
@@ -322,7 +321,7 @@ class SectionCaps {
                                             }
 
                                             if (capSegments.length > 0) {
-                                                unsortedSegments.set(objectId, capSegments);
+                                                unsortedSegments.set(entityId, capSegments);
                                             }
                                         }
                                     }
@@ -330,9 +329,9 @@ class SectionCaps {
 
                                 // sorting the segments
                                 const orderedSegments = new Map();
-                                unsortedSegments.forEach((unsortedSegment, segmentedId) => {
+                                unsortedSegments.forEach((unsortedSegment, entityId) => {
                                     const segments = [ [ unsortedSegment[0] ] ]; // an array of two vectors
-                                    orderedSegments.set(segmentedId, segments);
+                                    orderedSegments.set(entityId, segments);
                                     unsortedSegment.splice(0, 1);
                                     let index = 0;
                                     while (unsortedSegment.length > 0) {
@@ -354,7 +353,7 @@ class SectionCaps {
 
                                         if (! newSegment) {
                                             if (pointsEqual(lastPoint, curSegments[0][0]) && (unsortedSegment.length > 1)) {
-                                                segments.push([ unsortedSegments.get(segmentedId)[0] ]);
+                                                segments.push([ unsortedSegments.get(entityId)[0] ]);
                                                 unsortedSegment.splice(0, 1);
                                                 index++;
                                             } else {
@@ -365,7 +364,7 @@ class SectionCaps {
                                     }
                                 });
 
-                                orderedSegments.forEach((orderedSegment, objectId) => {
+                                orderedSegments.forEach((orderedSegment, entityId) => {
                                     const loops = orderedSegment.map(segments => {
                                         return segments.map(seg => [
                                             projectTo2D(seg[0], plane.dir),
@@ -398,15 +397,15 @@ class SectionCaps {
                                         }
                                     }
 
-                                    if (! prevIntersectionModelsMap[sceneModel.id])
-                                        prevIntersectionModelsMap[sceneModel.id] = new Map();
+                                    if (! modelEntityToCapMeshes[sceneModel.id])
+                                        modelEntityToCapMeshes[sceneModel.id] = new Map();
 
-                                    const prevIntersection = prevIntersectionModelsMap[sceneModel.id];
-                                    if (! prevIntersection.has(objectId)) {
-                                        prevIntersection.set(objectId, [ ]);
+                                    const prevIntersection = modelEntityToCapMeshes[sceneModel.id];
+                                    if (! prevIntersection.has(entityId)) {
+                                        prevIntersection.set(entityId, [ ]);
                                     }
 
-                                    prevIntersection.get(objectId).push(...groupedLoops.map((group, index) => {
+                                    prevIntersection.get(entityId).push(...groupedLoops.map((group, index) => {
                                         // Convert the segments into a flat array of vertices and find holes
                                         const vertices = [];
                                         const holes = [];
@@ -553,7 +552,7 @@ class SectionCaps {
 
                                         // Create mesh with transformed positions
                                         return new Mesh(scene, {
-                                            id: `${plane.id}-${objectId}-${index}`,
+                                            id: `${plane.id}-${entityId}-${index}`,
                                             geometry: new ReadableGeometry(scene, {
                                                 primitive: 'triangles',
                                                 positions: positions, // Only copy what we need
@@ -564,7 +563,7 @@ class SectionCaps {
                                             origin:   math.addVec3(modelOrigin, math.mulVec3Scalar(plane.dir, 0.001, tempVec3a), tempVec3a),
                                             position: [0, 0, 0],
                                             rotation: [0, 0, 0],
-                                            material: sceneModel.objects[objectId].capMaterial
+                                            material: sceneModelObjects[entityId].capMaterial
                                         });
                                     }));
                                 });
