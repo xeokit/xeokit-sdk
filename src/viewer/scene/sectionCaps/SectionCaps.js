@@ -122,67 +122,77 @@ class SectionCaps {
     constructor(scene) {
         this.scene = scene;
         this._resourcesAllocated = false;
-    }
 
-    _onCapMaterialUpdated(entityId, modelId) {
-        if(!this._resourcesAllocated) {
-            this._resourcesAllocated = true;
-            this._sectionPlanes = [];
-            this._sceneModelsData = {};
-            this._dirtyMap = {};
-            this._prevIntersectionModelsMap = {};
-            this._sectionPlaneTimeout = null;
-            this._updateTimeout = null;
+        this.destroy = () => {
+            this._deletePreviousModels();
+            if (this._resourcesAllocated) {
+                this.scene.off(this._onModelLoaded);
+                this.scene.off(this._onModelUnloaded);
+                this.scene.off(this._onSectionPlaneCreated);
+                this.scene.off(this._onTick);
+            }
+        };
 
-            const handleSectionPlane = (sectionPlane) => {
+        this._onCapMaterialUpdated = (entityId, modelId) => {
+            if(!this._resourcesAllocated) {
+                this._resourcesAllocated = true;
+                this._sectionPlanes = [];
+                this._sceneModelsData = {};
+                this._dirtyMap = {};
+                this._prevIntersectionModelsMap = {};
+                this._sectionPlaneTimeout = null;
+                this._updateTimeout = null;
 
-                const onSectionPlaneUpdated = () => {
-                    this._setAllDirty(true);
-                    this._update();
+                const handleSectionPlane = (sectionPlane) => {
+
+                    const onSectionPlaneUpdated = () => {
+                        this._setAllDirty(true);
+                        this._update();
+                    };
+                    this._sectionPlanes.push(sectionPlane);
+                    sectionPlane.on('pos', onSectionPlaneUpdated);
+                    sectionPlane.on('dir', onSectionPlaneUpdated);
+                    sectionPlane.on('active', onSectionPlaneUpdated);
+                    sectionPlane.once('destroyed', (() => {
+                        const sectionPlaneId = sectionPlane.id;
+                        if (sectionPlaneId) {
+                            this._sectionPlanes = this._sectionPlanes.filter((sectionPlane) => sectionPlane.id !== sectionPlaneId);
+                            this._update();
+                        }
+                    }).bind(this));
+                };
+
+                for(const key in this.scene.sectionPlanes){
+                    handleSectionPlane(this.scene.sectionPlanes[key]);
                 }
-                this._sectionPlanes.push(sectionPlane);
-                sectionPlane.on('pos', onSectionPlaneUpdated);
-                sectionPlane.on('dir', onSectionPlaneUpdated);
-                sectionPlane.on('active', onSectionPlaneUpdated);
-                sectionPlane.once('destroyed', (() => {
-                    const sectionPlaneId = sectionPlane.id;
-                    if (sectionPlaneId) {
-                        this._sectionPlanes = this._sectionPlanes.filter((sectionPlane) => sectionPlane.id !== sectionPlaneId);
+
+                this._onSectionPlaneCreated = this.scene.on('sectionPlaneCreated', handleSectionPlane);
+
+                this._onTick = this.scene.on("tick", () => {
+                    //on ticks we only check if there is a model that we have saved vertices for,
+                    //but it's no more available on the scene, or if its visibility changed
+                    let dirty = false;
+                    for(const sceneModelId in this._sceneModelsData) {
+                        if(!this.scene.models[sceneModelId]){
+                            delete this._sceneModelsData[sceneModelId];
+                            dirty = true;
+                        } else if (this._sceneModelsData[sceneModelId].visible !== (!!this.scene.models[sceneModelId].visible)) {
+                            this._sceneModelsData[sceneModelId].visible = !!this.scene.models[sceneModelId].visible;
+                            dirty = true;
+                        }
+                    }
+                    if (dirty) {
                         this._update();
                     }
-                }).bind(this));
+                });
             }
 
-            for(const key in this.scene.sectionPlanes){
-                handleSectionPlane(this.scene.sectionPlanes[key]);
-            }
+            if(!this._dirtyMap[modelId])
+                this._dirtyMap[modelId] = new Map();
 
-            this._onSectionPlaneCreated = this.scene.on('sectionPlaneCreated', handleSectionPlane)
-
-            this._onTick = this.scene.on("tick", () => {
-                //on ticks we only check if there is a model that we have saved vertices for,
-                //but it's no more available on the scene, or if its visibility changed
-                let dirty = false;
-                for(const sceneModelId in this._sceneModelsData) {
-                    if(!this.scene.models[sceneModelId]){
-                        delete this._sceneModelsData[sceneModelId];
-                        dirty = true;
-                    } else if (this._sceneModelsData[sceneModelId].visible !== (!!this.scene.models[sceneModelId].visible)) {
-                        this._sceneModelsData[sceneModelId].visible = !!this.scene.models[sceneModelId].visible;
-                        dirty = true;
-                    }
-                }
-                if (dirty) {
-                    this._update();
-                }
-            })
-        }
-
-        if(!this._dirtyMap[modelId])
-            this._dirtyMap[modelId] = new Map();
-
-        this._dirtyMap[modelId].set(entityId, true);
-        this._update();
+            this._dirtyMap[modelId].set(entityId, true);
+            this._update();
+        };
     }
 
     _update() {
@@ -745,17 +755,5 @@ class SectionCaps {
         }
         return uvs;
     }
-
-    destroy() {
-        this._deletePreviousModels();
-        if(this._resourcesAllocated) {
-            this.scene.off(this._onModelLoaded);
-            this.scene.off(this._onModelUnloaded);
-            this.scene.off(this._onSectionPlaneCreated);
-            this.scene.off(this._onTick);
-        }
-        
-    }
 }
-
 export { SectionCaps };
