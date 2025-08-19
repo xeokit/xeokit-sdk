@@ -14,6 +14,8 @@ const tempVec3c = math.vec3();
 const tempVec3d = math.vec3();
 const planeOff  = math.vec3();
 
+const triangle = [ math.vec3(), math.vec3(), math.vec3() ];
+
 function pointsEqual(p1, p2) {
     return (
         Math.abs(p1[0] - p2[0]) < epsilon &&
@@ -242,16 +244,6 @@ class SectionCaps {
                                 if (! modelEntityToCapMeshes[sceneModel.id])
                                     modelEntityToCapMeshes[sceneModel.id] = new Map();
 
-                                // calculating segments in unsorted way
-                                // we calculate the segments by intersecting plane with each triangle
-                                const sceneModelObjects = sceneModel.objects;
-                                // Preallocate arrays for triangle vertices to avoid repeated allocation
-                                const triangle = [
-                                    math.vec3(),
-                                    math.vec3(),
-                                    math.vec3()
-                                ];
-
                                 if (! sceneModelsData[sceneModel.id]) {
                                     const aabb = sceneModel.aabb;
                                     sceneModelsData[sceneModel.id] = {
@@ -272,7 +264,7 @@ class SectionCaps {
 
                                 dirtyMap[sceneModel.id].forEach((isDirty, entityId) => {
                                     if (isDirty) {
-                                        const entity = sceneModelObjects[entityId];
+                                        const entity = sceneModel.objects[entityId];
                                         if (doesPlaneIntersectBoundingBox(entity.aabb, plane)) {
                                             if (! modelData.entityGeometries.has(entityId)) {
                                                 const indices  = [ ];
@@ -289,19 +281,21 @@ class SectionCaps {
                                             const vertices = entityGeometry.vertices;
 
                                             const unsortedSegment = [];
+                                            const setVertex = (i, dst) => {
+                                                const idx = indices[i] * 3;
+                                                dst[0] = vertices[idx + 0];
+                                                dst[1] = vertices[idx + 1];
+                                                dst[2] = vertices[idx + 2];
+                                            };
 
                                             for (let i = 0; i < indices.length; i += 3) {
                                                 // Reuse triangle buffer instead of creating new arrays
-                                                for (let j = 0; j < 3; j++) {
-                                                    const idx = indices[i + j] * 3;
-                                                    triangle[j][0] = vertices[idx];
-                                                    triangle[j][1] = vertices[idx + 1];
-                                                    triangle[j][2] = vertices[idx + 2];
-                                                }
-
+                                                setVertex(i + 0, triangle[0]);
                                                 // Early null check
                                                 if (triangle[0][0] || triangle[0][1] || triangle[0][2]) {
-                                                    const intersections = [];
+                                                    setVertex(i + 1, triangle[1]);
+                                                    setVertex(i + 2, triangle[2]);
+                                                    const intersections = [ ];
                                                     for (let i = 0; i < 3; i++) {
                                                         const p1 = triangle[i];
                                                         const p2 = triangle[(i + 1) % 3];
@@ -462,7 +456,7 @@ class SectionCaps {
 
                                                         capMeshes.push(new Mesh(scene, {
                                                             id:       `${plane.id}-${entityId}-${capMeshes.length}`,
-                                                            material: sceneModelObjects[entityId].capMaterial,
+                                                            material: entity.capMaterial,
                                                             origin:   math.addVec3(modelOrigin, math.mulVec3Scalar(planeDir, 0.001, tempVec3a), tempVec3a),
                                                             geometry: new ReadableGeometry(scene, {
                                                                 primitive: "triangles",
