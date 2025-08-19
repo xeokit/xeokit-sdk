@@ -235,48 +235,45 @@ class SectionCaps {
                                     math.vec3()
                                 ];
 
+                                if (! sceneModelsData[sceneModel.id]) {
+                                    const aabb = sceneModel.aabb;
+                                    sceneModelsData[sceneModel.id] = {
+                                        entityGeometries: new Map(),
+                                        // modelOrigin is critical to use when handling models with large coordinates.
+                                        // See XCD-306 and examples/slicing/SectionCaps_at_distance.html for more details.
+                                        modelOrigin: math.vec3([
+                                            (aabb[0] + aabb[3]) / 2,
+                                            (aabb[1] + aabb[4]) / 2,
+                                            (aabb[2] + aabb[5]) / 2
+                                        ])
+                                    };
+                                }
+
+                                const modelData = sceneModelsData[sceneModel.id];
+                                const modelOrigin = modelData.modelOrigin;
+                                const planeDist = math.dotVec3(planeDir, math.subVec3(modelOrigin, planePos, tempVec3a));
+
                                 dirtyMap[sceneModel.id].forEach((isDirty, entityId) => {
                                     if (isDirty) {
-                                        const object = sceneModelObjects[entityId];
-                                        if (doesPlaneIntersectBoundingBox(object.aabb, plane)) {
-                                            if (! sceneModelsData[sceneModel.id]) {
-                                                const aabb = sceneModel.aabb;
-                                                sceneModelsData[sceneModel.id] = {
-                                                    verticesMap: new Map(),
-                                                    indicesMap:  new Map(),
-                                                    // modelOrigin is critical to use when handling models with large coordinates.
-                                                    // See XCD-306 and examples/slicing/SectionCaps_at_distance.html for more details.
-                                                    modelOrigin: math.vec3([
-                                                        (aabb[0] + aabb[3]) / 2,
-                                                        (aabb[1] + aabb[4]) / 2,
-                                                        (aabb[2] + aabb[5]) / 2
-                                                    ])
-                                                };
-                                            }
-
-                                            const modelData = sceneModelsData[sceneModel.id];
-                                            const modelOrigin = modelData.modelOrigin;
-
-                                            if (!modelData.verticesMap.has(entityId)) {
-                                                const isSolid = object.meshes[0].isSolid();
-                                                const vertices = [ ];
+                                        const entity = sceneModelObjects[entityId];
+                                        if (doesPlaneIntersectBoundingBox(entity.aabb, plane)) {
+                                            if (! modelData.entityGeometries.has(entityId)) {
                                                 const indices  = [ ];
-                                                if (isSolid && object.capMaterial) {
-                                                    object.getEachVertex(v => vertices.push(v[0]-modelOrigin[0], v[1]-modelOrigin[1], v[2]-modelOrigin[2]));
-                                                    object.getEachIndex(i  => indices.push(i));
+                                                const vertices = [ ];
+                                                if (entity.capMaterial && entity.meshes[0].isSolid()) {
+                                                    entity.getEachIndex(i  => indices.push(i));
+                                                    entity.getEachVertex(v => vertices.push(v[0]-modelOrigin[0], v[1]-modelOrigin[1], v[2]-modelOrigin[2]));
                                                 }
-                                                modelData.verticesMap.set(entityId, vertices);
-                                                modelData.indicesMap.set(entityId, indices);
+                                                modelData.entityGeometries.set(entityId, { indices: indices, vertices: vertices });
                                             }
 
-                                            const vertices = modelData.verticesMap.get(entityId);
-                                            const indices  = modelData.indicesMap.get(entityId);
-                                            const planeDist = -math.dotVec3(math.subVec3(plane.pos, modelOrigin, tempVec3a), plane.dir);
+                                            const entityGeometry = modelData.entityGeometries.get(entityId);
+                                            const indices  = entityGeometry.indices;
+                                            const vertices = entityGeometry.vertices;
 
                                             const capSegments = [];
-                                            const vertCount = indices.length;
 
-                                            for (let i = 0; i < vertCount; i += 3) {
+                                            for (let i = 0; i < indices.length; i += 3) {
                                                 // Reuse triangle buffer instead of creating new arrays
                                                 for (let j = 0; j < 3; j++) {
                                                     const idx = indices[i + j] * 3;
@@ -291,8 +288,8 @@ class SectionCaps {
                                                     for (let i = 0; i < 3; i++) {
                                                         const p1 = triangle[i];
                                                         const p2 = triangle[(i + 1) % 3];
-                                                        const d1 = planeDist + math.dotVec3(plane.dir, p1);
-                                                        const d2 = planeDist + math.dotVec3(plane.dir, p2);
+                                                        const d1 = planeDist + math.dotVec3(planeDir, p1);
+                                                        const d2 = planeDist + math.dotVec3(planeDir, p2);
                                                         if (d1 * d2 <= 0) {
                                                             intersections.push(math.lerpVec3(-d1 / (d2 - d1), 0, 1, p1, p2, math.vec3()));
                                                         }
