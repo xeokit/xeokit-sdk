@@ -381,12 +381,7 @@ class SectionCaps {
                                     }
 
                                     const entityId = orderedEntitySegment.entityId;
-                                    const prevIntersection = modelEntityToCapMeshes[sceneModel.id];
-                                    if (! prevIntersection.has(entityId)) {
-                                        prevIntersection.set(entityId, [ ]);
-                                    }
-
-                                    prevIntersection.get(entityId).push(...groupedLoops.map((group, index) => {
+                                    modelEntityToCapMeshes[sceneModel.id].set(entityId, groupedLoops.map((group, index) => {
                                         // Convert the segments into a flat array of vertices and find holes
 
                                         // First, determine which loop has the largest area - this will be our outer boundary
