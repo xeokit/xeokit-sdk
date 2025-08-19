@@ -220,16 +220,6 @@ class SectionCaps {
             return inside;
         };
 
-        const projectTo2D = (point, normal) => {
-            const u = math.normalizeVec3((Math.abs(normal[0]) > Math.abs(normal[1]))
-                                         ? [-normal[2], 0, normal[0]]
-                                         : [0, normal[2], -normal[1]]);
-            return [
-                math.dotVec3(point, u),
-                math.dotVec3(point, math.normalizeVec3(math.cross3Vec3(normal, u, math.vec3())))
-            ];
-        };
-
         let updateTimeout = null;
 
         const update = () => {
@@ -239,13 +229,18 @@ class SectionCaps {
                 const sceneModels = Object.values(scene.models).filter(sceneModel => sceneModel.visible);
                 sectionPlanes.forEach((plane) => {
                     if (plane.active) {
+                        const planeDir = plane.dir;
+                        const planePos = plane.pos;
+                        const planeU = math.normalizeVec3(math.vec3((Math.abs(planeDir[0]) > Math.abs(planeDir[1]))
+                                                                    ? [-planeDir[2], 0, planeDir[0]]
+                                                                    : [0, planeDir[2], -planeDir[1]]));
+                        const planeV = math.normalizeVec3(math.cross3Vec3(planeDir, planeU, math.vec3()));
+                        const projectToPlane2D = point => [ math.dotVec3(planeU, point), math.dotVec3(planeV, point) ];
+
                         sceneModels.forEach((sceneModel) => {
                             if (doesPlaneIntersectBoundingBox(sceneModel.aabb, plane) && dirtyMap[sceneModel.id]) {
                                 if (! modelEntityToCapMeshes[sceneModel.id])
                                     modelEntityToCapMeshes[sceneModel.id] = new Map();
-
-                                const planeDir = plane.dir;
-                                const planePos = plane.pos;
 
                                 // calculating segments in unsorted way
                                 // we calculate the segments by intersecting plane with each triangle
@@ -356,12 +351,7 @@ class SectionCaps {
                                                     }
                                                 }
 
-                                                const loops = segments.map(segments => {
-                                                    return segments.map(seg => [
-                                                        projectTo2D(seg[0], planeDir),
-                                                        projectTo2D(seg[1], planeDir)
-                                                    ]);
-                                                });
+                                                const loops = segments.map(segments => segments.map(seg => [ projectToPlane2D(seg[0]), projectToPlane2D(seg[1]) ]));
 
                                                 const modelOrigin = sceneModelsData[sceneModel.id].modelOrigin;
 
@@ -438,21 +428,10 @@ class SectionCaps {
                                                     for (let i = 0; i < triangles.length; i += 3) {
                                                         for (let j = 0; j < 3; j++) {
                                                             const idx = triangles[i + j] * 2;
-                                                            const x = vertices[idx];
-                                                            const y = vertices[idx + 1];
-
-                                                            // Reconstruct the same basis vectors used in projectTo2D
-                                                            const u = math.normalizeVec3((Math.abs(planeDir[0]) > Math.abs(planeDir[1]))
-                                                                                         ? [-planeDir[2], 0, planeDir[0]]
-                                                                                         : [0, planeDir[2], -planeDir[1]]);
-                                                            const v = math.normalizeVec3(math.cross3Vec3(planeDir, u, tempVec3a));
-
                                                             // Reconstruct 3D point using the basis vectors
-                                                            const result = [
-                                                                u[0] * x + v[0] * y,
-                                                                u[1] * x + v[1] * y,
-                                                                u[2] * x + v[2] * y
-                                                            ];
+                                                            const result = math.addVec3(math.mulVec3Scalar(planeU, vertices[idx],     tempVec3b),
+                                                                                        math.mulVec3Scalar(planeV, vertices[idx + 1], tempVec3c),
+                                                                                        tempVec3b);
 
                                                             // Project the point onto the cutting plane
                                                             const t = math.dotVec3(planeDir, math.subVec3(planePos, math.addVec3(modelOrigin, result, tempVec3a), tempVec3a));
