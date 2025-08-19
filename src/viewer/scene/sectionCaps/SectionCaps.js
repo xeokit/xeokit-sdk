@@ -148,6 +148,26 @@ class SectionCaps {
             destroy && destroy();
         };
 
+        // not used but kept for debugging
+        const buildLines = (orderedSegments) => {
+            for (const key in orderedSegments) {
+                orderedSegments[key].forEach(segments => {
+                    segments.forEach((segment, index) => {
+                        new Mesh(this.scene, {
+                            clippable: false,
+                            geometry: new ReadableGeometry(this.scene, buildLineGeometry({
+                                startPoint: segment[0],
+                                endPoint: segment[1],
+                            })),
+                            material: new PhongMaterial(this.scene, {
+                                emissive: [1, 0, 0]
+                            })
+                        });
+                    });
+                });
+            }
+        };
+
         const doesPlaneIntersectBoundingBox = (bb, plane) => {
             const min = [bb[0], bb[1], bb[2]];
             const max = [bb[3], bb[4], bb[5]];
@@ -684,29 +704,6 @@ class SectionCaps {
             this._dirtyMap[modelId].set(entityId, true);
             update();
         };
-    }
-
-    //not used but kept for debugging
-    _buildLines(sortedSegments) {
-        for (const key in sortedSegments) {
-            for (let i = 0; i < sortedSegments[key].length; i++) {
-                const segments = sortedSegments[key][i];
-                if (segments.length <= 0) continue;
-                segments.forEach((segment, index) => {
-                    new Mesh(this.scene, {
-                        clippable: false,
-                        geometry: new ReadableGeometry(this.scene, buildLineGeometry({
-                            startPoint: segment[0],
-                            endPoint: segment[1],
-                        })),
-                        material: new PhongMaterial(this.scene, {
-                            emissive: [1, 0, 0]
-                        })
-                    });
-                })
-            }
-
-        }
     }
 }
 export { SectionCaps };
