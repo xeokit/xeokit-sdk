@@ -546,7 +546,7 @@ class SectionCaps {
                                     this._prevIntersectionModelsMap[sceneModel.id] = new Map();
 
                                 // Cache plane direction values
-                                math.mulVec3Scalar(plane.dir, 0.001, planeOff); // Use dedicated planeOff, as tempVec* are overwritten by _createUVs
+                                math.mulVec3Scalar(plane.dir, 0.001, planeOff);
 
                                 geometryData.forEach((geometries, objectId) => {
                                     const modelOrigin = this._sceneModelsData[sceneModel.id].modelOrigin;
@@ -560,7 +560,36 @@ class SectionCaps {
 
                                         // Build normals and UVs in parallel if possible
                                         const meshNormals = math.buildNormals(vertices, indices);
-                                        const uvs = this._createUVs(vertices, plane, modelOrigin);
+
+                                        // create uvs
+                                        const O = plane.pos;
+                                        const D = tempVec3a;
+                                        D.set(plane.dir);
+                                        math.normalizeVec3(D);
+                                        const P = tempVec3b;
+
+                                        const uvs = [ ];
+                                        for (let i = 0; i < vertices.length; i += 3) {
+                                            P[0] = vertices[i]     + modelOrigin[0];
+                                            P[1] = vertices[i + 1] + modelOrigin[1];
+                                            P[2] = vertices[i + 2] + modelOrigin[2];
+
+                                            // Project P onto the plane
+                                            const OP = math.subVec3(P, O, tempVec3c);
+                                            const dist = math.dotVec3(OP, D);
+                                            math.subVec3(P, math.mulVec3Scalar(D, dist, tempVec3c), P);
+
+                                            const right = ((Math.abs(math.dotVec3(D, worldUp)) < 0.999)
+                                                           ? math.cross3Vec3(D, worldUp, tempVec3c)
+                                                           : worldRight);
+                                            const v = math.cross3Vec3(D, right, tempVec3c);
+                                            math.normalizeVec3(v, v);
+
+                                            const OP_proj = math.subVec3(P, O, P);
+                                            uvs.push(
+                                                math.dotVec3(OP_proj, math.normalizeVec3(math.cross3Vec3(v, D, tempVec3d))),
+                                                math.dotVec3(OP_proj, v));
+                                        }
 
                                         // Create mesh with transformed vertices
                                         meshArray[meshIndex++] = new Mesh(this.scene, {
@@ -578,6 +607,7 @@ class SectionCaps {
                                             material: sceneModel.objects[objectId].capMaterial
                                         });
                                     });
+
                                     if (this._prevIntersectionModelsMap[sceneModel.id].has(objectId)) {
                                         this._prevIntersectionModelsMap[sceneModel.id].get(objectId).push(...meshArray);
                                     }
@@ -677,38 +707,6 @@ class SectionCaps {
             }
 
         }
-    }
-
-    _createUVs(vertices, plane, origin) {
-        const O = plane.pos;
-        const D = tempVec3a;
-        D.set(plane.dir);
-        math.normalizeVec3(D);
-        const P = tempVec3b;
-
-        const uvs = [ ];
-        for (let i = 0; i < vertices.length; i += 3) {
-            P[0] = vertices[i]     + origin[0];
-            P[1] = vertices[i + 1] + origin[1];
-            P[2] = vertices[i + 2] + origin[2];
-
-            // Project P onto the plane
-            const OP = math.subVec3(P, O, tempVec3c);
-            const dist = math.dotVec3(OP, D);
-            math.subVec3(P, math.mulVec3Scalar(D, dist, tempVec3c), P);
-
-            const right = ((Math.abs(math.dotVec3(D, worldUp)) < 0.999)
-                        ? math.cross3Vec3(D, worldUp, tempVec3c)
-                        : worldRight);
-            const v = math.cross3Vec3(D, right, tempVec3c);
-            math.normalizeVec3(v, v);
-
-            const OP_proj = math.subVec3(P, O, P);
-            uvs.push(
-                math.dotVec3(OP_proj, math.normalizeVec3(math.cross3Vec3(v, D, tempVec3d))),
-                math.dotVec3(OP_proj, v));
-        }
-        return uvs;
     }
 }
 export { SectionCaps };
