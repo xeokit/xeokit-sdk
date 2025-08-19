@@ -345,32 +345,23 @@ class SectionCaps {
                                     }
                                 });
 
-                                // projecting the segments to 2D
-                                const projectedSegments = new Map();
-                                orderedSegments.forEach((orderedSegment, key) => {
-                                    const arr = [];
+                                const caps = new Map();
+                                orderedSegments.forEach((orderedSegment, segmentId) => {
+                                    const loops = [];
                                     for (let i = 0; i < orderedSegment.length; i++) {
-                                        arr.push([]);
-                                        orderedSegment[i].forEach((segment) => {
-                                            arr[i].push([
-                                                projectTo2D(segment[0], plane.dir),
-                                                projectTo2D(segment[1], plane.dir)
+                                        loops.push([]);
+                                        orderedSegment[i].forEach((seg) => {
+                                            loops[i].push([
+                                                projectTo2D(seg[0], plane.dir),
+                                                projectTo2D(seg[1], plane.dir)
                                             ]);
                                         });
                                     }
-                                    projectedSegments.set(key, arr);
-                                });
 
-                                // creating caps using earcut and then projecting them back to 3D
-                                const caps = new Map();
-                                let arr;
-                                projectedSegments.forEach((segment, segmentId) => {
+                                    // creating caps using earcut and then projecting them back to 3D
                                     const modelOrigin = sceneModelsData[sceneModel.id].modelOrigin;
-                                    arr = [];
-                                    const loops = segment;
 
                                     // Group related loops (outer boundaries with their holes)
-
                                     const groupedLoops = [];
                                     const used = new Set();
 
@@ -394,7 +385,7 @@ class SectionCaps {
                                     }
 
                                     // Process each group separately
-                                    groupedLoops.forEach(group => {
+                                    caps.set(segmentId, groupedLoops.map(group => {
                                         // Convert the segments into a flat array of vertices and find holes
                                         const vertices = [];
                                         const holes = [];
@@ -481,16 +472,15 @@ class SectionCaps {
 
                                             cap3D.push(triangle);
                                         }
-                                        arr.push(cap3D);
-                                    });
-                                    caps.set(segmentId, arr);
+                                        return cap3D;
+                                    }));
                                 });
 
                                 // converting caps to geometry
                                 const geometryData = new Map();
 
                                 caps.forEach((cap, capId) => {
-                                    arr = [];
+                                    const arr = [];
                                     cap.forEach(capTriangles => {
                                         // Create a vertex map to reuse vertices
                                         const vertexMap = new Map();
