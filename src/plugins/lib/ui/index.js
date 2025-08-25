@@ -133,15 +133,21 @@ const clipSegment = (scene, parentElement, start, end, canvasStart, canvasEnd) =
     for (let i = 0; i < 2; ++i) {
         const denom = p1[i] - p0[i];
 
-        const l = (-p0[3] - p0[i]) / denom;
-        const r = ( p0[3] - p0[i]) / denom;
+        const l = (-1 - p0[i]) / denom;
+        const r = ( 1 - p0[i]) / denom;
 
         if (denom > 0) {
             t_min = Math.max(t_min, l);
             t_max = Math.min(t_max, r);
-        } else {
+        } else if (denom < 0) {
             t_min = Math.max(t_min, r);
             t_max = Math.min(t_max, l);
+        } else {
+            if (p0[0] < -1) {
+                t_min = -window.Infinity;
+            } else if (p0[0] > 1) {
+                t_max = window.Infinity;
+            }
         }
     }
 
