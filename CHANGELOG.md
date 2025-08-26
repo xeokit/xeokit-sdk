@@ -1,5 +1,11 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.89](https://github.com/xeokit/xeokit-sdk/compare/v2.6.88...v2.6.89)
+
+### 26 August 2025
+
+fix(XCD-350): improve clipping logic in clipSegment function for paralel lines [#1937](https://github.com/xeokit/xeokit-sdk/pull/1937)
+
 # [v2.6.88](https://github.com/xeokit/xeokit-sdk/compare/v2.6.87...v2.6.88)
 
 ### 11 August 2025
