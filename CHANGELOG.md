@@ -1,5 +1,11 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.90](https://github.com/xeokit/xeokit-sdk/compare/v2.6.89...v2.6.90)
+
+### 29 August 2025
+
+XCD-369 Fix transparents rendering when using isUI meshes, and add a test-scene [#1940](https://github.com/xeokit/xeokit-sdk/pull/1940)
+
 # [v2.6.89](https://github.com/xeokit/xeokit-sdk/compare/v2.6.88...v2.6.89)
 
 ### 26 August 2025
