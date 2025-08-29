@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>xeokit visual test</title>
+    <link href="css/pageStyle.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <canvas id="myCanvas"></canvas>
+  </body>
+
+  <script type="module">
+    import { signalTestComplete } from "./lib/utils.js";
+
+    import { math, Mesh, PhongMaterial, ReadableGeometry, Viewer, GLTFLoaderPlugin, ZonesPlugin } from "../../dist/xeokit-sdk.min.es.js";
+
+    const viewer = new Viewer({ canvasId: "myCanvas" });
+
+    viewer.camera.eye = [4.69981911881723,3.6739629010130805,-3.8837652066987225];
+    viewer.camera.look = [0.6552961824988408,1.3020174815917072,0.422562250870933];
+    viewer.camera.up = [-0.2550711725375346,0.927998849721906,0.271582090453598];
+    viewer.cameraControl.followPointer = true;
+
+    new GLTFLoaderPlugin(viewer).load({
+        id: "myModel",
+        src: "../../assets/models/glb/1_simple-glb-data.glb",
+        edges: true
+    }).on("loaded", () => {
+        const scene = viewer.scene;
+        const mesh = new Mesh(scene, {
+            pickable: false, // otherwise there's a WebGL error inside PickMeshRenderer.prototype.drawMesh
+            geometry: new ReadableGeometry(
+                scene,
+                (function() {
+                    const indices   = [ ].concat(...[[3,2,0],[2,1,0]]);
+                    const positions = [ ].concat(...[[1,3,3],[3,3,3],[3,1,3],[1,1,3]]);
+                    return {
+                        indices:   indices,
+                        positions: positions,
+                        normals:   math.buildNormals(positions, indices)
+                    };
+                })()),
+            material: new PhongMaterial(scene, {
+                alpha: .5,
+                backfaces: true,
+                diffuse: [0.86, 0.86, 0.067]
+            }),
+            isUI: true
+        });
+
+        const plugin = new ZonesPlugin(viewer);
+
+        [
+            [[-0.44,3],[-1.3,3.7],[-1.55,2.6]],
+            [[-2.03,2.43],[-2.76,3.43],[-3.42,2.45]],
+            [[-2.76,1.34],[-4.12,1.37],[-3.4,-0.8]],
+        ].forEach((planeCoordinates, i) => plugin.createZone({
+            id: "id_" + i,
+            geometry: {
+                planeCoordinates: planeCoordinates,
+                altitude: 0,
+                height: 0
+            },
+            alpha: .95,
+            color: "#20B673"
+        }));
+    });
+
+    window.viewer = viewer;
+
+    signalTestComplete(viewer);
+  </script>
+</html>

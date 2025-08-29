@@ -27,4 +27,8 @@ test.describe("Build a scene model", async () => {
 
         testPage("vbo_batching_flat_geometries_lights");
     });
+
+    test.describe("isUI objects", async () => {
+        testPage("isUI_transparencies");
+    });
 });
