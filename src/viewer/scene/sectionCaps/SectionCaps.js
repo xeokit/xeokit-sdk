@@ -291,24 +291,21 @@ class SectionCaps {
                                             for (let i = 0; i < indices.length; i += 3) {
                                                 // Reuse triangle buffer instead of creating new arrays
                                                 setVertex(i + 0, triangle[0]);
-                                                // Early null check
-                                                if (triangle[0][0] || triangle[0][1] || triangle[0][2]) {
-                                                    setVertex(i + 1, triangle[1]);
-                                                    setVertex(i + 2, triangle[2]);
-                                                    const intersections = [ ];
-                                                    for (let i = 0; i < 3; i++) {
-                                                        const p1 = triangle[i];
-                                                        const p2 = triangle[(i + 1) % 3];
-                                                        const d1 = planeDist + math.dotVec3(planeDir, p1);
-                                                        const d2 = planeDist + math.dotVec3(planeDir, p2);
-                                                        if (d1 * d2 <= 0) {
-                                                            intersections.push(math.lerpVec3(-d1 / (d2 - d1), 0, 1, p1, p2, math.vec3()));
-                                                        }
+                                                setVertex(i + 1, triangle[1]);
+                                                setVertex(i + 2, triangle[2]);
+                                                const intersections = [ ];
+                                                for (let i = 0; i < 3; i++) {
+                                                    const p1 = triangle[i];
+                                                    const p2 = triangle[(i + 1) % 3];
+                                                    const d1 = planeDist + math.dotVec3(planeDir, p1);
+                                                    const d2 = planeDist + math.dotVec3(planeDir, p2);
+                                                    if (d1 * d2 <= 0) {
+                                                        intersections.push(math.lerpVec3(-d1 / (d2 - d1), 0, 1, p1, p2, math.vec3()));
                                                     }
-
-                                                    if (intersections.length === 2)
-                                                        unsortedSegment.push(intersections);
                                                 }
+
+                                                if (intersections.length === 2)
+                                                    unsortedSegment.push(intersections);
                                             }
 
                                             if (unsortedSegment.length > 0) {
