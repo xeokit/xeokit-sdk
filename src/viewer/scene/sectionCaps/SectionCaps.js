@@ -400,6 +400,7 @@ class SectionCaps {
                                                                 // Project the point onto the cutting plane
                                                                 const t = math.dotVec3(planeDir, math.subVec3(planePos, math.addVec3(modelOrigin, result, tempVec3a), tempVec3a));
                                                                 const vertex = math.addVec3(result, math.mulVec3Scalar(planeDir, t, tempVec3a), tempVec3a);
+                                                                triangle[j].set(vertex);
 
                                                                 // Create a key for the vertex to check for duplicates
                                                                 const vertexKey = `${vertex[0].toFixed(6)},${vertex[1].toFixed(6)},${vertex[2].toFixed(6)}`;
@@ -428,6 +429,16 @@ class SectionCaps {
                                                                         math.dotVec3(OP_proj, math.normalizeVec3(math.cross3Vec3(v, planeDir, tempVec3d))),
                                                                         math.dotVec3(OP_proj, v));
                                                                 }
+                                                            }
+
+                                                            math.subVec3(triangle[1], triangle[0], tempVec3b);
+                                                            math.subVec3(triangle[2], triangle[0], tempVec3c);
+                                                            math.normalizeVec3(math.cross3Vec3(tempVec3b, tempVec3c, tempVec3c), tempVec3c);
+                                                            if (math.dotVec3(tempVec3c, planeDir) > 0) {
+                                                                // The cap is oriented along the planeDir, need to flip it
+                                                                const tmp = indices[indices.length - 1];
+                                                                indices[indices.length - 1] = indices[indices.length - 2];
+                                                                indices[indices.length - 2] = tmp;
                                                             }
                                                         }
 
