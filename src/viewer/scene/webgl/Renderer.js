@@ -724,6 +724,7 @@ const Renderer = function (scene, options) {
 
             if (normalFillTransparentBinLen > 0) {
                 const eye = frameCtx.pickOrigin || scene.camera.eye;
+                normalFillTransparentBin.length = normalFillTransparentBinLen; // normalFillTransparentBin reused by renderDrawables calls, so needs to be truncated if necessary
                 const byDist = normalFillTransparentBin.map(d => ({ drawable: d, distSq: math.distVec3(d.origin || vec3_0, eye) }));
                 byDist.sort((a, b) => b.distSq - a.distSq);
                 for (i = 0; i < normalFillTransparentBinLen; i++) {

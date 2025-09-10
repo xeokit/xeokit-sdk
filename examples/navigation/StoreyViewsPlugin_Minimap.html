@@ -182,7 +182,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import { Viewer, StoreyViewsPlugin, math, XKTLoaderPlugin, CameraMemento, Skybox } from "../../dist/xeokit-sdk.es.js";
+    import { Viewer, StoreyViewsPlugin, math, XKTLoaderPlugin, CameraMemento } from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Helping Variables
@@ -205,11 +205,6 @@
     viewer.camera.up = [0.10, 0.98, -0.14];
 
     viewer.camera.project.fovy = 70;
-
-    new Skybox(viewer.scene, {
-        src: "../../assets/textures/skybox/cloudySkyBox.jpg",
-        size: 1000
-    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model

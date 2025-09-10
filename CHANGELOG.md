@@ -1,5 +1,29 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.90](https://github.com/xeokit/xeokit-sdk/compare/v2.6.89...v2.6.90)
+
+### 29 August 2025
+
+XCD-369 Fix transparents rendering when using isUI meshes, and add a test-scene [#1940](https://github.com/xeokit/xeokit-sdk/pull/1940)
+
+# [v2.6.89](https://github.com/xeokit/xeokit-sdk/compare/v2.6.88...v2.6.89)
+
+### 26 August 2025
+
+fix(XCD-350): improve clipping logic in clipSegment function for paralel lines [#1937](https://github.com/xeokit/xeokit-sdk/pull/1937)
+
+# [v2.6.88](https://github.com/xeokit/xeokit-sdk/compare/v2.6.87...v2.6.88)
+
+### 11 August 2025
+
+- fix: Update links in README and index.html for consistency; change image source in getSnapshot example
+- feat: XCD-343 Add touch event support for NavCube interactions
+- XCD-349 Remove rootNode when destroy
+- refactor: update type definitions for touchPointSelector to be generic
+- fix(XEOK-168): DotBIMLoaderPlugin - update mesh ID generation to include dbMeshId for uniqueness
+- refactor(XEOK-321) : remove @creooxag/cxconverter-dependency
+- Xeok 168 errors inside examples set 1
+
 # [v2.6.87](https://github.com/xeokit/xeokit-sdk/compare/v2.6.86...v2.6.87)
 
 ### 31 July 2025

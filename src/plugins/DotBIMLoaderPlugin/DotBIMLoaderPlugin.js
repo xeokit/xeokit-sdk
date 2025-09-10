@@ -432,7 +432,7 @@ export class DotBIMLoaderPlugin extends Plugin {
 
                     parseDBMesh(dbMeshId, element);
 
-                    const meshId = `${objectId}-mesh`;
+                    const meshId = `${objectId}-mesh-${dbMeshId}`;
 
                     let color = element.color ? [element.color.r / 255.0, element.color.g / 255.0, element.color.b / 255.0] : [1, 1, 1];
                     let opacity = element.color ? element.color.a / 255.0 : 1.0;
@@ -505,7 +505,7 @@ export class DotBIMLoaderPlugin extends Plugin {
                             positions: trianglesCoordinates,
                             indices: [...Array(trianglesCoordinates.length / 3).keys()]
                         });
-                        const meshId = `${objectId}-mesh-${faceColor}`;
+                        const meshId = `${objectId}-mesh-${dbMeshId}-${faceColor}`;
                         const faceColorArray = faceColor.split(',').map(Number);
 
                         let color = [faceColorArray[0] / 255.0, faceColorArray[1] / 255.0, faceColorArray[2] / 255.0];

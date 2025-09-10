@@ -171,6 +171,7 @@
 <script type="module">
 
     import { CxConverterIFCLoaderPlugin, Viewer, NavCubePlugin, TreeViewPlugin, SceneModel } from "../../dist/xeokit-sdk.es.js";
+    import * as CxConverter from "https://cdn.jsdelivr.net/npm/@creooxag/cxconverter@0.0.3-alpha/dist/index.mjs";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -196,6 +197,7 @@
     });
 
     const cxConverterIFCLoaderPlugin = new CxConverterIFCLoaderPlugin(viewer);
+    cxConverterIFCLoaderPlugin.setCxConverterModule(CxConverter);
     const progressCallback =
         (progress) => {
             const progressPercentage = document.getElementById("progressPercentage");

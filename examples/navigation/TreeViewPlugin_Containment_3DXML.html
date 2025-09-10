@@ -247,7 +247,8 @@
         TreeViewPlugin,
         ReflectionMap,
         XML3DLoaderPlugin,
-        ContextMenu
+        ContextMenu,
+        sRGBEncoding
     } from "../../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
@@ -312,14 +313,14 @@
 
     new ReflectionMap(viewer.scene, {
         src: [
-            "../../../assets/textures/reflect/desertRoad/px.png",
-            "../../../assets/textures/reflect/desertRoad/nx.png",
-            "../../../assets/textures/reflect/desertRoad/py.png",
-            "../../../assets/textures/reflect/desertRoad/ny.png",
-            "../../../assets/textures/reflect/desertRoad/pz.png",
-            "../../../assets/textures/reflect/desertRoad/nz.png"
+            "../../assets/textures/reflect/desertRoad/px.png",
+            "../../assets/textures/reflect/desertRoad/nx.png",
+            "../../assets/textures/reflect/desertRoad/py.png",
+            "../../assets/textures/reflect/desertRoad/ny.png",
+            "../../assets/textures/reflect/desertRoad/pz.png",
+            "../../assets/textures/reflect/desertRoad/nz.png"
         ],
-        encoding: "sRGB"
+        encoding: sRGBEncoding
     });
 
     //------------------------------------------------------------------------------------------------------------------
