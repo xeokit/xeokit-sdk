@@ -52,10 +52,10 @@
   },
   "homepage": "https://xeokit.io",
   "dependencies": {
-    "@loaders.gl/core": "^4.3.3",
-    "@loaders.gl/gltf": "^4.3.3",
-    "@loaders.gl/las": "^4.3.3",
-    "html2canvas": "^1.4.1"
+    "@loaders.gl/core": "4.3.4",
+    "@loaders.gl/gltf": "4.3.4",
+    "@loaders.gl/las": "4.3.4",
+    "html2canvas": "1.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
