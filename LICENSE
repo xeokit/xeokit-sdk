@@ -630,10 +630,6 @@ K3D.js V1.0
 Copyright (c) 2012 Ivan Kuckir
 MIT License [http://www.opensource.org/licenses/mit-license.php]
 
-web-ifc
-Copyright (c) 2020-2022 web-ifc contributors
-MIT License [http://www.opensource.org/licenses/mit-license.php]
-
 Pako
 Copyright (C) 2014-2017 by Vitaly Puzrin and Andrei Tuputcyn
 MIT License [http://www.opensource.org/licenses/mit-license.php]
@@ -641,6 +637,13 @@ MIT License [http://www.opensource.org/licenses/mit-license.php]
 Earcut
 Copyright (c) 2024, Mapbox
 ISC License [https://opensource.org/license/isc-license-txt]
+
+xeokit also uses the following components with MPL-2.0 in executable form:
+
+web-ifc
+Copyright (c) 2020-2025 web-ifc contributors
+Link to source code: https://github.com/ThatOpen/engine_web-ifc
+Mozilla Public License, v. 2.0 [https://www.mozilla.org/en-US/MPL/2.0/]
 ---
 
 ## 📜 Licensing & Commercial Use
