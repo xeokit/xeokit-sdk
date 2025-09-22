@@ -56,9 +56,9 @@
 
     viewer.cameraControl.active = false;
 
-    new XKTLoaderPlugin(viewer).load({ src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt", edges: true });
-
     const startOrientationListener = () => {
+        new XKTLoaderPlugin(viewer).load({ src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt", edges: true });
+
         const rot = math.mat4();
         const tmpMat4 = math.mat4();
 
@@ -98,6 +98,19 @@
         });
     };
 
+    function addInfoDiv(message) {
+        const body = document.getElementsByTagName("body")[0];
+        const infoDiv = document.createElement("div");
+        infoDiv.style.position = "absolute";
+        infoDiv.style.top = "50%";
+        infoDiv.style.width = "100%";
+        infoDiv.style.textAlign = "center";
+        infoDiv.style.color = "red";
+        infoDiv.innerText = message;
+        infoDiv.style.backgroundColor = "white";
+        body.appendChild(infoDiv);
+    }
+
     const requestOrientationPermission = window.DeviceOrientationEvent && window.DeviceOrientationEvent.requestPermission;
     if (typeof requestOrientationPermission === "function") {
         const button = document.getElementById("requestPermission");
@@ -109,13 +122,12 @@
                     console.log("Orientation permission granted");
                     startOrientationListener();
                 } else {
-                    console.error("Orientation permission denied");
+                    addInfoDiv("Error: Device Orientation permission denied.");
                 }
             });
         });
     } else {
-        console.log("Orientation permission not needed");
-        startOrientationListener();
+        addInfoDiv("Error: No Device Orientation API available on this device.");
     }
 
   </script>
