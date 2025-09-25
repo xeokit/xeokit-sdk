@@ -9,16 +9,23 @@ const getCanvasPosFromEvent = function (event, canvasPos) {
         let element = event.target;
         let totalOffsetLeft = 0;
         let totalOffsetTop = 0;
+        let isFromCanvas = element.tagName === 'canvas'
         while (element.offsetParent) {
-            totalOffsetLeft += element.offsetLeft;
-            totalOffsetTop += element.offsetTop;
+            if (isFromCanvas) {
+                totalOffsetLeft += element.offsetLeft;
+                totalOffsetTop += element.offsetTop;
+            }
             element = element.offsetParent;
+            if (!isFromCanvas) {
+                isFromCanvas = element.tagName === 'canvas'
+            }
         }
         canvasPos[0] = event.pageX - totalOffsetLeft;
         canvasPos[1] = event.pageY - totalOffsetTop;
     }
     return canvasPos;
 };
+
 
 /**
  * @private
