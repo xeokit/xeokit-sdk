@@ -165,89 +165,35 @@
     </div>
 </body>
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/pyodide/v0.28.0a3/full/pyodide.js"></script>
-
 
 <script type="module">
 
     import { Viewer, NavCubePlugin, TreeViewPlugin, Plugin, ReadableGeometry, PhongMaterial, Mesh, Node, math, worldToRTCPositions } from "../../dist/xeokit-sdk.min.es.js";
 
-    async function setupPyodide(scene, fn) {
-        const pyodide = await loadPyodide();
-        await pyodide.loadPackage("micropip");
-        await pyodide.loadPackage("numpy");
-        await pyodide.loadPackage("shapely");
-        const micropip = pyodide.pyimport("micropip");
-        await micropip.install("typing-extensions");
-        await micropip.install("../../dist/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl");
-
-        let ifcopenshell = pyodide.pyimport('ifcopenshell');
-        let ifcopenshell_geom = pyodide.pyimport('ifcopenshell.geom');
-        let settings = ifcopenshell_geom.settings();
-        settings.set(settings.WELD_VERTICES, false);
-
-        return { pyodide, ifcopenshell, ifcopenshell_geom, settings };
-    }
-
-    async function loadIfc(state, scene, fn) {
-        const { pyodide, ifcopenshell, ifcopenshell_geom, settings } = state;
-        const resp = await fetch(fn);
-        const text = await resp.text();
-        console.log(text.slice(0, 500));
-
-        const ifc = ifcopenshell.file.from_string(text);
-        const it = ifcopenshell_geom.iterator.callKwargs({
-            'settings': settings,
-            'file_or_filename': ifc,
-            'exclude': ['IfcSpace', 'IfcOpeningElement'],
-            'geometry_library': 'hybrid-cgal-simple-opencascade'
-        });
-
-        let last_mesh_id = null;
-        let cache = {};
-        let meshes = [];
-
-        if (it.initialize()) {
-            while (true) {
-                let obj = it.get();
-
-                // obj.type appears to be overwritten by pyodide, returning the typename of the C++ class?
-                let ty = ifc.by_id(obj.id).is_a()
-                meshes.push(generateMesh(scene, last_mesh_id, obj, cache));
-
-                if (!it.next()) {
-                    break;
-                }
-            }
-        }
-
-        return meshes;
-    }
-
-    function generateMesh(scene, last_mesh_id, obj, cache) {
+    function generateMesh(scene, obj, cache) {
         let bundles;
 
-        if (cache.last_mesh_id === obj.geometry.id) {
+        if (cache.last_mesh_id === obj.geometry_id) {
             bundles = cache.last_bundles;
         } else {
             bundles = [];
 
-            const srcMaterials = obj.geometry.materials.toJs();
+            const srcMaterials = obj.materials;
             const materials = srcMaterials.map(e => new PhongMaterial(scene, {
-                diffuse: e.diffuse.components.toJs(),
+                diffuse: e.diffuse,
                 backfaces: true
             }));
             const materialOpacities = srcMaterials.map(e => 1.0 - (e.transparency ?? 0));
 
             const mapping = {};
-            obj.geometry.material_ids.toJs().forEach((matId, faceIdx) => {
+            obj.material_ids.forEach((matId, faceIdx) => {
                 (mapping[matId] ||= []).push(faceIdx);
             });
 
-            const vs = new Float32Array(obj.geometry.verts.toJs());
-            const ns = new Float32Array(obj.geometry.normals.toJs());
-            const es = new Uint32Array(obj.geometry.edges.toJs());
-            const fs = obj.geometry.faces.toJs(); // triangles index buffer (flat)
+            const vs = obj.verts;
+            const ns = obj.normals;
+            const es = obj.edges;
+            const fs = obj.faces;
 
             let offset = 0;
             if (mapping[-1]) {
@@ -292,11 +238,11 @@
 
             bundles.push({ geometry: edgeGeom, material: edgeMat, kind: "line", opacity: 1.0 });
 
-            cache.last_mesh_id = obj.geometry.id;
+            cache.last_mesh_id = obj.geometry_id;
             cache.last_bundles = bundles;
         }
 
-        const M = obj.transformation.data().components.toJs(); // 4x4 array
+        const M = obj.transform;
         const matrix = [
             M[0][0], M[2][0], -M[1][0], M[3][0],
             M[0][1], M[2][1], -M[1][1], M[3][1],
@@ -311,13 +257,13 @@
         matrix.splice(12, 3, ...worldOrigin);
         
         const parent = new Node(scene, {
-            id: obj.guid || `obj_${obj.geometry.id}`,
+            id: obj.guid || `obj_${obj.geometry_id}`,
             isObject: true,
             matrix,
             origin,
             children: bundles.map((b, i) => {
                 const mesh = new Mesh(scene, {
-                    id: `${obj.guid || obj.geometry.id}_${b.kind}_${i}`,
+                    id: `${obj.guid || obj.geometry_id}_${b.kind}_${i}`,
                     isObject: true,
                     geometry: b.geometry,
                     material: b.material
@@ -332,22 +278,40 @@
 
 
     class IfcOpenShellLoaderPlugin extends Plugin {
-        static _pyodidePromise = null;
+        static _workerReadyPromise = null;
+        static _worker = null;
 
         constructor(viewer, cfg = {}) {
             super(cfg.id || "IfcOpenShellLoaderPlugin", viewer, cfg);
 
-            IfcOpenShellLoaderPlugin._pyodidePromise ??= (async () => {
-                try {
-                    const pyodide = await setupPyodide(
-                        cfg.indexURL ? { indexURL: cfg.indexURL } : undefined
-                    );
-                    return pyodide;
-                } catch (err) {
-                    IfcOpenShellLoaderPlugin._pyodidePromise = null;
-                    throw err;
-                }
-            })();
+            if (!IfcOpenShellLoaderPlugin._workerReadyPromise) {
+                const workerURL = new URL("./ifcopenshell-worker.js", import.meta.url);
+                const worker = new Worker(workerURL.href); // classic worker
+                IfcOpenShellLoaderPlugin._worker = worker;
+
+                IfcOpenShellLoaderPlugin._workerReadyPromise = new Promise((resolve, reject) => {
+                const onMessage = (ev) => {
+                    const data = ev.data;
+                    if (!data) return;
+                    if (data.type === "ready") {
+                    worker.removeEventListener("message", onMessage);
+                    resolve(worker);
+                    } else if (data.type === "error") {
+                    worker.removeEventListener("message", onMessage);
+                    reject(new Error(data.message + "\n" + (data.stack || "")));
+                    }
+                };
+                worker.addEventListener("message", onMessage);
+
+                worker.postMessage({
+                    type: "init",
+                    indexURL: cfg.indexURL || "https://cdn.jsdelivr.net/pyodide/v0.28.0a3/full",
+                    wheelURL:
+                    cfg.wheelURL ||
+                    "../../dist/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl"
+                });
+                });
+            }
         }
 
         async load(params = {}) {
@@ -355,23 +319,57 @@
                 id = "cubeModel",
             } = params;
 
-            const pyodide = await IfcOpenShellLoaderPlugin._pyodidePromise;
+            const worker = await IfcOpenShellLoaderPlugin._workerReadyPromise;
 
             const scene = this.viewer.scene;
             const model = new Node(scene, {
                 id,
-                isModel: true,
-                children: await loadIfc(pyodide, scene, "../../assets/models/ifc/Duplex.ifc")
+                isModel: true
             });
 
-            this.fire("loaded", { id, model });
+            const cache = {};
+
+            const onMessage = (ev) => {
+                const data = ev.data;
+                if (!data) return;
+
+                if (data.type === "object") {
+                    const node = generateMesh(scene, data.payload, cache);
+                    // Attach new object under the model as it streams in
+                    node.parent = model;
+                    // Hint the renderer
+                    this.viewer.scene.needRender = true;
+                    } else if (data.type === "done") {
+                    worker.removeEventListener("message", onMessage);
+                    this.fire("loaded", { id, model, count: data.count });
+                    } else if (data.type === "error") {
+                    worker.removeEventListener("message", onMessage);
+                    console.error("Worker error:", data.message, data.stack);
+                    this.fire("error", { id, error: data.message });
+                }
+            };
+
+            const src = "../../assets/models/ifc/Duplex.ifc";
+
+            const exclude = ["IfcSpace", "IfcOpeningElement"];
+            const geometryLibrary = "hybrid-cgal-simple-opencascade";
+
+            worker.addEventListener("message", onMessage);
+            worker.postMessage({
+                type: "load",
+                ifcUrl: src,
+                exclude,
+                geometryLibrary
+            });
+
             return model;
         }
     }
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true
+        transparent: true,
+        entityOffsetsEnabled: true
     });
 
     viewer.camera.eye = [-3.933, 2.855, 27.018];
