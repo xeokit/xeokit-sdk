@@ -265,11 +265,11 @@ class SectionCaps {
                                 dirtyMap[sceneModel.id].forEach((isDirty, entityId) => {
                                     if (isDirty) {
                                         const entity = sceneModel.objects[entityId];
-                                        if (doesPlaneIntersectBoundingBox(entity.aabb, plane)) {
+                                        if (entity.capMaterial && doesPlaneIntersectBoundingBox(entity.aabb, plane)) {
                                             if (! modelData.entityGeometries.has(entityId)) {
                                                 const indices  = [ ];
                                                 const vertices = [ ];
-                                                if (entity.capMaterial && entity.meshes[0].isSolid()) {
+                                                if (entity.meshes[0].isSolid()) {
                                                     entity.getEachIndex(i  => indices.push(i));
                                                     entity.getEachVertex(v => vertices.push(v[0]-modelOrigin[0], v[1]-modelOrigin[1], v[2]-modelOrigin[2]));
                                                 }
