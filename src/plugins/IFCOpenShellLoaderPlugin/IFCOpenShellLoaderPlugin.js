@@ -1,7 +1,7 @@
-import { Plugin, SceneModel, utils, worldToRTCPositions } from "../../viewer/index.js";
-import { math } from "../../viewer/scene/math/math.js";
-import { IFCOpenShellDefaultDataSource } from "./IFCOpenShellDefaultDataSource.js";
-import { IFCObjectDefaults } from "../../viewer/metadata/IFCObjectDefaults.js";
+import {Plugin, SceneModel, utils, worldToRTCPositions} from "../../viewer/index.js";
+import {math} from "../../viewer/scene/math/math.js";
+import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js";
+import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 
 /**
  * {@link Viewer} plugin that loads models from IFC format using IfcOpenShell.
@@ -20,17 +20,49 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
      * @param {Object} cfg.ifcopenshell_geom  IfcOpenShell geometry API (required).
      */
     constructor(viewer, cfg) {
+
         super("IFCOpenShellLoader", viewer, cfg);
 
         if (!cfg) throw new Error("IFCOpenShellLoaderPlugin: No configuration given");
-        if (!cfg.ifcopenshell) throw new Error("IFCOpenShellLoaderPlugin: No ifcopenshell given");
-        if (!cfg.ifcopenshell_geom) throw new Error("IFCOpenShellLoaderPlugin: No ifcopenshell_geom given");
-
-        this.ifcopenshell = cfg.ifcopenshell;
-        this.ifcopenshell_geom = cfg.ifcopenshell_geom;
+        if (!cfg.workerSrc) throw new Error("IFCOpenShellLoaderPlugin: No workerSrc given");
+        if (!cfg.wheelURL) throw new Error("IFCOpenShellLoaderPlugin: No wheelURL given");
 
         this.dataSource = cfg.dataSource;
         this.objectDefaults = cfg.objectDefaults;
+
+        if (!this._workerReadyPromise) {
+
+            const workerURL = new URL(cfg.workerSrc, import.meta.url);
+            const worker = new Worker(workerURL.href);
+
+            this._worker = worker;
+
+            this._workerReadyPromise = new Promise((resolve, reject) => {
+
+                const onMessage = (ev) => {
+                    const data = ev.data;
+                    if (!data) {
+                        return;
+                    }
+                    if (data.type === "ready") {
+                        worker.removeEventListener("message", onMessage);
+                        resolve(worker);
+
+                    } else if (data.type === "error") {
+                        worker.removeEventListener("message", onMessage);
+                        reject(new Error(data.message + "\n" + (data.stack || "")));
+                    }
+                };
+
+                worker.addEventListener("message", onMessage);
+
+                worker.postMessage({
+                    type: "init",
+                    indexURL: cfg.indexURL || "https://cdn.jsdelivr.net/pyodide/v0.28.0a3/full",
+                    wheelURL: cfg.wheelURL || "../../dist/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl"
+                });
+            });
+        }
     }
 
     // ----------------------
@@ -78,11 +110,12 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
      * @param {Boolean} [params.dtxEnabled=true]
      * @returns {Entity}
      */
-    load(params = {}) {
-        let { id, backfaces, dtxEnabled, rotation, origin } = params;
+    async load(params = {}) {
+
+        let {id, backfaces, dtxEnabled, rotation, origin} = params;
 
         if (id && this.viewer.scene.components[id]) {
-            this.error(`Component with this ID already exists: ${id} - autogenerating ID`);
+            this.error(`Component with this ID already exists: ${id} - autogenerating SceneModel ID`);
             id = null;
         }
 
@@ -102,86 +135,81 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
             return sceneModel; // Return empty model
         }
 
-        if (params.src) {
-            this.viewer.scene.canvas.spinner.processes++;
-            this._dataSource.getIFC(
-                params.src,
-                (fileData) => {
-                    this._parseIFC({ fileData, sceneModel });
-                    this.viewer.scene.canvas.spinner.processes--;
-                },
-                (err) => {
-                    this.viewer.scene.canvas.spinner.processes--;
-                    this.error(err);
-                }
-            );
-        } else {
-            this._parseIFC({ fileData: params.text, sceneModel });
-        }
+        const worker = await this._workerReadyPromise;
+
+        const cache = {};
+
+        const onMessage = (ev) => {
+            const data = ev.data;
+            if (!data) {
+                return;
+            }
+            if (data.type === "object") {
+                this._parseElement(sceneModel, data.payload, cache);
+
+            } else if (data.type === "done") {
+                worker.removeEventListener("message", onMessage);
+                sceneModel.finalize();
+                sceneModel.scene.once("tick", () => {
+                    if (!sceneModel.destroyed) {
+                        sceneModel.scene.fire("modelLoaded", sceneModel.id);
+                        sceneModel.fire("loaded", true, false);
+                    }
+                });
+                this.fire("loaded", {id, sceneModel, count: data.count});
+
+            } else if (data.type === "error") {
+                worker.removeEventListener("message", onMessage);
+                console.error("Worker error:", data.message, data.stack);
+                this.fire("error", {id, error: data.message});
+            }
+        };
+
+        worker.addEventListener("message", onMessage);
+
+        const geometryLibrary = "hybrid-cgal-simple-opencascade";
+
+        worker.postMessage({
+            type: "load",
+            ifcUrl: params.src,
+            exclude: params.excludeTypes,
+            geometryLibrary
+        });
+
+        //    if (loadMetadata) {
+        //      this.viewer.metaScene.createMetaModel(modelId, ctx.metadata, options);
+        //  }
 
         sceneModel.once("destroyed", () => {
             this.viewer.metaScene.destroyMetaModel(modelId);
         });
 
+
         return sceneModel;
     }
 
-    // ----------------------
-    // Parsing
-    // ----------------------
+    _parseElement(sceneModel, payload, cache) {
 
-    _parseIFC(ctx) {
-        const { fileData, sceneModel } = ctx;
-        const { ifcopenshell, ifcopenshell_geom } = this;
-
-        const ifc = ifcopenshell.file.from_string(fileData);
-
-        const iterator = ifcopenshell_geom.iterator.callKwargs({
-            settings, // external
-            file_or_filename: ifc,
-            exclude: ["IfcSpace", "IfcOpeningElement"],
-            geometry_library: "hybrid-cgal-simple-opencascade"
-        });
-
-        // Single-entry micro-cache to speed repeated geometry
-        const cache = { last_mesh_id: undefined, last_bundles: undefined };
-
-        if (iterator.initialize()) {
-            do {
-                const obj = iterator.get();
-                if (obj) {
-                    this._parseElement(sceneModel, obj, cache);
-                }
-            } while (iterator.next());
-        }
-
-        sceneModel.finalize();
-
-        sceneModel.scene.once("tick", () => {
-            if (!sceneModel.destroyed) {
-                sceneModel.scene.fire("modelLoaded", sceneModel.id);
-                sceneModel.fire("loaded", true, false);
-            }
-        });
-    }
-
-    _parseElement(sceneModel, obj, cache) {
-        const bundles = this._getOrBuildBundles(sceneModel, cache, obj);
-        const { origin, matrix } = this._extractRTCTransform(obj);
+        const bundles = this._getOrBuildBundles(sceneModel, cache, payload);
+        const {origin, matrix} = this._extractRTCTransform(payload);
 
         const meshIds = bundles.map((b) => {
-            const sceneMesh = sceneModel.createMesh({
+
+            const meshId = math.createUUID();
+
+            sceneModel.createMesh({
+                id: meshId,
                 origin,
                 matrix,
-                geometryId: b.geometry.id,
-                color: b.material.color,    // expecting [r,g,b] in 0..1; map to 0..255 if your engine needs it
-                opacity: b.material.opacity
+                geometryId: b.geometryId,
+                color: b.material.diffuse,    // expecting [r,g,b] in 0..1; map to 0..255 if your engine needs it
+                opacity: 1.0 - b.material.transparency
             });
-            return sceneMesh.id;
+            return meshId;
         });
 
         return sceneModel.createEntity({
-            id: obj.guid || `obj_${obj.geometry.id}`,
+            id: payload.guid || `payload_${payload.geometry_id}`,
             isObject: true,
             meshIds
         });
@@ -190,8 +218,9 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
     /**
      * Returns cached bundles for a geometry or builds them once and caches.
      */
-    _getOrBuildBundles(sceneModel, cache, obj) {
-        if (cache.last_mesh_id === obj.geometry.id) {
+    _getOrBuildBundles(sceneModel, cache, payload) {
+
+        if (cache.last_mesh_id === payload.geometry_id) {
             return cache.last_bundles;
         }
 
@@ -202,17 +231,22 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
             normals,
             edgeIndices,
             faceIndices
-        } = this._buildMaterialsAndMapping(obj);
+        } = this._buildMaterialsAndMapping(payload);
 
         const bundles = [];
 
         materials.forEach((material, mi) => {
             const faceList = mapping[mi] || [];
-            if (faceList.length === 0) return;
+            if (faceList.length === 0) {
+                return;
+            }
 
             const indices = this._buildIndicesForFaces(faceList, faceIndices);
 
-            const geometry = sceneModel.createGeometry({
+            const geometryId = math.createUUID()
+
+            sceneModel.createGeometry({
+                id: geometryId,
                 primitive: "triangles",
                 positions,
                 normals,
@@ -221,13 +255,13 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
             });
 
             bundles.push({
-                geometry,
+                geometryId,
                 material,
                 kind: "tri"
             });
         });
 
-        cache.last_mesh_id = obj.geometry.id;
+        cache.last_mesh_id = payload.geometry_id;
         cache.last_bundles = bundles;
 
         return bundles;
@@ -237,24 +271,17 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
      * Builds materials, material->faces mapping, and base buffers.
      * Handles a missing material (-1) by injecting a default neutral material.
      */
-    _buildMaterialsAndMapping(obj) {
+    _buildMaterialsAndMapping(payload) {
 
         // Base buffers
-        const positions   = new Float32Array(obj.geometry.verts.toJs());
-        const normals     = new Float32Array(obj.geometry.normals.toJs());
-        const edgeIndices = new Uint32Array(obj.geometry.edges.toJs());
-        const faceIndices = obj.geometry.faces.toJs();
+        const positions = payload.verts;
+        const normals = payload.normals;
+        const edgeIndices = payload.edges;
+        const faceIndices = payload.faces;
 
         // Raw material info
-        const rawMaterials = obj.geometry.materials.toJs();
-        const materialIds  = obj.geometry.material_ids.toJs();
-
-        // Normalize materials
-        const materials = rawMaterials.map((m) => ({
-            color: m.diffuse.components.toJs(),          // [r,g,b] in 0..1
-            opacity: 1.0 - (m.transparency ?? 0),        // IfcOpenShell transparency -> engine opacity
-            backfaces: true
-        }));
+        const materials = payload.materials;
+        const materialIds = payload.material_ids;
 
         // Inject default material for faces with -1
         let defaultMaterialIndex = -1;
@@ -272,11 +299,13 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
         for (let faceIdx = 0; faceIdx < materialIds.length; faceIdx++) {
             const rawId = materialIds[faceIdx];
             const matIndex = rawId === -1 ? defaultMaterialIndex : rawId;
-            if (matIndex == null || matIndex < 0) continue;
+            if (matIndex == null || matIndex < 0) {
+                continue;
+            }
             (mapping[matIndex] ||= []).push(faceIdx);
         }
 
-        return { materials, mapping, positions, normals, edgeIndices, faceIndices };
+        return {materials, mapping, positions, normals, edgeIndices, faceIndices};
     }
 
     /**
@@ -298,16 +327,13 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
      * - Converts the 2D matrix array into flat mat4 order
      * - Moves translation into RTC origin and patches the matrix translation
      */
-    _extractRTCTransform(obj) {
-        const matrix4x4 = obj.transformation.data().components.toJs();
-        const matrix = this._flattenMatrixArray(matrix4x4);
-
+    _extractRTCTransform(payload) {
+        const matrix = this._flattenMatrixArray(payload.transform);
         const origin = math.vec3();
         const worldOrigin = matrix.slice(12, 15); // translation xyz
         worldToRTCPositions(worldOrigin, worldOrigin, origin);
-        matrix.splice(12, 3, ...worldOrigin);
-
-        return { origin, matrix };
+        matrix.set(worldOrigin, 12);
+        return {origin, matrix};
     }
 
     _flattenMatrixArray(m) {
