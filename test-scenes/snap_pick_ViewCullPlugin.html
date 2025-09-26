@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+  </head>
+  <body>
+    <canvas id="myCanvas"></canvas>
+  </body>
+  <script type="module">
+
+    import { GLTFLoaderPlugin, ViewCullPlugin, Viewer } from "../../dist/xeokit-sdk.es.js";
+    import { signalTestComplete } from "./lib/utils.js";
+
+    const canvas = window.document.getElementById("myCanvas");
+    canvas.style.width = canvas.style.height = "600px";
+
+    const viewer = new Viewer({ canvasElement: canvas });
+
+    new ViewCullPlugin(viewer, { maxTreeDepth: 20 });
+
+    new GLTFLoaderPlugin(viewer).load({
+        src: "../../assets/models/gltf/HousePlan/glTF-Binary/HousePlan.glb",
+        rotation: [90,0,0]
+    }).on("loaded", () => {
+        viewer.camera.eye  = [1390.76,235.98,1.54];
+        viewer.camera.look = [1390.64,235.70,0.72];
+        viewer.camera.up   = [-0.37,-0.86,0.35];
+        window.setTimeout(
+            () => {
+                window.xeokitViewer = viewer;
+                signalTestComplete(viewer);
+            },
+            100);
+    });
+
+  </script>
+</html>
