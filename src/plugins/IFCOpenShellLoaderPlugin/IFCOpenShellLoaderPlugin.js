@@ -1,4 +1,4 @@
-import {Plugin, SceneModel, utils, worldToRTCPositions} from "../../viewer/index.js";
+import {Plugin, SceneModel, worldToRTCPositions} from "../../viewer/index.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
