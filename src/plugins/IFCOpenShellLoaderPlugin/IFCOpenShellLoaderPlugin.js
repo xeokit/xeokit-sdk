@@ -112,7 +112,7 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
      */
     async load(params = {}) {
 
-        let {id, backfaces, dtxEnabled, rotation, origin} = params;
+        let {id, backfaces, dtxEnabled, rotation, origin, loadMetadata} = params;
 
         if (id && this.viewer.scene.components[id]) {
             this.error(`Component with this ID already exists: ${id} - autogenerating SceneModel ID`);
@@ -147,6 +147,9 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
             if (data.type === "object") {
                 this._parseElement(sceneModel, data.payload, cache);
 
+            } else if (data.type === "metamodel") {
+                this.viewer.metaScene.createMetaModel(modelId, data.metaModel);
+
             } else if (data.type === "done") {
                 worker.removeEventListener("message", onMessage);
                 sceneModel.finalize();
@@ -173,12 +176,9 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
             type: "load",
             ifcUrl: params.src,
             exclude: params.excludeTypes,
-            geometryLibrary
+            geometryLibrary,
+            loadMetadata
         });
-
-        //    if (loadMetadata) {
-        //      this.viewer.metaScene.createMetaModel(modelId, ctx.metadata, options);
-        //  }
 
         sceneModel.once("destroyed", () => {
             this.viewer.metaScene.destroyMetaModel(modelId);

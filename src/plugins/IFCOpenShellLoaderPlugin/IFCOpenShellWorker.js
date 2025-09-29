@@ -25,7 +25,6 @@ self.onmessage = async (e) => {
             await pyodide.loadPackage("numpy");
             await pyodide.loadPackage("shapely");
 
-
             const micropip = pyodide.pyimport("micropip");
             await micropip.install("typing-extensions");
             await micropip.install(wheelURL);
@@ -37,6 +36,7 @@ self.onmessage = async (e) => {
             settings.set(settings.WELD_VERTICES, false);
 
             self.postMessage({ type: "ready" });
+
             return;
         }
 
@@ -45,6 +45,7 @@ self.onmessage = async (e) => {
                 ifcUrl,
                 exclude = ["IfcSpace", "IfcOpeningElement"],
                 geometryLibrary = "hybrid-cgal-simple-opencascade",
+                loadMetadata
             } = msg;
 
             if (!ifcopenshell || !ifcopenshell_geom || !settings) {
@@ -55,6 +56,12 @@ self.onmessage = async (e) => {
             const ifcText = await resp.text();
 
             const ifc = ifcopenshell.file.from_string(ifcText);
+
+            if (loadMetadata !== false) {
+                const metaModel = extractMetaModel(ifc);
+                self.postMessage({type: "metamodel", metaModel});
+            }
+
             const it = ifcopenshell_geom.iterator.callKwargs({
                 settings,
                 file_or_filename: ifc,
@@ -67,6 +74,9 @@ self.onmessage = async (e) => {
             if (it.initialize()) {
                 while (true) {
                     const obj = it.get();
+
+                    const entity = ifc.by_id(obj.id);
+                    const id = entity.GlobalId;
 
                     const srcMaterials = obj.geometry.materials.toJs();
                     const materials = srcMaterials.map((m) => ({
@@ -85,7 +95,7 @@ self.onmessage = async (e) => {
                     const M = obj.transformation.data().components.toJs();
 
                     const payload = {
-                        id: obj.id,
+                        id,
                         guid: obj.guid,
                         geometry_id: obj.geometry.id,
                         materials,
@@ -101,14 +111,85 @@ self.onmessage = async (e) => {
                     );
 
                     count++;
-                    if (!it.next()) break;
+                    if (!it.next()) {
+                        break;
+                    }
                 }
             }
 
             self.postMessage({ type: "done", count });
+
             return;
         }
     } catch (err) {
         postError(err);
     }
 };
+
+function extractMetaModel(ifc) {
+    const visited = new Set();
+    const metaObjects = [];
+
+    function getGlobalId(entity) {
+        try {
+            return String(entity.GlobalId);
+        } catch {
+            return null;
+        }
+    }
+
+    function walk(entity, parent = null) {
+        if (!entity) {
+            return;
+        }
+
+        const globalId = getGlobalId(entity);
+        const type = String(entity.is_a());
+        const parentId = parent ? getGlobalId(parent) : null;
+
+        if (!globalId || visited.has(globalId)) {
+            return;
+        }
+        visited.add(globalId);
+
+        metaObjects.push({ id: globalId, type, parent: parentId });
+
+        const rels = entity.IsDecomposedBy;
+        if (rels) {
+            for (let i = 0; i < rels.length; i++) {
+                const rel = rels.get(i);
+                if (String(rel.is_a()) === "IfcRelAggregates") {
+                    const children = rel.RelatedObjects;
+                    for (let j = 0; j < children.length; j++) {
+                        const child = children.get(j);
+                        walk(child, entity);
+                        child.destroy?.();
+                    }
+                    children.destroy?.();
+                }
+                rel.destroy?.();
+            }
+        }
+
+        entity.destroy?.();
+    }
+
+    const projects = ifc.by_type("IfcProject");
+    for (let i = 0; i < projects.length; i++) {
+        const project = projects.get(i);
+        walk(project, null);
+        project.destroy?.();
+    }
+    projects.destroy?.();
+
+    return {
+        id: "",
+        projectId: "",
+        author: "",
+        createdAt: "",
+        schema: "",
+        creatingApplication: "",
+        metaObjects,
+        propertySets: []
+    }
+}
