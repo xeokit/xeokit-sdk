@@ -1,5 +1,5 @@
-import { parse } from '@loaders.gl/core';
-import { GLTFLoader, postProcessGLTF } from '@loaders.gl/gltf';
+import { parse } from "../../external.js";
+import { GLTFLoader, postProcessGLTF } from "../../external.js";
 import { sRGBEncoding } from "../../viewer/scene/constants/constants.js";
 import { core } from "../../viewer/scene/core.js";
 import { math } from "../../viewer/scene/math/math.js";
