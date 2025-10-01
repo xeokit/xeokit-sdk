@@ -5,26 +5,15 @@ import {math} from "../../../math/math.js";
 
 const canvasPos = math.vec2();
 
-const getCanvasPosFromEvent = function (event, canvasPos) {
+const getCanvasPosFromEvent = function(event, canvas, canvasPos) {
     if (!event) {
         event = window.event;
         canvasPos[0] = event.x;
         canvasPos[1] = event.y;
     } else {
-        let element = event.target;
-        let totalOffsetLeft = 0;
-        let totalOffsetTop = 0;
-        let totalScrollX = 0;
-        let totalScrollY = 0;
-        while (element.offsetParent) {
-          totalOffsetLeft += element.offsetLeft;
-          totalOffsetTop += element.offsetTop;
-          totalScrollX += element.scrollLeft;
-          totalScrollY += element.scrollTop;
-          element = element.offsetParent;
-        }
-        canvasPos[0] = event.pageX + totalScrollX - totalOffsetLeft;
-        canvasPos[1] = event.pageY + totalScrollY - totalOffsetTop;
+        const canvasRect = canvas.getBoundingClientRect();
+        canvasPos[0] = event.clientX - canvasRect.left;
+        canvasPos[1] = event.clientY - canvasRect.top;
     }
     return canvasPos;
 };
@@ -296,7 +285,7 @@ class MousePanRotateDollyHandler {
             }
             switch (e.which) {
                 case 3: // Right button
-                    getCanvasPosFromEvent(e, canvasPos);
+                    getCanvasPosFromEvent(e, canvas, canvasPos);
                     const x = canvasPos[0];
                     const y = canvasPos[1];
                     if (Math.abs(x - lastXDown) < 3 && Math.abs(y - lastYDown) < 3) {
@@ -347,6 +336,10 @@ class MousePanRotateDollyHandler {
             updates.dollyDelta += -normalizedDelta * secsElapsed * configs.mouseWheelDollyRate;
 
             if (mouseMovedOnCanvasSinceLastWheel) {
+                if ((states.pointerCanvasPos[0] === 0) && (states.pointerCanvasPos[1] === 0)) {
+                    // Dirty fix to initiate states.pointerCanvasPos if a wheel over an empty space is the first action in a scene
+                    getCanvasPosFromEvent(e, canvas, states.pointerCanvasPos); // Added to fix XCD-386: The zoom speed slows down when zooming into an empty space for the first time on a relatively large model, and it cannot be reset without reloading
+                }
                 states.followPointerDirty = true;
                 mouseMovedOnCanvasSinceLastWheel = false;
             }

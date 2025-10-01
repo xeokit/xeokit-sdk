@@ -20,6 +20,7 @@ class MouseMiscHandler {
 
         document.addEventListener("mousemove", this._mouseMoveHandler = (e) => {
             getCanvasPosFromEvent(e, canvas, states.pointerCanvasPos);
+            states.mouseover = true; // Added to fix XCD-386: The zoom speed slows down when zooming into an empty space for the first time on a relatively large model, and it cannot be reset without reloading
         });
 
         canvas.addEventListener("mousedown", this._mouseDownHandler = (e) => {
