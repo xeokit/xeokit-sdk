@@ -659,9 +659,12 @@ export class SceneModelEntity {
      * @type {Material}
      */
     set capMaterial(value) {
-        if(!this.scene.readableGeometryEnabled) return;
-        this._capMaterial = value instanceof Material ? value : null;
-        this.scene._capMaterialUpdated(this.id, this.model.id);
+        if (this.scene.readableGeometryEnabled) {
+            this._capMaterial = value;
+            this.scene._sectionCaps._onCapMaterialUpdated(this.id, this.model.id);
+        } else {
+            throw "The `capMaterial' assignment requires `Viewer::readableGeometryEnabled` to be `true'";
+        }
     }
 
     /**
