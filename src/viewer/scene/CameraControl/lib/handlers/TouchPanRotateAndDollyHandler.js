@@ -243,6 +243,7 @@ class TouchPanRotateAndDollyHandler {
                 const dollyDelta = (d2 - d1) * configs.touchDollyRate;
 
                 updates.dollyDelta = dollyDelta;
+                states.followPointerDirty = true; // Added to fix XCD-386: The zoom speed slows down when zooming into an empty space for the first time on a relatively large model, and it cannot be reset without reloading
 
                 if (Math.abs(dollyDelta) < 1.0) {
 
