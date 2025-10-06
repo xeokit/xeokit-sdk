@@ -470,13 +470,19 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
             if (!data) {
                 return;
             }
-            if (data.type === "object") {
-                this._parseElement(sceneModel, data.payload, cache);
-
-            } else if (data.type === "metamodel") {
+            if (data.type === "metamodel") {
                 this.viewer.metaScene.createMetaModel(modelId, data.metaModel);
 
-            } else if (data.type === "done") {
+            } else  if (data.type === "geometry") {
+                sceneModel.createGeometry(data.payload);
+
+            } else if (data.type === "mesh") {
+                sceneModel.createMesh(data.payload);
+
+            } else if (data.type === "entity") {
+                sceneModel.createEntity(data.payload);
+
+            }  else  if (data.type === "done") {
                 worker.removeEventListener("message", onMessage);
                 sceneModel.finalize();
                 sceneModel.scene.once("tick", () => {
@@ -513,163 +519,163 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
 
         return sceneModel;
     }
-
-    _parseElement(sceneModel, payload, cache) {
-
-        const bundles = this._getOrBuildBundles(sceneModel, cache, payload);
-        const {origin, matrix} = this._extractRTCTransform(payload);
-
-        const meshIds = bundles.map((b) => {
-
-            const meshId = math.createUUID();
-
-            sceneModel.createMesh({
-                id: meshId,
-                origin,
-                matrix,
-                geometryId: b.geometryId,
-                color: b.material.diffuse,    // expecting [r,g,b] in 0..1; map to 0..255 if your engine needs it
-                opacity: 1.0 - b.material.transparency
-            });
-            return meshId;
-        });
-
-        return sceneModel.createEntity({
-            id: payload.id,
-            isObject: true,
-            meshIds
-        });
-    }
-
-    /**
-     * Returns cached bundles for a geometry or builds them once and caches.
-     */
-    _getOrBuildBundles(sceneModel, cache, payload) {
-
-        if (cache.last_mesh_id === payload.geometry_id) {
-            return cache.last_bundles;
-        }
-
-        const {
-            materials,
-            mapping,
-            positions,
-            normals,
-            edgeIndices,
-            faceIndices
-        } = this._buildMaterialsAndMapping(payload);
-
-        const bundles = [];
-
-        materials.forEach((material, mi) => {
-            const faceList = mapping[mi] || [];
-            if (faceList.length === 0) {
-                return;
-            }
-
-            const indices = this._buildIndicesForFaces(faceList, faceIndices);
-
-            const geometryId = math.createUUID()
-
-            sceneModel.createGeometry({
-                id: geometryId,
-                primitive: "triangles",
-                positions,
-                normals,
-                indices,
-                edgeIndices
-            });
-
-            bundles.push({
-                geometryId,
-                material,
-                kind: "tri"
-            });
-        });
-
-        cache.last_mesh_id = payload.geometry_id;
-        cache.last_bundles = bundles;
-
-        return bundles;
-    }
-
-    /**
-     * Builds materials, material->faces mapping, and base buffers.
-     * Handles a missing material (-1) by injecting a default neutral material.
-     */
-    _buildMaterialsAndMapping(payload) {
-
-        // Base buffers
-        const positions = payload.verts;
-        const normals = payload.normals;
-        const edgeIndices = payload.edges;
-        const faceIndices = payload.faces;
-
-        // Raw material info
-        const materials = payload.materials;
-        const materialIds = payload.material_ids;
-
-        // Inject default material for faces with -1
-        let defaultMaterialIndex = -1;
-        if (materialIds.some((id) => id === -1)) {
-            defaultMaterialIndex = materials.length;
-            materials.push({
-                color: [0.6, 0.6, 0.6],
-                opacity: 1.0,
-                backfaces: true
-            });
-        }
-
-        // Build mapping: materialIndex -> [faceIdx...]
-        const mapping = {};
-        for (let faceIdx = 0; faceIdx < materialIds.length; faceIdx++) {
-            const rawId = materialIds[faceIdx];
-            const matIndex = rawId === -1 ? defaultMaterialIndex : rawId;
-            if (matIndex == null || matIndex < 0) {
-                continue;
-            }
-            (mapping[matIndex] ||= []).push(faceIdx);
-        }
-
-        return {materials, mapping, positions, normals, edgeIndices, faceIndices};
-    }
-
-    /**
-     * Builds a flat index buffer for a list of face indices.
-     */
-    _buildIndicesForFaces(faceList, faceIndices) {
-        const indices = new Uint32Array(faceList.length * 3);
-        let k = 0;
-        for (const f of faceList) {
-            indices[k++] = faceIndices[3 * f + 0];
-            indices[k++] = faceIndices[3 * f + 1];
-            indices[k++] = faceIndices[3 * f + 2];
-        }
-        return indices;
-    }
-
-    /**
-     * Extracts RTC origin + adjusted matrix from an IFC transform.
-     * - Converts the 2D matrix array into flat mat4 order
-     * - Moves translation into RTC origin and patches the matrix translation
-     */
-    _extractRTCTransform(payload) {
-        const matrix = this._flattenMatrixArray(payload.transform);
-        const origin = math.vec3();
-        const worldOrigin = matrix.slice(12, 15); // translation xyz
-        worldToRTCPositions(worldOrigin, worldOrigin, origin);
-        matrix.set(worldOrigin, 12);
-        return {origin, matrix};
-    }
-
-    _flattenMatrixArray(m) {
-        return math.mat4([
-            m[0][0], m[2][0], -m[1][0], m[3][0],
-            m[0][1], m[2][1], -m[1][1], m[3][1],
-            m[0][2], m[2][2], -m[1][2], m[3][2],
-            m[0][3], m[2][3], -m[1][3], m[3][3]
-        ]);
-    }
+    //
+    // _parseElement(sceneModel, payload, cache) {
+    //
+    //     const bundles = this._getOrBuildBundles(sceneModel, cache, payload);
+    //     const {origin, matrix} = this._extractRTCTransform(payload);
+    //
+    //     const meshIds = bundles.map((b) => {
+    //
+    //         const meshId = math.createUUID();
+    //
+    //         sceneModel.createMesh({
+    //             id: meshId,
+    //             origin,
+    //             matrix,
+    //             geometryId: b.geometryId,
+    //             color: b.material.diffuse,    // expecting [r,g,b] in 0..1; map to 0..255 if your engine needs it
+    //             opacity: 1.0 - b.material.transparency
+    //         });
+    //         return meshId;
+    //     });
+    //
+    //     return sceneModel.createEntity({
+    //         id: payload.id,
+    //         isObject: true,
+    //         meshIds
+    //     });
+    // }
+    //
+    // /**
+    //  * Returns cached bundles for a geometry or builds them once and caches.
+    //  */
+    // _getOrBuildBundles(sceneModel, cache, payload) {
+    //
+    //     if (cache.last_mesh_id === payload.geometry_id) {
+    //         return cache.last_bundles;
+    //     }
+    //
+    //     const {
+    //         materials,
+    //         mapping,
+    //         positions,
+    //         normals,
+    //         edgeIndices,
+    //         faceIndices
+    //     } = this._buildMaterialsAndMapping(payload);
+    //
+    //     const bundles = [];
+    //
+    //     materials.forEach((material, mi) => {
+    //         const faceList = mapping[mi] || [];
+    //         if (faceList.length === 0) {
+    //             return;
+    //         }
+    //
+    //         const indices = this._buildIndicesForFaces(faceList, faceIndices);
+    //
+    //         const geometryId = math.createUUID()
+    //
+    //         sceneModel.createGeometry({
+    //             id: geometryId,
+    //             primitive: "triangles",
+    //             positions,
+    //             normals,
+    //             indices,
+    //             edgeIndices
+    //         });
+    //
+    //         bundles.push({
+    //             geometryId,
+    //             material,
+    //             kind: "tri"
+    //         });
+    //     });
+    //
+    //     cache.last_mesh_id = payload.geometry_id;
+    //     cache.last_bundles = bundles;
+    //
+    //     return bundles;
+    // }
+    //
+    // /**
+    //  * Builds materials, material->faces mapping, and base buffers.
+    //  * Handles a missing material (-1) by injecting a default neutral material.
+    //  */
+    // _buildMaterialsAndMapping(payload) {
+    //
+    //     // Base buffers
+    //     const positions = payload.verts;
+    //     const normals = payload.normals;
+    //     const edgeIndices = payload.edges;
+    //     const faceIndices = payload.faces;
+    //
+    //     // Raw material info
+    //     const materials = payload.materials;
+    //     const materialIds = payload.material_ids;
+    //
+    //     // Inject default material for faces with -1
+    //     let defaultMaterialIndex = -1;
+    //     if (materialIds.some((id) => id === -1)) {
+    //         defaultMaterialIndex = materials.length;
+    //         materials.push({
+    //             color: [0.6, 0.6, 0.6],
+    //             opacity: 1.0,
+    //             backfaces: true
+    //         });
+    //     }
+    //
+    //     // Build mapping: materialIndex -> [faceIdx...]
+    //     const mapping = {};
+    //     for (let faceIdx = 0; faceIdx < materialIds.length; faceIdx++) {
+    //         const rawId = materialIds[faceIdx];
+    //         const matIndex = rawId === -1 ? defaultMaterialIndex : rawId;
+    //         if (matIndex == null || matIndex < 0) {
+    //             continue;
+    //         }
+    //         (mapping[matIndex] ||= []).push(faceIdx);
+    //     }
+    //
+    //     return {materials, mapping, positions, normals, edgeIndices, faceIndices};
+    // }
+    //
+    // /**
+    //  * Builds a flat index buffer for a list of face indices.
+    //  */
+    // _buildIndicesForFaces(faceList, faceIndices) {
+    //     const indices = new Uint32Array(faceList.length * 3);
+    //     let k = 0;
+    //     for (const f of faceList) {
+    //         indices[k++] = faceIndices[3 * f + 0];
+    //         indices[k++] = faceIndices[3 * f + 1];
+    //         indices[k++] = faceIndices[3 * f + 2];
+    //     }
+    //     return indices;
+    // }
+    //
+    // /**
+    //  * Extracts RTC origin + adjusted matrix from an IFC transform.
+    //  * - Converts the 2D matrix array into flat mat4 order
+    //  * - Moves translation into RTC origin and patches the matrix translation
+    //  */
+    // _extractRTCTransform(payload) {
+    //     const matrix = this._flattenMatrixArray(payload.transform);
+    //     const origin = math.vec3();
+    //     const worldOrigin = matrix.slice(12, 15); // translation xyz
+    //     worldToRTCPositions(worldOrigin, worldOrigin, origin);
+    //     matrix.set(worldOrigin, 12);
+    //     return {origin, matrix};
+    // }
+    //
+    // _flattenMatrixArray(m) {
+    //     return math.mat4([
+    //         m[0][0], m[2][0], -m[1][0], m[3][0],
+    //         m[0][1], m[2][1], -m[1][1], m[3][1],
+    //         m[0][2], m[2][2], -m[1][2], m[3][2],
+    //         m[0][3], m[2][3], -m[1][3], m[3][3]
+    //     ]);
+    // }
 
     destroy() {
         super.destroy();
