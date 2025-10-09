@@ -287,7 +287,6 @@ class DistanceMeasurementsPlugin extends Plugin {
    * @param {string} [cfg.defaultColor=#00BBFF] The default color of the length dots, wire and label.
    * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
    * @param {boolean} [cfg.defaultLabelsOnWires=true] The default value of the DistanceMeasurements `labelsOnWires` property.
-   * @param {Function} [cfg.unitStrFormat] Function to format unit strings. Receives (len, scale, unit, approximate) and returns formatted string. Default: (len, scale, unit, approximate) => (approximate ? " ~ " : " = ") + len.toFixed(2) + unit
    * @param {PointerCircle} [cfg.pointerLens] A PointerLens to help the user position the pointer. This can be shared with other plugins.
    */
   constructor(viewer, cfg = {}) {
@@ -319,10 +318,6 @@ class DistanceMeasurementsPlugin extends Plugin {
     this.zIndex = cfg.zIndex || 10000;
     this.defaultLabelsOnWires = cfg.defaultLabelsOnWires !== false;
     this.useRotationAdjustment = cfg.useRotationAdjustment !== undefined ? cfg.useRotationAdjustment !== false : false;
-
-    this.unitStrFormat = cfg.unitStrFormat || ((len, scale, unit, approximate) =>
-      (approximate ? " ~ " : " = ") + (len * scale).toFixed(2) + unit
-    );
 
     this._onMouseOver = (event, measurement) => {
       this.fire("mouseOver", {
@@ -466,7 +461,6 @@ class DistanceMeasurementsPlugin extends Plugin {
    * @param {Boolean} [params.lengthLabelVisible=true] Whether to initially show the labels.
    * @param {string} [params.color] The color of the length dot, wire and label.
    * @param {Boolean} [params.labelsOnWires=true] Determines if labels will be set on wires or one below the other.
-   * @param {Function} [params.unitStrFormat] Function to format unit strings for this measurement. Receives (len, scale, unit, approximate) and returns formatted string. If not provided, uses plugin default.
    * @returns {DistanceMeasurement} The new {@link DistanceMeasurement}.
    */
   createMeasurement(params = {}) {
@@ -506,7 +500,6 @@ class DistanceMeasurementsPlugin extends Plugin {
       targetVisible: params.targetVisible,
       color: params.color,
       labelsOnWires:params.labelsOnWires !== false && this.defaultLabelsOnWires !== false,
-      unitStrFormat: params.unitStrFormat || this.unitStrFormat,
       onMouseOver: this._onMouseOver,
       onMouseLeave: this._onMouseLeave,
       onContextMenu: this._onContextMenu,

@@ -1,132 +1,59 @@
 <!doctype html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>xeokit Example Distance Precision</title>
-    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <link href="../css/pageStyle.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <script src="../libs/dat.gui.min.js" type="text/javascript"></script>
-    <link href="../css/dat-gui-light-style.css" rel="stylesheet"/>
-    <style>
-        .viewer-ruler-wire-highlighted {
-            border: 2px solid white !important;
-        }
-
-        .viewer-ruler-label-highlighted {
-            border: 2px solid white !important;
-        }
-
-        .viewer-ruler-dot-highlighted {
-            border: 2px solid white !important;
-        }
-
-        .xeokit-context-menu {
-            font-family: 'Roboto', sans-serif;
-            font-size: 15px;
-            display: none;
-            z-index: 300000;
-            background: rgba(255, 255, 255, 0.46);
-            border: 1px solid black;
-            border-radius: 6px;
-            padding: 0;
-            width: 200px;
-        }
-
-        .xeokit-context-menu ul {
-            list-style: none;
-            margin-left: 0;
-            padding: 0;
-        }
-
-        .xeokit-context-menu-item {
-            list-style-type: none;
-            padding-left: 10px;
-            padding-right: 20px;
-            padding-top: 4px;
-            padding-bottom: 4px;
-            color: black;
-            background: rgba(255, 255, 255, 0.46);
-            cursor: pointer;
-            width: calc(100% - 30px);
-        }
-
-        .xeokit-context-menu-item:hover {
-            background: black;
-            color: white;
-            font-weight: normal;
-        }
-
-        .xeokit-context-menu-item span {
-            display: inline-block;
-        }
-
-        .xeokit-context-menu .disabled {
-            display: inline-block;
-            color: gray;
-            cursor: default;
-            font-weight: normal;
-        }
-
-        .xeokit-context-menu .disabled:hover {
-            color: gray;
-            cursor: default;
-            background: #eeeeee;
-            font-weight: normal;
-        }
-
-        .xeokit-context-menu-item-separator {
-            background: rgba(0, 0, 0, 1);
-            height: 1px;
-            width: 100%;
-        }
-    </style>
+    <link href="../css/dat-gui-light-style.css" rel="stylesheet" />
 </head>
+
 <body>
-<input type="checkbox" id="info-button"/>
-<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
-<canvas id="myCanvas"></canvas>
-<div class="slideout-sidebar">
-    <img class="info-icon" src="../../assets/images/measure_distance_icon.png"/>
-    <h1>DistanceMeasurementPlugin</h1>
-    <h2>Configuring units and scale</h2>
-    <p>In this example, we're loading model with two boxes, one box is slightly bigger than the other. On the left 670mm x 1100mm x 250mm and on the right 670.10mm x1100mm x 250.01mm</p>
-    <p>DistanceMeasurement on the right have a custom unitStrFormat function that sets the precision to 4</p>
-    <h3>Configure units and scale</h3>
-    <div id="myDatGuiContainer"></div>
-    <h3>Components Used</h3>
-    <ul>
-        <li>
-            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
-               target="_other">Viewer</a>
-        </li>
-        <li>
-            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
-               target="_other">XKTLoaderPlugin</a>
-        </li>
-        <li>
-            <a href="../../docs/class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html"
-               target="_other">DistanceMeasurementsPlugin</a>
-        </li>
-    </ul>
-    <h3>Assets</h3>
-    <ul>
-        <li>
-            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
-               target="_other">Model source</a>
-        </li>
-    </ul>
-</div>
+    <input type="checkbox" id="info-button" />
+    <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+    <canvas id="myCanvas"></canvas>
+    <div class="slideout-sidebar">
+        <img class="info-icon" src="../../assets/images/measure_distance_icon.png" />
+        <h1>DistanceMeasurementPlugin</h1>
+        <h2>Configuring units and scale</h2>
+        <p>In this example, we're loading model with two boxes, one box is slightly bigger than the other. On the left
+            670mm x 1100mm x 250mm and on the right 670.10mm x1100mm x 250.01mm</p>
+        <p>DistanceMeasurement on the right have a custom labelStringFormat function that sets the precision to 4</p>
+        <h3>Configure units and scale</h3>
+        <div id="myDatGuiContainer"></div>
+        <h3>Components Used</h3>
+        <ul>
+            <li>
+                <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html" target="_other">Viewer</a>
+            </li>
+            <li>
+                <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+                    target="_other">XKTLoaderPlugin</a>
+            </li>
+            <li>
+                <a href="../../docs/class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html"
+                    target="_other">DistanceMeasurementsPlugin</a>
+            </li>
+        </ul>
+        <h3>Assets</h3>
+        <ul>
+            <li>
+                <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274" target="_other">Model source</a>
+            </li>
+        </ul>
+    </div>
 
 </body>
 <script type="module">
-
     //------------------------------------------------------------------------------------------------------------------
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, ContextMenu, PointerLens, DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl, DistanceMeasurementEditMouseControl} from "../../dist/xeokit-sdk.es.js";
+    import { Viewer, XKTLoaderPlugin, ContextMenu, PointerLens, DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl, DistanceMeasurementEditMouseControl } from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -146,28 +73,6 @@
     viewer.scene.metrics.scale = 1000;
     viewer.scene.metrics.origin = [100, 0, 200];
 
-    var metrics = new function () {
-        this.scale = 1000;
-        this.units = "millimeters";
-        this.precision = 2;
-    }();
-
-    var update = function () {
-        viewer.scene.metrics.scale = metrics.scale;
-        viewer.scene.metrics.units = metrics.units;
-        requestAnimationFrame(update);
-    };
-
-    update();
-
-    var gui = new dat.GUI({autoPlace: false, width: "100%"});
-    gui.add(metrics, 'scale', 0.1, 10.0);
-    gui.add(metrics, 'units', ["meters", "centimeters", "millimeters", "yards", "feet", "inches"])
-    gui.add(metrics, 'precision', [0, 1, 2, 3, 4, 5, 6]);
-
-    var customContainer = document.getElementById('myDatGuiContainer');
-    customContainer.appendChild(gui.domElement);
-
     //------------------------------------------------------------------------------------------------------------------
     // Load a model
     //------------------------------------------------------------------------------------------------------------------
@@ -180,39 +85,9 @@
         edges: true
     });
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Create a DistanceMeasurementsPlugin, with which we'll create DistanceMeasurements
-    //------------------------------------------------------------------------------------------------------------------
-
-    const distanceMeasurementsPlugin = new DistanceMeasurementsPlugin(viewer, {
-        unitStrFormat: (len, scale, unit, approximate) => {
-            return (approximate ? " ~ " : " = ") + parseFloat(String(len * scale)).toFixed(metrics.precision) + unit;
-        }
-    });
-
-    distanceMeasurementsPlugin.on("mouseOver", (e) => {
-        e.distanceMeasurement.setHighlighted(true);
-    });
-
-    distanceMeasurementsPlugin.on("mouseLeave", (e) => {
-        e.distanceMeasurement.setHighlighted(false);
-    });
-
-    window.distanceMeasurementsPlugin = distanceMeasurementsPlugin;
-
-    const distanceMeasurementsMouseControl = new DistanceMeasurementsMouseControl(distanceMeasurementsPlugin, {
-        pointerLens: new PointerLens(viewer),
-        snapping: true // Default
-    })
-
-    distanceMeasurementsMouseControl.snapping = true;
-
-    distanceMeasurementsMouseControl.activate();
+    const distanceMeasurementsPlugin = new DistanceMeasurementsPlugin(viewer);
 
     sceneModel.on("loaded", () => {
-        //------------------------------------------------------------------------------------------------------------------
-        // Create some DistanceMeasurements
-        //------------------------------------------------------------------------------------------------------------------
 
         const myMeasurement1 = distanceMeasurementsPlugin.createMeasurement({
             id: "distanceMeasurement1",
@@ -236,244 +111,16 @@
             },
             visible: true,
             wireVisible: true,
-            unitStrFormat: (len, scale, unit, approximate) => {
-                return (approximate ? " ~ " : " = ") + parseFloat(String(len * scale)).toFixed(4) + unit;
-            }
         });
-    });
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Create a context menu to delete and configure measurements
-    //------------------------------------------------------------------------------------------------------------------
+        myMeasurement2.labelStringFormat = (len) => {
+            const metrics = viewer.scene.metrics;
+            const scale = metrics.scale;
+            const unit = metrics.unitsInfo[metrics.units].abbrev;
 
-    let endMeasurementEdit = null;
-
-    const distanceMeasurementsContextMenu = new ContextMenu({
-        items: [
-            [
-                {
-                    title: "Clear",
-                    doAction: function (context) {
-                        context.distanceMeasurement.destroy();
-                    }
-                },
-                {
-                    getTitle: (context) => {
-                        return context.distanceMeasurement.axisVisible ? "Hide Axis" : "Show Axis";
-                    },
-                    doAction: function (context) {
-                        context.distanceMeasurement.axisVisible = !context.distanceMeasurement.axisVisible;
-                    }
-                },
-                {
-                    getTitle: (context) => {
-                        return context.distanceMeasurement.xLabelEnabled && context.distanceMeasurement.labelsVisible ? "Disable X Label" : "Enable X Label";
-                    },
-                    doAction: function (context) {
-                        context.distanceMeasurement.xLabelEnabled = !context.distanceMeasurement.xLabelEnabled;
-                    }
-                },
-                {
-                    getTitle: (context) => {
-                        return context.distanceMeasurement.yLabelEnabled && context.distanceMeasurement.labelsVisible ? "Disable Y Label" : "Enable Y Label";
-                    },
-                    doAction: function (context) {
-                        context.distanceMeasurement.yLabelEnabled = !context.distanceMeasurement.yLabelEnabled;
-                    }
-                },
-                {
-                    getTitle: (context) => {
-                        return context.distanceMeasurement.zLabelEnabled && context.distanceMeasurement.labelsVisible ? "Disable Z Label" : "Enable Z Label";
-                    },
-                    doAction: function (context) {
-                        context.distanceMeasurement.zLabelEnabled = !context.distanceMeasurement.zLabelEnabled;
-                    }
-                },
-                {
-                    getTitle: (context) => {
-                        return context.distanceMeasurement.lengthLabelEnabled && context.distanceMeasurement.labelsVisible ? "Disable Length Label" : "Enable Length Label";
-                    },
-                    doAction: function (context) {
-                        context.distanceMeasurement.lengthLabelEnabled = !context.distanceMeasurement.lengthLabelEnabled;
-                    }
-                },
-                {
-                    getTitle: (context) => {
-                        return context.distanceMeasurement.labelsVisible ? "Hide All Labels" : "Show All Labels";
-                    },
-                    doAction: function (context) {
-                        context.distanceMeasurement.labelsVisible = !context.distanceMeasurement.labelsVisible;
-                    }
-                },
-                {
-                    title: "Edit",
-                    doAction: function (context) {
-                        distanceMeasurementsMouseControl.deactivate();
-                        const measurement = context.distanceMeasurement;
-                        const edit = new DistanceMeasurementEditMouseControl(measurement, {
-                            pointerLens: new PointerLens(viewer),
-                            snapping: true
-                        });
-                        edit.on("edited", () => console.log("edited", measurement.id));
-                        endMeasurementEdit = () => {
-                            edit.deactivate();
-                            endMeasurementEdit = null;
-                        };
-                    }
-                }
-            ], [
-                {
-                    title: "Clear All",
-                    getEnabled: function (context) {
-                        return (Object.keys(context.distanceMeasurementsPlugin.measurements).length > 0);
-                    },
-                    doAction: function (context) {
-                        context.distanceMeasurementsPlugin.clear();
-                    }
-                },
-                {
-                    getTitle: () => {
-                        return "Cancel Measurement";
-                    },
-                    doAction: function () {
-                        distanceMeasurementsMouseControl.reset();
-                    }
-                }
-            ]
-        ]
-    });
-
-    distanceMeasurementsContextMenu.on("hidden", () => {
-        if (distanceMeasurementsContextMenu.context.distanceMeasurement) {
-            distanceMeasurementsContextMenu.context.distanceMeasurement.setHighlighted(false);
-        }
-    });
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Create a context menu to activate and deactivate the control
-    //------------------------------------------------------------------------------------------------------------------
-
-    const canvasContextMenu = new ContextMenu({
-        enabled: true,
-        context: {
-            viewer: viewer
-        },
-        items: [
-            [
-                {
-                    getTitle: (context) => {
-                        return distanceMeasurementsMouseControl.active ? "Deactivate Control" : "Activate Control";
-                    },
-                    doAction: function (context) {
-                        distanceMeasurementsMouseControl.active
-                            ? distanceMeasurementsMouseControl.deactivate()
-                            : distanceMeasurementsMouseControl.activate();
-                    }
-                },
-                {
-                    getTitle: () => {
-                        return "Cancel Measurement";
-                    },
-                    getEnabled: function () {
-                        return (!!distanceMeasurementsMouseControl.currentMeasurement);
-                    },
-                    doAction: function () {
-                        distanceMeasurementsMouseControl.reset();
-                    }
-                },
-                {
-                    getTitle: () => {
-                        return "End Editing";
-                    },
-                    getEnabled: function () {
-                        return !!endMeasurementEdit;
-                    },
-                    doAction: function () {
-                        endMeasurementEdit();
-                    }
-                }
-            ]
-        ]
-    });
-
-    viewer.scene.canvas.canvas.addEventListener('contextmenu', (event) => {
-        const canvasPos = getCanvasPosFromEvent(event);
-        canvasContextMenu.show(canvasPos[0], canvasPos[1]);
-        event.preventDefault();
-        event.stopPropagation();
-    });
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Create an DistanceMeasurementsPlugin, activate its DistanceMeasuremntsControl
-    //------------------------------------------------------------------------------------------------------------------
-
-    distanceMeasurementsPlugin.on("mouseOver", (e) => {
-        if (endMeasurementEdit) {
-            return;
-        }
-        e.distanceMeasurement.setHighlighted(true);
-    });
-
-    distanceMeasurementsPlugin.on("mouseLeave", (e) => {
-        if (endMeasurementEdit) {
-            return;
-        }
-        if (distanceMeasurementsContextMenu.shown && distanceMeasurementsContextMenu.context.distanceMeasurement.id === e.distanceMeasurement.id) {
-            return;
-        }
-        e.distanceMeasurement.setHighlighted(false);
-    });
-
-    distanceMeasurementsPlugin.on("contextMenu", (e) => {
-        if (endMeasurementEdit) {
-            return;
-        }
-        distanceMeasurementsContextMenu.context = { // Must set context before showing menu
-            viewer: viewer,
-            distanceMeasurementsPlugin: distanceMeasurementsPlugin,
-            distanceMeasurement: e.distanceMeasurement
+            return parseFloat(String(len * viewer.scene.metrics.scale)).toFixed(4) + unit;
         };
-        distanceMeasurementsContextMenu.show(e.event.clientX, e.event.clientY);
-        e.event.preventDefault();
     });
-
-    const getCanvasPosFromEvent = function (event) {
-        const canvasPos = [];
-        if (!event) {
-            event = window.event;
-            canvasPos[0] = event.x;
-            canvasPos[1] = event.y;
-        } else {
-            let element = event.target;
-            let totalOffsetLeft = 0;
-            let totalOffsetTop = 0;
-            let totalScrollX = 0;
-            let totalScrollY = 0;
-            while (element.offsetParent) {
-                totalOffsetLeft += element.offsetLeft;
-                totalOffsetTop += element.offsetTop;
-                totalScrollX += element.scrollLeft;
-                totalScrollY += element.scrollTop;
-                element = element.offsetParent;
-            }
-            canvasPos[0] = event.pageX + totalScrollX - totalOffsetLeft;
-            canvasPos[1] = event.pageY + totalScrollY - totalOffsetTop;
-        }
-        return canvasPos;
-    };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </script>
+
 </html>

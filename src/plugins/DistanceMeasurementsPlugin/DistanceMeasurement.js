@@ -72,7 +72,13 @@ class DistanceMeasurement extends Component {
         this._axesBasis = math.identityMat4();
         this.approximate = cfg.approximate;
 
-        this._unitStrFormat = cfg.unitStrFormat || plugin.unitStrFormat;
+        this._labelStringFormat = (len) => {
+            const metrics = this.plugin.viewer.scene.metrics;
+            const scale = metrics.scale;
+            const unit = metrics.unitsInfo[metrics.units].abbrev;
+
+            return (this.approximate ? " ~ " : " = ") + (len * scale).toFixed(2) + unit;
+        };
 
         const canvas = scene.canvas.canvas;
 
@@ -213,21 +219,21 @@ class DistanceMeasurement extends Component {
 
             this._xAxisWire.setEnds(p0, xEnd);
             setAxisLabelCoords(this._xAxisLabel, p0, xEnd, 1);
-            this._xAxisLabel.setText("X" + this._unitStrFormat(math.distVec3(p0, xEnd), scale, unit, this._approximate));
+            this._xAxisLabel.setText("X" + this._labelStringFormat(math.distVec3(p0, xEnd)));
 
             this._yAxisWire.setEnds(xEnd, zStart);
             setAxisLabelCoords(this._yAxisLabel, xEnd, zStart, 2);
-            this._yAxisLabel.setText("Y" + this._unitStrFormat(math.distVec3(xEnd, zStart), scale, unit, this._approximate));
+            this._yAxisLabel.setText("Y" + this._labelStringFormat(math.distVec3(xEnd, zStart)));
 
             this._zAxisWire.setEnds(zStart, p1);
             setAxisLabelCoords(this._zAxisLabel, zStart, p1, 3);
-            this._zAxisLabel.setText((measurementOrientationVertical ? "" : "Z") + this._unitStrFormat(math.distVec3(zStart, p1), scale, unit, this._approximate));
+            this._zAxisLabel.setText((measurementOrientationVertical ? "" : "Z") + this._labelStringFormat(math.distVec3(zStart, p1)));
 
             this._lengthWire.setEnds(p0, p1);
             setAxisLabelCoords(this._lengthLabel, p0, p1, 0);
             const length = math.distVec3(p0, p1);
             this._length = length * scale;
-            this._lengthLabel.setText(this._unitStrFormat(length, scale, unit, this._approximate));
+            this._lengthLabel.setText(this._labelStringFormat(length, scale, unit, this._approximate));
         };
 
         if (measurementOrientationVertical) {
@@ -685,13 +691,9 @@ class DistanceMeasurement extends Component {
      *
      * @type {Function}
      */
-    set unitStrFormat(value) {
-        if (typeof value === 'function') {
-            this._unitStrFormat = value;
-            this._update();
-        } else {
-            console.warn('unitStrFormat must be a function');
-        }
+    set labelStringFormat(value) {
+        this._labelStringFormat = value;
+        this._update();
     }
 
     /**
@@ -699,8 +701,8 @@ class DistanceMeasurement extends Component {
      *
      * @type {Function}
      */
-    get unitStrFormat() {
-        return this._unitStrFormat;
+    get labelStringFormat() {
+        return this._labelStringFormat;
     }
 
     /**
