@@ -233,7 +233,7 @@ class DistanceMeasurement extends Component {
             setAxisLabelCoords(this._lengthLabel, p0, p1, 0);
             const length = math.distVec3(p0, p1);
             this._length = length * scale;
-            this._lengthLabel.setText(this._labelStringFormat(length, scale, unit, this._approximate));
+            this._lengthLabel.setText(this._labelStringFormat(length));
         };
 
         if (measurementOrientationVertical) {
