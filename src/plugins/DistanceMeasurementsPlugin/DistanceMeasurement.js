@@ -72,6 +72,7 @@ class DistanceMeasurement extends Component {
         this._axesBasis = math.identityMat4();
         this.approximate = cfg.approximate;
 
+        this._unitStrFormat = cfg.unitStrFormat || plugin.unitStrFormat;
 
         const canvas = scene.canvas.canvas;
 
@@ -209,24 +210,24 @@ class DistanceMeasurement extends Component {
                     label.setPosOnWire(p0, p1, offsetIdx * 35, 0);
                 }
             };
-            const unitStr = len => (this._approximate ? " ~ " : " = ") + len.toFixed(2) + unit;
 
             this._xAxisWire.setEnds(p0, xEnd);
             setAxisLabelCoords(this._xAxisLabel, p0, xEnd, 1);
-            this._xAxisLabel.setText("X" + unitStr(math.distVec3(p0, xEnd) * scale));
+            this._xAxisLabel.setText("X" + this._unitStrFormat(math.distVec3(p0, xEnd), scale, unit, this._approximate));
 
             this._yAxisWire.setEnds(xEnd, zStart);
             setAxisLabelCoords(this._yAxisLabel, xEnd, zStart, 2);
-            this._yAxisLabel.setText("Y" + unitStr(math.distVec3(xEnd, zStart) * scale));
+            this._yAxisLabel.setText("Y" + this._unitStrFormat(math.distVec3(xEnd, zStart), scale, unit, this._approximate));
 
             this._zAxisWire.setEnds(zStart, p1);
             setAxisLabelCoords(this._zAxisLabel, zStart, p1, 3);
-            this._zAxisLabel.setText((measurementOrientationVertical ? "" : "Z") + unitStr(math.distVec3(zStart, p1) * scale));
+            this._zAxisLabel.setText((measurementOrientationVertical ? "" : "Z") + this._unitStrFormat(math.distVec3(zStart, p1), scale, unit, this._approximate));
 
             this._lengthWire.setEnds(p0, p1);
             setAxisLabelCoords(this._lengthLabel, p0, p1, 0);
-            this._length = math.distVec3(p0, p1) * scale;
-            this._lengthLabel.setText(unitStr(this._length));
+            const length = math.distVec3(p0, p1);
+            this._length = length * scale;
+            this._lengthLabel.setText(this._unitStrFormat(length, scale, unit, this._approximate));
         };
 
         if (measurementOrientationVertical) {
@@ -677,6 +678,29 @@ class DistanceMeasurement extends Component {
      */
     get clickable() {
         return this._clickable.get();
+    }
+
+    /**
+     * Sets the function to format unit strings.
+     *
+     * @type {Function}
+     */
+    set unitStrFormat(value) {
+        if (typeof value === 'function') {
+            this._unitStrFormat = value;
+            this._update();
+        } else {
+            console.warn('unitStrFormat must be a function');
+        }
+    }
+
+    /**
+     * Gets the function to format unit strings.
+     *
+     * @type {Function}
+     */
+    get unitStrFormat() {
+        return this._unitStrFormat;
     }
 
     /**
