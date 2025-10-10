@@ -67,6 +67,8 @@
     "@rollup/plugin-node-resolve": "^13.2.1",
     "@types/node": "^22.10.6",
     "auto-changelog": "^2.4.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^10.0.0",
     "dotenv": "^16.4.7",
     "esdoc": "^1.1.0",
     "esdoc-custom-theme": "^1.4.2",
