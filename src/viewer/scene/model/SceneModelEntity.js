@@ -55,7 +55,7 @@ export class SceneModelEntity {
             const mesh = this.meshes[i];
             mesh.parent = this;
             mesh.entity = this;
-            this._numPrimitives += mesh.numPrimitives;
+            this._numPrimitives += mesh.numTriangles;
         }
 
         /**
