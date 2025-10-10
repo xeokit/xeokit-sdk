@@ -2814,6 +2814,10 @@ export class SceneModel extends Component {
                 } else {
                     cfg.meshMatrix = math.composeMat4(position, cfg.quaternion || DEFAULT_QUATERNION, scale, math.mat4());
                 }
+            } else {
+                if (!cfg.meshMatrix) {
+                    cfg.meshMatrix = math.identityMat4();
+                }
             }
 
             if (cfg.positionsDecodeBoundary) {

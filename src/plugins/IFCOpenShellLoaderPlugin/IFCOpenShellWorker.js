@@ -272,36 +272,41 @@ function extractMetaModel(ifc) {
     const visited = new Set();
     const metaObjects = [];
 
+    // ---- helpers -----------------------------------------------------------
+    const toStr = (v) => (v === undefined || v === null) ? "" : String(v);
+
     function getGlobalId(entity) {
-        try {
-            return String(entity.GlobalId);
-        } catch {
-            return null;
-        }
+        try { return String(entity.GlobalId); } catch { return null; }
+    }
+
+    function addNode(entity, parent) {
+        const id = getGlobalId(entity);
+        if (!id || visited.has(id)) return false;
+        visited.add(id);
+        metaObjects.push({
+            id,
+            type: String(entity.is_a()),
+            parent: parent ? getGlobalId(parent) : null
+        });
+        return true;
     }
 
     function walk(entity, parent = null) {
-        if (!entity) {
+        if (!entity) return;
+
+        // add current node (skip children if already visited)
+        if (!addNode(entity, parent)) {
+            entity.destroy?.();
             return;
         }
 
-        const globalId = getGlobalId(entity);
-        const type = String(entity.is_a());
-        const parentId = parent ? getGlobalId(parent) : null;
-
-        if (!globalId || visited.has(globalId)) {
-            return;
-        }
-        visited.add(globalId);
-
-        metaObjects.push({ id: globalId, type, parent: parentId });
-
-        const rels = entity.IsDecomposedBy;
-        if (rels) {
-            for (let i = 0; i < rels.length; i++) {
-                const rel = rels.get(i);
-                if (String(rel.is_a()) === "IfcRelAggregates") {
-                    const children = rel.RelatedObjects;
+        // 1) Decomposition (IfcRelAggregates / IfcRelNests)
+        const decos = entity.IsDecomposedBy;
+        if (decos) {
+            for (let i = 0; i < decos.length; i++) {
+                const rel = decos.get(i);
+                const children = rel.RelatedObjects;
+                if (children) {
                     for (let j = 0; j < children.length; j++) {
                         const child = children.get(j);
                         walk(child, entity);
@@ -313,25 +318,161 @@ function extractMetaModel(ifc) {
             }
         }
 
+        // 2) Spatial containment (IfcRelContainedInSpatialStructure)
+        const contains = entity.ContainsElements;
+        if (contains) {
+            for (let i = 0; i < contains.length; i++) {
+                const rel = contains.get(i);
+                const elems = rel.RelatedElements;
+                if (elems) {
+                    for (let j = 0; j < elems.length; j++) {
+                        const elem = elems.get(j);
+                        walk(elem, entity);
+                        elem.destroy?.();
+                    }
+                    elems.destroy?.();
+                }
+                rel.destroy?.();
+            }
+        }
+
         entity.destroy?.();
     }
 
+    // ---- metadata extraction ----------------------------------------------
+    let projectId = "";
+    let author = "";
+    let createdAt = ""; // ISO string
+    let schema = "";
+    let creatingApplication = "";
+
+    // Schema (primary)
+    try {
+        // ifcopenshell.file usually exposes a `schema` string property
+        schema = toStr(ifc.schema);
+    } catch {}
+    if (!schema) {
+        // Fallback to STEP header
+        try {
+            const ids = ifc.wrapped_data.header.file_schema.schema_identifiers;
+            if (ids && ids.length > 0) schema = toStr(ids.get(0));
+        } catch {}
+    }
+
+    // Project (also gives us OwnerHistory on many files)
     const projects = ifc.by_type("IfcProject");
-    for (let i = 0; i < projects.length; i++) {
-        const project = projects.get(i);
+    if (projects && projects.length > 0) {
+        const project = projects.get(0);
+        projectId = toStr(project.GlobalId);
+
+        // OwnerHistory path (preferred when present)
+        try {
+            const oh = project.OwnerHistory; // deprecated in newer IFC4.x, but present in many files
+            if (oh) {
+                // Author: IfcPersonAndOrganization → ThePerson (GivenName/FamilyName) and TheOrganization.Name
+                try {
+                    const user = oh.OwningUser;
+                    const person = user?.ThePerson;
+                    const org = user?.TheOrganization;
+                    const gn = person?.GivenName ? toStr(person.GivenName) : "";
+                    const fn = person?.FamilyName ? toStr(person.FamilyName) : "";
+                    const personName = (gn || fn) ? [gn, fn].filter(Boolean).join(" ") : "";
+                    const orgName = org?.Name ? toStr(org.Name) : "";
+                    author = [personName, orgName].filter(Boolean).join(" / ");
+                } catch {}
+
+                // Creation time (UNIX seconds)
+                try {
+                    const ts = oh?.CreationDate;
+                    if (typeof ts === "number" && isFinite(ts) && ts > 0) {
+                        createdAt = new Date(ts * 1000).toISOString();
+                    }
+                } catch {}
+
+                // Creating application
+                try {
+                    const app = oh?.OwningApplication;
+                    const appName =
+                        app?.ApplicationFullName ? toStr(app.ApplicationFullName) :
+                            app?.ApplicationIdentifier ? toStr(app.ApplicationIdentifier) : "";
+                    const appVer = app?.Version ? toStr(app.Version) : "";
+                    creatingApplication = [appName, appVer].filter(Boolean).join(" ");
+                } catch {}
+            }
+        } catch {}
+
+        // Clean first project (we’ll traverse below with a fresh pointer anyway)
+        project.destroy?.();
+    }
+
+    // Fallbacks via STEP header if OwnerHistory wasn’t there / incomplete
+    try {
+        const fileName = ifc.wrapped_data.header.file_name;
+        if (!author) {
+            try {
+                const authors = fileName.author;
+                if (authors && authors.length > 0) {
+                    // `author` is a LIST in the STEP header; join if multiple
+                    const parts = [];
+                    for (let i = 0; i < authors.length; i++) parts.push(toStr(authors.get(i)));
+                    author = parts.filter(Boolean).join(", ");
+                }
+            } catch {}
+        }
+        if (!createdAt) {
+            const ts = toStr(fileName.time_stamp); // already a string like "2023-08-10T12:34:56"
+            if (ts) {
+                // normalize to ISO if possible
+                const maybe = new Date(ts);
+                if (!isNaN(maybe.getTime())) createdAt = maybe.toISOString();
+            }
+        }
+        if (!creatingApplication) {
+            // STEP header carries "originating_system" and "preprocessor_version"
+            const orig = toStr(fileName.originating_system);
+            const prep = toStr(fileName.preprocessor_version);
+            creatingApplication = [orig, prep].filter(Boolean).join(" / ");
+        }
+    } catch {}
+
+    // If createdAt still missing, sweep for earliest OwnerHistory timestamp across roots
+    if (!createdAt) {
+        try {
+            let minTs = Infinity;
+            const roots = ifc.by_type("IfcRoot");
+            for (let i = 0; i < roots.length; i++) {
+                const r = roots.get(i);
+                const oh = r?.OwnerHistory;
+                const ts = oh?.CreationDate;
+                if (typeof ts === "number" && isFinite(ts) && ts > 0 && ts < minTs) {
+                    minTs = ts;
+                }
+                r.destroy?.();
+            }
+            roots.destroy?.();
+            if (isFinite(minTs)) createdAt = new Date(minTs * 1000).toISOString();
+        } catch {}
+    }
+
+    // ---- hierarchy walk ----------------------------------------------------
+    // Re-query projects since we destroyed the first pointer above
+    const projects2 = ifc.by_type("IfcProject");
+    for (let i = 0; i < projects2.length; i++) {
+        const project = projects2.get(i);
         walk(project, null);
         project.destroy?.();
     }
-    projects.destroy?.();
+    projects2.destroy?.();
 
     return {
-        id: "",
-        projectId: "",
-        author: "",
-        createdAt: "",
-        schema: "",
-        creatingApplication: "",
+        id: "", // keep your placeholder fields as-is
+        projectId,
+        author,
+        createdAt,
+        schema,
+        creatingApplication,
         metaObjects,
         propertySets: []
-    }
+    };
 }
+
