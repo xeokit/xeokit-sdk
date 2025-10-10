@@ -133,8 +133,8 @@
         <a href="../../docs/class/src/plugins/IFCOpenShellLoaderPlugin/IFCOpenShellLoaderPlugin.js~IFCOpenShellLoaderPlugin.html"
            target="_other">IFCOpenShellLoaderPlugin</a> is the easiest way to load IFC models into a xeokit Viewer.</p>
     <p>IFCOpenShellLoaderPlugin loads IFC STEP files and parses them within the browser using <a
-            href="https://github.com/tomvandig/web-ifc"
-            target="_other">web-ifc</a>, to create 3D objects within the
+            href="https://docs.ifcopenshell.org/"
+            target="_other">ifcopenshell.api</a>, to create 3D objects within the
         Viewer.</p>
     <h3>Limitations</h3>
     <p>Loading and parsing huge IFC STEP files can be slow, and can overwhelm the browser, however. To view your
@@ -220,6 +220,6 @@
         viewer.cameraFlight.jumpTo(sceneModel);
     });
 
-
+window.viewer = viewer;
 </script>
 </html>
