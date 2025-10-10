@@ -60,6 +60,9 @@ class AngleMeasurement extends Component {
 
         this.approximate = cfg.approximate;
 
+        this._labelStringFormat = (angle) => {
+            return (this._approximate ? " ~ " : " = ") + angle.toFixed(2) + "°";
+        };
 
         const canvas = scene.canvas.canvas;
 
@@ -181,7 +184,7 @@ class AngleMeasurement extends Component {
             math.normalizeVec3(tmpVec3a);
             math.normalizeVec3(tmpVec3b);
             this._angle = Math.abs(math.angleVec3(tmpVec3a, tmpVec3b)) * math.RADTODEG;
-            this._angleLabel.setText((this._approximate ? " ~ " : " = ") + this._angle.toFixed(2) + "°");
+            this._angleLabel.setText(this._labelStringFormat(this._angle));
         } else {
             this._angle = undefined;
             this._angleLabel.setText("");
@@ -439,6 +442,23 @@ class AngleMeasurement extends Component {
     set clickable(value) {
         this._clickable.set(!!value);
         this._drawables.forEach(d => d.setClickable(this._clickable.get()));
+    }
+
+    /**
+     * Gets the function that formats the angle label's text.
+     *
+     * By default, this function formats the angle with two decimal places.
+     */
+    get labelStringFormat() {
+        return this._labelStringFormat;
+    }
+
+    /** 
+     * Sets the function that formats the angle label's text.
+     */
+    set labelStringFormat(value) {
+        this._labelStringFormat = value;
+        this._update();
     }
 
     /**
