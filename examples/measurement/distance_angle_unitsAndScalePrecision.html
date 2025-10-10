@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example Distance Precision</title>
+    <link href="../css/pageStyle.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+
+<body>
+    <input type="checkbox" id="info-button" />
+    <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+    <canvas id="myCanvas"></canvas>
+    <div class="slideout-sidebar">
+        <img class="info-icon" src="../../assets/images/measure_distance_icon.png" />
+        <h1>DistanceMeasurementPlugin & AngleMeasurementsPlugin</h1>
+        <h2>Configuring units and scale using custom labelStringFormat</h2>
+        <p>In this example, we're configuring the DistanceMeasurementPlugin and AngleMeasurementsPlugin to use specific units and scale settings.</p>
+        <p>DistanceMeasurement and AngleMeasurement labelStringFormat functions are used to customize the display of measurement labels.</p>
+
+        <h3>Components Used</h3>
+        <ul>
+            <li>
+                <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html" target="_other">Viewer</a>
+            </li>
+            <li>
+                <a href="../../docs/class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html"
+                    target="_other">DistanceMeasurementsPlugin</a>
+            </li>
+            <li>
+                <a href="../../docs/class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html"
+                    target="_other">AngleMeasurementsPlugin</a>
+            </li>
+        </ul>
+    </div>
+
+</body>
+<script type="module">
+    import { Viewer, SceneModel, buildBoxGeometry, DistanceMeasurementsPlugin, AngleMeasurementsPlugin } from "../../dist/xeokit-sdk.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    window.viewer = viewer;
+
+    viewer.camera.eye = [-1.0926419973425696, 2.3580704059603845, 6.210196339754095];
+    viewer.camera.look = [-0.5830042171783097, 0.7341756767262191, 1.146747560503286];
+    viewer.camera.up = [0.03044340816649346, 0.9526735433561989, -0.30246705388910183];
+
+    viewer.cameraControl.followPointer = true;
+
+    viewer.scene.metrics.units = "millimeters";
+    viewer.scene.metrics.scale = 1000;
+    viewer.scene.metrics.origin = [100, 0, 200];
+
+    const sceneModel = new SceneModel(viewer.scene, { isModel: true });
+    sceneModel.edges = true;
+
+    const addBox = (id, center) => {
+        const box = buildBoxGeometry({ center: center });
+        const mesh = sceneModel.createMesh({
+            id: id,
+            primitive: "solid",
+            positions: box.positions,
+            normals: box.normals,
+            indices: box.indices,
+            color: [.49, .81, 0],
+            position: [-1, 0, 0]
+        });
+        sceneModel.createEntity({ id: "entity_" + mesh.id, meshIds: [mesh.id] });
+    };
+
+    addBox('box_1', [-2, 0, 0]);
+    addBox('box_2', [2, 0, 0]);
+
+    sceneModel.finalize();
+
+    const distanceMeasurementsPlugin = new DistanceMeasurementsPlugin(viewer);
+
+    const myMeasurement1 = distanceMeasurementsPlugin.createMeasurement({
+        id: "distanceMeasurement1",
+        origin: {
+            worldPos: [-4, 1, -1]
+        },
+        target: {
+            worldPos: [-2, -1, 1]
+        },
+        visible: true,
+        wireVisible: true
+    });
+
+    const myMeasurement2 = distanceMeasurementsPlugin.createMeasurement({
+        id: "distanceMeasurement2",
+        origin: {
+            worldPos: [0, 1, -1]
+        },
+        target: {
+            worldPos: [2, -1, 1]
+        },
+        visible: true,
+        wireVisible: true
+    });
+
+    myMeasurement2.labelStringFormat = (length) => {
+        const cm = length * 100;
+        return ` ${(cm).toFixed(1) }cm (${(cm / 254).toFixed(2) }in)`;
+    };
+
+    const angleMeasurementsPlugin = new AngleMeasurementsPlugin(viewer, {
+        defaultColor: 'black'
+    });
+
+    const angleMeasurement1 = angleMeasurementsPlugin.createMeasurement({
+        id: "angleMeasurement1",
+        origin: {
+            worldPos: [-4, 1, -1]
+        },
+        corner: {
+            worldPos: [-4, 1, 1]
+        },
+        target: {
+            worldPos: [-2, -1, -1]
+        },
+        visible: true
+    });
+
+    const angleMeasurement2 = angleMeasurementsPlugin.createMeasurement({
+        id: "angleMeasurement2",
+        origin: {
+            worldPos: [0, 1, -1]
+        },
+        corner: {
+            worldPos: [0, 1, 1]
+        },
+        target: {
+            worldPos: [2, -1, -1]
+        },
+        visible: true
+    });
+
+    angleMeasurement2.labelStringFormat = (angle) => {
+        return ` ${(angle * 0.0174532925).toFixed(2)}rad`;
+    };
+</script>
+
+</html>

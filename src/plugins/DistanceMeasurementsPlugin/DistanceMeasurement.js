@@ -72,6 +72,13 @@ class DistanceMeasurement extends Component {
         this._axesBasis = math.identityMat4();
         this.approximate = cfg.approximate;
 
+        this._labelStringFormat = (len) => {
+            const metrics = this.plugin.viewer.scene.metrics;
+            const scale = metrics.scale;
+            const unit = metrics.unitsInfo[metrics.units].abbrev;
+
+            return (this.approximate ? " ~ " : " = ") + (len * scale).toFixed(2) + unit;
+        };
 
         const canvas = scene.canvas.canvas;
 
@@ -209,24 +216,24 @@ class DistanceMeasurement extends Component {
                     label.setPosOnWire(p0, p1, offsetIdx * 35, 0);
                 }
             };
-            const unitStr = len => (this._approximate ? " ~ " : " = ") + len.toFixed(2) + unit;
 
             this._xAxisWire.setEnds(p0, xEnd);
             setAxisLabelCoords(this._xAxisLabel, p0, xEnd, 1);
-            this._xAxisLabel.setText("X" + unitStr(math.distVec3(p0, xEnd) * scale));
+            this._xAxisLabel.setText("X" + this._labelStringFormat(math.distVec3(p0, xEnd)));
 
             this._yAxisWire.setEnds(xEnd, zStart);
             setAxisLabelCoords(this._yAxisLabel, xEnd, zStart, 2);
-            this._yAxisLabel.setText("Y" + unitStr(math.distVec3(xEnd, zStart) * scale));
+            this._yAxisLabel.setText("Y" + this._labelStringFormat(math.distVec3(xEnd, zStart)));
 
             this._zAxisWire.setEnds(zStart, p1);
             setAxisLabelCoords(this._zAxisLabel, zStart, p1, 3);
-            this._zAxisLabel.setText((measurementOrientationVertical ? "" : "Z") + unitStr(math.distVec3(zStart, p1) * scale));
+            this._zAxisLabel.setText((measurementOrientationVertical ? "" : "Z") + this._labelStringFormat(math.distVec3(zStart, p1)));
 
             this._lengthWire.setEnds(p0, p1);
             setAxisLabelCoords(this._lengthLabel, p0, p1, 0);
-            this._length = math.distVec3(p0, p1) * scale;
-            this._lengthLabel.setText(unitStr(this._length));
+            const length = math.distVec3(p0, p1);
+            this._length = length * scale;
+            this._lengthLabel.setText(this._labelStringFormat(length));
         };
 
         if (measurementOrientationVertical) {
@@ -677,6 +684,25 @@ class DistanceMeasurement extends Component {
      */
     get clickable() {
         return this._clickable.get();
+    }
+
+    /**
+     * Sets the function to format unit strings.
+     *
+     * @type {Function}
+     */
+    set labelStringFormat(value) {
+        this._labelStringFormat = value;
+        this._update();
+    }
+
+    /**
+     * Gets the function to format unit strings.
+     *
+     * @type {Function}
+     */
+    get labelStringFormat() {
+        return this._labelStringFormat;
     }
 
     /**
