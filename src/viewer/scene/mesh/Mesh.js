@@ -8,16 +8,19 @@ import {math} from '../math/math.js';
 import {createRTCViewMat} from '../math/rtcCoords.js';
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
-import {DrawRenderer} from "./draw/DrawRenderer.js";
-import {EmphasisFillRenderer} from "./emphasis/EmphasisFillRenderer.js";
-import {EmphasisEdgesRenderer} from "./emphasis/EmphasisEdgesRenderer.js";
-import {PickMeshRenderer} from "./pick/PickMeshRenderer.js";
-import {PickTriangleRenderer} from "./pick/PickTriangleRenderer.js";
-import {OcclusionRenderer} from "./occlusion/OcclusionRenderer.js";
-import {ShadowRenderer} from "./shadow/ShadowRenderer.js";
+import {createProgramVariablesState} from '../webgl/WebGLRenderer.js';
+import {DrawShaderSource} from "./draw/DrawShaderSource.js";
+import {LambertShaderSource} from "./draw/LambertShaderSource.js";
+import {EmphasisShaderSource} from "./emphasis/EmphasisShaderSource.js";
+import {PickMeshShaderSource} from "./pick/PickMeshShaderSource.js";
+import {PickTriangleShaderSource} from "./pick/PickTriangleShaderSource.js";
+import {OcclusionShaderSource} from "./occlusion/OcclusionShaderSource.js";
+import {ShadowShaderSource} from "./shadow/ShadowShaderSource.js";
 
 import {geometryCompressionUtils} from '../math/geometryCompressionUtils.js';
 import {RenderFlags} from "../webgl/RenderFlags.js";
+import {stats} from '../stats.js';
+import {Map} from "../utils/Map.js";
 
 const obb = math.OBB3();
 const angleAxis = math.vec4();
@@ -31,6 +34,9 @@ const veca = math.vec3(3);
 const vecb = math.vec3(3);
 
 const identityMat = math.identityMat4();
+
+const ids = new Map({});
+const renderersCache = { };
 
 /**
  * @desc An {@link Entity} that is a drawable element, with a {@link Geometry} and a {@link Material}, that can be
@@ -176,7 +182,7 @@ const identityMat = math.identityMat4();
  * @implements {Entity}
  * @implements {Drawable}
  */
-class Mesh extends Component {
+export class Mesh extends Component {
 
     /**
      * @constructor
@@ -257,23 +263,120 @@ class Mesh extends Component {
             colorize: null,
             pickID: this.scene._renderer.getPickID(this),
             drawHash: "",
-            pickHash: "",
+            pickOcclusionHash: "",
             offset: math.vec3(),
             origin: null,
             originHash: null,
             isUI: cfg.isUI
         });
 
-        this._drawRenderer = null;
-        this._shadowRenderer = null;
-        this._emphasisFillRenderer = null;
-        this._emphasisEdgesRenderer = null;
-        this._pickMeshRenderer = null;
-        this._pickTriangleRenderer = null;
-        this._occlusionRenderer = null;
+        const material = cfg.material ? this._checkComponent2(["PhongMaterial", "MetallicMaterial", "SpecularMaterial", "LambertMaterial"], cfg.material) : this.scene.material;
+
+        const mesh = this;
+
+        const wrapRenderer = (getProgramSetup) => {
+            let instance = null;
+            const ensureInstance = () => {
+                if (! instance) {
+                    const programVariablesState = createProgramVariablesState();
+                    const createAttribute = programVariablesState.programVariables.createAttribute;
+                    const geometryState = mesh._geometry._state;
+                    const attributes = {
+                        position:  createAttribute("vec3", "position"),
+                        color:     geometryState.colorsBuf && createAttribute("vec4", "color"),
+                        pickColor: createAttribute("vec4", "pickColor"),
+                        uv:        geometryState.uvBuf && createAttribute("vec2", "uv"),
+                        normal:    (geometryState.autoVertexNormals || geometryState.normalsBuf) && [ "triangles", "triangle-strip", "triangle-fan" ].includes(geometryState.primitiveName) && createAttribute("vec3", "normal")
+                    };
+
+                    const lazyShaderVariable = function(name) {
+                        const variable = {
+                            toString: () => {
+                                variable.needed = true;
+                                return name;
+                            }
+                        };
+                        return variable;
+                    };
+                    const worldNormal = attributes.normal && lazyShaderVariable("worldNormal");
+                    const viewNormal  = worldNormal && lazyShaderVariable("viewNormal");
+                    const decodedUv = attributes.uv && lazyShaderVariable("decodedUv");
+
+                    const programSetup = getProgramSetup(
+                        programVariablesState.programVariables,
+                        {
+                            attributes: {
+                                position:  {
+                                    world: "worldPosition",
+                                    view:  "viewPosition"
+                                },
+                                color:     attributes.color,
+                                pickColor: attributes.pickColor,
+                                uv:        decodedUv,
+                                normal:    attributes.normal && {
+                                    world: worldNormal,
+                                    view:  viewNormal
+                                }
+                            },
+                            viewMatrix: "viewMatrix2"
+                        });
+                    const hash = [
+                        programSetup.programName,
+                        mesh.scene.canvas.canvas.id,
+                        mesh.scene._sectionPlanesState.getHash(),
+                        mesh._geometry._state.hash
+                    ].concat(programSetup.getHash()).join(";");
+                    if (! (hash in renderersCache)) {
+                        const renderer = instantiateMeshRenderer(mesh, attributes, { decodedUv: decodedUv, worldNormal: worldNormal, viewNormal: viewNormal }, programSetup, programVariablesState);
+                        if (renderer.errors) {
+                            console.log(renderer.errors.join("\n"));
+                            return;
+                        }
+                        const id = ids.addItem({});
+                        renderersCache[hash] = {
+                            drawMesh: renderer.drawMesh,
+                            id: id,
+                            useCount: 0,
+                            delete: () => {
+                                ids.removeItem(id);
+                                renderer.destroy();
+                                delete renderersCache[hash];
+                                stats.memory.programs--;
+                            }
+                        };
+                        stats.memory.programs++;
+                    }
+                    instance = renderersCache[hash];
+                    instance.useCount++;
+                }
+            };
+            return {
+                get:      ensureInstance,
+                getId:    () => instance.id,
+                put:      () => { if (instance) { if (--instance.useCount === 0) { instance.delete(); } instance = null; } },
+                drawMesh: (frameCtx, mesh, material) => {
+                    ensureInstance();
+                    instance && instance.drawMesh(frameCtx, mesh, material);
+                }
+            };
+        };
+
+        const scene = mesh.scene;
+        const emphasisShaderSourceMaker = isFill => (vars, geo) => EmphasisShaderSource(mesh._state.hash, vars, geo, scene, isFill);
+        this._renderers = {
+            _drawRenderer:          wrapRenderer((vars, geo) => ((material.type === "LambertMaterial")
+                                                                 ? LambertShaderSource(mesh._state.drawHash, vars, geo, material, scene)
+                                                                 : DrawShaderSource   (mesh._state.drawHash, vars, geo, material, scene))),
+            _shadowRenderer:        wrapRenderer((vars) => ShadowShaderSource(mesh._state.hash, vars)),
+            _emphasisEdgesRenderer: wrapRenderer(emphasisShaderSourceMaker(false)),
+            _emphasisFillRenderer:  wrapRenderer(emphasisShaderSourceMaker(true)),
+            _pickMeshRenderer:      wrapRenderer((vars) => PickMeshShaderSource(mesh._state.hash, vars)),
+            _pickTriangleRenderer:  wrapRenderer((vars, geo) => PickTriangleShaderSource(mesh._state.hash, vars, geo)),
+            _occlusionRenderer:     wrapRenderer((vars) => OcclusionShaderSource(mesh._state.pickOcclusionHash, vars))
+        };
 
         this._geometry = cfg.geometry ? this._checkComponent2(["ReadableGeometry", "VBOGeometry"], cfg.geometry) : this.scene.geometry;
-        this._material = cfg.material ? this._checkComponent2(["PhongMaterial", "MetallicMaterial", "SpecularMaterial", "LambertMaterial"], cfg.material) : this.scene.material;
+        this._material = material;
         this._xrayMaterial = cfg.xrayMaterial ? this._checkComponent("EmphasisMaterial", cfg.xrayMaterial) : this.scene.xrayMaterial;
         this._highlightMaterial = cfg.highlightMaterial ? this._checkComponent("EmphasisMaterial", cfg.highlightMaterial) : this.scene.highlightMaterial;
         this._selectedMaterial = cfg.selectedMaterial ? this._checkComponent("EmphasisMaterial", cfg.selectedMaterial) : this.scene.selectedMaterial;
@@ -1298,27 +1401,49 @@ class Mesh extends Component {
      * @private
      */
     compile() {
-        const drawHash = this._makeDrawHash();
+        const scene = this.scene;
+        const state = this._state;
+        const hash = [
+            scene.canvas.canvas.id,
+            scene._sectionPlanesState.getHash()
+        ];
+        if (state.stationary) {
+            hash.push("/s");
+        }
+        if (state.billboard === "none") {
+            hash.push("/n");
+        } else if (state.billboard === "spherical") {
+            hash.push("/s");
+        } else if (state.billboard === "cylindrical") {
+            hash.push("/c");
+        }
+        hash.push(";");
+
+        const drawHash = hash.concat([
+            scene.gammaOutput ? "go" : "",
+            scene._lightsState.getHash(),
+            state.receivesShadow ? "/rs" : ""
+        ]).join("");
         if (this._state.drawHash !== drawHash) {
             this._state.drawHash = drawHash;
-            this._putDrawRenderers();
-            this._drawRenderer = DrawRenderer.get(this);
-            // this._shadowRenderer = ShadowRenderer.get(this);
-            this._emphasisFillRenderer = EmphasisFillRenderer.get(this);
-            this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this);
+            this._renderers._drawRenderer.put();
+            this._renderers._shadowRenderer.put();
+            this._renderers._emphasisFillRenderer.put();
+            this._renderers._emphasisEdgesRenderer.put();
+            this._renderers._drawRenderer.get();
+            // this._renderers._shadowRenderer.get();
+            this._renderers._emphasisFillRenderer.get();
+            this._renderers._emphasisEdgesRenderer.get();
         }
-        const pickHash = this._makePickHash();
-        if (this._state.pickHash !== pickHash) {
-            this._state.pickHash = pickHash;
-            this._putPickRenderers();
-            this._pickMeshRenderer = PickMeshRenderer.get(this);
-        }
-        if (this._state.occluder) {
-            const occlusionHash = this._makeOcclusionHash();
-            if (this._state.occlusionHash !== occlusionHash) {
-                this._state.occlusionHash = occlusionHash;
-                this._putOcclusionRenderer();
-                this._occlusionRenderer = OcclusionRenderer.get(this);
+        const pickOcclusionHash = hash.join("");
+        if (this._state.pickOcclusionHash !== pickOcclusionHash) {
+            this._state.pickOcclusionHash = pickOcclusionHash;
+            this._renderers._pickMeshRenderer.put();
+            this._renderers._pickTriangleRenderer.put();
+            this._renderers._pickMeshRenderer.get();
+            if (this._state.occluder) {
+                this._renderers._occlusionRenderer.put();
+                this._renderers._occlusionRenderer.get();
             }
         }
     }
@@ -1373,98 +1498,6 @@ class Mesh extends Component {
         }
         this._buildAABB(this.worldMatrix, this._aabb); // Mesh or VBOSceneModel
         this._aabbDirty = false;
-    }
-
-    _webglContextRestored() {
-        if (this._drawRenderer) {
-            this._drawRenderer.webglContextRestored();
-        }
-        if (this._shadowRenderer) {
-            this._shadowRenderer.webglContextRestored();
-        }
-        if (this._emphasisFillRenderer) {
-            this._emphasisFillRenderer.webglContextRestored();
-        }
-        if (this._emphasisEdgesRenderer) {
-            this._emphasisEdgesRenderer.webglContextRestored();
-        }
-        if (this._pickMeshRenderer) {
-            this._pickMeshRenderer.webglContextRestored();
-        }
-        if (this._pickTriangleRenderer) {
-            this._pickMeshRenderer.webglContextRestored();
-        }
-        if (this._occlusionRenderer) {
-            this._occlusionRenderer.webglContextRestored();
-        }
-    }
-
-    _makeDrawHash() {
-        const scene = this.scene;
-        const hash = [
-            scene.canvas.canvas.id,
-            (scene.gammaInput ? "gi;" : ";") + (scene.gammaOutput ? "go" : ""),
-            scene._lightsState.getHash(),
-            scene._sectionPlanesState.getHash()
-        ];
-        const state = this._state;
-        if (state.stationary) {
-            hash.push("/s");
-        }
-        if (state.billboard === "none") {
-            hash.push("/n");
-        } else if (state.billboard === "spherical") {
-            hash.push("/s");
-        } else if (state.billboard === "cylindrical") {
-            hash.push("/c");
-        }
-        if (state.receivesShadow) {
-            hash.push("/rs");
-        }
-        hash.push(";");
-        return hash.join("");
-    }
-
-    _makePickHash() {
-        const scene = this.scene;
-        const hash = [
-            scene.canvas.canvas.id,
-            scene._sectionPlanesState.getHash()
-        ];
-        const state = this._state;
-        if (state.stationary) {
-            hash.push("/s");
-        }
-        if (state.billboard === "none") {
-            hash.push("/n");
-        } else if (state.billboard === "spherical") {
-            hash.push("/s");
-        } else if (state.billboard === "cylindrical") {
-            hash.push("/c");
-        }
-        hash.push(";");
-        return hash.join("");
-    }
-
-    _makeOcclusionHash() {
-        const scene = this.scene;
-        const hash = [
-            scene.canvas.canvas.id,
-            scene._sectionPlanesState.getHash()
-        ];
-        const state = this._state;
-        if (state.stationary) {
-            hash.push("/s");
-        }
-        if (state.billboard === "none") {
-            hash.push("/n");
-        } else if (state.billboard === "spherical") {
-            hash.push("/s");
-        } else if (state.billboard === "cylindrical") {
-            hash.push("/c");
-        }
-        hash.push(";");
-        return hash.join("");
     }
 
     _buildAABB(worldMatrix, aabb) {
@@ -1603,43 +1636,6 @@ class Mesh extends Component {
         return this.translate(zAxis, distance);
     }
 
-    _putDrawRenderers() {
-        if (this._drawRenderer) {
-            this._drawRenderer.put();
-            this._drawRenderer = null;
-        }
-        if (this._shadowRenderer) {
-            this._shadowRenderer.put();
-            this._shadowRenderer = null;
-        }
-        if (this._emphasisFillRenderer) {
-            this._emphasisFillRenderer.put();
-            this._emphasisFillRenderer = null;
-        }
-        if (this._emphasisEdgesRenderer) {
-            this._emphasisEdgesRenderer.put();
-            this._emphasisEdgesRenderer = null;
-        }
-    }
-
-    _putPickRenderers() {
-        if (this._pickMeshRenderer) {
-            this._pickMeshRenderer.put();
-            this._pickMeshRenderer = null;
-        }
-        if (this._pickTriangleRenderer) {
-            this._pickTriangleRenderer.put();
-            this._pickTriangleRenderer = null;
-        }
-    }
-
-    _putOcclusionRenderer() {
-        if (this._occlusionRenderer) {
-            this._occlusionRenderer.put();
-            this._occlusionRenderer = null;
-        }
-    }
-
     /**
      * Comparison function used by the renderer to determine the order in which xeokit should render the Mesh, relative to to other Meshes.
      *
@@ -1653,7 +1649,7 @@ class Mesh extends Component {
      */
     stateSortCompare(mesh1, mesh2) {
         return (mesh1._state.layer - mesh2._state.layer)
-            || (mesh1._drawRenderer.id - mesh2._drawRenderer.id) // Program state
+            || (mesh1._renderers._drawRenderer.getId() - mesh2._renderers._drawRenderer.getId()) // Program state
             || (mesh1._material._state.id - mesh2._material._state.id) // Material state
             || (mesh1._geometry._state.id - mesh2._geometry._state.id); // Geometry state
     }
@@ -1791,16 +1787,12 @@ class Mesh extends Component {
 
     /** @private  */
     drawColorOpaque(frameCtx) {
-        if (this._drawRenderer || (this._drawRenderer = DrawRenderer.get(this))) {
-            this._drawRenderer.drawMesh(frameCtx, this);
-        }
+        this._renderers._drawRenderer.drawMesh(frameCtx, this, this._material);
     }
 
     /** @private  */
     drawColorTransparent(frameCtx) {
-        if (this._drawRenderer || (this._drawRenderer = DrawRenderer.get(this))) {
-            this._drawRenderer.drawMesh(frameCtx, this);
-        }
+        this._renderers._drawRenderer.drawMesh(frameCtx, this, this._material);
     }
 
     // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
@@ -1811,87 +1803,65 @@ class Mesh extends Component {
 
     /** @private  */
     drawSilhouetteXRayed(frameCtx) {
-        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
-            this._emphasisFillRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
-        }
+        this._renderers._emphasisFillRenderer.drawMesh(frameCtx, this, this._xrayMaterial);
     }
 
     /** @private  */
     drawSilhouetteHighlighted(frameCtx) {
-        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
-            this._emphasisFillRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
-        }
+        this._renderers._emphasisFillRenderer.drawMesh(frameCtx, this, this._highlightMaterial);
     }
 
     /** @private  */
     drawSilhouetteSelected(frameCtx) {
-        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
-            this._emphasisFillRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
-        }
+        this._renderers._emphasisFillRenderer.drawMesh(frameCtx, this, this._selectedMaterial);
     }
 
     // ---------------------- EDGES RENDERING -----------------------------------
 
     /** @private  */
     drawEdgesColorOpaque(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 3); // 3 == edges
-        }
+        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, this._edgeMaterial);
     }
 
     /** @private  */
     drawEdgesColorTransparent(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 3); // 3 == edges
-        }
+        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, this._edgeMaterial);
     }
 
     /** @private  */
     drawEdgesXRayed(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
-        }
+        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, this._xrayMaterial);
     }
 
     /** @private  */
     drawEdgesHighlighted(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
-        }
+        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, this._highlightMaterial);
     }
 
     /** @private  */
     drawEdgesSelected(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
-        }
+        this._renderers._emphasisEdgesRenderer.drawMesh(frameCtx, this, this._selectedMaterial);
     }
 
     // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
 
     /** @private  */
     drawOcclusion(frameCtx) {
-        if (this._state.occluder && this._occlusionRenderer || (this._occlusionRenderer = OcclusionRenderer.get(this))) {
-            this._occlusionRenderer.drawMesh(frameCtx, this);
-        }
+        this._renderers._occlusionRenderer.drawMesh(frameCtx, this, this._material);
     }
 
     // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
 
     /** @private  */
     drawShadow(frameCtx) {
-        if (this._shadowRenderer || (this._shadowRenderer = ShadowRenderer.get(this))) {
-            this._shadowRenderer.drawMesh(frameCtx, this);
-        }
+        this._renderers._shadowRenderer.drawMesh(frameCtx, this, this._material);
     }
 
     // ---------------------- PICKING RENDERING ----------------------------------
 
     /** @private  */
     drawPickMesh(frameCtx) {
-        if (this._pickMeshRenderer || (this._pickMeshRenderer = PickMeshRenderer.get(this))) {
-            this._pickMeshRenderer.drawMesh(frameCtx, this);
-        }
+        this._renderers._pickMeshRenderer.drawMesh(frameCtx, this, this._material);
     }
 
     /** @private
@@ -1902,9 +1872,7 @@ class Mesh extends Component {
 
     /** @private  */
     drawPickTriangles(frameCtx) {
-        if (this._pickTriangleRenderer || (this._pickTriangleRenderer = PickTriangleRenderer.get(this))) {
-            this._pickTriangleRenderer.drawMesh(frameCtx, this);
-        }
+        this._renderers._pickTriangleRenderer.drawMesh(frameCtx, this, this._material);
     }
 
     /** @private */
@@ -1934,9 +1902,8 @@ class Mesh extends Component {
      */
     destroy() {
         super.destroy(); // xeokit.Object
-        this._putDrawRenderers();
-        this._putPickRenderers();
-        this._putOcclusionRenderer();
+        Object.values(this._renderers).forEach(r => r.put());
+
         this.scene._renderer.putPickID(this._state.pickID); // TODO: somehow puch this down into xeokit framework?
         if (this._isObject) {
             this.scene._deregisterObject(this);
@@ -2214,4 +2181,279 @@ const pickTriangleSurface = (function () {
     }
 })();
 
-export {Mesh};
+const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, programVariablesState) => {
+    const programVariables = programVariablesState.programVariables;
+    const decodedUv   = auxVariables.decodedUv;
+    const worldNormal = auxVariables.worldNormal;
+    const viewNormal  = auxVariables.viewNormal;
+    const scene = mesh.scene;
+    const gl = scene.canvas.gl;
+    const meshStateBackground = mesh._state.background;
+    const geometryState = mesh._geometry._state;
+    const quantizedGeometry = geometryState.compressGeometry;
+    const isPoints = geometryState.primitiveName === "points";
+
+    const pointSize             = programVariables.createUniform("float", "pointSize");
+    const modelMatrix           = programVariables.createUniform("mat4",  "modelMatrix");
+    const modelNormalMatrix     = programVariables.createUniform("mat4",  "modelNormalMatrix");
+    const offset                = programVariables.createUniform("vec3",  "offset");
+    const scale                 = programVariables.createUniform("vec3",  "scale");
+    const positionsDecodeMatrix = programVariables.createUniform("mat4",  "positionsDecodeMatrix");
+    const uvDecodeMatrix        = programVariables.createUniform("mat3",  "uvDecodeMatrix");
+    const viewMatrix            = programVariables.createUniform("mat4",  "viewMatrix");
+    const viewNormalMatrix      = programVariables.createUniform("mat4",  "viewNormalMatrix");
+    const projMatrix            = programVariables.createUniform("mat4",  "projMatrix");
+
+    const billboard = mesh.billboard;
+    const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
+    const stationary = mesh.stationary;
+    const defineBillboard = isBillboard && ((name, src) => [
+        `mat4 ${name}(in mat4 matIn) {`,
+        "   mat4 mat = matIn;",
+        `   mat[0].xyz = vec3(${scale}[0], 0.0, 0.0);`,
+        ...((billboard === "spherical") ? [ `   mat[1].xyz = vec3(0.0, ${scale}[1], 0.0);` ] : [ ]),
+        "   mat[2].xyz = vec3(0.0, 0.0, 1.0);",
+        "   return mat;",
+        "}",
+    ].forEach(l => src.push(l)));
+
+    const billboardIfApplicable = (function() {
+        const billboardVert = defineBillboard && programVariables.createVertexDefinition("billboard", defineBillboard);
+        return v => billboardVert ? `${billboardVert}(${v})` : v;
+    })();
+
+    const billboardIfApplicableFrag = (function() {
+        const billboardFrag = defineBillboard && programVariables.createFragmentDefinition("billboard", defineBillboard);
+        return v => billboardFrag ? `${billboardFrag}(${v})` : v;
+    })();
+
+    const fragmentOutputsSetup = [ ];
+    if (programSetup.dontBillboardAnything) {
+        fragmentOutputsSetup.push(`mat4 viewMatrix2 = ${viewMatrix};`);
+    } else {
+        fragmentOutputsSetup.push(`mat4 viewMatrix1 = ${viewMatrix};`);
+        if (stationary) {
+            fragmentOutputsSetup.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
+        } else if (meshStateBackground) {
+            fragmentOutputsSetup.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
+        }
+        fragmentOutputsSetup.push(`mat4 viewMatrix2 = ${billboardIfApplicableFrag("viewMatrix1")};`);
+    }
+
+    const clipPos = "clipPos";
+    const getVertexData = function() {
+        const viewNormalDefinition = viewNormal && viewNormal.needed && `vec3 ${viewNormal} = normalize((${billboardIfApplicable(viewNormalMatrix)} * vec4(${worldNormal}, 0.0)).xyz);`;
+        const src = [ ];
+        src.push(`vec4 localPosition = vec4(${attributes.position}, 1.0);`);
+        if (quantizedGeometry) {
+            src.push(`localPosition = ${positionsDecodeMatrix} * localPosition;`);
+        }
+        src.push(`vec4 worldPosition = ${billboardIfApplicable(modelMatrix)} * localPosition;`);
+        src.push(`worldPosition.xyz = worldPosition.xyz + ${offset};`);
+        if (programSetup.dontBillboardAnything) {
+            src.push(`vec4 viewPosition = ${viewMatrix} * worldPosition;`);
+        } else {
+            src.push(`mat4 viewMatrix1 = ${viewMatrix};`);
+            if (stationary) {
+                src.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
+            } else if (meshStateBackground) {
+                src.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
+            }
+            src.push(`mat4 viewMatrix2 = ${billboardIfApplicable("viewMatrix1")};`);
+            src.push(`vec4 viewPosition = ${(isBillboard
+                                                 ? `${billboardIfApplicable(`viewMatrix1 * ${modelMatrix}`)} * localPosition`
+                                                 : "viewMatrix2 * worldPosition")};`);
+        }
+        decodedUv && decodedUv.needed && src.push(`vec2 ${decodedUv} = ${quantizedGeometry ? `(${uvDecodeMatrix} * vec3(${attributes.uv}, 1.0)).xy` : attributes.uv};`);
+        if (worldNormal && worldNormal.needed) {
+            const localNormal = quantizedGeometry ? `${programVariables.commonLibrary.octDecode}(${attributes.normal}.xy)` : attributes.normal;
+            src.push(`vec3 ${worldNormal} = (${billboardIfApplicable(modelNormalMatrix)} * vec4(${localNormal}, 0.0)).xyz;`);
+        }
+        viewNormalDefinition && src.push(viewNormalDefinition);
+        src.push(`vec4 ${clipPos} = ${projMatrix} * viewPosition;`);
+        return src;
+    };
+
+    const clippable = programVariables.createUniform("bool", "clippable");
+
+    const [ program, errors ] = programVariablesState.buildProgram(
+        gl,
+        programSetup.programName,
+        {
+            appendFragmentOutputs:          (src, getGammaOutputExpression, gl_FragCoord, sliceColorOr) => {
+                fragmentOutputsSetup.forEach(line => src.push(line));
+                programSetup.appendFragmentOutputs(src, getGammaOutputExpression, gl_FragCoord, sliceColorOr);
+            },
+            clippableTest:                  () => clippable,
+            clippingCaps:                   programSetup.clippingCaps,
+            clipPos:                        meshStateBackground ? `${clipPos}.xyww` : clipPos,
+            crossSections:                  scene.crossSections,
+            discardPoints:                  isPoints && programSetup.discardPoints,
+            getGammaFactor:                 scene.gammaOutput && (() => scene.gammaFactor),
+            getLogDepth:                    (! programSetup.dontGetLogDepth) && scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
+            getPointSize:                   programSetup.setupPointSize && isPoints && (() => pointSize),
+            getVertexData:                  getVertexData,
+            projMatrix:                     projMatrix,
+            sectionPlanesState:             scene._sectionPlanesState,
+            testPerspectiveForGl_FragDepth: true,
+            usePickClipPos:                 programSetup.isPick,
+            worldPositionAttribute:         "worldPosition"
+        });
+
+    if (errors) {
+        return { errors: errors };
+    } else {
+        const inputSetters = program.inputSetters;
+
+        let lastMaterialId = null;
+        let lastGeometryId = null;
+
+        return {
+            destroy: () => program.destroy(),
+            drawMesh: (frameCtx, mesh, material) => {
+                if (programSetup.skipIfTransparent && (material.alpha < 1.0)) {
+                    return;
+                }
+
+                const materialState = material._state;
+                const meshState = mesh._state;
+                const geometry = mesh._geometry;
+                const geometryState = geometry._state;
+                const viewParams = frameCtx.viewParams;
+                const actsAsBackground = programSetup.canActAsBackground && meshStateBackground;
+
+                if (frameCtx.lastProgramId !== program.id) {
+                    frameCtx.lastProgramId = program.id;
+                    program.bind();
+                    frameCtx.useProgram++;
+                    lastMaterialId = null;
+                    lastGeometryId = null;
+                    if (actsAsBackground) {
+                        gl.depthFunc(gl.LEQUAL);
+                    }
+                }
+
+                if (materialState.id !== lastMaterialId) {
+                    if (frameCtx.backfaces !== materialState.backfaces) {
+                        if (materialState.backfaces) {
+                            gl.disable(gl.CULL_FACE);
+                        } else {
+                            gl.enable(gl.CULL_FACE);
+                        }
+                        frameCtx.backfaces = materialState.backfaces;
+                    }
+
+                    if ((! programSetup.dontSetFrontFace) && (frameCtx.frontface !== materialState.frontface)) {
+                        gl.frontFace(materialState.frontface ? gl.CCW : gl.CW);
+                        frameCtx.frontface = materialState.frontface;
+                    }
+
+                    if (programSetup.drawEdges && (frameCtx.lineWidth !== materialState.edgeWidth)) {
+                        gl.lineWidth(materialState.edgeWidth);
+                        frameCtx.lineWidth = materialState.edgeWidth;
+                    }
+
+                    if (programSetup.setsLineWidth && (frameCtx.lineWidth !== materialState.lineWidth)) {
+                        gl.lineWidth(materialState.lineWidth);
+                        frameCtx.lineWidth = materialState.lineWidth;
+                    }
+
+                    lastMaterialId = materialState.id;
+                }
+
+                const setUniforms = (projMat, viewMat) => {
+                    const setUni = (u, v) => (u.setInputValue && u.setInputValue(v));
+                    setUni(pointSize,             material.pointSize);
+                    setUni(modelMatrix,           mesh.worldMatrix);
+                    setUni(modelNormalMatrix,     mesh.worldNormalMatrix);
+                    setUni(offset,                mesh.offset);
+                    setUni(scale,                 mesh.scale);
+                    setUni(positionsDecodeMatrix, geometryState.positionsDecodeMatrix);
+                    setUni(uvDecodeMatrix,        geometryState.uvDecodeMatrix);
+                    setUni(viewMatrix,            viewMat);
+                    setUni(viewNormalMatrix,      viewParams.viewNormalMatrix);
+                    setUni(projMatrix,            projMat);
+                    setUni(clippable,             mesh.clippable);
+
+                    inputSetters.setUniforms(frameCtx, {
+                        material:     material,
+                        meshColorize: mesh.colorize,
+                        meshPickID:   mesh._state.pickID,
+                        mesh:         {
+                            origin:      mesh.origin,
+                            renderFlags: { sectionPlanesActivePerLayer: mesh.renderFlags.sectionPlanesActivePerLayer }
+                        },
+                        view:         { far: viewParams.far }
+                    });
+                };
+
+                const origin = (! programSetup.useShadowView) && mesh.origin;
+                setUniforms(viewParams.projMatrix, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : viewParams.viewMatrix);
+
+                const setAttributes = (triangleGeometry) => {
+                    const setAttr = (a, b) => {
+                        if (a && a.setInputValue && b) {
+                            a.setInputValue(b);
+                            frameCtx.bindArray++;
+                        }
+                    };
+                    setAttr(attributes.position,  (triangleGeometry || geometryState).positionsBuf);
+                    setAttr(attributes.color,     geometryState.colorsBuf);
+                    setAttr(attributes.pickColor, triangleGeometry && triangleGeometry.pickColorsBuf);
+                    setAttr(attributes.uv,        geometryState.uvBuf);
+                    setAttr(attributes.normal,    geometryState.normalsBuf);
+                };
+
+                if (programSetup.trianglePick) {
+                    const positionsBuf = geometry._getPickTrianglePositions();
+                    if (geometryState.id !== lastGeometryId) {
+                        setAttributes({ positionsBuf: positionsBuf, pickColorsBuf: geometry._getPickTriangleColors() });
+                        lastGeometryId = geometryState.id;
+                    }
+
+                    gl.drawArrays(geometryState.primitive, 0, positionsBuf.numItems / 3);
+                } else if (programSetup.drawEdges) {
+                    const indicesBuf = ((geometryState.primitive === gl.TRIANGLES)
+                                        ? geometry._getEdgeIndices()
+                                        : ((geometryState.primitive === gl.LINES) && geometryState.indicesBuf));
+
+                    if (indicesBuf) {
+                        if (geometryState.id !== lastGeometryId) {
+                            setAttributes();
+
+                            indicesBuf.bind();
+                            frameCtx.bindArray++;
+                            lastGeometryId = geometryState.id;
+                        }
+
+                        gl.drawElements(gl.LINES, indicesBuf.numItems, indicesBuf.itemType, 0);
+
+                        frameCtx.drawElements++;
+                    }
+                } else {
+                    if (geometryState.id !== lastGeometryId) {
+                        setAttributes();
+
+                        if (geometryState.indicesBuf) {
+                            geometryState.indicesBuf.bind();
+                            frameCtx.bindArray++;
+                        }
+                        lastGeometryId = geometryState.id;
+                    }
+
+                    if (geometryState.indicesBuf) {
+                        gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
+                        frameCtx.drawElements++;
+                    } else if (geometryState.positionsBuf) {
+                        gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
+                        frameCtx.drawArrays++;
+                    }
+                }
+
+                if (actsAsBackground) {
+                    gl.depthFunc(gl.LESS);
+                }
+            }
+        };
+    }
+};
