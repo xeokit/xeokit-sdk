@@ -1,0 +1,393 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* NavCubePlugin */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* TreeViewPlugin */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        #treeViewContainer {
+            pointer-events: all;
+            height: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: black;
+            top: 80px;
+            z-index: 200000;
+            float: left;
+            left: 0;
+            padding-left: 10px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            width: 350px;
+        }
+
+        #treeViewContainer ul {
+            list-style: none;
+            padding-left: 1.75em;
+            pointer-events: none;
+        }
+
+        #treeViewContainer ul li {
+            position: relative;
+            width: 500px;
+            pointer-events: none;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            vertical-align: middle;
+        }
+
+        #treeViewContainer ul li a {
+            background-color: #eee;
+            border-radius: 50%;
+            color: #000;
+            display: inline-block;
+            height: 1.5em;
+            left: -1.5em;
+            position: absolute;
+            text-align: center;
+            text-decoration: none;
+            width: 1.5em;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li a.plus {
+            background-color: #ded;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li a.minus {
+            background-color: #eee;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li a:active {
+            top: 1px;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li span:hover {
+            color: white;
+            cursor: pointer;
+            background: black;
+            padding-left: 2px;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li span {
+            display: inline-block;
+            width: calc(100% - 50px);
+            padding-left: 2px;
+            pointer-events: all;
+            height: 23px;
+        }
+
+        #treeViewContainer .highlighted-node {
+            /* Appearance of node highlighted with TreeViewPlugin#showNode() */
+            border: black solid 1px;
+            background: yellow;
+            color: black;
+            padding-left: 1px;
+            padding-right: 5px;
+            pointer-events: all;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="checkbox" id="info-button" />
+    <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+    <canvas id="myCanvas"></canvas>
+    <canvas id="myNavCubeCanvas"></canvas>
+    <div id="treeViewContainer"></div>
+    <div class="slideout-sidebar">
+        <img class="info-icon" src="../../assets/images/bim_icon.png" />
+        <h1>IfcOpenShell loader</h1>
+        <h3>Limitations</h3>
+        <p>Loading and parsing huge IFC STEP files can be slow, and can overwhelm the browser, however. To view your
+            largest IFC models, we recommend instead pre-converting those to xeokit's compressed native .XKT format,
+            then
+            loading them with <a
+                href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+                target="_other">XKTLoaderPlugin</a>.</p>
+        <h3>Stats</h3>
+        <ul>
+            <li>
+                <div id="time">Loading JavaScript modules...</div>
+            </li>
+        </ul>
+        <h3>Components used</h3>
+        <ul>
+            <li>
+                <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html" target="_other">Viewer</a>
+            </li>
+            <li>
+                <a href="../../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html"
+                    target="_other">TreeViewPlugin</a>
+            </li>
+            <li>
+                <a href="../../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html"
+                    target="_other">NavCubePlugin</a>
+            </li>
+        </ul>
+        <h3>Assets</h3>
+        <ul>
+            <li>
+                <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274" target="_other">Model source</a>
+            </li>
+        </ul>
+    </div>
+</body>
+
+
+<script type="module">
+
+    import { Viewer, NavCubePlugin, TreeViewPlugin, Plugin, ReadableGeometry, PhongMaterial, Mesh, Node, math, worldToRTCPositions } from "../../dist/xeokit-sdk.min.es.js";
+
+    function generateMesh(scene, obj, cache) {
+        let bundles;
+
+        if (cache.last_mesh_id === obj.geometry_id) {
+            bundles = cache.last_bundles;
+        } else {
+            bundles = [];
+
+            const srcMaterials = obj.materials;
+            const materials = srcMaterials.map(e => new PhongMaterial(scene, {
+                diffuse: e.diffuse,
+                backfaces: true
+            }));
+            const materialOpacities = srcMaterials.map(e => 1.0 - (e.transparency ?? 0));
+
+            const mapping = {};
+            obj.material_ids.forEach((matId, faceIdx) => {
+                (mapping[matId] ||= []).push(faceIdx);
+            });
+
+            const vs = obj.verts;
+            const ns = obj.normals;
+            const es = obj.edges;
+            const fs = obj.faces;
+
+            let offset = 0;
+            if (mapping[-1]) {
+                materials.unshift(new PhongMaterial(scene, { diffuse: [0.6, 0.6, 0.6], backfaces: true }));
+                materialOpacities.unshift(1.0);
+                offset = 1;
+            }
+
+            materials.forEach((mat, mi) => {
+                const faceList = mapping[mi - offset];
+                if (!faceList || faceList.length === 0) return;
+
+                const triIndices = new Uint32Array(faceList.length * 3);
+                let k = 0;
+                for (const f of faceList) {
+                    triIndices[k++] = fs[3 * f + 0];
+                    triIndices[k++] = fs[3 * f + 1];
+                    triIndices[k++] = fs[3 * f + 2];
+                }
+
+                const geom = new ReadableGeometry(scene, {
+                    primitive: "triangles",
+                    positions: vs,
+                    normals: ns,
+                    indices: triIndices
+                });
+
+                bundles.push({
+                    geometry: geom,
+                    material: mat,
+                    kind: "tri",
+                    opacity: materialOpacities[mi]
+                });
+            });
+
+            const edgeGeom = new ReadableGeometry(scene, {
+                primitive: "lines",
+                positions: vs,
+                indices: es
+            });
+            const edgeMat = new PhongMaterial(scene, { emissive: [0, 0, 0], lineWidth: 1 });
+
+            bundles.push({ geometry: edgeGeom, material: edgeMat, kind: "line", opacity: 1.0 });
+
+            cache.last_mesh_id = obj.geometry_id;
+            cache.last_bundles = bundles;
+        }
+
+        const M = obj.transform;
+        const matrix = [
+            M[0][0], M[2][0], -M[1][0], M[3][0],
+            M[0][1], M[2][1], -M[1][1], M[3][1],
+            M[0][2], M[2][2], -M[1][2], M[3][2],
+            M[0][3], M[2][3], -M[1][3], M[3][3]
+        ];
+
+        // Move translation component into offset
+        const origin = math.vec3();
+        const worldOrigin = matrix.slice(12, 15);
+        worldToRTCPositions(worldOrigin, worldOrigin, origin);
+        matrix.splice(12, 3, ...worldOrigin);
+        
+        const parent = new Node(scene, {
+            id: obj.guid || `obj_${obj.geometry_id}`,
+            isObject: true,
+            matrix,
+            origin,
+            children: bundles.map((b, i) => {
+                const mesh = new Mesh(scene, {
+                    id: `${obj.guid || obj.geometry_id}_${b.kind}_${i}`,
+                    isObject: true,
+                    geometry: b.geometry,
+                    material: b.material
+                });
+                mesh.opacity = b.opacity;
+                return mesh;
+            })
+        });
+
+        return parent;
+    }
+
+
+    class IfcOpenShellLoaderPlugin extends Plugin {
+        static _workerReadyPromise = null;
+        static _worker = null;
+
+        constructor(viewer, cfg = {}) {
+            super(cfg.id || "IfcOpenShellLoaderPlugin", viewer, cfg);
+
+            if (!IfcOpenShellLoaderPlugin._workerReadyPromise) {
+                const workerURL = new URL("./ifcopenshell-worker.js", import.meta.url);
+                const worker = new Worker(workerURL.href); // classic worker
+                IfcOpenShellLoaderPlugin._worker = worker;
+
+                IfcOpenShellLoaderPlugin._workerReadyPromise = new Promise((resolve, reject) => {
+                const onMessage = (ev) => {
+                    const data = ev.data;
+                    if (!data) return;
+                    if (data.type === "ready") {
+                    worker.removeEventListener("message", onMessage);
+                    resolve(worker);
+                    } else if (data.type === "error") {
+                    worker.removeEventListener("message", onMessage);
+                    reject(new Error(data.message + "\n" + (data.stack || "")));
+                    }
+                };
+                worker.addEventListener("message", onMessage);
+
+                worker.postMessage({
+                    type: "init",
+                    indexURL: cfg.indexURL || "https://cdn.jsdelivr.net/pyodide/v0.28.0a3/full",
+                    wheelURL:
+                    cfg.wheelURL ||
+                    "../../dist/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl"
+                });
+                });
+            }
+        }
+
+        async load(params = {}) {
+            const {
+                id = "cubeModel",
+            } = params;
+
+            const worker = await IfcOpenShellLoaderPlugin._workerReadyPromise;
+
+            const scene = this.viewer.scene;
+            const model = new Node(scene, {
+                id,
+                isModel: true
+            });
+
+            const cache = {};
+
+            const onMessage = (ev) => {
+                const data = ev.data;
+                if (!data) return;
+
+                if (data.type === "object") {
+                    const node = generateMesh(scene, data.payload, cache);
+                    // Attach new object under the model as it streams in
+                    node.parent = model;
+                    // Hint the renderer
+                    this.viewer.scene.needRender = true;
+                    } else if (data.type === "done") {
+                    worker.removeEventListener("message", onMessage);
+                    this.fire("loaded", { id, model, count: data.count });
+                    } else if (data.type === "error") {
+                    worker.removeEventListener("message", onMessage);
+                    console.error("Worker error:", data.message, data.stack);
+                    this.fire("error", { id, error: data.message });
+                }
+            };
+
+            const src = "../../assets/models/ifc/Duplex.ifc";
+
+            const exclude = ["IfcSpace", "IfcOpeningElement"];
+            const geometryLibrary = "hybrid-cgal-simple-opencascade";
+
+            worker.addEventListener("message", onMessage);
+            worker.postMessage({
+                type: "load",
+                ifcUrl: src,
+                exclude,
+                geometryLibrary
+            });
+
+            return model;
+        }
+    }
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        entityOffsetsEnabled: true
+    });
+
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
+
+    new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
+        visible: true,
+        size: 250,
+        alignment: "bottomRight",
+        bottomMargin: 100,
+        rightMargin: 10
+    });
+
+    const loader = new IfcOpenShellLoaderPlugin(viewer);
+    const sceneModel = loader.load();
+
+</script>
+
+</html>
