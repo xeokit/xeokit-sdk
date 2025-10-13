@@ -1,7 +1,7 @@
 import {utils} from "../../viewer/scene/utils.js";
 
 /**
- * Default data access strategy for {@link DotBIMLoaderPlugin}.
+ * Default data access strategy for {@link IFCOpenShellLoaderPlugin}.
  *
  * This just loads assets using XMLHttpRequest.
  */
