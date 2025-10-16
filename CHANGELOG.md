@@ -1,5 +1,10 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.92](https://github.com/xeokit/xeokit-sdk/compare/v2.6.91...v2.6.92)
+
+### 16 October 2025
+
+XCD-391 Implement labelStringFormat [#1940](https://github.com/xeokit/xeokit-sdk/pull/1967)
 
 # [v2.6.91](https://github.com/xeokit/xeokit-sdk/compare/v2.6.90...v2.6.91)
 
