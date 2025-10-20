@@ -1,5 +1,12 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.93](https://github.com/xeokit/xeokit-sdk/compare/v2.6.92...v2.6.93)
+
+### 20 October 2025
+
+IMPORTANT: Please read the details in the comment at https://github.com/xeokit/xeokit-sdk/pull/1850#issuecomment-3397906988
+Renderers refactor - a large change, but shouldn't require any integration effort in user code, unless it relied on `TrianglesColorTextureRenderer`'s color texture.
+
 # [v2.6.92](https://github.com/xeokit/xeokit-sdk/compare/v2.6.91...v2.6.92)
 
 ### 16 October 2025
