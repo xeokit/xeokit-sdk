@@ -181,7 +181,8 @@ class PointLight extends Light {
 
             getShadowRenderBuf: () => {
                 if (!self._shadowRenderBuf) {
-                    self._shadowRenderBuf = new RenderBuffer(self.scene.canvas.canvas, self.scene.canvas.gl, {size: [1024, 1024]}); // Super old mobile devices have a limit of 1024x1024 textures
+                    self._shadowRenderBuf = new RenderBuffer(self.scene.canvas.gl); // Super old mobile devices have a limit of 1024x1024 textures
+                    self._shadowRenderBuf.setSize([1024, 1024]);
                 }
                 return self._shadowRenderBuf;
             }

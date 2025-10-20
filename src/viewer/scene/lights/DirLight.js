@@ -177,7 +177,8 @@ class DirLight extends Light {
 
             getShadowRenderBuf: () => {
                 if (!this._shadowRenderBuf) {
-                    this._shadowRenderBuf = new RenderBuffer(this.scene.canvas.canvas, this.scene.canvas.gl, {size: [1024, 1024]}); // Super old mobile devices have a limit of 1024x1024 textures
+                    this._shadowRenderBuf = new RenderBuffer(this.scene.canvas.gl); // Super old mobile devices have a limit of 1024x1024 textures
+                    this._shadowRenderBuf.setSize([1024, 1024]);
                 }
                 return this._shadowRenderBuf;
             }

@@ -2,15 +2,8 @@ import {Component} from "../Component.js";
 import {math} from "../math/math.js";
 import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {SceneModelMesh} from './SceneModelMesh.js';
-import {getScratchMemory, putScratchMemory} from "./vbo/ScratchMemory.js";
-import {VBOBatchingTrianglesLayer} from './vbo/batching/triangles/VBOBatchingTrianglesLayer.js';
-import {VBOInstancingTrianglesLayer} from './vbo/instancing/triangles/VBOInstancingTrianglesLayer.js';
-import {VBOBatchingLinesLayer} from './vbo/batching/lines/VBOBatchingLinesLayer.js';
-import {VBOInstancingLinesLayer} from './vbo/instancing/lines/VBOInstancingLinesLayer.js';
-import {VBOBatchingPointsLayer} from './vbo/batching/points/VBOBatchingPointsLayer.js';
-import {VBOInstancingPointsLayer} from './vbo/instancing/points/VBOInstancingPointsLayer.js';
-import {DTXLinesLayer} from "./dtx/lines/DTXLinesLayer.js";
-import {DTXTrianglesLayer} from "./dtx/triangles/DTXTrianglesLayer.js";
+import {DTXLayer} from './layer/DTXLayer.js';
+import {VBOLayer} from './layer/VBOLayer.js';
 import {ENTITY_FLAGS} from './ENTITY_FLAGS.js';
 import {RenderFlags} from "../webgl/RenderFlags.js";
 import {worldToRTCPositions} from "../math/rtcCoords.js";
@@ -1138,18 +1131,16 @@ export class SceneModel extends Component {
         this._enableVertexWelding = false; // Not needed for most objects, and very expensive, so disabled
         this._enableIndexBucketing = false; // Until fixed: https://github.com/xeokit/xeokit-sdk/issues/1204
 
-        this._vboBatchingLayerScratchMemory = getScratchMemory();
         this._textureTranscoder = cfg.textureTranscoder || getKTX2TextureTranscoder(this.scene.viewer);
 
-        this._maxGeometryBatchSize = cfg.maxGeometryBatchSize;
+        this._maxGeometryBatchSize = cfg.maxGeometryBatchSize ?? 5000000;
 
         this._aabb = math.collapseAABB3();
         this._aabbDirty = true;
 
         this._quantizationRanges = {};
 
-        this._vboInstancingLayers = {};
-        this._vboBatchingLayers = {};
+        this._vboLayers = {};
         this._dtxLayers = {};
 
         this._meshList = [];
@@ -1294,7 +1285,26 @@ export class SceneModel extends Component {
             }
         });
 
-        this._createDefaultTextureSet();
+        // Every SceneModelMesh gets at least the default TextureSet,
+        // which contains empty default textures filled with color
+        const defineTex = (texId, preloadColor) => {
+            return this._textures[texId] = new SceneModelTexture({
+                id: texId,
+                texture: new Texture2D({
+                    gl: this.scene.canvas.gl,
+                    preloadColor: preloadColor
+                })
+            });
+        };
+
+        this._textureSets[DEFAULT_TEXTURE_SET_ID] = new SceneModelTextureSet({
+            id: DEFAULT_TEXTURE_SET_ID,
+            colorTexture:             defineTex(DEFAULT_COLOR_TEXTURE_ID,       [1, 1, 1, 1]), // [r, g, b, a]}),
+            metallicRoughnessTexture: defineTex(DEFAULT_METAL_ROUGH_TEXTURE_ID, [0, 1, 1, 1]), // [_, roughness, metalness, _],
+            normalsTexture:           defineTex(DEFAULT_NORMALS_TEXTURE_ID,     [0, 0, 0, 0]), // [x, y, z, _] - these must be zeros
+            emissiveTexture:          defineTex(DEFAULT_EMISSIVE_TEXTURE_ID,    [0, 0, 0, 1]), // [x, y, z, _]
+            occlusionTexture:         defineTex(DEFAULT_OCCLUSION_TEXTURE_ID,   [1, 1, 1, 1])  // [x, y, z, _]
+        });
 
         this.visible = cfg.visible;
         this.culled = cfg.culled;
@@ -1314,60 +1324,6 @@ export class SceneModel extends Component {
 
     _meshMatrixDirty(mesh) {
         this._meshesWithDirtyMatrices[this._numMeshesWithDirtyMatrices++] = mesh;
-    }
-
-    _createDefaultTextureSet() {
-        // Every SceneModelMesh gets at least the default TextureSet,
-        // which contains empty default textures filled with color
-        const defaultColorTexture = new SceneModelTexture({
-            id: DEFAULT_COLOR_TEXTURE_ID,
-            texture: new Texture2D({
-                gl: this.scene.canvas.gl,
-                preloadColor: [1, 1, 1, 1] // [r, g, b, a]})
-            })
-        });
-        const defaultMetalRoughTexture = new SceneModelTexture({
-            id: DEFAULT_METAL_ROUGH_TEXTURE_ID,
-            texture: new Texture2D({
-                gl: this.scene.canvas.gl,
-                preloadColor: [0, 1, 1, 1] // [unused, roughness, metalness, unused]
-            })
-        });
-        const defaultNormalsTexture = new SceneModelTexture({
-            id: DEFAULT_NORMALS_TEXTURE_ID,
-            texture: new Texture2D({
-                gl: this.scene.canvas.gl,
-                preloadColor: [0, 0, 0, 0] // [x, y, z, unused] - these must be zeros
-            })
-        });
-        const defaultEmissiveTexture = new SceneModelTexture({
-            id: DEFAULT_EMISSIVE_TEXTURE_ID,
-            texture: new Texture2D({
-                gl: this.scene.canvas.gl,
-                preloadColor: [0, 0, 0, 1] // [x, y, z, unused]
-            })
-        });
-        const defaultOcclusionTexture = new SceneModelTexture({
-            id: DEFAULT_OCCLUSION_TEXTURE_ID,
-            texture: new Texture2D({
-                gl: this.scene.canvas.gl,
-                preloadColor: [1, 1, 1, 1] // [x, y, z, unused]
-            })
-        });
-        this._textures[DEFAULT_COLOR_TEXTURE_ID] = defaultColorTexture;
-        this._textures[DEFAULT_METAL_ROUGH_TEXTURE_ID] = defaultMetalRoughTexture;
-        this._textures[DEFAULT_NORMALS_TEXTURE_ID] = defaultNormalsTexture;
-        this._textures[DEFAULT_EMISSIVE_TEXTURE_ID] = defaultEmissiveTexture;
-        this._textures[DEFAULT_OCCLUSION_TEXTURE_ID] = defaultOcclusionTexture;
-        this._textureSets[DEFAULT_TEXTURE_SET_ID] = new SceneModelTextureSet({
-            id: DEFAULT_TEXTURE_SET_ID,
-            model: this,
-            colorTexture: defaultColorTexture,
-            metallicRoughnessTexture: defaultMetalRoughTexture,
-            normalsTexture: defaultNormalsTexture,
-            emissiveTexture: defaultEmissiveTexture,
-            occlusionTexture: defaultOcclusionTexture
-        });
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -2272,6 +2228,14 @@ export class SceneModel extends Component {
         }
     }
 
+    _createDefaultIndices(numIndices) {
+        const indices = [];
+        for (let i = 0; i < numIndices; i++) {
+            indices.push(i);
+        }
+        return indices;
+    }
+
     /**
      * Creates a reusable geometry within this SceneModel.
      *
@@ -2327,8 +2291,7 @@ export class SceneModel extends Component {
             return null;
         }
         if (!cfg.buckets && !cfg.indices && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface")) {
-            const numPositions = (cfg.positions || cfg.positionsCompressed).length / 3;
-            cfg.indices = this._createDefaultIndices(numPositions);
+            cfg.indices = this._createDefaultIndices((cfg.positions || cfg.positionsCompressed).length / 3);
         }
         if (!cfg.buckets && !cfg.indices && cfg.primitive !== "points") {
             this.error(`[createGeometry] Param expected: indices (required for '${cfg.primitive}' primitive type)`);
@@ -2580,74 +2543,39 @@ export class SceneModel extends Component {
         const textureSetId = cfg.id;
         if (textureSetId === undefined || textureSetId === null) {
             this.error("[createTextureSet] Config missing: id");
-            return;
+            return false;
         }
         if (this._textureSets[textureSetId]) {
             this.error(`[createTextureSet] Texture set already created: ${textureSetId}`);
-            return;
+            return false;
         }
-        let colorTexture;
-        if (cfg.colorTextureId !== undefined && cfg.colorTextureId !== null) {
-            colorTexture = this._textures[cfg.colorTextureId];
-            if (!colorTexture) {
-                this.error(`[createTextureSet] Texture not found: ${cfg.colorTextureId} - ensure that you create it first with createTexture()`);
-                return;
+
+        const getTexture = (cfgId, defaultKey) => {
+            const id = cfgId ?? defaultKey;
+            if (id in this._textures) {
+                return this._textures[id];
+            } else {
+                throw cfgId;
             }
-        } else {
-            colorTexture = this._textures[DEFAULT_COLOR_TEXTURE_ID];
+        };
+
+        try {
+            const textureSet = new SceneModelTextureSet({
+                id: textureSetId,
+                model: this,
+                alphaCutoff: cfg.alphaCutoff,
+                colorTexture:             getTexture(cfg.colorTextureId,             DEFAULT_COLOR_TEXTURE_ID),
+                metallicRoughnessTexture: getTexture(cfg.metallicRoughnessTextureId, DEFAULT_METAL_ROUGH_TEXTURE_ID),
+                normalsTexture:           getTexture(cfg.normalsTextureId,           DEFAULT_NORMALS_TEXTURE_ID),
+                emissiveTexture:          getTexture(cfg.emissiveTextureId,          DEFAULT_EMISSIVE_TEXTURE_ID),
+                occlusionTexture:         getTexture(cfg.occlusionTextureId,         DEFAULT_OCCLUSION_TEXTURE_ID)
+            });
+            this._textureSets[textureSetId] = textureSet;
+            return textureSet;
+        } catch (id) {
+            this.error(`[createTextureSet] Texture not found: ${id} - ensure that you create it first with createTexture()`);
+            return false;
         }
-        let metallicRoughnessTexture;
-        if (cfg.metallicRoughnessTextureId !== undefined && cfg.metallicRoughnessTextureId !== null) {
-            metallicRoughnessTexture = this._textures[cfg.metallicRoughnessTextureId];
-            if (!metallicRoughnessTexture) {
-                this.error(`[createTextureSet] Texture not found: ${cfg.metallicRoughnessTextureId} - ensure that you create it first with createTexture()`);
-                return;
-            }
-        } else {
-            metallicRoughnessTexture = this._textures[DEFAULT_METAL_ROUGH_TEXTURE_ID];
-        }
-        let normalsTexture;
-        if (cfg.normalsTextureId !== undefined && cfg.normalsTextureId !== null) {
-            normalsTexture = this._textures[cfg.normalsTextureId];
-            if (!normalsTexture) {
-                this.error(`[createTextureSet] Texture not found: ${cfg.normalsTextureId} - ensure that you create it first with createTexture()`);
-                return;
-            }
-        } else {
-            normalsTexture = this._textures[DEFAULT_NORMALS_TEXTURE_ID];
-        }
-        let emissiveTexture;
-        if (cfg.emissiveTextureId !== undefined && cfg.emissiveTextureId !== null) {
-            emissiveTexture = this._textures[cfg.emissiveTextureId];
-            if (!emissiveTexture) {
-                this.error(`[createTextureSet] Texture not found: ${cfg.emissiveTextureId} - ensure that you create it first with createTexture()`);
-                return;
-            }
-        } else {
-            emissiveTexture = this._textures[DEFAULT_EMISSIVE_TEXTURE_ID];
-        }
-        let occlusionTexture;
-        if (cfg.occlusionTextureId !== undefined && cfg.occlusionTextureId !== null) {
-            occlusionTexture = this._textures[cfg.occlusionTextureId];
-            if (!occlusionTexture) {
-                this.error(`[createTextureSet] Texture not found: ${cfg.occlusionTextureId} - ensure that you create it first with createTexture()`);
-                return;
-            }
-        } else {
-            occlusionTexture = this._textures[DEFAULT_OCCLUSION_TEXTURE_ID];
-        }
-        const textureSet = new SceneModelTextureSet({
-            id: textureSetId,
-            model: this,
-            colorTexture,
-            alphaCutoff: cfg.alphaCutoff,
-            metallicRoughnessTexture,
-            normalsTexture,
-            emissiveTexture,
-            occlusionTexture
-        });
-        this._textureSets[textureSetId] = textureSet;
-        return textureSet;
     }
 
     /**
@@ -2750,17 +2678,36 @@ export class SceneModel extends Component {
             return false;
         }
 
-        const instancing = (cfg.geometryId !== undefined);
-        const batching = !instancing;
+        const geometryId = cfg.geometryId;
+        const instancing = geometryId !== undefined;
 
-        if (batching) {
+        if (instancing) {
+            if (cfg.positions || cfg.positionsCompressed || cfg.indices || cfg.edgeIndices || cfg.normals || cfg.normalsCompressed || cfg.uv || cfg.uvCompressed || cfg.positionsDecodeMatrix) {
+                this.error(`Mesh geometry parameters not expected when instancing a geometry (not expected: positions, positionsCompressed, indices, edgeIndices, normals, normalsCompressed, uv, uvCompressed, positionsDecodeMatrix)`);
+                return false;
+            }
+
+            cfg.geometry = this._geometries[geometryId];
+            if (!cfg.geometry) {
+                this.error(`[createMesh] Geometry not found: ${geometryId} - ensure that you create it first with createGeometry()`);
+                return false;
+            }
+        } else {
+            cfg.primitive ??= "triangles";
+        }
+
+        const primitive = instancing ? cfg.geometry.primitive : cfg.primitive;
+        const isTriangular = (primitive === "triangles") || (primitive === "solid") || (primitive === "surface");
+        const textureSetId = cfg.textureSetId;
+        const useDTX = this._dtxEnabled && isTriangular && (! textureSetId);
+
+        cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
+
+        if (! instancing) {
 
             // Batched geometry
 
-            if (cfg.primitive === undefined || cfg.primitive === null) {
-                cfg.primitive = "triangles";
-            }
-            if (cfg.primitive !== "points" && cfg.primitive !== "lines" && cfg.primitive !== "triangles" && cfg.primitive !== "solid" && cfg.primitive !== "surface") {
+            if (primitive !== "points" && primitive !== "lines" && primitive !== "triangles" && primitive !== "solid" && primitive !== "surface") {
                 this.error(`Unsupported value for 'primitive': '${primitive}'  ('geometryId' is absent) - supported values are 'points', 'lines', 'triangles', 'solid' and 'surface'.`);
                 return false;
             }
@@ -2780,26 +2727,18 @@ export class SceneModel extends Component {
                 this.error("Param expected: 'uvCompressed' should be accompanied by `uvDecodeMatrix` ('geometryId' is absent)");
                 return false;
             }
-            if (!cfg.buckets && !cfg.indices && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface")) {
-                const numPositions = (cfg.positions || cfg.positionsCompressed).length / 3;
-                cfg.indices = this._createDefaultIndices(numPositions);
-            }
-            if (!cfg.buckets && !cfg.indices && cfg.primitive !== "points") {
-                cfg.indices = this._createDefaultIndices(numIndices)
-                this.error(`Param expected: indices (required for '${cfg.primitive}' primitive type)`);
-                return false;
+            if (!cfg.buckets && !cfg.indices) {
+                if (isTriangular) {
+                    cfg.indices = this._createDefaultIndices((cfg.positions || cfg.positionsCompressed).length / 3);
+                } else if (primitive === "lines") {
+                    this.error(`Param expected: indices (required for '${primitive}' primitive type)`);
+                    return false;
+                }
             }
             if ((cfg.matrix || cfg.position || cfg.rotation || cfg.scale) && (cfg.positionsCompressed || cfg.positionsDecodeBoundary)) {
                 this.error("Unexpected params: 'matrix', 'rotation', 'scale', 'position' not allowed with 'positionsCompressed'");
                 return false;
             }
-
-            const useDTX = (!!this._dtxEnabled && (cfg.primitive === "triangles"
-                    || cfg.primitive === "solid"
-                    || cfg.primitive === "surface"))
-                && (!cfg.textureSetId);
-
-            cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
 
             // MATRIX - optional for batching
 
@@ -2808,193 +2747,85 @@ export class SceneModel extends Component {
             } else if (cfg.scale || cfg.rotation || cfg.position || cfg.quaternion) {
                 const scale = cfg.scale || DEFAULT_SCALE;
                 const position = cfg.position || DEFAULT_POSITION;
-                if (cfg.rotation) {
-                    math.eulerToQuaternion(cfg.rotation, "XYZ", tempQuaternion);
-                    cfg.meshMatrix = math.composeMat4(position, tempQuaternion, scale, math.mat4());
-                } else {
-                    cfg.meshMatrix = math.composeMat4(position, cfg.quaternion || DEFAULT_QUATERNION, scale, math.mat4());
-                }
+                const quaternion = (cfg.rotation
+                                    ? math.eulerToQuaternion(cfg.rotation, "XYZ", tempQuaternion)
+                                    : cfg.quaternion || DEFAULT_QUATERNION);
+                cfg.meshMatrix = math.composeMat4(position, quaternion, scale, math.mat4());
             }
 
             if (cfg.positionsDecodeBoundary) {
                 cfg.positionsDecodeMatrix = createPositionsDecodeMatrix(cfg.positionsDecodeBoundary, math.mat4());
             }
 
-            if (useDTX) {
+            // RTC && COMPRESSION
 
-                // DTX
-
-                cfg.type = DTX;
-
-                // NPR
-
-                cfg.color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : defaultCompressedColor;
-                cfg.opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
-
-                // RTC
-
-                if (cfg.positions) {
-                    const rtcCenter = math.vec3();
-                    const rtcPositions = [];
-                    const rtcNeeded = worldToRTCPositions(cfg.positions, rtcPositions, rtcCenter);
-                    if (rtcNeeded) {
-                        cfg.positions = rtcPositions;
-                        cfg.origin = math.addVec3(cfg.origin, rtcCenter, rtcCenter);
-                    }
+            if (cfg.positions) {
+                const rtcPositions = [];
+                const rtcNeeded = worldToRTCPositions(cfg.positions, rtcPositions, tempVec3a);
+                if (rtcNeeded) {
+                    cfg.positions = rtcPositions;
+                    cfg.origin = math.addVec3(cfg.origin, tempVec3a, math.vec3());
                 }
 
-                // COMPRESSION
-
-                if (cfg.positions) {
-                    const aabb = math.collapseAABB3();
+                const aabb = math.collapseAABB3();
+                if (useDTX) {
                     cfg.positionsDecodeMatrix = math.mat4();
                     math.expandAABB3Points3(aabb, cfg.positions);
                     cfg.positionsCompressed = quantizePositions(cfg.positions, aabb, cfg.positionsDecodeMatrix);
-                    cfg.aabb = aabb;
-
-                } else if (cfg.positionsCompressed) {
-                    const aabb = math.collapseAABB3();
-                    math.expandAABB3Points3(aabb, cfg.positionsCompressed);
-                    geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
-                    cfg.aabb = aabb;
-
-                }
-                if (cfg.buckets) {
-                    const aabb = math.collapseAABB3();
-                    for (let i = 0, len = cfg.buckets.length; i < len; i++) {
-                        const bucket = cfg.buckets[i];
-                        if (bucket.positions) {
-                            math.expandAABB3Points3(aabb, bucket.positions);
-                        } else if (bucket.positionsCompressed) {
-                            math.expandAABB3Points3(aabb, bucket.positionsCompressed);
-                        }
-                    }
-                    if (cfg.positionsDecodeMatrix) {
-                        geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
-                    }
-                    cfg.aabb = aabb;
-                }
-
-                if (cfg.meshMatrix) {
-                    math.AABB3ToOBB3(cfg.aabb, tempOBB3);
-                    math.transformOBB3(cfg.meshMatrix, tempOBB3);
-                    math.OBB3ToAABB3(tempOBB3, cfg.aabb);
-                }
-
-                // EDGES
-
-                if (!cfg.buckets && !cfg.edgeIndices && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface")) {
-                    if (cfg.positions) { // Faster
-                        cfg.edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, 2.0);
-                    } else {
-                        cfg.edgeIndices = buildEdgeIndices(cfg.positionsCompressed, cfg.indices, cfg.positionsDecodeMatrix, 2.0);
-                    }
-                }
-
-                // BUCKETING
-
-                if (!cfg.buckets) {
-                    cfg.buckets = createDTXBuckets(cfg, this._enableVertexWelding && this._enableIndexBucketing);
-                }
-
-            } else {
-
-                // VBO
-
-                cfg.type = VBO_BATCHED;
-
-                // PBR
-
-                cfg.color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : [255, 255, 255];
-                cfg.opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
-                cfg.metallic = (cfg.metallic !== undefined && cfg.metallic !== null) ? Math.floor(cfg.metallic * 255) : 0;
-                cfg.roughness = (cfg.roughness !== undefined && cfg.roughness !== null) ? Math.floor(cfg.roughness * 255) : 255;
-
-                // RTC
-
-                if (cfg.positions) {
-                    const rtcPositions = [];
-                    const rtcNeeded = worldToRTCPositions(cfg.positions, rtcPositions, tempVec3a);
-                    if (rtcNeeded) {
-                        cfg.positions = rtcPositions;
-                        cfg.origin = math.addVec3(cfg.origin, tempVec3a, math.vec3());
-                    }
-                }
-
-                if (cfg.positions) {
-                    const aabb = math.collapseAABB3();
+                } else {
                     if (cfg.meshMatrix) {
                         math.transformPositions3(cfg.meshMatrix, cfg.positions, cfg.positions);
                         cfg.meshMatrix = null; // Positions now baked, don't need any more
                     }
                     math.expandAABB3Points3(aabb, cfg.positions);
-                    cfg.aabb = aabb;
+                }
+                cfg.aabb = aabb;
+            } else if (cfg.positionsCompressed) {
+                const aabb = math.collapseAABB3();
+                math.expandAABB3Points3(aabb, cfg.positionsCompressed);
+                geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
+                cfg.aabb = aabb;
+            }
 
-                } else {
-                    const aabb = math.collapseAABB3();
-                    math.expandAABB3Points3(aabb, cfg.positionsCompressed);
+            if (useDTX && cfg.buckets) {
+                const aabb = math.collapseAABB3();
+                cfg.buckets.forEach(bucket => {
+                    const positions = bucket.positions || bucket.positionsCompressed;
+                    if (positions) {
+                        math.expandAABB3Points3(aabb, positions);
+                    }
+                });
+                if (cfg.positionsDecodeMatrix) {
                     geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
-                    cfg.aabb = aabb;
                 }
+                cfg.aabb = aabb;
+            }
 
-                if (cfg.meshMatrix) {
-                    math.AABB3ToOBB3(cfg.aabb, tempOBB3);
-                    math.transformOBB3(cfg.meshMatrix, tempOBB3);
-                    math.OBB3ToAABB3(tempOBB3, cfg.aabb);
-                }
+            // EDGES
 
-                // EDGES
-
-                if (!cfg.buckets && !cfg.edgeIndices && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface")) {
-                    if (cfg.positions) {
-                        cfg.edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, 2.0);
-                    } else {
-                        cfg.edgeIndices = buildEdgeIndices(cfg.positionsCompressed, cfg.indices, cfg.positionsDecodeMatrix, 2.0);
-                    }
-                }
-
-                // TEXTURE
-
-                // cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
-                if (cfg.textureSetId) {
-                    cfg.textureSet = this._textureSets[cfg.textureSetId];
-                    if (!cfg.textureSet) {
-                        this.error(`[createMesh] Texture set not found: ${cfg.textureSetId} - ensure that you create it first with createTextureSet()`);
-                        return false;
-                    }
-                }
+            if (isTriangular && (! cfg.buckets)) {
+                cfg.edgeIndices ||= buildEdgeIndices(cfg.positions || cfg.positionsCompressed, cfg.indices, cfg.positions ? null : cfg.positionsDecodeMatrix, 2.0);
             }
 
         } else {
 
             // INSTANCING
 
-            if (cfg.positions || cfg.positionsCompressed || cfg.indices || cfg.edgeIndices || cfg.normals || cfg.normalsCompressed || cfg.uv || cfg.uvCompressed || cfg.positionsDecodeMatrix) {
-                this.error(`Mesh geometry parameters not expected when instancing a geometry (not expected: positions, positionsCompressed, indices, edgeIndices, normals, normalsCompressed, uv, uvCompressed, positionsDecodeMatrix)`);
-                return false;
-            }
-
-            cfg.geometry = this._geometries[cfg.geometryId];
-            if (!cfg.geometry) {
-                this.error(`[createMesh] Geometry not found: ${cfg.geometryId} - ensure that you create it first with createGeometry()`);
-                return false;
-            }
-
-            cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
             cfg.positionsDecodeMatrix = cfg.geometry.positionsDecodeMatrix;
 
-            if (cfg.transformId) {
+            cfg.aabb = math.AABB3(cfg.geometry.aabb);
+
+            const transformId = cfg.transformId;
+            if (transformId) {
 
                 // TRANSFORM
 
-                cfg.transform = this._transforms[cfg.transformId];
+                cfg.transform = this._transforms[transformId];
 
                 if (!cfg.transform) {
-                    this.error(`[createMesh] Transform not found: ${cfg.transformId} - ensure that you create it first with createTransform()`);
+                    this.error(`[createMesh] Transform not found: ${transformId} - ensure that you create it first with createTransform()`);
                     return false;
                 }
-
-                cfg.aabb = cfg.geometry.aabb;
 
             } else {
 
@@ -3005,111 +2836,66 @@ export class SceneModel extends Component {
                 } else if (cfg.scale || cfg.rotation || cfg.position || cfg.quaternion) {
                     const scale = cfg.scale || DEFAULT_SCALE;
                     const position = cfg.position || DEFAULT_POSITION;
-                    if (cfg.rotation) {
-                        math.eulerToQuaternion(cfg.rotation, "XYZ", tempQuaternion);
-                        cfg.meshMatrix = math.composeMat4(position, tempQuaternion, scale, math.mat4());
-                    } else {
-                        cfg.meshMatrix = math.composeMat4(position, cfg.quaternion || DEFAULT_QUATERNION, scale, math.mat4());
-                    }
+                    const quaternion = (cfg.rotation
+                                        ? math.eulerToQuaternion(cfg.rotation, "XYZ", tempQuaternion)
+                                        : cfg.quaternion || DEFAULT_QUATERNION);
+                    cfg.meshMatrix = math.composeMat4(position, quaternion, scale, math.mat4());
                 }
+            }
+        }
 
-                math.AABB3ToOBB3(cfg.geometry.aabb, tempOBB3);
-                math.transformOBB3(cfg.meshMatrix, tempOBB3);
-                cfg.aabb = math.OBB3ToAABB3(tempOBB3, math.AABB3());
+        if (cfg.meshMatrix) {
+            math.AABB3ToOBB3(cfg.aabb, tempOBB3);
+            math.transformOBB3(cfg.meshMatrix, tempOBB3, tempOBB3);
+            math.OBB3ToAABB3(tempOBB3, cfg.aabb);
+        }
+
+        cfg.color = cfg.color ? new Uint8Array(cfg.color.slice(0, 3).map(v => Math.floor(v * 255))) : defaultCompressedColor;
+        cfg.opacity = Math.floor((cfg.opacity ?? 1) * 255);
+
+        if (useDTX) {
+            cfg.type = DTX;
+
+            // BUCKETING
+            if (instancing) {
+                cfg.buckets = this._dtxBuckets[geometryId]; // lazy generated, reused
+            }
+            if (!cfg.buckets) {
+                cfg.buckets = createDTXBuckets(instancing ? cfg.geometry : cfg, this._enableVertexWelding, this._enableIndexBucketing);
+                if (instancing) {
+                    this._dtxBuckets[geometryId] = cfg.buckets;
+                }
             }
 
-            const useDTX = (!!this._dtxEnabled
-                    && (cfg.geometry.primitive === "triangles"
-                        || cfg.geometry.primitive === "solid"
-                        || cfg.geometry.primitive === "surface"))
-                && (!cfg.textureSetId);
+        } else {
+            cfg.type = instancing ? VBO_INSTANCED : VBO_BATCHED;
 
-            if (useDTX) {
+            // PBR
+            cfg.metallic  = Math.floor((cfg.metallic  ?? 0) * 255);
+            cfg.roughness = Math.floor((cfg.roughness ?? 1) * 255);
 
-                // DTX
-
-                cfg.type = DTX;
-
-                // NPR
-
-                cfg.color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : defaultCompressedColor;
-                cfg.opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
-
-                // BUCKETING - lazy generated, reused
-
-                let buckets = this._dtxBuckets[cfg.geometryId];
-                if (!buckets) {
-                    buckets = createDTXBuckets(cfg.geometry, this._enableVertexWelding, this._enableIndexBucketing);
-                    this._dtxBuckets[cfg.geometryId] = buckets;
-                }
-                cfg.buckets = buckets;
-
-            } else {
-
-                // VBO
-
-                cfg.type = VBO_INSTANCED;
-
-                // PBR
-
-                cfg.color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : defaultCompressedColor;
-                cfg.opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
-                cfg.metallic = (cfg.metallic !== undefined && cfg.metallic !== null) ? Math.floor(cfg.metallic * 255) : 0;
-                cfg.roughness = (cfg.roughness !== undefined && cfg.roughness !== null) ? Math.floor(cfg.roughness * 255) : 255;
-
-                // TEXTURE
-
-                if (cfg.textureSetId) {
-                    cfg.textureSet = this._textureSets[cfg.textureSetId];
-                    // if (!cfg.textureSet) {
-                    //     this.error(`[createMesh] Texture set not found: ${cfg.textureSetId} - ensure that you create it first with createTextureSet()`);
-                    //     return false;
-                    // }
+            // TEXTURE
+            // cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
+            if (textureSetId) {
+                cfg.textureSet = this._textureSets[textureSetId];
+                if ((! instancing) && (!cfg.textureSet)) {
+                    this.error(`[createMesh] Texture set not found: ${textureSetId} - ensure that you create it first with createTextureSet()`);
+                    return false;
                 }
             }
         }
 
         cfg.numPrimitives = this._getNumPrimitives(cfg);
 
-        return this._createMesh(cfg);
-    }
-
-    _createDefaultIndices(numIndices) {
-        const indices = [];
-        for (let i = 0; i < numIndices; i++) {
-            indices.push(i);
-        }
-        return indices;
-    }
-
-    _createMesh(cfg) {
         const mesh = new SceneModelMesh(this, cfg.id, cfg.color, cfg.opacity, cfg.transform, cfg.textureSet);
-        mesh.pickId = this.scene._renderer.getPickID(mesh);
-        const pickId = mesh.pickId;
-        const a = pickId >> 24 & 0xFF;
-        const b = pickId >> 16 & 0xFF;
-        const g = pickId >> 8 & 0xFF;
-        const r = pickId & 0xFF;
-        cfg.pickColor = new Uint8Array([r, g, b, a]); // Quantized pick color
-        cfg.solid = (cfg.primitive === "solid");
+        const pickId = this.scene._renderer.getPickID(mesh);
+        mesh.pickId = pickId;
         mesh.origin = math.vec3(cfg.origin);
-        switch (cfg.type) {
-            case DTX:
-                mesh.layer = this._getDTXLayer(cfg);
-                mesh.aabb = cfg.aabb;
-                break;
-            case VBO_BATCHED:
-                mesh.layer = this._getVBOBatchingLayer(cfg);
-                mesh.aabb = cfg.aabb;
-                break;
-            case VBO_INSTANCED:
-                mesh.layer = this._getVBOInstancingLayer(cfg);
-                mesh.aabb = cfg.aabb;
-                break;
-        }
-        if (cfg.transform) {
-            cfg.meshMatrix = cfg.transform.worldMatrix;
-        }
+        mesh.layer = (cfg.type === DTX) ? this._getDTXLayer(cfg) : this._getVBOLayer(cfg.type === VBO_INSTANCED, cfg);
+        mesh.aabb = cfg.aabb;
+        cfg.pickColor = new Uint8Array([pickId & 0xFF, pickId >> 8 & 0xFF, pickId >> 16 & 0xFF, pickId >> 24 & 0xFF]); // Quantized pick color
+        cfg.solid = (cfg.primitive === "solid");
+        cfg.meshMatrix = cfg.transform ? cfg.transform.worldMatrix : cfg.meshMatrix;
         mesh.portionId = mesh.layer.createPortion(mesh, cfg);
         mesh.numPrimitives = cfg.numPrimitives;
         this._meshes[cfg.id] = mesh;
@@ -3193,10 +2979,7 @@ export class SceneModel extends Component {
             case "triangles":
             case "solid":
             case "surface":
-                dtxLayer = new DTXTrianglesLayer(this, {layerIndex: 0, origin, primitive}); // layerIndex is set in #finalize()
-                break;
-            case "lines":
-                dtxLayer = new DTXLinesLayer(this, {layerIndex: 0, origin, primitive}); // layerIndex is set in #finalize()
+                dtxLayer = new DTXLayer(this, primitive, origin);
                 break;
             default:
                 return;
@@ -3207,115 +2990,45 @@ export class SceneModel extends Component {
         return dtxLayer;
     }
 
-    _getVBOBatchingLayer(cfg) {
-        const model = this;
+    _getVBOLayer(instancing, cfg) {
+        const geometry = instancing && cfg.geometry;
+        const primitive = instancing ? geometry.primitive : cfg.primitive;
         const origin = cfg.origin;
-        const renderLayer = cfg.renderLayer || 0;
-        const positionsDecodeHash = cfg.positionsDecodeMatrix || cfg.positionsDecodeBoundary ?
-            this._createHashStringFromMatrix(cfg.positionsDecodeMatrix || cfg.positionsDecodeBoundary)
-            : "-";
+        const posDecode = (! instancing) && (cfg.positionsDecodeMatrix || cfg.positionsDecodeBoundary);
+        const positionsDecodeHash = posDecode ? this._createHashStringFromMatrix(posDecode) : "-";
         const textureSetId = cfg.textureSetId || "-";
-        const layerId = `${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}.${cfg.primitive}.${positionsDecodeHash}.${textureSetId}`;
-        let vboBatchingLayer = this._vboBatchingLayers[layerId];
-        if (vboBatchingLayer) {
-            return vboBatchingLayer;
-        }
-        let textureSet = cfg.textureSet;
-        while (!vboBatchingLayer) {
-            switch (cfg.primitive) {
-                case "triangles":
-                    // console.info(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
-                    vboBatchingLayer = new VBOBatchingTrianglesLayer({
-                        model,
-                        textureSet,
-                        layerIndex: 0, // This is set in #finalize()
-                        scratchMemory: this._vboBatchingLayerScratchMemory,
-                        positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                        uvDecodeMatrix: cfg.uvDecodeMatrix, // Can be undefined
-                        origin,
-                        maxGeometryBatchSize: this._maxGeometryBatchSize,
-                        solid: (cfg.primitive === "solid"),
-                        autoNormals: true,
-                        primitive: cfg.primitive
-                    });
-                    break;
-                case "solid":
-                    // console.info(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
-                    vboBatchingLayer = new VBOBatchingTrianglesLayer({
-                        model,
-                        textureSet,
-                        layerIndex: 0, // This is set in #finalize()
-                        scratchMemory: this._vboBatchingLayerScratchMemory,
-                        positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                        uvDecodeMatrix: cfg.uvDecodeMatrix, // Can be undefined
-                        origin,
-                        maxGeometryBatchSize: this._maxGeometryBatchSize,
-                        solid: (cfg.primitive === "solid"),
-                        autoNormals: true,
-                        primitive: cfg.primitive
-                    });
-                    break;
-                case "surface":
-                    // console.info(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
-                    vboBatchingLayer = new VBOBatchingTrianglesLayer({
-                        model,
-                        textureSet,
-                        layerIndex: 0, // This is set in #finalize()
-                        scratchMemory: this._vboBatchingLayerScratchMemory,
-                        positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                        uvDecodeMatrix: cfg.uvDecodeMatrix, // Can be undefined
-                        origin,
-                        maxGeometryBatchSize: this._maxGeometryBatchSize,
-                        solid: (cfg.primitive === "solid"),
-                        autoNormals: true,
-                        primitive: cfg.primitive
-                    });
-                    break;
-                case "lines":
-                    // console.info(`[SceneModel ${this.id}]: creating VBOBatchingLinesLayer`);
-                    vboBatchingLayer = new VBOBatchingLinesLayer({
-                        model,
-                        layerIndex: 0, // This is set in #finalize()
-                        scratchMemory: this._vboBatchingLayerScratchMemory,
-                        positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                        uvDecodeMatrix: cfg.uvDecodeMatrix, // Can be undefined
-                        origin,
-                        maxGeometryBatchSize: this._maxGeometryBatchSize,
-                        primitive: cfg.primitive
-                    });
-                    break;
-                case "points":
-                    // console.info(`[SceneModel ${this.id}]: creating VBOBatchingPointsLayer`);
-                    vboBatchingLayer = new VBOBatchingPointsLayer({
-                        model,
-                        layerIndex: 0, // This is set in #finalize()
-                        scratchMemory: this._vboBatchingLayerScratchMemory,
-                        positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                        uvDecodeMatrix: cfg.uvDecodeMatrix, // Can be undefined
-                        origin,
-                        maxGeometryBatchSize: this._maxGeometryBatchSize,
-                        primitive: cfg.primitive
-                    });
-                    break;
-            }
+        const geometryId = instancing ? cfg.geometryId : "-";
+        const layerId = (instancing ? "instancing" : "batching") + `.${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}.${primitive}.${positionsDecodeHash}.${textureSetId}.${geometryId}`;
+
+        if ((! instancing) && (layerId in this._vboLayers)) {
+            const layer = this._vboLayers[layerId];
             const lenPositions = cfg.positionsCompressed ? cfg.positionsCompressed.length : cfg.positions.length;
-            const canCreatePortion = (cfg.primitive === "points")
-                ? vboBatchingLayer.canCreatePortion(lenPositions)
-                : vboBatchingLayer.canCreatePortion(lenPositions, cfg.indices.length);
-            if (!canCreatePortion) {
-                vboBatchingLayer.finalize();
-                delete this._vboBatchingLayers[layerId];
-                vboBatchingLayer = null;
+            if (! layer.canCreatePortion(lenPositions, (primitive === "points") ? 0 : cfg.indices.length)) {
+                layer.finalize();
+                delete this._vboLayers[layerId];
             }
         }
-        this._vboBatchingLayers[layerId] = vboBatchingLayer;
-        this.layerList.push(vboBatchingLayer);
-        this._layersToFinalize.push(vboBatchingLayer);
-        return vboBatchingLayer;
+
+        if (! (layerId in this._vboLayers)) {
+            const layer = new VBOLayer(this, primitive, origin, {
+                textureSet: cfg.textureSet,
+                ...(instancing ? {
+                    geometry: geometry,
+                } : {
+                    maxGeometryBatchSize: this._maxGeometryBatchSize,
+                    positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
+                    uvDecodeMatrix: cfg.uvDecodeMatrix, // Can be undefined
+                })
+            });
+            this.layerList.push(layer);
+            this._layersToFinalize.push(layer);
+            this._vboLayers[layerId] = layer;
+        }
+        return this._vboLayers[layerId];
     }
 
     _createHashStringFromMatrix(matrix) {
-        const matrixString = matrix.join('');
+        const matrixString = matrix.join(";");
         let hash = 0;
         for (let i = 0; i < matrixString.length; i++) {
             const char = matrixString.charCodeAt(i);
@@ -3324,87 +3037,6 @@ export class SceneModel extends Component {
         }
         const hashString = (hash >>> 0).toString(16);
         return hashString;
-    }
-
-    _getVBOInstancingLayer(cfg) {
-        const model = this;
-        const origin = cfg.origin;
-        const textureSetId = cfg.textureSetId || "-";
-        const geometryId = cfg.geometryId;
-        const layerId = `${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}.${textureSetId}.${geometryId}`;
-        let vboInstancingLayer = this._vboInstancingLayers[layerId];
-        if (vboInstancingLayer) {
-            return vboInstancingLayer;
-        }
-        let textureSet = cfg.textureSet;
-        const geometry = cfg.geometry;
-        while (!vboInstancingLayer) {
-            switch (geometry.primitive) {
-                case "triangles":
-                    // console.info(`[SceneModel ${this.id}]: creating TrianglesInstancingLayer`);
-                    vboInstancingLayer = new VBOInstancingTrianglesLayer({
-                        model,
-                        textureSet,
-                        geometry,
-                        origin,
-                        layerIndex: 0,
-                        solid: false
-                    });
-                    break;
-                case "solid":
-                    // console.info(`[SceneModel ${this.id}]: creating TrianglesInstancingLayer`);
-                    vboInstancingLayer = new VBOInstancingTrianglesLayer({
-                        model,
-                        textureSet,
-                        geometry,
-                        origin,
-                        layerIndex: 0,
-                        solid: true
-                    });
-                    break;
-                case "surface":
-                    // console.info(`[SceneModel ${this.id}]: creating TrianglesInstancingLayer`);
-                    vboInstancingLayer = new VBOInstancingTrianglesLayer({
-                        model,
-                        textureSet,
-                        geometry,
-                        origin,
-                        layerIndex: 0,
-                        solid: false
-                    });
-                    break;
-                case "lines":
-                    // console.info(`[SceneModel ${this.id}]: creating VBOInstancingLinesLayer`);
-                    vboInstancingLayer = new VBOInstancingLinesLayer({
-                        model,
-                        textureSet,
-                        geometry,
-                        origin,
-                        layerIndex: 0
-                    });
-                    break;
-                case "points":
-                    // console.info(`[SceneModel ${this.id}]: creating PointsInstancingLayer`);
-                    vboInstancingLayer = new VBOInstancingPointsLayer({
-                        model,
-                        textureSet,
-                        geometry,
-                        origin,
-                        layerIndex: 0
-                    });
-                    break;
-            }
-            // const lenPositions = geometry.positionsCompressed.length;
-            // if (!vboInstancingLayer.canCreatePortion(lenPositions, geometry.indices.length)) { // FIXME: indices should be optional
-            //     vboInstancingLayer.finalize();
-            //     delete this._vboInstancingLayers[layerId];
-            //     vboInstancingLayer = null;
-            // }
-        }
-        this._vboInstancingLayers[layerId] = vboInstancingLayer;
-        this.layerList.push(vboInstancingLayer);
-        this._layersToFinalize.push(vboInstancingLayer);
-        return vboInstancingLayer;
     }
 
     /**
@@ -3444,41 +3076,22 @@ export class SceneModel extends Component {
         }
         if (cfg.meshIds === undefined) {
             this.error("Config missing: meshIds");
-            return;
+            return null;
         }
-        let flags = 0;
-        if (this._visible && cfg.visible !== false) {
-            flags = flags | ENTITY_FLAGS.VISIBLE;
-        }
-        if (this._pickable && cfg.pickable !== false) {
-            flags = flags | ENTITY_FLAGS.PICKABLE;
-        }
-        if (this._culled && cfg.culled !== false) {
-            flags = flags | ENTITY_FLAGS.CULLED;
-        }
-        if (this._clippable && cfg.clippable !== false) {
-            flags = flags | ENTITY_FLAGS.CLIPPABLE;
-        }
-        if (this._collidable && cfg.collidable !== false) {
-            flags = flags | ENTITY_FLAGS.COLLIDABLE;
-        }
-        if (this._edges && cfg.edges !== false) {
-            flags = flags | ENTITY_FLAGS.EDGES;
-        }
-        if (this._xrayed && cfg.xrayed !== false) {
-            flags = flags | ENTITY_FLAGS.XRAYED;
-        }
-        if (this._highlighted && cfg.highlighted !== false) {
-            flags = flags | ENTITY_FLAGS.HIGHLIGHTED;
-        }
-        if (this._selected && cfg.selected !== false) {
-            flags = flags | ENTITY_FLAGS.SELECTED;
-        }
-        cfg.flags = flags;
-        return this._createEntity(cfg);
-    }
 
-    _createEntity(cfg) {
+        const notFalse = v => v !== false;
+        let flags = 0;
+        flags |= (this._visible     && notFalse(cfg.visible)     && ENTITY_FLAGS.VISIBLE);
+        flags |= (this._pickable    && notFalse(cfg.pickable)    && ENTITY_FLAGS.PICKABLE);
+        flags |= (this._culled      && notFalse(cfg.culled)      && ENTITY_FLAGS.CULLED);
+        flags |= (this._clippable   && notFalse(cfg.clippable)   && ENTITY_FLAGS.CLIPPABLE);
+        flags |= (this._collidable  && notFalse(cfg.collidable)  && ENTITY_FLAGS.COLLIDABLE);
+        flags |= (this._xrayed      && notFalse(cfg.xrayed)      && ENTITY_FLAGS.XRAYED);
+        flags |= (this._highlighted && notFalse(cfg.highlighted) && ENTITY_FLAGS.HIGHLIGHTED);
+        flags |= (this._selected    && notFalse(cfg.selected)    && ENTITY_FLAGS.SELECTED);
+        flags |= (this._edges       && notFalse(cfg.edges)       && ENTITY_FLAGS.EDGES);
+        cfg.flags = flags;
+
         let meshes = [];
         for (let i = 0, len = cfg.meshIds.length; i < len; i++) {
             const meshId = cfg.meshIds[i];
@@ -3526,8 +3139,7 @@ export class SceneModel extends Component {
             const layer = this._layersToFinalize[i];
             layer.finalize();
         }
-        this._vboBatchingLayers = {};
-        this._vboInstancingLayers = {};
+        this._vboLayers = {};
         this._dtxLayers = {};
         this._layersToFinalize = [];
         for (let i = 0, len = this._entitiesToFinalize.length; i < len; i++) {
@@ -3721,263 +3333,48 @@ export class SceneModel extends Component {
 
     // -------------- RENDERING ---------------------------------------------------------------------------------------
 
-    /** @private */
-    drawColorOpaque(frameCtx, layerList) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawColorOpaque(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawColorTransparent(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawColorTransparent(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawDepth(frameCtx) { // Dedicated to SAO because it skips transparent objects
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawDepth(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawNormals(frameCtx) { // Dedicated to SAO because it skips transparent objects
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawNormals(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawSilhouetteXRayed(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawSilhouetteXRayed(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawSilhouetteHighlighted(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawSilhouetteHighlighted(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawSilhouetteSelected(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawSilhouetteSelected(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawEdgesColorOpaque(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawEdgesColorOpaque(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawEdgesColorTransparent(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawEdgesColorTransparent(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawEdgesXRayed(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawEdgesXRayed(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawEdgesHighlighted(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawEdgesHighlighted(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawEdgesSelected(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawEdgesSelected(renderFlags, frameCtx);
-        }
-    }
 
     /**
      * @private
      */
-    drawOcclusion(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
+    _withEachVisibleLayer(testNumVisibleLayerPortions, cb) {
+        if (testNumVisibleLayerPortions && (this.numVisibleLayerPortions === 0)) {
             return;
         }
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawOcclusion(renderFlags, frameCtx);
+            cb(this.layerList[layerIndex]);
         }
     }
 
-    /**
-     * @private
-     */
-    drawShadow(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawShadow(renderFlags, frameCtx);
-        }
-    }
+    drawColorOpaque          (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawColorOpaque          (this.renderFlags, frameCtx)); }
+    drawColorTransparent     (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawColorTransparent     (this.renderFlags, frameCtx)); }
+    drawDepth                (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawDepth                (this.renderFlags, frameCtx)); } // Dedicated to SAO because it skips transparent objects
+    drawSilhouetteXRayed     (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawSilhouetteXRayed     (this.renderFlags, frameCtx)); }
+    drawSilhouetteHighlighted(frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawSilhouetteHighlighted(this.renderFlags, frameCtx)); }
+    drawSilhouetteSelected   (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawSilhouetteSelected   (this.renderFlags, frameCtx)); }
+    drawEdgesColorOpaque     (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawEdgesColorOpaque     (this.renderFlags, frameCtx)); }
+    drawEdgesColorTransparent(frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawEdgesColorTransparent(this.renderFlags, frameCtx)); }
+    drawEdgesXRayed          (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawEdgesXRayed          (this.renderFlags, frameCtx)); }
+    drawEdgesHighlighted     (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawEdgesHighlighted     (this.renderFlags, frameCtx)); }
+    drawEdgesSelected        (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawEdgesSelected        (this.renderFlags, frameCtx)); }
+    drawOcclusion            (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawOcclusion            (this.renderFlags, frameCtx)); }
+    drawShadow               (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawShadow               (this.renderFlags, frameCtx)); }
+    drawPickMesh             (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawPickMesh             (this.renderFlags, frameCtx)); }
+    drawPickDepths           (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawPickDepths           (this.renderFlags, frameCtx)); }
+    drawPickNormals          (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawPickNormals          (this.renderFlags, frameCtx)); }
+    _drawSnap    (frameCtx, isSnapInit) { this._withEachVisibleLayer(true,  layer => layer.drawSnap                 (this.renderFlags, frameCtx, isSnapInit)); }
 
-    /** @private */
-    setPickMatrices(pickViewMatrix, pickProjMatrix) {
-        if (this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            const layer = this.layerList[layerIndex];
-            if (layer.setPickMatrices) {
-                layer.setPickMatrices(pickViewMatrix, pickProjMatrix);
-            }
-        }
-    }
-
-    /** @private */
-    drawPickMesh(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawPickMesh(renderFlags, frameCtx);
-        }
-    }
-
-    /**
-     * Called by SceneModelMesh.drawPickDepths()
-     * @private
-     */
-    drawPickDepths(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawPickDepths(renderFlags, frameCtx);
-        }
-    }
-
-    /**
-     * Called by SceneModelMesh.drawPickNormals()
-     * @private
-     */
-    drawPickNormals(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawPickNormals(renderFlags, frameCtx);
-        }
-    }
-
-    /**
-     * @private
-     */
-    drawSnapInit(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            const layer = this.layerList[layerIndex];
-            if (layer.drawSnapInit) {
-                frameCtx.snapPickOrigin = [0, 0, 0];
-                frameCtx.snapPickCoordinateScale = [1, 1, 1];
-                frameCtx.snapPickLayerNumber++;
-                layer.drawSnapInit(renderFlags, frameCtx);
-                frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
-                    origin: frameCtx.snapPickOrigin.slice(),
-                    coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
-                };
-            }
-        }
-    }
-
-    /**
-     * @private
-     */
-    drawSnap(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            const layer = this.layerList[layerIndex];
-            if (layer.drawSnap) {
-                frameCtx.snapPickOrigin = [0, 0, 0];
-                frameCtx.snapPickCoordinateScale = [1, 1, 1];
-                frameCtx.snapPickLayerNumber++;
-                layer.drawSnap(renderFlags, frameCtx);
-                frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
-                    origin: frameCtx.snapPickOrigin.slice(),
-                    coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
-                };
-            }
-        }
-    }
+    drawSnapInit(frameCtx) { this._drawSnap(frameCtx, true ); }
+    drawSnap    (frameCtx) { this._drawSnap(frameCtx, false); }
 
     /**
      * Destroys this SceneModel.
      */
     destroy() {
-        for (let layerId in this._vboBatchingLayers) {
-            if (this._vboBatchingLayers.hasOwnProperty(layerId)) {
-                this._vboBatchingLayers[layerId].destroy();
-            }
-        }
-        this._vboBatchingLayers = {};
-        for (let layerId in this._vboInstancingLayers) {
-            if (this._vboInstancingLayers.hasOwnProperty(layerId)) {
-                this._vboInstancingLayers[layerId].destroy();
-            }
-        }
-        this._vboInstancingLayers = {};
+        Object.values(this._vboLayers).forEach(l => l.destroy());
+        this._vboLayers = {};
         this.scene.camera.off(this._onCameraViewMatrix);
         this.scene.off(this._onTick);
         for (let i = 0, len = this.layerList.length; i < len; i++) {
@@ -3987,7 +3384,7 @@ export class SceneModel extends Component {
         for (let i = 0, len = this._entityList.length; i < len; i++) {
             this._entityList[i]._destroy();
         }
-        this._layersToFinalize = {};
+        this._layersToFinalize = [];
         // Object.entries(this._geometries).forEach(([id, geometry]) => {
         //     geometry.destroy();
         // });
@@ -4001,7 +3398,6 @@ export class SceneModel extends Component {
         if (this._isModel) {
             this.scene._deregisterModel(this);
         }
-        putScratchMemory();
         super.destroy();
     }
 }
