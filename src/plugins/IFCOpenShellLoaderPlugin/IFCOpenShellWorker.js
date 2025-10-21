@@ -13,12 +13,12 @@ self.onmessage = async (e) => {
     //   try {
     if (msg.type === "init") {
         const {
-            indexURL = "https://cdn.jsdelivr.net/pyodide/v0.28.0a3/full",
-            wheelURL = "../../dist/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl",
+            pyodideSrc = "https://cdn.jsdelivr.net/pyodide/v0.28.0a3/full",
+            ifcOpenShellSrc = "../../dist/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl",
         } = msg;
 
-        self.importScripts(`${indexURL}/pyodide.js`);
-        pyodide = await self.loadPyodide({ indexURL });
+        self.importScripts(`${pyodideSrc}/pyodide.js`);
+        pyodide = await self.loadPyodide({ pyodideSrc });
 
         await pyodide.loadPackage("micropip");
         await pyodide.loadPackage("numpy");
@@ -26,7 +26,7 @@ self.onmessage = async (e) => {
 
         const micropip = pyodide.pyimport("micropip");
         await micropip.install("typing-extensions");
-        await micropip.install(wheelURL);
+        await micropip.install(ifcOpenShellSrc);
 
         ifcopenshell = pyodide.pyimport("ifcopenshell");
         ifcopenshell_geom = pyodide.pyimport("ifcopenshell.geom");

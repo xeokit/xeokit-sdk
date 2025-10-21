@@ -77,7 +77,7 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  *
  * const ifcLoader = new IFCOpenShellLoaderPlugin(viewer, {
  *     workerSrc: "./my/directory/IFCOpenShellWorker.js",
- *     wheelURL: "./my/directory/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl"
+ *     ifcOpenShellSrc: "./my/directory/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl"
  * });
  *
  * // 2
@@ -234,7 +234,7 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
 
         if (!cfg) throw new Error("IFCOpenShellLoaderPlugin: No configuration given");
         if (!cfg.workerSrc) throw new Error("IFCOpenShellLoaderPlugin: No workerSrc given");
-        if (!cfg.wheelURL) throw new Error("IFCOpenShellLoaderPlugin: No wheelURL given");
+        if (!cfg.ifcOpenShellSrc) throw new Error("IFCOpenShellLoaderPlugin: No ifcOpenShellSrc given");
 
         this.dataSource = cfg.dataSource;
         this.objectDefaults = cfg.objectDefaults;
@@ -267,8 +267,8 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
 
                 worker.postMessage({
                     type: "init",
-                    indexURL: cfg.indexURL || "https://cdn.jsdelivr.net/pyodide/v0.28.0a3/full",
-                    wheelURL: cfg.wheelURL || "../../dist/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl"
+                    pyodideSrc: cfg.pyodideSrc || "https://cdn.jsdelivr.net/pyodide/v0.28.0a3/full",
+                    ifcOpenShellSrc: cfg.ifcOpenShellSrc || "../../dist/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl"
                 });
             });
         }
@@ -382,7 +382,8 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
 
         const worker = await this._workerReadyPromise;
 
-        const cache = {};
+        const spinner = this.viewer.scene.canvas.spinner;
+        spinner.processes++;
 
         const onMessage = (ev) => {
             const data = ev.data;
@@ -410,11 +411,13 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
                         sceneModel.fire("loaded", true, false);
                     }
                 });
+                spinner.processes--;
                 this.fire("loaded", {id, sceneModel, count: data.count});
 
             } else if (data.type === "error") {
                 worker.removeEventListener("message", onMessage);
                 console.error("Worker error:", data.message, data.stack);
+                spinner.processes--;
                 this.fire("error", {id, error: data.message});
             }
         };

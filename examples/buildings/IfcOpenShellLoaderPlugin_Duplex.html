@@ -205,7 +205,7 @@
 
     const ifcLoader = new IFCOpenShellLoaderPlugin(viewer, {
         workerSrc: "./../dist/IFCOpenShellWorker.js",
-        wheelURL: "./../dist/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl"
+        ifcOpenShellSrc: "./../dist/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl"
     });
 
     const sceneModel = await ifcLoader.load({
