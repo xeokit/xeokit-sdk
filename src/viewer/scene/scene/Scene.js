@@ -2655,7 +2655,7 @@ class Scene extends Component {
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
      * @param {Number[]} [colorize=(1,1,1)] RGB colorize factors, multiplied by the rendered pixel colors.
-     * @returns {Boolean} True if any {@link Entity}s changed opacity, else false if all updates were redundant and not applied.
+     * @returns {Boolean} True if any {@link Entity}s were colorized, else false if all updates were redundant and not applied.
      */
     setObjectsColorized(ids, colorize) {
         return this.withObjects(ids, entity => {
