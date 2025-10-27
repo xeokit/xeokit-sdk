@@ -87,6 +87,14 @@ var loadOBJ = function (modelNode, url, ok) {
         });
 };
 
+//--------------------------------------------------------------------------------------------
+// How to format materialId
+//--------------------------------------------------------------------------------------------
+var formatMaterialId = function (modelId, materialId) {
+    return `${modelId}_${materialId}`;
+};
+
+
 var parseOBJ = (function () {
 
     const regexp = {
@@ -292,7 +300,7 @@ var parseOBJ = (function () {
                 // material
 
                 var id = line.substring(7).trim();
-                state.object.material.id = id;
+                state.object.material.id = formatMaterialId(modelNode.id, id);
 
             } else if (regexp.material_library_pattern.test(line)) {
 
@@ -532,7 +540,6 @@ var parseMTL = (function () {
         var materialCfg = {
             id: "Default"
         };
-        var needCreate = false;
         var line;
         var pos;
         var key;
@@ -560,13 +567,10 @@ var parseMTL = (function () {
             switch (key.toLowerCase()) {
 
                 case "newmtl": // New material
-                    //if (needCreate) {
-                    createMaterial(modelNode, materialCfg);
-                    //}
                     materialCfg = {
-                        id: value
+                        id: value ? formatMaterialId(modelNode.id , value) : ""
                     };
-                    needCreate = true;
+                    createMaterial(modelNode, materialCfg);
                     break;
 
                 case 'ka':
@@ -624,10 +628,6 @@ var parseMTL = (function () {
                 // modelNode.error("Unrecognized token: " + key);
             }
         }
-
-        if (needCreate) {
-            createMaterial(modelNode, materialCfg);
-        }
     };
 
     function createTexture(modelNode, basePath, value, encoding) {
@@ -658,7 +658,14 @@ var parseMTL = (function () {
     }
 
     function createMaterial(modelNode, materialCfg) {
-        new PhongMaterial(modelNode, materialCfg);
+        var material = modelNode.scene.components[materialCfg.id];
+        if(material){
+            console.warn("Material already loaded");
+            if(!modelNode._ownedComponents)  modelNode._ownedComponents = {};
+            modelNode._ownedComponents[materialCfg.id] = material;
+        }else{
+            new PhongMaterial(modelNode, materialCfg);
+        }
     }
 
     function parseRGB(value) {
