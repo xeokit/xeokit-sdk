@@ -228,9 +228,9 @@ class SectionCaps {
                                     const aabb = sceneModel.aabb;
                                     sceneModelsData[sceneModel.id] = {
                                         entityGeometries: new Map(),
-                                        // modelOrigin is critical to use when handling models with large coordinates.
+                                        // modelCenter is critical to use when handling models with large coordinates.
                                         // See XCD-306 and examples/slicing/SectionCaps_at_distance.html for more details.
-                                        modelOrigin: math.vec3([
+                                        modelCenter: math.vec3([
                                             (aabb[0] + aabb[3]) / 2,
                                             (aabb[1] + aabb[4]) / 2,
                                             (aabb[2] + aabb[5]) / 2
@@ -239,8 +239,8 @@ class SectionCaps {
                                 }
 
                                 const modelData = sceneModelsData[sceneModel.id];
-                                const modelOrigin = modelData.modelOrigin;
-                                const planeDist = math.dotVec3(planeDir, math.subVec3(modelOrigin, planePos, tempVec3a));
+                                const modelCenter = modelData.modelCenter;
+                                const planeDist = math.dotVec3(planeDir, math.subVec3(modelCenter, planePos, tempVec3a));
 
                                 dirtyMap[sceneModel.id].forEach((isDirty, entityId) => {
                                     if (isDirty) {
@@ -251,7 +251,7 @@ class SectionCaps {
                                                 const vertices = [ ];
                                                 if (entity.meshes[0].isSolid()) {
                                                     entity.getEachIndex(i  => indices.push(i));
-                                                    entity.getEachVertex(v => vertices.push(v[0]-modelOrigin[0], v[1]-modelOrigin[1], v[2]-modelOrigin[2]));
+                                                    entity.getEachVertex(v => vertices.push(v[0]-modelCenter[0], v[1]-modelCenter[1], v[2]-modelCenter[2]));
                                                 }
                                                 modelData.entityGeometries.set(entityId, { indices: indices, vertices: vertices });
                                             }
@@ -399,7 +399,7 @@ class SectionCaps {
                                                                                             tempVec3b);
 
                                                                 // Project the point onto the cutting plane
-                                                                const t = math.dotVec3(planeDir, math.subVec3(planePos, math.addVec3(modelOrigin, result, tempVec3a), tempVec3a));
+                                                                const t = math.dotVec3(planeDir, math.subVec3(planePos, math.addVec3(modelCenter, result, tempVec3a), tempVec3a));
                                                                 const vertex = math.addVec3(result, math.mulVec3Scalar(planeDir, t, tempVec3a), tempVec3a);
                                                                 triangle[j].set(vertex);
 
@@ -415,7 +415,7 @@ class SectionCaps {
                                                                     vertexMap.set(vertexKey, curVertexIndex);
                                                                     indices.push(curVertexIndex++);
 
-                                                                    const P = math.addVec3(modelOrigin, vertex, tempVec3b);
+                                                                    const P = math.addVec3(modelCenter, vertex, tempVec3b);
                                                                     // Project P onto the plane
                                                                     const dist = math.dotVec3(planeDir, math.subVec3(planePos, P, tempVec3c));
                                                                     math.addVec3(P, math.mulVec3Scalar(planeDir, dist, tempVec3c), P);
@@ -446,7 +446,7 @@ class SectionCaps {
                                                         capMeshes.push(new Mesh(scene, {
                                                             id:       `${plane.id}-${entityId}-${capMeshes.length}`,
                                                             material: entity.capMaterial,
-                                                            origin:   math.addVec3(modelOrigin, math.mulVec3Scalar(planeDir, 0.001, tempVec3a), tempVec3a),
+                                                            origin:   math.addVec3(modelCenter, math.mulVec3Scalar(planeDir, 0.001, tempVec3a), tempVec3a),
                                                             geometry: new ReadableGeometry(scene, {
                                                                 primitive: "triangles",
                                                                 indices:   indices,
