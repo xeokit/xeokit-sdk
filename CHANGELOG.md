@@ -1,5 +1,11 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.94](https://github.com/xeokit/xeokit-sdk/compare/v2.6.93...v2.6.94)
+
+### 03 November 2025
+
+XEOK-377 Consider DirLight.space="space" same as "world" and fix DirLight.space documentation [#1977](https://github.com/xeokit/xeokit-sdk/pull/1977)
+
 # [v2.6.93](https://github.com/xeokit/xeokit-sdk/compare/v2.6.92...v2.6.93)
 
 ### 20 October 2025
