@@ -328,8 +328,6 @@ class SectionCaps {
                                                         // Triangulate
                                                         const triangles = earcut(vertices, innerLoops.map(loop => loop.index));
 
-                                                        // Create a vertex map to reuse vertices
-                                                        const vertexMap = new Map();
                                                         const positions = [];
                                                         const indices = [];
                                                         const uvs = [ ];
@@ -349,33 +347,23 @@ class SectionCaps {
                                                                 const vertex = math.addVec3(result, math.mulVec3Scalar(planeDir, t, tempVec3a), tempVec3a);
                                                                 triangle[j].set(vertex);
 
-                                                                // Create a key for the vertex to check for duplicates
-                                                                const vertexKey = `${vertex[0].toFixed(6)},${vertex[1].toFixed(6)},${vertex[2].toFixed(6)}`;
+                                                                positions.push(vertex[0], vertex[1], vertex[2]);
+                                                                indices.push(curVertexIndex++);
 
-                                                                if (vertexMap.has(vertexKey)) {
-                                                                    // Reuse existing vertex
-                                                                    indices.push(vertexMap.get(vertexKey));
-                                                                } else {
-                                                                    // Add new vertex
-                                                                    positions.push(vertex[0], vertex[1], vertex[2]);
-                                                                    vertexMap.set(vertexKey, curVertexIndex);
-                                                                    indices.push(curVertexIndex++);
+                                                                const P = math.addVec3(modelCenter, vertex, tempVec3b);
+                                                                // Project P onto the plane
+                                                                const dist = math.dotVec3(planeDir, math.subVec3(planePos, P, tempVec3c));
+                                                                math.addVec3(P, math.mulVec3Scalar(planeDir, dist, tempVec3c), P);
 
-                                                                    const P = math.addVec3(modelCenter, vertex, tempVec3b);
-                                                                    // Project P onto the plane
-                                                                    const dist = math.dotVec3(planeDir, math.subVec3(planePos, P, tempVec3c));
-                                                                    math.addVec3(P, math.mulVec3Scalar(planeDir, dist, tempVec3c), P);
+                                                                const right = ((Math.abs(math.dotVec3(planeDir, worldUp)) < 0.999)
+                                                                               ? math.cross3Vec3(planeDir, worldUp, tempVec3c)
+                                                                               : worldRight);
+                                                                const v = math.normalizeVec3(math.cross3Vec3(planeDir, right, tempVec3c));
 
-                                                                    const right = ((Math.abs(math.dotVec3(planeDir, worldUp)) < 0.999)
-                                                                                   ? math.cross3Vec3(planeDir, worldUp, tempVec3c)
-                                                                                   : worldRight);
-                                                                    const v = math.normalizeVec3(math.cross3Vec3(planeDir, right, tempVec3c));
-
-                                                                    const OP_proj = math.subVec3(P, planePos, P);
-                                                                    uvs.push(
-                                                                        math.dotVec3(OP_proj, math.normalizeVec3(math.cross3Vec3(v, planeDir, tempVec3d))),
-                                                                        math.dotVec3(OP_proj, v));
-                                                                }
+                                                                const OP_proj = math.subVec3(P, planePos, P);
+                                                                uvs.push(
+                                                                    math.dotVec3(OP_proj, math.normalizeVec3(math.cross3Vec3(v, planeDir, tempVec3d))),
+                                                                    math.dotVec3(OP_proj, v));
                                                             }
 
                                                             math.subVec3(triangle[1], triangle[0], tempVec3b);
