@@ -280,7 +280,7 @@ class SectionCaps {
                                                     }
                                                 }
 
-                                                const loops = segments.map(segments => segments.map(seg => [ projectToPlane2D(seg[0]), projectToPlane2D(seg[1]) ]));
+                                                const loops = segments.filter(segments => segments.length > 2).map(segments => segments.map(seg => [ projectToPlane2D(seg[0]), projectToPlane2D(seg[1]) ]));
 
                                                 // Group related loops (outer boundaries with their holes)
                                                 const used = new Set();
