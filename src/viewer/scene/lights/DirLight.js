@@ -111,7 +111,7 @@ class DirLight extends Light {
      * @param {Number[]} [cfg.dir=[1.0, 1.0, 1.0]]  A unit vector indicating the direction that the light is shining,  given in either World or View space, depending on the value of the ````space```` parameter.
      * @param {Number[]} [cfg.color=[0.7, 0.7, 0.8 ]] The color of this DirLight.
      * @param {Number} [cfg.intensity=1.0] The intensity of this DirLight, as a factor in range ````[0..1]````.
-     * @param {String} [cfg.space="view"] The coordinate system the DirLight is defined in - ````"view"```` or ````"space"````.
+     * @param {String} [cfg.space="view"] The coordinate system the DirLight is defined in - ````"view"```` or ````"world"````.
      * @param {Boolean} [cfg.castsShadow=false] Flag which indicates if this DirLight casts a castsShadow.
      */
     constructor(owner, cfg = {}) {
