@@ -255,28 +255,30 @@ class SectionCaps {
                                                     const curSegments = segments[index];
                                                     const lastPoint = curSegments[curSegments.length - 1][1];
 
-                                                    let newSegment = null;
-                                                    for (let i = 0; i < unsortedSegment.length; i++) {
-                                                        const [start, end] = unsortedSegment[i];
-                                                        newSegment = ((pointsEqual(lastPoint, start) && [start, end])
-                                                                      ||
-                                                                      (pointsEqual(lastPoint, end)   && [end, start]));
-                                                        if (newSegment) {
-                                                            curSegments.push(newSegment);
-                                                            unsortedSegment.splice(i, 1);
-                                                            break;
+                                                    const closest = { dist: window.Infinity, idx: -1, side: -1 };
+                                                    unsortedSegment.forEach((seg, i) => {
+                                                        const dist0 = math.distVec3(seg[0], lastPoint);
+                                                        const dist1 = math.distVec3(seg[1], lastPoint);
+                                                        const dist = Math.min(dist0, dist1);
+                                                        if (closest.dist > dist) {
+                                                            closest.dist = dist;
+                                                            closest.idx = i;
+                                                            closest.side = (dist1 < dist0) ? 1 : 0;
                                                         }
-                                                    }
+                                                    });
 
-                                                    if (! newSegment) {
-                                                        if (pointsEqual(lastPoint, curSegments[0][0]) && (unsortedSegment.length > 1)) {
-                                                            segments.push([ unsortedSegment[0] ]);
-                                                            unsortedSegment.splice(0, 1);
-                                                            index++;
-                                                        } else {
-                                                            // console.error(`Could not find a matching segment. Loop may not be closed. Key: ${key}`);
-                                                            break;
-                                                        }
+                                                    const next = unsortedSegment[closest.idx];
+                                                    const newSegment = pointsEqual(lastPoint, next[closest.side]) && [next[closest.side], next[1-closest.side]];
+                                                    if (newSegment) {
+                                                        curSegments.push(newSegment);
+                                                        unsortedSegment.splice(closest.idx, 1);
+                                                    } else if (pointsEqual(lastPoint, curSegments[0][0]) && (unsortedSegment.length > 1)) {
+                                                        segments.push([ unsortedSegment[0] ]);
+                                                        unsortedSegment.splice(0, 1);
+                                                        index++;
+                                                    } else {
+                                                        // console.error(`Could not find a matching segment. Loop may not be closed. Key: ${key}`);
+                                                        break;
                                                     }
                                                 }
 
