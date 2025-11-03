@@ -280,63 +280,53 @@ class SectionCaps {
                                                     }
                                                 }
 
-                                                const loops = segments.filter(segments => segments.length > 2).map(segments => segments.map(seg => [ projectToPlane2D(seg[0]), projectToPlane2D(seg[1]) ]));
+                                                const loops = segments.filter(segments => segments.length > 2).map((segments, idx) => {
+                                                    const planeSegments = segments.map(seg => seg.map(projectToPlane2D));
+                                                    let doubleArea = 0;
+                                                    for (let i = 0; i < planeSegments.length; i++) {
+                                                        const [ x0, y0 ] = planeSegments[i][0];
+                                                        const [ x1, y1 ] = planeSegments[(i + 1) % planeSegments.length][0];
+                                                        doubleArea += (x0 * y1 - x1 * y0);
+                                                    }
+                                                    return {
+                                                        doubleArea: Math.abs(doubleArea),
+                                                        segments: planeSegments
+                                                    };
+                                                }).sort((a, b) => b.doubleArea - a.doubleArea);
 
                                                 // Group related loops (outer boundaries with their holes)
                                                 const used = new Set();
 
+                                                const isInsideEitherWay = (a, b) => isLoopInside(a, b) || isLoopInside(b, a);
+
                                                 for (let loopIdx = 0; loopIdx < loops.length; loopIdx++) {
                                                     if (! used.has(loopIdx)) {
-                                                        const group = [loops[loopIdx]];
+                                                        const vertices = [ ];
+                                                        const appendSegmentVertices = segment => vertices.push(segment[0][0], segment[0][1]);
+
+                                                        const outerLoop = loops[loopIdx].segments;
+                                                        outerLoop.forEach(appendSegmentVertices);
+
+                                                        const innerLoops = [ ];
                                                         used.add(loopIdx);
 
                                                         // Check remaining loops
                                                         for (let j = loopIdx + 1; j < loops.length; j++) {
                                                             if (! used.has(j)) {
-                                                                if (isLoopInside(loops[loopIdx], loops[j]) || isLoopInside(loops[j], loops[loopIdx])) {
-                                                                    group.push(loops[j]);
+                                                                const loop = loops[j].segments;
+                                                                if (isInsideEitherWay(loop, outerLoop)
+                                                                    &&
+                                                                    (! innerLoops.some(inner => isInsideEitherWay(loop, inner.segments)))) {
+                                                                    const holeIndex = vertices.length / 2;
+                                                                    loop.forEach(appendSegmentVertices);
+                                                                    innerLoops.push({ segments: loop, index: holeIndex });
                                                                     used.add(j);
                                                                 }
                                                             }
                                                         }
 
-                                                        // Convert the segments into a flat array of vertices and find holes
-
-                                                        // First, determine which loop has the largest area - this will be our outer boundary
-                                                        let outerLoopIndex = -1;
-                                                        let largestDoubleArea = -window.Infinity;
-                                                        group.forEach((loop, idx) => {
-                                                            let doubleArea = 0;
-                                                            for (let i = 0; i < loop.length; i++) {
-                                                                const j = (i + 1) % loop.length;
-                                                                doubleArea += loop[i][0][0] * loop[j][0][1];
-                                                                doubleArea -= loop[j][0][0] * loop[i][0][1];
-                                                            }
-                                                            doubleArea = Math.abs(doubleArea);
-                                                            if (largestDoubleArea < doubleArea) {
-                                                                largestDoubleArea = doubleArea;
-                                                                outerLoopIndex = idx;
-                                                            }
-                                                        });
-
-                                                        const vertices = [ ];
-                                                        const appendSegmentVertices = segment => vertices.push(segment[0][0], segment[0][1]);
-
-                                                        // Add the outer boundary first
-                                                        group[outerLoopIndex].forEach(appendSegmentVertices);
-
-                                                        // Then add all other loops as holes
-                                                        const holes = [];
-                                                        group.forEach((loop, i) => {
-                                                            if (i !== outerLoopIndex) {
-                                                                // Store the starting vertex index for this hole
-                                                                holes.push(vertices.length / 2);
-                                                                loop.forEach(appendSegmentVertices);
-                                                            }
-                                                        });
-
-                                                        // Triangulate using earcut
-                                                        const triangles = earcut(vertices, holes);
+                                                        // Triangulate
+                                                        const triangles = earcut(vertices, innerLoops.map(loop => loop.index));
 
                                                         // Create a vertex map to reuse vertices
                                                         const vertexMap = new Map();
