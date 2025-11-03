@@ -199,26 +199,23 @@ class SectionCaps {
                             if (doesPlaneIntersectBoundingBox(modelAABB, plane)) {
                                 // modelCenter is critical to use when handling models with large coordinates.
                                 // See XCD-306 and examples/slicing/SectionCaps_at_distance.html for more details.
-                                const modelCenter = math.getAABB3Center(sceneModel.aabb, math.vec3());
+                                const modelCenter = math.getAABB3Center(modelAABB, math.vec3());
                                 const planeDist = math.dotVec3(planeDir, math.subVec3(modelCenter, planePos, tempVec3a));
 
                                 modelCaches[sceneModel.id].entityCaches.forEach((entityCache, entityId) => {
-                                    if (entityCache.generateCaps) {
-                                        const entity = sceneModel.objects[entityId];
-                                        if (entity.capMaterial && doesPlaneIntersectBoundingBox(entity.aabb, plane)) {
-                                            if (! entityCache.geometryCache) {
-                                                const indices  = [ ];
-                                                const vertices = [ ];
-                                                if (entity.meshes[0].isSolid()) {
-                                                    entity.getEachIndex(i  => indices.push(i));
-                                                    entity.getEachVertex(v => vertices.push(v[0]-modelCenter[0], v[1]-modelCenter[1], v[2]-modelCenter[2]));
-                                                }
-                                                entityCache.geometryCache = { indices: indices, vertices: vertices };
-                                            }
+                                    const entity = sceneModel.objects[entityId];
+                                    if (entityCache.generateCaps && entity.capMaterial && doesPlaneIntersectBoundingBox(entity.aabb, plane)) {
+                                        entityCache.meshCaches ||= entity.meshes.filter(mesh => mesh.isSolid()).map(mesh => {
+                                            const indices  = [ ];
+                                            const vertices = [ ];
+                                            mesh.getEachIndex(i  => indices.push(i));
+                                            mesh.getEachVertex(v => vertices.push(...math.subVec3(v, modelCenter, tempVec3a)));
+                                            return { mesh: mesh, indices: indices, vertices: vertices };
+                                        });
 
-                                            const entityGeometry = entityCache.geometryCache;
-                                            const indices  = entityGeometry.indices;
-                                            const vertices = entityGeometry.vertices;
+                                        entityCache.meshCaches.filter(meshCache => doesPlaneIntersectBoundingBox(meshCache.mesh.aabb, plane)).forEach(meshCache => {
+                                            const indices  = meshCache.indices;
+                                            const vertices = meshCache.vertices;
 
                                             const unsortedSegment = [];
                                             const setVertex = (i, dst) => {
@@ -417,7 +414,7 @@ class SectionCaps {
                                                     }
                                                 }
                                             }
-                                        }
+                                        });
                                     }
                                 });
                             }
@@ -500,7 +497,7 @@ class SectionCaps {
             if (! entityCaches.has(entityId)) {
                 const entityCache = {
                     capMeshes: [ ],
-                    geometryCache: null,
+                    meshCaches: null,
                     generateCaps: false,
                     destroyCaps: () => {
                         entityCache.capMeshes.forEach(capMesh => capMesh.destroy());
