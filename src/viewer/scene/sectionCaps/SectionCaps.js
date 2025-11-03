@@ -123,34 +123,10 @@ class SectionCaps {
      */
     constructor(scene) {
         let destroy = null;
-        const dirtyMap = { };
-        const modelEntityToCapMeshes = { };
-        const sceneModelsData = { };
+        const modelCaches = { };
         const sectionPlanes = [ ];
 
-        const deletePreviousModels = () => {
-            for (const sceneModelId in modelEntityToCapMeshes) {
-                modelEntityToCapMeshes[sceneModelId].forEach((meshes, entityId) => {
-                    if (dirtyMap[sceneModelId].get(entityId)) {
-                        meshes.forEach(mesh => mesh.destroy());
-                        modelEntityToCapMeshes[sceneModelId].delete(entityId);
-                    }
-                });
-                if (modelEntityToCapMeshes[sceneModelId].size <= 0)
-                    delete modelEntityToCapMeshes[sceneModelId];
-            }
-        };
-
-        const setAllDirty = (value) => {
-            for (const key in dirtyMap) {
-                dirtyMap[key].forEach((_, key2) => dirtyMap[key].set(key2, value));
-            }
-        };
-
-        this.destroy = () => {
-            deletePreviousModels();
-            destroy && destroy();
-        };
+        this.destroy = () => destroy && destroy();
 
         const doesPlaneIntersectBoundingBox = (bb, plane) => {
             const min = [bb[0], bb[1], bb[2]];
@@ -205,10 +181,9 @@ class SectionCaps {
         let updateTimeout = null;
 
         const update = () => {
-            deletePreviousModels();
             clearTimeout(updateTimeout);
             updateTimeout = setTimeout(() => {
-                const sceneModels = Object.values(scene.models).filter(sceneModel => sceneModel.visible);
+                const visibleSceneModels = Object.values(scene.models).filter(sceneModel => (sceneModel.id in modelCaches) && sceneModel.visible);
                 sectionPlanes.forEach((plane) => {
                     if (plane.active) {
                         const planeDir = plane.dir;
@@ -219,44 +194,29 @@ class SectionCaps {
                         const planeV = math.normalizeVec3(math.cross3Vec3(planeDir, planeU, math.vec3()));
                         const projectToPlane2D = point => [ math.dotVec3(planeU, point), math.dotVec3(planeV, point) ];
 
-                        sceneModels.forEach((sceneModel) => {
-                            if (doesPlaneIntersectBoundingBox(sceneModel.aabb, plane) && dirtyMap[sceneModel.id]) {
-                                if (! modelEntityToCapMeshes[sceneModel.id])
-                                    modelEntityToCapMeshes[sceneModel.id] = new Map();
-
-                                if (! sceneModelsData[sceneModel.id]) {
-                                    const aabb = sceneModel.aabb;
-                                    sceneModelsData[sceneModel.id] = {
-                                        entityGeometries: new Map(),
-                                        // modelCenter is critical to use when handling models with large coordinates.
-                                        // See XCD-306 and examples/slicing/SectionCaps_at_distance.html for more details.
-                                        modelCenter: math.vec3([
-                                            (aabb[0] + aabb[3]) / 2,
-                                            (aabb[1] + aabb[4]) / 2,
-                                            (aabb[2] + aabb[5]) / 2
-                                        ])
-                                    };
-                                }
-
-                                const modelData = sceneModelsData[sceneModel.id];
-                                const modelCenter = modelData.modelCenter;
+                        visibleSceneModels.forEach(sceneModel => {
+                            const modelAABB = sceneModel.aabb;
+                            if (doesPlaneIntersectBoundingBox(modelAABB, plane)) {
+                                // modelCenter is critical to use when handling models with large coordinates.
+                                // See XCD-306 and examples/slicing/SectionCaps_at_distance.html for more details.
+                                const modelCenter = math.getAABB3Center(sceneModel.aabb, math.vec3());
                                 const planeDist = math.dotVec3(planeDir, math.subVec3(modelCenter, planePos, tempVec3a));
 
-                                dirtyMap[sceneModel.id].forEach((isDirty, entityId) => {
-                                    if (isDirty) {
+                                modelCaches[sceneModel.id].entityCaches.forEach((entityCache, entityId) => {
+                                    if (entityCache.generateCaps) {
                                         const entity = sceneModel.objects[entityId];
                                         if (entity.capMaterial && doesPlaneIntersectBoundingBox(entity.aabb, plane)) {
-                                            if (! modelData.entityGeometries.has(entityId)) {
+                                            if (! entityCache.geometryCache) {
                                                 const indices  = [ ];
                                                 const vertices = [ ];
                                                 if (entity.meshes[0].isSolid()) {
                                                     entity.getEachIndex(i  => indices.push(i));
                                                     entity.getEachVertex(v => vertices.push(v[0]-modelCenter[0], v[1]-modelCenter[1], v[2]-modelCenter[2]));
                                                 }
-                                                modelData.entityGeometries.set(entityId, { indices: indices, vertices: vertices });
+                                                entityCache.geometryCache = { indices: indices, vertices: vertices };
                                             }
 
-                                            const entityGeometry = modelData.entityGeometries.get(entityId);
+                                            const entityGeometry = entityCache.geometryCache;
                                             const indices  = entityGeometry.indices;
                                             const vertices = entityGeometry.vertices;
 
@@ -326,7 +286,6 @@ class SectionCaps {
                                                 const loops = segments.map(segments => segments.map(seg => [ projectToPlane2D(seg[0]), projectToPlane2D(seg[1]) ]));
 
                                                 // Group related loops (outer boundaries with their holes)
-                                                const capMeshes = [];
                                                 const used = new Set();
 
                                                 for (let loopIdx = 0; loopIdx < loops.length; loopIdx++) {
@@ -443,8 +402,8 @@ class SectionCaps {
                                                             }
                                                         }
 
-                                                        capMeshes.push(new Mesh(scene, {
-                                                            id:       `${plane.id}-${entityId}-${capMeshes.length}`,
+                                                        entityCache.capMeshes.push(new Mesh(scene, {
+                                                            id:       `${plane.id}-${entityId}-${entityCache.capMeshes.length}`,
                                                             material: entity.capMaterial,
                                                             origin:   math.addVec3(modelCenter, math.mulVec3Scalar(planeDir, 0.001, tempVec3a), tempVec3a),
                                                             geometry: new ReadableGeometry(scene, {
@@ -457,8 +416,6 @@ class SectionCaps {
                                                         }));
                                                     }
                                                 }
-
-                                                modelEntityToCapMeshes[sceneModel.id].set(entityId, capMeshes);
                                             }
                                         }
                                     }
@@ -467,7 +424,7 @@ class SectionCaps {
                         });
                     }
                 });
-                setAllDirty(false);
+                visibleSceneModels.forEach(sceneModel => modelCaches[sceneModel.id].entityCaches.forEach(entityCache => entityCache.generateCaps = false));
             }, 100);
         };
 
@@ -477,7 +434,10 @@ class SectionCaps {
 
                 const handleSectionPlane = (sectionPlane) => {
                     const onSectionPlaneUpdated = () => {
-                        setAllDirty(true);
+                        Object.values(modelCaches).forEach(modelCache => modelCache.entityCaches.forEach(entityCache => {
+                            entityCache.destroyCaps();
+                            entityCache.generateCaps = true;
+                        }));
                         update();
                     };
                     sectionPlanes.push(sectionPlane);
@@ -488,7 +448,7 @@ class SectionCaps {
                         const idx = sectionPlanes.indexOf(sectionPlane);
                         if (idx >= 0) {
                             sectionPlanes.splice(idx, 1);
-                            update();
+                            onSectionPlaneUpdated();
                         }
                     });
                 };
@@ -502,31 +462,56 @@ class SectionCaps {
                 const onTick = scene.on("tick", () => {
                     //on ticks we only check if there is a model that we have saved vertices for,
                     //but it's no more available on the scene, or if its visibility changed
-                    let dirty = false;
-                    for (const sceneModelId in sceneModelsData) {
-                        if (! scene.models[sceneModelId]){
-                            delete sceneModelsData[sceneModelId];
-                            dirty = true;
-                        } else if (sceneModelsData[sceneModelId].visible !== (!!scene.models[sceneModelId].visible)) {
-                            sceneModelsData[sceneModelId].visible = !!scene.models[sceneModelId].visible;
-                            dirty = true;
+                    let doUpdate = false;
+                    for (const sceneModelId in modelCaches) {
+                        const sceneModel = scene.models[sceneModelId];
+                        if (! sceneModel) {
+                            modelCaches[sceneModelId].entityCaches.forEach(entityCache => entityCache.destroyCaps());
+                            delete modelCaches[sceneModelId];
+                            doUpdate = true;
+                        } else if (modelCaches[sceneModelId].modelVisible != sceneModel.visible) {
+                            const modelCache = modelCaches[sceneModelId];
+                            modelCache.modelVisible = !!sceneModel.visible;
+                            modelCache.entityCaches.forEach(entityCache => {
+                                entityCache.destroyCaps();
+                                entityCache.generateCaps = true;
+                            });
+                            doUpdate = true;
                         }
                     }
-                    if (dirty) {
+                    if (doUpdate) {
                         update();
                     }
                 });
                 destroy = () => {
+                    for (const sceneModelId in modelCaches) {
+                        modelCaches[sceneModelId].entityCaches.forEach(entityCache => entityCache.destroyCaps());
+                    }
                     scene.off(onSectionPlaneCreated);
                     scene.off(onTick);
                 };
             }
 
-            const modelId = entity.model.id;
-            if (! dirtyMap[modelId])
-                dirtyMap[modelId] = new Map();
-
-            dirtyMap[modelId].set(entity.id, true);
+            const model = entity.model;
+            const modelId = model.id;
+            modelCaches[modelId] ||= { modelVisible: model.visible, entityCaches: new Map() };
+            const entityCaches = modelCaches[modelId].entityCaches;
+            const entityId = entity.id;
+            if (! entityCaches.has(entityId)) {
+                const entityCache = {
+                    capMeshes: [ ],
+                    geometryCache: null,
+                    generateCaps: false,
+                    destroyCaps: () => {
+                        entityCache.capMeshes.forEach(capMesh => capMesh.destroy());
+                        entityCache.capMeshes.length = 0;
+                    }
+                };
+                entityCaches.set(entityId, entityCache);
+            }
+            const entityCache = entityCaches.get(entityId);
+            entityCache.destroyCaps();
+            entityCache.generateCaps = true;
             update();
         };
     }
