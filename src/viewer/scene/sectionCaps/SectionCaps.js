@@ -471,7 +471,7 @@ class SectionCaps {
             }, 100);
         };
 
-        this._onCapMaterialUpdated = (entityId, modelId) => {
+        this._onCapMaterialUpdated = (entity) => {
             if (! destroy) {
                 updateTimeout = null;
 
@@ -522,10 +522,11 @@ class SectionCaps {
                 };
             }
 
+            const modelId = entity.model.id;
             if (! dirtyMap[modelId])
                 dirtyMap[modelId] = new Map();
 
-            dirtyMap[modelId].set(entityId, true);
+            dirtyMap[modelId].set(entity.id, true);
             update();
         };
     }

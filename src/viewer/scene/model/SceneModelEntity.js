@@ -661,7 +661,7 @@ export class SceneModelEntity {
     set capMaterial(value) {
         if (this.scene.readableGeometryEnabled) {
             this._capMaterial = value;
-            this.scene._sectionCaps._onCapMaterialUpdated(this.id, this.model.id);
+            this.scene._sectionCaps._onCapMaterialUpdated(this);
         } else {
             throw "The `capMaterial` assignment requires `Viewer::readableGeometryEnabled` to be `true`";
         }
