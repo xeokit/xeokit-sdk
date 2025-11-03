@@ -163,11 +163,11 @@ class SectionCaps {
 
         const isLoopInside = (loop1, loop2) => {
             // Simple point-in-polygon test using the first point of loop1
-            const point = loop1[0][0];  // First point of first segment
+            const point = loop1[0];  // First point of first segment
             let inside = false;
             for (let i = 0, j = loop2.length - 1; i < loop2.length; j = i++) {
-                const xi = loop2[i][0][0], yi = loop2[i][0][1];
-                const xj = loop2[j][0][0], yj = loop2[j][0][1];
+                const xi = loop2[i][0], yi = loop2[i][1];
+                const xj = loop2[j][0], yj = loop2[j][1];
 
                 if (((yi > point[1]) !== (yj > point[1]))
                     &&
@@ -283,16 +283,16 @@ class SectionCaps {
                                                 }
 
                                                 const loops = segments.filter(segments => segments.length > 2).map((segments, idx) => {
-                                                    const planeSegments = segments.map(seg => seg.map(projectToPlane2D));
+                                                    const planeSegments = segments.map(s => projectToPlane2D(s[0]));
                                                     let doubleArea = 0;
                                                     for (let i = 0; i < planeSegments.length; i++) {
-                                                        const [ x0, y0 ] = planeSegments[i][0];
-                                                        const [ x1, y1 ] = planeSegments[(i + 1) % planeSegments.length][0];
+                                                        const [ x0, y0 ] = planeSegments[i];
+                                                        const [ x1, y1 ] = planeSegments[(i + 1) % planeSegments.length];
                                                         doubleArea += (x0 * y1 - x1 * y0);
                                                     }
                                                     return {
                                                         doubleArea: Math.abs(doubleArea),
-                                                        segments: planeSegments
+                                                        endPoints: planeSegments
                                                     };
                                                 }).sort((a, b) => b.doubleArea - a.doubleArea);
 
@@ -304,9 +304,9 @@ class SectionCaps {
                                                 for (let loopIdx = 0; loopIdx < loops.length; loopIdx++) {
                                                     if (! used.has(loopIdx)) {
                                                         const vertices = [ ];
-                                                        const appendSegmentVertices = segment => vertices.push(segment[0][0], segment[0][1]);
+                                                        const appendSegmentVertices = endPoint => vertices.push(endPoint[0], endPoint[1]);
 
-                                                        const outerLoop = loops[loopIdx].segments;
+                                                        const outerLoop = loops[loopIdx].endPoints;
                                                         outerLoop.forEach(appendSegmentVertices);
 
                                                         const innerLoops = [ ];
@@ -315,13 +315,13 @@ class SectionCaps {
                                                         // Check remaining loops
                                                         for (let j = loopIdx + 1; j < loops.length; j++) {
                                                             if (! used.has(j)) {
-                                                                const loop = loops[j].segments;
+                                                                const loop = loops[j].endPoints;
                                                                 if (isInsideEitherWay(loop, outerLoop)
                                                                     &&
-                                                                    (! innerLoops.some(inner => isInsideEitherWay(loop, inner.segments)))) {
+                                                                    (! innerLoops.some(inner => isInsideEitherWay(loop, inner.endPoints)))) {
                                                                     const holeIndex = vertices.length / 2;
                                                                     loop.forEach(appendSegmentVertices);
-                                                                    innerLoops.push({ segments: loop, index: holeIndex });
+                                                                    innerLoops.push({ endPoints: loop, index: holeIndex });
                                                                     used.add(j);
                                                                 }
                                                             }
