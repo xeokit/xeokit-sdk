@@ -345,7 +345,7 @@ export const DrawShaderSource = function(meshDrawHash, programVariables, geometr
                             src.push("shadow /= 9.0;");
                         }
                         src.push(`vec3 lightColor${i} = ${light.getColor()}${light.shadowParameters ? (" * " + "shadow") : ""};`);
-                        src.push(`vec3 lightDirection${i} = ${light.isWorldSpace ? vDirectionals[i].vViewLightReverseDir : light.getDirection(null, vViewPosition)};`);
+                        src.push(`vec3 lightDirection${i} = ${light.isViewSpace ? light.getDirection(null, vViewPosition) : vDirectionals[i].vViewLightReverseDir};`);
                         const dotNL = `${saturate}(dot(viewNormal, lightDirection${i}))`;
                         src.push(`vec3 irradiance${i} = ${dotNL} * lightColor${i};`);
                         src.push(`reflDiff += irradiance${i};`);

@@ -442,7 +442,7 @@ export const createLightSetup = function(programVariables, lightsState) {
         const withViewLightDir = getDirection => {
             return {
                 glslLight: {
-                    isWorldSpace: light.space === "world",
+                    isViewSpace: light.space === "view",
                     getColor: () => `${lightUniforms.color}.rgb * ${lightUniforms.color}.a`,
                     getDirection: (viewMatrix, viewPosition) => `normalize(${getDirection(viewMatrix, viewPosition)})`,
                     shadowParameters: light.castsShadow && {
