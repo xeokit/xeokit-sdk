@@ -284,33 +284,42 @@ class SectionCaps {
                                                 const loops = endpointLoops.filter(endPoints => endPoints.length > 2).map((endPoints, idx) => {
                                                     const planeEndpoints = endPoints.map(projectToPlane2D);
                                                     let doubleArea = 0;
+                                                    const aabb = math.collapseAABB2(math.AABB2());
                                                     for (let i = 0; i < planeEndpoints.length; i++) {
-                                                        const [ x0, y0 ] = planeEndpoints[i];
-                                                        const [ x1, y1 ] = planeEndpoints[(i + 1) % planeEndpoints.length];
-                                                        doubleArea += (x0 * y1 - x1 * y0);
+                                                        const p0 = planeEndpoints[i];
+                                                        math.expandAABB2Point2(aabb, p0);
+                                                        const p1 = planeEndpoints[(i + 1) % planeEndpoints.length];
+                                                        doubleArea += (p0[0] * p1[1] - p1[0] * p0[1]);
                                                     }
                                                     return {
+                                                        boundingBox: aabb,
                                                         doubleArea: Math.abs(doubleArea),
                                                         endPoints: planeEndpoints
                                                     };
                                                 }).sort((a, b) => b.doubleArea - a.doubleArea);
 
-                                                const isInsideEitherWay = (a, b) => isLoopInside(a, b) || isLoopInside(b, a); // TODO: start with bboxes for faster tests
+                                                const isInsideEitherWay = (a, b) => {
+                                                    const bbA = a.boundingBox;
+                                                    const bbB = b.boundingBox;
+                                                    return ((bbA[0] >= bbB[0]) && (bbA[1] >= bbB[1]) && (bbA[2] <= bbB[2]) && (bbA[3] <= bbB[3])
+                                                            &&
+                                                            (isLoopInside(a.endPoints, b.endPoints) || isLoopInside(b.endPoints, a.endPoints)));
+                                                };
 
                                                 while (loops.length > 0) {
                                                         const vertices = [ ];
-                                                        const appendSegmentVertices = endPoint => vertices.push(endPoint[0], endPoint[1]);
+                                                        const appendLoopVertices = loop => loop.endPoints.forEach(p => vertices.push(p[0], p[1]));
 
-                                                        const outerLoop = loops.shift().endPoints;
-                                                        outerLoop.forEach(appendSegmentVertices);
+                                                        const outerLoop = loops.shift();
+                                                        appendLoopVertices(outerLoop);
 
                                                         const innerLoops = [ ];
                                                         for (let i = 0; i < loops.length; ) {
-                                                            const loop = loops[i].endPoints;
-                                                            if (isInsideEitherWay(loop, outerLoop) && innerLoops.every(inner => !isInsideEitherWay(loop, inner.endPoints))) {
-                                                                const holeIndex = vertices.length / 2;
-                                                                loop.forEach(appendSegmentVertices);
-                                                                innerLoops.push({ endPoints: loop, index: holeIndex });
+                                                            const loop = loops[i];
+                                                            if (isInsideEitherWay(loop, outerLoop) && innerLoops.every(inner => !isInsideEitherWay(loop, inner))) {
+                                                                loop.index = vertices.length / 2;
+                                                                appendLoopVertices(loop);
+                                                                innerLoops.push(loop);
                                                                 loops.splice(i, 1);
                                                             } else {
                                                                 ++i;
