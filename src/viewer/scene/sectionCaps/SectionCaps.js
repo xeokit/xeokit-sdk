@@ -255,15 +255,15 @@ class SectionCaps {
                                                     const curSegments = segments[index];
                                                     const lastPoint = curSegments[curSegments.length - 1][1];
 
-                                                    const closest = { dist: window.Infinity, idx: -1, side: -1 };
+                                                    const closest = { distSq: window.Infinity, idx: -1, side: -1 };
                                                     unsortedSegment.forEach((seg, i) => {
-                                                        const dist0 = math.distVec3(seg[0], lastPoint);
-                                                        const dist1 = math.distVec3(seg[1], lastPoint);
-                                                        const dist = Math.min(dist0, dist1);
-                                                        if (closest.dist > dist) {
-                                                            closest.dist = dist;
+                                                        const distSq0 = math.sqLenVec3(math.subVec3(seg[0], lastPoint, tempVec3a));
+                                                        const distSq1 = math.sqLenVec3(math.subVec3(seg[1], lastPoint, tempVec3a));
+                                                        const distSq = Math.min(distSq0, distSq1);
+                                                        if (closest.distSq > distSq) {
+                                                            closest.distSq = distSq;
                                                             closest.idx = i;
-                                                            closest.side = (dist1 < dist0) ? 1 : 0;
+                                                            closest.side = (distSq1 < distSq0) ? 1 : 0;
                                                         }
                                                     });
 
