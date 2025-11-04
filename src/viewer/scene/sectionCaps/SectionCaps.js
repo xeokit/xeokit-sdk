@@ -248,13 +248,13 @@ class SectionCaps {
 
                                             if (unsortedSegment.length > 0) {
                                                 // sorting the segments
-                                                const segments = [ ];
-                                                segments.push([ unsortedSegment[0] ]);
+                                                const endpointLoops = [ ];
+                                                let firstStart = unsortedSegment[0][0];
+                                                endpointLoops.push([ unsortedSegment[0][1] ]);
                                                 unsortedSegment.splice(0, 1);
                                                 while (unsortedSegment.length > 0) {
-                                                    const curSegments = segments[segments.length - 1];
-                                                    const lastPoint = curSegments[curSegments.length - 1][1];
-
+                                                    const curEndpoints = endpointLoops[endpointLoops.length - 1];
+                                                    const lastPoint = curEndpoints[curEndpoints.length - 1];
                                                     const closest = { distSq: window.Infinity, idx: -1, side: -1 };
                                                     unsortedSegment.forEach((seg, i) => {
                                                         const distSq0 = math.sqLenVec3(math.subVec3(seg[0], lastPoint, tempVec3a));
@@ -268,12 +268,12 @@ class SectionCaps {
                                                     });
 
                                                     const next = unsortedSegment[closest.idx];
-                                                    const newSegment = pointsEqual(lastPoint, next[closest.side]) && [next[closest.side], next[1-closest.side]];
-                                                    if (newSegment) {
-                                                        curSegments.push(newSegment);
+                                                    if (pointsEqual(lastPoint, next[closest.side])) {
+                                                        curEndpoints.push(next[1 - closest.side]);
                                                         unsortedSegment.splice(closest.idx, 1);
-                                                    } else if (pointsEqual(lastPoint, curSegments[0][0]) && (unsortedSegment.length > 1)) {
-                                                        segments.push([ unsortedSegment[0] ]);
+                                                    } else if (pointsEqual(lastPoint, firstStart) && (unsortedSegment.length > 1)) {
+                                                        firstStart = unsortedSegment[0][0];
+                                                        endpointLoops.push([ unsortedSegment[0][1] ]);
                                                         unsortedSegment.splice(0, 1);
                                                     } else {
                                                         // console.error(`Could not find a matching segment. Loop may not be closed. Key: ${key}`);
@@ -281,17 +281,17 @@ class SectionCaps {
                                                     }
                                                 }
 
-                                                const loops = segments.filter(segments => segments.length > 2).map((segments, idx) => {
-                                                    const planeSegments = segments.map(s => projectToPlane2D(s[0]));
+                                                const loops = endpointLoops.filter(endPoints => endPoints.length > 2).map((endPoints, idx) => {
+                                                    const planeEndpoints = endPoints.map(projectToPlane2D);
                                                     let doubleArea = 0;
-                                                    for (let i = 0; i < planeSegments.length; i++) {
-                                                        const [ x0, y0 ] = planeSegments[i];
-                                                        const [ x1, y1 ] = planeSegments[(i + 1) % planeSegments.length];
+                                                    for (let i = 0; i < planeEndpoints.length; i++) {
+                                                        const [ x0, y0 ] = planeEndpoints[i];
+                                                        const [ x1, y1 ] = planeEndpoints[(i + 1) % planeEndpoints.length];
                                                         doubleArea += (x0 * y1 - x1 * y0);
                                                     }
                                                     return {
                                                         doubleArea: Math.abs(doubleArea),
-                                                        endPoints: planeSegments
+                                                        endPoints: planeEndpoints
                                                     };
                                                 }).sort((a, b) => b.doubleArea - a.doubleArea);
 
