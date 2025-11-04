@@ -248,11 +248,11 @@ class SectionCaps {
 
                                             if (unsortedSegment.length > 0) {
                                                 // sorting the segments
-                                                const segments = [ [ unsortedSegment[0] ] ]; // an array of two vectors
+                                                const segments = [ ];
+                                                segments.push([ unsortedSegment[0] ]);
                                                 unsortedSegment.splice(0, 1);
-                                                let index = 0;
                                                 while (unsortedSegment.length > 0) {
-                                                    const curSegments = segments[index];
+                                                    const curSegments = segments[segments.length - 1];
                                                     const lastPoint = curSegments[curSegments.length - 1][1];
 
                                                     const closest = { distSq: window.Infinity, idx: -1, side: -1 };
@@ -275,7 +275,6 @@ class SectionCaps {
                                                     } else if (pointsEqual(lastPoint, curSegments[0][0]) && (unsortedSegment.length > 1)) {
                                                         segments.push([ unsortedSegment[0] ]);
                                                         unsortedSegment.splice(0, 1);
-                                                        index++;
                                                     } else {
                                                         // console.error(`Could not find a matching segment. Loop may not be closed. Key: ${key}`);
                                                         break;
