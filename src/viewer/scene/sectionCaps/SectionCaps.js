@@ -295,34 +295,25 @@ class SectionCaps {
                                                     };
                                                 }).sort((a, b) => b.doubleArea - a.doubleArea);
 
-                                                // Group related loops (outer boundaries with their holes)
-                                                const used = new Set();
+                                                const isInsideEitherWay = (a, b) => isLoopInside(a, b) || isLoopInside(b, a); // TODO: start with bboxes for faster tests
 
-                                                const isInsideEitherWay = (a, b) => isLoopInside(a, b) || isLoopInside(b, a);
-
-                                                for (let loopIdx = 0; loopIdx < loops.length; loopIdx++) {
-                                                    if (! used.has(loopIdx)) {
+                                                while (loops.length > 0) {
                                                         const vertices = [ ];
                                                         const appendSegmentVertices = endPoint => vertices.push(endPoint[0], endPoint[1]);
 
-                                                        const outerLoop = loops[loopIdx].endPoints;
+                                                        const outerLoop = loops.shift().endPoints;
                                                         outerLoop.forEach(appendSegmentVertices);
 
                                                         const innerLoops = [ ];
-                                                        used.add(loopIdx);
-
-                                                        // Check remaining loops
-                                                        for (let j = loopIdx + 1; j < loops.length; j++) {
-                                                            if (! used.has(j)) {
-                                                                const loop = loops[j].endPoints;
-                                                                if (isInsideEitherWay(loop, outerLoop)
-                                                                    &&
-                                                                    (! innerLoops.some(inner => isInsideEitherWay(loop, inner.endPoints)))) {
-                                                                    const holeIndex = vertices.length / 2;
-                                                                    loop.forEach(appendSegmentVertices);
-                                                                    innerLoops.push({ endPoints: loop, index: holeIndex });
-                                                                    used.add(j);
-                                                                }
+                                                        for (let i = 0; i < loops.length; ) {
+                                                            const loop = loops[i].endPoints;
+                                                            if (isInsideEitherWay(loop, outerLoop) && innerLoops.every(inner => !isInsideEitherWay(loop, inner.endPoints))) {
+                                                                const holeIndex = vertices.length / 2;
+                                                                loop.forEach(appendSegmentVertices);
+                                                                innerLoops.push({ endPoints: loop, index: holeIndex });
+                                                                loops.splice(i, 1);
+                                                            } else {
+                                                                ++i;
                                                             }
                                                         }
 
@@ -390,7 +381,6 @@ class SectionCaps {
                                                                 uv:        uvs
                                                             })
                                                         }));
-                                                    }
                                                 }
                                             }
                                         });
