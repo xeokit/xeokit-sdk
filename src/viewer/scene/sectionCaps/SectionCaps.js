@@ -231,6 +231,10 @@ class SectionCaps {
                                                 const p1 = setVertex(i + 1, triangle[1]);
                                                 const p2 = setVertex(i + 2, triangle[2]);
 
+                                                if (math.compareVec3(p0, p1) || math.compareVec3(p1, p2) || math.compareVec3(p2, p0)) {
+                                                    continue; // skip degenerate triangle
+                                                }
+
                                                 const d0 = planeDist + math.dotVec3(planeDir, p0);
                                                 const d1 = planeDist + math.dotVec3(planeDir, p1);
                                                 const d2 = planeDist + math.dotVec3(planeDir, p2);
