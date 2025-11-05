@@ -161,21 +161,55 @@ class SectionCaps {
             return false;
         };
 
-        const isLoopInside = (loop1, loop2) => {
-            // Simple point-in-polygon test using the first point of loop1
-            const point = loop1[0];  // First point of first segment
-            let inside = false;
-            for (let i = 0, j = loop2.length - 1; i < loop2.length; j = i++) {
-                const xi = loop2[i][0], yi = loop2[i][1];
-                const xj = loop2[j][0], yj = loop2[j][1];
+        const ccw = (a, b, c) => ((c[1] - a[1]) * (b[0] - a[0])) > ((b[1] - a[1]) * (c[0] - a[0]));
 
-                if (((yi > point[1]) !== (yj > point[1]))
-                    &&
-                    (point[0] < (xj - xi) * (point[1] - yi) / (yj - yi) + xi)) { // if intersect
-                    inside = !inside;
+        const isLoopInside = (inner, outer) => {
+            const bbI = inner.boundingBox;
+            const bbO = outer.boundingBox;
+            if ((bbI[0] < bbO[0]) || (bbI[1] < bbO[1]) || (bbI[2] > bbO[2]) || (bbI[3] > bbO[3])) {
+                return false;
+            }
+
+            const innerEndpoints = inner.endPoints;
+            const outerEndpoints = outer.endPoints;
+            for (let ii = 0, ij = innerEndpoints.length - 1; ii < innerEndpoints.length; ij = ii++) {
+                const i0 = innerEndpoints[ii];
+                const [i0x, i0y] = i0;
+                const i1 = innerEndpoints[ij];
+
+                let inside = false;
+                for (let i = 0, j = outerEndpoints.length - 1; i < outerEndpoints.length; j = i++) {
+                    const o0 = outerEndpoints[i];
+                    const o1 = outerEndpoints[j];
+
+                    if ((ccw(i0, o0, o1) !== ccw(i1, o0, o1)) && (ccw(i0, i1, o0) !== ccw(i0, i1, o1))) {
+                        return false; // segments intersect
+                    }
+
+                    const [o0x, o0y] = o0;
+                    const [o1x, o1y] = o1;
+
+                    const dx = i0x - o0x;
+                    const dy = i0y - o0y;
+
+                    const oDx = o1x - o0x;
+                    const oDy = o1y - o0y;
+
+                    const dot = (Math.abs(oDx * dy - oDy * dx) < 1e-10) ? (dx * oDx + dy * oDy) : -1;
+                    if ((dot >= 0) && (dot <= (Math.pow(oDx, 2) + Math.pow(oDy, 2)))) {
+                        return false; // on edge
+                    }
+
+                    if (((o0y > i0y) !== (o1y > i0y)) && (dx < (dy * oDx / oDy))) {
+                        inside = !inside;
+                    }
+                }
+                if (! inside) {
+                    return false;
                 }
             }
-            return inside;
+
+            return true;
         };
 
         let updateTimeout = null;
@@ -302,14 +336,6 @@ class SectionCaps {
                                                     };
                                                 }).sort((a, b) => b.doubleArea - a.doubleArea);
 
-                                                const isInsideEitherWay = (a, b) => {
-                                                    const bbA = a.boundingBox;
-                                                    const bbB = b.boundingBox;
-                                                    return ((bbA[0] >= bbB[0]) && (bbA[1] >= bbB[1]) && (bbA[2] <= bbB[2]) && (bbA[3] <= bbB[3])
-                                                            &&
-                                                            (isLoopInside(a.endPoints, b.endPoints) || isLoopInside(b.endPoints, a.endPoints)));
-                                                };
-
                                                 while (loops.length > 0) {
                                                         const vertices = [ ];
                                                         const appendLoopVertices = loop => loop.endPoints.forEach(p => vertices.push(p[0], p[1]));
@@ -320,7 +346,7 @@ class SectionCaps {
                                                         const innerLoops = [ ];
                                                         for (let i = 0; i < loops.length; ) {
                                                             const loop = loops[i];
-                                                            if (isInsideEitherWay(loop, outerLoop) && innerLoops.every(inner => !isInsideEitherWay(loop, inner))) {
+                                                            if (isLoopInside(loop, outerLoop) && innerLoops.every(inner => !isLoopInside(loop, inner))) {
                                                                 loop.index = vertices.length / 2;
                                                                 appendLoopVertices(loop);
                                                                 innerLoops.push(loop);
