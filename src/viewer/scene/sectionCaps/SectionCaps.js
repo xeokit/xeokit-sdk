@@ -195,7 +195,7 @@ class SectionCaps {
                     const oDx = o1x - o0x;
                     const oDy = o1y - o0y;
 
-                    const dot = (Math.abs(oDx * dy - oDy * dx) < 1e-10) ? (dx * oDx + dy * oDy) : -1;
+                    const dot = (((oDx !== 0) || (oDy !== 0)) && (Math.abs(oDx * dy - oDy * dx) < 1e-10)) ? (dx * oDx + dy * oDy) : -1;
                     if ((dot >= 0) && (dot <= (Math.pow(oDx, 2) + Math.pow(oDy, 2)))) {
                         return false; // on edge
                     }
