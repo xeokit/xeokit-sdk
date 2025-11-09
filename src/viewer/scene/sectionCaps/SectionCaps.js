@@ -240,30 +240,30 @@ class SectionCaps {
                                     const entity = sceneModel.objects[entityId];
                                     if (entityCache.generateCaps && entity.capMaterial && doesPlaneIntersectBoundingBox(entity.aabb, plane)) {
                                         entityCache.meshCaches ||= entity.meshes.filter(mesh => mesh.isSolid()).map(mesh => {
-                                            const indices  = [ ];
-                                            const vertices = [ ];
-                                            mesh.getEachIndex(i  => indices.push(i));
-                                            mesh.getEachVertex(v => vertices.push(...math.subVec3(v, modelCenter, tempVec3a)));
-                                            return { mesh: mesh, indices: indices, vertices: vertices };
+                                            const meshIndices  = [ ];
+                                            const meshVertices = [ ];
+                                            mesh.getEachIndex(i  => meshIndices.push(i));
+                                            mesh.getEachVertex(v => meshVertices.push(...math.subVec3(v, modelCenter, tempVec3a)));
+                                            return { mesh: mesh, meshIndices: meshIndices, meshVertices: meshVertices };
                                         });
 
                                         entityCache.meshCaches.filter(meshCache => doesPlaneIntersectBoundingBox(meshCache.mesh.aabb, plane)).forEach(meshCache => {
-                                            const indices  = meshCache.indices;
-                                            const vertices = meshCache.vertices;
+                                            const meshIndices  = meshCache.meshIndices;
+                                            const meshVertices = meshCache.meshVertices;
 
-                                            const unsortedSegment = [];
+                                            const unsortedSegment = [ ];
                                             const setVertex = (i, dst) => {
-                                                const idx = indices[i] * 3;
-                                                dst[0] = vertices[idx + 0];
-                                                dst[1] = vertices[idx + 1];
-                                                dst[2] = vertices[idx + 2];
+                                                const idx = meshIndices[i] * 3;
+                                                dst[0] = meshVertices[idx + 0];
+                                                dst[1] = meshVertices[idx + 1];
+                                                dst[2] = meshVertices[idx + 2];
                                                 return dst;
                                             };
 
-                                            for (let i = 0; i < indices.length; i += 3) {
-                                                const p0 = setVertex(i + 0, triangle[0]);
-                                                const p1 = setVertex(i + 1, triangle[1]);
-                                                const p2 = setVertex(i + 2, triangle[2]);
+                                            for (let meshIdx = 0; meshIdx < meshIndices.length; meshIdx += 3) {
+                                                const p0 = setVertex(meshIdx + 0, triangle[0]);
+                                                const p1 = setVertex(meshIdx + 1, triangle[1]);
+                                                const p2 = setVertex(meshIdx + 2, triangle[2]);
 
                                                 if (math.compareVec3(p0, p1) || math.compareVec3(p1, p2) || math.compareVec3(p2, p0)) {
                                                     continue; // skip degenerate triangle
@@ -274,12 +274,12 @@ class SectionCaps {
                                                 const d2 = planeDist + math.dotVec3(planeDir, p2);
 
                                                 if ((d0 !== 0) || (d1 !== 0) || (d2 !== 0)) {
-                                                    const i01 = (d0 * d1 <= 0) && math.lerpVec3(d0 / (d0 - d1), 0, 1, p0, p1, math.vec3());
-                                                    const i12 = (d1 * d2 <= 0) && math.lerpVec3(d1 / (d1 - d2), 0, 1, p1, p2, math.vec3());
-                                                    const i20 = (d2 * d0 <= 0) && math.lerpVec3(d2 / (d2 - d0), 0, 1, p2, p0, math.vec3());
+                                                    const i0 = (d0 * d1 <= 0) && math.lerpVec3(d0 / (d0 - d1), 0, 1, p0, p1, math.vec3());
+                                                    const i1 = (d1 * d2 <= 0) && math.lerpVec3(d1 / (d1 - d2), 0, 1, p1, p2, math.vec3());
+                                                    const i2 = (d2 * d0 <= 0) && math.lerpVec3(d2 / (d2 - d0), 0, 1, p2, p0, math.vec3());
 
-                                                    if (i01 ? (i12 || i20) : (i12 && i20)) { // triangle intersected by the section plane
-                                                        unsortedSegment.push(i01 ? [ i01, i12 || i20 ] : [ i12, i20 ]);
+                                                    if (i0 ? (i1 || i2) : (i1 && i2)) { // triangle intersected by the section plane
+                                                        unsortedSegment.push(i0 ? [ i0, i1 || i2 ] : [ i1, i2 ]);
                                                     }
                                                 }
                                             }
