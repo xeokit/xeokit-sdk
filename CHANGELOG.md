@@ -1,5 +1,37 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.94](https://github.com/xeokit/xeokit-sdk/compare/v2.6.93...v2.6.94)
+
+### 03 November 2025
+
+XEOK-377 Consider DirLight.space="space" same as "world" and fix DirLight.space documentation [#1977](https://github.com/xeokit/xeokit-sdk/pull/1977)
+
+# [v2.6.93](https://github.com/xeokit/xeokit-sdk/compare/v2.6.92...v2.6.93)
+
+### 20 October 2025
+
+IMPORTANT: Please read the details in the comment at https://github.com/xeokit/xeokit-sdk/pull/1850#issuecomment-3397906988
+Renderers refactor - a large change, but shouldn't require any integration effort in user code, unless it relied on `TrianglesColorTextureRenderer`'s color texture.
+
+# [v2.6.92](https://github.com/xeokit/xeokit-sdk/compare/v2.6.91...v2.6.92)
+
+### 16 October 2025
+
+XCD-391 Implement labelStringFormat [#1940](https://github.com/xeokit/xeokit-sdk/pull/1967)
+
+# [v2.6.91](https://github.com/xeokit/xeokit-sdk/compare/v2.6.90...v2.6.91)
+
+### 06 October 2025
+
+Update LICENSE and CONTRIBUTING.md
+chore: upgrade loaders.gl and cxconverter.
+feat: set `__XEOKIT__` in window object [#1947](https://github.com/xeokit/xeokit-sdk/pull/1947)
+fix: add error message for Device Orientation permission and improve user feedback [#1948](https://github.com/xeokit/xeokit-sdk/pull/1948
+XEOK-372 Import external deps from a common location [#1954](https://github.com/xeokit/xeokit-sdk/pull/1954)
+XCD-386 Fix zoom speed after empty space zoom [#1958](https://github.com/xeokit/xeokit-sdk/pull/1958)
+XCD-383 Fix extreme zoom-out/in with touch control [#1957](https://github.com/xeokit/xeokit-sdk/pull/1957)
+XEOK-373 Declare ViewerConfiguration::readableGeometryEnabled [#1962](https://github.com/xeokit/xeokit-sdk/pull/1962)
+
 # [v2.6.90](https://github.com/xeokit/xeokit-sdk/compare/v2.6.89...v2.6.90)
 
 ### 29 August 2025

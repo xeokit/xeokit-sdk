@@ -1,6 +1,6 @@
-# Contributing to Xeokit SDK
+# Contributing to xeokit SDK
 
-First off, thank you for considering contributing to Xeokit SDK! We welcome contributions from everyone and appreciate your efforts to help improve the project.
+First off, thank you for considering contributing to xeokit SDK! We welcome contributions from everyone and appreciate your efforts to help improve the project.
 
 ## Code of Conduct
 
@@ -14,7 +14,7 @@ If you find a bug, please [open an issue](https://github.com/xeokit/xeokit-sdk/i
 - A clear and descriptive title.
 - Steps to reproduce the issue.
 - Any relevant code snippets or error messages.
-- Your environment (operating system, browser, version of Xeokit SDK, etc.).
+- Your environment (operating system, browser, version of xeokit SDK, etc.).
 
 ### Suggesting Enhancements
 
@@ -48,7 +48,7 @@ To submit a pull request:
 
 ### Sign the Contributor License Agreement
 
-Please make sure you have signed our [Contributor License Agreement](CLA-Creoox.pdf). We are not asking you to assign copyright to us, but to give us the right to distribute your code without restriction. We ask this of all contributors in order to assure our users of the origin and continuing existence of the code. You only need to sign the CLA once. And if you represent a company, then please [contact us](https://creoox.com/en/contact/).
+Please make sure you have signed our [Contributor License Agreement](CLA-Creoox.pdf) and sent it to [contact@creoox.com](mailto:contact@creoox.com). We are not asking you to assign copyright to us, but to give us the right to distribute your code without restriction. We ask this of all contributors in order to assure our users of the origin and continuing existence of the code. You only need to sign the CLA once. And if you represent a company, then please [contact us](https://creoox.com/en/contact/).
 
 ## Development Environment
 

@@ -51,8 +51,8 @@ export declare type ViewerConfiguration = {
   alphaDepthMask?: boolean;
   /** Whether to enable {@link Entity.offset}. For best performance, only set this ````true```` when you need to use {@link Entity.offset}. */
   entityOffsetsEnabled?: boolean;
-  /** Whether to enable full-precision accuracy when surface picking with {@link Scene.pick}. */
-  pickSurfacePrecisionEnabled?: boolean;
+  /** Whether to enable full-precision accuracy when surface picking with {@link Scene#pick}. Note that when ````true````, this configuration will increase the amount of browser memory used by the Viewer. The ````pickSurfacePrecision```` option for ````Scene#pick```` only works if this is set ````true````. */
+  readableGeometryEnabled?: boolean;
   /** Whether to enable logarithmic depth buffer. */
   logarithmicDepthBufferEnabled?: boolean;
   /** Whether to enable base color texture rendering. */

@@ -1,21 +1,14 @@
 import {math} from "../../../math/math.js";
 
-const getCanvasPosFromEvent = function (event, canvasPos) {
+const getCanvasPosFromEvent = function(event, canvas, canvasPos) {
     if (!event) {
         event = window.event;
         canvasPos[0] = event.x;
         canvasPos[1] = event.y;
     } else {
-        let element = event.target;
-        let totalOffsetLeft = 0;
-        let totalOffsetTop = 0;
-        while (element.offsetParent) {
-            totalOffsetLeft += element.offsetLeft;
-            totalOffsetTop += element.offsetTop;
-            element = element.offsetParent;
-        }
-        canvasPos[0] = event.pageX - totalOffsetLeft;
-        canvasPos[1] = event.pageY - totalOffsetTop;
+        const canvasRect = canvas.getBoundingClientRect();
+        canvasPos[0] = event.clientX - canvasRect.left;
+        canvasPos[1] = event.clientY - canvasRect.top;
     }
     return canvasPos;
 };
@@ -69,7 +62,7 @@ class TouchPanRotateAndDollyHandler {
 
                 tapStartTime = states.touchStartTime;
 
-                getCanvasPosFromEvent(touches[0], tapStartCanvasPos);
+                getCanvasPosFromEvent(touches[0], canvas, tapStartCanvasPos);
 
                 if (configs.followPointer) {
 
@@ -111,7 +104,7 @@ class TouchPanRotateAndDollyHandler {
             }
 
             for (let i = 0, len = touches.length; i < len; ++i) {
-                getCanvasPosFromEvent(touches[i], lastCanvasTouchPosList[i]);
+                getCanvasPosFromEvent(touches[i], canvas, lastCanvasTouchPosList[i]);
             }
 
             numTouches = touches.length;
@@ -159,7 +152,7 @@ class TouchPanRotateAndDollyHandler {
 
             if (numTouches === 1) {
 
-                getCanvasPosFromEvent(touches[0], tapCanvasPos0);
+                getCanvasPosFromEvent(touches[0], canvas, tapCanvasPos0);
 
                 //-----------------------------------------------------------------------------------------------
                 // Drag rotation
@@ -220,8 +213,8 @@ class TouchPanRotateAndDollyHandler {
                 const touch0 = touches[0];
                 const touch1 = touches[1];
 
-                getCanvasPosFromEvent(touch0, tapCanvasPos0);
-                getCanvasPosFromEvent(touch1, tapCanvasPos1);
+                getCanvasPosFromEvent(touch0, canvas, tapCanvasPos0);
+                getCanvasPosFromEvent(touch1, canvas, tapCanvasPos1);
 
                 const lastMiddleTouch = math.geometricMeanVec2(lastCanvasTouchPosList[0], lastCanvasTouchPosList[1]);
                 const currentMiddleTouch = math.geometricMeanVec2(tapCanvasPos0, tapCanvasPos1);
@@ -243,6 +236,7 @@ class TouchPanRotateAndDollyHandler {
                 const dollyDelta = (d2 - d1) * configs.touchDollyRate;
 
                 updates.dollyDelta = dollyDelta;
+                states.followPointerDirty = true; // Added to fix XCD-386: The zoom speed slows down when zooming into an empty space for the first time on a relatively large model, and it cannot be reset without reloading
 
                 if (Math.abs(dollyDelta) < 1.0) {
 
@@ -269,7 +263,7 @@ class TouchPanRotateAndDollyHandler {
             }
 
             for (let i = 0; i < numTouches; ++i) {
-                getCanvasPosFromEvent(touches[i], lastCanvasTouchPosList[i]);
+                getCanvasPosFromEvent(touches[i], canvas, lastCanvasTouchPosList[i]);
             }
         });
     }

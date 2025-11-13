@@ -3,7 +3,7 @@ import {CameraFlightAnimation} from "./scene/camera/CameraFlightAnimation.js";
 import {CameraControl} from "./scene/CameraControl/CameraControl.js";
 import {MetaScene} from "./metadata/MetaScene.js";
 import {LocaleService} from "./localization/LocaleService.js";
-import html2canvas from 'html2canvas/dist/html2canvas.esm.js';
+import {html2canvas} from '../external.js';
 import {math} from "./scene/math/math.js";
 import {transformToNode} from "../plugins/lib/ui/index.js";
 
@@ -311,11 +311,55 @@ class Viewer {
      * Exit snapshot mode using {@link Viewer#endSnapshot}.
      */
     beginSnapshot() {
-        if (this._snapshotBegun) {
-            return;
+        if (! this._snapshotBegun) {
+            this.scene._renderer.snapshot.beginSnapshot();
+            this._snapshotBegun = true;
         }
-        this.scene._renderer.beginSnapshot();
-        this._snapshotBegun = true;
+    }
+
+    _renderSnapshotToCanvas(params) {
+        const resize = (params.width !== undefined && params.height !== undefined);
+        const canvas = this.scene.canvas.canvas;
+        const saveWidth  = canvas.clientWidth;
+        const saveHeight = canvas.clientHeight;
+        const excludeGizmos = !params.includeGizmos;
+
+        if (resize) {
+            canvas.width  = params.width  ? Math.floor(params.width)  : canvas.width;
+            canvas.height = params.height ? Math.floor(params.height) : canvas.height;
+        }
+
+        this.beginSnapshot();
+
+        if (excludeGizmos) {
+            this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
+        }
+
+        const snapshotCanvas = this.scene._renderer.snapshot.renderSnapshotToCanvas();
+
+        if (resize) {
+            canvas.width = saveWidth;
+            canvas.height = saveHeight;
+            this.scene.glRedraw();
+        }
+
+        return {
+            canvas:    snapshotCanvas,
+            toDataURL: () => {
+                if (excludeGizmos) {
+                    this.sendToPlugins("snapshotFinished");
+                }
+
+                this.endSnapshot();
+
+                let format = params.format || "png";
+                if (format !== "jpeg" && format !== "png" && format !== "bmp") {
+                    console.error("Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'png'");
+                    format = "png";
+                }
+                return snapshotCanvas.toDataURL(`image/${format}`);
+            }
+        };
     }
 
     /**
@@ -338,54 +382,9 @@ class Viewer {
      * @returns {String} String-encoded image data URI.
      */
     getSnapshot(params = {}) {
-
-        const needFinishSnapshot = (!this._snapshotBegun);
-        const resize = (params.width !== undefined && params.height !== undefined);
-        const canvas = this.scene.canvas.canvas;
-        const saveWidth = canvas.clientWidth;
-        const saveHeight = canvas.clientHeight;
-        const width = params.width ? Math.floor(params.width) : canvas.width;
-        const height = params.height ? Math.floor(params.height) : canvas.height;
-
-        if (resize) {
-            canvas.width = width;
-            canvas.height = height;
-        }
-
-        if (!this._snapshotBegun) {
-            this.beginSnapshot({
-                width,
-                height
-            });
-        }
-
-        if (!params.includeGizmos) {
-            this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
-        }
-
         // firing "rendering" is necessary to trigger DTX{Lines,Triangles}Layer::_uploadDeferredFlags
         this.scene.fire("rendering", { }, true);
-
-        this.scene._renderer.renderSnapshot();
-
-        const imageDataURI = this.scene._renderer.readSnapshot(params);
-
-        if (resize) {
-            canvas.width = saveWidth;
-            canvas.height = saveHeight;
-
-            this.scene.glRedraw();
-        }
-
-        if (!params.includeGizmos) {
-            this.sendToPlugins("snapshotFinished");
-        }
-
-        if (needFinishSnapshot) {
-            this.endSnapshot();
-        }
-
-        return imageDataURI;
+        return this._renderSnapshotToCanvas(params).toDataURL();
     }
 
     /**
@@ -428,36 +427,7 @@ class Viewer {
         // right amount of pixels, for a sharper image.
 
 
-        const needFinishSnapshot = (!this._snapshotBegun);
-        const resize = (params.width !== undefined && params.height !== undefined);
-        const canvas = this.scene.canvas.canvas;
-        const saveWidth = canvas.clientWidth;
-        const saveHeight = canvas.clientHeight;
-        const snapshotWidth = params.width ? Math.floor(params.width) : canvas.width;
-        const snapshotHeight = params.height ? Math.floor(params.height) : canvas.height;
-
-        if (resize) {
-            canvas.width = snapshotWidth;
-            canvas.height = snapshotHeight;
-        }
-
-        if (!this._snapshotBegun) {
-            this.beginSnapshot();
-        }
-
-        if (!params.includeGizmos) {
-            this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
-        }
-
-        this.scene._renderer.renderSnapshot();
-
-        const snapshotCanvas = this.scene._renderer.readSnapshotAsCanvas();
-
-        if (resize) {
-            canvas.width = saveWidth;
-            canvas.height = saveHeight;
-            this.scene.glRedraw();
-        }
+        const snapshotResult = this._renderSnapshotToCanvas(params);
 
         const pluginToCapture = {};
         const pluginContainerElements = [];
@@ -481,6 +451,7 @@ class Viewer {
         document.head.appendChild(style);
         style.sheet?.insertRule('body > div:last-child img { display: inline-block; }');
 
+        const snapshotCanvas = snapshotResult.canvas;
         for (let i = 0, len = pluginContainerElements.length; i < len; i++) {
             const containerElement = pluginContainerElements[i];
             await html2canvas(containerElement, {
@@ -496,24 +467,7 @@ class Viewer {
 
         style.remove();
 
-        if (!params.includeGizmos) {
-            this.sendToPlugins("snapshotFinished");
-        }
-        if (needFinishSnapshot) {
-            this.endSnapshot();
-        }
-        let format = params.format || "png";
-        if (format !== "jpeg" && format !== "png" && format !== "bmp") {
-            console.error("Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'png'");
-            format = "png";
-        }
-        if (!params.includeGizmos) {
-            this.sendToPlugins("snapshotFinished");
-        }
-        if (needFinishSnapshot) {
-            this.endSnapshot();
-        }
-        return snapshotCanvas.toDataURL(`image/${format}`);
+        return snapshotResult.toDataURL();
     }
 
     /**
@@ -523,12 +477,10 @@ class Viewer {
      *
      */
     endSnapshot() {
-        if (!this._snapshotBegun) {
-            return;
+        if (this._snapshotBegun) {
+            this.scene._renderer.snapshot.endSnapshot();
+            this._snapshotBegun = false;
         }
-        this.scene._renderer.endSnapshot();
-        this.scene._renderer.render({force: true});
-        this._snapshotBegun = false;
     }
 
     /** Destroys this Viewer.

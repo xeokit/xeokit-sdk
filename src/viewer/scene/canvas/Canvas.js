@@ -118,37 +118,7 @@ class Canvas extends Component {
 
         this._initWebGL(cfg);
 
-        // Bind context loss and recovery handlers
-
         const self = this;
-
-        this.canvas.addEventListener("webglcontextlost", this._webglcontextlostListener = function (event) {
-                console.time("webglcontextrestored");
-                self.scene._webglContextLost();
-                /**
-                 * Fired whenever the WebGL context has been lost
-                 * @event webglcontextlost
-                 */
-                self.fire("webglcontextlost");
-                event.preventDefault();
-            },
-            false);
-
-        this.canvas.addEventListener("webglcontextrestored", this._webglcontextrestoredListener = function (event) {
-                self._initWebGL();
-                if (self.gl) {
-                    self.scene._webglContextRestored(self.gl);
-                    /**
-                     * Fired whenever the WebGL context has been restored again after having previously being lost
-                     * @event webglContextRestored
-                     * @param value The WebGL context object
-                     */
-                    self.fire("webglcontextrestored", self.gl);
-                    event.preventDefault();
-                }
-                console.timeEnd("webglcontextrestored");
-            },
-            false);
 
         // Attach to resize events on the canvas
         let dirtyBoundary = true; // make sure we publish the 1st boundary event
@@ -448,12 +418,9 @@ class Canvas extends Component {
      *
      * ````JavaScript
      *
-     * // Ignore transparent pixels (default is false)
-     * var opaqueOnly = true;
-     *
      * var colors = new Float32Array(8);
      *
-     * viewer.scene.canvas.readPixels([ 100, 22, 12, 33 ], colors, 2, opaqueOnly);
+     * viewer.scene.canvas.readPixels([ 100, 22, 12, 33 ], colors, 2);
      * ````
      *
      * Then the r,g,b components of the colors will be set to the colors at those pixels.
@@ -461,10 +428,9 @@ class Canvas extends Component {
      * @param {Number[]} pixels
      * @param {Number[]} colors
      * @param {Number} size
-     * @param {Boolean} opaqueOnly
      */
-    readPixels(pixels, colors, size, opaqueOnly) {
-        return this.scene._renderer.readPixels(pixels, colors, size, opaqueOnly);
+    readPixels(pixels, colors, size) {
+        return this.scene._renderer.snapshot.readPixels(pixels, colors, size);
     }
 
     /**
@@ -479,13 +445,7 @@ class Canvas extends Component {
     destroy() {
         this.scene.off(this._tick);
         this._spinner._destroy();
-        // Memory leak avoidance
-        this.canvas.removeEventListener("webglcontextlost", this._webglcontextlostListener);
-        this.canvas.removeEventListener("webglcontextrestored", this._webglcontextrestoredListener);
-        
-        // this.gl.getExtension("WEBGL_lose_context").loseContext(); // disabled because of XCD-306 and XEOK-295
         this.gl = null;
-        
         super.destroy();
     }
 }

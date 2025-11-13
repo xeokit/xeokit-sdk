@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <h1>Mesh Billboarding with Text</h1>
+    <h2>Building text labels with billboard mesh</h2>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+               target="_other">PhongMaterial</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html"
+               target="_other">ReadableGeometry</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html"
+               target="_other">DotBIMLoaderPlugin</a>
+        </li>
+    </ul>
+    <h3>Assets</h3>
+    <ul>
+        <li><a href="https://www.dotbim.net/" target="_other">Model source</a></li>
+    </ul>
+</div>
+</body>
+
+<script id="source" type="module">
+
+    import {Viewer, Mesh, PhongMaterial, ReadableGeometry, Texture, DotBIMLoaderPlugin, math} from "../../dist/xeokit-sdk.min.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.scene.camera.eye = [-25, 25, -25];
+    viewer.scene.camera.look = [0, 0, 0];
+    viewer.scene.camera.up = [0, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load a dotbim model with chair
+    //------------------------------------------------------------------------------------------------------------------
+
+    const dotBIMLoader = new DotBIMLoaderPlugin(viewer);
+
+    const sceneModel = dotBIMLoader.load({
+        id: "myModel",
+        src: "../../assets/models/dotbim/Armchair.bim",
+        saoEnabled: true,
+        edges: true,
+        rotation: [-90, 0, 0]
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Texture with text
+    //------------------------------------------------------------------------------------------------------------------
+
+    const width = 300;
+    const height = 300;
+
+    const textureCanvas = document.createElement('canvas');
+    const context = textureCanvas.getContext("2d");
+    context.fillStyle = "#FFFFFF";
+    context.fillRect(0, 0, width, height);
+    context.fillStyle = "#000000";
+    context.font = '60px sans';
+    context.textAlign = "center";
+    context.fillText("Armchair", width * 0.5, height * 0.3, 1000);
+
+    const texture = new Texture(viewer.scene, {
+        image: textureCanvas,
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Billboard Mesh
+    //------------------------------------------------------------------------------------------------------------------
+
+    sceneModel.on("loaded", function () {
+        const aabb = sceneModel.aabb;
+        const billboardPosition = math.addVec3(math.getAABB3Center(aabb, math.vec3()), [0.0, 0.4, 0.0], math.vec3());
+
+        new Mesh(viewer.scene, {
+            geometry: new ReadableGeometry(viewer.scene, {
+                primitive: "triangles",
+                positions: [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0],
+                normals: [-1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0],
+                uv: [1, -1, 0, -1, 0, 0, 1, 0],
+                indices: [0, 1, 2, 0, 2, 3] // Ensure these will be front-faces
+            }),
+            material: new PhongMaterial(viewer.scene, {
+                diffuseMap: texture,
+            }),
+            scale: [0.12, 0.06, 1.0],
+            position: billboardPosition,
+            billboard: "spherical"
+        });
+
+        viewer.cameraFlight.jumpTo({
+            aabb: aabb
+        });
+    });
+
+    window.viewer = viewer;
+
+</script>
+</html>

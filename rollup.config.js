@@ -20,34 +20,31 @@ const buildTimeStamp = new Date().toISOString();
 
 const versionInfo = `xeokit-sdk v${pkg.version}\n Commit: ${gitCommitHash}\n Built: ${buildTimeStamp}`;
 
-// Common configuration for both standard and minified builds
-const input = './src/index.js';
-const bannerPlugin = banner(versionInfo);
-const replacePlugin = replace({
-    'import.meta.url': 'typeof document === "undefined" ? "" : document.currentScript.src',
-    preventAssignment: true
-});
+const bannerCode = `if (typeof window !== 'undefined') {
+    window.__XEOKIT__ = { version: '${pkg.version}', commit: '${gitCommitHash}', built: '${buildTimeStamp}' };
+}
+`;
 
-
-// Standard build configuration
-const standardBuildConfig = {
-    input,
+export default {
+    input: './src/index.js',
     output: [
         {
             file: './dist/xeokit-sdk.es.js',
             format: 'es',
-            name: 'bundle'
+            name: 'bundle',
+            banner: bannerCode
         },
         {
             file: './dist/xeokit-sdk.cjs.js',
             format: 'cjs',
-            name: 'xeokit'
+            name: 'bundle',
+            banner: bannerCode
         },
         {
             file: './dist/xeokit-sdk.es5.js',
-            format: 'umd',
-            name: 'xeokit',
-            sourcemap: false,
+            format: 'es',
+            name: 'bundle',
+            banner: bannerCode,
             plugins: [
                 getBabelOutputPlugin({
                     allowAllFormats: true,

@@ -1,7 +1,6 @@
 import {math} from './math.js';
 
 const tempVec3a = math.vec3();
-const tempVec4  = math.vec4();
 
 /**
  * Given a view matrix and a relative-to-center (RTC) coordinate origin, returns a view matrix
@@ -104,40 +103,4 @@ function worldToRTCPositions(worldPositions, rtcPositions, rtcCenter, cellSize =
     return rtcNeeded;
 }
 
-/**
- * Converts an RTC 3D position to World-space.
- *
- * @private
- * @param {Float64Array} rtcCenter Double-precision relative-to-center (RTC) center pos.
- * @param {Float32Array} rtcPos Single-precision offset fom that center.
- * @param {Float64Array} worldPos The World-space position.
- */
-function rtcToWorldPos(rtcCenter, rtcPos, worldPos) {
-    worldPos[0] = rtcCenter[0] + rtcPos[0];
-    worldPos[1] = rtcCenter[1] + rtcPos[1];
-    worldPos[2] = rtcCenter[2] + rtcPos[2];
-    return worldPos;
-}
-
-/**
- * Given a 3D plane defined by distance from origin and direction, and an RTC center position,
- * return a plane position that is relative to the RTC center.
- *
- * @private
- * @param dist
- * @param dir
- * @param rtcCenter
- * @param rtcPlanePos
- * @returns {*}
- */
-function getPlaneRTCPos(dist, dir, rtcOrigin, rtcPlanePos, originMatrix) {
-    const rtcCenter = (originMatrix
-                       ? (tempVec4.set(rtcOrigin, 0), tempVec4[3] = 1, math.mulMat4v4(originMatrix, tempVec4, tempVec4))
-                       : rtcOrigin);
-    const rtcCenterToPlaneDist = math.dotVec3(dir, rtcCenter) + dist;
-    const dirNormalized = math.normalizeVec3(dir, tempVec3a);
-    math.mulVec3Scalar(dirNormalized, -rtcCenterToPlaneDist, rtcPlanePos);
-    return rtcPlanePos;
-}
-
-export {createRTCViewMat, worldToRTCPos, worldToRTCPositions, rtcToWorldPos, getPlaneRTCPos};
+export {createRTCViewMat, worldToRTCPos, worldToRTCPositions};
