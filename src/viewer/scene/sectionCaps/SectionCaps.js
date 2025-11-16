@@ -110,39 +110,6 @@ class SectionCaps {
 
         this.destroy = () => destroy && destroy();
 
-        const doesPlaneIntersectBoundingBox = (bb, plane) => {
-            const min = [bb[0], bb[1], bb[2]];
-            const max = [bb[3], bb[4], bb[5]];
-
-            const corners = [
-                [min[0], min[1], min[2]], // 000
-                [max[0], min[1], min[2]], // 100
-                [min[0], max[1], min[2]], // 010
-                [max[0], max[1], min[2]], // 110
-                [min[0], min[1], max[2]], // 001
-                [max[0], min[1], max[2]], // 101
-                [min[0], max[1], max[2]], // 011
-                [max[0], max[1], max[2]]  // 111
-            ];
-
-            // Calculate distance from each corner to the plane
-            let hasPositive = false;
-            let hasNegative = false;
-
-            for (const corner of corners) {
-                const distance = plane.dist + math.dotVec3(plane.dir, corner);
-
-                if (distance > 0) hasPositive = true;
-                if (distance < 0) hasNegative = true;
-
-                // If we found points on both sides, the plane intersects the box
-                if (hasPositive && hasNegative) return true;
-            }
-
-            // If all points are on the same side, no intersection
-            return false;
-        };
-
         let updateTimeout = null;
 
         const update = () => {
@@ -154,14 +121,14 @@ class SectionCaps {
                         const sliceMesh = math.makeSectionPlaneSlicer(plane.pos, plane.quaternion);
                         visibleSceneModels.forEach(sceneModel => {
                             const modelAABB = sceneModel.aabb;
-                            if (doesPlaneIntersectBoundingBox(modelAABB, plane)) {
+                            if (math.planeIntersectsAABB3(plane, modelAABB)) {
                                 // modelCenter is critical to use when handling models with large coordinates.
                                 // See XCD-306 and examples/slicing/SectionCaps_at_distance.html for more details.
                                 const modelCenter = math.getAABB3Center(modelAABB, math.vec3());
 
                                 modelCaches[sceneModel.id].entityCaches.forEach((entityCache, entityId) => {
                                     const entity = sceneModel.objects[entityId];
-                                    if (entityCache.generateCaps && entity.capMaterial && doesPlaneIntersectBoundingBox(entity.aabb, plane)) {
+                                    if (entityCache.generateCaps && entity.capMaterial && math.planeIntersectsAABB3(plane, entity.aabb)) {
                                         entityCache.meshCaches ||= entity.meshes.filter(mesh => mesh.isSolid()).map(mesh => {
                                             const meshIndices  = [ ];
                                             const meshVertices = [ ];
@@ -170,7 +137,7 @@ class SectionCaps {
                                             return { mesh: mesh, meshIndices: meshIndices, meshVertices: meshVertices };
                                         });
 
-                                        entityCache.meshCaches.filter(meshCache => doesPlaneIntersectBoundingBox(meshCache.mesh.aabb, plane)).forEach((meshCache, meshIdx) => {
+                                        entityCache.meshCaches.filter(meshCache => math.planeIntersectsAABB3(plane, meshCache.mesh.aabb)).forEach((meshCache, meshIdx) => {
                                             sliceMesh(modelCenter, meshCache.meshIndices, meshCache.meshVertices).forEach((geo, geoIdx) => {
                                                 entityCache.capMeshes.push(new Mesh(scene, {
                                                     isObject: true,

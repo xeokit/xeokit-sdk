@@ -5416,6 +5416,45 @@ math.planeClipsPositions3 = function (pos, dir, positions, numElementsPerPositio
 };
 
 /**
+ * Tests whether a plane intersects a bouding box.
+ * @param plane SectionPlane
+ * @param aabb Bounding box
+ * @returns {boolean}
+ */
+math.planeIntersectsAABB3 = (plane, aabb) => {
+    const min = [aabb[0], aabb[1], aabb[2]];
+    const max = [aabb[3], aabb[4], aabb[5]];
+
+    const corners = [
+        [min[0], min[1], min[2]], // 000
+        [max[0], min[1], min[2]], // 100
+        [min[0], max[1], min[2]], // 010
+        [max[0], max[1], min[2]], // 110
+        [min[0], min[1], max[2]], // 001
+        [max[0], min[1], max[2]], // 101
+        [min[0], max[1], max[2]], // 011
+        [max[0], max[1], max[2]]  // 111
+    ];
+
+    // Calculate distance from each corner to the plane
+    let hasPositive = false;
+    let hasNegative = false;
+
+    for (const corner of corners) {
+        const distance = plane.dist + math.dotVec3(plane.dir, corner);
+
+        if (distance > 0) hasPositive = true;
+        if (distance < 0) hasNegative = true;
+
+        // If we found points on both sides, the plane intersects the box
+        if (hasPositive && hasNegative) return true;
+    }
+
+    // If all points are on the same side, no intersection
+    return false;
+};
+
+/**
  * makeSectionPlaneSlicer returns a function that slices a given geometry with a given SectionPlane
  * The implementation finds segments where the SectionPlane intersects with the geometry's surface.
  * These segments form loops that are triangulated using the Earcut algorithm, taking internal holes into account.
