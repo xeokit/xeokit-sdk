@@ -5551,7 +5551,8 @@ math.makeSectionPlaneSlicer = (function() {
         const planeN = math.vec3ApplyQuaternion(planeRot, worldForward, math.vec3());
 
         return function(meshCenter, meshIndices, meshPositions) {
-            const planeDist = math.dotVec3(planeN, math.subVec3(meshCenter, planePos, tempVec3a));
+            const planeToMesh = math.subVec3(meshCenter, planePos, math.vec3());
+            const planeDist = math.dotVec3(planeN, planeToMesh);
 
             const unsortedSegment = [ ];
             const indexedPositions = [ null ]; // to never return 0 from addPosition, so its result can be used as a predicate
@@ -5630,7 +5631,10 @@ math.makeSectionPlaneSlicer = (function() {
             }
 
             const loops = endpointLoops.filter(endPoints => endPoints.length > 2).map((endPoints, idx) => {
-                const planeEndpoints = endPoints.map(p => ({ posIdx: p, coord2Dx: math.dotVec3(planeU, indexedPositions[p]), coord2Dy: math.dotVec3(planeV, indexedPositions[p]) }));
+                const planeEndpoints = endPoints.map(posIdx => {
+                    const P = math.addVec3(planeToMesh, indexedPositions[posIdx], tempVec3a);
+                    return { posIdx: posIdx, coord2Dx: math.dotVec3(planeU, P), coord2Dy: math.dotVec3(planeV, P) };
+                });
                 let doubleArea = 0;
                 const aabb = math.collapseAABB2(math.AABB2());
                 for (let i = 0; i < planeEndpoints.length; i++) {
@@ -5653,16 +5657,10 @@ math.makeSectionPlaneSlicer = (function() {
             while (loops.length > 0) {
                 const vertices2D = [ ];
                 const vertices3D = [ ];
-                const uvsPerTidx = [ ];
 
                 const appendLoopVertices = loop => loop.endPoints.forEach(endpoint2D => {
                     vertices2D.push(endpoint2D.coord2Dx, endpoint2D.coord2Dy);
-
-                    const posIdx = endpoint2D.posIdx;
-                    vertices3D.push(posIdx);
-
-                    const P = math.subVec3(math.addVec3(meshCenter, indexedPositions[posIdx], tempVec3a), planePos, tempVec3a);
-                    uvsPerTidx.push(math.dotVec3(P, planeU), math.dotVec3(P, planeV));
+                    vertices3D.push(endpoint2D.posIdx);
                });
 
                 const outerLoop = loops.shift();
@@ -5705,7 +5703,7 @@ math.makeSectionPlaneSlicer = (function() {
                         positions.push(v[0], v[1], v[2]);
                         normals.push(tempVec3c[0], tempVec3c[1], tempVec3c[2]);
                         const uvOff = 2 * vIdx;
-                        uv.push(uvsPerTidx[uvOff], uvsPerTidx[uvOff + 1]);
+                        uv.push(vertices2D[uvOff], vertices2D[uvOff + 1]);
                     }
                 }
 
