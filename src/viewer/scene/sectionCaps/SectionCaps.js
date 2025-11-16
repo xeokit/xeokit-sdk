@@ -292,11 +292,11 @@ class SectionCaps {
                                             }
 
                                             const endpointLoops = [ ];
-                                            if (unsortedSegment.length > 0) {
+                                            while (unsortedSegment.length > 0) {
                                                 endpointLoops.push([ unsortedSegment[0][0], unsortedSegment[0][1] ]);
+                                                const curEndpoints = endpointLoops[endpointLoops.length - 1];
                                                 unsortedSegment.splice(0, 1);
                                                 while (unsortedSegment.length > 0) {
-                                                    const curEndpoints = endpointLoops[endpointLoops.length - 1];
                                                     const lastPoint = indexedPositions[curEndpoints[curEndpoints.length - 1]];
                                                     const closest = { distSq: sqDistVec3(indexedPositions[curEndpoints[0]], lastPoint), idx: -1, side: -1 };
                                                     unsortedSegment.forEach((seg, i) => {
@@ -314,11 +314,15 @@ class SectionCaps {
                                                         const nextSegment = (closest.idx >= 0) && unsortedSegment[closest.idx];
                                                         indexedPositions[nextSegment ? nextSegment[closest.side] : curEndpoints[0]] = lastPoint; // move the split face's (above) vertex to lastPoint, to not introduce gaps
                                                         if (nextSegment) {
-                                                            curEndpoints.push(nextSegment[1 - closest.side]);
                                                             unsortedSegment.splice(closest.idx, 1);
+                                                            const nextEnd = nextSegment[1 - closest.side];
+                                                            if (sqDistVec3(indexedPositions[nextEnd], indexedPositions[curEndpoints[0]]) > 1e-20) {
+                                                                curEndpoints.push(nextEnd);
+                                                            } else {
+                                                                break;
+                                                            }
                                                         } else {
-                                                            endpointLoops.push([ unsortedSegment[0][0], unsortedSegment[0][1] ]);
-                                                            unsortedSegment.splice(0, 1);
+                                                            break;
                                                         }
                                                     } else {
                                                         // Could not find a matching segment. Loop may not be closed
