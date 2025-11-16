@@ -5463,6 +5463,12 @@ math.planeIntersectsAABB3 = (plane, aabb) => {
  * @returns {function}
  */
 math.makeSectionPlaneSlicer = (function() {
+
+    const tempVec2a = math.vec2();
+    const tempVec2b = math.vec2();
+    const tempVec2c = math.vec2();
+    const tempVec2d = math.vec2();
+
     const tempVec3a = math.vec3();
     const tempVec3b = math.vec3();
     const tempVec3c = math.vec3();
@@ -5485,6 +5491,8 @@ math.makeSectionPlaneSlicer = (function() {
         return ret;
     };
 
+    const setCoord2D = (p, dst) => { dst[0] = p.coord2Dx; dst[1] = p.coord2Dy; return dst; };
+
     const ccw = (a, b, c) => ((c[1] - a[1]) * (b[0] - a[0])) > ((b[1] - a[1]) * (c[0] - a[0]));
 
     const isLoopInside = (inner, outer) => {
@@ -5497,14 +5505,14 @@ math.makeSectionPlaneSlicer = (function() {
         const innerEndpoints = inner.endPoints;
         const outerEndpoints = outer.endPoints;
         for (let ii = 0, ij = innerEndpoints.length - 1; ii < innerEndpoints.length; ij = ii++) {
-            const i0 = innerEndpoints[ii].coord2D;
+            const i0 = setCoord2D(innerEndpoints[ii], tempVec2a);
             const [i0x, i0y] = i0;
-            const i1 = innerEndpoints[ij].coord2D;
+            const i1 = setCoord2D(innerEndpoints[ij], tempVec2b);
 
             let inside = false;
             for (let i = 0, j = outerEndpoints.length - 1; i < outerEndpoints.length; j = i++) {
-                const o0 = outerEndpoints[i].coord2D;
-                const o1 = outerEndpoints[j].coord2D;
+                const o0 = setCoord2D(outerEndpoints[i], tempVec2c);
+                const o1 = setCoord2D(outerEndpoints[j], tempVec2d);
 
                 if ((ccw(i0, o0, o1) !== ccw(i1, o0, o1)) && (ccw(i0, i1, o0) !== ccw(i0, i1, o1))) {
                     return false; // segments intersect
@@ -5543,7 +5551,6 @@ math.makeSectionPlaneSlicer = (function() {
                                                     ? [-planeDir[2], 0, planeDir[0]]
                                                     : [0, planeDir[2], -planeDir[1]]));
         const planeV = math.normalizeVec3(math.cross3Vec3(planeDir, planeU, math.vec3()));
-        const projectToPlane2D = point => [ math.dotVec3(planeU, point), math.dotVec3(planeV, point) ];
 
         return function(meshCenter, meshIndices, meshPositions) {
             const planeDist = math.dotVec3(planeDir, math.subVec3(meshCenter, planePos, tempVec3a));
@@ -5625,14 +5632,16 @@ math.makeSectionPlaneSlicer = (function() {
             }
 
             const loops = endpointLoops.filter(endPoints => endPoints.length > 2).map((endPoints, idx) => {
-                const planeEndpoints = endPoints.map(p => ({ coord2D: projectToPlane2D(indexedPositions[p]), posIdx: p }));
+                const planeEndpoints = endPoints.map(p => ({ posIdx: p, coord2Dx: math.dotVec3(planeU, indexedPositions[p]), coord2Dy: math.dotVec3(planeV, indexedPositions[p]) }));
                 let doubleArea = 0;
                 const aabb = math.collapseAABB2(math.AABB2());
                 for (let i = 0; i < planeEndpoints.length; i++) {
-                    const p0 = planeEndpoints[i].coord2D;
-                    math.expandAABB2Point2(aabb, p0);
-                    const p1 = planeEndpoints[(i + 1) % planeEndpoints.length].coord2D;
-                    doubleArea += (p0[0] * p1[1] - p1[0] * p0[1]);
+                    const p0 = planeEndpoints[i];
+                    tempVec2a[0] = p0.coord2Dx;
+                    tempVec2a[1] = p0.coord2Dy;
+                    math.expandAABB2Point2(aabb, tempVec2a);
+                    const p1 = planeEndpoints[(i + 1) % planeEndpoints.length];
+                    doubleArea += (p0.coord2Dx * p1.coord2Dy - p1.coord2Dx * p0.coord2Dy);
                 }
                 return {
                     boundingBox: aabb,
@@ -5649,8 +5658,7 @@ math.makeSectionPlaneSlicer = (function() {
                 const uvsPerTidx = [ ];
 
                 const appendLoopVertices = loop => loop.endPoints.forEach(endpoint2D => {
-                    const p = endpoint2D.coord2D;
-                    vertices2D.push(p[0], p[1]);
+                    vertices2D.push(endpoint2D.coord2Dx, endpoint2D.coord2Dy);
 
                     const posIdx = endpoint2D.posIdx;
                     vertices3D.push(posIdx);
