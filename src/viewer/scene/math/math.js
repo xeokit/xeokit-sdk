@@ -5476,8 +5476,9 @@ math.makeSectionPlaneSlicer = (function() {
 
     const triangle = [ math.vec3(), math.vec3(), math.vec3() ];
 
-    const worldUp    = [0, 1, 0];
-    const worldRight = [1, 0, 0];
+    const worldUp      = [0, 1, 0];
+    const worldRight   = [1, 0, 0];
+    const worldForward = [0, 0, 1];
 
     const sqDistVec3 = (function() {
         const tmp = math.vec3();
@@ -5545,15 +5546,12 @@ math.makeSectionPlaneSlicer = (function() {
     };
 
     return function(planePos, planeRot) {
-        const planeDir = math.vec3();
-        math.vec3ApplyQuaternion(planeRot, [0, 0, 1], planeDir);
-        const planeU = math.normalizeVec3(math.vec3((Math.abs(planeDir[0]) > Math.abs(planeDir[1]))
-                                                    ? [-planeDir[2], 0, planeDir[0]]
-                                                    : [0, planeDir[2], -planeDir[1]]));
-        const planeV = math.normalizeVec3(math.cross3Vec3(planeDir, planeU, math.vec3()));
+        const planeU = math.vec3ApplyQuaternion(planeRot, worldRight,   math.vec3());
+        const planeV = math.vec3ApplyQuaternion(planeRot, worldUp,      math.vec3());
+        const planeN = math.vec3ApplyQuaternion(planeRot, worldForward, math.vec3());
 
         return function(meshCenter, meshIndices, meshPositions) {
-            const planeDist = math.dotVec3(planeDir, math.subVec3(meshCenter, planePos, tempVec3a));
+            const planeDist = math.dotVec3(planeN, math.subVec3(meshCenter, planePos, tempVec3a));
 
             const unsortedSegment = [ ];
             const indexedPositions = [ null ]; // to never return 0 from addPosition, so its result can be used as a predicate
@@ -5576,9 +5574,9 @@ math.makeSectionPlaneSlicer = (function() {
                     continue; // skip degenerate triangle
                 }
 
-                const d0 = planeDist + math.dotVec3(planeDir, p0);
-                const d1 = planeDist + math.dotVec3(planeDir, p1);
-                const d2 = planeDist + math.dotVec3(planeDir, p2);
+                const d0 = planeDist + math.dotVec3(planeN, p0);
+                const d1 = planeDist + math.dotVec3(planeN, p1);
+                const d2 = planeDist + math.dotVec3(planeN, p2);
 
                 if ((d0 !== 0) || (d1 !== 0) || (d2 !== 0)) {
                     const i0 = (d0 * d1 <= 0) && addPosition(math.lerpVec3(d0 / (d0 - d1), 0, 1, p0, p1, tempVec3a));
@@ -5663,21 +5661,9 @@ math.makeSectionPlaneSlicer = (function() {
                     const posIdx = endpoint2D.posIdx;
                     vertices3D.push(posIdx);
 
-                    const P = math.addVec3(meshCenter, indexedPositions[posIdx], tempVec3b);
-                    // Project P onto the plane
-                    const dist = math.dotVec3(planeDir, math.subVec3(planePos, P, tempVec3c));
-                    math.addVec3(P, math.mulVec3Scalar(planeDir, dist, tempVec3c), P);
-
-                    const right = ((Math.abs(math.dotVec3(planeDir, worldUp)) < 0.999)
-                                   ? math.cross3Vec3(planeDir, worldUp, tempVec3c)
-                                   : worldRight);
-                    const v = math.normalizeVec3(math.cross3Vec3(planeDir, right, tempVec3c));
-
-                    const OP_proj = math.subVec3(P, planePos, P);
-                    uvsPerTidx.push(
-                        math.dotVec3(OP_proj, math.normalizeVec3(math.cross3Vec3(v, planeDir, tempVec3d))),
-                        math.dotVec3(OP_proj, v));
-                });
+                    const P = math.subVec3(math.addVec3(meshCenter, indexedPositions[posIdx], tempVec3a), planePos, tempVec3a);
+                    uvsPerTidx.push(math.dotVec3(P, planeU), math.dotVec3(P, planeV));
+               });
 
                 const outerLoop = loops.shift();
                 appendLoopVertices(outerLoop);
@@ -5709,7 +5695,7 @@ math.makeSectionPlaneSlicer = (function() {
                     math.subVec3(v1, v0, tempVec3b);
                     math.subVec3(v2, v0, tempVec3c);
                     math.normalizeVec3(math.cross3Vec3(tempVec3b, tempVec3c, tempVec3c), tempVec3c);
-                    const facedPositively = math.dotVec3(tempVec3c, planeDir) <= 0;
+                    const facedPositively = math.dotVec3(tempVec3c, planeN) <= 0;
                     if (! facedPositively) {
                         math.negateVec3(tempVec3c, tempVec3c);
                     }
