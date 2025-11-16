@@ -291,9 +291,8 @@ class SectionCaps {
                                                 }
                                             }
 
+                                            const endpointLoops = [ ];
                                             if (unsortedSegment.length > 0) {
-                                                // sorting the segments
-                                                const endpointLoops = [ ];
                                                 endpointLoops.push([ unsortedSegment[0][0], unsortedSegment[0][1] ]);
                                                 unsortedSegment.splice(0, 1);
                                                 while (unsortedSegment.length > 0) {
@@ -326,110 +325,111 @@ class SectionCaps {
                                                         break;
                                                     }
                                                 }
+                                            }
 
-                                                const loops = endpointLoops.filter(endPoints => endPoints.length > 2).map((endPoints, idx) => {
-                                                    const planeEndpoints = endPoints.map(p => ({ coord2D: projectToPlane2D(indexedPositions[p]), posIdx: p }));
-                                                    let doubleArea = 0;
-                                                    const aabb = math.collapseAABB2(math.AABB2());
-                                                    for (let i = 0; i < planeEndpoints.length; i++) {
-                                                        const p0 = planeEndpoints[i].coord2D;
-                                                        math.expandAABB2Point2(aabb, p0);
-                                                        const p1 = planeEndpoints[(i + 1) % planeEndpoints.length].coord2D;
-                                                        doubleArea += (p0[0] * p1[1] - p1[0] * p0[1]);
+                                            const loops = endpointLoops.filter(endPoints => endPoints.length > 2).map((endPoints, idx) => {
+                                                const planeEndpoints = endPoints.map(p => ({ coord2D: projectToPlane2D(indexedPositions[p]), posIdx: p }));
+                                                let doubleArea = 0;
+                                                const aabb = math.collapseAABB2(math.AABB2());
+                                                for (let i = 0; i < planeEndpoints.length; i++) {
+                                                    const p0 = planeEndpoints[i].coord2D;
+                                                    math.expandAABB2Point2(aabb, p0);
+                                                    const p1 = planeEndpoints[(i + 1) % planeEndpoints.length].coord2D;
+                                                    doubleArea += (p0[0] * p1[1] - p1[0] * p0[1]);
+                                                }
+                                                return {
+                                                    boundingBox: aabb,
+                                                    doubleArea: Math.abs(doubleArea),
+                                                    endPoints: planeEndpoints
+                                                };
+                                            }).sort((a, b) => b.doubleArea - a.doubleArea);
+
+                                            while (loops.length > 0) {
+                                                const vertices2D = [ ];
+                                                const vertices3D = [ ];
+                                                const uvsPerTidx = [ ];
+
+                                                const appendLoopVertices = loop => loop.endPoints.forEach(endpoint2D => {
+                                                    const p = endpoint2D.coord2D;
+                                                    vertices2D.push(p[0], p[1]);
+
+                                                    const posIdx = endpoint2D.posIdx;
+                                                    vertices3D.push(posIdx);
+
+                                                    const P = math.addVec3(modelCenter, indexedPositions[posIdx], tempVec3b);
+                                                    // Project P onto the plane
+                                                    const dist = math.dotVec3(planeDir, math.subVec3(planePos, P, tempVec3c));
+                                                    math.addVec3(P, math.mulVec3Scalar(planeDir, dist, tempVec3c), P);
+
+                                                    const right = ((Math.abs(math.dotVec3(planeDir, worldUp)) < 0.999)
+                                                                   ? math.cross3Vec3(planeDir, worldUp, tempVec3c)
+                                                                   : worldRight);
+                                                    const v = math.normalizeVec3(math.cross3Vec3(planeDir, right, tempVec3c));
+
+                                                    const OP_proj = math.subVec3(P, planePos, P);
+                                                    uvsPerTidx.push(
+                                                        math.dotVec3(OP_proj, math.normalizeVec3(math.cross3Vec3(v, planeDir, tempVec3d))),
+                                                        math.dotVec3(OP_proj, v));
+                                                });
+
+                                                const outerLoop = loops.shift();
+                                                appendLoopVertices(outerLoop);
+
+                                                const innerLoops = [ ];
+                                                let innerLoopIdx = 0;
+                                                while (innerLoopIdx < loops.length) {
+                                                    const loop = loops[innerLoopIdx];
+                                                    if (isLoopInside(loop, outerLoop) && innerLoops.every(inner => !isLoopInside(loop, inner))) {
+                                                        loop.index = vertices2D.length / 2;
+                                                        appendLoopVertices(loop);
+                                                        innerLoops.push(loop);
+                                                        loops.splice(innerLoopIdx, 1);
+                                                    } else {
+                                                        ++innerLoopIdx;
                                                     }
-                                                    return {
-                                                        boundingBox: aabb,
-                                                        doubleArea: Math.abs(doubleArea),
-                                                        endPoints: planeEndpoints
-                                                    };
-                                                }).sort((a, b) => b.doubleArea - a.doubleArea);
+                                                }
 
-                                                while (loops.length > 0) {
-                                                    const vertices2D = [ ];
-                                                    const vertices3D = [ ];
-                                                    const uvsPerTidx = [ ];
+                                                // Triangulate
+                                                const triangles = earcut(vertices2D, innerLoops.map(loop => loop.index));
 
-                                                    const appendLoopVertices = loop => loop.endPoints.forEach(endpoint2D => {
-                                                        const p = endpoint2D.coord2D;
-                                                        vertices2D.push(p[0], p[1]);
-
-                                                        const posIdx = endpoint2D.posIdx;
-                                                        vertices3D.push(posIdx);
-
-                                                        const P = math.addVec3(modelCenter, indexedPositions[posIdx], tempVec3b);
-                                                        // Project P onto the plane
-                                                        const dist = math.dotVec3(planeDir, math.subVec3(planePos, P, tempVec3c));
-                                                        math.addVec3(P, math.mulVec3Scalar(planeDir, dist, tempVec3c), P);
-
-                                                        const right = ((Math.abs(math.dotVec3(planeDir, worldUp)) < 0.999)
-                                                                       ? math.cross3Vec3(planeDir, worldUp, tempVec3c)
-                                                                       : worldRight);
-                                                        const v = math.normalizeVec3(math.cross3Vec3(planeDir, right, tempVec3c));
-
-                                                        const OP_proj = math.subVec3(P, planePos, P);
-                                                        uvsPerTidx.push(
-                                                            math.dotVec3(OP_proj, math.normalizeVec3(math.cross3Vec3(v, planeDir, tempVec3d))),
-                                                            math.dotVec3(OP_proj, v));
-                                                    });
-
-                                                    const outerLoop = loops.shift();
-                                                    appendLoopVertices(outerLoop);
-
-                                                    const innerLoops = [ ];
-                                                    let innerLoopIdx = 0;
-                                                    while (innerLoopIdx < loops.length) {
-                                                        const loop = loops[innerLoopIdx];
-                                                        if (isLoopInside(loop, outerLoop) && innerLoops.every(inner => !isLoopInside(loop, inner))) {
-                                                            loop.index = vertices2D.length / 2;
-                                                            appendLoopVertices(loop);
-                                                            innerLoops.push(loop);
-                                                            loops.splice(innerLoopIdx, 1);
-                                                        } else {
-                                                            ++innerLoopIdx;
-                                                        }
+                                                const positions = [ ];
+                                                const normals   = [ ];
+                                                const uvs       = [ ];
+                                                for (let i = 0; i < triangles.length; i += 3) {
+                                                    const v0 = indexedPositions[vertices3D[triangles[i + 0]]];
+                                                    const v1 = indexedPositions[vertices3D[triangles[i + 1]]];
+                                                    const v2 = indexedPositions[vertices3D[triangles[i + 2]]];
+                                                    math.subVec3(v1, v0, tempVec3b);
+                                                    math.subVec3(v2, v0, tempVec3c);
+                                                    math.normalizeVec3(math.cross3Vec3(tempVec3b, tempVec3c, tempVec3c), tempVec3c);
+                                                    const facedPositively = math.dotVec3(tempVec3c, planeDir) <= 0;
+                                                    if (! facedPositively) {
+                                                        math.negateVec3(tempVec3c, tempVec3c);
                                                     }
-
-                                                    // Triangulate
-                                                    const triangles = earcut(vertices2D, innerLoops.map(loop => loop.index));
-
-                                                    const positions = [ ];
-                                                    const normals   = [ ];
-                                                    const uvs       = [ ];
-                                                    for (let i = 0; i < triangles.length; i += 3) {
-                                                        const v0 = indexedPositions[vertices3D[triangles[i + 0]]];
-                                                        const v1 = indexedPositions[vertices3D[triangles[i + 1]]];
-                                                        const v2 = indexedPositions[vertices3D[triangles[i + 2]]];
-                                                        math.subVec3(v1, v0, tempVec3b);
-                                                        math.subVec3(v2, v0, tempVec3c);
-                                                        math.normalizeVec3(math.cross3Vec3(tempVec3b, tempVec3c, tempVec3c), tempVec3c);
-                                                        const facedPositively = math.dotVec3(tempVec3c, planeDir) <= 0;
-                                                        if (! facedPositively) {
-                                                            math.negateVec3(tempVec3c, tempVec3c);
-                                                        }
-                                                        for (let j = 0; j < 3; ++j) {
-                                                            const vIdx = triangles[i + (facedPositively ? j : (2 - j))];
-                                                            const v = indexedPositions[vertices3D[vIdx]];
-                                                            positions.push(v[0], v[1], v[2]);
-                                                            normals.push(tempVec3c[0], tempVec3c[1], tempVec3c[2]);
-                                                            const uvOff = 2 * vIdx;
-                                                            uvs.push(uvsPerTidx[uvOff], uvsPerTidx[uvOff + 1]);
-                                                        }
+                                                    for (let j = 0; j < 3; ++j) {
+                                                        const vIdx = triangles[i + (facedPositively ? j : (2 - j))];
+                                                        const v = indexedPositions[vertices3D[vIdx]];
+                                                        positions.push(v[0], v[1], v[2]);
+                                                        normals.push(tempVec3c[0], tempVec3c[1], tempVec3c[2]);
+                                                        const uvOff = 2 * vIdx;
+                                                        uvs.push(uvsPerTidx[uvOff], uvsPerTidx[uvOff + 1]);
                                                     }
+                                                }
 
-                                                    if (positions.length > 0) {
-                                                        entityCache.capMeshes.push(new Mesh(scene, {
-                                                            id:       `${plane.id}-${entityId}-${entityCache.capMeshes.length}`,
-                                                            material: entity.capMaterial,
-                                                            origin:   math.addVec3(modelCenter, math.mulVec3Scalar(planeDir, 0.001, tempVec3a), tempVec3a),
-                                                            geometry: new ReadableGeometry(scene, {
-                                                                primitive: "triangles",
-                                                                indices:   iota(positions.length / 3),
-                                                                positions: positions,
-                                                                normals:   normals,
-                                                                uv:        uvs
-                                                            })
-                                                        }));
-                                                    }
+                                                if (positions.length > 0) {
+                                                    entityCache.capMeshes.push(new Mesh(scene, {
+                                                        isObject: true,
+                                                        id:       `${plane.id}-${entityId}-${entityCache.capMeshes.length}`,
+                                                        material: entity.capMaterial,
+                                                        origin:   math.addVec3(modelCenter, math.mulVec3Scalar(planeDir, 0.001, tempVec3a), tempVec3a),
+                                                        geometry: new ReadableGeometry(scene, {
+                                                            primitive: "triangles",
+                                                            indices:   iota(positions.length / 3),
+                                                            positions: positions,
+                                                            normals:   normals,
+                                                            uv:        uvs
+                                                        })
+                                                    }));
                                                 }
                                             }
                                         });
