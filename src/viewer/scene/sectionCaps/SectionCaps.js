@@ -325,7 +325,7 @@ class SectionCaps {
                                                             break;
                                                         }
                                                     } else {
-                                                        // Could not find a matching segment. Loop may not be closed
+                                                        endpointLoops.pop(); // Could not find a matching segment. Discard a loop that cannot be closed.
                                                         break;
                                                     }
                                                 }
