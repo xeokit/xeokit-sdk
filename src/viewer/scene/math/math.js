@@ -5703,7 +5703,7 @@ math.makeSectionPlaneSlicer = (function() {
                         positions.push(v[0], v[1], v[2]);
                         normals.push(tempVec3c[0], tempVec3c[1], tempVec3c[2]);
                         const uvOff = 2 * vIdx;
-                        uv.push(vertices2D[uvOff], vertices2D[uvOff + 1]);
+                        uv.push(-vertices2D[uvOff], vertices2D[uvOff + 1]);
                     }
                 }
 
