@@ -1,5 +1,15 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.95](https://github.com/xeokit/xeokit-sdk/compare/v2.6.94...v2.6.95)
+
+### 18 November 2025
+
+-  Added memory leak test example
+-  XEOK-378 Rectifies some inaccuracies related to SectionCaps generation.
+-  BREAKING CHANGE: XEOK-361 Improves SectionCaps feature feedback (by throwing an exception) if Entity::capMaterial assigned to when readableGeometryEnabled: false.
+Code that previously would silently fail will now throw an error.
+This should make the readableGeometryEnabled requirement more clear.
+
 # [v2.6.94](https://github.com/xeokit/xeokit-sdk/compare/v2.6.93...v2.6.94)
 
 ### 03 November 2025
