@@ -2,8 +2,6 @@ import {Plugin, SceneModel, worldToRTCPositions} from "../../viewer";
 
 import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js";
 
-
-
 /**
  * {@link Viewer} plugin that uses [IfcOpenShell](https://ifcopenshell.org/) to load BIM models directly from IFC files.
  *
@@ -19,7 +17,6 @@ import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js"
  * * Not for large models. For best performance with large models, we recommend using {@link XKTLoaderPlugin}.
  * * Loads double-precision coordinates, enabling models to be viewed at global coordinates without accuracy loss.
  * * Filter which IFC types get loaded.
- * * Configure initial appearances of specified IFC types.
  * * Set a custom data source for IFC files.
  *
  * ## Limitations
@@ -52,6 +49,7 @@ import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js"
  * ````javascript
  * import {Viewer, IFCOpenShellLoaderPlugin, NavCubePlugin, TreeViewPlugin} from "../../dist/xeokit-sdk.es.js";
  *
+ *  ````javascript
  * //------------------------------------------------------------------------------------------------------------------
  * // 1. Create a Viewer,
  * // 2. Arrange the camera
@@ -75,12 +73,37 @@ import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js"
  *
  * // 1
  *
+ * async function setupPyodide() {
+ *
+ *     const pyodide = await loadPyodide();
+ *
+ *     await pyodide.loadPackage("micropip");
+ *     await pyodide.loadPackage("numpy");
+ *     await pyodide.loadPackage("shapely");
+ *
+ *     const micropip = pyodide.pyimport("micropip");
+ *
+ *     await micropip.install("typing-extensions");
+ *     await micropip.install("https://ifcopenshell.github.io/wasm-wheels/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl")
+ *
+ *     const ifcopenshell = pyodide.pyimport('ifcopenshell');
+ *     const ifcopenshell_geom = pyodide.pyimport('ifcopenshell.geom');
+ *     const settings = ifcopenshell_geom.settings();
+ *
+ *     settings.set(settings.WELD_VERTICES, false);
+ *
+ *     return { pyodide, ifcopenshell, ifcopenshell_geom, settings };
+ * }
+ *
+ * const { ifcopenshell, ifcopenshell_geom, settings } = await setupPyodide();
+ *
  * const ifcLoader = new IFCOpenShellLoaderPlugin(viewer, {
- *     workerSrc: "./my/directory/IFCOpenShellWorker.js",
- *     ifcOpenShellURL: "./my/directory/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl"
+ *    ifcopenshell, // Pyodide proxy for the ifcopenshell module
+ *    ifcopenshell_geom // Pyodide proxy for the ifcopenshell.geom module
  * });
  *
  * // 2
+ *
  * const model = ifcLoader.load({          // Returns an Entity that represents the model
  *    id: "myModel",
  *    src: "../assets/models/ifc/Duplex.ifc",
@@ -97,6 +120,7 @@ import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js"
  *    //----------------------------------------------------------------------------------------------------------
  *
  *    // 1
+ *
  *    const metaModel = viewer.metaScene.metaModels["myModel"];       // MetaModel with ID "myModel"
  *    const metaObject
  *            = viewer.metaScene.metaObjects["1xS3BCk291UvhgP2dvNsgp"];  // MetaObject with ID "1xS3BCk291UvhgP2dvNsgp"
@@ -110,10 +134,12 @@ import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js"
  *    const aabb = viewer.scene.getAABB(objectIds);                   // Axis-aligned boundary of the leaf sub-objects
  *
  *    // 2
+ *
  *    viewer.scene.setObjectsXRayed(viewer.scene.objectIds, true);
  *    viewer.scene.setObjectsXRayed(objectIds, false);
  *
  *    // 3
+ *
  *    viewer.cameraFlight.flyTo(aabb);
  *
  *    // Find the model Entity by ID
@@ -153,12 +179,16 @@ import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js"
  * }
  *
  * const ifcLoader2 = new IFCOpenShellLoaderPlugin(viewer, {
- *       dataSource: new MyDataSource()
+ *    dataSource: new MyDataSource(),
+ *
+ *    // The same ifcopenshell and ifcopenshell_geom as before
+ *    ifcopenshell,
+ *    ifcopenshell_geom
  * });
  *
  * const model5 = ifcLoader2.load({
- *      id: "myModel5",
- *      src: "../assets/models/ifc/Duplex.ifc"
+ *    id: "myModel5",
+ *    src: "../assets/models/ifc/Duplex.ifc"
  * });
  * ````
  *
@@ -215,7 +245,7 @@ import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js"
  *````
  *
  * @class IFCOpenShellLoaderPlugin
- * @since 2.6.90
+ * @since 2.6.95
  */
 export class IFCOpenShellLoaderPlugin extends Plugin {
 
@@ -224,8 +254,8 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
      * @param {Object} cfg
      * @param {String} [cfg.id="IFCOpenShellLoader"]
      * @param {Object} [cfg.dataSource] Custom data source (defaults to {@link IFCOpenShellDefaultDataSource}).
-     * @param {String} cfg.ifcopenshell
-     * @param {String} cfg.ifcopenshell_geom
+     * @param {Proxy} cfg.ifcopenshell Pyodide proxy for the ifcopenshell module.
+     * @param {Proxy} cfg.ifcopenshell_geom Pyodide proxy for the ifcopenshell.geom module.
      */
     constructor(viewer, cfg) {
 
@@ -247,7 +277,7 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
         this.ifcopenshell_geom = cfg.ifcopenshell_geom;
 
         this.dataSource = cfg.dataSource;
-   }
+    }
 
     /**
      * Sets a custom data source for IFC files.
@@ -305,18 +335,32 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
      * @param {String} [params.src] IFC file path (alternative to `text`).
      * @param {String} [params.text] IFC text (alternative to `src`).
      * @param {{String:Object}} [params.objectDefaults]
-     * @param {String[]} [params.includeTypes]
-     * @param {String[]} [params.excludeTypes]
-     * @param {Number[]} [params.origin=[0,0,0]]
-     * @param {Number[]} [params.position=[0,0,0]]
-     * @param {Number[]} [params.rotation=[0,0,0]]
-     * @param {Boolean} [params.backfaces=true]
-     * @param {Boolean} [params.dtxEnabled=true]
+     * @param {String[]} [params.includeTypes] Array of IFC types to include.
+     * @param {String[]} [params.excludeTypes] Array of IFC types to exclude.
+     * @param {Number[]} [params.origin=[0,0,0]] Optional World-coordinate origin to apply to the model.
+     * @param {Number[]} [params.position=[0,0,0]] Optional position offset to apply to the model.
+     * @param {Number[]} [params.rotation=[0,0,0]] Optional XYZ Euler rotation (degrees) to apply to the model.
+     * @param {Boolean} [params.backfaces=true] Whether to render backfaces.
+     * @param {Boolean} [params.dtxEnabled=true] Whether to enable data texture storage for geometry buffers.
+     * @param {Boolean} [params.loadMetadata=true] Whether to load metadata.
+     * @param {Boolean} [params.edges=false] Whether to generate edge lines for the model.
+     * @param {Boolean} [params.saoEnabled=false] Whether to enable SAO for the model.
+     * @param {Boolean} [params.globalizeObjectIds=false] Whether to globalize each {@link Entity#id} and {@link MetaObject#id} as it loads the model.
      * @returns {Entity}
      */
     async load(params = {}) {
 
-        let {id, backfaces, dtxEnabled, rotation, origin, loadMetadata} = params;
+        let {
+            id,
+            backfaces,
+            dtxEnabled,
+            rotation,
+            origin,
+            loadMetadata,
+            edges,
+            saoEnabled,
+            globalizeObjectIds
+        } = params;
 
         if (id && this.viewer.scene.components[id]) {
             this.error(`Component with this ID already exists: ${id} - autogenerating SceneModel ID`);
@@ -326,10 +370,13 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
         const sceneModel = new SceneModel(this.viewer.scene, {
             id,
             isModel: true,
+            globalizeObjectIds,
             backfaces,
             dtxEnabled,
             rotation,
-            origin
+            origin,
+            edges,
+            saoEnabled
         });
 
         const modelId = sceneModel.id;
@@ -342,16 +389,17 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
         const spinner = this.viewer.scene.canvas.spinner;
         spinner.processes++;
 
-        const loadIFC = (fileData)=>{
+        const loadIFC = (fileData) => {
             const ifc = this.ifcopenshell.file.from_string(fileData);
-          const ctx = {
-              geometryCache: new Map(),
-              ifc,
-              sceneModel
-          };
+            const ctx = {
+                globalizeObjectIds: globalizeObjectIds || this._globalizeObjectIds,
+                geometryCache: new Map(),
+                ifc,
+                sceneModel
+            };
             this._loadIFCGeometry(ctx);
             if (loadMetadata !== false) {
-                const metaModelData = this._loadIFCMetaModel(ifc);
+                const metaModelData = this._loadIFCMetaModel(ctx, ifc);
                 this.viewer.metaScene.createMetaModel(modelId, metaModelData);
             }
             this.viewer.scene.canvas.spinner.processes--;
@@ -363,6 +411,7 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
                 params.src,
                 (fileData) => {
                     loadIFC(fileData);
+                    this.viewer.scene.canvas.spinner.processes--;
                 },
                 (err) => {
                     this.viewer.scene.canvas.spinner.processes--;
@@ -377,13 +426,12 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
             this.viewer.metaScene.destroyMetaModel(modelId);
         });
 
-
         return sceneModel;
     }
 
     _loadIFCGeometry(ctx) {
-        const { ifc, sceneModel } = ctx;
-        const { ifcopenshell_geom } = this;
+        const {ifc, sceneModel} = ctx;
+        const {ifcopenshell_geom} = this;
 
         const settings = ifcopenshell_geom.settings();
         settings.set(settings.WELD_VERTICES, false);
@@ -394,11 +442,6 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
             exclude: ["IfcSpace", "IfcOpeningElement"],
             geometry_library: "hybrid-cgal-simple-opencascade"
         });
-
-        // Single-entry micro-cache to speed repeated geometry
-        const cache = {
-
-        };
 
         if (iterator.initialize()) {
             do {
@@ -420,7 +463,7 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
         });
     }
 
-    _parseIFCEntity(ctx,  obj, ifcEntity) {
+    _parseIFCEntity(ctx, obj, ifcEntity) {
         const {sceneModel, geometryCache} = ctx;
         const geometry_id = obj.geometry.id;
 
@@ -432,7 +475,8 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
             const srcMaterials = obj.geometry.materials.toJs();
             const materials = srcMaterials.map((m) => ({
                 diffuse: m.diffuse.components.toJs(),
-                transparency: m.transparency ?? 0.0,
+                transparency: (m.transparency
+                    && !isNaN(m.transparency)) ? m.transparency : 0.0 ,
             }));
 
             const materialIds = new Int32Array(obj.geometry.material_ids.toJs());
@@ -485,28 +529,28 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
         const meshIds = [];
 
         for (const [matIndex, sceneGeometryId] of cached.subGeoms.entries()) {
-            const material = cached.materials[matIndex] || { diffuse: [0.6, 0.6, 0.6], transparency: 0.0 };
-
+            const material = cached.materials[matIndex] || {diffuse: [0.6, 0.6, 0.6], transparency: 0.0};
             const meshId = generateUUID();
+            const diffuse = material.diffuse;
             sceneModel.createMesh({
                 id: meshId,
                 geometryId: sceneGeometryId,
                 origin,
                 matrix,
-                color: material.diffuse,
+                color: [diffuse[0], diffuse[1], diffuse[2]],
                 opacity: 1.0 - material.transparency
             });
             meshIds.push(meshId);
         }
 
         sceneModel.createEntity({
-            id: ifcEntity.GlobalId,
+            id: ctx.globalizeObjectIds ? math.globalizeObjectId(ctx.sceneModel.id, ifcEntity.GlobalId) : ifcEntity.GlobalId,
             isObject: true,
             meshIds
         });
     }
 
-    _loadIFCMetaModel(ifc) {
+    _loadIFCMetaModel(ctx, ifc) {
 
         const visited = new Set();
         const metaObjects = [];
@@ -515,17 +559,27 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
         const toStr = (v) => (v === undefined || v === null) ? "" : String(v);
 
         function getGlobalId(entity) {
-            try { return String(entity.GlobalId); } catch { return null; }
+            try {
+                return String(entity.GlobalId);
+            } catch {
+                return null;
+            }
         }
 
         function addNode(entity, parent) {
             const id = getGlobalId(entity);
             if (!id || visited.has(id)) return false;
             visited.add(id);
+            const globalizeObjectIds = ctx.globalizeObjectIds;
+            const modelId = ctx.sceneModel.id;
             metaObjects.push({
-                id,
+                id: globalizeObjectIds ? math.globalizeObjectId(modelId, id) : id,
                 type: String(entity.is_a()),
-                parent: parent ? getGlobalId(parent) : null
+                parent: parent
+                    ? (globalizeObjectIds
+                        ? math.globalizeObjectId(modelId, getGlobalId(parent))
+                        : getGlobalId(parent))
+                    : null
             });
             return true;
         }
@@ -589,13 +643,15 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
         try {
             // ifcopenshell.file usually exposes a `schema` string property
             schema = toStr(ifc.schema);
-        } catch {}
+        } catch {
+        }
         if (!schema) {
             // Fallback to STEP header
             try {
                 const ids = ifc.wrapped_data.header.file_schema.schema_identifiers;
                 if (ids && ids.length > 0) schema = toStr(ids.get(0));
-            } catch {}
+            } catch {
+            }
         }
 
         // Project (also gives us OwnerHistory on many files)
@@ -618,7 +674,8 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
                         const personName = (gn || fn) ? [gn, fn].filter(Boolean).join(" ") : "";
                         const orgName = org?.Name ? toStr(org.Name) : "";
                         author = [personName, orgName].filter(Boolean).join(" / ");
-                    } catch {}
+                    } catch {
+                    }
 
                     // Creation time (UNIX seconds)
                     try {
@@ -626,7 +683,8 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
                         if (typeof ts === "number" && isFinite(ts) && ts > 0) {
                             createdAt = new Date(ts * 1000).toISOString();
                         }
-                    } catch {}
+                    } catch {
+                    }
 
                     // Creating application
                     try {
@@ -636,9 +694,11 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
                                 app?.ApplicationIdentifier ? toStr(app.ApplicationIdentifier) : "";
                         const appVer = app?.Version ? toStr(app.Version) : "";
                         creatingApplication = [appName, appVer].filter(Boolean).join(" ");
-                    } catch {}
+                    } catch {
+                    }
                 }
-            } catch {}
+            } catch {
+            }
 
             // Clean first project (we’ll traverse below with a fresh pointer anyway)
             project.destroy?.();
@@ -656,7 +716,8 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
                         for (let i = 0; i < authors.length; i++) parts.push(toStr(authors.get(i)));
                         author = parts.filter(Boolean).join(", ");
                     }
-                } catch {}
+                } catch {
+                }
             }
             if (!createdAt) {
                 const ts = toStr(fileName.time_stamp); // already a string like "2023-08-10T12:34:56"
@@ -672,7 +733,8 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
                 const prep = toStr(fileName.preprocessor_version);
                 creatingApplication = [orig, prep].filter(Boolean).join(" / ");
             }
-        } catch {}
+        } catch {
+        }
 
         // If createdAt still missing, sweep for earliest OwnerHistory timestamp across roots
         if (!createdAt) {
@@ -690,7 +752,8 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
                 }
                 roots.destroy?.();
                 if (isFinite(minTs)) createdAt = new Date(minTs * 1000).toISOString();
-            } catch {}
+            } catch {
+            }
         }
 
         // ---- hierarchy walk ----------------------------------------------------
