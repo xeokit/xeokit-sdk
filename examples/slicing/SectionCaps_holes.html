@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <link href="../css/dat-gui-light-style.css" rel="stylesheet"/>
+    <script src="../libs/dat.gui.min.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <input type="checkbox" id="info-button"/>
+    <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+    <canvas id="myCanvas"></canvas>
+    <div class="slideout-sidebar">
+      <img class="info-icon" src="../../assets/images/performance_model_icon.png"/>
+      <h1>SectionCaps</h1>
+      <h2>SectionCaps fill holes created in models by a SectionPlane</h2>
+      <p>
+        Assign a material to Entity::capMaterial property, to visualise caps created by a SectionPlane.
+      </p>
+      <h3>Customize example</h3>
+      <div id="myDatGuiContainer"></div>
+      <h3>Components Used</h3>
+      <ul>
+        <li>
+          <a href="../../docs/class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html"
+             target="_other">SectionPlane</a>
+        </li>
+        <li>
+          <a href="../../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+             target="_other">PhongMaterial</a>
+        </li>
+      </ul>
+    </div>
+  </body>
+
+  <script type="module">
+
+import { buildBoxGeometry, buildSphereGeometry, Viewer, SceneModel, SectionPlanesPlugin, PhongMaterial, Texture, LinearEncoding, math } from "../../dist/xeokit-sdk.min.es.js";
+
+const viewer = new Viewer({
+    canvasId: "myCanvas",
+    readableGeometryEnabled: true,
+});
+
+viewer.camera.eye = [ -9.7794609622236,-0.09463738206444143,15.728028298543682 ];
+viewer.camera.look = [ 0.9290615838326971,-2.5614638034487336,-0.11249909572088146 ];
+viewer.camera.up = [ 0.07166111641726329,0.9917800986311227,-0.10600434119917788 ];
+
+const sceneModel = new SceneModel(viewer.scene, { isModel: true, edges: true });
+
+const color = [ .3, 1, .3 ];
+
+const combinedGeo = {
+    indices:     [ ],
+    positions:   [ ],
+    normals:     [ ],
+    edgeIndices: [ ]
+};
+
+let nextId = 0;
+
+const createMesh = (isHole, geo) => {
+    const tringleEdges = [ ];
+    for (let i = 0; i < geo.indices.length; i += 3) {
+        for (let j = 0; j < 3; ++j) {
+            tringleEdges.push(geo.indices[i + j], geo.indices[i + (j + 1) % 3]);
+        }
+    }
+
+    const ind = isHole ? geo.indices.map(i => i).reverse() : geo.indices;
+    const pos = geo.positions;
+    const nor = isHole ? geo.normals.map(v => -v) : geo.normals;
+    const edg = tringleEdges;
+
+    const ref = combinedGeo.positions.length / 3;
+    ind.forEach(i => combinedGeo.indices.push(ref + i));
+    pos.forEach(p => combinedGeo.positions.push(p));
+    nor.forEach(n => combinedGeo.normals.push(n));
+    edg.forEach(e => combinedGeo.edgeIndices.push(ref + e));
+};
+
+const sph = (center, radius) => buildSphereGeometry({ center: center, radius: radius });
+const cub = (center, size)   => buildBoxGeometry({ center: center, xSize: size, ySize: size, zSize: size });
+
+createMesh(true,  sph([ 2.5,    0, -2.5], 1.3));
+createMesh(false, cub([-3.1, -2.5,    0],  .5));
+createMesh(true,  cub([ 2.5,    0,  1.7], 2));
+createMesh(false, sph([   2,    0,   .5],  .5));
+createMesh(false, cub([   0,    0,    0], 5));
+createMesh(true,  sph([-2.4, -2.3, -0.5], 2));
+createMesh(true,  sph([-1.7,  2.5,    0], 2));
+createMesh(false, cub([-1.7, -1.8, -1.3],  .3));
+createMesh(false, sph([-1.7,  2.5,    0], 1.5));
+createMesh(true,  sph([-1.7,  2.5,    0], 1.0));
+createMesh(false, cub([-1.8, -2.2,   .7],  .2));
+createMesh(false, sph([-1.7,  2.5,    0], 0.5));
+
+const entity = sceneModel.createEntity({
+    isObject: true,
+    meshIds: [
+      sceneModel.createMesh({
+          id: "mesh_" + nextId++,
+          primitive: "solid",
+          indices:   combinedGeo.indices,
+          positions: combinedGeo.positions,
+          normals:   combinedGeo.normals,
+          edgeIndices: combinedGeo.edgeIndices,
+          color:     color}).id
+      ]
+});
+
+const capMaterial = new PhongMaterial(viewer.scene, { diffuse: color, backfaces: false });
+entity.capMaterial = capMaterial;
+
+sceneModel.finalize();
+
+const sectionPlanes = new SectionPlanesPlugin(viewer);
+const sectionPlane = sectionPlanes.createSectionPlane({ pos: [0,-9,1], dir: [0,0,-1] });
+sectionPlanes.showControl(sectionPlane.id);
+
+const gui = new window.dat.GUI({autoPlace: false, width: "100%"});
+gui.add({topology:    !!sceneModel.edges},   'topology').onChange(on => sceneModel.edges = on);
+gui.add({capMaterial: !!entity.capMaterial}, 'capMaterial').onChange(on => entity.capMaterial = on && capMaterial);
+document.getElementById("myDatGuiContainer").appendChild(gui.domElement);
+
+window.viewer = viewer;
+
+  </script>
+</html>

@@ -994,10 +994,6 @@ class Scene extends Component {
     // Scene. Violates Hollywood Principle, where we could just filter on type in _addComponent,
     // but this is faster than checking the type of each component in such a filter.
 
-    _capMaterialUpdated(entityId, modelId) {
-        this._sectionCaps._onCapMaterialUpdated(entityId, modelId);
-    }
-
     _sectionPlaneCreated(sectionPlane) {
         this.sectionPlanes[sectionPlane.id] = sectionPlane;
         this.scene._sectionPlanesState.addSectionPlane(sectionPlane._state);

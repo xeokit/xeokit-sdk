@@ -165,8 +165,8 @@
         isObject: true,
     }).capMaterial = new PhongMaterial(viewer.scene, {
             diffuse: [1,1,1],
-            backfaces: true,
             diffuseMap: new Texture(viewer.scene, {
+                flipY: true,
                 src: "../../assets/textures/diffuse/uvGrid2.jpg",
                 encoding: LinearEncoding
             }),
