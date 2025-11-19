@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit-sdk WebXR Plugin Example</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            background: #f0f0f0;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            -webkit-user-select:none;
+            user-select: none;
+        }
+
+        #myCanvas {
+            width: 100%;
+            height: 100vh;
+            display: block;
+            background: lightblue;
+            background-image: linear-gradient(lightblue, white);
+        }
+
+        .info-panel {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: calc(100dvw - 30px);
+            font-size: 14px;
+        }
+
+        .info-panel h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .status {
+            padding: 5px;
+            border-radius: 4px;
+            margin: 5px;
+            font-weight: bold;
+        }
+
+        .status.ready {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.waiting {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas"></canvas>
+
+    <div class="info-panel">
+        <h2>xeokit-sdk WebXR AR Example</h2>
+        <div id="status" class="status waiting">
+            Checking WebXR support...
+        </div>
+
+        <p><strong>Requirements:</strong></p>
+        <ul>
+            <li>AR-compatible device (iOS Safari or Android Chrome)</li>
+            <li>WebXR API support (iOS quick look or ARKit)</li>
+            <li>Camera permissions</li>
+            <li>Secure context (https or localhost)</li>
+        </ul>
+    </div>
+
+    <script type="module">
+        import {WebXRPlugin} from "../../dist/xeokit-sdk.es.js";
+        import {Viewer, GLTFLoaderPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk@2.6.90/dist/xeokit-sdk.es.min.js";
+
+        const viewer = new Viewer({
+            canvasId: "myCanvas",
+            transparent: true
+        });
+
+        viewer.camera.eye = [-5, 5, 5];
+        viewer.camera.look = [0, 0, 0];
+        viewer.camera.up = [0, 1, 0];
+
+        const gltfLoader = new GLTFLoaderPlugin(viewer);
+        const webXR = new WebXRPlugin(viewer, { id: "webxr" }, { iosSrc: "https://sos-ch-gva-2.exo.io/creoox-public/residential_window.usdz" });
+        const statusDiv = document.getElementById("status");
+
+        if (!navigator.xr) {
+            if (webXR.quickLookSupported) {
+                statusDiv.className = "status ready";
+                statusDiv.textContent = "iOS quick look supported - Ready to load model";
+            } else {
+                statusDiv.className = "status error";
+                statusDiv.textContent = "WebXR not supported on this browser/device";
+            }
+        } else {
+            navigator.xr.isSessionSupported('immersive-ar').then((supported) => {
+                if (supported) {
+                    statusDiv.className = "status ready";
+                    statusDiv.textContent = "WebXR AR supported - Ready to load model";
+                } else {
+                    statusDiv.className = "status error";
+                    statusDiv.textContent = "WebXR AR not supported on this device!";
+                }
+            }).catch(() => {
+                statusDiv.className = "status error";
+                statusDiv.textContent = "Error checking WebXR support";
+            });
+        }
+
+        // Load a sample model
+        const model = gltfLoader.load({
+            id: "myModel",
+            src: "https://sos-ch-gva-2.exo.io/creoox-public/residential_window.glb",
+            colorTextureEnabled: true,
+            autoMetaModel: true,
+            saoEnabled: true,
+            edges: true,
+            dtxEnabled: true
+        });
+
+        model.on("loaded", () => {
+            console.log("Model loaded successfully");
+            
+            webXR.setModel(model);
+
+            viewer.cameraFlight.flyTo({
+                aabb: model.aabb,
+                duration: 0.5
+            });
+        });
+
+        model.on("error", (error) => {
+            console.log({error});
+
+            console.error("Model loading error:", error);
+            statusDiv.className = "status error";
+            statusDiv.textContent = "Error loading model: " + error.message;
+        });
+
+        webXR.on("arStarted", () => {
+            console.log("AR session started");
+            statusDiv.textContent = "AR mode active - Point at surface and tap to place";
+        });
+
+        webXR.on("arEnded", () => {
+            console.log("AR session ended");
+            statusDiv.textContent = "AR session ended - Returned to normal view";
+        });
+
+        webXR.on("modelPlaced", (event) => {
+            console.log("Model placed at:", event.position);
+            statusDiv.textContent = "Model placed! Tap again to place another";
+        });
+    </script>
+</body>
+</html>
