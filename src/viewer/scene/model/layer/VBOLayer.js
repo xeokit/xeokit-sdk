@@ -970,9 +970,13 @@ const makeVBORenderingAttributes = function(programVariables, instancing, entity
     return {
         dontCullOnAlphaZero: true,
 
+        clippableTest: (function() {
+            const vClippable = programVariables.createVarying("float", "vClippable", () => `${`((int(${attributes.flags}) >> 16 & 0xF) == 1)`} ? 1.0 : 0.0`); // Using `flat uint` for vClippable causes an instability - see XEOK-385
+            return () => `${vClippable} != 0.0`;
+        })(),
+
         geometryParameters: {
             attributes: {
-                clippable:         `((int(${attributes.flags}) >> 16 & 0xF) == 1)`,
                 color:             attributes.color,
                 flags:             iota(4).map(i => ({ toString: () => `(int(${attributes.flags}) >> ${i * 4} & 0xF)` })),
                 metallicRoughness: attributes.metallicRoughness,
