@@ -156,10 +156,7 @@ export const getRenderers = (function() {
                                     appendFragmentOutputs:          programSetup.appendFragmentOutputs,
                                     cleanerEdges:                   programSetup.cleanerEdges,
                                     clipPos:                        clipPos,
-                                    clippableTest:                  (function() {
-                                        const vClippable = programVariables.createVarying("float", "vClippable", () => `${attributes.clippable} ? 1.0 : 0.0`, "flat");
-                                        return () => `${vClippable} > 0.0`;
-                                    })(),
+                                    clippableTest:                  renderingAttributes.clippableTest,
                                     clippingCaps:                   programSetup.clippingCaps,
                                     crossSections:                  scene.crossSections,
                                     discardPoints:                  setupPoints && pointsMaterial.roundPoints,
