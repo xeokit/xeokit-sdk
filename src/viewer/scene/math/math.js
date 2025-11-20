@@ -5475,9 +5475,12 @@ math.makeSectionPlaneSlicer = (function() {
     const tempVec3d = math.vec3();
 
     const triangle = [ math.vec3(), math.vec3(), math.vec3() ];
+    const tmpIntersections = [ null, null, null ];
+    const tmpPositions     = [ null, null, null ];
+    const tmpReferences    = [ null, null, null ];
 
-    const worldUp      = [0, 1, 0];
     const worldRight   = [1, 0, 0];
+    const worldUp      = [0, 1, 0];
     const worldForward = [0, 0, 1];
 
     const sqDistVec3 = (function() {
@@ -5492,71 +5495,100 @@ math.makeSectionPlaneSlicer = (function() {
         return ret;
     };
 
-    const setCoord2D = (p, dst) => { dst[0] = p.coord2Dx; dst[1] = p.coord2Dy; return dst; };
-
     const ccw = (a, b, c) => ((c[1] - a[1]) * (b[0] - a[0])) > ((b[1] - a[1]) * (c[0] - a[0]));
-
-    const isLoopInside = (inner, outer) => {
-        const bbI = inner.boundingBox;
-        const bbO = outer.boundingBox;
-        if ((bbI[0] < bbO[0]) || (bbI[1] < bbO[1]) || (bbI[2] > bbO[2]) || (bbI[3] > bbO[3])) {
-            return false;
-        }
-
-        const innerEndpoints = inner.endPoints;
-        const outerEndpoints = outer.endPoints;
-        for (let ii = 0, ij = innerEndpoints.length - 1; ii < innerEndpoints.length; ij = ii++) {
-            const i0 = setCoord2D(innerEndpoints[ii], tempVec2a);
-            const [i0x, i0y] = i0;
-            const i1 = setCoord2D(innerEndpoints[ij], tempVec2b);
-
-            let inside = false;
-            for (let i = 0, j = outerEndpoints.length - 1; i < outerEndpoints.length; j = i++) {
-                const o0 = setCoord2D(outerEndpoints[i], tempVec2c);
-                const o1 = setCoord2D(outerEndpoints[j], tempVec2d);
-
-                if ((ccw(i0, o0, o1) !== ccw(i1, o0, o1)) && (ccw(i0, i1, o0) !== ccw(i0, i1, o1))) {
-                    return false; // segments intersect
-                }
-
-                const [o0x, o0y] = o0;
-                const [o1x, o1y] = o1;
-
-                const dx = i0x - o0x;
-                const dy = i0y - o0y;
-
-                const oDx = o1x - o0x;
-                const oDy = o1y - o0y;
-
-                const dot = (((oDx !== 0) || (oDy !== 0)) && (Math.abs(oDx * dy - oDy * dx) < 1e-10)) ? (dx * oDx + dy * oDy) : -1;
-                if ((dot >= 0) && (dot <= (Math.pow(oDx, 2) + Math.pow(oDy, 2)))) {
-                    return false; // on edge
-                }
-
-                if (((o0y > i0y) !== (o1y > i0y)) && (dx < (dy * oDx / oDy))) {
-                    inside = !inside;
-                }
-            }
-            if (! inside) {
-                return false;
-            }
-        }
-
-        return true;
-    };
 
     return function(plane) {
         const planeU = math.vec3ApplyQuaternion(plane.quaternion, worldRight,   math.vec3());
         const planeV = math.vec3ApplyQuaternion(plane.quaternion, worldUp,      math.vec3());
         const planeN = math.vec3ApplyQuaternion(plane.quaternion, worldForward, math.vec3());
 
-        return function(mesh) {
+        return function(mesh, cfg = { }) {
             const planeToMesh = math.subVec3(mesh.origin, plane.pos, math.vec3());
             const planeDist = math.dotVec3(planeN, planeToMesh);
 
             const unsortedSegment = [ ];
             const indexedPositions = [ null ]; // to never return 0 from addPosition, so its result can be used as a predicate
-            const addPosition = p => { const idx = indexedPositions.length; indexedPositions.push(math.vec3(p)); return idx; };
+            const addPosition = (p, addUV) => {
+                const idx = indexedPositions.length;
+                const P = new Float64Array(5);
+                P.set(p);
+                if (addUV) {
+                    math.addVec3(planeToMesh, p, tempVec3a);
+                    P[3] = -math.dotVec3(planeU, tempVec3a);
+                    P[4] = math.dotVec3(planeV, tempVec3a);
+                }
+                indexedPositions.push(P);
+                return idx;
+            };
+
+            const getCoord2D = (idx, dst) => { const P = indexedPositions[idx]; dst[0] = P[3]; dst[1] = P[4]; return dst; };
+
+            const isLoopInside = (inner, outer) => {
+                const bbI = inner.boundingBox;
+                const bbO = outer.boundingBox;
+                if ((bbI[0] < bbO[0]) || (bbI[1] < bbO[1]) || (bbI[2] > bbO[2]) || (bbI[3] > bbO[3])) {
+                    return false;
+                }
+
+                const innerEndpoints = inner.endPoints;
+                const outerEndpoints = outer.endPoints;
+                for (let ii = 0, ij = innerEndpoints.length - 1; ii < innerEndpoints.length; ij = ii++) {
+                    const i0 = getCoord2D(innerEndpoints[ii], tempVec2a);
+                    const [i0x, i0y] = i0;
+                    const i1 = getCoord2D(innerEndpoints[ij], tempVec2b);
+
+                    let inside = false;
+                    for (let i = 0, j = outerEndpoints.length - 1; i < outerEndpoints.length; j = i++) {
+                        const o0 = getCoord2D(outerEndpoints[i], tempVec2c);
+                        const o1 = getCoord2D(outerEndpoints[j], tempVec2d);
+
+                        if ((ccw(i0, o0, o1) !== ccw(i1, o0, o1)) && (ccw(i0, i1, o0) !== ccw(i0, i1, o1))) {
+                            return false; // segments intersect
+                        }
+
+                        const [o0x, o0y] = o0;
+                        const [o1x, o1y] = o1;
+
+                        const dx = i0x - o0x;
+                        const dy = i0y - o0y;
+
+                        const oDx = o1x - o0x;
+                        const oDy = o1y - o0y;
+
+                        const dot = (((oDx !== 0) || (oDy !== 0)) && (Math.abs(oDx * dy - oDy * dx) < 1e-10)) ? (dx * oDx + dy * oDy) : -1;
+                        if ((dot >= 0) && (dot <= (Math.pow(oDx, 2) + Math.pow(oDy, 2)))) {
+                            return false; // on edge
+                        }
+
+                        if (((o0y > i0y) !== (o1y > i0y)) && (dx < (dy * oDx / oDy))) {
+                            inside = !inside;
+                        }
+                    }
+                    if (! inside) {
+                        return false;
+                    }
+                }
+
+                return true;
+            };
+
+            const pos = { indices: [ ], normals: [ ] };
+            const neg = (! cfg.onlyPosSliceWithUV) && { indices: [ ], normals: [ ] };
+
+            const appendOnSide = (dst, indices, normal) => {
+                if (dst) {
+                    const p0 = indexedPositions[indices[0]];
+                    normal ||= math.normalizeVec3(math.cross3Vec3(math.subVec3(indexedPositions[indices[1]], p0, tempVec3a),
+                                                                  math.subVec3(indexedPositions[indices[2]], p0, tempVec3b),
+                                                                  tempVec3a),
+                                                  tempVec3a);
+
+                    for (let i = 0; i < 3; ++i) {
+                        dst.indices.push(indices[i]);
+                        dst.normals.push(normal[0], normal[1], normal[2]);
+                    }
+                }
+            };
 
             const setVertex = (i, dst) => {
                 const idx = mesh.indices[i] * 3;
@@ -5580,9 +5612,9 @@ math.makeSectionPlaneSlicer = (function() {
                 const d2 = planeDist + math.dotVec3(planeN, p2);
 
                 if ((d0 !== 0) || (d1 !== 0) || (d2 !== 0)) {
-                    const i0 = (d0 * d1 <= 0) && addPosition(math.lerpVec3(d0 / (d0 - d1), 0, 1, p0, p1, tempVec3a));
-                    const i1 = (d1 * d2 <= 0) && addPosition(math.lerpVec3(d1 / (d1 - d2), 0, 1, p1, p2, tempVec3a));
-                    const i2 = (d2 * d0 <= 0) && addPosition(math.lerpVec3(d2 / (d2 - d0), 0, 1, p2, p0, tempVec3a));
+                    const i0 = (d0 * d1 <= 0) && addPosition(math.lerpVec3(d0 / (d0 - d1), 0, 1, p0, p1, tempVec3a), true);
+                    const i1 = (d1 * d2 <= 0) && addPosition(math.lerpVec3(d1 / (d1 - d2), 0, 1, p1, p2, tempVec3a), true);
+                    const i2 = (d2 * d0 <= 0) && addPosition(math.lerpVec3(d2 / (d2 - d0), 0, 1, p2, p0, tempVec3a), true);
 
                     if (i0 ? (i1 || i2) : (i1 && i2)) { // triangle intersected by the section plane
                         unsortedSegment.push(i0 ? [ i0, i1 || i2 ] : [ i1, i2 ]);
@@ -5631,37 +5663,30 @@ math.makeSectionPlaneSlicer = (function() {
             }
 
             const loops = endpointLoops.filter(endPoints => endPoints.length > 2).map((endPoints, idx) => {
-                const planeEndpoints = endPoints.map(posIdx => {
-                    const P = math.addVec3(planeToMesh, indexedPositions[posIdx], tempVec3a);
-                    return { posIdx: posIdx, coord2Dx: math.dotVec3(planeU, P), coord2Dy: math.dotVec3(planeV, P) };
-                });
                 let doubleArea = 0;
                 const aabb = math.collapseAABB2(math.AABB2());
-                for (let i = 0; i < planeEndpoints.length; i++) {
-                    const p0 = planeEndpoints[i];
-                    tempVec2a[0] = p0.coord2Dx;
-                    tempVec2a[1] = p0.coord2Dy;
+                for (let i = 0; i < endPoints.length; i++) {
+                    getCoord2D(endPoints[i], tempVec2a);
                     math.expandAABB2Point2(aabb, tempVec2a);
-                    const p1 = planeEndpoints[(i + 1) % planeEndpoints.length];
-                    doubleArea += (p0.coord2Dx * p1.coord2Dy - p1.coord2Dx * p0.coord2Dy);
+                    getCoord2D(endPoints[(i + 1) % endPoints.length], tempVec2b);
+                    doubleArea += (tempVec2a[0] * tempVec2b[1] - tempVec2b[0] * tempVec2a[1]);
                 }
                 return {
                     boundingBox: aabb,
                     doubleArea: Math.abs(doubleArea),
-                    endPoints: planeEndpoints
+                    endPoints: endPoints
                 };
             }).sort((a, b) => b.doubleArea - a.doubleArea);
-
-            const sliceGeometries = [ ];
 
             while (loops.length > 0) {
                 const vertices2D = [ ];
                 const vertices3D = [ ];
 
                 const appendLoopVertices = loop => loop.endPoints.forEach(endpoint2D => {
-                    vertices2D.push(endpoint2D.coord2Dx, endpoint2D.coord2Dy);
-                    vertices3D.push(endpoint2D.posIdx);
-               });
+                    getCoord2D(endpoint2D, tempVec2a);
+                    vertices2D.push(tempVec2a[0], tempVec2a[1]);
+                    vertices3D.push(endpoint2D);
+                });
 
                 const outerLoop = loops.shift();
                 appendLoopVertices(outerLoop);
@@ -5683,41 +5708,33 @@ math.makeSectionPlaneSlicer = (function() {
                 // Triangulate
                 const triangles = earcut(vertices2D, innerLoops.map(loop => loop.index));
 
-                const positions = [ ];
-                const normals   = [ ];
-                const uv        = [ ];
                 for (let i = 0; i < triangles.length; i += 3) {
-                    const v0 = indexedPositions[vertices3D[triangles[i + 0]]];
-                    const v1 = indexedPositions[vertices3D[triangles[i + 1]]];
-                    const v2 = indexedPositions[vertices3D[triangles[i + 2]]];
-                    math.subVec3(v1, v0, tempVec3b);
-                    math.subVec3(v2, v0, tempVec3c);
+                    const ti = tmpIntersections;
+                    ti[0] = vertices3D[triangles[i + 0]];
+                    ti[1] = vertices3D[triangles[i + 1]];
+                    ti[2] = vertices3D[triangles[i + 2]];
+                    const v0 = indexedPositions[ti[0]];
+                    math.subVec3(indexedPositions[ti[1]], v0, tempVec3b);
+                    math.subVec3(indexedPositions[ti[2]], v0, tempVec3c);
                     math.normalizeVec3(math.cross3Vec3(tempVec3b, tempVec3c, tempVec3c), tempVec3c);
                     const facedPositively = math.dotVec3(tempVec3c, planeN) <= 0;
-                    if (! facedPositively) {
-                        math.negateVec3(tempVec3c, tempVec3c);
-                    }
-                    for (let j = 0; j < 3; ++j) {
-                        const vIdx = triangles[i + (facedPositively ? j : (2 - j))];
-                        const v = indexedPositions[vertices3D[vIdx]];
-                        positions.push(v[0], v[1], v[2]);
-                        normals.push(tempVec3c[0], tempVec3c[1], tempVec3c[2]);
-                        const uvOff = 2 * vIdx;
-                        uv.push(-vertices2D[uvOff], vertices2D[uvOff + 1]);
-                    }
-                }
-
-                if (positions.length > 0) {
-                    sliceGeometries.push({
-                        indices:   iota(positions.length / 3),
-                        positions: positions,
-                        normals:   normals,
-                        uv:        uv
-                    });
+                    appendOnSide(facedPositively ? pos : neg, ti, tempVec3c);
+                    const tmp = ti[0]; ti[0] = ti[2]; ti[2] = tmp;
+                    appendOnSide(facedPositively ? neg : pos, ti, math.negateVec3(tempVec3c, tempVec3c));
                 }
             }
 
-            return sliceGeometries;
+            const side = src => src && (src.indices.length > 0) && (function() {
+                const positions = [ ];
+                const uv = cfg.onlyPosSliceWithUV && [ ];
+                src.indices.forEach(idx => {
+                    const P = indexedPositions[idx];
+                    positions.push(P[0], P[1], P[2]);
+                    uv && uv.push(P[3], P[4]);
+                });
+                return { indices: iota(src.indices.length), positions: positions, normals: src.normals, uv: uv };
+            })();
+            return { pos: side(pos), neg: side(neg) };
         };
     };
 })();
