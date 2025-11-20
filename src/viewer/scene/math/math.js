@@ -5616,8 +5616,56 @@ math.makeSectionPlaneSlicer = (function() {
                     const i1 = (d1 * d2 <= 0) && addPosition(math.lerpVec3(d1 / (d1 - d2), 0, 1, p1, p2, tempVec3a), true);
                     const i2 = (d2 * d0 <= 0) && addPosition(math.lerpVec3(d2 / (d2 - d0), 0, 1, p2, p0, tempVec3a), true);
 
+                    const p = (! cfg.onlyPosSliceWithUV) && tmpPositions;
+                    if (p) {
+                        p[0] = addPosition(p0);
+                        p[1] = addPosition(p1);
+                        p[2] = addPosition(p2);
+                    }
+
                     if (i0 ? (i1 || i2) : (i1 && i2)) { // triangle intersected by the section plane
                         unsortedSegment.push(i0 ? [ i0, i1 || i2 ] : [ i1, i2 ]);
+
+                        if (p) {
+                            if ((d0 === 0) && (d1 === 0)) {
+                                appendOnSide((d2 > 0) ? pos : neg, p);
+                            } else if ((d0 === 0) && (d2 === 0)) {
+                                appendOnSide((d1 > 0) ? pos : neg, p);
+                            } else if ((d1 === 0) && (d2 === 0)) {
+                                appendOnSide((d0 > 0) ? pos : neg, p);
+                            } else {
+                                const isPos = (i0 ? d0 : d1) > 0;
+                                const dst0 = isPos ? pos : neg;
+                                const dst1 = isPos ? neg : pos;
+                                const i = tmpIntersections;
+                                i[0] = i0;
+                                i[1] = i1;
+                                i[2] = i2;
+                                const ref = tmpReferences;
+                                if (i0) {
+                                    ref[0] = 0; ref[1] = 1; ref[2] = 2;
+                                } else {
+                                    ref[0] = 1; ref[1] = 2; ref[2] = 0;
+                                }
+                                if (i[ref[1]]) {
+                                    appendOnSide(dst0, [ p[ref[0]], i[ref[0]], p[ref[2]] ]);
+                                    appendOnSide(dst0, [ i[ref[0]], i[ref[1]], p[ref[2]] ]);
+                                    appendOnSide(dst1, [ i[ref[0]], p[ref[1]], i[ref[1]] ]);
+                                } else {
+                                    appendOnSide(dst0, [ p[ref[0]], i[ref[0]], i[ref[2]] ]);
+                                    appendOnSide(dst1, [ i[ref[0]], p[ref[1]], p[ref[2]] ]);
+                                    appendOnSide(dst1, [ i[ref[0]], p[ref[2]], i[ref[2]] ]);
+                                }
+                            }
+                        }
+                    } else if (p) {
+                        if ((d0 >= 0) && (d1 >= 0) && (d2 >= 0)) {
+                            appendOnSide(pos, p);
+                        } else if ((d0 <= 0) && (d1 <= 0) && (d2 <= 0)) {
+                            appendOnSide(neg, p);
+                        } else {
+                            debugger;
+                        }
                     }
                 }
             }
