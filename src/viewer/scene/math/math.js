@@ -5545,13 +5545,13 @@ math.makeSectionPlaneSlicer = (function() {
         return true;
     };
 
-    return function(planePos, planeRot) {
-        const planeU = math.vec3ApplyQuaternion(planeRot, worldRight,   math.vec3());
-        const planeV = math.vec3ApplyQuaternion(planeRot, worldUp,      math.vec3());
-        const planeN = math.vec3ApplyQuaternion(planeRot, worldForward, math.vec3());
+    return function(plane) {
+        const planeU = math.vec3ApplyQuaternion(plane.quaternion, worldRight,   math.vec3());
+        const planeV = math.vec3ApplyQuaternion(plane.quaternion, worldUp,      math.vec3());
+        const planeN = math.vec3ApplyQuaternion(plane.quaternion, worldForward, math.vec3());
 
-        return function(meshCenter, meshIndices, meshPositions) {
-            const planeToMesh = math.subVec3(meshCenter, planePos, math.vec3());
+        return function(mesh) {
+            const planeToMesh = math.subVec3(mesh.origin, plane.pos, math.vec3());
             const planeDist = math.dotVec3(planeN, planeToMesh);
 
             const unsortedSegment = [ ];
@@ -5559,17 +5559,17 @@ math.makeSectionPlaneSlicer = (function() {
             const addPosition = p => { const idx = indexedPositions.length; indexedPositions.push(math.vec3(p)); return idx; };
 
             const setVertex = (i, dst) => {
-                const idx = meshIndices[i] * 3;
-                dst[0] = meshPositions[idx + 0];
-                dst[1] = meshPositions[idx + 1];
-                dst[2] = meshPositions[idx + 2];
+                const idx = mesh.indices[i] * 3;
+                dst[0] = mesh.positions[idx + 0];
+                dst[1] = mesh.positions[idx + 1];
+                dst[2] = mesh.positions[idx + 2];
                 return dst;
             };
 
-            for (let meshIdx = 0; meshIdx < meshIndices.length; meshIdx += 3) {
-                const p0 = setVertex(meshIdx + 0, triangle[0]);
-                const p1 = setVertex(meshIdx + 1, triangle[1]);
-                const p2 = setVertex(meshIdx + 2, triangle[2]);
+            for (let faceIdx = 0; faceIdx < mesh.indices.length; faceIdx += 3) {
+                const p0 = setVertex(faceIdx + 0, triangle[0]);
+                const p1 = setVertex(faceIdx + 1, triangle[1]);
+                const p2 = setVertex(faceIdx + 2, triangle[2]);
 
                 if (math.compareVec3(p0, p1) || math.compareVec3(p1, p2) || math.compareVec3(p2, p0)) {
                     continue; // skip degenerate triangle

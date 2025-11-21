@@ -118,7 +118,7 @@ class SectionCaps {
                 const visibleSceneModels = Object.values(scene.models).filter(sceneModel => (sceneModel.id in modelCaches) && sceneModel.visible);
                 sectionPlanes.forEach((plane) => {
                     if (plane.active) {
-                        const sliceMesh = math.makeSectionPlaneSlicer(plane.pos, plane.quaternion);
+                        const sliceMesh = math.makeSectionPlaneSlicer(plane);
                         visibleSceneModels.forEach(sceneModel => {
                             const modelAABB = sceneModel.aabb;
                             if (math.planeIntersectsAABB3(plane, modelAABB)) {
@@ -138,7 +138,7 @@ class SectionCaps {
                                         });
 
                                         entityCache.meshCaches.filter(meshCache => math.planeIntersectsAABB3(plane, meshCache.mesh.aabb)).forEach((meshCache, meshIdx) => {
-                                            sliceMesh(modelCenter, meshCache.meshIndices, meshCache.meshVertices).forEach((geo, geoIdx) => {
+                                            sliceMesh({ origin: modelCenter, indices: meshCache.meshIndices, positions: meshCache.meshVertices }).forEach((geo, geoIdx) => {
                                                 entityCache.capMeshes.push(new Mesh(scene, {
                                                     isObject: true,
                                                     id:       `${plane.id}-${entityId}-${meshIdx}-${geoIdx}`,
