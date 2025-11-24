@@ -27,10 +27,6 @@ export declare type IFCOpenShellLoaderPluginConfigs = {
   id?: string;
   /** Custom data source for loading IFC files. */
   dataSource?: IFCOpenShellDefaultDataSource;
-  /** IFC types to include when loading. */
-  includeTypes?: string[];
-  /** IFC types to exclude when loading. */
-  excludeTypes?: string[];
   /** Pyodide proxy for the ifcopenshell module. */
   ifcopenshell: any;
   /** Pyodide proxy for the ifcopenshell.geom module. */
@@ -45,10 +41,10 @@ export declare type LoadIFCOpenShellModel = {
   id?: string;
   /** Path to the IFC file. */
   src?: string;
-  /** Whether to load IFC metadata (metaobjects and property sets). */
+  /** Whether to load IFC metadata (metaobject). */
   loadMetadata?: boolean;
-  /** Only load objects with types in this list. */
-  includeTypes?: string[];
+  /** Whether to load IFC metadata property sets. Only works when `loadMetadata` is `true`. */
+  loadMetadataPropertySets?: boolean;
   /** Exclude objects with types in this list. */
   excludeTypes?: string[];
   /** Render the model with edges emphasized. */
@@ -69,6 +65,8 @@ export declare type LoadIFCOpenShellModel = {
   globalizeObjectIds?: boolean;
   /** Collect model statistics. */
   stats?: ModelStats;
+    /** Indicates if compact data texture scene representation is enabled for this model. */
+  dtxEnabled?: boolean;
 };
 
 /**
