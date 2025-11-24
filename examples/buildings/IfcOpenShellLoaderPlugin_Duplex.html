@@ -234,6 +234,8 @@
      */
     async function setupPyodide() {
 
+        viewer.scene.canvas.spinner.processes++; // Show spinner
+
         const pyodide = await loadPyodide();
 
         await pyodide.loadPackage("micropip");
@@ -250,6 +252,8 @@
         const settings = ifcopenshell_geom.settings();
 
         settings.set(settings.WELD_VERTICES, false);
+
+        viewer.scene.canvas.spinner.processes--; // Hide spinner
 
         return { pyodide, ifcopenshell, ifcopenshell_geom, settings };
     }
