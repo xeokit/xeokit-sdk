@@ -3,7 +3,6 @@ import {math, Plugin, SceneModel, worldToRTCPositions} from "../../viewer";
 import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js";
 
 
-
 /**
  * {@link Viewer} plugin that uses [IfcOpenShell](https://ifcopenshell.org/) to load BIM models directly from IFC files.
  *
@@ -312,6 +311,7 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
      * @param {Boolean} [params.backfaces=true] Whether to render backfaces.
      * @param {Boolean} [params.dtxEnabled=true] Whether to enable data texture storage for geometry buffers.
      * @param {Boolean} [params.loadMetadata=true] Whether to load metadata.
+     * @param {Boolean} [params.loadMetadataPropertySets=true] Whether to load property sets within the metadata. Only works when `loadMetadata` is true.
      * @param {Boolean} [params.edges=false] Whether to generate edge lines for the model.
      * @param {Boolean} [params.saoEnabled=false] Whether to enable SAO for the model.
      * @param {Boolean} [params.globalizeObjectIds=false] Whether to globalize each {@link Entity#id} and {@link MetaObject#id} as it loads the model.
@@ -321,11 +321,13 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
 
         let {
             id,
-            backfaces=true,
-            dtxEnabled=true,
+            backfaces = true,
+            dtxEnabled = true,
+            position,
             rotation,
             origin,
             loadMetadata,
+            loadMetadataPropertySets,
             edges,
             saoEnabled,
             globalizeObjectIds,
@@ -343,6 +345,7 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
             globalizeObjectIds,
             backfaces,
             dtxEnabled,
+            position,
             rotation,
             origin,
             edges,
@@ -362,6 +365,7 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
         const loadIFC = (fileData) => {
             const ifc = this.ifcopenshell.file.from_string(fileData);
             const ctx = {
+                loadMetadataPropertySets: (loadMetadataPropertySets !== false),
                 globalizeObjectIds: globalizeObjectIds || this._globalizeObjectIds,
                 geometryCache: new Map(),
                 ifc,
@@ -449,7 +453,7 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
             const materials = srcMaterials.map((m) => ({
                 diffuse: m.diffuse.components.toJs(),
                 transparency: (m.transparency
-                    && !isNaN(m.transparency)) ? m.transparency : 0.0 ,
+                    && !isNaN(m.transparency)) ? m.transparency : 0.0,
             }));
 
             const materialIds = new Int32Array(obj.geometry.material_ids.toJs());
@@ -527,6 +531,8 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
 
         const visited = new Set();
         const metaObjects = [];
+        const propertySets = [];
+        const metaObjectPropertySetIds = new Map();
 
         // ---- helpers -----------------------------------------------------------
         const toStr = (v) => (v === undefined || v === null) ? "" : String(v);
@@ -545,6 +551,90 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
             visited.add(id);
             const globalizeObjectIds = ctx.globalizeObjectIds;
             const modelId = ctx.sceneModel.id;
+            const propertySetIds = [];
+            if (ctx.loadMetadataPropertySets) {
+                // Try all possible association fields
+                const associationFields = ["HasAssociations", "IsDefinedBy", "IsDecomposedBy", "ContainsElements"];
+                for (const field of associationFields) {
+                    const associations = entity[field];
+                    if (associations && associations.length > 0) {
+                        for (let j = 0; j < associations.length; j++) {
+                            const rel = associations.get(j);
+                            if (rel.is_a && rel.is_a() === "IfcRelDefinesByProperties") {
+                                const propSet = rel.RelatingPropertyDefinition;
+                                if (propSet && propSet.is_a) {
+                                    // Accept both IfcPropertySet and IfcElementQuantity
+                                    if (["IfcPropertySet", "IfcElementQuantity"].includes(propSet.is_a())) {
+                                        const propSetId = propSet.GlobalId ? String(propSet.GlobalId) : null;
+                                        const propSetName = propSet.Name ? String(propSet.Name) : "";
+                                        const propSetType = propSet.is_a ? String(propSet.is_a()) : "";
+                                        const properties = [];
+                                        const props = propSet.HasProperties || propSet.Quantities;
+                                        if (props && props.length > 0) {
+                                            for (let k = 0; k < props.length; k++) {
+                                                const p = props.get(k);
+                                                const propName = p.Name ? String(p.Name) : "";
+                                                let propValue = "";
+                                                let propType = p.is_a ? String(p.is_a()) : "";
+                                                if (p.is_a && p.is_a() === "IfcPropertySingleValue") {
+                                                    try {
+                                                        propValue = p.NominalValue ? String(p.NominalValue.wrappedValue) : "";
+                                                    } catch {
+                                                        propValue = "";
+                                                    }
+                                                } else if (p.is_a && p.is_a() === "IfcPropertyEnumeratedValue") {
+                                                    try {
+                                                        const values = p.EnumerationValues;
+                                                        if (values && values.length > 0) {
+                                                            const arr = [];
+                                                            for (let vi = 0; vi < values.length; vi++) {
+                                                                arr.push(String(values.get(vi).wrappedValue));
+                                                            }
+                                                            propValue = arr.join(", ");
+                                                        }
+                                                    } catch {
+                                                        propValue = "";
+                                                    }
+                                                } else if (p.is_a && p.is_a() === "IfcQuantityArea") {
+                                                    propValue = p.AreaValue ? String(p.AreaValue) : "";
+                                                } else if (p.is_a && p.is_a() === "IfcQuantityLength") {
+                                                    propValue = p.LengthValue ? String(p.LengthValue) : "";
+                                                } else if (p.is_a && p.is_a() === "IfcQuantityVolume") {
+                                                    propValue = p.VolumeValue ? String(p.VolumeValue) : "";
+                                                } else {
+                                                    try {
+                                                        propValue = p.NominalValue ? String(p.NominalValue) : "";
+                                                    } catch {
+                                                        propValue = "";
+                                                    }
+                                                }
+                                                properties.push({
+                                                    name: propName,
+                                                    value: propValue,
+                                                    type: propType
+                                                });
+                                                p.destroy?.();
+                                            }
+                                            props.destroy?.();
+                                        }
+                                        propertySets.push({
+                                            id: propSetId,
+                                            //    objectId: ctx.globalizeObjectIds ? math.globalizeObjectId(ctx.sceneModel.id, objectId) : objectId,
+                                            name: propSetName,
+                                            type: propSetType,
+                                            properties
+                                        });
+                                        propertySetIds.push(propSetId);
+                                        propSet.destroy?.();
+                                    }
+                                }
+                                rel.destroy?.();
+                            }
+                        }
+                        associations.destroy?.();
+                    }
+                }
+            }
             metaObjects.push({
                 id: globalizeObjectIds ? math.globalizeObjectId(modelId, id) : id,
                 type: String(entity.is_a()),
@@ -552,7 +642,8 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
                     ? (globalizeObjectIds
                         ? math.globalizeObjectId(modelId, getGlobalId(parent))
                         : getGlobalId(parent))
-                    : null
+                    : null,
+                propertySetIds
             });
             return true;
         }
@@ -747,7 +838,7 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
             schema,
             creatingApplication,
             metaObjects,
-            propertySets: []
+            propertySets
         };
     }
 

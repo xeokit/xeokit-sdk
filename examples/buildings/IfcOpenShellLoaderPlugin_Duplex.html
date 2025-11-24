@@ -215,10 +215,13 @@
 
     const sceneModel = await ifcLoader.load({
         id: "myModel",
-        src: "../../assets/models/ifc/IfcOpenHouse4.ifc",
+        src: "../../assets/models/ifc/Duplex.ifc",
         loadMetadata: true, // Default
+        loadMetadataPropertySets: true, // Default
         excludeTypes: ["IfcSpace","IfcOpeningElement"], // Optional array of IFC types to exclude
         edges: true,
+        origin: [0,0,0],
+        posititon: [0,0,0],
         dtxEnabled: true // Enable data texture model representation
     });
 
