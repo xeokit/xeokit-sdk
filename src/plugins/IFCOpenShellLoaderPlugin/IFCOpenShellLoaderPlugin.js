@@ -1,6 +1,8 @@
-import {Plugin, SceneModel, worldToRTCPositions} from "../../viewer";
+import {math, Plugin, SceneModel, worldToRTCPositions} from "../../viewer";
 
 import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js";
+
+
 
 /**
  * {@link Viewer} plugin that uses [IfcOpenShell](https://ifcopenshell.org/) to load BIM models directly from IFC files.
@@ -16,7 +18,8 @@ import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js"
  * * Loads IFC geometry, element structure metadata, and property sets.
  * * Not for large models. For best performance with large models, we recommend using {@link XKTLoaderPlugin}.
  * * Loads double-precision coordinates, enabling models to be viewed at global coordinates without accuracy loss.
- * * Filter which IFC types get loaded.
+ * * Filter which IFC types don't get loaded.
+ * * Configure initial appearances of specified IFC types.
  * * Set a custom data source for IFC files.
  *
  * ## Limitations
@@ -49,7 +52,6 @@ import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js"
  * ````javascript
  * import {Viewer, IFCOpenShellLoaderPlugin, NavCubePlugin, TreeViewPlugin} from "../../dist/xeokit-sdk.es.js";
  *
- *  ````javascript
  * //------------------------------------------------------------------------------------------------------------------
  * // 1. Create a Viewer,
  * // 2. Arrange the camera
@@ -73,37 +75,12 @@ import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js"
  *
  * // 1
  *
- * async function setupPyodide() {
- *
- *     const pyodide = await loadPyodide();
- *
- *     await pyodide.loadPackage("micropip");
- *     await pyodide.loadPackage("numpy");
- *     await pyodide.loadPackage("shapely");
- *
- *     const micropip = pyodide.pyimport("micropip");
- *
- *     await micropip.install("typing-extensions");
- *     await micropip.install("https://ifcopenshell.github.io/wasm-wheels/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl")
- *
- *     const ifcopenshell = pyodide.pyimport('ifcopenshell');
- *     const ifcopenshell_geom = pyodide.pyimport('ifcopenshell.geom');
- *     const settings = ifcopenshell_geom.settings();
- *
- *     settings.set(settings.WELD_VERTICES, false);
- *
- *     return { pyodide, ifcopenshell, ifcopenshell_geom, settings };
- * }
- *
- * const { ifcopenshell, ifcopenshell_geom, settings } = await setupPyodide();
- *
  * const ifcLoader = new IFCOpenShellLoaderPlugin(viewer, {
- *    ifcopenshell, // Pyodide proxy for the ifcopenshell module
- *    ifcopenshell_geom // Pyodide proxy for the ifcopenshell.geom module
+ *     workerSrc: "./my/directory/IFCOpenShellWorker.js",
+ *     ifcOpenShellURL: "./my/directory/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl"
  * });
  *
  * // 2
- *
  * const model = ifcLoader.load({          // Returns an Entity that represents the model
  *    id: "myModel",
  *    src: "../assets/models/ifc/Duplex.ifc",
@@ -120,7 +97,6 @@ import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js"
  *    //----------------------------------------------------------------------------------------------------------
  *
  *    // 1
- *
  *    const metaModel = viewer.metaScene.metaModels["myModel"];       // MetaModel with ID "myModel"
  *    const metaObject
  *            = viewer.metaScene.metaObjects["1xS3BCk291UvhgP2dvNsgp"];  // MetaObject with ID "1xS3BCk291UvhgP2dvNsgp"
@@ -134,12 +110,10 @@ import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js"
  *    const aabb = viewer.scene.getAABB(objectIds);                   // Axis-aligned boundary of the leaf sub-objects
  *
  *    // 2
- *
  *    viewer.scene.setObjectsXRayed(viewer.scene.objectIds, true);
  *    viewer.scene.setObjectsXRayed(objectIds, false);
  *
  *    // 3
- *
  *    viewer.cameraFlight.flyTo(aabb);
  *
  *    // Find the model Entity by ID
@@ -179,16 +153,12 @@ import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js"
  * }
  *
  * const ifcLoader2 = new IFCOpenShellLoaderPlugin(viewer, {
- *    dataSource: new MyDataSource(),
- *
- *    // The same ifcopenshell and ifcopenshell_geom as before
- *    ifcopenshell,
- *    ifcopenshell_geom
+ *       dataSource: new MyDataSource()
  * });
  *
  * const model5 = ifcLoader2.load({
- *    id: "myModel5",
- *    src: "../assets/models/ifc/Duplex.ifc"
+ *      id: "myModel5",
+ *      src: "../assets/models/ifc/Duplex.ifc"
  * });
  * ````
  *
@@ -245,17 +215,17 @@ import {IFCOpenShellDefaultDataSource} from "./IFCOpenShellDefaultDataSource.js"
  *````
  *
  * @class IFCOpenShellLoaderPlugin
- * @since 2.6.95
+ * @since 2.6.90
  */
 export class IFCOpenShellLoaderPlugin extends Plugin {
 
     /**
-     * @param {Viewer} viewer
-     * @param {Object} cfg
-     * @param {String} [cfg.id="IFCOpenShellLoader"]
+     * @param {Viewer} viewer The {@link Viewer} that will own this plugin.
+     * @param {Object} cfg Plugin configuration.
+     * @param {String} [cfg.id="IFCOpenShellLoader"] Optional ID for this plugin instance.
      * @param {Object} [cfg.dataSource] Custom data source (defaults to {@link IFCOpenShellDefaultDataSource}).
-     * @param {Proxy} cfg.ifcopenshell Pyodide proxy for the ifcopenshell module.
-     * @param {Proxy} cfg.ifcopenshell_geom Pyodide proxy for the ifcopenshell.geom module.
+     * @param {Object} cfg.ifcopenshell IfcOpenShell API object.
+     * @param {Object} cfg.ifcopenshell_geom IfcOpenShell geometry API object.
      */
     constructor(viewer, cfg) {
 
@@ -335,7 +305,6 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
      * @param {String} [params.src] IFC file path (alternative to `text`).
      * @param {String} [params.text] IFC text (alternative to `src`).
      * @param {{String:Object}} [params.objectDefaults]
-     * @param {String[]} [params.includeTypes] Array of IFC types to include.
      * @param {String[]} [params.excludeTypes] Array of IFC types to exclude.
      * @param {Number[]} [params.origin=[0,0,0]] Optional World-coordinate origin to apply to the model.
      * @param {Number[]} [params.position=[0,0,0]] Optional position offset to apply to the model.
@@ -359,7 +328,8 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
             loadMetadata,
             edges,
             saoEnabled,
-            globalizeObjectIds
+            globalizeObjectIds,
+            excludeTypes
         } = params;
 
         if (id && this.viewer.scene.components[id]) {
@@ -397,6 +367,9 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
                 ifc,
                 sceneModel
             };
+            if (excludeTypes) {
+                ctx.excludeTypes = excludeTypes;
+            }
             this._loadIFCGeometry(ctx);
             if (loadMetadata !== false) {
                 const metaModelData = this._loadIFCMetaModel(ctx, ifc);
@@ -439,7 +412,7 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
         const iterator = ifcopenshell_geom.iterator.callKwargs({
             settings,
             file_or_filename: ifc,
-            exclude: ["IfcSpace", "IfcOpeningElement"],
+            exclude: ctx.excludeTypes,
             geometry_library: "hybrid-cgal-simple-opencascade"
         });
 
