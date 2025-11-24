@@ -1,0 +1,265 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* NavCubePlugin */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* TreeViewPlugin */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        #treeViewContainer {
+            pointer-events: all;
+            height: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: black;
+            top: 80px;
+            z-index: 200000;
+            float: left;
+            left: 0;
+            padding-left: 10px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            width: 350px;
+        }
+
+        #treeViewContainer ul {
+            list-style: none;
+            padding-left: 1.75em;
+            pointer-events: none;
+        }
+
+        #treeViewContainer ul li {
+            position: relative;
+            width: 500px;
+            pointer-events: none;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            vertical-align: middle;
+        }
+
+        #treeViewContainer ul li a {
+            background-color: #eee;
+            border-radius: 50%;
+            color: #000;
+            display: inline-block;
+            height: 1.5em;
+            left: -1.5em;
+            position: absolute;
+            text-align: center;
+            text-decoration: none;
+            width: 1.5em;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li a.plus {
+            background-color: #ded;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li a.minus {
+            background-color: #eee;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li a:active {
+            top: 1px;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li span:hover {
+            color: white;
+            cursor: pointer;
+            background: black;
+            padding-left: 2px;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li span {
+            display: inline-block;
+            width: calc(100% - 50px);
+            padding-left: 2px;
+            pointer-events: all;
+            height: 23px;
+        }
+
+        #treeViewContainer .highlighted-node { /* Appearance of node highlighted with TreeViewPlugin#showNode() */
+            border: black solid 1px;
+            background: yellow;
+            color: black;
+            padding-left: 1px;
+            padding-right: 5px;
+            pointer-events: all;
+        }
+
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<canvas id="myNavCubeCanvas"></canvas>
+<div id="treeViewContainer"></div>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/bim_icon.png"/>
+    <h1>IFCOpenShellLoaderPlugin</h1>
+    <h2>Loading an IFC File</h2>
+    <p>
+        <a href="../../docs/class/src/plugins/IFCOpenShellLoaderPlugin/IFCOpenShellLoaderPlugin.js~IFCOpenShellLoaderPlugin.html"
+           target="_other">IFCOpenShellLoaderPlugin</a> is the easiest way to load IFC models into a xeokit Viewer.</p>
+    <p>IFCOpenShellLoaderPlugin loads IFC STEP files and parses them within the browser using <a
+            href="https://docs.ifcopenshell.org/"
+            target="_other">ifcopenshell.api</a>, to create 3D objects within the
+        Viewer.</p>
+    <h3>Limitations</h3>
+    <p>Loading and parsing huge IFC STEP files can be slow, and can overwhelm the browser, however. To view your
+        largest IFC models, we recommend instead pre-converting those to xeokit's compressed native .XKT format, then
+        loading them with <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+                             target="_other">XKTLoaderPlugin</a>.</p>
+    <h3>Stats</h3>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+    </ul>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/IFCOpenShellLoaderPlugin/IFCOpenShellLoaderPlugin.js~IFCOpenShellLoaderPlugin.html"
+               target="_other">IFCOpenShellLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html"
+               target="_other">TreeViewPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html"
+               target="_other">NavCubePlugin</a>
+        </li>
+    </ul>
+    <h3>Assets</h3>
+    <ul>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/pyodide/v0.28.0a3/full/pyodide.js"></script>
+
+<script type="module">
+
+    import {Viewer, IFCOpenShellLoaderPlugin, NavCubePlugin, TreeViewPlugin} from "../../dist/xeokit-sdk.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        dtxEnabled: true // Enable data texture model representation
+    });
+
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
+
+    new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
+        visible: true,
+        size: 250,
+        alignment: "bottomRight",
+        bottomMargin: 100,
+        rightMargin: 10
+    });
+
+    new TreeViewPlugin(viewer, {
+        containerElement: document.getElementById("treeViewContainer"),
+        autoExpandDepth: 3 // Initially expand the root tree node
+    });
+
+    const { ifcopenshell, ifcopenshell_geom, settings } = await setupPyodide();
+
+    const ifcLoader = new IFCOpenShellLoaderPlugin(viewer, {
+        ifcopenshell,
+        ifcopenshell_geom
+    });
+
+    const sceneModel = await ifcLoader.load({
+        id: "myModel",
+        src: "../../assets/models/ifc/Duplex.ifc",
+        loadMetadata: true, // Default
+        loadMetadataPropertySets: true, // Default
+        excludeTypes: ["IfcSpace","IfcOpeningElement"], // Optional array of IFC types to exclude
+        edges: true,
+        origin: [0,0,0],
+        posititon: [0,0,0],
+        dtxEnabled: true // Enable data texture model representation
+    });
+
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(sceneModel);
+    });
+
+    /**
+     * Sets up Pyodide with ifcopenshell and ifcopenshell.geom.
+     */
+    async function setupPyodide() {
+
+        viewer.scene.canvas.spinner.processes++; // Show spinner
+
+        const pyodide = await loadPyodide();
+
+        await pyodide.loadPackage("micropip");
+        await pyodide.loadPackage("numpy");
+        await pyodide.loadPackage("shapely");
+
+        const micropip = pyodide.pyimport("micropip");
+
+        await micropip.install("typing-extensions");
+        await micropip.install("https://ifcopenshell.github.io/wasm-wheels/ifcopenshell-0.8.3+34a1bc6-cp313-cp313-emscripten_4_0_9_wasm32.whl")
+
+        const ifcopenshell = pyodide.pyimport('ifcopenshell');
+        const ifcopenshell_geom = pyodide.pyimport('ifcopenshell.geom');
+        const settings = ifcopenshell_geom.settings();
+
+        settings.set(settings.WELD_VERTICES, false);
+
+        viewer.scene.canvas.spinner.processes--; // Hide spinner
+
+        return { pyodide, ifcopenshell, ifcopenshell_geom, settings };
+    }
+
+    // Exposing viewer to window for easy access from browser console
+    window.viewer = viewer;
+
+</script>
+</html>
