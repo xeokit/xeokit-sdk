@@ -184,7 +184,8 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true
+        transparent: true,
+        dtxEnabled: true // Enable data texture model representation
     });
 
     viewer.camera.eye = [-3.933, 2.855, 27.018];
@@ -217,7 +218,8 @@
         src: "../../assets/models/ifc/IfcOpenHouse4.ifc",
         loadMetadata: true, // Default
         excludeTypes: ["IfcSpace","IfcOpeningElement"], // Optional array of IFC types to exclude
-        edges: true
+        edges: true,
+        dtxEnabled: true // Enable data texture model representation
     });
 
     sceneModel.on("loaded", () => {

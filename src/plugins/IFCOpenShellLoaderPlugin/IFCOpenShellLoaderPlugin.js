@@ -321,8 +321,8 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
 
         let {
             id,
-            backfaces,
-            dtxEnabled,
+            backfaces=true,
+            dtxEnabled=true,
             rotation,
             origin,
             loadMetadata,
@@ -466,8 +466,9 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
                     continue;
                 }
 
+                // xeokit auto-generates normals on the GPU side
+
                 const positions = new Float32Array(obj.geometry.verts.toJs());
-                const normals = new Float32Array(obj.geometry.normals.toJs());
                 const edgeIndices = new Uint32Array(obj.geometry.edges.toJs());
                 const faces = new Uint32Array(obj.geometry.faces.toJs());
                 const matIndex = Number(matIndexStr);
@@ -478,7 +479,6 @@ export class IFCOpenShellLoaderPlugin extends Plugin {
                     id: sceneGeometryId,
                     primitive: "triangles",
                     positions,
-                    normals,
                     indices,
                     edgeIndices
                 });
