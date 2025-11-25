@@ -8,6 +8,7 @@ export * from "./DistanceMeasurementsPlugin";
 export * from "./DotBIMLoaderPlugin";
 export * from "./FastNavPlugin";
 export * from "./GLTFLoaderPlugin";
+export * from "./IFCOpenShellLoaderPlugin";
 export * from "./LASLoaderPlugin";
 export * from "./NavCubePlugin";
 export * from "./OBJLoaderPlugin";
