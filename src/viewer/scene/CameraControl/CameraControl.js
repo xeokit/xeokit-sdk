@@ -867,7 +867,7 @@ class CameraControl extends Component {
      *
      * See class docs for usage.
      *
-     * @param {{Number:Number}|String} value Either a set of new key mappings, or a string to select a keyboard layout,
+     * @param {{Number:(Number | Number[])[]} | String} value Either a set of new key mappings, or a string to select a keyboard layout,
      * which causes ````CameraControl```` to use the default key mappings for that layout.
      */
     set keyMap(value) {
@@ -946,7 +946,7 @@ class CameraControl extends Component {
     /**
      * Gets custom mappings of keys to {@link CameraControl} actions.
      *
-     * @returns {{Number:Number}} Current key mappings.
+     * @returns {{Number:(Number | Number[])[]}} Current key mappings.
      */
     get keyMap() {
         return this._keyMap;
