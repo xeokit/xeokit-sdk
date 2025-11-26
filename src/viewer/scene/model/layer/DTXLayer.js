@@ -812,9 +812,13 @@ const makeDTXRenderingAttributes = function(programVariables, isTriangle) {
     const colorsAndFlags = (offset) => perObjColsFlags(`ivec2(objectIndexCoords.x*8+${offset}, objectIndexCoords.y)`);
 
     return {
+        clippableTest: (function() {
+            const vClippable = programVariables.createVarying("uint", "vClippable", () => "flags2.r", "flat");
+            return () => `${vClippable} > 0u`;
+        })(),
+
         geometryParameters: {
             attributes: {
-                clippable:         "(flags2.r > 0u)",
                 color:             colorA,
                 flags:             iota(4).map(i => `int(flags[${i}])`),
                 metallicRoughness: null,
