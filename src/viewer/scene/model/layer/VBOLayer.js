@@ -887,8 +887,8 @@ export class VBOLayer extends Layer {
                             } else {    // triangles
                                 if (subGeometry && subGeometry.vertices) {
                                     return drawPoints;
-                                } else if (subGeometry && edgeIndicesBuf) {
-                                    return elementsDrawer(gl.LINES, edgeIndicesBuf);
+                                } else if (subGeometry) {
+                                    return edgeIndicesBuf ? elementsDrawer(gl.LINES, edgeIndicesBuf) : (() => { });
                                 } else {
                                     return elementsDrawer(gl.TRIANGLES, indicesBuf);
                                 }
