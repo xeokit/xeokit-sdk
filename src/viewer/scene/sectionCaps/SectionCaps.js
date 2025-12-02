@@ -118,7 +118,7 @@ class SectionCaps {
                 const visibleSceneModels = Object.values(scene.models).filter(sceneModel => (sceneModel.id in modelCaches) && sceneModel.visible);
                 sectionPlanes.forEach((plane) => {
                     if (plane.active) {
-                        const sliceMesh = math.makeSectionPlaneSlicer(plane.pos, plane.quaternion);
+                        const sliceMesh = math.makeSectionPlaneSlicer(plane);
                         visibleSceneModels.forEach(sceneModel => {
                             const modelAABB = sceneModel.aabb;
                             if (math.planeIntersectsAABB3(plane, modelAABB)) {
@@ -138,10 +138,11 @@ class SectionCaps {
                                         });
 
                                         entityCache.meshCaches.filter(meshCache => math.planeIntersectsAABB3(plane, meshCache.mesh.aabb)).forEach((meshCache, meshIdx) => {
-                                            sliceMesh(modelCenter, meshCache.meshIndices, meshCache.meshVertices).forEach((geo, geoIdx) => {
+                                            const geo = sliceMesh({ origin: modelCenter, indices: meshCache.meshIndices, positions: meshCache.meshVertices }, { onlyPosSliceWithUV: true }).pos;
+                                            if (geo) {
                                                 entityCache.capMeshes.push(new Mesh(scene, {
                                                     isObject: true,
-                                                    id:       `${plane.id}-${entityId}-${meshIdx}-${geoIdx}`,
+                                                    id:       `${plane.id}-${entityId}-${meshIdx}`,
                                                     material: entity.capMaterial,
                                                     origin:   math.addVec3(modelCenter, math.mulVec3Scalar(plane.dir, 0.001, tempVec3a), tempVec3a),
                                                     geometry: new ReadableGeometry(scene, {
@@ -152,7 +153,7 @@ class SectionCaps {
                                                         uv:        geo.uv
                                                     })
                                                 }));
-                                            });
+                                            }
                                         });
                                     }
                                 });
