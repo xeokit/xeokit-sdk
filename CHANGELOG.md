@@ -1,5 +1,17 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.96](https://github.com/xeokit/xeokit-sdk/compare/v2.6.95...v2.6.96)
+
+### 02 December 2025
+
+-  XEOK-385 Make VBO vClippable non-flat to fix stability issue [#1986](https://github.com/xeokit/xeokit-sdk/pull/1986)
+-  Implemented Ifcopenshellplugin without Worker [#1984](https://github.com/xeokit/xeokit-sdk/pull/1984) and [#1987](https://github.com/xeokit/xeokit-sdk/pull/1987)
+-  #1976 Camera control key map types update [#1988](https://github.com/xeokit/xeokit-sdk/pull/1988)
+-  #1949 viewer.destroy memory leak improvement by SceneModelMesh layer reference removal [#1989](https://github.com/xeokit/xeokit-sdk/pull/1989)
+-  XEOK-394 Fix quantizePositions' positionsDecodeMatrix for flat axis-aligned surface mesh [#1990](https://github.com/xeokit/xeokit-sdk/pull/1990)
+-  Return full submeshes from makeSectionPlaneSlicer [#1991](https://github.com/xeokit/xeokit-sdk/pull/1991)
+
+
 # [v2.6.95](https://github.com/xeokit/xeokit-sdk/compare/v2.6.94...v2.6.95)
 
 ### 18 November 2025
