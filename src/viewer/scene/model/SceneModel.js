@@ -3337,7 +3337,7 @@ export class SceneModel extends Component {
     /**
      * @private
      */
-    _withEachVisibleLayer(testNumVisibleLayerPortions, cb) {
+    _withEachVisibleLayer(frameCtx, testNumVisibleLayerPortions, cb) {
         if (testNumVisibleLayerPortions && (this.numVisibleLayerPortions === 0)) {
             return;
         }
@@ -3348,23 +3348,23 @@ export class SceneModel extends Component {
         }
     }
 
-    drawColorOpaque          (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawColorOpaque          (this.renderFlags, frameCtx)); }
-    drawColorTransparent     (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawColorTransparent     (this.renderFlags, frameCtx)); }
-    drawDepth                (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawDepth                (this.renderFlags, frameCtx)); } // Dedicated to SAO because it skips transparent objects
-    drawSilhouetteXRayed     (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawSilhouetteXRayed     (this.renderFlags, frameCtx)); }
-    drawSilhouetteHighlighted(frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawSilhouetteHighlighted(this.renderFlags, frameCtx)); }
-    drawSilhouetteSelected   (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawSilhouetteSelected   (this.renderFlags, frameCtx)); }
-    drawEdgesColorOpaque     (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawEdgesColorOpaque     (this.renderFlags, frameCtx)); }
-    drawEdgesColorTransparent(frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawEdgesColorTransparent(this.renderFlags, frameCtx)); }
-    drawEdgesXRayed          (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawEdgesXRayed          (this.renderFlags, frameCtx)); }
-    drawEdgesHighlighted     (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawEdgesHighlighted     (this.renderFlags, frameCtx)); }
-    drawEdgesSelected        (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawEdgesSelected        (this.renderFlags, frameCtx)); }
-    drawOcclusion            (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawOcclusion            (this.renderFlags, frameCtx)); }
-    drawShadow               (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawShadow               (this.renderFlags, frameCtx)); }
-    drawPickMesh             (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawPickMesh             (this.renderFlags, frameCtx)); }
-    drawPickDepths           (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawPickDepths           (this.renderFlags, frameCtx)); }
-    drawPickNormals          (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawPickNormals          (this.renderFlags, frameCtx)); }
-    _drawSnap    (frameCtx, isSnapInit) { this._withEachVisibleLayer(true,  layer => layer.drawSnap                 (this.renderFlags, frameCtx, isSnapInit)); }
+    drawColorOpaque          (frameCtx) { this._withEachVisibleLayer(frameCtx, false, layer => layer.drawColorOpaque          (this.renderFlags, frameCtx)); }
+    drawColorTransparent     (frameCtx) { this._withEachVisibleLayer(frameCtx, false, layer => layer.drawColorTransparent     (this.renderFlags, frameCtx)); }
+    drawDepth                (frameCtx) { this._withEachVisibleLayer(frameCtx, false, layer => layer.drawDepth                (this.renderFlags, frameCtx)); } // Dedicated to SAO because it skips transparent objects
+    drawSilhouetteXRayed     (frameCtx) { this._withEachVisibleLayer(frameCtx, false, layer => layer.drawSilhouetteXRayed     (this.renderFlags, frameCtx)); }
+    drawSilhouetteHighlighted(frameCtx) { this._withEachVisibleLayer(frameCtx, false, layer => layer.drawSilhouetteHighlighted(this.renderFlags, frameCtx)); }
+    drawSilhouetteSelected   (frameCtx) { this._withEachVisibleLayer(frameCtx, false, layer => layer.drawSilhouetteSelected   (this.renderFlags, frameCtx)); }
+    drawEdgesColorOpaque     (frameCtx) { this._withEachVisibleLayer(frameCtx, false, layer => layer.drawEdgesColorOpaque     (this.renderFlags, frameCtx)); }
+    drawEdgesColorTransparent(frameCtx) { this._withEachVisibleLayer(frameCtx, false, layer => layer.drawEdgesColorTransparent(this.renderFlags, frameCtx)); }
+    drawEdgesXRayed          (frameCtx) { this._withEachVisibleLayer(frameCtx, false, layer => layer.drawEdgesXRayed          (this.renderFlags, frameCtx)); }
+    drawEdgesHighlighted     (frameCtx) { this._withEachVisibleLayer(frameCtx, false, layer => layer.drawEdgesHighlighted     (this.renderFlags, frameCtx)); }
+    drawEdgesSelected        (frameCtx) { this._withEachVisibleLayer(frameCtx, false, layer => layer.drawEdgesSelected        (this.renderFlags, frameCtx)); }
+    drawOcclusion            (frameCtx) { this._withEachVisibleLayer(frameCtx, true,  layer => layer.drawOcclusion            (this.renderFlags, frameCtx)); }
+    drawShadow               (frameCtx) { this._withEachVisibleLayer(frameCtx, true,  layer => layer.drawShadow               (this.renderFlags, frameCtx)); }
+    drawPickMesh             (frameCtx) { this._withEachVisibleLayer(frameCtx, true,  layer => layer.drawPickMesh             (this.renderFlags, frameCtx)); }
+    drawPickDepths           (frameCtx) { this._withEachVisibleLayer(frameCtx, true,  layer => layer.drawPickDepths           (this.renderFlags, frameCtx)); }
+    drawPickNormals          (frameCtx) { this._withEachVisibleLayer(frameCtx, true,  layer => layer.drawPickNormals          (this.renderFlags, frameCtx)); }
+    _drawSnap    (frameCtx, isSnapInit) { this._withEachVisibleLayer(frameCtx, true,  layer => layer.drawSnap                 (this.renderFlags, frameCtx, isSnapInit)); }
 
     drawSnapInit(frameCtx) { this._drawSnap(frameCtx, true ); }
     drawSnap    (frameCtx) { this._drawSnap(frameCtx, false); }
