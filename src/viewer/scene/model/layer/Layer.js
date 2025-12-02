@@ -502,6 +502,15 @@ export class Layer {
 
     aabbChanged() { this._aabbDirty = true; }
 
+    getAABB() {
+        if (this._aabbDirty) { // Per-layer AABB for best RTC accuracy
+            math.collapseAABB3(this._aabb);
+            this._meshes.forEach(m => math.expandAABB3(this._aabb, m.aabb));
+            this._aabbDirty = false;
+        }
+        return this._aabb;
+    }
+
     __drawLayer(renderFlags, frameCtx, renderer, pass) {
         if ((this._countsByFlag[ENTITY_FLAGS.CULLED].count < this._portions.length) && (this._countsByFlag[ENTITY_FLAGS.VISIBLE].count > 0)) {
             const backfacePasses = (this.primitive !== "points") && (this.primitive !== "lines") && [
@@ -671,13 +680,7 @@ export class Layer {
     drawSnap(renderFlags, frameCtx, isSnapInit) {
         frameCtx.snapPickOrigin = [0, 0, 0];
 
-        if (this._aabbDirty) { // Per-layer AABB for best RTC accuracy
-            math.collapseAABB3(this._aabb);
-            this._meshes.forEach(m => math.expandAABB3(this._aabb, m.aabb));
-            this._aabbDirty = false;
-        }
-
-        const aabb = this._aabb;
+        const aabb = this.getAABB();
         frameCtx.snapPickCoordinateScale = math.mulVec3Scalar(
             safeInvVec3([ aabb[3] - aabb[0], aabb[4] - aabb[1], aabb[5] - aabb[2] ]),
             math.MAX_INT);
