@@ -3341,10 +3341,13 @@ export class SceneModel extends Component {
         if (testNumVisibleLayerPortions && (this.numVisibleLayerPortions === 0)) {
             return;
         }
+        const testLayerCull = frameCtx.testAABB;
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            cb(this.layerList[layerIndex]);
+            const layer = this.layerList[renderFlags.visibleLayers[i]];
+            if ((! testLayerCull) || testLayerCull(layer.getAABB())) {
+                cb(layer);
+            }
         }
     }
 
