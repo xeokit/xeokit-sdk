@@ -1,5 +1,12 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.97](https://github.com/xeokit/xeokit-sdk/compare/v2.6.96...v2.6.97)
+
+### 03 December 2025
+
+-  XEOK-399 Implement Layer's AABB-based frustum culling [#1992](https://github.com/xeokit/xeokit-sdk/pull/1992)
+
+
 # [v2.6.96](https://github.com/xeokit/xeokit-sdk/compare/v2.6.95...v2.6.96)
 
 ### 02 December 2025
