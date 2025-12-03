@@ -17,6 +17,9 @@ const vec3_0 = math.vec3([0,0,0]);
 
 const iota = (n) => { const ret = [ ]; for (let i = 0; i < n; ++i) ret.push(i); return ret; };
 
+const tempPlanes = iota(6).map(() => math.vec4());
+const tempVec4 = math.vec4();
+
 const bitShiftScreenZ = math.vec4([1.0 / (256.0 * 256.0 * 256.0 * 256.0), 1.0 / (256.0 * 256.0 * 256.0), 1.0 / (256.0 * 256.0), 1.0 / 256.0]);
 
 const pixelToInt = pix => pix[0] + (pix[1] << 8) + (pix[2] << 16) + (pix[3] << 24);
@@ -25,6 +28,66 @@ const toWorldNormal = (n) => math.normalizeVec3(math.divVec3Scalar(n, math.MAX_I
 const toWorldPos    = (p, origin, scale) => math.vec3([ p[0] * scale[0] + origin[0],
                                                         p[1] * scale[1] + origin[1],
                                                         p[2] * scale[2] + origin[2] ]);
+
+const makeFrustumAABBIntersectionTest = function(camera) {
+    const m = math.mat4();
+    math.mulMat4(camera.projMatrix, camera.viewMatrix, m);
+
+    for (let i = 0; i < 3; ++i) {
+        tempPlanes[i * 2 + 0][0] = m[ 3] + m[i];
+        tempPlanes[i * 2 + 0][1] = m[ 7] + m[i + 4];
+        tempPlanes[i * 2 + 0][2] = m[11] + m[i + 8];
+        tempPlanes[i * 2 + 0][3] = m[15] + m[i + 12];
+
+        tempPlanes[i * 2 + 1][0] = m[ 3] - m[i];
+        tempPlanes[i * 2 + 1][1] = m[ 7] - m[i + 4];
+        tempPlanes[i * 2 + 1][2] = m[11] - m[i + 8];
+        tempPlanes[i * 2 + 1][3] = m[15] - m[i + 12];
+    }
+
+    // Normalize each plane
+    tempPlanes.forEach(p => math.divVec4Scalar(p, math.lenVec3(p), p));
+
+    return aabb => tempPlanes.every(p => {
+        // Compute the positive vertex (farthest in direction of normal)
+        tempVec4[0] = aabb[(p[0] >= 0) ? 3 : 0];
+        tempVec4[1] = aabb[(p[1] >= 0) ? 4 : 1];
+        tempVec4[2] = aabb[(p[2] >= 0) ? 5 : 2];
+        tempVec4[3] = 1;
+        return math.dotVec4(p, tempVec4) >= 0;
+    });
+};
+
+const makeRayAABBIntersectionTest = (O, D) => aabb => {
+    let tmin = -Infinity;
+    let tmax = Infinity;
+
+    for (let i = 0; i < 3; i++) {
+        const origin = O[i];
+        const direction = D[i];
+        const minBound = aabb[i];
+        const maxBound = aabb[i + 3];
+
+        if (Math.abs(direction) < 1e-8) {
+            // Ray is parallel to plane
+            if ((origin < minBound) || (origin > maxBound)) {
+                return false; // No intersection
+            }
+        } else {
+            const t1 = (minBound - origin) / direction;
+            const t2 = (maxBound - origin) / direction;
+
+            tmin = Math.max(tmin, Math.min(t1, t2)); // near
+            tmax = Math.min(tmax, Math.max(t1, t2)); // far
+
+            if (tmin > tmax) {
+                return false; // No intersection
+            }
+        }
+    }
+
+    return tmax >= 0; // Check if intersection is in front of ray
+};
 
 /**
  * @private
@@ -789,6 +852,8 @@ const Renderer = function (scene, options) {
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         }
 
+        frameCtx.testAABB = makeFrustumAABBIntersectionTest(scene.camera);
+
         const renderDrawables = function(drawables) {
 
         let normalDrawSAOBinLen = 0;
@@ -1123,6 +1188,8 @@ const Renderer = function (scene, options) {
             renderDrawables(uiDrawableList);
         }
 
+        frameCtx.testAABB = null;
+
         const endTime = Date.now();
         const frameStats = stats.frame;
 
@@ -1231,10 +1298,15 @@ const Renderer = function (scene, options) {
 
                 pickResult.canvasPos = params.canvasPos;
 
+                math.canvasPosToWorldRay(canvas, pickViewMatrix, pickProjMatrix, projection, canvasPos, tempVec3a, tempVec3b);
+                frameCtx.testAABB = makeRayAABBIntersectionTest(tempVec3a, tempVec3b);
             } else {
 
                 // Picking with arbitrary World-space ray
                 // Align camera along ray and fire ray through center of canvas
+
+                canvasPos[0] = canvas.clientWidth * 0.5;
+                canvasPos[1] = canvas.clientHeight * 0.5;
 
                 if (params.matrix) {
 
@@ -1245,6 +1317,8 @@ const Renderer = function (scene, options) {
                     nearAndFar[0] = camera.project.near;
                     nearAndFar[1] = camera.project.far;
 
+                    math.canvasPosToWorldRay(canvas, pickViewMatrix, pickProjMatrix, projection, canvasPos, tempVec3a, tempVec3b);
+                    frameCtx.testAABB = makeRayAABBIntersectionTest(tempVec3a, tempVec3b);
                 } else {
 
                     worldRayOrigin.set(params.origin || [0, 0, 0]);
@@ -1273,10 +1347,9 @@ const Renderer = function (scene, options) {
 
                     pickResult.origin = worldRayOrigin;
                     pickResult.direction = worldRayDir;
-                }
 
-                canvasPos[0] = canvas.clientWidth * 0.5;
-                canvasPos[1] = canvas.clientHeight * 0.5;
+                    frameCtx.testAABB = makeRayAABBIntersectionTest(pickResult.origin, pickResult.direction);
+                }
             }
 
             pickBuffer.bind();
@@ -1312,6 +1385,8 @@ const Renderer = function (scene, options) {
                 gl.clear(gl.DEPTH_BUFFER_BIT);
                 renderDrawables(uiDrawableList);
             }
+
+            frameCtx.testAABB = null;
 
             const pickID = pixelToInt(pickBuffer.read(0, 0));
             const pickable = (pickID >= 0) && pickIDs.items[pickID];
