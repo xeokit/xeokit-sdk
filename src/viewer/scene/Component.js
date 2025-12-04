@@ -909,6 +909,7 @@ class Component {
         this._eventCallDepth = 0;
         this._ownedComponents = null;
         this._updateScheduled = false;
+        this._renderer = null;
     }
 }
 
