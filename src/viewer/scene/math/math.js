@@ -2115,9 +2115,9 @@ const math = {
 
             const sy = math.lenVec3(vec);
 
-            vec[8] = mat[8];
-            vec[9] = mat[9];
-            vec[10] = mat[10];
+            vec[0] = mat[8];
+            vec[1] = mat[9];
+            vec[2] = mat[10];
 
             const sz = math.lenVec3(vec);
 
