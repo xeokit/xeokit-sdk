@@ -5,7 +5,7 @@ export const SnapProgram = function(programVariables, geometry, isSnapInit, isPo
     const coordinateScaler = programVariables.createUniform("vec3", "coordinateScaler", (set, state) => set(state.legacyFrameCtx.snapPickCoordinateScale));
 
     const vWorldPosition = programVariables.createVarying("vec3", "vWorldPosition", () => `${geometry.attributes.position.world}.xyz`);
-    const vPickColor = programVariables.createVarying("vec4", "vPickColor", () => geometry.attributes.pickColor, "flat");
+    const vPickColor = programVariables.createVarying("vec4", "vPickColor", () => geometry.attributes.pickColor); // Using `flat` causes an instability - see XEOK-385 and XEOK-401
 
     const outCoords    = programVariables.createOutput("highp ivec4", "outCoords", 0);
     const outNormal    = programVariables.createOutput("highp ivec4", "outNormal", 1);
