@@ -1,6 +1,6 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "2.6.97",
+  "version": "2.6.98",
   "description": "3D BIM IFC Viewer SDK for AEC engineering applications. Open Source JavaScript Toolkit based on pure WebGL for top performance, real-world coordinates and full double precision",
   "module": "./dist/xeokit-sdk.es.js",
   "main": "./dist/xeokit-sdk.cjs.js",

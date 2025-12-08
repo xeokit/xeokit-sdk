@@ -1,5 +1,15 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.98](https://github.com/xeokit/xeokit-sdk/compare/v2.6.97...v2.6.98)
+
+### 08 December 2025
+
+-  #1949 Component's _renderer reference removal [#1996](https://github.com/xeokit/xeokit-sdk/pull/1996)
+-  IFC examples list refactor [#1997](https://github.com/xeokit/xeokit-sdk/pull/1997)
+-  XEOK-401 Make SnapProgram::vPickColor non-flat to fix stability issue [#1998](https://github.com/xeokit/xeokit-sdk/pull/1998)
+-  fix: out of range indices in decomposeMat4 [#1994](https://github.com/xeokit/xeokit-sdk/pull/1994)
+
+
 # [v2.6.97](https://github.com/xeokit/xeokit-sdk/compare/v2.6.96...v2.6.97)
 
 ### 03 December 2025
