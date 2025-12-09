@@ -102,6 +102,7 @@ function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok, er
     const spinner = plugin.viewer.scene.canvas.spinner;
     spinner.processes++;
     parse(gltf, GLTFLoader, {
+        ...(options.parseOptions || { }),
         baseUri: options.basePath
     }).then((gltfData) => {
         const processedGLTF = postProcessGLTF(gltfData);

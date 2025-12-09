@@ -323,6 +323,7 @@ class GLTFLoaderPlugin extends Plugin {
      * primitives. Only works while {@link DTX#enabled} is also ````true````.
      * @param {Boolean} [params.autoMetaModel] When supplied, creates a default MetaModel with a single MetaObject.
      * @param {Boolean} [params.globalizeObjectIds=false] Indicates whether to globalize each {@link Entity#id} and {@link MetaObject#id}, in case you need to prevent ID clashes with other models.
+     * @param {*} [params.parseOptions={}] Options to pass to loaders.gl parse method, eg. ````{ gltf: { excludeExtensions: { "KHR_texture_transform": false } } }````.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
      */
     load(params = {}) {
