@@ -83,6 +83,8 @@ export declare type LoadGLTFModel = {
   performance?: boolean;
   /** When true, generate a single MetaObject that represents the entire glTF model, and a MetaObject for each entity within it. */
   autoMetaModel?: boolean;
+  /** Options to pass to loaders.gl parse method, eg. ````{ gltf: { excludeExtensions: { "KHR_texture_transform": false } } }````. */
+  parseOptions?: any;
 };
 
 /**
