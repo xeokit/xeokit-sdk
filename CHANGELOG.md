@@ -1,5 +1,13 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.99](https://github.com/xeokit/xeokit-sdk/compare/v2.6.98...v2.6.99)
+
+### 09 December 2025
+
+-  Add point cloud heatmap example [#1972](https://github.com/xeokit/xeokit-sdk/pull/1972)
+-  XEOK-402 Pass GLTFLoaderPlugin::load::params::parseOptions to loaders.gl::parse [#1999](https://github.com/xeokit/xeokit-sdk/pull/1999)
+
+
 # [v2.6.98](https://github.com/xeokit/xeokit-sdk/compare/v2.6.97...v2.6.98)
 
 ### 08 December 2025
