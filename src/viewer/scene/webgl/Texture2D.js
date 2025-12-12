@@ -108,6 +108,7 @@ class Texture2D {
         if (props.unpackAlignment !== undefined) {
             this.unpackAlignment = props.unpackAlignment;
         }
+        this.maxAnisotropy = props.maxAnisotropy;
         if (props.minFilter !== undefined) {
             this.minFilter = props.minFilter;
         }
@@ -139,6 +140,12 @@ class Texture2D {
 
         const bak4 = gl.getParameter(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL);;
         gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
+
+        const anisoExt = this.maxAnisotropy && getExtension(gl, "EXT_texture_filter_anisotropic");
+        if (anisoExt) {
+            const max = gl.getParameter(anisoExt.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+            gl.texParameterf(gl.TEXTURE_2D, anisoExt.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(max, this.maxAnisotropy));
+        }
 
         const minFilter = convertConstant(gl, this.minFilter);
         gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, minFilter);

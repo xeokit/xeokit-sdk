@@ -7,6 +7,8 @@ export declare type TextureConfiguration = {
     src?: string;
     /** HTML Image object to load into this Texture. See the {@link Texture#image} property for more info. */
     image?: HTMLImageElement;
+    /** Max anisotropy to use for texture filtering (see EXT_texture_filter_anisotropic). */
+    maxAnisotropy?: number;
     /** How the texture is sampled when a texel covers less than one pixel. */
     minFilter?: "LinearFilter" | "LinearMipMapNearestFilter" | "NearestMipMapNearestFilter" | "NearestMipMapLinearFilter" | "LinearMipMapLinearFilter";
     /** How the texture is sampled when a texel covers more than one pixel. Supported values are {@link LinearFilter} and {@link NearestFilter}. */
