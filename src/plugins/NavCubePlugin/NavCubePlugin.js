@@ -193,6 +193,7 @@ class NavCubePlugin extends Plugin {
 
         this._cubeSampler = new Texture(navCubeScene, {
             image: this._cubeTextureCanvas.getImage(),
+            maxAnisotropy: 4,
             flipY: true,
             wrapS: ClampToEdgeWrapping,
             wrapT: ClampToEdgeWrapping
