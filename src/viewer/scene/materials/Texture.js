@@ -103,6 +103,7 @@ class Texture extends Component {
      * @param {HTMLImageElement} [cfg.image=null] HTML Image object to load into this Texture. See the {@link Texture#image} property for more info.
      * @param {Number} [cfg.minFilter=LinearMipmapLinearFilter] How the texture is sampled when a texel covers less than one pixel.
      * Supported values are {@link LinearMipmapLinearFilter}, {@link LinearMipMapNearestFilter}, {@link NearestMipMapNearestFilter}, {@link NearestMipMapLinearFilter} and {@link LinearMipMapLinearFilter}.
+     * @param {Number} [cfg.maxAnisotropy=false] Max anisotropy to use for texture filtering (see EXT_texture_filter_anisotropic).
      * @param {Number} [cfg.magFilter=LinearFilter] How the texture is sampled when a texel covers more than one pixel. Supported values are {@link LinearFilter} and {@link NearestFilter}.
      * @param {Number} [cfg.wrapS=RepeatWrapping] Wrap parameter for texture coordinate *S*. Supported values are {@link ClampToEdgeWrapping}, {@link MirroredRepeatWrapping} and {@link RepeatWrapping}.
      * @param {Number} [cfg.wrapT=RepeatWrapping] Wrap parameter for texture coordinate *T*. Supported values are {@link ClampToEdgeWrapping}, {@link MirroredRepeatWrapping} and {@link RepeatWrapping}..
@@ -120,6 +121,7 @@ class Texture extends Component {
             texture: new Texture2D({gl: this.scene.canvas.gl}),
             matrix: math.identityMat4(),
             hasMatrix: (cfg.translate && (cfg.translate[0] !== 0 || cfg.translate[1] !== 0)) || (!!cfg.rotate) || (cfg.scale && (cfg.scale[0] !== 0 || cfg.scale[1] !== 0)),
+            maxAnisotropy: cfg.maxAnisotropy,
             minFilter: this._checkMinFilter(cfg.minFilter),
             magFilter: this._checkMagFilter(cfg.magFilter),
             wrapS: this._checkWrapS(cfg.wrapS),
