@@ -1,5 +1,13 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.100](https://github.com/xeokit/xeokit-sdk/compare/v2.6.99...v2.6.100)
+
+### 12 December 2025
+
+-  Implement math.addVec2, math.compareVec2, math.mulVec2 [#2000](https://github.com/xeokit/xeokit-sdk/pull/2000)
+-  XCD-419 Introduce Texture::maxAnisotropy parameter and use for NavCubePlugin [#2001](https://github.com/xeokit/xeokit-sdk/pull/2001)
+
+
 # [v2.6.99](https://github.com/xeokit/xeokit-sdk/compare/v2.6.98...v2.6.99)
 
 ### 09 December 2025
