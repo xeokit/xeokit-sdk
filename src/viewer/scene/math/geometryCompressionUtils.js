@@ -37,9 +37,9 @@ const createPositionsDecodeMatrix = (function () {
         const xmin = aabb[0];
         const ymin = aabb[1];
         const zmin = aabb[2];
-        const xwid = aabb[3] - xmin;
-        const ywid = aabb[4] - ymin;
-        const zwid = aabb[5] - zmin;
+        const xwid = (aabb[3] - xmin) || 1;
+        const ywid = (aabb[4] - ymin) || 1;
+        const zwid = (aabb[5] - zmin) || 1;
         const maxInt = 65535;
         math.identityMat4(translate);
         math.translationMat4v(aabb, translate);
