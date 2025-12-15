@@ -41,9 +41,15 @@ export declare class Curve extends Component {
     get tangent(): number[];
 
     /**
-     * Gets the length of this Curve.
+     * Gets the approximate length of this Curve.
      *
-     * @returns {Number} The Curve length.
+     * This method calculates the length by discretizing Curve into hardcoded number of straight segments. Then it sums
+     * lengths of these straight segments.
+     *
+     * If you need more control over the precision of the length calculation, we strongly encourage you to build
+     * your own custom function.
+     *
+     * @returns {Number} The approximate Curve length.
      */
     get length(): number;
 
