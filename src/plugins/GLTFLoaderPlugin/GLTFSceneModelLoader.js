@@ -427,11 +427,10 @@ function loadDefaultScene(ctx) {
             const nodeName = node.name;
             let entityId = (((nodeName !== undefined) && (nodeName !== null) && nodeName)
                             ||
-                            ((depth === 0) && ("entity-" + ctx.nextId++)));
-
+                            ((depth === 0) && ("Node." + String(ctx.nextId++).padStart(4, "0"))));
             if (entityId) {
                 while (ctx.sceneModel.objects[entityId]) {
-                    entityId = "entity-" + ctx.nextId++;
+                    entityId = nodeName + "." + String(ctx.nextId++).padStart(4, "0");
                 }
                 meshIdsStack.push(meshIds);
                 meshIds = [];
