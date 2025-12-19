@@ -208,7 +208,9 @@ export class DTXLayer extends Layer {
                             }
                         }
                     };
-                }
+                },
+
+                _clearToOptimizeGC: () => { indicesBuffer.length = edgeIndicesBuffer.length = 0; }
             };
         };
 
@@ -509,7 +511,14 @@ export class DTXLayer extends Layer {
         const draw16 = buffer.geometry16Bits.createDrawers(createTextureForSingleItems, gl.UNSIGNED_SHORT);
         const draw32 = buffer.geometry32Bits.createDrawers(createTextureForSingleItems, gl.UNSIGNED_INT);
 
-        // Free up memory
+        // Optimization to free up memory (XCD-408 and XCD-424).
+        // The following lines were added to assist GC in cleaning up some of the data. See also the `texArray = null`.
+        // A Chrome test with Lyon[1-9].xkt models loaded simultaneously showed a decrease of 596MB to 158MB.
+        this._bucketGeometries = null;
+        this._buffer.geometry8Bits._clearToOptimizeGC();
+        this._buffer.geometry16Bits._clearToOptimizeGC();
+        this._buffer.geometry32Bits._clearToOptimizeGC();
+        Object.keys(this._buffer).forEach(k => this._buffer[k] = null);
         this._buffer = null;
 
         let deferredSetFlagsActive = false;
@@ -720,7 +729,7 @@ const createBindableDataTexture = function(gl, entitiesCnt, entitySize, type, en
     if (textureHeight === 0) {
         throw "texture height===0";
     }
-    const texArray = new arrayType(textureWidth * textureHeight * pixelWidth);
+    let texArray = new arrayType(textureWidth * textureHeight * pixelWidth);
     dataTextureRamStats[statsProp] += texArray.byteLength;
     dataTextureRamStats.numberOfTextures++;
 
@@ -735,6 +744,10 @@ const createBindableDataTexture = function(gl, entitiesCnt, entitySize, type, en
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.bindTexture(gl.TEXTURE_2D, null);
+
+    if (! exposeData) {
+        texArray = null; // See the comment related to XCD-408 and XCD-424 above.
+    }
 
     return {
         // called by createSampler::bindTexture
