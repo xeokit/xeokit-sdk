@@ -1,5 +1,14 @@
 ## xeokit-sdk Changelog
 
+
+# [v2.6.101](https://github.com/xeokit/xeokit-sdk/compare/v2.6.100...v2.6.101)
+
+### 22 December 2025
+
+-  XCD-408 and XCD-424 Improve GC to lower memory consumption [#2006](https://github.com/xeokit/xeokit-sdk/pull/2006)
+-  Math improvements (implement math.mulVec3, fix geometryCompressionUtils.createPositionsDecodeMatrix) [#2003](https://github.com/xeokit/xeokit-sdk/pull/2003)
+
+
 # [v2.6.100](https://github.com/xeokit/xeokit-sdk/compare/v2.6.99...v2.6.100)
 
 ### 12 December 2025
