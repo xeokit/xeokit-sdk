@@ -84,12 +84,12 @@ We strive to create an inclusive and welcoming community. Here are some ways to 
 
 ## Resources
 
-- [User Tutorials](https://xeokit.notion.site/xeokit-Documentation-4598591fcedb4889bf8896750651f74e)
 - [API Documentation](https://xeokit.github.io/xeokit-sdk/docs/)
 - [SDK Examples](https://xeokit.github.io/xeokit-sdk/examples/index.html)
 - [Issue Tracker](https://github.com/xeokit/xeokit-sdk/issues)
 - [Discussion Forum](https://github.com/xeokit/xeokit-sdk/discussions)- 
 - [Enterprise Service Desk](https://creoox.atlassian.net/servicedesk/customer/portal/1)
+- [Blog](https://xeokit.io/blog)
 - [Contact Us](https://creoox.com/en/contact/)
 - [LinkedIn Page](https://www.linkedin.com/showcase/xeokit/)
 
