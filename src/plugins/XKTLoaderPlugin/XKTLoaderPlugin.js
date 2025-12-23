@@ -462,7 +462,7 @@ parsers[ParserV12.version] = ParserV12;
  * into a xeokit Viewer in one load operation, combining the XKT files into a single SceneModel and MetaModel.
  *
  * You can learn more about this conversion and loading process, with splitting, batch converting and batch loading,
- * in [this tutorial](https://www.notion.so/xeokit/Importing-Huge-IFC-Models-as-Multiple-XKT-Files-165fc022e94742cf966ee50003572259).
+ * in [this tutorial](https://xeokit.io/blog/automatically-splitting-large-models-for-better-performance).
  *
  * To show how to use XKTLoaderPlugin to load a manifest of XKT files, let's imagine that we have a set of such XKT files. As
  * described in the tutorial, they were converted by `ifc2gltf` from an IFC file into a set of glTF+JSON files, that were
