@@ -533,7 +533,7 @@ parsers[ParserV12.version] = ParserV12;
  *
  * The main advantage here, of splitting IFC files like this within the conversion and import pipeline,
  * is to reduce the memory pressure on each of the `ifc2gltf`, `convert2xkt` and XKTLoaderPlugin components.
- * They work much reliably (and faster) when processing smaller files (eg. 20MB) than when processing large files (eg. 500MB), where
+ * They work much reliably (and faster) when processing smaller files (e.g. 20MB) than when processing large files (e.g. 500MB), where
  * they have less trouble allocating the system memory they need for conversion and parsing.
  *
  * We can also provide an HTTP URL to the manifest:
@@ -885,9 +885,9 @@ class XKTLoaderPlugin extends Plugin {
      * Loads an ````.xkt```` model into this XKTLoaderPlugin's {@link Viewer}.
      *
      * Since xeokit/xeokit-sdk 1.9.0, XKTLoaderPlugin has supported XKT 8, which bundles the metamodel
-     * data (eg. an IFC element hierarchy) in the XKT file itself. For XKT 8, we therefore no longer need to
+     * data (e.g. an IFC element hierarchy) in the XKT file itself. For XKT 8, we therefore no longer need to
      * load the metamodel data from a separate accompanying JSON file, as we did with previous XKT versions.
-     * However, if we do choose to specify a separate metamodel JSON file to load (eg. for backward compatibility
+     * However, if we do choose to specify a separate metamodel JSON file to load (e.g. for backward compatibility
      * in data pipelines), then that metamodel will be loaded and the metamodel in the XKT 8 file will be ignored.
      *
      * @param {*} params Loading parameters.
