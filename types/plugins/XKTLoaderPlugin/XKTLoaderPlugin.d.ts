@@ -32,9 +32,9 @@ export declare type LoadXKTModel = {
     metaModelSrc?: string;
     /** JSON model metadata, as an alternative to the ````metaModelSrc```` parameter. */
     metaModelData?: any;
-    /** Path or URL to a JSON manifest file that provides paths or URLs to ````.xkt```` files to load as parts of the model. Use this option to load models that have been split intomultiple XKT files. See [tutorial](https://www.notion.so/xeokit/Automatically-Splitting-Large-Models-for-Better-Performance-165fc022e94742cf966ee50003572259) for more info.*/
+    /** Path or URL to a JSON manifest file that provides paths or URLs to ````.xkt```` files to load as parts of the model. Use this option to load models that have been split intomultiple XKT files. See [tutorial](https://xeokit.io/blog/automatically-splitting-large-models-for-better-performance) for more info.*/
     manifestSrc?: any;
-    /** A JSON manifest object (as an alternative to a path or URL) that provides paths or URLs to ````.xkt```` files to load as parts of the model. Use this option to load models that have been split intomultiple XKT files. See [tutorial](https://www.notion.so/xeokit/Automatically-Splitting-Large-Models-for-Better-Performance-165fc022e94742cf966ee50003572259) for more info. */
+    /** A JSON manifest object (as an alternative to a path or URL) that provides paths or URLs to ````.xkt```` files to load as parts of the model. Use this option to load models that have been split intomultiple XKT files. See [tutorial](https://xeokit.io/blog/automatically-splitting-large-models-for-better-performance) for more info. */
     manifest?: object;
     /** Map of initial default states for each loaded {@link Entity} that represents an object. Default value is {@link IFCObjectDefaults}. */
     objectDefaults?: object;
