@@ -13,7 +13,7 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * * Creates an {@link Entity} for each object within the model, which is indicated by each glTF ````node```` that has a ````name```` attribute. Those Entities will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
  * * When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model's {@link Entity}s.
  * * Not recommended for large models. For best performance with large glTF datasets, we recommend first converting them
- * to ````.xkt```` format (eg. using [convert2xkt](https://github.com/xeokit/xeokit-convert)), then loading
+ * to ````.xkt```` format (e.g. using [convert2xkt](https://github.com/xeokit/xeokit-convert)), then loading
  * the ````.xkt```` using {@link XKTLoaderPlugin}.
  *
  * ## Metadata
@@ -35,8 +35,6 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  *
  * Since this model contains IFC types, the GLTFLoaderPlugin will set the initial colors of object {@link Entity}s according
  * to the standard IFC element colors in the GLTFModel's current map. Override that with your own map via property {@link GLTFLoaderPlugin#objectDefaults}.
- *
- * Read more about this example in the user guide on [Viewing BIM Models Offline](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee).
  *
  * ````javascript
  * import {Viewer, GLTFLoaderPlugin} from "xeokit-sdk.es.js";
@@ -174,7 +172,7 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * contains a MetaObject that corresponds to that Entity.
  *
  * When we've done that, then xeokit's {@link TreeViewPlugin} is able to have a node that represents the glTF model and controls
- * the visibility of that Entity (ie. to control the visibility of the entire model).
+ * the visibility of that Entity (i.e. to control the visibility of the entire model).
  *
  * The snippet below shows how this is done.
  *
