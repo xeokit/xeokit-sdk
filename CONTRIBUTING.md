@@ -87,7 +87,7 @@ We strive to create an inclusive and welcoming community. Here are some ways to 
 - [API Documentation](https://xeokit.github.io/xeokit-sdk/docs/)
 - [SDK Examples](https://xeokit.github.io/xeokit-sdk/examples/index.html)
 - [Issue Tracker](https://github.com/xeokit/xeokit-sdk/issues)
-- [Discussion Forum](https://github.com/xeokit/xeokit-sdk/discussions)- 
+- [Discussion Forum](https://github.com/xeokit/xeokit-sdk/discussions)
 - [Enterprise Service Desk](https://creoox.atlassian.net/servicedesk/customer/portal/1)
 - [Blog](https://xeokit.io/blog)
 - [Contact Us](https://creoox.com/en/contact/)
