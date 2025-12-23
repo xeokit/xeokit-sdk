@@ -12,7 +12,7 @@ high-detail, full-precision 3D engineering and BIM models in the browser.
 
 * [xeokit.io](https://xeokit.io/)
 * [Examples](http://xeokit.github.io/xeokit-sdk/examples/)
-* [Guides](https://www.notion.so/xeokit/xeokit-Documentation-4598591fcedb4889bf8896750651f74e)
+* [Blog](https://xeokit.io/blog)
 * [API Docs](https://xeokit.github.io/xeokit-sdk/docs/)
 * [Features](https://xeokit.io/index.html?foo=1#features)
 * [Changelog](https://github.com/xeokit/xeokit-sdk/blob/master/CHANGELOG.md)
