@@ -13,7 +13,7 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * * Creates an {@link Entity} for each object within the model, which is indicated by each glTF ````node```` that has a ````name```` attribute. Those Entities will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
  * * When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model's {@link Entity}s.
  * * Not recommended for large models. For best performance with large glTF datasets, we recommend first converting them
- * to ````.xkt```` format (eg. using [convert2xkt](https://github.com/xeokit/xeokit-convert)), then loading
+ * to ````.xkt```` format (e.g. using [convert2xkt](https://github.com/xeokit/xeokit-convert)), then loading
  * the ````.xkt```` using {@link XKTLoaderPlugin}.
  *
  * ## Metadata
