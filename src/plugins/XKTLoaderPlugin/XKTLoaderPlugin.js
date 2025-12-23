@@ -507,7 +507,7 @@ parsers[ParserV12.version] = ParserV12;
  *   TreeViewPlugin,
  * } from "xeokit-sdk.es.js";
  *
- * constviewer = new Viewer({
+ * const viewer = new Viewer({
  *   canvasId: "myCanvas"
  * });
  *
