@@ -172,7 +172,7 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * contains a MetaObject that corresponds to that Entity.
  *
  * When we've done that, then xeokit's {@link TreeViewPlugin} is able to have a node that represents the glTF model and controls
- * the visibility of that Entity (ie. to control the visibility of the entire model).
+ * the visibility of that Entity (i.e. to control the visibility of the entire model).
  *
  * The snippet below shows how this is done.
  *
