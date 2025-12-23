@@ -93,7 +93,7 @@ parsers[ParserV12.version] = ParserV12;
  * Since this model contains IFC types, the XKTLoaderPlugin will set the initial appearance of each object
  * {@link Entity} according to its IFC type in {@link XKTLoaderPlugin#objectDefaults}.
  *
- * Read more about this example in the user guide on [Viewing BIM Models Offline](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee).
+ * Read more about this example in the user guide on [Viewing BIM Models Offline](https://xeokit.io/blog/viewing-an-ifc-model-with-xktloaderplugin).
  *
  * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_XKT_metadata_Schependomlaan)]
  *
