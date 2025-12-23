@@ -897,9 +897,9 @@ class XKTLoaderPlugin extends Plugin {
      * @param {String} [params.metaModelSrc] Path or URL to an optional metadata file, as an alternative to the ````metaModelData```` parameter.
      * @param {*} [params.metaModelData] JSON model metadata, as an alternative to the ````metaModelSrc```` parameter.
      * @param {String} [params.manifestSrc] Path or URL to a JSON manifest file that provides paths to ````.xkt```` files to load as parts of the model. Use this option to load models that have been split into
-     * multiple XKT files. See [tutorial](https://www.notion.so/xeokit/Automatically-Splitting-Large-Models-for-Better-Performance-165fc022e94742cf966ee50003572259) for more info.
+     * multiple XKT files. See [tutorial](https://xeokit.io/blog/automatically-splitting-large-models-for-better-performance) for more info.
      * @param {Object} [params.manifest] A JSON manifest object (as an alternative to a path or URL) that provides paths to ````.xkt```` files to load as parts of the model. Use this option to load models that have been split into
-     * multiple XKT files. See [tutorial](https://www.notion.so/xeokit/Automatically-Splitting-Large-Models-for-Better-Performance-165fc022e94742cf966ee50003572259) for more info.
+     * multiple XKT files. See [tutorial](https://xeokit.io/blog/automatically-splitting-large-models-for-better-performance) for more info.
      * @param {{String:Object}} [params.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object. Default value is {@link IFCObjectDefaults}.
      * @param {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
