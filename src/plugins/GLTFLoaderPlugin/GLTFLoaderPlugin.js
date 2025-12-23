@@ -36,8 +36,6 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * Since this model contains IFC types, the GLTFLoaderPlugin will set the initial colors of object {@link Entity}s according
  * to the standard IFC element colors in the GLTFModel's current map. Override that with your own map via property {@link GLTFLoaderPlugin#objectDefaults}.
  *
- * Read more about this example in the user guide on [Viewing BIM Models Offline](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee).
- *
  * ````javascript
  * import {Viewer, GLTFLoaderPlugin} from "xeokit-sdk.es.js";
  *
