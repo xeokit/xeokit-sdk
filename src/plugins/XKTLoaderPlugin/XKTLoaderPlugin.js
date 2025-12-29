@@ -56,9 +56,9 @@ parsers[ParserV12.version] = ParserV12;
  *
  * # Creating *````.XKT````* Files and Metadata
  *
- * We have several sways to convert your files into XKT. See these tutorials for more info:
+ * We have several ways to convert your files into XKT. See these tutorials for more info:
  *
- * * [Converting Models to XKT with convert2xkt](https://www.notion.so/xeokit/Converting-Models-to-XKT-with-convert2xkt-fa567843313f4db8a7d6535e76da9380) - how to convert various file formats (glTF, IFC, CityJSON, LAS/LAZ...) to XKT using our nodejs-based converter.
+ * * [Converting Models to XKT with convert2xkt](https://xeokit.io/blog/converting-models-to-xkt-with-convert2xkt) - how to convert various file formats (glTF, IFC, CityJSON, LAS/LAZ...) to XKT using our nodejs-based converter.
  * * [Converting IFC Models to XKT using 3rd-Party Open Source Tools](https://www.notion.so/xeokit/Converting-IFC-Models-to-XKT-using-3rd-Party-Open-Source-Tools-c373e48bc4094ff5b6e5c5700ff580ee) - how to convert IFC files to XKT using 3rd-party open source CLI tools.
  *
  * # Scene representation
@@ -93,7 +93,7 @@ parsers[ParserV12.version] = ParserV12;
  * Since this model contains IFC types, the XKTLoaderPlugin will set the initial appearance of each object
  * {@link Entity} according to its IFC type in {@link XKTLoaderPlugin#objectDefaults}.
  *
- * Read more about this example in the user guide on [Viewing BIM Models Offline](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee).
+ * Read more about this example in the user guide on [Viewing BIM Models Offline](https://xeokit.io/blog/viewing-an-ifc-model-with-xktloaderplugin).
  *
  * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_XKT_metadata_Schependomlaan)]
  *
@@ -462,7 +462,7 @@ parsers[ParserV12.version] = ParserV12;
  * into a xeokit Viewer in one load operation, combining the XKT files into a single SceneModel and MetaModel.
  *
  * You can learn more about this conversion and loading process, with splitting, batch converting and batch loading,
- * in [this tutorial](https://www.notion.so/xeokit/Importing-Huge-IFC-Models-as-Multiple-XKT-Files-165fc022e94742cf966ee50003572259).
+ * in [this tutorial](https://xeokit.io/blog/automatically-splitting-large-models-for-better-performance).
  *
  * To show how to use XKTLoaderPlugin to load a manifest of XKT files, let's imagine that we have a set of such XKT files. As
  * described in the tutorial, they were converted by `ifc2gltf` from an IFC file into a set of glTF+JSON files, that were
@@ -507,7 +507,7 @@ parsers[ParserV12.version] = ParserV12;
  *   TreeViewPlugin,
  * } from "xeokit-sdk.es.js";
  *
- * constviewer = new Viewer({
+ * const viewer = new Viewer({
  *   canvasId: "myCanvas"
  * });
  *
@@ -533,7 +533,7 @@ parsers[ParserV12.version] = ParserV12;
  *
  * The main advantage here, of splitting IFC files like this within the conversion and import pipeline,
  * is to reduce the memory pressure on each of the `ifc2gltf`, `convert2xkt` and XKTLoaderPlugin components.
- * They work much reliably (and faster) when processing smaller files (eg. 20MB) than when processing large files (eg. 500MB), where
+ * They work much reliably (and faster) when processing smaller files (e.g. 20MB) than when processing large files (e.g. 500MB), where
  * they have less trouble allocating the system memory they need for conversion and parsing.
  *
  * We can also provide an HTTP URL to the manifest:
@@ -885,9 +885,9 @@ class XKTLoaderPlugin extends Plugin {
      * Loads an ````.xkt```` model into this XKTLoaderPlugin's {@link Viewer}.
      *
      * Since xeokit/xeokit-sdk 1.9.0, XKTLoaderPlugin has supported XKT 8, which bundles the metamodel
-     * data (eg. an IFC element hierarchy) in the XKT file itself. For XKT 8, we therefore no longer need to
+     * data (e.g. an IFC element hierarchy) in the XKT file itself. For XKT 8, we therefore no longer need to
      * load the metamodel data from a separate accompanying JSON file, as we did with previous XKT versions.
-     * However, if we do choose to specify a separate metamodel JSON file to load (eg. for backward compatibility
+     * However, if we do choose to specify a separate metamodel JSON file to load (e.g. for backward compatibility
      * in data pipelines), then that metamodel will be loaded and the metamodel in the XKT 8 file will be ignored.
      *
      * @param {*} params Loading parameters.
@@ -897,9 +897,9 @@ class XKTLoaderPlugin extends Plugin {
      * @param {String} [params.metaModelSrc] Path or URL to an optional metadata file, as an alternative to the ````metaModelData```` parameter.
      * @param {*} [params.metaModelData] JSON model metadata, as an alternative to the ````metaModelSrc```` parameter.
      * @param {String} [params.manifestSrc] Path or URL to a JSON manifest file that provides paths to ````.xkt```` files to load as parts of the model. Use this option to load models that have been split into
-     * multiple XKT files. See [tutorial](https://www.notion.so/xeokit/Automatically-Splitting-Large-Models-for-Better-Performance-165fc022e94742cf966ee50003572259) for more info.
+     * multiple XKT files. See [tutorial](https://xeokit.io/blog/automatically-splitting-large-models-for-better-performance) for more info.
      * @param {Object} [params.manifest] A JSON manifest object (as an alternative to a path or URL) that provides paths to ````.xkt```` files to load as parts of the model. Use this option to load models that have been split into
-     * multiple XKT files. See [tutorial](https://www.notion.so/xeokit/Automatically-Splitting-Large-Models-for-Better-Performance-165fc022e94742cf966ee50003572259) for more info.
+     * multiple XKT files. See [tutorial](https://xeokit.io/blog/automatically-splitting-large-models-for-better-performance) for more info.
      * @param {{String:Object}} [params.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object. Default value is {@link IFCObjectDefaults}.
      * @param {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
