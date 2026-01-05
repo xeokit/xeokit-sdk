@@ -1,6 +1,16 @@
 ## xeokit-sdk Changelog
 
 
+# [v2.6.101](https://github.com/xeokit/xeokit-sdk/compare/v2.6.101...v2.6.102)
+
+### 05 Jan 2026
+
+-  XCD-415 Add more descriptive explanation of the Curve's length getter [#2004](https://github.com/xeokit/xeokit-sdk/pull/2004)
+-  XCD-426 Change "entity-" prefix into nodeName [#2007](https://github.com/xeokit/xeokit-sdk/pull/2007)
+-  XEOK-386 Documentation refactors, external link replacement [#2008](https://github.com/xeokit/xeokit-sdk/pull/2008)
+-  XCD-427 Apply model.matrix only once inside getEachVertex [#2009](https://github.com/xeokit/xeokit-sdk/pull/2009)
+
+
 # [v2.6.101](https://github.com/xeokit/xeokit-sdk/compare/v2.6.100...v2.6.101)
 
 ### 22 December 2025
