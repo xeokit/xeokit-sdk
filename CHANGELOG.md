@@ -1,7 +1,7 @@
 ## xeokit-sdk Changelog
 
 
-# [v2.6.101](https://github.com/xeokit/xeokit-sdk/compare/v2.6.101...v2.6.102)
+# [v2.6.102](https://github.com/xeokit/xeokit-sdk/compare/v2.6.101...v2.6.102)
 
 ### 05 Jan 2026
 
