@@ -648,7 +648,6 @@ export class VBOLayer extends Layer {
                     }
                     origVec[3] = 1;
                     const sceneModelMatrix = model.matrix;
-                    math.mulMat4v4(sceneModelMatrix, origVec, origVec);
                     const positions = retainedGeometry.quantizedPositions;
                     const worldPos = tempVec4a;
                     for (let i = 0, len = positions.length; i < len; i += 3) {
@@ -660,8 +659,8 @@ export class VBOLayer extends Layer {
                             math.transformPoint3(retainedGeometry.matrix, worldPos, worldPos);
                         }
                         worldPos[3] = 1;
-                        math.mulMat4v4(sceneModelMatrix, worldPos, worldPos);
                         math.addVec3(origVec, worldPos, worldPos);
+                        math.mulMat4v4(sceneModelMatrix, worldPos, worldPos);
                         callback(worldPos);
                     }
                 }
