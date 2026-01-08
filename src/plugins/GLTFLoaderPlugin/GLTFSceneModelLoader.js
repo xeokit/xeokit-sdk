@@ -429,8 +429,11 @@ function loadDefaultScene(ctx) {
                             ||
                             ((depth === 0) && ("Node." + String(ctx.nextId++).padStart(4, "0"))));
             if (entityId) {
+                entityId = ctx.globalizeObjectIds ? math.globalizeObjectId(ctx.sceneModel.id, entityId) : entityId;
+                
                 while (ctx.sceneModel.objects[entityId]) {
                     entityId = nodeName + "." + String(ctx.nextId++).padStart(4, "0");
+                    entityId = ctx.globalizeObjectIds ? math.globalizeObjectId(ctx.sceneModel.id, entityId) : entityId;
                 }
                 meshIdsStack.push(meshIds);
                 meshIds = [];
@@ -448,17 +451,16 @@ function loadDefaultScene(ctx) {
 
             if (entityId) {
                 if (meshIds.length > 0) {
-                    const globalId = ctx.globalizeObjectIds ? math.globalizeObjectId(ctx.sceneModel.id, entityId) : entityId;
                     ctx.sceneModel.createEntity({
-                        id: globalId,
+                        id: entityId,
                         meshIds: meshIds,
                         isObject: true
                     });
                     if (ctx.autoMetaModel) {
                         ctx.metaObjects.push({
-                            id: globalId,
+                            id: entityId,
                             type: "Default",
-                            name: globalId,
+                            name: entityId,
                             parent: ctx.sceneModel.id
                         });
                     }
