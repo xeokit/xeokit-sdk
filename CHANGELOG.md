@@ -1,6 +1,13 @@
 ## xeokit-sdk Changelog
 
 
+# [v2.6.103](https://github.com/xeokit/xeokit-sdk/compare/v2.6.102...v2.6.103)
+
+### 08 Jan 2026
+
+-  XCD-426 Moving globalizing objects' ids next to entityId creation [#2010](https://github.com/xeokit/xeokit-sdk/pull/2010)
+
+
 # [v2.6.102](https://github.com/xeokit/xeokit-sdk/compare/v2.6.101...v2.6.102)
 
 ### 05 Jan 2026
