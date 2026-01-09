@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 11657,
+  "end": 11754,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 502,
+      "line": 508,
       "column": 16
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 11657,
+    "end": 11754,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 502,
+        "line": 508,
         "column": 16
       }
     },
@@ -31,14 +31,14 @@
       {
         "type": "Identifier",
         "start": 1516,
-        "end": 11639,
+        "end": 11736,
         "loc": {
           "start": {
             "line": 36,
             "column": 0
           },
           "end": {
-            "line": 500,
+            "line": 506,
             "column": 1
           }
         },
@@ -64,14 +64,14 @@
         "body": {
           "type": "ClassBody",
           "start": 1529,
-          "end": 11639,
+          "end": 11736,
           "loc": {
             "start": {
               "line": 36,
               "column": 13
             },
             "end": {
-              "line": 500,
+              "line": 506,
               "column": 1
             }
           },
@@ -4180,9 +4180,9 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Destroys this Entity.\n     ",
+                  "value": "*\n     * Gets the complete geometry of this entity.\n     ",
                   "start": 11574,
-                  "end": 11614,
+                  "end": 11635,
                   "loc": {
                     "start": {
                       "line": 494,
@@ -4198,15 +4198,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 11619,
-              "end": 11637,
+              "start": 11640,
+              "end": 11665,
               "loc": {
                 "start": {
                   "line": 497,
                   "column": 4
                 },
                 "end": {
-                  "line": 499,
+                  "line": 498,
                   "column": 5
                 }
               },
@@ -4214,8 +4214,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 11619,
-                "end": 11626,
+                "start": 11640,
+                "end": 11655,
                 "loc": {
                   "start": {
                     "line": 497,
@@ -4223,6 +4223,102 @@
                   },
                   "end": {
                     "line": 497,
+                    "column": 19
+                  },
+                  "identifierName": "getGeometryData"
+                },
+                "name": "getGeometryData",
+                "leadingComments": null
+              },
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 11658,
+                "end": 11665,
+                "loc": {
+                  "start": {
+                    "line": 497,
+                    "column": 22
+                  },
+                  "end": {
+                    "line": 498,
+                    "column": 5
+                  }
+                },
+                "body": [],
+                "directives": [],
+                "leadingComments": null,
+                "trailingComments": null
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Gets the complete geometry of this entity.\n     ",
+                  "start": 11574,
+                  "end": 11635,
+                  "loc": {
+                    "start": {
+                      "line": 494,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 496,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Destroys this Entity.\n     ",
+                  "start": 11671,
+                  "end": 11711,
+                  "loc": {
+                    "start": {
+                      "line": 500,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 502,
+                      "column": 7
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "ClassMethod",
+              "start": 11716,
+              "end": 11734,
+              "loc": {
+                "start": {
+                  "line": 503,
+                  "column": 4
+                },
+                "end": {
+                  "line": 505,
+                  "column": 5
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 11716,
+                "end": 11723,
+                "loc": {
+                  "start": {
+                    "line": 503,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 503,
                     "column": 11
                   },
                   "identifierName": "destroy"
@@ -4238,15 +4334,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 11629,
-                "end": 11637,
+                "start": 11726,
+                "end": 11734,
                 "loc": {
                   "start": {
-                    "line": 497,
+                    "line": 503,
                     "column": 14
                   },
                   "end": {
-                    "line": 499,
+                    "line": 505,
                     "column": 5
                   }
                 },
@@ -4257,15 +4353,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Destroys this Entity.\n     ",
-                  "start": 11574,
-                  "end": 11614,
+                  "start": 11671,
+                  "end": 11711,
                   "loc": {
                     "start": {
-                      "line": 494,
+                      "line": 500,
                       "column": 4
                     },
                     "end": {
-                      "line": 496,
+                      "line": 502,
                       "column": 7
                     }
                   }
@@ -4280,15 +4376,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 11641,
-        "end": 11657,
+        "start": 11738,
+        "end": 11754,
         "loc": {
           "start": {
-            "line": 502,
+            "line": 508,
             "column": 0
           },
           "end": {
-            "line": 502,
+            "line": 508,
             "column": 16
           }
         },
@@ -4296,29 +4392,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 11649,
-            "end": 11655,
+            "start": 11746,
+            "end": 11752,
             "loc": {
               "start": {
-                "line": 502,
+                "line": 508,
                 "column": 8
               },
               "end": {
-                "line": 502,
+                "line": 508,
                 "column": 14
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 11649,
-              "end": 11655,
+              "start": 11746,
+              "end": 11752,
               "loc": {
                 "start": {
-                  "line": 502,
+                  "line": 508,
                   "column": 8
                 },
                 "end": {
-                  "line": 502,
+                  "line": 508,
                   "column": 14
                 },
                 "identifierName": "Entity"
@@ -4327,15 +4423,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 11649,
-              "end": 11655,
+              "start": 11746,
+              "end": 11752,
               "loc": {
                 "start": {
-                  "line": 502,
+                  "line": 508,
                   "column": 8
                 },
                 "end": {
-                  "line": 502,
+                  "line": 508,
                   "column": 14
                 },
                 "identifierName": "Entity"
@@ -4348,29 +4444,29 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 11641,
-        "end": 11657,
+        "start": 11738,
+        "end": 11754,
         "loc": {
           "start": {
-            "line": 502,
+            "line": 508,
             "column": 0
           },
           "end": {
-            "line": 502,
+            "line": 508,
             "column": 16
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
           "start": 1516,
-          "end": 11639,
+          "end": 11736,
           "loc": {
             "start": {
               "line": 36,
               "column": 0
             },
             "end": {
-              "line": 500,
+              "line": 506,
               "column": 1
             }
           },
@@ -4396,14 +4492,14 @@
           "body": {
             "type": "ClassBody",
             "start": 1529,
-            "end": 11639,
+            "end": 11736,
             "loc": {
               "start": {
                 "line": 36,
                 "column": 13
               },
               "end": {
-                "line": 500,
+                "line": 506,
                 "column": 1
               }
             },
@@ -8512,9 +8608,9 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Destroys this Entity.\n     ",
+                    "value": "*\n     * Gets the complete geometry of this entity.\n     ",
                     "start": 11574,
-                    "end": 11614,
+                    "end": 11635,
                     "loc": {
                       "start": {
                         "line": 494,
@@ -8530,15 +8626,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 11619,
-                "end": 11637,
+                "start": 11640,
+                "end": 11665,
                 "loc": {
                   "start": {
                     "line": 497,
                     "column": 4
                   },
                   "end": {
-                    "line": 499,
+                    "line": 498,
                     "column": 5
                   }
                 },
@@ -8546,8 +8642,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 11619,
-                  "end": 11626,
+                  "start": 11640,
+                  "end": 11655,
                   "loc": {
                     "start": {
                       "line": 497,
@@ -8555,6 +8651,102 @@
                     },
                     "end": {
                       "line": 497,
+                      "column": 19
+                    },
+                    "identifierName": "getGeometryData"
+                  },
+                  "name": "getGeometryData",
+                  "leadingComments": null
+                },
+                "kind": "method",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 11658,
+                  "end": 11665,
+                  "loc": {
+                    "start": {
+                      "line": 497,
+                      "column": 22
+                    },
+                    "end": {
+                      "line": 498,
+                      "column": 5
+                    }
+                  },
+                  "body": [],
+                  "directives": [],
+                  "leadingComments": null,
+                  "trailingComments": null
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Gets the complete geometry of this entity.\n     ",
+                    "start": 11574,
+                    "end": 11635,
+                    "loc": {
+                      "start": {
+                        "line": 494,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 496,
+                        "column": 7
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Destroys this Entity.\n     ",
+                    "start": 11671,
+                    "end": 11711,
+                    "loc": {
+                      "start": {
+                        "line": 500,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 502,
+                        "column": 7
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "ClassMethod",
+                "start": 11716,
+                "end": 11734,
+                "loc": {
+                  "start": {
+                    "line": 503,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 505,
+                    "column": 5
+                  }
+                },
+                "static": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 11716,
+                  "end": 11723,
+                  "loc": {
+                    "start": {
+                      "line": 503,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 503,
                       "column": 11
                     },
                     "identifierName": "destroy"
@@ -8570,15 +8762,15 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 11629,
-                  "end": 11637,
+                  "start": 11726,
+                  "end": 11734,
                   "loc": {
                     "start": {
-                      "line": 497,
+                      "line": 503,
                       "column": 14
                     },
                     "end": {
-                      "line": 499,
+                      "line": 505,
                       "column": 5
                     }
                   },
@@ -8589,15 +8781,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Destroys this Entity.\n     ",
-                    "start": 11574,
-                    "end": 11614,
+                    "start": 11671,
+                    "end": 11711,
                     "loc": {
                       "start": {
-                        "line": 494,
+                        "line": 500,
                         "column": 4
                       },
                       "end": {
-                        "line": 496,
+                        "line": 502,
                         "column": 7
                       }
                     }
@@ -9293,9 +9485,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Destroys this Entity.\n     ",
+      "value": "*\n     * Gets the complete geometry of this entity.\n     ",
       "start": 11574,
-      "end": 11614,
+      "end": 11635,
       "loc": {
         "start": {
           "line": 494,
@@ -9303,6 +9495,22 @@
         },
         "end": {
           "line": 496,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Destroys this Entity.\n     ",
+      "start": 11671,
+      "end": 11711,
+      "loc": {
+        "start": {
+          "line": 500,
+          "column": 4
+        },
+        "end": {
+          "line": 502,
           "column": 7
         }
       }
@@ -16598,9 +16806,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Destroys this Entity.\n     ",
+      "value": "*\n     * Gets the complete geometry of this entity.\n     ",
       "start": 11574,
-      "end": 11614,
+      "end": 11635,
       "loc": {
         "start": {
           "line": 494,
@@ -16624,9 +16832,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "destroy",
-      "start": 11619,
-      "end": 11626,
+      "value": "getGeometryData",
+      "start": 11640,
+      "end": 11655,
       "loc": {
         "start": {
           "line": 497,
@@ -16634,6 +16842,148 @@
         },
         "end": {
           "line": 497,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 11655,
+      "end": 11656,
+      "loc": {
+        "start": {
+          "line": 497,
+          "column": 19
+        },
+        "end": {
+          "line": 497,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 11656,
+      "end": 11657,
+      "loc": {
+        "start": {
+          "line": 497,
+          "column": 20
+        },
+        "end": {
+          "line": 497,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 11658,
+      "end": 11659,
+      "loc": {
+        "start": {
+          "line": 497,
+          "column": 22
+        },
+        "end": {
+          "line": 497,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 11664,
+      "end": 11665,
+      "loc": {
+        "start": {
+          "line": 498,
+          "column": 4
+        },
+        "end": {
+          "line": 498,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Destroys this Entity.\n     ",
+      "start": 11671,
+      "end": 11711,
+      "loc": {
+        "start": {
+          "line": 500,
+          "column": 4
+        },
+        "end": {
+          "line": 502,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "destroy",
+      "start": 11716,
+      "end": 11723,
+      "loc": {
+        "start": {
+          "line": 503,
+          "column": 4
+        },
+        "end": {
+          "line": 503,
           "column": 11
         }
       }
@@ -16650,15 +17000,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 11626,
-      "end": 11627,
+      "start": 11723,
+      "end": 11724,
       "loc": {
         "start": {
-          "line": 497,
+          "line": 503,
           "column": 11
         },
         "end": {
-          "line": 497,
+          "line": 503,
           "column": 12
         }
       }
@@ -16675,15 +17025,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 11627,
-      "end": 11628,
+      "start": 11724,
+      "end": 11725,
       "loc": {
         "start": {
-          "line": 497,
+          "line": 503,
           "column": 12
         },
         "end": {
-          "line": 497,
+          "line": 503,
           "column": 13
         }
       }
@@ -16700,15 +17050,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 11629,
-      "end": 11630,
+      "start": 11726,
+      "end": 11727,
       "loc": {
         "start": {
-          "line": 497,
+          "line": 503,
           "column": 14
         },
         "end": {
-          "line": 497,
+          "line": 503,
           "column": 15
         }
       }
@@ -16725,15 +17075,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 11636,
-      "end": 11637,
+      "start": 11733,
+      "end": 11734,
       "loc": {
         "start": {
-          "line": 499,
+          "line": 505,
           "column": 4
         },
         "end": {
-          "line": 499,
+          "line": 505,
           "column": 5
         }
       }
@@ -16750,15 +17100,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 11638,
-      "end": 11639,
+      "start": 11735,
+      "end": 11736,
       "loc": {
         "start": {
-          "line": 500,
+          "line": 506,
           "column": 0
         },
         "end": {
-          "line": 500,
+          "line": 506,
           "column": 1
         }
       }
@@ -16778,15 +17128,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 11641,
-      "end": 11647,
+      "start": 11738,
+      "end": 11744,
       "loc": {
         "start": {
-          "line": 502,
+          "line": 508,
           "column": 0
         },
         "end": {
-          "line": 502,
+          "line": 508,
           "column": 6
         }
       }
@@ -16803,15 +17153,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 11648,
-      "end": 11649,
+      "start": 11745,
+      "end": 11746,
       "loc": {
         "start": {
-          "line": 502,
+          "line": 508,
           "column": 7
         },
         "end": {
-          "line": 502,
+          "line": 508,
           "column": 8
         }
       }
@@ -16829,15 +17179,15 @@
         "binop": null
       },
       "value": "Entity",
-      "start": 11649,
-      "end": 11655,
+      "start": 11746,
+      "end": 11752,
       "loc": {
         "start": {
-          "line": 502,
+          "line": 508,
           "column": 8
         },
         "end": {
-          "line": 502,
+          "line": 508,
           "column": 14
         }
       }
@@ -16854,15 +17204,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 11655,
-      "end": 11656,
+      "start": 11752,
+      "end": 11753,
       "loc": {
         "start": {
-          "line": 502,
+          "line": 508,
           "column": 14
         },
         "end": {
-          "line": 502,
+          "line": 508,
           "column": 15
         }
       }
@@ -16880,15 +17230,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 11656,
-      "end": 11657,
+      "start": 11753,
+      "end": 11754,
       "loc": {
         "start": {
-          "line": 502,
+          "line": 508,
           "column": 15
         },
         "end": {
-          "line": 502,
+          "line": 508,
           "column": 16
         }
       }
@@ -16906,15 +17256,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 11657,
-      "end": 11657,
+      "start": 11754,
+      "end": 11754,
       "loc": {
         "start": {
-          "line": 502,
+          "line": 508,
           "column": 16
         },
         "end": {
-          "line": 502,
+          "line": 508,
           "column": 16
         }
       }

@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 2228,
+  "end": 2321,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 69,
+      "line": 70,
       "column": 18
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 2228,
+    "end": 2321,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 69,
+        "line": 70,
         "column": 18
       }
     },
@@ -31,14 +31,14 @@
       {
         "type": "Identifier",
         "start": 93,
-        "end": 2208,
+        "end": 2301,
         "loc": {
           "start": {
             "line": 8,
             "column": 0
           },
           "end": {
-            "line": 67,
+            "line": 68,
             "column": 1
           }
         },
@@ -64,14 +64,14 @@
         "body": {
           "type": "ClassBody",
           "start": 108,
-          "end": 2208,
+          "end": 2301,
           "loc": {
             "start": {
               "line": 8,
               "column": 15
             },
             "end": {
-              "line": 67,
+              "line": 68,
               "column": 1
             }
           },
@@ -497,16 +497,16 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
+                  "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param {RenderFlags} renderFlags Render flags.\n     * @param {FrameContext} frameCtx Renderer frame context.\n     ",
                   "start": 1542,
-                  "end": 1639,
+                  "end": 1732,
                   "loc": {
                     "start": {
                       "line": 43,
                       "column": 4
                     },
                     "end": {
-                      "line": 46,
+                      "line": 47,
                       "column": 7
                     }
                   }
@@ -515,15 +515,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 1644,
-              "end": 1689,
+              "start": 1737,
+              "end": 1782,
               "loc": {
                 "start": {
-                  "line": 47,
+                  "line": 48,
                   "column": 4
                 },
                 "end": {
-                  "line": 48,
+                  "line": 49,
                   "column": 5
                 }
               },
@@ -531,15 +531,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1644,
-                "end": 1658,
+                "start": 1737,
+                "end": 1751,
                 "loc": {
                   "start": {
-                    "line": 47,
+                    "line": 48,
                     "column": 4
                   },
                   "end": {
-                    "line": 47,
+                    "line": 48,
                     "column": 18
                   },
                   "identifierName": "drawPickDepths"
@@ -555,15 +555,15 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 1659,
-                  "end": 1670,
+                  "start": 1752,
+                  "end": 1763,
                   "loc": {
                     "start": {
-                      "line": 47,
+                      "line": 48,
                       "column": 19
                     },
                     "end": {
-                      "line": 47,
+                      "line": 48,
                       "column": 30
                     },
                     "identifierName": "renderFlags"
@@ -572,15 +572,15 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 1672,
-                  "end": 1680,
+                  "start": 1765,
+                  "end": 1773,
                   "loc": {
                     "start": {
-                      "line": 47,
+                      "line": 48,
                       "column": 32
                     },
                     "end": {
-                      "line": 47,
+                      "line": 48,
                       "column": 40
                     },
                     "identifierName": "frameCtx"
@@ -590,15 +590,15 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 1682,
-                "end": 1689,
+                "start": 1775,
+                "end": 1782,
                 "loc": {
                   "start": {
-                    "line": 47,
+                    "line": 48,
                     "column": 42
                   },
                   "end": {
-                    "line": 48,
+                    "line": 49,
                     "column": 5
                   }
                 },
@@ -610,16 +610,16 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
+                  "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param {RenderFlags} renderFlags Render flags.\n     * @param {FrameContext} frameCtx Renderer frame context.\n     ",
                   "start": 1542,
-                  "end": 1639,
+                  "end": 1732,
                   "loc": {
                     "start": {
                       "line": 43,
                       "column": 4
                     },
                     "end": {
-                      "line": 46,
+                      "line": 47,
                       "column": 7
                     }
                   }
@@ -629,15 +629,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Delegates an {@link Entity} as representing what was actually picked in place of this Pickable.\n     * @returns {PerformanceNode}\n     ",
-                  "start": 1695,
-                  "end": 1843,
+                  "start": 1788,
+                  "end": 1936,
                   "loc": {
                     "start": {
-                      "line": 50,
+                      "line": 51,
                       "column": 4
                     },
                     "end": {
-                      "line": 53,
+                      "line": 54,
                       "column": 7
                     }
                   }
@@ -646,15 +646,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 1848,
-              "end": 1906,
+              "start": 1941,
+              "end": 1999,
               "loc": {
                 "start": {
-                  "line": 54,
+                  "line": 55,
                   "column": 4
                 },
                 "end": {
-                  "line": 56,
+                  "line": 57,
                   "column": 5
                 }
               },
@@ -662,15 +662,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1848,
-                "end": 1868,
+                "start": 1941,
+                "end": 1961,
                 "loc": {
                   "start": {
-                    "line": 54,
+                    "line": 55,
                     "column": 4
                   },
                   "end": {
-                    "line": 54,
+                    "line": 55,
                     "column": 24
                   },
                   "identifierName": "delegatePickedEntity"
@@ -686,73 +686,73 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 1871,
-                "end": 1906,
+                "start": 1964,
+                "end": 1999,
                 "loc": {
                   "start": {
-                    "line": 54,
+                    "line": 55,
                     "column": 27
                   },
                   "end": {
-                    "line": 56,
+                    "line": 57,
                     "column": 5
                   }
                 },
                 "body": [
                   {
                     "type": "ReturnStatement",
-                    "start": 1881,
-                    "end": 1900,
+                    "start": 1974,
+                    "end": 1993,
                     "loc": {
                       "start": {
-                        "line": 55,
+                        "line": 56,
                         "column": 8
                       },
                       "end": {
-                        "line": 55,
+                        "line": 56,
                         "column": 27
                       }
                     },
                     "argument": {
                       "type": "MemberExpression",
-                      "start": 1888,
-                      "end": 1899,
+                      "start": 1981,
+                      "end": 1992,
                       "loc": {
                         "start": {
-                          "line": 55,
+                          "line": 56,
                           "column": 15
                         },
                         "end": {
-                          "line": 55,
+                          "line": 56,
                           "column": 26
                         }
                       },
                       "object": {
                         "type": "ThisExpression",
-                        "start": 1888,
-                        "end": 1892,
+                        "start": 1981,
+                        "end": 1985,
                         "loc": {
                           "start": {
-                            "line": 55,
+                            "line": 56,
                             "column": 15
                           },
                           "end": {
-                            "line": 55,
+                            "line": 56,
                             "column": 19
                           }
                         }
                       },
                       "property": {
                         "type": "Identifier",
-                        "start": 1893,
-                        "end": 1899,
+                        "start": 1986,
+                        "end": 1992,
                         "loc": {
                           "start": {
-                            "line": 55,
+                            "line": 56,
                             "column": 20
                           },
                           "end": {
-                            "line": 55,
+                            "line": 56,
                             "column": 26
                           },
                           "identifierName": "parent"
@@ -770,15 +770,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Delegates an {@link Entity} as representing what was actually picked in place of this Pickable.\n     * @returns {PerformanceNode}\n     ",
-                  "start": 1695,
-                  "end": 1843,
+                  "start": 1788,
+                  "end": 1936,
                   "loc": {
                     "start": {
-                      "line": 50,
+                      "line": 51,
                       "column": 4
                     },
                     "end": {
-                      "line": 53,
+                      "line": 54,
                       "column": 7
                     }
                   }
@@ -788,15 +788,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
-                  "start": 1912,
-                  "end": 2181,
+                  "start": 2005,
+                  "end": 2274,
                   "loc": {
                     "start": {
-                      "line": 58,
+                      "line": 59,
                       "column": 4
                     },
                     "end": {
-                      "line": 64,
+                      "line": 65,
                       "column": 7
                     }
                   }
@@ -805,15 +805,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 2186,
-              "end": 2206,
+              "start": 2279,
+              "end": 2299,
               "loc": {
                 "start": {
-                  "line": 65,
+                  "line": 66,
                   "column": 4
                 },
                 "end": {
-                  "line": 66,
+                  "line": 67,
                   "column": 5
                 }
               },
@@ -821,15 +821,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 2190,
-                "end": 2196,
+                "start": 2283,
+                "end": 2289,
                 "loc": {
                   "start": {
-                    "line": 65,
+                    "line": 66,
                     "column": 8
                   },
                   "end": {
-                    "line": 65,
+                    "line": 66,
                     "column": 14
                   },
                   "identifierName": "origin"
@@ -844,15 +844,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 2199,
-                "end": 2206,
+                "start": 2292,
+                "end": 2299,
                 "loc": {
                   "start": {
-                    "line": 65,
+                    "line": 66,
                     "column": 17
                   },
                   "end": {
-                    "line": 66,
+                    "line": 67,
                     "column": 5
                   }
                 },
@@ -863,15 +863,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
-                  "start": 1912,
-                  "end": 2181,
+                  "start": 2005,
+                  "end": 2274,
                   "loc": {
                     "start": {
-                      "line": 58,
+                      "line": 59,
                       "column": 4
                     },
                     "end": {
-                      "line": 64,
+                      "line": 65,
                       "column": 7
                     }
                   }
@@ -886,15 +886,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 2210,
-        "end": 2228,
+        "start": 2303,
+        "end": 2321,
         "loc": {
           "start": {
-            "line": 69,
+            "line": 70,
             "column": 0
           },
           "end": {
-            "line": 69,
+            "line": 70,
             "column": 18
           }
         },
@@ -902,29 +902,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 2218,
-            "end": 2226,
+            "start": 2311,
+            "end": 2319,
             "loc": {
               "start": {
-                "line": 69,
+                "line": 70,
                 "column": 8
               },
               "end": {
-                "line": 69,
+                "line": 70,
                 "column": 16
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 2218,
-              "end": 2226,
+              "start": 2311,
+              "end": 2319,
               "loc": {
                 "start": {
-                  "line": 69,
+                  "line": 70,
                   "column": 8
                 },
                 "end": {
-                  "line": 69,
+                  "line": 70,
                   "column": 16
                 },
                 "identifierName": "Pickable"
@@ -933,15 +933,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 2218,
-              "end": 2226,
+              "start": 2311,
+              "end": 2319,
               "loc": {
                 "start": {
-                  "line": 69,
+                  "line": 70,
                   "column": 8
                 },
                 "end": {
-                  "line": 69,
+                  "line": 70,
                   "column": 16
                 },
                 "identifierName": "Pickable"
@@ -954,29 +954,29 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 2210,
-        "end": 2228,
+        "start": 2303,
+        "end": 2321,
         "loc": {
           "start": {
-            "line": 69,
+            "line": 70,
             "column": 0
           },
           "end": {
-            "line": 69,
+            "line": 70,
             "column": 18
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
           "start": 93,
-          "end": 2208,
+          "end": 2301,
           "loc": {
             "start": {
               "line": 8,
               "column": 0
             },
             "end": {
-              "line": 67,
+              "line": 68,
               "column": 1
             }
           },
@@ -1002,14 +1002,14 @@
           "body": {
             "type": "ClassBody",
             "start": 108,
-            "end": 2208,
+            "end": 2301,
             "loc": {
               "start": {
                 "line": 8,
                 "column": 15
               },
               "end": {
-                "line": 67,
+                "line": 68,
                 "column": 1
               }
             },
@@ -1435,16 +1435,16 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
+                    "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param {RenderFlags} renderFlags Render flags.\n     * @param {FrameContext} frameCtx Renderer frame context.\n     ",
                     "start": 1542,
-                    "end": 1639,
+                    "end": 1732,
                     "loc": {
                       "start": {
                         "line": 43,
                         "column": 4
                       },
                       "end": {
-                        "line": 46,
+                        "line": 47,
                         "column": 7
                       }
                     }
@@ -1453,15 +1453,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1644,
-                "end": 1689,
+                "start": 1737,
+                "end": 1782,
                 "loc": {
                   "start": {
-                    "line": 47,
+                    "line": 48,
                     "column": 4
                   },
                   "end": {
-                    "line": 48,
+                    "line": 49,
                     "column": 5
                   }
                 },
@@ -1469,15 +1469,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1644,
-                  "end": 1658,
+                  "start": 1737,
+                  "end": 1751,
                   "loc": {
                     "start": {
-                      "line": 47,
+                      "line": 48,
                       "column": 4
                     },
                     "end": {
-                      "line": 47,
+                      "line": 48,
                       "column": 18
                     },
                     "identifierName": "drawPickDepths"
@@ -1493,15 +1493,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 1659,
-                    "end": 1670,
+                    "start": 1752,
+                    "end": 1763,
                     "loc": {
                       "start": {
-                        "line": 47,
+                        "line": 48,
                         "column": 19
                       },
                       "end": {
-                        "line": 47,
+                        "line": 48,
                         "column": 30
                       },
                       "identifierName": "renderFlags"
@@ -1510,15 +1510,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 1672,
-                    "end": 1680,
+                    "start": 1765,
+                    "end": 1773,
                     "loc": {
                       "start": {
-                        "line": 47,
+                        "line": 48,
                         "column": 32
                       },
                       "end": {
-                        "line": 47,
+                        "line": 48,
                         "column": 40
                       },
                       "identifierName": "frameCtx"
@@ -1528,15 +1528,15 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1682,
-                  "end": 1689,
+                  "start": 1775,
+                  "end": 1782,
                   "loc": {
                     "start": {
-                      "line": 47,
+                      "line": 48,
                       "column": 42
                     },
                     "end": {
-                      "line": 48,
+                      "line": 49,
                       "column": 5
                     }
                   },
@@ -1548,16 +1548,16 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
+                    "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param {RenderFlags} renderFlags Render flags.\n     * @param {FrameContext} frameCtx Renderer frame context.\n     ",
                     "start": 1542,
-                    "end": 1639,
+                    "end": 1732,
                     "loc": {
                       "start": {
                         "line": 43,
                         "column": 4
                       },
                       "end": {
-                        "line": 46,
+                        "line": 47,
                         "column": 7
                       }
                     }
@@ -1567,15 +1567,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Delegates an {@link Entity} as representing what was actually picked in place of this Pickable.\n     * @returns {PerformanceNode}\n     ",
-                    "start": 1695,
-                    "end": 1843,
+                    "start": 1788,
+                    "end": 1936,
                     "loc": {
                       "start": {
-                        "line": 50,
+                        "line": 51,
                         "column": 4
                       },
                       "end": {
-                        "line": 53,
+                        "line": 54,
                         "column": 7
                       }
                     }
@@ -1584,15 +1584,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1848,
-                "end": 1906,
+                "start": 1941,
+                "end": 1999,
                 "loc": {
                   "start": {
-                    "line": 54,
+                    "line": 55,
                     "column": 4
                   },
                   "end": {
-                    "line": 56,
+                    "line": 57,
                     "column": 5
                   }
                 },
@@ -1600,15 +1600,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1848,
-                  "end": 1868,
+                  "start": 1941,
+                  "end": 1961,
                   "loc": {
                     "start": {
-                      "line": 54,
+                      "line": 55,
                       "column": 4
                     },
                     "end": {
-                      "line": 54,
+                      "line": 55,
                       "column": 24
                     },
                     "identifierName": "delegatePickedEntity"
@@ -1624,73 +1624,73 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1871,
-                  "end": 1906,
+                  "start": 1964,
+                  "end": 1999,
                   "loc": {
                     "start": {
-                      "line": 54,
+                      "line": 55,
                       "column": 27
                     },
                     "end": {
-                      "line": 56,
+                      "line": 57,
                       "column": 5
                     }
                   },
                   "body": [
                     {
                       "type": "ReturnStatement",
-                      "start": 1881,
-                      "end": 1900,
+                      "start": 1974,
+                      "end": 1993,
                       "loc": {
                         "start": {
-                          "line": 55,
+                          "line": 56,
                           "column": 8
                         },
                         "end": {
-                          "line": 55,
+                          "line": 56,
                           "column": 27
                         }
                       },
                       "argument": {
                         "type": "MemberExpression",
-                        "start": 1888,
-                        "end": 1899,
+                        "start": 1981,
+                        "end": 1992,
                         "loc": {
                           "start": {
-                            "line": 55,
+                            "line": 56,
                             "column": 15
                           },
                           "end": {
-                            "line": 55,
+                            "line": 56,
                             "column": 26
                           }
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 1888,
-                          "end": 1892,
+                          "start": 1981,
+                          "end": 1985,
                           "loc": {
                             "start": {
-                              "line": 55,
+                              "line": 56,
                               "column": 15
                             },
                             "end": {
-                              "line": 55,
+                              "line": 56,
                               "column": 19
                             }
                           }
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 1893,
-                          "end": 1899,
+                          "start": 1986,
+                          "end": 1992,
                           "loc": {
                             "start": {
-                              "line": 55,
+                              "line": 56,
                               "column": 20
                             },
                             "end": {
-                              "line": 55,
+                              "line": 56,
                               "column": 26
                             },
                             "identifierName": "parent"
@@ -1708,15 +1708,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Delegates an {@link Entity} as representing what was actually picked in place of this Pickable.\n     * @returns {PerformanceNode}\n     ",
-                    "start": 1695,
-                    "end": 1843,
+                    "start": 1788,
+                    "end": 1936,
                     "loc": {
                       "start": {
-                        "line": 50,
+                        "line": 51,
                         "column": 4
                       },
                       "end": {
-                        "line": 53,
+                        "line": 54,
                         "column": 7
                       }
                     }
@@ -1726,15 +1726,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
-                    "start": 1912,
-                    "end": 2181,
+                    "start": 2005,
+                    "end": 2274,
                     "loc": {
                       "start": {
-                        "line": 58,
+                        "line": 59,
                         "column": 4
                       },
                       "end": {
-                        "line": 64,
+                        "line": 65,
                         "column": 7
                       }
                     }
@@ -1743,15 +1743,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 2186,
-                "end": 2206,
+                "start": 2279,
+                "end": 2299,
                 "loc": {
                   "start": {
-                    "line": 65,
+                    "line": 66,
                     "column": 4
                   },
                   "end": {
-                    "line": 66,
+                    "line": 67,
                     "column": 5
                   }
                 },
@@ -1759,15 +1759,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 2190,
-                  "end": 2196,
+                  "start": 2283,
+                  "end": 2289,
                   "loc": {
                     "start": {
-                      "line": 65,
+                      "line": 66,
                       "column": 8
                     },
                     "end": {
-                      "line": 65,
+                      "line": 66,
                       "column": 14
                     },
                     "identifierName": "origin"
@@ -1782,15 +1782,15 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 2199,
-                  "end": 2206,
+                  "start": 2292,
+                  "end": 2299,
                   "loc": {
                     "start": {
-                      "line": 65,
+                      "line": 66,
                       "column": 17
                     },
                     "end": {
-                      "line": 66,
+                      "line": 67,
                       "column": 5
                     }
                   },
@@ -1801,15 +1801,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
-                    "start": 1912,
-                    "end": 2181,
+                    "start": 2005,
+                    "end": 2274,
                     "loc": {
                       "start": {
-                        "line": 58,
+                        "line": 59,
                         "column": 4
                       },
                       "end": {
-                        "line": 64,
+                        "line": 65,
                         "column": 7
                       }
                     }
@@ -1929,16 +1929,16 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
+      "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param {RenderFlags} renderFlags Render flags.\n     * @param {FrameContext} frameCtx Renderer frame context.\n     ",
       "start": 1542,
-      "end": 1639,
+      "end": 1732,
       "loc": {
         "start": {
           "line": 43,
           "column": 4
         },
         "end": {
-          "line": 46,
+          "line": 47,
           "column": 7
         }
       }
@@ -1946,15 +1946,15 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Delegates an {@link Entity} as representing what was actually picked in place of this Pickable.\n     * @returns {PerformanceNode}\n     ",
-      "start": 1695,
-      "end": 1843,
+      "start": 1788,
+      "end": 1936,
       "loc": {
         "start": {
-          "line": 50,
+          "line": 51,
           "column": 4
         },
         "end": {
-          "line": 53,
+          "line": 54,
           "column": 7
         }
       }
@@ -1962,15 +1962,15 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
-      "start": 1912,
-      "end": 2181,
+      "start": 2005,
+      "end": 2274,
       "loc": {
         "start": {
-          "line": 58,
+          "line": 59,
           "column": 4
         },
         "end": {
-          "line": 64,
+          "line": 65,
           "column": 7
         }
       }
@@ -2746,16 +2746,16 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
+      "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param {RenderFlags} renderFlags Render flags.\n     * @param {FrameContext} frameCtx Renderer frame context.\n     ",
       "start": 1542,
-      "end": 1639,
+      "end": 1732,
       "loc": {
         "start": {
           "line": 43,
           "column": 4
         },
         "end": {
-          "line": 46,
+          "line": 47,
           "column": 7
         }
       }
@@ -2773,15 +2773,15 @@
         "binop": null
       },
       "value": "drawPickDepths",
-      "start": 1644,
-      "end": 1658,
+      "start": 1737,
+      "end": 1751,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 48,
           "column": 4
         },
         "end": {
-          "line": 47,
+          "line": 48,
           "column": 18
         }
       }
@@ -2798,15 +2798,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1658,
-      "end": 1659,
+      "start": 1751,
+      "end": 1752,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 48,
           "column": 18
         },
         "end": {
-          "line": 47,
+          "line": 48,
           "column": 19
         }
       }
@@ -2824,15 +2824,15 @@
         "binop": null
       },
       "value": "renderFlags",
-      "start": 1659,
-      "end": 1670,
+      "start": 1752,
+      "end": 1763,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 48,
           "column": 19
         },
         "end": {
-          "line": 47,
+          "line": 48,
           "column": 30
         }
       }
@@ -2850,15 +2850,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1670,
-      "end": 1671,
+      "start": 1763,
+      "end": 1764,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 48,
           "column": 30
         },
         "end": {
-          "line": 47,
+          "line": 48,
           "column": 31
         }
       }
@@ -2876,15 +2876,15 @@
         "binop": null
       },
       "value": "frameCtx",
-      "start": 1672,
-      "end": 1680,
+      "start": 1765,
+      "end": 1773,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 48,
           "column": 32
         },
         "end": {
-          "line": 47,
+          "line": 48,
           "column": 40
         }
       }
@@ -2901,15 +2901,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1680,
-      "end": 1681,
+      "start": 1773,
+      "end": 1774,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 48,
           "column": 40
         },
         "end": {
-          "line": 47,
+          "line": 48,
           "column": 41
         }
       }
@@ -2926,15 +2926,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1682,
-      "end": 1683,
+      "start": 1775,
+      "end": 1776,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 48,
           "column": 42
         },
         "end": {
-          "line": 47,
+          "line": 48,
           "column": 43
         }
       }
@@ -2951,15 +2951,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1688,
-      "end": 1689,
+      "start": 1781,
+      "end": 1782,
       "loc": {
         "start": {
-          "line": 48,
+          "line": 49,
           "column": 4
         },
         "end": {
-          "line": 48,
+          "line": 49,
           "column": 5
         }
       }
@@ -2967,15 +2967,15 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Delegates an {@link Entity} as representing what was actually picked in place of this Pickable.\n     * @returns {PerformanceNode}\n     ",
-      "start": 1695,
-      "end": 1843,
+      "start": 1788,
+      "end": 1936,
       "loc": {
         "start": {
-          "line": 50,
+          "line": 51,
           "column": 4
         },
         "end": {
-          "line": 53,
+          "line": 54,
           "column": 7
         }
       }
@@ -2993,15 +2993,15 @@
         "binop": null
       },
       "value": "delegatePickedEntity",
-      "start": 1848,
-      "end": 1868,
+      "start": 1941,
+      "end": 1961,
       "loc": {
         "start": {
-          "line": 54,
+          "line": 55,
           "column": 4
         },
         "end": {
-          "line": 54,
+          "line": 55,
           "column": 24
         }
       }
@@ -3018,15 +3018,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1868,
-      "end": 1869,
+      "start": 1961,
+      "end": 1962,
       "loc": {
         "start": {
-          "line": 54,
+          "line": 55,
           "column": 24
         },
         "end": {
-          "line": 54,
+          "line": 55,
           "column": 25
         }
       }
@@ -3043,15 +3043,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1869,
-      "end": 1870,
+      "start": 1962,
+      "end": 1963,
       "loc": {
         "start": {
-          "line": 54,
+          "line": 55,
           "column": 25
         },
         "end": {
-          "line": 54,
+          "line": 55,
           "column": 26
         }
       }
@@ -3068,15 +3068,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1871,
-      "end": 1872,
+      "start": 1964,
+      "end": 1965,
       "loc": {
         "start": {
-          "line": 54,
+          "line": 55,
           "column": 27
         },
         "end": {
-          "line": 54,
+          "line": 55,
           "column": 28
         }
       }
@@ -3096,15 +3096,15 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 1881,
-      "end": 1887,
+      "start": 1974,
+      "end": 1980,
       "loc": {
         "start": {
-          "line": 55,
+          "line": 56,
           "column": 8
         },
         "end": {
-          "line": 55,
+          "line": 56,
           "column": 14
         }
       }
@@ -3124,15 +3124,15 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 1888,
-      "end": 1892,
+      "start": 1981,
+      "end": 1985,
       "loc": {
         "start": {
-          "line": 55,
+          "line": 56,
           "column": 15
         },
         "end": {
-          "line": 55,
+          "line": 56,
           "column": 19
         }
       }
@@ -3150,15 +3150,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1892,
-      "end": 1893,
+      "start": 1985,
+      "end": 1986,
       "loc": {
         "start": {
-          "line": 55,
+          "line": 56,
           "column": 19
         },
         "end": {
-          "line": 55,
+          "line": 56,
           "column": 20
         }
       }
@@ -3176,15 +3176,15 @@
         "binop": null
       },
       "value": "parent",
-      "start": 1893,
-      "end": 1899,
+      "start": 1986,
+      "end": 1992,
       "loc": {
         "start": {
-          "line": 55,
+          "line": 56,
           "column": 20
         },
         "end": {
-          "line": 55,
+          "line": 56,
           "column": 26
         }
       }
@@ -3202,15 +3202,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1899,
-      "end": 1900,
+      "start": 1992,
+      "end": 1993,
       "loc": {
         "start": {
-          "line": 55,
+          "line": 56,
           "column": 26
         },
         "end": {
-          "line": 55,
+          "line": 56,
           "column": 27
         }
       }
@@ -3227,15 +3227,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1905,
-      "end": 1906,
+      "start": 1998,
+      "end": 1999,
       "loc": {
         "start": {
-          "line": 56,
+          "line": 57,
           "column": 4
         },
         "end": {
-          "line": 56,
+          "line": 57,
           "column": 5
         }
       }
@@ -3243,15 +3243,15 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
-      "start": 1912,
-      "end": 2181,
+      "start": 2005,
+      "end": 2274,
       "loc": {
         "start": {
-          "line": 58,
+          "line": 59,
           "column": 4
         },
         "end": {
-          "line": 64,
+          "line": 65,
           "column": 7
         }
       }
@@ -3269,15 +3269,15 @@
         "binop": null
       },
       "value": "get",
-      "start": 2186,
-      "end": 2189,
+      "start": 2279,
+      "end": 2282,
       "loc": {
         "start": {
-          "line": 65,
+          "line": 66,
           "column": 4
         },
         "end": {
-          "line": 65,
+          "line": 66,
           "column": 7
         }
       }
@@ -3295,15 +3295,15 @@
         "binop": null
       },
       "value": "origin",
-      "start": 2190,
-      "end": 2196,
+      "start": 2283,
+      "end": 2289,
       "loc": {
         "start": {
-          "line": 65,
+          "line": 66,
           "column": 8
         },
         "end": {
-          "line": 65,
+          "line": 66,
           "column": 14
         }
       }
@@ -3320,15 +3320,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2196,
-      "end": 2197,
+      "start": 2289,
+      "end": 2290,
       "loc": {
         "start": {
-          "line": 65,
+          "line": 66,
           "column": 14
         },
         "end": {
-          "line": 65,
+          "line": 66,
           "column": 15
         }
       }
@@ -3345,15 +3345,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2197,
-      "end": 2198,
+      "start": 2290,
+      "end": 2291,
       "loc": {
         "start": {
-          "line": 65,
+          "line": 66,
           "column": 15
         },
         "end": {
-          "line": 65,
+          "line": 66,
           "column": 16
         }
       }
@@ -3370,15 +3370,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2199,
-      "end": 2200,
+      "start": 2292,
+      "end": 2293,
       "loc": {
         "start": {
-          "line": 65,
+          "line": 66,
           "column": 17
         },
         "end": {
-          "line": 65,
+          "line": 66,
           "column": 18
         }
       }
@@ -3395,15 +3395,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2205,
-      "end": 2206,
+      "start": 2298,
+      "end": 2299,
       "loc": {
         "start": {
-          "line": 66,
+          "line": 67,
           "column": 4
         },
         "end": {
-          "line": 66,
+          "line": 67,
           "column": 5
         }
       }
@@ -3420,15 +3420,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2207,
-      "end": 2208,
+      "start": 2300,
+      "end": 2301,
       "loc": {
         "start": {
-          "line": 67,
+          "line": 68,
           "column": 0
         },
         "end": {
-          "line": 67,
+          "line": 68,
           "column": 1
         }
       }
@@ -3448,15 +3448,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 2210,
-      "end": 2216,
+      "start": 2303,
+      "end": 2309,
       "loc": {
         "start": {
-          "line": 69,
+          "line": 70,
           "column": 0
         },
         "end": {
-          "line": 69,
+          "line": 70,
           "column": 6
         }
       }
@@ -3473,15 +3473,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2217,
-      "end": 2218,
+      "start": 2310,
+      "end": 2311,
       "loc": {
         "start": {
-          "line": 69,
+          "line": 70,
           "column": 7
         },
         "end": {
-          "line": 69,
+          "line": 70,
           "column": 8
         }
       }
@@ -3499,15 +3499,15 @@
         "binop": null
       },
       "value": "Pickable",
-      "start": 2218,
-      "end": 2226,
+      "start": 2311,
+      "end": 2319,
       "loc": {
         "start": {
-          "line": 69,
+          "line": 70,
           "column": 8
         },
         "end": {
-          "line": 69,
+          "line": 70,
           "column": 16
         }
       }
@@ -3524,15 +3524,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2226,
-      "end": 2227,
+      "start": 2319,
+      "end": 2320,
       "loc": {
         "start": {
-          "line": 69,
+          "line": 70,
           "column": 16
         },
         "end": {
-          "line": 69,
+          "line": 70,
           "column": 17
         }
       }
@@ -3550,15 +3550,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2227,
-      "end": 2228,
+      "start": 2320,
+      "end": 2321,
       "loc": {
         "start": {
-          "line": 69,
+          "line": 70,
           "column": 17
         },
         "end": {
-          "line": 69,
+          "line": 70,
           "column": 18
         }
       }
@@ -3576,15 +3576,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2228,
-      "end": 2228,
+      "start": 2321,
+      "end": 2321,
       "loc": {
         "start": {
-          "line": 69,
+          "line": 70,
           "column": 18
         },
         "end": {
-          "line": 69,
+          "line": 70,
           "column": 18
         }
       }

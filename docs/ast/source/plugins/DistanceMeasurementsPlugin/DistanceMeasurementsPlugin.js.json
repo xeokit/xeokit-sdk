@@ -14119,7 +14119,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n   * Shows all or hides the axis wires of each {@link DistanceMeasurement}.\n   *\n   * @param {Boolean} labelsShown Whether or not to show the axis wires.\n   ",
+                  "value": "*\n   * Shows all or hides the axis wires of each {@link DistanceMeasurement}.\n   *\n   * @param {Boolean} axisVisible Whether or not to show the axis wires.\n   ",
                   "start": 23566,
                   "end": 23729,
                   "loc": {
@@ -14642,7 +14642,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n   * Shows all or hides the axis wires of each {@link DistanceMeasurement}.\n   *\n   * @param {Boolean} labelsShown Whether or not to show the axis wires.\n   ",
+                  "value": "*\n   * Shows all or hides the axis wires of each {@link DistanceMeasurement}.\n   *\n   * @param {Boolean} axisVisible Whether or not to show the axis wires.\n   ",
                   "start": 23566,
                   "end": 23729,
                   "loc": {
@@ -29633,7 +29633,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * Shows all or hides the axis wires of each {@link DistanceMeasurement}.\n   *\n   * @param {Boolean} labelsShown Whether or not to show the axis wires.\n   ",
+                    "value": "*\n   * Shows all or hides the axis wires of each {@link DistanceMeasurement}.\n   *\n   * @param {Boolean} axisVisible Whether or not to show the axis wires.\n   ",
                     "start": 23566,
                     "end": 23729,
                     "loc": {
@@ -30156,7 +30156,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * Shows all or hides the axis wires of each {@link DistanceMeasurement}.\n   *\n   * @param {Boolean} labelsShown Whether or not to show the axis wires.\n   ",
+                    "value": "*\n   * Shows all or hides the axis wires of each {@link DistanceMeasurement}.\n   *\n   * @param {Boolean} axisVisible Whether or not to show the axis wires.\n   ",
                     "start": 23566,
                     "end": 23729,
                     "loc": {
@@ -31501,7 +31501,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * Shows all or hides the axis wires of each {@link DistanceMeasurement}.\n   *\n   * @param {Boolean} labelsShown Whether or not to show the axis wires.\n   ",
+      "value": "*\n   * Shows all or hides the axis wires of each {@link DistanceMeasurement}.\n   *\n   * @param {Boolean} axisVisible Whether or not to show the axis wires.\n   ",
       "start": 23566,
       "end": 23729,
       "loc": {
@@ -57355,7 +57355,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * Shows all or hides the axis wires of each {@link DistanceMeasurement}.\n   *\n   * @param {Boolean} labelsShown Whether or not to show the axis wires.\n   ",
+      "value": "*\n   * Shows all or hides the axis wires of each {@link DistanceMeasurement}.\n   *\n   * @param {Boolean} axisVisible Whether or not to show the axis wires.\n   ",
       "start": 23566,
       "end": 23729,
       "loc": {
