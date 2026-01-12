@@ -460,7 +460,7 @@ function loadDefaultScene(ctx) {
                         ctx.metaObjects.push({
                             id: entityId,
                             type: "Default",
-                            name: entityId,
+                            name: nodeName ? nodeName : "Node",
                             parent: ctx.sceneModel.id
                         });
                     }
