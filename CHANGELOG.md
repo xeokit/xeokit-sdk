@@ -1,6 +1,13 @@
 ## xeokit-sdk Changelog
 
 
+# [v2.6.104](https://github.com/xeokit/xeokit-sdk/compare/v2.6.103...v2.6.104)
+
+### 14 Jan 2026
+
+-  XCD-426 Use actual node name for name of meta object [#2014](https://github.com/xeokit/xeokit-sdk/pull/2014)
+
+
 # [v2.6.103](https://github.com/xeokit/xeokit-sdk/compare/v2.6.102...v2.6.103)
 
 ### 08 Jan 2026
