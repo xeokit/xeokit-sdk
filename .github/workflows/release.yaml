@@ -34,6 +34,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Build documentation
+        run: npm run docs
+
       - name: Get version from package.json
         id: version
         run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
@@ -46,7 +49,7 @@ jobs:
       - name: Commit and push dist files
         run: |
           git add -A
-          git commit -m "chore: Release v${{ steps.version.outputs.version }} dist files" || echo "No changes to commit"
+          git commit -m "chore: Release v${{ steps.version.outputs.version }} dist files and docs" || echo "No changes to commit"
           git push origin ${{ inputs.branch }}
 
       - name: Extract release notes from CHANGELOG.md
