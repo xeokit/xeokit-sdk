@@ -633,7 +633,8 @@ class Scene extends Component {
 
         this._renderer = new Renderer(this, {
             transparent: transparent,
-            alphaDepthMask: alphaDepthMask
+            alphaDepthMask: alphaDepthMask,
+            sortAllTransparent: cfg.sortAllTransparent
         });
 
         this._sectionPlanesState = new (function () {

@@ -18,6 +18,7 @@ const vec3_0 = math.vec3([0,0,0]);
 const iota = (n) => { const ret = [ ]; for (let i = 0; i < n; ++i) ret.push(i); return ret; };
 
 const tempPlanes = iota(6).map(() => math.vec4());
+const tempVec3 = math.vec3();
 const tempVec4 = math.vec4();
 
 const bitShiftScreenZ = math.vec4([1.0 / (256.0 * 256.0 * 256.0 * 256.0), 1.0 / (256.0 * 256.0 * 256.0), 1.0 / (256.0 * 256.0), 1.0 / 256.0]);
@@ -1021,6 +1022,40 @@ const Renderer = function (scene, options) {
             if (normalFillTransparentBinLen > 0 || normalEdgesTransparentBinLen > 0) {
                 gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
             }
+
+            if (options.sortAllTransparent) {
+                const eye = frameCtx.viewParams.eye;
+                normalFillTransparentBin.length = normalFillTransparentBinLen; // normalFillTransparentBin reused by renderDrawables calls, so needs to be truncated if necessary
+
+                const transparentDrawables = [ ];
+                const appendTransparentDrawable = (d, draw) => {
+                    math.getAABB3Center(d.aabb, tempVec3);
+                    transparentDrawables.push({ draw: draw, distSq: math.distVec3(eye, math.getAABB3Center(d.aabb, tempVec3)) });
+                };
+                iota(normalEdgesTransparentBinLen).forEach(i => {
+                    const d = normalEdgesTransparentBin[i];
+                    appendTransparentDrawable(d, () => d.drawEdgesColorTransparent(frameCtx));
+                });
+
+                iota(normalFillTransparentBinLen).forEach(i => {
+                    const d = normalFillTransparentBin[i];
+                    appendTransparentDrawable(d, () => d.drawColorTransparent(frameCtx));
+                });
+
+                iota(xrayEdgesTransparentBinLen).forEach(i => {
+                    const d = xrayEdgesTransparentBin[i];
+                    appendTransparentDrawable(d, () => d.drawEdgesXRayed(frameCtx));
+                });
+
+                iota(xrayedFillTransparentBinLen).forEach(i => {
+                    const d = xrayedFillTransparentBin[i];
+                    appendTransparentDrawable(d, () => d.drawSilhouetteXRayed(frameCtx));
+                });
+
+                transparentDrawables.sort((a, b) => b.distSq - a.distSq).forEach(d => d.draw());
+
+            } else {
+
             if (normalEdgesTransparentBinLen > 0) {
                 for (i = 0; i < normalEdgesTransparentBinLen; i++) {
                     drawable = normalEdgesTransparentBin[i];
@@ -1054,6 +1089,7 @@ const Renderer = function (scene, options) {
                 for (i = 0; i < xrayedFillTransparentBinLen; i++) {
                     xrayedFillTransparentBin[i].drawSilhouetteXRayed(frameCtx);
                 }
+            }
             }
 
             gl.disable(gl.BLEND);

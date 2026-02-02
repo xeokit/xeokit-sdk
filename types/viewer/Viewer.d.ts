@@ -67,6 +67,8 @@ export declare type ViewerConfiguration = {
   markerZOffset?: number;
   /** Enhances the efficiency of SectionPlane creation by proactively allocating Viewer resources for a specified quantity of SectionPlanes.*/
   numCachedSectionPlanes?: number;
+  /** Whether to sort all transparent objects by their distance from the camera, before drawing on the scene. */
+  sortAllTransparent?: boolean;
 };
 
 /**

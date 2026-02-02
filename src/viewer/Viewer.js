@@ -65,6 +65,7 @@ class Viewer {
      * configures renderer logic for the specified number of SectionPlanes, eliminating the need for setting up logic with each SectionPlane creation and thereby enhancing
      * responsiveness. It is important to consider that each SectionPlane impacts rendering performance, so it is recommended to set this value to a quantity that aligns with
      * your expected usage.
+     * @param {Boolean} [cfg.sortAllTransparent=false] Whether to sort all transparent objects by their distance from the camera, before drawing on the scene.
      */
     constructor(cfg) {
 
@@ -124,7 +125,8 @@ class Viewer {
             colorTextureEnabled: (cfg.colorTextureEnabled !== false),
             dtxEnabled: (!!cfg.dtxEnabled),
             markerZOffset: cfg.markerZOffset,
-            numCachedSectionPlanes: cfg.numCachedSectionPlanes
+            numCachedSectionPlanes: cfg.numCachedSectionPlanes,
+            sortAllTransparent: cfg.sortAllTransparent
         });
 
         /**
