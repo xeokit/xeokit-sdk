@@ -59,7 +59,7 @@ parsers[ParserV12.version] = ParserV12;
  * We have several ways to convert your files into XKT. See these tutorials for more info:
  *
  * * [Converting Models to XKT with convert2xkt](https://xeokit.io/blog/converting-models-to-xkt-with-convert2xkt) - how to convert various file formats (glTF, IFC, CityJSON, LAS/LAZ...) to XKT using our nodejs-based converter.
- * * [Converting IFC Models to XKT using 3rd-Party Open Source Tools](https://www.notion.so/xeokit/Converting-IFC-Models-to-XKT-using-3rd-Party-Open-Source-Tools-c373e48bc4094ff5b6e5c5700ff580ee) - how to convert IFC files to XKT using 3rd-party open source CLI tools.
+ * * [Converting IFC Models to XKT using various different methods, including 3rd-Party Open Source Tools](https://xeokit.io/blog/xeokit-loaders-&-converters) - how to convert IFC files to XKT using various different methods, including 3rd-party open source CLI tools.
  *
  * # Scene representation
  *
