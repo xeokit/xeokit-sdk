@@ -2998,7 +2998,7 @@ export class SceneModel extends Component {
         const positionsDecodeHash = posDecode ? this._createHashStringFromMatrix(posDecode) : "-";
         const textureSetId = cfg.textureSetId || "-";
         const geometryId = instancing ? cfg.geometryId : "-";
-        const layerId = (instancing ? "instancing" : "batching") + `.${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}.${primitive}.${positionsDecodeHash}.${textureSetId}.${geometryId}`;
+        const layerId = (instancing ? "instancing" : "batching") + `.${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}.${primitive}.${positionsDecodeHash}.${textureSetId}.${geometryId}.${Object.keys(this._vboLayers).length}`;
 
         if ((! instancing) && (layerId in this._vboLayers)) {
             const layer = this._vboLayers[layerId];
