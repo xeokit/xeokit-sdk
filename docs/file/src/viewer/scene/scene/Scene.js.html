@@ -1195,6 +1195,7 @@ class Scene extends Component {
         this._colorTextureEnabled = (cfg.colorTextureEnabled !== false);
         this._dtxEnabled = !!cfg.dtxEnabled;
         this._markerZOffset = cfg.markerZOffset;
+        this.layerPerMesh = cfg.layerPerMesh;
 
         // Register Scene on xeokit
         // Do this BEFORE we add components below

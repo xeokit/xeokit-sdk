@@ -14658,6 +14658,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/scene/scene.js~scene#layerpermesh",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-layerPerMesh",
+    "src/viewer/scene/scene/Scene.js~Scene#layerPerMesh",
+    "member"
+  ],
+  [
     "src/viewer/scene/scene/scene.js~scene#lightmaps",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-lightMaps",
     "src/viewer/scene/scene/Scene.js~Scene#lightMaps",
