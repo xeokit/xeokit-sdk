@@ -244,6 +244,7 @@ class Zone extends Component {
         const scene = this.plugin.viewer.scene;
 
         this._geometry = cfg.geometry;
+        this._isUI = !!cfg.isUI;
 
         const onMouseOver = cfg.onMouseOver ? (event) => {
             cfg.onMouseOver(event, this);
@@ -359,6 +360,7 @@ class Zone extends Component {
                     indices:   ind,
                     normals:   math.buildNormals(positions, ind)
                 }),
+            isUI: this._isUI,
             material: new PhongMaterial(scene, {
                 alpha: this._alpha,
                 backfaces: true,
@@ -655,6 +657,7 @@ class Zone extends Component {
         return {
             id: this.id,
             geometry: this._geometry,
+            isUI:  this._isUI,
             alpha: this._alpha,
             color: this._color
         };
@@ -669,6 +672,7 @@ class Zone extends Component {
                     altitude: this._geometry.altitude,
                     height: this._geometry.height
                 },
+                isUI:  this._isUI,
                 alpha: this._alpha,
                 color: this._color
             });
@@ -908,6 +912,7 @@ export class ZonesPlugin extends Plugin {
 
         this.defaultColor = cfg.defaultColor !== undefined ? cfg.defaultColor : "#00BBFF";
         this.zIndex = cfg.zIndex || 10000;
+        this._isUI = cfg.isUI;
 
         this._onMouseOver = (event, zone) => {
             this.fire("mouseOver", {
@@ -959,6 +964,7 @@ export class ZonesPlugin extends Plugin {
             plugin: this,
             container: this._container,
             geometry: params.geometry,
+            isUI:  this._isUI,
             alpha: params.alpha,
             color: params.color,
             onMouseOver: this._onMouseOver,
