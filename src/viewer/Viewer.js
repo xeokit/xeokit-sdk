@@ -124,6 +124,7 @@ class Viewer {
             pbrEnabled: (!!cfg.pbrEnabled),
             colorTextureEnabled: (cfg.colorTextureEnabled !== false),
             dtxEnabled: (!!cfg.dtxEnabled),
+            layerPerMesh: (!!cfg.layerPerMesh),
             markerZOffset: cfg.markerZOffset,
             numCachedSectionPlanes: cfg.numCachedSectionPlanes,
             sortAllTransparent: cfg.sortAllTransparent
