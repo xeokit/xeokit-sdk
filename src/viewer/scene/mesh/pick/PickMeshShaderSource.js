@@ -16,7 +16,6 @@ export const PickMeshShaderSource = function(meshHash, programVariables) {
         getHash: () => [ meshHash ],
         programName: "PickMesh",
         isPick: true,
-        dontBillboardAnything: true,
         appendFragmentOutputs: (src) => src.push(`${outColor} = ${pickColor};`)
     };
 };
