@@ -550,11 +550,11 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                             }
                             if (geometryArrays.batchThisMesh) {
                                 if(primitiveType === 7) {
-                                    geometryArrays.transformedAndRecompressedPositions = new Uint16Array(geometryArrays.decompressedPositions.length);
+                                    geometryArrays.transformedAndRecompressedPositionsLength = geometryArrays.decompressedPositions.length;
                                 }
                                 else {
                                     geometryArrays.decompressedPositions = new Float32Array(geometryArrays.geometryPositions.length);
-                                    geometryArrays.transformedAndRecompressedPositions = new Uint16Array(geometryArrays.geometryPositions.length)
+                                    geometryArrays.transformedAndRecompressedPositionsLength = geometryArrays.geometryPositions.length;
                                     const geometryPositions = geometryArrays.geometryPositions;
                                     const decompressedPositions = geometryArrays.decompressedPositions;
                                     for (let i = 0, len = geometryPositions.length; i < len; i += 3) {
@@ -575,7 +575,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                         if (geometryArrays.batchThisMesh) {
 
                             const decompressedPositions = geometryArrays.decompressedPositions;
-                            const transformedAndRecompressedPositions = geometryArrays.transformedAndRecompressedPositions;
+                            const transformedAndRecompressedPositions = new Uint16Array(geometryArrays.transformedAndRecompressedPositionsLength);
 
                             for (let i = 0, len = decompressedPositions.length; i < len; i += 3) {
                                 tempVec4a[0] = decompressedPositions[i + 0];
