@@ -1,6 +1,14 @@
 ## xeokit-sdk Changelog
 
 
+# [v2.6.106](https://github.com/xeokit/xeokit-sdk/compare/v2.6.105...v2.6.106)
+
+### 20 Feb 2026
+
+-  XCD-406 Billboard (so far excluded) PickMeshShaderSource, PickTriangleShaderSource, ShadowShaderSource [#2022](https://github.com/xeokit/xeokit-sdk/pull/2022)
+-  XCD-432 Instantiate transformedAndRecompressedPositions per mesh [#2021](https://github.com/xeokit/xeokit-sdk/pull/2021)
+
+
 # [v2.6.105](https://github.com/xeokit/xeokit-sdk/compare/v2.6.104...v2.6.105)
 
 ### 28 Jan 2026
