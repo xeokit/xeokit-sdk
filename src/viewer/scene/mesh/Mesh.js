@@ -2205,7 +2205,7 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
     const projMatrix            = programVariables.createUniform("mat4",  "projMatrix");
 
     const billboard = mesh.billboard;
-    const isBillboard = (! programSetup.dontBillboardAnything) && ((billboard === "spherical") || (billboard === "cylindrical"));
+    const isBillboard = (billboard === "spherical") || (billboard === "cylindrical");
     const stationary = mesh.stationary;
     const defineBillboard = isBillboard && ((name, src) => [
         `mat4 ${name}(in mat4 matIn) {`,
@@ -2228,17 +2228,13 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
     })();
 
     const fragmentOutputsSetup = [ ];
-    if (programSetup.dontBillboardAnything) {
-        fragmentOutputsSetup.push(`mat4 viewMatrix2 = ${viewMatrix};`);
-    } else {
-        fragmentOutputsSetup.push(`mat4 viewMatrix1 = ${viewMatrix};`);
-        if (stationary) {
-            fragmentOutputsSetup.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
-        } else if (meshStateBackground) {
-            fragmentOutputsSetup.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
-        }
-        fragmentOutputsSetup.push(`mat4 viewMatrix2 = ${billboardIfApplicableFrag("viewMatrix1")};`);
+    fragmentOutputsSetup.push(`mat4 viewMatrix1 = ${viewMatrix};`);
+    if (stationary) {
+        fragmentOutputsSetup.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
+    } else if (meshStateBackground) {
+        fragmentOutputsSetup.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
     }
+    fragmentOutputsSetup.push(`mat4 viewMatrix2 = ${billboardIfApplicableFrag("viewMatrix1")};`);
 
     const clipPos = "clipPos";
     const getVertexData = function() {
@@ -2250,20 +2246,16 @@ const instantiateMeshRenderer = (mesh, attributes, auxVariables, programSetup, p
         }
         src.push(`vec4 worldPosition = ${billboardIfApplicable(modelMatrix)} * localPosition;`);
         src.push(`worldPosition.xyz = worldPosition.xyz + ${offset};`);
-        if (programSetup.dontBillboardAnything) {
-            src.push(`vec4 viewPosition = ${viewMatrix} * worldPosition;`);
-        } else {
-            src.push(`mat4 viewMatrix1 = ${viewMatrix};`);
-            if (stationary) {
-                src.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
-            } else if (meshStateBackground) {
-                src.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
-            }
-            src.push(`mat4 viewMatrix2 = ${billboardIfApplicable("viewMatrix1")};`);
-            src.push(`vec4 viewPosition = ${(isBillboard
+        src.push(`mat4 viewMatrix1 = ${viewMatrix};`);
+        if (stationary) {
+            src.push("viewMatrix1[3].xyz = vec3(0.0, 0.0, 0.0);");
+        } else if (meshStateBackground) {
+            src.push("viewMatrix1[3]     = vec4(0.0, 0.0, 0.0, 1.0);");
+        }
+        src.push(`mat4 viewMatrix2 = ${billboardIfApplicable("viewMatrix1")};`);
+        src.push(`vec4 viewPosition = ${(isBillboard
                                                  ? `${billboardIfApplicable(`viewMatrix1 * ${modelMatrix}`)} * localPosition`
                                                  : "viewMatrix2 * worldPosition")};`);
-        }
         decodedUv && decodedUv.needed && src.push(`vec2 ${decodedUv} = ${quantizedGeometry ? `(${uvDecodeMatrix} * vec3(${attributes.uv}, 1.0)).xy` : attributes.uv};`);
         if (worldNormal && worldNormal.needed) {
             const localNormal = quantizedGeometry ? `${programVariables.commonLibrary.octDecode}(${attributes.normal}.xy)` : attributes.normal;

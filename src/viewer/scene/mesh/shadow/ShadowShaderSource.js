@@ -16,7 +16,6 @@ export const ShadowShaderSource = function(meshHash, programVariables) {
         programName: "Shadow",
         setsLineWidth: true,
         useShadowView: true,
-        dontBillboardAnything: true,
         dontGetLogDepth: true,
         appendFragmentOutputs: (src, getGammaOutputExpression, gl_FragCoord) => src.push(`${outColor} = ${encodeFloat}(${gl_FragCoord}.z);`)
     };
