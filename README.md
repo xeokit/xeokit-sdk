@@ -107,6 +107,11 @@ and [OBJ](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/OBJLoaderPl
 </html>
 ````
 ---
+## Deprecation Notice: ES5 and CJS Builds
+
+Starting from **September 2026**, the ES5/UMD and CommonJS builds will no longer be included in the npm package. Maintaining ES5 compatibility requires extensive transpilation and polyfilling that is increasingly difficult to sustain as the codebase evolves. Going forward, only the ES module builds (`xeokit-sdk.es.js` and `xeokit-sdk.min.es.js`) will be provided, which are compatible with all modern browsers and bundlers.
+
+---
 ## 📜 Licensing & Commercial Use
 
 xeokit SDK is licensed under **AGPLv3**, which requires that any modifications or integrations of xeokit SDK into a project must also be open-sourced under AGPLv3.
