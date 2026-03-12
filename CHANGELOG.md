@@ -1,6 +1,13 @@
 ## xeokit-sdk Changelog
 
 
+# [v2.6.107](https://github.com/xeokit/xeokit-sdk/compare/v2.6.106...v2.6.107)
+
+### 12 Mar 2026
+
+-  XCD-454 Test layer's AABB against active section planes for early cull optimization [#2024](https://github.com/xeokit/xeokit-sdk/pull/2024)
+
+
 # [v2.6.106](https://github.com/xeokit/xeokit-sdk/compare/v2.6.105...v2.6.106)
 
 ### 20 Feb 2026
