@@ -3341,11 +3341,13 @@ export class SceneModel extends Component {
         if (testNumVisibleLayerPortions && (this.numVisibleLayerPortions === 0)) {
             return;
         }
+        const activeSectionPlanes = this.scene._sectionPlanesState.sectionPlanes.filter(p => p.active);
         const testLayerCull = frameCtx.testAABB;
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layer = this.layerList[renderFlags.visibleLayers[i]];
-            if ((! testLayerCull) || testLayerCull(layer.getAABB())) {
+            const aabb = layer.getAABB();
+            if (((! testLayerCull) || testLayerCull(aabb)) && activeSectionPlanes.every(p => math.planeAABB3Intersect(p.dir, p.dist, aabb) >= 0)) {
                 cb(layer);
             }
         }
