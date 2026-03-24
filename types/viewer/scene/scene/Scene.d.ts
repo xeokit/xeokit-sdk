@@ -89,6 +89,8 @@ export declare class Scene extends Component {
     */
    on(event: "sectionPlaneDestroyed", callback: (measurement: SectionPlane) => void): void;
 
+  canvas: Component;
+
   /**
    * The epoch time (in milliseconds since 1970) when this Scene was instantiated.
    */
