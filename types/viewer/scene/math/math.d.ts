@@ -52,6 +52,11 @@ declare const math: {
    */
    normalizeVec3: (v: number[], dest?: any) => number[];
 
+  /**
+   * Adds one three-element vector to another.
+   */
+  addVec3: (u: number[], v: number[], dest?: number[]) => number[];
+
    /**
      * Multiplies each element of a three-element vector by a scalar.
      */
