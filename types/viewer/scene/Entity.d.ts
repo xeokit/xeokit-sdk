@@ -15,6 +15,15 @@ export declare abstract class Entity {
   get id(): string | number;
 
   /**
+   * The SceneModel of the SceneModelEntity
+   *
+   * SceneModelEntity is the only Entity class at the moment, so every Entity is SceneModelEntity.
+   */
+  model: {
+    id?: string
+  }
+
+  /**
    * ID of the corresponding object within the originating system, if any.
    *
    * By default, this has the same value as {@link Entity.id}. When we load a model using {@link XKTLoaderPlugin.load},
