@@ -400,6 +400,16 @@ export declare abstract class Entity {
   getGeometryData(): {indices: number[],positions:number[]}
 
   /**
+   * Gets volume of the entity.
+   */
+  get volume(): number;
+
+  /**
+   * Gets surface area of the entity.
+   */
+  get surfaceArea(): number;
+
+  /**
    * Destroys this Entity.
    */
   destroy(): void;
