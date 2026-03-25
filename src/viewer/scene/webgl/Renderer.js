@@ -1767,12 +1767,9 @@ const Renderer = function (scene, options) {
                 }
             });
 
-            this._occlusionTester.drawMarkers();
+            this._occlusionTester.drawMarkersAndDoOcclusionTest(readPixelBuf);
 
             if (readPixelBuf) {
-                const resolutionScale = scene.canvas.resolutionScale;
-                this._occlusionTester.doOcclusionTest( // Updates Marker "visible" properties
-                    (x, y) => readPixelBuf.read(Math.round(resolutionScale * x), Math.round(resolutionScale * y)));
                 readPixelBuf.unbind();
             }
         }

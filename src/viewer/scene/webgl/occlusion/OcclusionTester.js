@@ -103,9 +103,10 @@ export class OcclusionTester {
     }
 
     /**
-     * Draws {@link Marker}s to the render buffer.
+     * Draws {@link Marker}s to the render buffer and sets visibilities of {@link Marker}s
+     * according to whether or not they are obscured by anything in the render buffer.
      */
-    drawMarkers() {
+    drawMarkersAndDoOcclusionTest(readPixelBuf) {
 
         const scene = this._scene;
         const canvas = scene.canvas;
@@ -234,19 +235,19 @@ export class OcclusionTester {
         }
 
         this._drawable.drawCall();
-    }
 
-    /**
-     * Sets visibilities of {@link Marker}s according to whether or not they are obscured by anything in the render buffer.
-     */
-    doOcclusionTest(readColorPixel) {
-        this._occlusionLayersList.forEach(occlusionLayer => {
-            for (let i = 0; i < occlusionLayer.lenOcclusionTestList; i++) {
-                const j = i * 2;
-                const color = readColorPixel(occlusionLayer.pixels[j], occlusionLayer.pixels[j + 1]);
-                occlusionLayer.occlusionTestList[i]._setVisible(math.compareVec3(MARKER_COLOR, color));
-            }
-        });
+        if (readPixelBuf) {
+            const resolutionScale = scene.canvas.resolutionScale;
+            this._occlusionLayersList.forEach(occlusionLayer => {
+                for (let i = 0; i < occlusionLayer.lenOcclusionTestList; i++) {
+                    const j = i * 2;
+                    const color = readPixelBuf.read(
+                        Math.round(resolutionScale * occlusionLayer.pixels[j]),
+                        Math.round(resolutionScale * occlusionLayer.pixels[j + 1]));
+                    occlusionLayer.occlusionTestList[i]._setVisible(math.compareVec3(MARKER_COLOR, color));
+                }
+            });
+        }
     }
 
     /**
