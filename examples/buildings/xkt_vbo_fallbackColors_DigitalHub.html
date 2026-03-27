@@ -329,6 +329,7 @@
 
     const hzgColorMap = {
         // Flow segments / distribution — teal
+        IfcPipe:                { colorize: [0.000, 0.620, 0.451] }, // #009E73
         IfcPipeSegment:         { colorize: [0.000, 0.620, 0.451] }, // #009E73
         IfcPipeFitting:         { colorize: [0.000, 0.620, 0.451] }, // #009E73
         IfcDistributionPort:    { colorize: [0.000, 0.620, 0.451] }, // #009E73
@@ -391,7 +392,7 @@
     // IfcGeographicElement; adding that to the type map is still recommended for future models.
     //------------------------------------------------------------------------------------------------------------------
 
-    function hasDefinedColor(entity) {
+    function hasDefinedColor(entity, chromaThreshold) {
         // We need to check every mesh individually because entity.colorize only reads
         // the first mesh.  Compound entities like barriers have a neutral post (first
         // mesh) followed by a coloured arm — entity.colorize would miss the colour and
@@ -402,16 +403,34 @@
         // accessor is added in a future SDK version this should be updated.
         for (const mesh of entity.meshes) {
             const c = mesh._colorize;
-            if ((Math.max(c[0], c[1], c[2]) - Math.min(c[0], c[1], c[2])) / 255 > 0.05) {
+            if ((Math.max(c[0], c[1], c[2]) - Math.min(c[0], c[1], c[2])) / 255 > chromaThreshold) {
                 return true;
             }
         }
         return false;
     }
 
-    function applyFallbackColors(metaModelId, colorMap, nameColorMap = null) {
+    // Cache of computed fallback assignments per model, keyed by metaModelId.
+    // Populated on the first applyFallbackColors call (when mesh._colorize still
+    // reflects the original XKT state).  Subsequent calls re-use the cache so the
+    // chroma check is never run against already-overridden _colorize values.
+    const fallbackCache = {};
+
+    function applyFallbackColors(metaModelId, colorMap, nameColorMap = null, chromaThreshold = 0.05) {
+        // Re-use cached assignments after the first apply/remove cycle.
+        if (fallbackCache[metaModelId]) {
+            for (const { id, props } of fallbackCache[metaModelId]) {
+                const entity = viewer.scene.objects[id];
+                if (!entity) continue;
+                if (props.colorize) entity.colorize = props.colorize;
+                if (props.opacity !== undefined) entity.opacity = props.opacity;
+            }
+            return;
+        }
+        // First call: compute assignments from the original XKT mesh colours.
         const metaModel = viewer.metaScene.metaModels[metaModelId];
         if (!metaModel) return;
+        const assignments = [];
         for (const id of Object.keys(metaModel.metaObjects)) {
             const metaObject = metaModel.metaObjects[id];
             const entity = viewer.scene.objects[id];
@@ -425,17 +444,15 @@
                 if (nameEntry) props = nameEntry;
             }
             if (!props) {
-                if (hasDefinedColor(entity)) continue; // IFC already provided a colour — respect it
+                if (hasDefinedColor(entity, chromaThreshold)) continue; // IFC already provided a colour — respect it
                 props = colorMap[metaObject.type] || colorMap["DEFAULT"];
             }
             if (!props) continue;
-            if (props.colorize) {
-                entity.colorize = props.colorize;
-            }
-            if (props.opacity !== undefined) {
-                entity.opacity = props.opacity;
-            }
+            assignments.push({ id, props });
+            if (props.colorize) entity.colorize = props.colorize;
+            if (props.opacity !== undefined) entity.opacity = props.opacity;
         }
+        fallbackCache[metaModelId] = assignments;
     }
 
     function removeFallbackColors(metaModelId) {
@@ -467,12 +484,12 @@
 
     arcModel.on("loaded", () => {
         viewer.cameraFlight.jumpTo(arcModel);
-        applyFallbackColors("arcModel", arcColorMap, arcNameColorMap);
+        applyFallbackColors("arcModel", arcColorMap, arcNameColorMap, 0.05);
         onModelLoaded();
     });
 
     hzgModel.on("loaded", () => {
-        applyFallbackColors("hzgModel", hzgColorMap);
+        applyFallbackColors("hzgModel", hzgColorMap, null, 0.15);
         onModelLoaded();
     });
 
@@ -482,8 +499,8 @@
 
     document.getElementById("fallbackToggle").addEventListener("change", function () {
         if (this.checked) {
-            applyFallbackColors("arcModel", arcColorMap, arcNameColorMap);
-            applyFallbackColors("hzgModel", hzgColorMap);
+            applyFallbackColors("arcModel", arcColorMap, arcNameColorMap, 0.05);
+            applyFallbackColors("hzgModel", hzgColorMap, null, 0.15);
         } else {
             removeFallbackColors("arcModel");
             removeFallbackColors("hzgModel");
