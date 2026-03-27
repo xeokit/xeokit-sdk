@@ -717,6 +717,9 @@ export declare class Scene extends Component {
    * @param {Number[]} [params.origin] World-space ray origin when ray-picking. Ignored when canvasPos given.
    * @param {Number[]} [params.direction] World-space ray direction when ray-picking. Also indicates the length of the ray. Ignored when canvasPos given.
    * @param {Number[]} [params.matrix] 4x4 transformation matrix to define the World-space ray origin and direction, as an alternative to ````origin```` and ````direction````.
+   * @param {Number} [params.snapRadius=30] The snap radius, in canvas pixels.
+   * @param {boolean} [params.snapToEdge=true] Whether to snap to edge. Only works when `canvasPos` given.
+   * @param {boolean} [params.snapToVertex=true] Whether to snap to vertex. Only works when `canvasPos` given.
    * @param {String[]} [params.includeEntities] IDs of {@link Entity}s to restrict picking to. When given, ignores {@link Entity}s whose IDs are not in this list.
    * @param {String[]} [params.excludeEntities] IDs of {@link Entity}s to ignore. When given, will pick *through* these {@link Entity}s, as if they were not there.
    * @param {PickResult} [pickResult] Holds the results of the pick attempt. Will use the Scene's singleton PickResult if you don't supply your own.
@@ -730,6 +733,9 @@ export declare class Scene extends Component {
     origin?: number[];
     direction?: number[];
     matrix?: number[];
+    snapRadius?: number;
+    snapToEdge?: boolean;
+    snapToVertex?: boolean;
     includeEntities?: string[];
     excludeEntities?: string[];
   }, pickResult?: PickResult): PickResult | null;
