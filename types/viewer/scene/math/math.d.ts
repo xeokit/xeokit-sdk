@@ -50,17 +50,37 @@ declare const math: {
   /**
    * Normalizes a three-element vector
    */
-   normalizeVec3: (v: number[], dest?: any) => number[];
+  normalizeVec3: (v: number[], dest?: any) => number[];
 
   /**
    * Adds one three-element vector to another.
    */
   addVec3: (u: number[], v: number[], dest?: number[]) => number[];
 
-   /**
-     * Multiplies each element of a three-element vector by a scalar.
-     */
-   mulVec3Scalar: (v: number[], scalar: number, dest?: number[]) => number[];
+  /**
+   * Adds one three-element vector to another.
+   */
+  subVec3: (u: number[], v: number[], dest?: number[]) => number[];
+
+  /**
+   * Multiplies each element of a three-element vector by a scalar.
+   */
+  mulVec3Scalar: (v: number[], scalar: number, dest?: number[]) => number[];
+
+  /**
+   * Returns the cross product of two three-element vectors.
+   */
+  cross3Vec3: (u: number[], v: number[], dest?: number[]) => number[];
+
+  /**
+   * Multiplies the given 4x4 matrix by the given four-element vector.
+   */
+  mulMat4v4: (m: number[], v: number[], dest?: number[]) => number[];
+
+  /**
+   * Builds normal vectors from positions and indices.
+   */
+  buildNormals: (positions: number[], indices: number[], normals?: number) => number[];
 };
 
 export {math};
