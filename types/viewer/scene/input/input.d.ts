@@ -153,7 +153,7 @@ export declare class Input extends Component {
    * @param callback Called fired on the event
    * @param scope  Scope for the callback
    */
-  on(event: "mousedown" | "mouseup" | "mouseclicked" | "dblclick", callback: (canvasCoords: number[]) => void, scope?: any): string;
+  on(event: "mousedown" | "mouseup" | "mouseclicked" | "dblclick" | "mousemove", callback: (canvasCoords: number[]) => void, scope?: any): string;
 
    /**
    * Fires on keyboard events
