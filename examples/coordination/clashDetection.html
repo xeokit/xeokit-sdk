@@ -1,0 +1,877 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* Clash Panel (left sidebar) */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        #clashPanel {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            width: 320px;
+            height: calc(100% - 50px);
+            background: rgba(30, 30, 30, 0.85);
+            color: #ddd;
+            z-index: 200000;
+            font-family: 'Roboto', sans-serif;
+            font-size: 13px;
+            overflow-y: auto;
+            pointer-events: all;
+        }
+
+        #clashPanel .panel-header {
+            padding: 15px;
+            border-bottom: 1px solid #444;
+        }
+
+        #clashPanel .panel-header h2 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        #clashPanel .panel-header .clash-count {
+            font-size: 12px;
+            color: #999;
+        }
+
+        #clashPanel .panel-header .panel-description {
+            font-size: 11px;
+            color: #888;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        #clashList {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #clashList li {
+            padding: 10px 15px;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        #clashList li:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        #clashList li.active {
+            background: rgba(66, 133, 244, 0.25);
+            border-left: 3px solid #4285f4;
+        }
+
+        .clash-item-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .severity-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+
+        .severity-dot.hard {
+            background: #e53935;
+        }
+
+        .severity-dot.clearance {
+            background: #ff9800;
+        }
+
+        .clash-item-title {
+            font-weight: 500;
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .clash-item-types {
+            color: #aaa;
+            font-size: 11px;
+            margin-left: 18px;
+        }
+
+        .clash-item-depth {
+            color: #888;
+            font-size: 11px;
+            margin-left: 18px;
+            margin-top: 2px;
+        }
+
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* Navigation Bar (bottom center) */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        #navBar {
+            position: absolute;
+            bottom: 30px;
+            left: calc(50% + 160px);
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(30, 30, 30, 0.9);
+            border-radius: 25px;
+            padding: 8px 20px;
+            z-index: 200000;
+            pointer-events: all;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        #navBar button {
+            background: #444;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.15s;
+        }
+
+        #navBar button:hover {
+            background: #555;
+        }
+
+        #navBar button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        #navBar button.primary {
+            background: #4285f4;
+        }
+
+        #navBar button.primary:hover {
+            background: #5a9cf4;
+        }
+
+        #navBar .nav-label {
+            color: #ccc;
+            font-size: 13px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* Annotation Markers and Labels */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        .clash-marker {
+            color: #fff;
+            line-height: 1.8;
+            text-align: center;
+            font-weight: bold;
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            border-radius: 13px;
+            border: 2px solid #fff;
+            background: #e53935;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            font-size: 12px;
+            cursor: pointer;
+            /* Centre horizontally and lift above the clash point so it doesn't obscure it */
+            margin-left: -13px;
+            margin-top: -40px;
+        }
+
+        .clash-label {
+            position: absolute;
+            max-width: 280px;
+            min-width: 180px;
+            padding: 10px 14px;
+            background: rgba(30, 30, 30, 0.95);
+            color: #fff;
+            border-radius: 6px;
+            border: 1px solid #555;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            z-index: 90000;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .clash-label .label-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #4285f4;
+        }
+
+        .clash-label .label-row {
+            font-size: 11px;
+            color: #bbb;
+            margin-bottom: 3px;
+        }
+
+        .clash-label .label-row .elem-a {
+            color: #ef9a9a;
+        }
+
+        .clash-label .label-row .elem-b {
+            color: #90caf9;
+        }
+
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* Loading Overlay */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        #loadingOverlay {
+            position: absolute;
+            top: 50px;
+            left: 320px;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            z-index: 100000;
+            pointer-events: none;
+        }
+
+        #loadingOverlay.hidden {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+
+<div id="clashPanel">
+    <div class="panel-header">
+        <h2>Clash Detection Results</h2>
+        <div class="clash-count" id="clashCount"></div>
+        <div class="panel-description">
+            Real clash detection results generated by
+            <a href="https://docs.ifcopenshell.org/ifcclash.html" target="_blank" style="color: #4285f4;">IfcClash</a>
+            (IfcOpenShell) between architectural (ARC) and HVAC (HZG) disciplines.
+            359 collisions detected — 12 representative clashes shown.
+        </div>
+    </div>
+    <ul id="clashList"></ul>
+</div>
+
+<div id="loadingOverlay">Loading models...</div>
+
+<div id="navBar">
+    <button id="prevBtn" title="Previous clash (Left arrow)" disabled><i class="fas fa-chevron-left"></i> Prev</button>
+    <span class="nav-label" id="navLabel">-</span>
+    <button id="nextBtn" title="Next clash (Right arrow)" disabled>Next <i class="fas fa-chevron-right"></i></button>
+    <button id="showAllBtn" disabled>Show All</button>
+    <button id="exportBcfBtn" class="primary" title="Export current view as BCF viewpoint" disabled><i class="fas fa-download"></i> Export BCF Viewpoint</button>
+</div>
+
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/bim_icon.png"/>
+    <h1>Clash Detection Viewer</h1>
+    <h2>Visualizing pre-computed IfcClash results with BCF viewpoint export</h2>
+    <p>
+        This example visualizes <strong>real clash detection results</strong> generated by
+        <a href="https://ifcopenshell.org/" target="_blank">IfcOpenShell's IfcClash</a>
+        tool. Two federated BIM models (architectural and HVAC/heating) are loaded,
+        and 12 representative clashes from 359 detected collisions are shown.
+    </p>
+    <p>
+        Each clash can be exported as a <strong>BCF Viewpoint</strong> for interoperability with other BIM tools.
+    </p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html" target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html"
+               target="_other">BCFViewpointsPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html"
+               target="_other">AnnotationsPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://docs.ifcopenshell.org/ifcclash.html" target="_other">IfcClash Documentation</a>
+        </li>
+        <li>
+            <a href="https://github.com/IfcOpenShell/IfcOpenShell" target="_other">IfcOpenShell on GitHub</a>
+        </li>
+    </ul>
+    <h3>Assets</h3>
+    <ul>
+        <li>
+            <a href="https://www.ifcwiki.org/index.php?title=KIT_IFC_Examples" target="_other">RWTH DigitalHub IFC Models</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    import {Viewer, XKTLoaderPlugin, BCFViewpointsPlugin, AnnotationsPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [20, 20, 20];
+    viewer.camera.look = [0, 5, 0];
+    viewer.camera.up = [0, 1, 0];
+
+    viewer.scene.xrayMaterial.fill = true;
+    viewer.scene.xrayMaterial.fillAlpha = 0.1;
+    viewer.scene.xrayMaterial.fillColor = [0, 0, 0];
+    viewer.scene.xrayMaterial.edgeAlpha = 0.2;
+    viewer.scene.xrayMaterial.edgeColor = [0, 0, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Initialize Plugins
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const bcfViewpoints = new BCFViewpointsPlugin(viewer, {
+        originatingSystem: "xeokit-clashDetection-example"
+    });
+
+    const annotations = new AnnotationsPlugin(viewer, {
+        markerHTML: "<div class='clash-marker'>{{glyph}}</div>",
+        labelHTML:
+            "<div class='clash-label'>" +
+            "   <div class='label-title'>{{title}}</div>" +
+            "   <div class='label-row'>A: <span class='elem-a'>{{elemA}}</span></div>" +
+            "   <div class='label-row'>B: <span class='elem-b'>{{elemB}}</span></div>" +
+            "   <div class='label-row'>Type: {{clashType}} | Position: {{depth}}</div>" +
+            "</div>",
+        values: {
+            glyph: "",
+            title: "",
+            elemA: "",
+            elemB: "",
+            clashType: "",
+            depth: ""
+        }
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Real clash detection results from IfcOpenShell's IfcClash
+    // Generated by running: ifcclash clash_sets.json -o clash_output.json
+    // against DigitalHub_FM-ARC_v2.ifc (architectural) and DigitalHub_FM-HZG_v2.ifc (HVAC/heating)
+    // IfcClash detected 359 collisions total — 12 representative clashes shown below
+    // See: https://docs.ifcopenshell.org/ifcclash.html
+    //
+    // Note: contact_point values are in IFC coordinate space (Z-up) and are kept here as reference
+    // data from the IfcClash output. Annotation positions are computed from element AABBs in xeokit
+    // world space (Y-up) via computeClashRegion() instead.
+    //------------------------------------------------------------------------------------------------------------------
+
+    const clashResults = [
+        {
+            id: "clash-1",
+            a_global_id: "03fYK2KZb9bQXMSPptFZYQ",
+            a_ifc_class: "IfcWall",
+            a_name: "Basiswand:Metall-Einfachstaenderwand 2-lagig beplankt (MW12BF):2552855",
+            b_global_id: "1$I$Os48r5q9Qr_UHhn0mq",
+            b_ifc_class: "IfcPipeSegment",
+            b_name: "Rohrtypen:Kupfer - Hartgeloetet:7505408",
+            clash_type: "hard",
+            contact_point: [20.9250, 26.2676, 3.7881]
+        },
+        {
+            id: "clash-2",
+            a_global_id: "03fYK2KZb9bQXMSPptFZYQ",
+            a_ifc_class: "IfcWall",
+            a_name: "Basiswand:Metall-Einfachstaenderwand 2-lagig beplankt (MW12BF):2552855",
+            b_global_id: "1$I$Os48r5q9Qr_UHhn0s_",
+            b_ifc_class: "IfcPipeSegment",
+            b_name: "Rohrtypen:Kupfer - Hartgeloetet:7505802",
+            clash_type: "hard",
+            contact_point: [20.9250, 26.2051, 3.7860]
+        },
+        {
+            id: "clash-3",
+            a_global_id: "3LF03GdXv2GhSTK1xTZzXE",
+            a_ifc_class: "IfcDoor",
+            a_name: "TU DF 1 - Fluchttuere Endausgang:EN 179 - ML - 1010 x 2250:2423930",
+            b_global_id: "0vkf5AvWL7NuEeI4Yo4UNm",
+            b_ifc_class: "IfcPipeSegment",
+            b_name: "Rohrtypen:Kupfer - Hartgeloetet:7621699",
+            clash_type: "hard",
+            contact_point: [57.1096, 19.6590, -0.1122]
+        },
+        {
+            id: "clash-4",
+            a_global_id: "3LF03GdXv2GhSTK1xTZzXz",
+            a_ifc_class: "IfcWall",
+            a_name: "Basiswand:STB 250:2423926",
+            b_global_id: "0vkf5AvWL7NuEeI4Yo4U2y",
+            b_ifc_class: "IfcPipeSegment",
+            b_name: "Rohrtypen:Kupfer - Hartgeloetet:7621498",
+            clash_type: "hard",
+            contact_point: [56.1250, 15.9810, -0.1120]
+        },
+        {
+            id: "clash-5",
+            a_global_id: "23Np8uMAvEN9H6Ds49dea4",
+            a_ifc_class: "IfcWall",
+            a_name: "Basiswand:STB 300:2397918",
+            b_global_id: "0hhlZpKbL3F8_9iuv3Rz2b",
+            b_ifc_class: "IfcPipeFitting",
+            b_name: "Bogen Kupfer:Standard:7896928",
+            clash_type: "hard",
+            contact_point: [37.1297, 26.4250, -2.3783]
+        },
+        {
+            id: "clash-6",
+            a_global_id: "23Np8uMAvEN9H6Ds49dea4",
+            a_ifc_class: "IfcWall",
+            a_name: "Basiswand:STB 300:2397918",
+            b_global_id: "0hhlZpKbL3F8_9iuv3Rz2N",
+            b_ifc_class: "IfcPipeFitting",
+            b_name: "Bogen Kupfer:Standard:7896914",
+            clash_type: "hard",
+            contact_point: [37.1480, 26.4250, -2.4190]
+        },
+        {
+            id: "clash-7",
+            a_global_id: "3LJODRGPbDdfXHXShFLBhv",
+            a_ifc_class: "IfcSlab",
+            a_name: "Geschossdecke:FB 150 leer:2431108",
+            b_global_id: "0vkf5AvWL7NuEeI4Yo4UNm",
+            b_ifc_class: "IfcPipeSegment",
+            b_name: "Rohrtypen:Kupfer - Hartgeloetet:7621699",
+            clash_type: "hard",
+            contact_point: [57.1092, 19.7250, -0.1120]
+        },
+        {
+            id: "clash-8",
+            a_global_id: "3LJODRGPbDdfXHXShFLBhv",
+            a_ifc_class: "IfcSlab",
+            a_name: "Geschossdecke:FB 150 leer:2431108",
+            b_global_id: "0vkf5AvWL7NuEeI4Yo4U9k",
+            b_ifc_class: "IfcPipeSegment",
+            b_name: "Rohrtypen:Kupfer - Hartgeloetet:7621597",
+            clash_type: "hard",
+            contact_point: [57.0442, 19.7250, -0.1120]
+        },
+        {
+            id: "clash-9",
+            a_global_id: "3LJODRGPbDdfXHXShFL93W",
+            a_ifc_class: "IfcBuildingElementProxy",
+            a_name: "Oberflaeche:2437789",
+            b_global_id: "0hhlZpKbL3F8_9iuv3Rz2H",
+            b_ifc_class: "IfcPipeSegment",
+            b_name: "Rohrtypen:Kupfer - Hartgeloetet:7896916",
+            clash_type: "hard",
+            contact_point: [37.1463, 26.7250, -2.2745]
+        },
+        {
+            id: "clash-10",
+            a_global_id: "3LJODRGPbDdfXHXShFLAxF",
+            a_ifc_class: "IfcSlab",
+            a_name: "Geschossdecke:FB 150 leer:2428082",
+            b_global_id: "2q82uIR_T8OfJQchHQXe2N",
+            b_ifc_class: "IfcPipeFitting",
+            b_name: "T-Stueck Kupfer:Standard:7640996",
+            clash_type: "hard",
+            contact_point: [23.6631, 7.4161, 3.7500]
+        },
+        {
+            id: "clash-11",
+            a_global_id: "3LJODRGPbDdfXHXShFLAxF",
+            a_ifc_class: "IfcSlab",
+            a_name: "Geschossdecke:FB 150 leer:2428082",
+            b_global_id: "2q82uIR_T8OfJQchHQXe_M",
+            b_ifc_class: "IfcPipeFitting",
+            b_name: "Bogen Kupfer:Standard:7641253",
+            clash_type: "hard",
+            contact_point: [20.9358, 7.4188, 3.7500]
+        },
+        {
+            id: "clash-12",
+            a_global_id: "0CWDnGbzX4Sf1BesL9TjCD",
+            a_ifc_class: "IfcWall",
+            a_name: "Basiswand:STB 200:2546756",
+            b_global_id: "0hhlZpKbL3F8_9iuv3Rz2H",
+            b_ifc_class: "IfcPipeSegment",
+            b_name: "Rohrtypen:Kupfer - Hartgeloetet:7896916",
+            clash_type: "hard",
+            contact_point: [37.1470, 26.7250, -2.2745]
+        }
+    ];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Compute a tight AABB around the clash region between two elements.
+    // Returns { point, aabb } where point is the center and aabb is a box to fly the camera to.
+    //------------------------------------------------------------------------------------------------------------------
+
+    function computeClashRegion(scene, idA, idB) {
+        const aabbA = scene.getAABB([idA]);
+        const aabbB = scene.getAABB([idB]);
+
+        if (!aabbA || !aabbB) {
+            return {point: [0, 0, 0], aabb: [-1, -1, -1, 1, 1, 1]};
+        }
+
+        // Try to use the actual AABB overlap region
+        const overlapMin = [
+            Math.max(aabbA[0], aabbB[0]),
+            Math.max(aabbA[1], aabbB[1]),
+            Math.max(aabbA[2], aabbB[2])
+        ];
+        const overlapMax = [
+            Math.min(aabbA[3], aabbB[3]),
+            Math.min(aabbA[4], aabbB[4]),
+            Math.min(aabbA[5], aabbB[5])
+        ];
+
+        if (overlapMin[0] <= overlapMax[0] && overlapMin[1] <= overlapMax[1] && overlapMin[2] <= overlapMax[2]) {
+            const center = [
+                (overlapMin[0] + overlapMax[0]) / 2,
+                (overlapMin[1] + overlapMax[1]) / 2,
+                (overlapMin[2] + overlapMax[2]) / 2
+            ];
+            // Expand the overlap AABB slightly so the camera has context
+            const pad = 1.5;
+            return {
+                point: center,
+                aabb: [
+                    overlapMin[0] - pad, overlapMin[1] - pad, overlapMin[2] - pad,
+                    overlapMax[0] + pad, overlapMax[1] + pad, overlapMax[2] + pad
+                ]
+            };
+        }
+
+        // Fallback: midpoint between AABB centers with a small fixed-size box
+        const center = [
+            (aabbA[0] + aabbA[3] + aabbB[0] + aabbB[3]) / 4,
+            (aabbA[1] + aabbA[4] + aabbB[1] + aabbB[4]) / 4,
+            (aabbA[2] + aabbA[5] + aabbB[2] + aabbB[5]) / 4
+        ];
+        const r = 2.0;
+        return {
+            point: center,
+            aabb: [center[0] - r, center[1] - r, center[2] - r, center[0] + r, center[1] + r, center[2] + r]
+        };
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Clash Controller
+    //------------------------------------------------------------------------------------------------------------------
+
+    let currentIndex = -1;
+    let modelsLoaded = 0;
+
+    function onModelsLoaded() {
+
+        const scene = viewer.scene;
+
+        // Build clash list UI
+        const clashListEl = document.getElementById("clashList");
+        const clashCountEl = document.getElementById("clashCount");
+        clashCountEl.textContent = clashResults.length + " clashes found";
+
+        clashResults.forEach((clash, index) => {
+            const li = document.createElement("li");
+            li.id = "clash-item-" + index;
+            li.innerHTML =
+                "<div class='clash-item-header'>" +
+                "   <div class='severity-dot " + clash.clash_type + "'></div>" +
+                "   <span class='clash-item-title'>Clash " + (index + 1) + "</span>" +
+                "</div>" +
+                "<div class='clash-item-types'>" + clash.a_ifc_class + " vs " + clash.b_ifc_class + "</div>" +
+                "<div class='clash-item-depth'>" + (clash.clash_type === "hard" ? "Hard clash (collision)" : "Clearance violation") + "</div>";
+            li.addEventListener("click", function () {
+                goToClash(index);
+            });
+            clashListEl.appendChild(li);
+        });
+
+        // Create annotations for each clash
+        clashResults.forEach((clash, index) => {
+            // Always compute the contact point from element AABBs in xeokit world coordinates,
+            // since the IfcClash contact_point values are in IFC coordinate space (Z-up) and
+            // do not match xeokit's Y-up world space after model conversion.
+            const {point: contactPoint} = computeClashRegion(scene, clash.a_global_id, clash.b_global_id);
+            annotations.createAnnotation({
+                id: "clash-annotation-" + index,
+                worldPos: contactPoint,
+                occludable: false,
+                markerShown: false,
+                labelShown: false,
+                values: {
+                    glyph: "" + (index + 1),
+                    title: "Clash " + (index + 1) + " (" + clash.clash_type + ")",
+                    elemA: clash.a_ifc_class + ": " + clash.a_name,
+                    elemB: clash.b_ifc_class + ": " + clash.b_name,
+                    clashType: clash.clash_type === "hard" ? "Hard clash (collision)" : "Clearance violation",
+                    depth: "at (" + contactPoint[0].toFixed(1) + ", " + contactPoint[1].toFixed(1) + ", " + contactPoint[2].toFixed(1) + ")"
+                }
+            });
+        });
+
+        document.getElementById("loadingOverlay").classList.add("hidden");
+        document.getElementById("prevBtn").disabled = false;
+        document.getElementById("nextBtn").disabled = false;
+        document.getElementById("showAllBtn").disabled = false;
+
+        // Navigate to the first clash (also enables the export button)
+        goToClash(0);
+    }
+
+    function goToClash(index) {
+
+        if (index < 0 || index >= clashResults.length) {
+            return;
+        }
+
+        const scene = viewer.scene;
+        const clash = clashResults[index];
+
+        // Reset all emphasis state
+        scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
+        scene.setObjectsSelected(scene.selectedObjectIds, false);
+        scene.setObjectsColorized(scene.colorizedObjectIds, null);
+        scene.setObjectsOpacity(scene.objectIds, 1.0);
+
+        // X-ray all objects for context
+        scene.setObjectsVisible(scene.objectIds, true);
+        scene.setObjectsXRayed(scene.objectIds, true);
+
+        // Un-x-ray and colorize the two clashing elements with distinct colors
+        // Using only colorize (not highlight/selected) so each element gets its own color
+        const elemA = scene.objects[clash.a_global_id];
+        const elemB = scene.objects[clash.b_global_id];
+
+        if (elemA) {
+            elemA.xrayed = false;
+            elemA.colorize = [1.0, 0.2, 0.2]; // Red — architectural element (A)
+            elemA.opacity = 1.0;
+        }
+
+        if (elemB) {
+            elemB.xrayed = false;
+            elemB.colorize = [0.2, 0.6, 1.0]; // Blue — MEP element (B)
+            elemB.opacity = 1.0;
+        }
+
+        // Fly camera tightly to the clash region (AABB overlap between the two elements)
+        const {aabb: clashAABB} = computeClashRegion(scene, clash.a_global_id, clash.b_global_id);
+        viewer.cameraFlight.flyTo({
+            aabb: clashAABB,
+            duration: 1.0,
+            fitFOV: 45
+        });
+
+        // Update annotations — show only the active one
+        clashResults.forEach((c, i) => {
+            const annotation = annotations.annotations["clash-annotation-" + i];
+            if (annotation) {
+                annotation.setMarkerShown(i === index);
+                annotation.setLabelShown(i === index);
+            }
+        });
+
+        // Update clash list active state
+        if (currentIndex >= 0) {
+            const prevItem = document.getElementById("clash-item-" + currentIndex);
+            if (prevItem) prevItem.classList.remove("active");
+        }
+        const activeItem = document.getElementById("clash-item-" + index);
+        if (activeItem) {
+            activeItem.classList.add("active");
+            activeItem.scrollIntoView({behavior: "smooth", block: "nearest"});
+        }
+
+        // Update nav label and enable export
+        document.getElementById("navLabel").textContent = "Clash " + (index + 1) + " of " + clashResults.length;
+        document.getElementById("exportBcfBtn").disabled = false;
+
+        currentIndex = index;
+    }
+
+    function showAll() {
+        const scene = viewer.scene;
+        scene.setObjectsVisible(scene.objectIds, true);
+        scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+        scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
+        scene.setObjectsSelected(scene.selectedObjectIds, false);
+        scene.setObjectsColorized(scene.colorizedObjectIds, null);
+        scene.setObjectsOpacity(scene.objectIds, 1.0);
+        scene.setObjectsEdges(scene.objectIds, true);
+
+        // Show all annotation markers, hide labels
+        clashResults.forEach((c, i) => {
+            const annotation = annotations.annotations["clash-annotation-" + i];
+            if (annotation) {
+                annotation.setMarkerShown(true);
+                annotation.setLabelShown(false);
+            }
+        });
+
+        // Fly to full model
+        viewer.cameraFlight.flyTo({
+            aabb: scene.getAABB(),
+            duration: 1.0
+        });
+
+        // Clear active state
+        if (currentIndex >= 0) {
+            const prevItem = document.getElementById("clash-item-" + currentIndex);
+            if (prevItem) prevItem.classList.remove("active");
+        }
+        currentIndex = -1;
+        document.getElementById("navLabel").textContent = "All clashes";
+        document.getElementById("exportBcfBtn").disabled = true;
+    }
+
+    function exportBCF() {
+        const scene = viewer.scene;
+
+        // BCFViewpointsPlugin captures every object's visual state, including all x-rayed objects.
+        // For a clash viewpoint we only want the camera + the two colorized clash elements.
+        // Temporarily clear x-ray so the export contains only the colorized elements, then restore.
+        const xrayedIds = [...scene.xrayedObjectIds];
+        scene.setObjectsXRayed(xrayedIds, false);
+
+        const viewpoint = bcfViewpoints.getViewpoint({
+            spacesVisible: false,
+            spaceBoundariesVisible: false,
+            openingsVisible: false
+        });
+
+        scene.setObjectsXRayed(xrayedIds, true);
+
+        const viewpointStr = JSON.stringify(viewpoint, null, 4);
+        const blob = new Blob([viewpointStr], {type: "application/json"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = currentIndex >= 0
+            ? "clash-" + (currentIndex + 1) + "-viewpoint.bcf.json"
+            : "all-clashes-viewpoint.bcf.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load models
+    //------------------------------------------------------------------------------------------------------------------
+
+    const arcModel = xktLoader.load({
+        id: "DigitalHub_ARC",
+        src: "../../assets/models/xkt/v12/compressed/DigitalHub_FM-ARC_v2.xkt",
+        edges: true
+    });
+
+    const hzgModel = xktLoader.load({
+        id: "DigitalHub_HZG",
+        src: "../../assets/models/xkt/v12/compressed/DigitalHub_FM-HZG_v2.xkt",
+        edges: true
+    });
+
+    function onModelLoadError(model) {
+        document.getElementById("loadingOverlay").textContent = "Error loading model: " + model.id;
+    }
+
+    arcModel.on("loaded", function () {
+        modelsLoaded++;
+        if (modelsLoaded === 2) onModelsLoaded();
+    });
+    arcModel.on("error", function () { onModelLoadError(arcModel); });
+
+    hzgModel.on("loaded", function () {
+        modelsLoaded++;
+        if (modelsLoaded === 2) onModelsLoaded();
+    });
+    hzgModel.on("error", function () { onModelLoadError(hzgModel); });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Wire UI event handlers
+    //------------------------------------------------------------------------------------------------------------------
+
+    document.getElementById("prevBtn").addEventListener("click", function () {
+        if (currentIndex > 0) {
+            goToClash(currentIndex - 1);
+        } else {
+            goToClash(clashResults.length - 1); // Wrap around
+        }
+    });
+
+    document.getElementById("nextBtn").addEventListener("click", function () {
+        if (currentIndex < clashResults.length - 1) {
+            goToClash(currentIndex + 1);
+        } else {
+            goToClash(0); // Wrap around
+        }
+    });
+
+    document.getElementById("showAllBtn").addEventListener("click", showAll);
+    document.getElementById("exportBcfBtn").addEventListener("click", exportBCF);
+
+    // Keyboard navigation
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowLeft") {
+            e.preventDefault();
+            if (currentIndex > 0) {
+                goToClash(currentIndex - 1);
+            } else {
+                goToClash(clashResults.length - 1);
+            }
+        } else if (e.key === "ArrowRight") {
+            e.preventDefault();
+            if (currentIndex < clashResults.length - 1) {
+                goToClash(currentIndex + 1);
+            } else {
+                goToClash(0);
+            }
+        }
+    });
+
+    // Click annotation markers to navigate to that clash
+    annotations.on("markerClicked", function (annotation) {
+        const idParts = annotation.id.split("-");
+        const index = parseInt(idParts[idParts.length - 1]);
+        if (!isNaN(index)) {
+            goToClash(index);
+        }
+    });
+
+    window.viewer = viewer;
+
+</script>
+</html>
