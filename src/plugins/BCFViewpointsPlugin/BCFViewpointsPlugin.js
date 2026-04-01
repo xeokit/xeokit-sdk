@@ -526,6 +526,9 @@ class BCFViewpointsPlugin extends Plugin {
                 } else if (opacityObjectIds.has(entity.id)) {
                     alpha = Math.round(entity.opacity * 255).toString(16).padStart(2, "0");
                     color = alpha + color;
+                } else {
+                    // BCF color format is ARGB (8 chars); prepend "ff" for fully opaque colorized objects
+                    color = "ff" + color;
                 }
 
                 if (!coloringMap[color]) {
