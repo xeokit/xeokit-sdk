@@ -491,6 +491,7 @@ class Viewer {
             const plugin = plugins[i];
             plugin.destroy();
         }
+        this.metaScene._destroy();
         this.scene.destroy();
     }
 }
