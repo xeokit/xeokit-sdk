@@ -103,10 +103,9 @@ export class OcclusionTester {
     }
 
     /**
-     * Draws {@link Marker}s to the render buffer and sets visibilities of {@link Marker}s
-     * according to whether or not they are obscured by anything in the render buffer.
+     * Draws {@link Marker}s to the render buffer.
      */
-    drawMarkersAndDoOcclusionTest(readPixelBuf) {
+    drawMarkers() {
 
         const scene = this._scene;
         const canvas = scene.canvas;
@@ -124,7 +123,6 @@ export class OcclusionTester {
             const programVariables = programVariablesState.programVariables;
             const viewMatrix = programVariables.createUniform("mat4",  "viewMatrix");
             const projMatrix = programVariables.createUniform("mat4",  "projMatrix");
-            const layerIDu   = programVariables.createUniform("uint",  "layerID");
             const position   = programVariables.createAttribute("vec3", "position");
             const outColor   = programVariables.createOutput("vec4", "outColor");
             const clipPos    = "clipPos";
@@ -148,7 +146,7 @@ export class OcclusionTester {
                     worldPositionAttribute: "worldPosition",
                     getPointSize: () => "20.0",
                     clipPos: clipPos,
-                    appendFragmentOutputs: (src) => src.push(`${outColor} = vec4(${[24,16,8,0].map(i => `float((${layerIDu} >> ${i}) & 0xFFu) / 255.0`).join(", ")});`)
+                    appendFragmentOutputs: (src) => src.push(`${outColor} = vec4(1.0, 0.0, 0.0, 1.0);`)
                 });
 
             if (errors) {
@@ -179,7 +177,7 @@ export class OcclusionTester {
                             return (viewPos[2] <= -near) && (canvasX >= -10) && (canvasY >= -10) && (canvasX <= canvasWidth + 10) && (canvasY <= canvasHeight + 10);
                         };
 
-                        this._occlusionLayersList.forEach((occlusionLayer, layerID) => {
+                        this._occlusionLayersList.forEach(occlusionLayer => {
                             occlusionLayer.update(gl, markerInView);
 
                             const culled = sectionPlanesState.sectionPlanes.some((sectionPlane, i) => {
@@ -205,7 +203,6 @@ export class OcclusionTester {
                                     });
 
                                 position.setInputValue(occlusionLayer.positionsBuf);
-                                layerIDu.setInputValue(layerID);
 
                                 const indicesBuf = occlusionLayer.indicesBuf;
                                 indicesBuf.bind();
@@ -237,20 +234,19 @@ export class OcclusionTester {
         }
 
         this._drawable.drawCall();
+    }
 
-        if (readPixelBuf) {
-            const resolutionScale = scene.canvas.resolutionScale;
-            this._occlusionLayersList.forEach((occlusionLayer, layerID) => {
-                for (let i = 0; i < occlusionLayer.lenOcclusionTestList; i++) {
-                    const j = i * 2;
-                    const color = readPixelBuf.read(
-                        Math.round(resolutionScale * occlusionLayer.pixels[j]),
-                        Math.round(resolutionScale * occlusionLayer.pixels[j + 1]));
-                    const pixelLayerID = (color[0] << 24) | (color[1] << 16) | (color[2] <<  8) | color[3];
-                    occlusionLayer.occlusionTestList[i]._setVisible(pixelLayerID === layerID); // this assumes all markers in an occlusionLayer share the same origin
-                }
-            });
-        }
+    /**
+     * Sets visibilities of {@link Marker}s according to whether or not they are obscured by anything in the render buffer.
+     */
+    doOcclusionTest(readColorPixel) {
+        this._occlusionLayersList.forEach(occlusionLayer => {
+            for (let i = 0; i < occlusionLayer.lenOcclusionTestList; i++) {
+                const j = i * 2;
+                const color = readColorPixel(occlusionLayer.pixels[j], occlusionLayer.pixels[j + 1]);
+                occlusionLayer.occlusionTestList[i]._setVisible(math.compareVec3(MARKER_COLOR, color));
+            }
+        });
     }
 
     /**
