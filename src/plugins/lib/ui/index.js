@@ -312,10 +312,25 @@ export class Label3D {
         this.__visible = true;
 
         this._updatePos = () => {
-            toClipSpace(camera, this._start, tmpVec4a);
-            math.mulVec4Scalar(tmpVec4a, 1.0 / tmpVec4a[3]);
-            toCanvasSpace(scene.canvas.canvas, parentElement, tmpVec4a, tmpVec2a);
-            this._label.setPos(tmpVec2a[0], tmpVec2a[1]);
+            const p0 = tmpVec4a;
+            toClipSpace(camera, this._start, p0);
+            math.mulVec3Scalar(p0, 1.0 / p0[3]);
+
+            const outsideFrustum = ((p0[3] < 0)
+                                    ||
+                                    (p0[0] < -1) || (p0[0] > 1)
+                                    ||
+                                    (p0[1] < -1) || (p0[1] > 1)
+                                    ||
+                                    (p0[2] < -1) || (p0[2] > 1));
+            const culled = outsideFrustum || scene._sectionPlanesState.sectionPlanes.some(
+                plane => plane.active && (math.dotVec3(plane.dir, math.subVec3(plane.pos, this._start, tmpVec3a)) > 0));
+
+            this._label.setCulled(culled);
+            if (! culled) {
+                toCanvasSpace(scene.canvas.canvas, parentElement, p0, tmpVec2a);
+                this._label.setPos(tmpVec2a[0], tmpVec2a[1]);
+            }
         };
 
         const setPosOnWire = (p0, p1, yOff) => {
