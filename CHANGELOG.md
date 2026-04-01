@@ -1,6 +1,15 @@
 ## xeokit-sdk Changelog
 
 
+# [v2.6.108](https://github.com/xeokit/xeokit-sdk/compare/v2.6.107...v2.6.108)
+
+### 01 Apr 2026
+
+-  XEOK-437 Adjust ts types [#2026](https://github.com/xeokit/xeokit-sdk/pull/2026)
+-  XCD-465 Fix overlapping markers occlusion [#2027](https://github.com/xeokit/xeokit-sdk/pull/2027)
+-  XCD-466 Improving performance of viewer.destroy() [#2029](https://github.com/xeokit/xeokit-sdk/pull/2029)
+
+
 # [v2.6.107](https://github.com/xeokit/xeokit-sdk/compare/v2.6.106...v2.6.107)
 
 ### 12 Mar 2026
