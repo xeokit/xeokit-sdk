@@ -1755,24 +1755,23 @@ const Renderer = function (scene, options) {
             frameCtx.nearPlaneHeight = getNearPlaneHeight(scene.camera, gl.drawingBufferHeight);
 
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-            gl.clearColor(0, 0, 0, 0);
+            gl.clearColor(1, 1, 1, 1); // so layerID === 0 is a valid value
             gl.enable(gl.DEPTH_TEST);
             gl.disable(gl.CULL_FACE);
             gl.disable(gl.BLEND);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+            readPixelBuf && gl.drawBuffers([ ]); // don't draw colors, populate only the depth buffer
             postCullDrawableList.forEach(drawable => {
                 if (!drawable.culled && drawable.visible && drawable.pickable && drawable.drawOcclusion) { // TODO: Option to exclude transparent?
                     drawable.drawOcclusion(frameCtx);
                 }
             });
 
-            this._occlusionTester.drawMarkers();
+            readPixelBuf && gl.drawBuffers([ gl.COLOR_ATTACHMENT0 ]);
+            this._occlusionTester.drawMarkersAndDoOcclusionTest(readPixelBuf);
 
             if (readPixelBuf) {
-                const resolutionScale = scene.canvas.resolutionScale;
-                this._occlusionTester.doOcclusionTest( // Updates Marker "visible" properties
-                    (x, y) => readPixelBuf.read(Math.round(resolutionScale * x), Math.round(resolutionScale * y)));
                 readPixelBuf.unbind();
             }
         }

@@ -582,6 +582,7 @@ const makeInputSetters = function(gl, handle) {
                     switch (u.type) {
                     case gl.BOOL:       return value => gl.uniform1i(location, value);
                     case gl.INT:        return value => gl.uniform1i(location, value);
+                    case gl.UNSIGNED_INT: return value => gl.uniform1ui(location, value);
                     case gl.FLOAT:      return value => gl.uniform1f(location, value);
                     case gl.FLOAT_VEC2: return value => gl.uniform2fv(location, value);
                     case gl.FLOAT_VEC3: return value => gl.uniform3fv(location, value);
