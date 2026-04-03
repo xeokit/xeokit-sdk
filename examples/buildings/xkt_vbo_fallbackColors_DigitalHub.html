@@ -1,0 +1,496 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* NavCubePlugin */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* TreeViewPlugin */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        #treeViewContainer {
+            pointer-events: all;
+            height: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: black;
+            top: 80px;
+            z-index: 200000;
+            float: left;
+            left: 0;
+            padding-left: 10px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            width: 350px;
+        }
+
+        #treeViewContainer ul {
+            list-style: none;
+            padding-left: 1.75em;
+            pointer-events: none;
+        }
+
+        #treeViewContainer ul li {
+            position: relative;
+            width: 500px;
+            pointer-events: none;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            vertical-align: middle;
+        }
+
+        #treeViewContainer ul li a {
+            background-color: #eee;
+            border-radius: 50%;
+            color: #000;
+            display: inline-block;
+            height: 1.5em;
+            left: -1.5em;
+            position: absolute;
+            text-align: center;
+            text-decoration: none;
+            width: 1.5em;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li a.plus {
+            background-color: #ded;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li a.minus {
+            background-color: #eee;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li a:active {
+            top: 1px;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li span:hover {
+            color: white;
+            cursor: pointer;
+            background: black;
+            padding-left: 2px;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li span {
+            display: inline-block;
+            width: calc(100% - 50px);
+            padding-left: 2px;
+            pointer-events: all;
+            height: 23px;
+        }
+
+        #treeViewContainer .highlighted-node { /* Appearance of node highlighted with TreeViewPlugin#showNode() */
+            border: black solid 1px;
+            background: yellow;
+            color: black;
+            padding-left: 1px;
+            padding-right: 5px;
+            pointer-events: all;
+        }
+
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<canvas id="myNavCubeCanvas"></canvas>
+<div id="treeViewContainer"></div>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/bim_icon.png"/>
+    <h1>XKTLoaderPlugin — Fallback Colours per IFC Type</h1>
+    <h2>Assigning meaningful colours to elements that have no colour defined in the IFC model</h2>
+
+    <h3>Toggle</h3>
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;margin-bottom:6px;">
+        <input type="checkbox" id="fallbackToggle" checked style="width:16px;height:16px;cursor:pointer;"/>
+        Fallback colours
+    </label>
+    <p style="font-size:13px;margin-top:0;">
+        Toggle to compare the fallback-coloured view against the raw (uncoloured) state
+        stored in the XKT file.
+    </p>
+
+    <h3>Concept</h3>
+    <p>
+        Some IFC models contain elements with no colour information — for example, models
+        exported without material or surface-style assignments.
+    </p>
+    <p>
+        This example applies fallback colours at runtime via <code>entity.colorize</code>,
+        using a per-IFC-type colour map. Elements that already carry a meaningful IFC colour
+        (detected by checking whether their mesh colour has chroma) are left untouched, so
+        only neutral/achromatic elements receive a fallback.
+    </p>
+    <p>
+        Additionally, a <b>name-based override</b> map lets you recolour specific elements
+        regardless of their existing colour — useful for objects like Revit RPC trees that
+        export as <code>IfcBuildingElementProxy</code> with a non-neutral placeholder colour.
+        Name overrides are always applied and take priority over the type map.
+    </p>
+    <p>
+        The <code>DEFAULT</code> key in the type map acts as a catch-all for any IFC type
+        that has no explicit entry.
+    </p>
+
+    <h3>Colour palette</h3>
+    <p>
+        The palette follows the <b>Wong (2011) colorblind-safe</b> categorical set, organised
+        by visual role so that the scheme stays readable across projects:
+    </p>
+    <ul>
+        <li><b>Structure / fabric</b> — neutral, low-saturation greys (#BDBDBD → #6E6E6E)</li>
+        <li><b>Openings / circulation</b> — noticeable tones: sky-blue windows, vermillion doors, pink stairs</li>
+        <li><b>MEP / equipment</b> — saturated accents: teal pipes, amber equipment, yellow sensors</li>
+        <li><b>Vegetation</b> — muted forest green, always applied by name match (Revit RPC
+            trees are exported as <code>IfcBuildingElementProxy</code>;
+            <code>IfcGeographicElement</code> in IFC 4.3 is the proper long-term type)</li>
+        <li><b>Unknown / proxy</b> — light grey #C7C7C7</li>
+    </ul>
+
+    <h3>Stats</h3>
+    <ul>
+        <li><div id="time">Loading JavaScript modules...</div></li>
+    </ul>
+
+    <h3>Components used</h3>
+    <ul>
+        <li><a href="../../docs/class/src/viewer/Viewer.js~Viewer.html" target="_other">Viewer</a></li>
+        <li><a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html" target="_other">XKTLoaderPlugin</a></li>
+        <li><a href="../../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html" target="_other">TreeViewPlugin</a></li>
+        <li><a href="../../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html" target="_other">NavCubePlugin</a></li>
+        <li><a href="../../docs/class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html" target="_other">FastNavPlugin</a></li>
+    </ul>
+
+    <h3>Assets</h3>
+    <ul>
+        <li><a href="https://www.cms.bgu.tum.de/en/" target="_other">Models courtesy of RWTH Aachen</a></li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        saoEnabled: true
+    });
+
+    viewer.scene.camera.eye = [36.44, 32.92, 55.10];
+    viewer.scene.camera.look = [16.86, 4.67, 14.73];
+    viewer.scene.camera.up = [-0.11, 0.95, -0.29];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Configure navigation helpers
+    //------------------------------------------------------------------------------------------------------------------
+
+    new FastNavPlugin(viewer, {
+        hideEdges: true,
+        hideSAO: true,
+        hideColorTexture: true,
+        hidePBR: true,
+        hideTransparentObjects: false,
+        delayBeforeRestore: true,
+        delayBeforeRestoreSeconds: 0.4
+    });
+
+    new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
+        visible: true,
+        size: 250,
+        alignment: "bottomRight",
+        bottomMargin: 100,
+        rightMargin: 10
+    });
+
+    new TreeViewPlugin(viewer, {
+        containerElement: document.getElementById("treeViewContainer"),
+        hierarchy: "types",
+        autoExpandDepth: 1
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create the XKT loader
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Fallback colour map for the architectural model (FM_ARC).
+    //
+    // Palette follows the Wong (2011) colorblind-safe categorical set so the scheme is both
+    // accessible and stable across projects:
+    //   Structure / fabric  → neutral, low-saturation greys  (#BDBDBD … #6E6E6E)
+    //   Openings / circulation → warmer, more noticeable tones (#D55E00, #56B4E9, #CC79A7, #009E73)
+    //   MEP / equipment / finishes → saturated accents (#F0E442, #E69F00, #0072B2)
+    //   Unknown / proxy     → light grey #C7C7C7
+    //
+    // The DEFAULT entry catches any IFC type not explicitly listed.
+    //------------------------------------------------------------------------------------------------------------------
+
+    const arcColorMap = {
+        // Structure / fabric — neutral greys
+        IfcWall:                    { colorize: [0.741, 0.741, 0.741] }, // #BDBDBD
+        IfcSlab:                    { colorize: [0.549, 0.549, 0.549] }, // #8C8C8C
+        IfcRoof:                    { colorize: [0.431, 0.431, 0.431] }, // #6E6E6E
+        IfcColumn:                  { colorize: [0.620, 0.620, 0.620] }, // #9E9E9E
+        IfcBeam:                    { colorize: [0.498, 0.498, 0.498] }, // #7F7F7F
+        IfcMember:                  { colorize: [0.498, 0.498, 0.498] }, // #7F7F7F  (structural member → same as beam)
+
+        // Openings / circulation — distinctive, more noticeable tones
+        IfcDoor:                    { colorize: [0.835, 0.369, 0.000] }, // #D55E00  vermillion
+        IfcWindow:                  { colorize: [0.337, 0.706, 0.914], opacity: 0.4 }, // #56B4E9  sky blue
+        IfcOpeningElement:          { colorize: [0.902, 0.624, 0.000] }, // #E69F00  amber
+        IfcStair:                   { colorize: [0.800, 0.475, 0.655] }, // #CC79A7  reddish purple
+        IfcStairFlight:             { colorize: [0.800, 0.475, 0.655] }, // #CC79A7
+        IfcRamp:                    { colorize: [0.800, 0.475, 0.655] }, // #CC79A7
+        IfcRailing:                 { colorize: [0.000, 0.620, 0.451] }, // #009E73  bluish green
+
+        // Glazed / facade elements
+        IfcCurtainWall:             { colorize: [0.000, 0.447, 0.698], opacity: 0.5 }, // #0072B2  deep blue
+        IfcPlate:                   { colorize: [0.000, 0.447, 0.698], opacity: 0.5 }, // #0072B2  (glazing panels)
+
+        // Finishes / equipment / furnishings — saturated accents
+        IfcCovering:                { colorize: [0.941, 0.894, 0.259] }, // #F0E442  yellow
+        IfcFurnishingElement:       { colorize: [0.800, 0.475, 0.655] }, // #CC79A7  reddish purple
+
+        // Unknown / proxy
+        IfcBuildingElementProxy:    { colorize: [0.780, 0.780, 0.780] }, // #C7C7C7
+        IfcSpace:                   { colorize: [0.780, 0.780, 0.780], opacity: 0.1 }, // subtle ghost
+
+        DEFAULT:                    { colorize: [0.780, 0.780, 0.780] }  // #C7C7C7
+    };
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Name-based overrides for the architectural model.
+    //
+    // Trees/vegetation are often modelled as IfcBuildingElementProxy in Revit and similar tools,
+    // so they cannot be distinguished by IFC type alone.  Matching on the element name is a
+    // pragmatic fallback until IFC 4.3 IfcGeographicElement (with PredefinedType TREE / SHRUB)
+    // becomes common.  The regex covers German ("Baum", "Strauch", "Hecke") and English keywords.
+    //------------------------------------------------------------------------------------------------------------------
+
+    const arcNameColorMap = [
+        {
+            pattern: /baum|tree|plant|shrub|hedge|hecke|strauch|pflanz/i,
+            colorize: [0.22, 0.42, 0.18]   // muted forest green
+        }
+    ];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Fallback colour map for the heating model (FM_HZG).
+    //
+    // Reuses the same Wong palette categories so the user reads it the same way across models:
+    //   Flow segments / pipes / fittings  → teal  #009E73
+    //   Flow terminals / equipment        → amber #E69F00
+    //   Sensors / electrical              → yellow #F0E442
+    //   Unknown                           → teal  #009E73  (default for a single-discipline MEP model)
+    //------------------------------------------------------------------------------------------------------------------
+
+    const hzgColorMap = {
+        // Flow segments / distribution — teal
+        IfcPipeSegment:         { colorize: [0.000, 0.620, 0.451] }, // #009E73
+        IfcPipeFitting:         { colorize: [0.000, 0.620, 0.451] }, // #009E73
+        IfcDistributionPort:    { colorize: [0.000, 0.620, 0.451] }, // #009E73
+
+        // Flow terminals / equipment — amber
+        IfcValve:               { colorize: [0.902, 0.624, 0.000] }, // #E69F00
+        IfcPump:                { colorize: [0.902, 0.624, 0.000] }, // #E69F00
+        IfcSpaceHeater:         { colorize: [0.902, 0.624, 0.000] }, // #E69F00
+        IfcTank:                { colorize: [0.902, 0.624, 0.000] }, // #E69F00
+        IfcUnitaryEquipment:    { colorize: [0.902, 0.624, 0.000] }, // #E69F00
+
+        // Sensors / electrical — yellow
+        IfcSensor:              { colorize: [0.941, 0.894, 0.259] }, // #F0E442
+
+        DEFAULT:                { colorize: [0.000, 0.620, 0.451] }  // #009E73  (flow element default)
+    };
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load the architectural discipline model.  XKT v12 embeds IFC metadata (types, names,
+    // hierarchy) so no separate .json metaModelSrc is needed.
+    //------------------------------------------------------------------------------------------------------------------
+
+    const t0 = performance.now();
+    document.getElementById("time").innerHTML = "Loading models...";
+
+    const arcModel = xktLoader.load({
+        id: "arcModel",
+        src: "../../assets/models/xkt/v12/compressed/DigitalHub_FM-ARC_v2.xkt",
+        saoEnabled: true,
+        edges: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load the heating discipline model
+    //------------------------------------------------------------------------------------------------------------------
+
+    const hzgModel = xktLoader.load({
+        id: "hzgModel",
+        src: "../../assets/models/xkt/v12/compressed/DigitalHub_FM-HZG_v2.xkt",
+        saoEnabled: true,
+        edges: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Apply / remove fallback colours at runtime using entity.colorize.
+    // Setting entity.colorize overrides the displayed colour; setting it to null reverts to the
+    // mesh's original base colour stored in the XKT file.
+    //
+    // Before applying a fallback we read the entity's current colorize value, which equals the
+    // base XKT mesh colour before any override is in place.  If that colour has meaningful chroma
+    // (max(r,g,b) - min(r,g,b) > 0.05) the IFC model already assigned a real colour to this
+    // element and we leave it alone.  Only neutral/achromatic colours (greys, whites) that came
+    // from the converter's "no colour" default are replaced by the fallback.
+    //
+    // applyFallbackColors() accepts an optional nameColorMap — an array of { pattern, colorize,
+    // opacity? } entries whose regex is tested against the MetaObject name.  Name-based overrides
+    // are evaluated before the type map and are useful for authoring-tool-specific proxy names that
+    // carry semantic meaning not captured by the IFC type alone (e.g. Revit RPC trees exported as
+    // IfcBuildingElementProxy).  In IFC 4.3+ the proper type for vegetation is
+    // IfcGeographicElement; adding that to the type map is still recommended for future models.
+    //------------------------------------------------------------------------------------------------------------------
+
+    function hasDefinedColor(entity) {
+        // We need to check every mesh individually because entity.colorize only reads
+        // the first mesh.  Compound entities like barriers have a neutral post (first
+        // mesh) followed by a coloured arm — entity.colorize would miss the colour and
+        // the fallback would overwrite it.
+        //
+        // SceneModelMesh does not yet expose a public colorize getter, so we read
+        // mesh._colorize (Uint8Array [R, G, B, A] in 0-255) directly.  If a public
+        // accessor is added in a future SDK version this should be updated.
+        for (const mesh of entity.meshes) {
+            const c = mesh._colorize;
+            if ((Math.max(c[0], c[1], c[2]) - Math.min(c[0], c[1], c[2])) / 255 > 0.05) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function applyFallbackColors(metaModelId, colorMap, nameColorMap = null) {
+        const metaModel = viewer.metaScene.metaModels[metaModelId];
+        if (!metaModel) return;
+        for (const id of Object.keys(metaModel.metaObjects)) {
+            const metaObject = metaModel.metaObjects[id];
+            const entity = viewer.scene.objects[id];
+            if (!entity) continue;
+            // Name-based override takes priority — always applied, even when the
+            // entity already carries a colour (e.g. Revit RPC trees that export
+            // with a non-neutral placeholder colour as IfcBuildingElementProxy).
+            let props = null;
+            if (nameColorMap) {
+                const nameEntry = nameColorMap.find(e => e.pattern.test(metaObject.name));
+                if (nameEntry) props = nameEntry;
+            }
+            if (!props) {
+                if (hasDefinedColor(entity)) continue; // IFC already provided a colour — respect it
+                props = colorMap[metaObject.type] || colorMap["DEFAULT"];
+            }
+            if (!props) continue;
+            if (props.colorize) {
+                entity.colorize = props.colorize;
+            }
+            if (props.opacity !== undefined) {
+                entity.opacity = props.opacity;
+            }
+        }
+    }
+
+    function removeFallbackColors(metaModelId) {
+        const metaModel = viewer.metaScene.metaModels[metaModelId];
+        if (!metaModel) return;
+        for (const id of Object.keys(metaModel.metaObjects)) {
+            const entity = viewer.scene.objects[id];
+            if (!entity) continue;
+            entity.colorize = null;  // revert to original XKT mesh colour
+            entity.opacity = 1.0;
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Once each model is loaded, apply its fallback colours and update the stats panel.
+    //------------------------------------------------------------------------------------------------------------------
+
+    let loadedCount = 0;
+
+    function onModelLoaded() {
+        loadedCount++;
+        if (loadedCount === 2) {
+            const t1 = performance.now();
+            document.getElementById("time").innerHTML =
+                "Models loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>" +
+                "Objects: " + (arcModel.numEntities + hzgModel.numEntities);
+        }
+    }
+
+    arcModel.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(arcModel);
+        applyFallbackColors("arcModel", arcColorMap, arcNameColorMap);
+        onModelLoaded();
+    });
+
+    hzgModel.on("loaded", () => {
+        applyFallbackColors("hzgModel", hzgColorMap);
+        onModelLoaded();
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Toggle checkbox
+    //------------------------------------------------------------------------------------------------------------------
+
+    document.getElementById("fallbackToggle").addEventListener("change", function () {
+        if (this.checked) {
+            applyFallbackColors("arcModel", arcColorMap, arcNameColorMap);
+            applyFallbackColors("hzgModel", hzgColorMap);
+        } else {
+            removeFallbackColors("arcModel");
+            removeFallbackColors("hzgModel");
+        }
+    });
+
+    window.viewer = viewer;
+
+</script>
+</html>

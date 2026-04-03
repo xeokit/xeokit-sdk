@@ -8,7 +8,6 @@
     <link href='https://fonts.googleapis.com/css?family=Exo+2:400,800,900,700,600,500|Roboto:100,300,400,500,700,900'
           rel='stylesheet' type='text/css'>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
-    
 
     <style>
 
@@ -84,7 +83,6 @@
             border: 1px solid #676767;
             background: #FFFF44;
         }
-
 
         #index .commentFirst {
             margin-left: 0 !important;
@@ -200,7 +198,7 @@
 
         .viewSourceButton {
             position: absolute;
-            left: 20px;
+            right: 20px;
             bottom: 15px;
             z-index: 200;
             transition: all 300ms ease-in-out;
@@ -227,7 +225,7 @@
         }
 
         #index_toggle:checked ~ .viewSourceButton {
-            left: 570px;
+            right: 20px;
         }
 
         #index_toggle:checked ~ .content-container {
@@ -249,37 +247,22 @@
 <div class="content-overlay" id="viewer-overlay"></div>
 <iframe class="content-container" id="viewer" src="../default.html"></iframe>
 <div class="slideout-sidebar">
-    <div id="index"><h1><a href="https://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Labeling Objects</h1></div>
+    <div id="index"><h1><a href="https://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Model Coordination</h1></div>
 </div>
 </body>
 <script>
 
     const files = {
 
-        "Annotating Models": [
+        "Model Coordination": [
 
-            "#Pinning 3D labels on models",
+            "#Clash detection",
 
-            ["annotations_clickShowLabels", "Click annotation markers to show labels"],
-            ["annotations_hoverShowLabels", "Hover annotation markers to show labels"],
-            ["annotations_clickFlyToPosition", "Click annotation markers to go to vantage points"],
-            ["annotations_createWithMouse", "Click on the model to create annotations"],
-            ["annotations_createWithTouch", "Tap on the model to create annotations"],
-            ["annotations_createWithMouse_orthoWithZMarkerOffset", "Click on the model to create annotations, control OcclusionTester.js precision"],
-            ["annotations_createWithMouse_orthoWithZMarkerOffsetZero", "Click on the model to create annotations, control OcclusionTester.js precision"],
-            ["annotations_createAtCenterOfClickedObject", "Click objects to create annotations at their centers"],
-            ["annotations_externalElements", "Annotations with externally-provided DOM elements"],
-            ["annotations_occlusionDisabled", "Annotations with occlusion culling disabled"],
-            ["annotations_fullPrecision_MAP", "Annotations with double-precision rendering"],
-            ["annotations_occlusionEnabled_dtx", "Annotations with occlusion culling enabled, DTX enabled"],
-            ["annotations_occlusionEnabled_sceneGraph", "Annotations with occlusion culling enabled, scene graph"],
-            ["annotations_occlusionEnabled_SceneModel_dtx", "Annotations with occlusion culling enabled, SceneModel, DTX"],
-            ["annotations_transformControl", "Transforming annotations"],
+            ["clashDetection", "Visualizing IfcClash results with BCF viewpoint export"],
 
-            "#Sprite markers",
+            "#2D markup",
 
-            ["markers_SpriteMarker", "Billboarded marker sprite"],
-
+            ["2D_markup", "2D markup"]
         ]
     };
 
@@ -292,7 +275,7 @@
 
     const viewSourceButton = document.getElementById('viewSourceButton');
     viewSourceButton.addEventListener('click', function (event) {
-        window.open('https://github.com/xeokit/xeokit-sdk/blob/master/examples/annotations/' + selected + '.html');
+        window.open('https://github.com/xeokit/xeokit-sdk/blob/master/examples/coordination/' + selected + '.html');
     }, false);
 
     const indexToggle = document.getElementById("index_toggle");
@@ -301,10 +284,6 @@
     viewerOverlay.addEventListener('click', function (event) {
         indexToggle.checked = false;
     }, false);
-
-    // indexToggle.addEventListener('click', function (event) {
-    //     viewer.src="default.html";
-    // }, false);
 
     const sectionDivs = {};
     const divs = {};
@@ -322,15 +301,6 @@
     container.appendChild(document.createElement('hr'));
 
     const sectionNames = Object.keys(files);
-    // sectionNames.sort((a, b) => {
-    //     if (a < b) {
-    //         return -1;
-    //     }
-    //     if (a > b) {
-    //         return 1;
-    //     }
-    //     return 0;
-    // });
 
     for (let i = 0, len = sectionNames.length; i < len; i++) {
         const sectionName = sectionNames[i];
@@ -389,11 +359,10 @@
             }
 
             const fileNameComponents = fileName.split('_');
-            //    fileNameComponents.shift();
             const fileNamePath = fileNameComponents.join(' / ');
             const fileNameDiv = document.createElement('div');
             fileNameDiv.className = 'link';
-            fileNameDiv.textContent = fileNamePath; // expandCamel(name);
+            fileNameDiv.textContent = fileNamePath;
             fileNameDiv.addEventListener('click', (function () {
                 const _file = fileName;
                 return function () {

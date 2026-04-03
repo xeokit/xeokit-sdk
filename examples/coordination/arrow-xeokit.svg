@@ -1,0 +1,36 @@
+<svg width="512" height="512" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="var(--stroke-width, 1.5)" stroke-linecap="round" stroke-linejoin="round">
+  <style>
+    :root {
+      --shadow-color: rgba(0, 0, 0, 0.15);
+      --rotation: 0deg;
+    }
+    .arrow-path {
+      filter: drop-shadow(1px 1px 1px var(--shadow-color));
+    }
+    .arrow-path-secondary {
+      filter: drop-shadow(1px 1px 1px var(--shadow-color));
+      stroke-width: calc(var(--stroke-width, 1.5) * 0.5);
+    }
+    .arrow-head {
+      filter: drop-shadow(1px 1px 1px var(--shadow-color));
+    }
+    .arrow-container {
+      transform-box: fill-box;
+      transform-origin: center;
+      transform: rotate(var(--rotation));
+    }
+    .arrow-container.dashed .arrow-path,
+    .arrow-container.dashed .arrow-path-secondary {
+      stroke-dasharray: 4;
+    }
+  </style>
+  <g class="arrow-container">
+    <!-- Start dot -->
+    <circle cx="40" cy="100" r="3" fill="currentColor" filter="drop-shadow(1px 1px 1px var(--shadow-color))" />
+    <!-- Single-line arrow body for lighter style -->
+    <line class="arrow-path" x1="40" y1="100" x2="140" y2="100" />
+    <!-- Removed secondary lines for lighter appearance -->
+    <!-- Clean, filled arrowhead for better balance -->
+    <polygon class="arrow-head" points="140,92 170,100 140,108" fill="currentColor" />
+  </g>
+</svg>
