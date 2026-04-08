@@ -10,18 +10,11 @@
     "dev-build": "rollup --config rollup.dev.config.js",
     "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc && node docs/.scripts/fix-doc-links.mjs",
     "typedocs": "rm -Rf ./docs/*; typedoc --tsconfig tsconfig.json",
-    "changelog": "git fetch; auto-changelog --commit-limit false --package --template changelog-template.hbs",
     "test": "npx percy exec -- npx playwright test"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/xeokit/xeokit-sdk.git"
-  },
-  "auto-changelog": {
-    "output": "CHANGELOG.md",
-    "template": "keepachangelog",
-    "unreleased": true,
-    "commitLimit": false
   },
   "keywords": [
     "ifc-viewer",
@@ -66,7 +59,6 @@
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-node-resolve": "^13.2.1",
     "@types/node": "^22.10.6",
-    "auto-changelog": "^2.4.0",
     "dotenv": "^16.4.7",
     "esdoc": "1.1.0",
     "esdoc-custom-theme": "1.4.2",
