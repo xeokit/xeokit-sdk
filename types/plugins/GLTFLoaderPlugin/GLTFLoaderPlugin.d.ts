@@ -87,6 +87,20 @@ export declare type LoadGLTFModel = {
   parseOptions?: any;
   /** Create an entity for each mesh, instead of grouping leaf meshes under their common entity. */
   entityPerMesh?: boolean;
+  /**
+   * Alternative user-provided loaders.gl library.
+   * This feature has been tested with loaders.gl 4.3.4 version.
+   * Because loaders.gl is supplied externally, xeokit cannot guarantee compatibility with all loaders.gl versions.
+   */
+  loadersGl?: {
+    core: {
+      parse: (...args: any[]) => any;
+    };
+    gltf: {
+      GLTFLoader: any;
+      postProcessGLTF: (...args: any[]) => any;
+    };
+  };
 };
 
 /**
