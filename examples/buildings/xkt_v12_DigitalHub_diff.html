@@ -1,0 +1,418 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+        .mode-toggle {
+            display: flex;
+            gap: 6px;
+            margin: 10px 0 16px;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 8px 10px;
+            border: 2px solid #666;
+            background: transparent;
+            color: #bbb;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.15s;
+        }
+        .mode-btn.active {
+            background: #666;
+            color: #fff;
+        }
+        .mode-btn:hover:not(.active) {
+            background: #333;
+            color: #ddd;
+        }
+        .legend {
+            margin: 10px 0;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 6px 0;
+            font-size: 13px;
+        }
+        .legend-swatch {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            margin-right: 10px;
+            flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+        .stats-table td {
+            padding: 4px 6px;
+        }
+        .stats-table td:last-child {
+            text-align: right;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" style="width:280px; padding-bottom:10px;" src="../../assets/images/bim_icon.png"/>
+    <h1>Model Revision Diff</h1>
+    <h2>DigitalHub FM-ARC &mdash; v1 vs v2</h2>
+    <p>Compares two revisions of the FM-ARC model. Switch between <strong>Geometry</strong> (objects
+       added or removed) and <strong>Properties</strong> (objects whose property sets changed).</p>
+
+    <div class="mode-toggle">
+        <button id="btn-geometry" class="mode-btn active" disabled>Geometry</button>
+        <button id="btn-properties" class="mode-btn" disabled>Properties</button>
+    </div>
+
+    <!-- Geometry legend -->
+    <div id="legend-geometry" class="legend">
+        <div class="legend-item">
+            <div class="legend-swatch" style="background:#00ff33;"></div>
+            Added (in v2, not in v1)
+        </div>
+        <div class="legend-item">
+            <div class="legend-swatch" style="background:#ff3300;"></div>
+            Removed (in v1, not in v2)
+        </div>
+        <div class="legend-item">
+            <div class="legend-swatch" style="background:#888; opacity:0.5;"></div>
+            Present in both (faded)
+        </div>
+    </div>
+
+    <!-- Properties legend -->
+    <div id="legend-properties" class="legend" style="display:none;">
+        <div class="legend-item">
+            <div class="legend-swatch" style="background:#ff4000;"></div>
+            Sets replaced (gained &amp; lost)
+        </div>
+        <div class="legend-item">
+            <div class="legend-swatch" style="background:#00c4ff;"></div>
+            Sets gained (new property sets)
+        </div>
+        <div class="legend-item">
+            <div class="legend-swatch" style="background:#d147ff;"></div>
+            Sets lost (removed property sets)
+        </div>
+        <div class="legend-item">
+            <div class="legend-swatch" style="background:#ffeb00;"></div>
+            Values changed (same structure)
+        </div>
+        <div class="legend-item">
+            <div class="legend-swatch" style="background:#888; opacity:0.5;"></div>
+            Faded &mdash; no property changes, or only exists in one version
+        </div>
+    </div>
+
+    <h3>Stats</h3>
+    <div id="time">Loading...</div>
+
+    <!-- Geometry stats -->
+    <table class="stats-table" id="stats-geometry" style="display:none; margin-top:8px;">
+        <tr><td>Added</td><td id="stat-geom-added">-</td></tr>
+        <tr><td>Removed</td><td id="stat-geom-removed">-</td></tr>
+        <tr><td>Present in both</td><td id="stat-geom-shared">-</td></tr>
+    </table>
+
+    <!-- Properties stats -->
+    <table class="stats-table" id="stats-properties" style="display:none; margin-top:8px;">
+        <tr><td>Sets replaced</td><td id="stat-prop-replaced">-</td></tr>
+        <tr><td>Sets gained</td><td id="stat-prop-gained">-</td></tr>
+        <tr><td>Sets lost</td><td id="stat-prop-lost">-</td></tr>
+        <tr><td>Values changed</td><td id="stat-val-changed">-</td></tr>
+        <tr><td>No property changes</td><td id="stat-prop-unchanged">-</td></tr>
+        <tr style="opacity:0.6;"><td colspan="2" style="padding-top:6px; font-style:italic; font-size:12px;">Faded (no v1/v2 counterpart)</td></tr>
+        <tr style="opacity:0.6;"><td>Only in v2</td><td id="stat-prop-geom-added">-</td></tr>
+        <tr style="opacity:0.6;"><td>Only in v1</td><td id="stat-prop-geom-removed">-</td></tr>
+    </table>
+
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    import {Viewer, XKTLoaderPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // 1. Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.scene.xrayMaterial.fillAlpha = 0.06;
+    viewer.scene.xrayMaterial.edgeAlpha = 0.15;
+    viewer.scene.xrayMaterial.fillColor = [0.5, 0.5, 0.5];
+    viewer.scene.xrayMaterial.edgeColor = [0.3, 0.3, 0.3];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // 2. Fetch metadata and compute diffs
+    //------------------------------------------------------------------------------------------------------------------
+
+    document.getElementById("time").innerHTML = "Fetching metadata...";
+
+    const [v1Json, v2Json] = await Promise.all([
+        fetch("../../assets/models/xkt/v12/compressed/FM_ARC_DigitalHub_v1.json").then(r => r.json()),
+        fetch("../../assets/models/xkt/v12/compressed/DigitalHub_FM-ARC_v2.json").then(r => r.json())
+        // fetch("../../assets/models/xkt/v12/compressed/FM_HZG_DigitalHub_v1.json").then(r => r.json()),
+        // fetch("../../assets/models/xkt/v12/compressed/DigitalHub_FM-HZG_v2.json").then(r => r.json())
+    ]);
+
+    const v1ObjMap = new Map(v1Json.metaObjects.map(o => [o.id, o]));
+    const v2ObjMap = new Map(v2Json.metaObjects.map(o => [o.id, o]));
+
+    // --- Geometry diff ---
+    // Purely based on whether an object exists in a given version.
+    const geomAdded = [];    // in v2, not in v1
+    const geomRemoved = [];  // in v1, not in v2
+    const sharedIds = [];    // in both
+
+    for (const id of v2ObjMap.keys()) {
+        (v1ObjMap.has(id) ? sharedIds : geomAdded).push(id);
+    }
+    for (const id of v1ObjMap.keys()) {
+        if (!v2ObjMap.has(id)) geomRemoved.push(id);
+    }
+
+    // --- Property diff ---
+    // For each shared object, compare property sets by NAME (not ID, since IDs differ between versions).
+    // Within same-named sets, also compare individual property values.
+    //
+    // Categories (mutually exclusive, priority order):
+    //   propReplaced  – gained AND lost property set names
+    //   propGained    – only new property set names added
+    //   propLost      – only property set names removed
+    //   valChanged    – same property set structure, but at least one value differs
+    //   propUnchanged – no property changes at all
+
+    const v1PSById = new Map(v1Json.propertySets.map(ps => [ps.id, ps]));
+    const v2PSById = new Map(v2Json.propertySets.map(ps => [ps.id, ps]));
+
+    function buildPSNameMap(obj, psById, propertiesArr) {
+        const map = new Map();
+        for (const psId of (obj.propertySetIds || [])) {
+            const ps = psById.get(psId);
+            if (!ps) continue;
+            const props = {};
+            for (const idx of (ps.properties || [])) {
+                const p = propertiesArr[idx];
+                if (p) props[p.name] = p.value;
+            }
+            map.set(ps.name, props);
+        }
+        return map;
+    }
+
+    const propReplaced = [];
+    const propGained = [];
+    const propLost = [];
+    const valChanged = [];
+    const propUnchanged = [];
+
+    for (const id of sharedIds) {
+        const v1PS = buildPSNameMap(v1ObjMap.get(id), v1PSById, v1Json.properties);
+        const v2PS = buildPSNameMap(v2ObjMap.get(id), v2PSById, v2Json.properties);
+
+        const gained = [...v2PS.keys()].some(n => !v1PS.has(n));
+        const lost   = [...v1PS.keys()].some(n => !v2PS.has(n));
+
+        if (gained && lost) {
+            propReplaced.push(id);
+        } else if (gained) {
+            propGained.push(id);
+        } else if (lost) {
+            propLost.push(id);
+        } else {
+            // Same property set names — check if any value differs
+            let valuesDiffer = false;
+            outer: for (const [name, v1Props] of v1PS) {
+                const v2Props = v2PS.get(name);
+                if (!v2Props) continue;
+                const keys = new Set([...Object.keys(v1Props), ...Object.keys(v2Props)]);
+                for (const key of keys) {
+                    if (v1Props[key] !== v2Props[key]) { valuesDiffer = true; break outer; }
+                }
+            }
+            (valuesDiffer ? valChanged : propUnchanged).push(id);
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // 3. Load models
+    //
+    // Load v2 (all current objects) and v1 with ONLY the removed objects.
+    // Removed objects by definition have no ID overlap with v2, so no entity ID conflicts.
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    document.getElementById("time").innerHTML = "Loading v2 model...";
+    const t0 = performance.now();
+
+    const modelV2 = xktLoader.load({
+        id: "model-v2",
+        src: "../../assets/models/xkt/v12/compressed/DigitalHub_FM-ARC_v2.xkt",
+        // src: "../../assets/models/xkt/v12/compressed/DigitalHub_FM-HZG_v2.xkt",
+        edges: true
+    });
+    await new Promise(resolve => modelV2.on("loaded", resolve));
+
+    if (geomRemoved.length > 0) {
+        document.getElementById("time").innerHTML = "Loading removed objects from v1...";
+        const modelV1 = xktLoader.load({
+            id: "model-v1",
+            src: "../../assets/models/xkt/v12/compressed/FM_ARC_DigitalHub_v1.xkt",
+            // src: "../../assets/models/xkt/v12/compressed/FM_HZG_DigitalHub_v1.xkt",
+            edges: true,
+            includeIds: geomRemoved
+        });
+        await new Promise(resolve => modelV1.on("loaded", resolve));
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // 3b. Identify entities in the XKT that have no JSON metadata
+    //------------------------------------------------------------------------------------------------------------------
+
+    const trackedIds = new Set([...geomAdded, ...geomRemoved, ...sharedIds]);
+    const untrackedIds = Object.keys(viewer.scene.objects).filter(id => !trackedIds.has(id));
+
+    //------------------------------------------------------------------------------------------------------------------
+    // 4. Mode switching
+    //------------------------------------------------------------------------------------------------------------------
+
+    const ALL_IDS = [...geomAdded, ...geomRemoved, ...sharedIds, ...untrackedIds];
+
+    function resetColors() {
+        viewer.scene.setObjectsXRayed(ALL_IDS, false);
+        viewer.scene.setObjectsColorized(ALL_IDS, null);
+        if (geomRemoved.length > 0) {
+            viewer.scene.setObjectsOpacity(geomRemoved, 1.0);
+        }
+    }
+
+    function applyGeometryMode() {
+        resetColors();
+        // De-emphasize objects present in both versions
+        if (sharedIds.length > 0) {
+            viewer.scene.setObjectsXRayed(sharedIds, true);
+        }
+        // Green: added in v2
+        // NOTE: colors are pre-compensated for Lambert shading which multiplies by ~1.5x
+        if (geomAdded.length > 0) {
+            viewer.scene.setObjectsColorized(geomAdded, [0.0, 0.65, 0.13]);
+        }
+        // Red ghost: removed from v1
+        if (geomRemoved.length > 0) {
+            viewer.scene.setObjectsColorized(geomRemoved, [0.65, 0.13, 0.0]);
+            viewer.scene.setObjectsOpacity(geomRemoved, 0.55);
+        }
+        // Fade entities with no JSON metadata
+        if (untrackedIds.length > 0) {
+            viewer.scene.setObjectsXRayed(untrackedIds, true);
+        }
+    }
+
+    function applyPropertiesMode() {
+        resetColors();
+        // Geometry-only objects are not meaningful in property diff — fade them out
+        if (geomAdded.length > 0)   viewer.scene.setObjectsXRayed(geomAdded, true);
+        if (geomRemoved.length > 0) viewer.scene.setObjectsXRayed(geomRemoved, true);
+
+        // Orange: property sets replaced (gained AND lost)
+        // NOTE: colors are pre-compensated for Lambert shading which multiplies by ~1.5x
+        if (propReplaced.length > 0)  viewer.scene.setObjectsColorized(propReplaced, [0.65, 0.16, 0.0]);
+        // Cyan: only new property sets gained
+        if (propGained.length > 0)    viewer.scene.setObjectsColorized(propGained,   [0.0, 0.5, 0.65]);
+        // Purple: only property sets lost
+        if (propLost.length > 0)      viewer.scene.setObjectsColorized(propLost,     [0.53, 0.18, 0.65]);
+        // Yellow: values changed within same-named sets
+        if (valChanged.length > 0)    viewer.scene.setObjectsColorized(valChanged,   [0.65, 0.6, 0.0]);
+        // Fade unchanged
+        if (propUnchanged.length > 0) viewer.scene.setObjectsXRayed(propUnchanged, true);
+        // Fade entities with no JSON metadata
+        if (untrackedIds.length > 0) viewer.scene.setObjectsXRayed(untrackedIds, true);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // 5. Wire up toggle buttons and populate stats
+    //------------------------------------------------------------------------------------------------------------------
+
+    const btnGeometry   = document.getElementById("btn-geometry");
+    const btnProperties = document.getElementById("btn-properties");
+
+    btnGeometry.addEventListener("click", () => {
+        btnGeometry.classList.add("active");
+        btnProperties.classList.remove("active");
+        document.getElementById("legend-geometry").style.display = "";
+        document.getElementById("legend-properties").style.display = "none";
+        document.getElementById("stats-geometry").style.display = "table";
+        document.getElementById("stats-properties").style.display = "none";
+        applyGeometryMode();
+    });
+
+    btnProperties.addEventListener("click", () => {
+        btnProperties.classList.add("active");
+        btnGeometry.classList.remove("active");
+        document.getElementById("legend-geometry").style.display = "none";
+        document.getElementById("legend-properties").style.display = "";
+        document.getElementById("stats-geometry").style.display = "none";
+        document.getElementById("stats-properties").style.display = "table";
+        applyPropertiesMode();
+    });
+
+    // Populate stats
+    document.getElementById("stat-geom-added").textContent   = geomAdded.length;
+    document.getElementById("stat-geom-removed").textContent = geomRemoved.length;
+    document.getElementById("stat-geom-shared").textContent  = sharedIds.length;
+
+    document.getElementById("stat-prop-replaced").textContent  = propReplaced.length;
+    document.getElementById("stat-prop-gained").textContent    = propGained.length;
+    document.getElementById("stat-prop-lost").textContent      = propLost.length;
+    document.getElementById("stat-val-changed").textContent    = valChanged.length;
+    document.getElementById("stat-prop-unchanged").textContent = propUnchanged.length;
+    document.getElementById("stat-prop-geom-added").textContent   = geomAdded.length;
+    document.getElementById("stat-prop-geom-removed").textContent = geomRemoved.length;
+
+    // Enable buttons and apply initial geometry mode
+    btnGeometry.disabled   = false;
+    btnProperties.disabled = false;
+    document.getElementById("stats-geometry").style.display = "table";
+
+    const t1 = performance.now();
+    document.getElementById("time").innerHTML =
+        "Loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds";
+
+    applyGeometryMode();
+    viewer.cameraFlight.jumpTo(viewer.scene);
+
+</script>
+</html>
