@@ -74,7 +74,8 @@
     <h1>Model Revision Diff</h1>
     <h2>DigitalHub FM-ARC &mdash; v1 vs v2</h2>
     <p>Compares two revisions of the FM-ARC model. Switch between <strong>Geometry</strong> (objects
-       added or removed) and <strong>Properties</strong> (objects whose property sets changed).</p>
+       added, removed, or modified via bounding-box comparison) and <strong>Properties</strong> (objects whose
+       property sets changed).</p>
 
     <div class="mode-toggle">
         <button id="btn-geometry" class="mode-btn active" disabled>Geometry</button>
@@ -92,8 +93,12 @@
             Removed (in v1, not in v2)
         </div>
         <div class="legend-item">
+            <div class="legend-swatch" style="background:#ffaa00;"></div>
+            Modified (bounding box changed)
+        </div>
+        <div class="legend-item">
             <div class="legend-swatch" style="background:#888; opacity:0.5;"></div>
-            Present in both (faded)
+            Unchanged (faded)
         </div>
     </div>
 
@@ -128,7 +133,8 @@
     <table class="stats-table" id="stats-geometry" style="display:none; margin-top:8px;">
         <tr><td>Added</td><td id="stat-geom-added">-</td></tr>
         <tr><td>Removed</td><td id="stat-geom-removed">-</td></tr>
-        <tr><td>Present in both</td><td id="stat-geom-shared">-</td></tr>
+        <tr><td>Modified</td><td id="stat-geom-modified">-</td></tr>
+        <tr><td>Unchanged</td><td id="stat-geom-unchanged">-</td></tr>
     </table>
 
     <!-- Properties stats -->
@@ -164,7 +170,7 @@
     // 1. Create a Viewer
     //------------------------------------------------------------------------------------------------------------------
 
-    const viewer = new Viewer({
+    const viewer = window.viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true
     });
@@ -267,31 +273,66 @@
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    // 3. Load models
-    //
-    // Load v2 (all current objects) and v1 with ONLY the removed objects.
-    // Removed objects by definition have no ID overlap with v2, so no entity ID conflicts.
+    // 3. Load models and detect geometry changes via AABB comparison
     //------------------------------------------------------------------------------------------------------------------
 
     const xktLoader = new XKTLoaderPlugin(viewer);
+    const V1_XKT = "../../assets/models/xkt/v12/compressed/FM_ARC_DigitalHub_v1.xkt";
+    // const V1_XKT = "../../assets/models/xkt/v12/compressed/FM_HZG_DigitalHub_v1.xkt";
+    const V2_XKT = "../../assets/models/xkt/v12/compressed/DigitalHub_FM-ARC_v2.xkt";
+    // const V2_XKT = "../../assets/models/xkt/v12/compressed/DigitalHub_FM-HZG_v2.xkt";
 
     document.getElementById("time").innerHTML = "Loading v2 model...";
     const t0 = performance.now();
 
-    const modelV2 = xktLoader.load({
-        id: "model-v2",
-        src: "../../assets/models/xkt/v12/compressed/DigitalHub_FM-ARC_v2.xkt",
-        // src: "../../assets/models/xkt/v12/compressed/DigitalHub_FM-HZG_v2.xkt",
-        edges: true
-    });
+    const modelV2 = xktLoader.load({ id: "model-v2", src: V2_XKT, edges: true });
     await new Promise(resolve => modelV2.on("loaded", resolve));
+
+    // --- Geometry modification detection ---
+    // Temporarily load the FULL v1 model with globalizeObjectIds so entity IDs don't
+    // collide with v2.  Compare AABBs of shared objects, then destroy the temporary model.
+
+    const geomModified = [];
+    const geomUnchanged = [];
+    const TOLERANCE = 0.001; // 1 mm
+
+    function aabbsEqual(a, b) {
+        for (let i = 0; i < 6; i++) {
+            if (Math.abs(a[i] - b[i]) > TOLERANCE) return false;
+        }
+        return true;
+    }
+
+    if (sharedIds.length > 0) {
+        document.getElementById("time").innerHTML = "Comparing geometry (loading v1)...";
+        const tempV1 = xktLoader.load({
+            id: "temp-v1",
+            src: V1_XKT,
+            edges: false,
+            globalizeObjectIds: true
+        });
+        await new Promise(resolve => tempV1.on("loaded", resolve));
+
+        for (const id of sharedIds) {
+            const v2Entity = viewer.scene.objects[id];
+            const v1Entity = viewer.scene.objects["temp-v1#" + id];
+            if (v2Entity && v1Entity && !aabbsEqual(v2Entity.aabb, v1Entity.aabb)) {
+                geomModified.push(id);
+            } else {
+                geomUnchanged.push(id);
+            }
+        }
+
+        tempV1.destroy();
+    }
+
+    // --- Load removed objects from v1 for display ---
 
     if (geomRemoved.length > 0) {
         document.getElementById("time").innerHTML = "Loading removed objects from v1...";
         const modelV1 = xktLoader.load({
             id: "model-v1",
-            src: "../../assets/models/xkt/v12/compressed/FM_ARC_DigitalHub_v1.xkt",
-            // src: "../../assets/models/xkt/v12/compressed/FM_HZG_DigitalHub_v1.xkt",
+            src: V1_XKT,
             edges: true,
             includeIds: geomRemoved
         });
@@ -321,9 +362,9 @@
 
     function applyGeometryMode() {
         resetColors();
-        // De-emphasize objects present in both versions
-        if (sharedIds.length > 0) {
-            viewer.scene.setObjectsXRayed(sharedIds, true);
+        // De-emphasize objects present in both versions whose geometry is unchanged
+        if (geomUnchanged.length > 0) {
+            viewer.scene.setObjectsXRayed(geomUnchanged, true);
         }
         // Green: added in v2
         // NOTE: colors are pre-compensated for Lambert shading which multiplies by ~1.5x
@@ -334,6 +375,10 @@
         if (geomRemoved.length > 0) {
             viewer.scene.setObjectsColorized(geomRemoved, [0.65, 0.13, 0.0]);
             viewer.scene.setObjectsOpacity(geomRemoved, 0.55);
+        }
+        // Yellow: geometry modified (AABB changed)
+        if (geomModified.length > 0) {
+            viewer.scene.setObjectsColorized(geomModified, [0.65, 0.5, 0.0]);
         }
         // Fade entities with no JSON metadata
         if (untrackedIds.length > 0) {
@@ -390,9 +435,10 @@
     });
 
     // Populate stats
-    document.getElementById("stat-geom-added").textContent   = geomAdded.length;
-    document.getElementById("stat-geom-removed").textContent = geomRemoved.length;
-    document.getElementById("stat-geom-shared").textContent  = sharedIds.length;
+    document.getElementById("stat-geom-added").textContent     = geomAdded.length;
+    document.getElementById("stat-geom-removed").textContent   = geomRemoved.length;
+    document.getElementById("stat-geom-modified").textContent  = geomModified.length;
+    document.getElementById("stat-geom-unchanged").textContent = geomUnchanged.length;
 
     document.getElementById("stat-prop-replaced").textContent  = propReplaced.length;
     document.getElementById("stat-prop-gained").textContent    = propGained.length;
