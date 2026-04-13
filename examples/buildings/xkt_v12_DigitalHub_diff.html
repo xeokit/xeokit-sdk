@@ -189,8 +189,6 @@
     const [v1Json, v2Json] = await Promise.all([
         fetch("../../assets/models/xkt/v12/compressed/FM_ARC_DigitalHub_v1.json").then(r => r.json()),
         fetch("../../assets/models/xkt/v12/compressed/DigitalHub_FM-ARC_v2.json").then(r => r.json())
-        // fetch("../../assets/models/xkt/v12/compressed/FM_HZG_DigitalHub_v1.json").then(r => r.json()),
-        // fetch("../../assets/models/xkt/v12/compressed/DigitalHub_FM-HZG_v2.json").then(r => r.json())
     ]);
 
     const v1ObjMap = new Map(v1Json.metaObjects.map(o => [o.id, o]));
@@ -278,9 +276,7 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
     const V1_XKT = "../../assets/models/xkt/v12/compressed/FM_ARC_DigitalHub_v1.xkt";
-    // const V1_XKT = "../../assets/models/xkt/v12/compressed/FM_HZG_DigitalHub_v1.xkt";
     const V2_XKT = "../../assets/models/xkt/v12/compressed/DigitalHub_FM-ARC_v2.xkt";
-    // const V2_XKT = "../../assets/models/xkt/v12/compressed/DigitalHub_FM-HZG_v2.xkt";
 
     document.getElementById("time").innerHTML = "Loading v2 model...";
     const t0 = performance.now();
@@ -376,7 +372,7 @@
             viewer.scene.setObjectsColorized(geomRemoved, [0.65, 0.13, 0.0]);
             viewer.scene.setObjectsOpacity(geomRemoved, 0.55);
         }
-        // Yellow: geometry modified (AABB changed)
+        // Orange/amber: geometry modified (AABB changed)
         if (geomModified.length > 0) {
             viewer.scene.setObjectsColorized(geomModified, [0.65, 0.5, 0.0]);
         }
@@ -399,7 +395,7 @@
         if (propGained.length > 0)    viewer.scene.setObjectsColorized(propGained,   [0.0, 0.5, 0.65]);
         // Purple: only property sets lost
         if (propLost.length > 0)      viewer.scene.setObjectsColorized(propLost,     [0.53, 0.18, 0.65]);
-        // Yellow: values changed within same-named sets
+        // Orange/amber: values changed within same-named sets
         if (valChanged.length > 0)    viewer.scene.setObjectsColorized(valChanged,   [0.65, 0.6, 0.0]);
         // Fade unchanged
         if (propUnchanged.length > 0) viewer.scene.setObjectsXRayed(propUnchanged, true);
