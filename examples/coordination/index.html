@@ -7,7 +7,7 @@
     <title>xeokit Examples</title>
     <link href='https://fonts.googleapis.com/css?family=Exo+2:400,800,900,700,600,500|Roboto:100,300,400,500,700,900' rel='stylesheet' type='text/css'>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
-    
+
 
     <style>
 
@@ -248,156 +248,18 @@
 <div class="content-overlay" id="viewer-overlay"></div>
 <iframe class="content-container" id="viewer" src="../default.html"></iframe>
 <div class="slideout-sidebar">
-    <div id="index"><h1><a href="https://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Buildings</h1></div>
+    <div id="index"><h1><a href="https://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Coordination</h1></div>
 </div>
 </body>
 <script>
 
     const files = {
 
-        "XKT": [
+        "Model Revision Diff": [
 
-            "#XKT + VBOs",
+            "#Comparing model revisions",
 
-            ["xkt_vbo_RACHouse", "IFC RAC model loaded from XKT into SceneModel"],
-            ["xkt_vbo_IfcOpenHouse4", "IFC OpenHouse model loaded from XKT into SceneModel"],
-            ["xkt_vbo_Schependomlaan", "IFC Schependomlaan model loaded from XKT into SceneModel"],
-            ["xkt_vbo_Duplex", "IFC Duplex model loaded from XKT into SceneModel"],
-            ["xkt_vbo_HolterTower", "IFC Holter Tower model loaded from XKT into SceneModel"],
-            ["xkt_vbo_MAP", "IFC MAP model loaded from XKT into SceneModel"],
-            ["xkt_vbo_RAC", "IFC RAC model loaded from XKT into SceneModel"],
-            ["xkt_vbo_RME", "IFC RME model loaded from XKT into SceneModel"],
-            ["xkt_vbo_WaterLock", "IFC WaterLock model loaded from XKT into SceneModel"],
-            ["xkt_vbo_HousePlan", "House Plan model without textures loaded from XKT into SceneModel"],
-            ["xkt_vbo_textures_HousePlan", "House Plan model with textures loaded from XKT into SceneModel"],
-            ["xkt_vbo_federated_Clinic", "Viewing a federated BIM model loaded from XKT into SceneModels"],
-            ["xkt_vbo_DemoProjekt", "Viewing a BIM model exported from ArchiCAD"],
-            ["xkt_vbo_OTCConferenceCenter", "OTC Conference Center model, loaded from XKT into SceneModel"],
-            ["xkt_vbo_includeIds", "Loading an XKT model with only selected elements with specific ids"],
-
-            "#XKT + Data Textures",
-
-            ["xkt_dtx_RACHouse", "IFC RAC model loaded from XKT into SceneModel"],
-            ["xkt_dtx_IfcOpenHouse4", "IFC OpenHouse model loaded from XKT into SceneModel (data textures enabled)"],
-            ["xkt_dtx_Schependomlaan", "IFC Schependomlaan model loaded from XKT into SceneModel (data textures enabled)"],
-            ["xkt_dtx_HolterTower", "IFC Holter Tower model loaded from XKT into SceneModel (data textures enabled)"],
-            ["xkt_dtx_RAC", "IFC RAC model loaded from XKT into SceneModel (data textures enabled)"],
-            ["xkt_dtx_MAP", "IFC MAP model loaded from XKT into SceneModel (data textures enabled)"],
-            ["xkt_dtx_Store", "IFC Store model loaded from XKT into SceneModel (data textures enabled)"],
-            ["xkt_dtx_APHS", "APHS BIM model loaded from XKT into SceneModel (data textures enabled)"],
-            ["xkt_dtx_WestRiverSideHospital", "Viewing seven IFC BIM models (data textures enabled)"],
-
-            // ["BIMOffline_XKT_includeTypes", "Loading only IfcWalls from an IFC BIM model"],
-            // ["BIMOffline_XKT_objectDefaults", "Viewing an IFC BIM model, providing custom colors for IFC types"],
-            ["xkt_dtx_metadata_Schependomlaan", "Using IFC metadata to X-ray an IfcBuildingStorey"],
-            ["xkt_dtx_metadata_moveStoreys", "Using IFC metadata to separate IfcBuildingStoreys"],
-            // ["BIMOffline_XKT_authorMetadata", "Viewing an IFC BIM model with authoring data"],
-            // ["BIMOffline_XKT_Duplex_originalIFCColors", "Viewing an IFC BIM model, with colors loaded from file"],
-            ["xkt_dtx_DemoProjekt", "Viewing a BIM model exported from ArchiCAD (data textures enabled)"],
-        
-            "#XKT + IfcAxisLabels",
-
-            ["xkt_grid_labels", "Viewing an XKT model containing a grid with labels"],
-            ["xkt_model_labels", "Viewing an XKT model with a grid and some labels"],
-        ],
-
-        "XKT Multipart": [
-
-            "#XKT + VBOs",
-
-            ["xkt_manifest_KarhumakiBridge", "Loading a BIM model split into multiple XKT models"],
-            ["xkt_manifest_KarhumakiBridge_inline", "Loading BIM from split XKT, manifest as parameter"],
-            ["xkt_manifest_KarhumakiBridge_inline_urls", "Loading BIM from split XKT, manifest as parameter, files as URLs"],
-            ["xkt_manifest_KarhumakiBridge_hotlink", "Loading BIM model from split XKT at xeokit.github.io/xeokit-model-conversion-tests"],
-            ["xkt_manifest_Clinic", "Loading a federated BIM model split into multiple XKT models"],
-            ["xkt_manifest_WestRiverSideHospital", "Loading a BIM model split into multiple XKT models"]
-        ],
-
-        "GLB": [
-
-            "#Binary glTF + VBOs",
-
-            ["glb_autoMetaModel_MAP", "IFC MAP model loaded from glTF into SceneModel using autoMetaModel option"],
-            ["glb_HousePlan", "House plan model loaded from GLB into SceneModel using GLTFLoaderPlugin"],
-            ["glb_VianneyHouse", "Vianney house model loaded from GLB into SceneModel using GLTFLoaderPlugin"]
-        ],
-
-        "dotbim": [
-
-            "#dotbim",
-
-            ["dotbim_BlenderHouse", "House model loaded from .BIM into SceneModel using DotBIMLoaderPlugin"],
-            ["dotbim_MulticolorHouse", "House model with face_colors loaded from .BIM into SceneModel using DotBIMLoaderPlugin"],
-            ["dotbim_Teapots", "10000+ teapots loaded from .BIM into SceneModel using DotBIMLoaderPlugin"],
-            ["dotbim_House", "House model from IFC conversion loaded from .BIM into SceneModel using DotBIMLoaderPlugin"],
-            ["dotbim_TestStructure", "Structural model from IFC conversion loaded from .BIM into SceneModel using DotBIMLoaderPlugin"],
-            ["dotbim_SmallHouse", "House model with property sets, loaded from .BIM into SceneModel using DotBIMLoaderPlugin"],
-            ["dotbim_TestFaceColors", "Test model with cubes with different face_colors loaded from .BIM into SceneModel using DotBIMLoaderPlugin"],
-        ],
-        
-        "cxConverterIFC": [
-            "#cxConverterIFC + VBOs",
-            ["cxConverterIFC_vbo_Duplex", "IFC Duplex model loaded from IFC into SceneModel using CxConverterIFCPlugin"]
-        ],
-
-        "IfcOpenShell": [
-            "#IfcOpenShell + DTX",
-
-            ["IfcOpenShellLoaderPlugin_Duplex", "IFC Duplex model loaded from IFC into SceneModel using IfcOpenShellLoaderPlugin (data textures enabled)"]
-        ],
-
-        "web-ifc": [
-
-            "#web-ifc + VBOs",
-
-            ["web-ifc_vbo_Duplex", "IFC Duplex model loaded from IFC into SceneModel using WebIFCLoaderPlugin"],
-            ["web-ifc_vbo_ignoreMetadata", "IFC RAC model loaded from IFC into SceneModel using WebIFCLoaderPlugin, without metadata"],
-            ["web-ifc_vbo_isolateStorey", "IFC Duplex model single storey loaded from IFC into SceneModel using WebIFCLoaderPlugin"],
-            ["web-ifc_vbo_MAPGroundFloor", "IFC MAP model ground floor loaded from IFC into SceneModel using WebIFCLoaderPlugin"],
-
-            "#web-ifc + DTX",
-
-            ["web-ifc_dtx_Duplex", "IFC Duplex model loaded from IFC into SceneModel using WebIFCLoaderPlugin (data textures enabled)"],
-            ["web-ifc_dtx_MAPGroundFloor", "IFC MAP model ground floor loaded from IFC into SceneModel using WebIFCLoaderPlugin (data textures enabled)"]
-        ],
-
-        "glTF": [
-
-            "#glTF + VBOs",
-
-            ["glTF_VianneyHouse", "Vianney house model loaded from glTF into SceneModel using GLTFLoaderPlugin"],
-            ["glTF_Duplex_transform", "IFC Duplex house model loaded from glTF into SceneModel using GLTFLoaderPlugin"],
-            ["glTF_embedded_MAP", "IFC MAP model loaded from glTF into SceneModel using GLTFLoaderPlugin"],
-            ["glTF_Schependomlaan", "IFC Schependomlaan house model loaded from glTF into SceneModel using GLTFLoaderPlugin"],
-            ["glTF_DuckQuantized", "Duck model loaded from glTF with quantized vertex attributes"]
-        ],
-
-        "Positioning Models": [
-
-            "#Positioning models geographically",
-
-            ["positioning_cartesianCoordinates", "Loading IFC with WebIFCLoaderPlugin, positioning the model at distant Cartesian coordinates"],
-            ["positioning_geodesicCoordinates", "Loading IFC with WebIFCLoaderPlugin, positioning the model with geodesic coordinates"]
-        ],
-
-        "Google Street Maps": [
-
-            "#Viewing models from Google Street Maps",
-
-            ["glb_GoogleStreetMaps_Beograd01", "Viewing a glTF model exported from google Street Maps"],
-            ["glb_GoogleStreetMaps_BeogradCenter", "Viewing a GLB model exported from google Street Maps"],
-            ["glb_GoogleStreetMaps_DveKule", "Viewing a GLB model exported from google Street Maps"]
-        ],
-
-        "Misc": [
-            "# Simulate single-precision rendering jitter",
-
-            ["jitter_singlePrecision_MAP", "Demonstrates rounding jitter"],
-
-            "# Configuring custom buffer sizes to experiment with loading stability",
-
-            ["xkt_dtx_maxDataTextureHeight", "Configuring max data texture size"],
-            ["xkt_vbo_maxGeometryBatchSize", "Configuring max VBO geometry batch size"]
+            ["revisionDiff_DigitalHub", "Comparing two revisions of the DigitalHub FM-ARC model (geometry and property diff)"]
         ]
 
     };
@@ -411,7 +273,7 @@
 
     const viewSourceButton = document.getElementById('viewSourceButton');
     viewSourceButton.addEventListener('click', function (event) {
-        window.open('https://github.com/xeokit/xeokit-sdk/blob/master/examples/buildings/' + selected + '.html');
+        window.open('https://github.com/xeokit/xeokit-sdk/blob/master/examples/coordination/' + selected + '.html');
     }, false);
 
     const indexToggle = document.getElementById("index_toggle");
@@ -420,10 +282,6 @@
     viewerOverlay.addEventListener('click', function (event) {
         indexToggle.checked = false;
     }, false);
-
-    // indexToggle.addEventListener('click', function (event) {
-    //     viewer.src="default.html";
-    // }, false);
 
     const sectionDivs = {};
     const divs = {};
@@ -441,15 +299,6 @@
     container.appendChild(document.createElement('hr'));
 
     const sectionNames = Object.keys(files);
-    // sectionNames.sort((a, b) => {
-    //     if (a < b) {
-    //         return -1;
-    //     }
-    //     if (a > b) {
-    //         return 1;
-    //     }
-    //     return 0;
-    // });
 
     for (let i = 0, len = sectionNames.length; i < len; i++) {
         const sectionName = sectionNames[i];
@@ -508,11 +357,10 @@
             }
 
             const fileNameComponents = fileName.split('_');
-            //    fileNameComponents.shift();
             const fileNamePath = fileNameComponents.join(' / ');
             const fileNameDiv = document.createElement('div');
             fileNameDiv.className = 'link';
-            fileNameDiv.textContent = fileNamePath; // expandCamel(name);
+            fileNameDiv.textContent = fileNamePath;
             fileNameDiv.addEventListener('click', (function () {
                 const _file = fileName;
                 return function () {
