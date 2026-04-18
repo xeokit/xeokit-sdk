@@ -1,0 +1,51 @@
+{
+    "source": "./src/",
+    "destination": "./docs",
+    "excludes": [
+        "(workers|zipjs|TrianglesDataTextureLayer.js|loadLASHeader.js)"
+    ],
+    "plugins": [
+        {
+            "name": "esdoc-publish-html-plugin",
+            "option": {
+                "template": "assets/esdocTemplate"
+            }
+        },
+        {
+            "name": "esdoc-standard-plugin",
+            "includeSource": true,
+            "option": {
+                "lint": {
+                    "enable": true
+                },
+                "coverage": {
+                    "enable": true
+                },
+                "accessor": {
+                    "access": [
+                        "public"
+                    ],
+                    "autoPrivate": true
+                },
+                "undocumentIdentifier": {
+                    "enable": true
+                },
+                "unexportedIdentifier": {
+                    "enable": false
+                },
+                "typeInference": {
+                    "enable": true
+                },
+                "brand": {
+                    "logo": "./assets/images/logo.jpg",
+                    "title": "xeokit-sdk",
+                    "description": "3D engineering graphics in the browser",
+                    "repository": "https://github.com/xeokit/xeokit-sdk",
+                    "site": "http://xeokit.io",
+                    "author": "http://xeolabs.com",
+                    "image": "./images/logo.jpg"
+                }
+            }
+        }
+    ]
+}
