@@ -617,9 +617,7 @@ export class Layer {
     }
 
     drawEdgesColorOpaque(renderFlags, frameCtx) {
-        if (this._compiledPortions.edgesColorOpaqueAllowed()) {
-            this.__drawVertexEdges(renderFlags, frameCtx, RENDER_PASSES.EDGES_COLOR_OPAQUE);
-        }
+        this.__drawVertexEdges(renderFlags, frameCtx, RENDER_PASSES.EDGES_COLOR_OPAQUE);
     }
 
     drawEdgesColorTransparent(renderFlags, frameCtx) {

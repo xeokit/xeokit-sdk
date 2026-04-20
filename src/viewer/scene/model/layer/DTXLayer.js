@@ -586,17 +586,6 @@ export class DTXLayer extends Layer {
         };
 
         return {
-            edgesColorOpaqueAllowed: () => {
-                if (scene.logarithmicDepthBufferEnabled) {
-                    if (!scene._loggedWarning) {
-                        console.log("Edge enhancement for SceneModel data texture layers currently disabled with logarithmic depth buffer");
-                        scene._loggedWarning = true;
-                    }
-                    return false;
-                } else {
-                    return true;
-                }
-            },
             sortId: sortId,
             setClippableFlags: setFlags2,
             setFlags: (portionId, flags, transparent, deferred = false) => {
