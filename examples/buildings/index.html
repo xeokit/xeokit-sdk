@@ -117,6 +117,19 @@
             text-decoration: underline;
         }
 
+        .ai-badge {
+            display: inline-block;
+            font-size: 0.65em;
+            font-weight: 600;
+            color: #fff;
+            background: #6c757d;
+            border-radius: 3px;
+            padding: 1px 5px;
+            margin-left: 6px;
+            vertical-align: middle;
+            letter-spacing: 0.02em;
+        }
+
         .content-container {
             position: absolute;
             z-index: 0;
@@ -274,7 +287,7 @@
             ["xkt_vbo_DemoProjekt", "Viewing a BIM model exported from ArchiCAD"],
             ["xkt_vbo_OTCConferenceCenter", "OTC Conference Center model, loaded from XKT into SceneModel"],
             ["xkt_vbo_includeIds", "Loading an XKT model with only selected elements with specific ids"],
-            ["xkt_vbo_fallbackColors_DigitalHub", "Assigning fallback colours per IFC type to uncoloured elements"],
+            ["xkt_vbo_fallbackColors_DigitalHub", "Assigning fallback colours per IFC type to uncoloured elements", true],
 
             "#XKT + Data Textures",
 
@@ -500,6 +513,8 @@
                 fileDesc = sectionFile;
             }
 
+            const aiGenerated = !isString(sectionFile) && sectionFile[2];
+
             if (fileDesc.charAt(0) === "#") {
                 const commentDiv = document.createElement('div');
                 commentDiv.textContent = "// " + fileDesc.substring(1);
@@ -513,7 +528,15 @@
             const fileNamePath = fileNameComponents.join(' / ');
             const fileNameDiv = document.createElement('div');
             fileNameDiv.className = 'link';
-            fileNameDiv.textContent = fileNamePath; // expandCamel(name);
+            if (aiGenerated) {
+                fileNameDiv.appendChild(document.createTextNode(fileNamePath));
+                const badge = document.createElement('span');
+                badge.className = 'ai-badge';
+                badge.textContent = '[AI-generated]';
+                fileNameDiv.appendChild(badge);
+            } else {
+                fileNameDiv.textContent = fileNamePath; // expandCamel(name);
+            }
             fileNameDiv.addEventListener('click', (function () {
                 const _file = fileName;
                 return function () {
