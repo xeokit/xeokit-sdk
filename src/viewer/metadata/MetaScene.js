@@ -150,6 +150,20 @@ class MetaScene {
     }
 
     /**
+     * Destroys this MetaScene.
+     */
+    _destroy() {
+        this.viewer = null;
+        this.scene = null;
+        this.metaModels = {};
+        this.propertySets = {};
+        this.metaObjects = {};
+        this.metaObjectsByType = {};
+        this.rootMetaObjects = {};
+        this._eventSubs = {};
+    }
+
+    /**
      * Removes a {@link MetaModel} from this MetaScene.
      *
      * Fires a "metaModelDestroyed" event with the value of the {@link MetaModel#id}.

@@ -31,8 +31,15 @@ export declare abstract class Plugin {
      * Subscribes to an event fired at this Plugin.
      * @param {String} event The event
      * @param {Function} callback Callback fired on the event
+     * @returns {String} Subscription id
      */
-    on(event: string, callback: ()=> void): void;
+    on(event: string, callback: ()=> void): string;
+
+    /**
+     * Removes event subscription.
+     * @param {String} subId Subscription id
+     */
+    off(subId: string): void;
 
     /**
      * Fires an event at this Plugin.

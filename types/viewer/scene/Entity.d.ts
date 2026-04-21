@@ -15,6 +15,15 @@ export declare abstract class Entity {
   get id(): string | number;
 
   /**
+   * The SceneModel of the SceneModelEntity
+   *
+   * SceneModelEntity is the only Entity class at the moment, so every Entity is SceneModelEntity.
+   */
+  model: {
+    id?: string
+  }
+
+  /**
    * ID of the corresponding object within the originating system, if any.
    *
    * By default, this has the same value as {@link Entity.id}. When we load a model using {@link XKTLoaderPlugin.load},
@@ -398,6 +407,16 @@ export declare abstract class Entity {
    * Gets the complete geometry of this entity.
    */
   getGeometryData(): {indices: number[],positions:number[]}
+
+  /**
+   * Gets volume of the entity.
+   */
+  get volume(): number;
+
+  /**
+   * Gets surface area of the entity.
+   */
+  get surfaceArea(): number;
 
   /**
    * Destroys this Entity.

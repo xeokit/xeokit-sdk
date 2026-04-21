@@ -2,12 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>xeokit Examples</title>
-    <link href='https://fonts.googleapis.com/css?family=Exo+2:400,800,900,700,600,500|Roboto:100,300,400,500,700,900'
-          rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Exo+2:400,800,900,700,600,500|Roboto:100,300,400,500,700,900' rel='stylesheet' type='text/css'>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+
 
     <style>
 
@@ -198,7 +198,7 @@
 
         .viewSourceButton {
             position: absolute;
-            right: 20px;
+            left: 20px;
             bottom: 15px;
             z-index: 200;
             transition: all 300ms ease-in-out;
@@ -225,7 +225,7 @@
         }
 
         #index_toggle:checked ~ .viewSourceButton {
-            right: 20px;
+            left: 570px;
         }
 
         #index_toggle:checked ~ .content-container {
@@ -240,21 +240,21 @@
     </style>
 </head>
 <body>
-<input type="checkbox" id="index_toggle"/>
-<label for="index_toggle" class="index-button"><i class="fas fa-2x fa-bars"></i></label>
+<input id="index_toggle" type="checkbox"/>
+<label class="index-button" for="index_toggle"><i class="fas fa-2x fa-bars"></i></label>
 <div class="page-title" id="page-title"></div>
 <div class="viewSourceButton" id="viewSourceButton"><i class="fas fa-2x fa-code"></i></div>
 <div class="content-overlay" id="viewer-overlay"></div>
 <iframe class="content-container" id="viewer" src="../default.html"></iframe>
 <div class="slideout-sidebar">
-    <div id="index"><h1><a href="https://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Model Coordination</h1></div>
+    <div id="index"><h1><a href="https://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Coordination</h1></div>
 </div>
 </body>
 <script>
 
     const files = {
 
-        "Model Coordination": [
+        "Coordination": [
 
             "#Clash detection",
 
@@ -263,6 +263,13 @@
             "#2D markup",
 
             ["2D_markup", "2D markup"]
+        ],
+
+        "Model Revision Diff": [
+
+            "#Comparing model revisions",
+
+            ["revisionDiff_DigitalHub", "Comparing two revisions of the DigitalHub FM-ARC model (geometry and property diff)"]
         ]
     };
 

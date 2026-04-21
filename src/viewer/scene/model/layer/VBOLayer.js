@@ -570,7 +570,6 @@ export class VBOLayer extends Layer {
 
         const solid = (primitive === "solid");
         return {
-            edgesColorOpaqueAllowed: () => true,
             solid: solid,
             sortId: (((primitive === "points") ? "Points" : ((primitive === "lines") ? "Lines" : "Triangles"))
                      + (instancing ? "Instancing" : "Batching") + "Layer" +

@@ -1,6 +1,15 @@
 ## xeokit-sdk Changelog
 
 
+# [v2.6.108](https://github.com/xeokit/xeokit-sdk/compare/v2.6.107...v2.6.108)
+
+### 01 Apr 2026
+
+-  XEOK-437 Adjust ts types [#2026](https://github.com/xeokit/xeokit-sdk/pull/2026)
+-  XCD-466 Improving performance of viewer.destroy() [#2029](https://github.com/xeokit/xeokit-sdk/pull/2029)
+-  XEOK-439 Fix Label3D-SectionPlane culling [#2030](https://github.com/xeokit/xeokit-sdk/pull/2030)
+
+
 # [v2.6.107](https://github.com/xeokit/xeokit-sdk/compare/v2.6.106...v2.6.107)
 
 ### 12 Mar 2026
