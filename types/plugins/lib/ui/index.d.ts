@@ -15,6 +15,6 @@ type OnCommit<T> = (canvasPos: Vec2, worldPos: T | null) => void;
 
 declare function touchPointSelector<T>(viewer: Viewer, pointerCircle: PointerCircle, ray2WorldPos: Ray2WorldPos<T>): (onCancel: OnCancel, onChange: OnChange<T>, onCommit: OnCommit<T>) => Cleanup;
 
-export declare addMousePressListener(element: HTMLElement, onChange: (canvasPos: Vec2 | null) => void);
+declare function addMousePressListener(element: HTMLElement, onChange: (canvasPos: Vec2 | null) => void): Cleanup;
 
-export declare addTouchPressListener(element: HTMLElement, cameraControl: CameraControl, pointerCircle: PointerCircle, onChange: (canvasPos: Vec2 | null) => void);
+declare function addTouchPressListener(element: HTMLElement, cameraControl: CameraControl, pointerCircle: PointerCircle, onChange: (canvasPos: Vec2 | null) => void): Cleanup;
