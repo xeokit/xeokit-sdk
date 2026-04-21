@@ -101,11 +101,12 @@ function getBasePath(src) {
 function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok, error) {
     const spinner = plugin.viewer.scene.canvas.spinner;
     spinner.processes++;
-    parse(gltf, GLTFLoader, {
+    const loadersGl = options.loadersGl;
+    (loadersGl ? loadersGl.core.parse : parse)(gltf, loadersGl ? loadersGl.gltf.GLTFLoader : GLTFLoader, {
         ...(options.parseOptions || { }),
         baseUri: options.basePath
     }).then((gltfData) => {
-        const processedGLTF = postProcessGLTF(gltfData);
+        const processedGLTF = (loadersGl ? loadersGl.gltf.postProcessGLTF : postProcessGLTF)(gltfData);
         const ctx = {
             src: src,
             entityId: options.entityId,

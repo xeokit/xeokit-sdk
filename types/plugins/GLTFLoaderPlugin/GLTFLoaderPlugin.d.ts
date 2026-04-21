@@ -87,6 +87,16 @@ export declare type LoadGLTFModel = {
   parseOptions?: any;
   /** Create an entity for each mesh, instead of grouping leaf meshes under their common entity. */
   entityPerMesh?: boolean;
+  /** Alternative user-provided loaders.gl library. */
+  loadersGl?: {
+    core: {
+      parse: (...args: any[]) => any;
+    };
+    gltf: {
+      GLTFLoader: any;
+      postProcessGLTF: (...args: any[]) => any;
+    };
+  };
 };
 
 /**
