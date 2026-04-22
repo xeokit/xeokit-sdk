@@ -116,6 +116,19 @@
             text-decoration: underline;
         }
 
+        .ai-badge {
+            display: inline-block;
+            font-size: 0.65em;
+            font-weight: 600;
+            color: #fff;
+            background: #6c757d;
+            border-radius: 3px;
+            padding: 1px 5px;
+            margin-left: 6px;
+            vertical-align: middle;
+            letter-spacing: 0.02em;
+        }
+
         .content-container {
             position: absolute;
             z-index: 0;
@@ -258,7 +271,7 @@
 
             "#Clash detection",
 
-            ["clashDetection", "Visualizing IfcClash results with BCF viewpoint export"],
+            ["clashDetection", "Visualizing IfcClash results with BCF viewpoint export", true],
 
             "#2D markup",
 
@@ -269,7 +282,7 @@
 
             "#Comparing model revisions",
 
-            ["revisionDiff_DigitalHub", "Comparing two revisions of the DigitalHub FM-ARC model (geometry and property diff)"]
+            ["revisionDiff_DigitalHub", "Comparing two revisions of the DigitalHub FM-ARC model (geometry and property diff)", true]
         ]
     };
 
@@ -357,6 +370,8 @@
                 fileDesc = sectionFile;
             }
 
+            const aiGenerated = !isString(sectionFile) && sectionFile[2];
+
             if (fileDesc.charAt(0) === "#") {
                 const commentDiv = document.createElement('div');
                 commentDiv.textContent = "// " + fileDesc.substring(1);
@@ -369,7 +384,15 @@
             const fileNamePath = fileNameComponents.join(' / ');
             const fileNameDiv = document.createElement('div');
             fileNameDiv.className = 'link';
-            fileNameDiv.textContent = fileNamePath;
+            if (aiGenerated) {
+                fileNameDiv.appendChild(document.createTextNode(fileNamePath));
+                const badge = document.createElement('span');
+                badge.className = 'ai-badge';
+                badge.textContent = '[AI-generated]';
+                fileNameDiv.appendChild(badge);
+            } else {
+                fileNameDiv.textContent = fileNamePath;
+            }
             fileNameDiv.addEventListener('click', (function () {
                 const _file = fileName;
                 return function () {
