@@ -1,0 +1,682 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+  </head>
+  <body>
+    <input type="checkbox" id="info-button"/>
+    <label for="info-button" class="info-button" id="info-button-label"><i class="far fa-3x fa-question-circle"></i></label>
+    <canvas id="myCanvas"></canvas>
+    <div id="treeViewContainer" style="position: absolute; box-sizing: border-box; padding-top: 58px; max-width: 300px; max-height: 100%; overflow: auto; font-size: 12px; line-height: 1.3em"></div>
+    <div class="slideout-sidebar">
+      <h1>Model Splitting</h1>
+      <h2>Demonstrates how model entities can be split into new entities</h2>
+      <p>
+        This example demonstrates how the <span style="font-family: monospace;">math.makeSectionPlaneSlicer</span> function is used to generate a split of an existing mesh.
+        <br/>
+        The result submeshes are added to the scene, and the original mesh - with no modification - is being hidden.
+      </p>
+      <h3>Example workflow</h3>
+      <ol>
+        <li>Select an entity (e.g. the green roof) by left-clicking on it</li>
+        <li>Press the [split 1] button</li>
+        <li>Temporarily hide/disable the SectionPlane with the [Sect. plane off] bytton</li>
+        <li>Note two new split subentities under the "Basic Roof:Live Roof over Wood Joist Flat Roof:184483" node in the tree view.</li>
+        <li>Right click the "Basic Roof:Live Roof over Wood Joist Flat Roof:184483" tree view node, and click the [Unsplit] menu item to revert the split.</li>
+      </ul>
+    </div>
+  </body>
+
+  <script type="module">
+
+import { math, Mesh, PhongMaterial, ReadableGeometry, SceneModel, SectionPlanesPlugin, Viewer, XKTLoaderPlugin } from "../../dist/xeokit-sdk.es.js";
+
+const worldForward = [0, 0, 1];
+const tempVec2  = math.vec2();
+
+const px = v => v + "px";
+const htmlRgb = color => `rgb(${color.map(v => Math.floor(v * 255)).join(" ")})`;
+
+const findMap = (arr, map) => {
+    for (let i = 0; i < arr.length; ++i) {
+        const ret = map(arr[i]);
+        if (ret) {
+            return ret;
+        }
+    }
+    return undefined;
+};
+
+const createCaretIcon = (caretSize) => {
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", `0 0 ${caretSize} ${caretSize}`);
+    svg.setAttribute("width", caretSize);
+    svg.setAttribute("height", caretSize);
+    svg.setAttribute("fill", "none");
+    svg.setAttribute("stroke", "currentColor");
+    svg.setAttribute("stroke-width", "1.5");
+    const path = document.createElementNS(svgNS, "path");
+    path.setAttribute("d", "m6 3 5 5-5 5"); // depends on caretSize too
+    svg.appendChild(path);
+    return svg;
+};
+
+// An alternative to ContextMenu
+const showContextMenu = (function() {
+    const contextMenuParentNode = document.body;
+
+    const menuElement = document.createElement("div");
+    menuElement.oncontextmenu = (e) => e.preventDefault();
+
+    menuElement.style.background   = "white";
+    menuElement.style.border       = "1px solid black";
+    menuElement.style.borderRadius = "4px";
+    menuElement.style.boxShadow    = "0 4px 5px 0 gray";
+    menuElement.style.padding      = "5px";
+    menuElement.style.position     = "absolute";
+    menuElement.style.zIndex       = 300000;
+
+    const hide = () => menuElement.style.display = "none";
+    hide();
+    contextMenuParentNode.addEventListener("mousedown",  hide);
+
+    contextMenuParentNode.appendChild(menuElement);
+
+    return (coords, withAppendGroup) => {
+        [ ...menuElement.childNodes ].forEach(child => menuElement.removeChild(child));
+        let groupIdx = 0;
+        withAppendGroup(withAppendItem => {
+            if (groupIdx++ > 0) {
+                menuElement.appendChild(document.createElement("hr"));
+            }
+            withAppendItem((titleHTML, doAction) => {
+                const itemElement = document.createElement("div");
+                menuElement.appendChild(itemElement);
+
+                itemElement.innerHTML = titleHTML;
+
+                itemElement.style.borderRadius = "4px";
+                itemElement.style.padding = "0px 15px";
+                itemElement.style.whiteSpace = "nowrap";
+
+                const updateColor = () => {
+                    itemElement.style.backgroundColor = "";
+                    itemElement.style.color = doAction ? "" : "rgb(179 179 179)";
+                };
+
+                itemElement.addEventListener("mousedown", (event) => {
+                    event.preventDefault();
+                    if (doAction) {
+                        doAction();
+                        hide();
+                    }
+                });
+
+                itemElement.addEventListener("mouseenter", (event) => {
+                    event.preventDefault();
+                    if (doAction) {
+                        itemElement.style.backgroundColor = "rgb(0 100 226)";
+                        itemElement.style.color = "white";
+                    }
+                });
+
+                itemElement.addEventListener("mouseleave", (event) => {
+                    event.preventDefault();
+                    updateColor();
+                });
+
+                updateColor();
+            });
+        });
+        menuElement.style.display = "block";
+        menuElement.style.left = px(Math.min(coords[0], window.innerWidth  - menuElement.offsetWidth));
+        menuElement.style.top  = px(Math.min(coords[1], window.innerHeight - menuElement.offsetHeight));
+    };
+})();
+
+// Setup DOM resizing
+const treeViewContainer = document.getElementById("treeViewContainer");
+treeViewContainer.oncontextmenu = evt => evt.preventDefault();
+
+const canvas = window.document.getElementById("myCanvas");
+
+const viewer = new Viewer({
+    canvasElement: canvas,
+    readableGeometryEnabled: true
+});
+
+viewer.camera.eye  = [-5.3, 16.6, 25.83];
+viewer.camera.look = [0.78, 6.7, 12.22];
+viewer.camera.up   = [0.23, 0.83, -0.5];
+
+const scene = viewer.scene;
+
+const getCanvasPos = (e, dst) => {
+    const rect = canvas.getBoundingClientRect();
+    dst[0] = e.clientX - rect.left;
+    dst[1] = e.clientY - rect.top;
+    return dst;
+};
+
+const pickCanvasEntity = (function() {
+    const tmpRay = { origin: math.vec3(), direction: math.vec3() };
+    return (e) => {
+        const camera = viewer.camera;
+        math.canvasPosToWorldRay(canvas, camera.viewMatrix, camera.projMatrix, camera.projection, getCanvasPos(e, tempVec2), tmpRay.origin, tmpRay.direction);
+        const pickResult = scene.pick({ origin: tmpRay.origin, direction: tmpRay.direction, snapToVertex: false, snapToEdge: false });
+        return pickResult && pickResult.entity;
+    };
+})();
+
+const sectionPlanes = new SectionPlanesPlugin(viewer, { overviewVisible: false });
+const sectionPlane = sectionPlanes.createSectionPlane();
+sectionPlane.active = true;
+sectionPlane.dir = [1, 0, 0];
+sectionPlane.pos = [3, 4, 14.9];
+
+const xktLoader = new XKTLoaderPlugin(viewer);
+
+const sceneModel = xktLoader.load({
+    id: "myModel",
+    src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
+    saoEnabled: true,
+    edges: true,
+    dtxEnabled: false
+});
+
+sceneModel.on("loaded", () => {
+    let xray = false;
+    const splitsData = [ ];
+    const selected = new Set();
+
+    // Whenever any of selected or xray changes call updateEntities to propagate the change to all relevant parts
+    const updateEntities = () => {
+        Object.values(scene.models).forEach(model => model.entityList.forEach(e => {
+            const sel = selected.has(e);
+            e.highlighted = (! xray) && sel;
+            e.xrayed = xray && (! sel);
+        }));
+        updateSplitButton();
+        rootNodes.forEach(node => node.updateFromEntities());
+    };
+
+    // Work through the meta model to create a concise data structure for the tree display below
+    const metaModelRoots = (function rec(metaObjects) {
+        return metaObjects.map(metaObject => {
+            const metaObjectName = metaObject.name;
+            return {
+                children: metaObject.children && rec(metaObject.children),
+                entity:   sceneModel.objects[metaObject.id],
+                name:     (metaObjectName && (metaObjectName !== "Undefined") && (metaObjectName !== "Default")) ? metaObjectName : metaObject.type
+            };
+        });
+    })(viewer.metaScene.metaModels[sceneModel.id].rootMetaObjects);
+
+    // Alternative to TreeViewPlugin
+    const rootNodes = (function createNodes(metaModelNodes, depth, onVisibilityChange) {
+        return metaModelNodes.map(metaModelNode => {
+            const entity = metaModelNode.entity;
+            const metaChildren = metaModelNode.children || [ ];
+            const splitChildren = [ ];
+
+            let expanded = false;
+
+            const domElement = document.createElement("div");
+
+            const nodeElement = document.createElement("div");
+            nodeElement.style.paddingLeft = px(depth * 16);
+            nodeElement.style.paddingRight = px(5);
+            nodeElement.style.pointerEvents = "all";
+            nodeElement.style.textWrap = "nowrap";
+            nodeElement.addEventListener("click", () => {
+                const e = node.nodeEntity;
+                if (e) {
+                    selected.has(e) ? selected.delete(e) : selected.add(e);
+                    updateEntities();
+                }
+            });
+            nodeElement.addEventListener("mouseenter", () => nodeElement.style.backgroundColor = "rgb(0,0,0,0.15)");
+            nodeElement.addEventListener("mouseleave", () => nodeElement.style.backgroundColor = "");
+            nodeElement.addEventListener("contextmenu", evt => {
+                evt.preventDefault();
+                showContextMenu(
+                    [evt.clientX, evt.clientY],
+                    appendGroup => {
+                        if (node.children && (node.children.length > 0)) {
+                            const allEntities = (pred, cb) => {
+                                const predEntities = [ ];
+                                (function rec(nodes) {
+                                    nodes && nodes.forEach(node => {
+                                        const e = node.nodeEntity;
+                                        if (e && pred(e)) {
+                                            predEntities.push(e);
+                                        }
+                                        rec(node.children);
+                                    });
+                                })(node.children);
+                                return (predEntities.length > 0) && (() => { predEntities.forEach(cb); updateEntities(); });
+                            };
+                            appendGroup(appendItem => {
+                                appendItem("Select descendants",   allEntities(e => (! selected.has(e)), e => selected.add(e)));
+                                appendItem("Deselect descendants", allEntities(e => selected.has(e),  e => selected.delete(e)));
+                            });
+                        } else {
+                            const entity = node.nodeEntity;
+                            if (entity) {
+                                const has = selected.has(entity);
+                                appendGroup(appendItem => {
+                                    appendItem("Select",   (! has) && (() => { selected.add(entity); updateEntities(); }));
+                                    appendItem("Deselect", has && (() => { selected.delete(node.nodeEntity); updateEntities(); }));
+                                });
+                            }
+                        }
+                        node.clearSplitChildren && appendGroup(appendItem => appendItem("Unsplit", node.clearSplitChildren));
+                    });
+            });
+            domElement.appendChild(nodeElement);
+
+            const childrenDiv = document.createElement("div");
+            domElement.appendChild(childrenDiv);
+
+            const updateExpanded = (function() {
+                const expandToggleElement = createCaretIcon(16);
+                expandToggleElement.style.cursor = "pointer";
+                expandToggleElement.style.display = "inline-block";
+                expandToggleElement.style.transition = "transform 0.1s";
+                nodeElement.appendChild(expandToggleElement);
+
+                expandToggleElement.addEventListener("click", evt => {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    expanded = ! expanded;
+                    updateExpanded();
+                });
+                return () => {
+                    expandToggleElement.style.transform = expanded ? "translate(2px, 1.5px) rotate(90deg)" : "translate(3px, 1.5px)";
+                    expandToggleElement.style.visibility = ((metaChildren.length + splitChildren.length) > 0) ? "visible" : "hidden";
+                    childrenDiv.style.display = expanded ? "" : "none";
+                };
+            })();
+            updateExpanded();
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.style.cursor = "pointer";
+            checkbox.style.position = "relative";
+            checkbox.style.marginLeft = px(4);
+            checkbox.style.top = "1px";
+            checkbox.addEventListener("click", evt => evt.stopPropagation()); // to prevent nodeElement::click
+            checkbox.addEventListener("change", evt => {
+                const visible = checkbox.checked;
+                (function rec(node) {
+                    if (node.nodeEntity && (! node.clearSplitChildren)) {
+                        node.nodeEntity.visible = visible;
+                    }
+                    node.children.forEach(rec);
+                })(node);
+                onVisibilityChange && onVisibilityChange();
+            });
+            nodeElement.appendChild(checkbox);
+
+            const nameSpan = document.createElement("span");
+            nameSpan.textContent = metaModelNode.name;
+            nodeElement.appendChild(nameSpan);
+
+            const updateChecked = () => {
+                checkbox.checked       = ((! (entity && (splitChildren.length === 0))) || entity.visible) && node.children.every(n => n.isChecked());
+                checkbox.indeterminate = (! checkbox.checked) && node.children.some(n => n.isChecked() || n.isIndeterminate());
+            };
+
+            let splitsAddedSoFar = 0;
+            const node = {
+                addSplitChildren: (subEntities, toReplace) => {
+                    const start = toReplace ? splitChildren.findIndex(child => child.entity === toReplace) : splitChildren.length;
+                    splitChildren.splice(start, toReplace ? 1 : 0, ...subEntities.map(subEntity => ({
+                        entity: subEntity,
+                        name:   `Split ${++splitsAddedSoFar}`
+                    })));
+                    node.clearSplitChildren = () => {
+                        delete node.clearSplitChildren;
+                        splitChildren.forEach(n => n.entity.splitDestroy());
+                        splitChildren.length = 0;
+                        const splitsDataToRemove = [ ];
+                        splitsData.forEach((d, i) => (d.rootEntityId === entity.id) && splitsDataToRemove.unshift(i));
+                        splitsDataToRemove.forEach(i => splitsData.splice(i, 1));
+                        ensureSaveButtonActive();
+                        entity.visible = true;
+                        updateChildrenDiv();
+                        updateExpanded();
+                        updateEntities();
+                    };
+                    updateChildrenDiv();
+                    updateExpanded();
+                    node.expandNode();
+                },
+                domElement: domElement,
+                expandNode: () => { if (updateExpanded) { expanded = true; updateExpanded(); } },
+                isChecked: () => checkbox.checked,
+                isIndeterminate: () => checkbox.indeterminate,
+                nodeEntity: entity,
+                blink: () => {
+                    const t1 = 300;
+                    nodeElement.style.backgroundColor = "#f4433644";
+                    nodeElement.style.transition = "background-color " + t1 + "ms cubic-bezier(0.22,0.61,0.36,1.00)";
+                    setTimeout(() => {
+                        const t2 = 1000;
+                        nodeElement.style.backgroundColor = "";
+                        nodeElement.style.transition = "background-color " + t2 + "ms cubic-bezier(.5,0,.5,.5)";
+                        setTimeout(() => { nodeElement.style.transition = ""; }, t2);
+                    }, t1+200);
+                },
+                updateFromEntities: () => {
+                    node.children.forEach(node => node.updateFromEntities());
+                    nodeElement.style.color = (entity && (splitChildren.length === 0) && entity.highlighted) ? "red" : "";
+                    updateChecked();
+                }
+            };
+
+            const updateChildrenDiv = () => {
+                [...childrenDiv.childNodes].forEach(n => childrenDiv.removeChild(n));
+                node.children = createNodes(
+                    metaChildren.concat(splitChildren),
+                    depth + 1,
+                    () => { updateChecked(); onVisibilityChange && onVisibilityChange(); });
+                node.children.forEach(child => childrenDiv.appendChild(child.domElement));
+            };
+            updateChildrenDiv();
+
+            updateChecked();
+
+            return node;
+        });
+    })(metaModelRoots, 0, updateEntities);
+
+    // Automatically expand the first two levels of the building's tree
+    (function expand(nodes, depth) {
+        if (depth > 0) {
+            nodes.forEach((node, i) => {
+                if ((depth !== 2) || ((i === 0) || (i === 1))) {
+                    node.expandNode();
+                }
+                expand(node.children, depth - 1);
+            });
+        }
+    })(rootNodes, 5);
+
+    rootNodes.forEach(node => treeViewContainer.appendChild(node.domElement));
+
+    // Setup canvas UI
+    let down = false;
+    const downPos = math.vec2();
+    canvas.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        getCanvasPos(e, downPos);
+        down = true;
+    });
+    canvas.addEventListener("mousemove", (e) => {
+        e.preventDefault();
+        if (down && (math.distVec2(downPos, getCanvasPos(e, tempVec2)) > 5)) {
+            down = false;
+        }
+    });
+    canvas.addEventListener("mouseup", (e) => {
+        e.preventDefault();
+        if (down && (math.distVec2(downPos, getCanvasPos(e, tempVec2)) > 5)) {
+            down = false;
+        }
+        if (down) {
+            down = false;
+            const pickEntity = pickCanvasEntity(e);
+            if (e.button === 0) {
+                if (pickEntity) {
+                    // Toggle picked element's selection
+                    if (selected.has(pickEntity)) {
+                        selected.delete(pickEntity);
+                    } else {
+                        selected.add(pickEntity);
+                    }
+                    updateEntities();
+                }
+            } else if (e.button === 2) {
+                // Open context menu
+                showContextMenu([e.clientX, e.clientY], appendGroup => {
+                    // General context menu options
+                    appendGroup(appendItem => {
+                        const visibleSelected   = [ ];
+                        const visibleUnselected = [ ];
+                        Object.values(scene.models).forEach(model => model.entityList.forEach(e => e.visible && (selected.has(e) ? visibleSelected : visibleUnselected).push(e)));
+                        appendItem("Select all visible", (visibleUnselected.length > 0) && (() => { visibleUnselected.forEach(e => selected.add(e));  updateEntities(); }));
+                        appendItem("Deselect all visible", (visibleSelected.length > 0) && (() => { visibleSelected.forEach(e => selected.delete(e)); updateEntities(); }));
+                        appendItem("Toggle all visible", () => { visibleUnselected.forEach(e => selected.add(e)); visibleSelected.forEach(e => selected.delete(e)); updateEntities(); });
+                        appendItem("Hide selected", (visibleSelected.length > 0) && (() => { visibleSelected.forEach(e => e.visible = false); updateEntities(); }));
+                    });
+
+                    if (pickEntity) {
+                        // pickEntity-specific context menu options
+                        appendGroup(appendItem => appendItem("Hide entity", () => { pickEntity.visible = false; updateEntities(); }));
+
+                        const path = (function rec(nodes) {
+                            return findMap(nodes, node => {
+                                if (node.nodeEntity === pickEntity) {
+                                    return [ node ];
+                                } else {
+                                    const subpath = rec(node.children);
+                                    return subpath && [ node, ...subpath ];
+                                }
+                            });
+                        })(rootNodes);
+                        if (path) {
+                            appendGroup(appendItem => {
+                                appendItem("Show in the tree", () => {
+                                    path.forEach(node => node.expandNode());
+                                    const node = path[path.length - 1];
+                                    node.domElement.scrollIntoView({ block: "nearest" });
+                                    node.blink();
+                                });
+                            });
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    // Function to add a top-right corner button
+    const addButton = (function() {
+        let btnIdx = 0;
+        return (onClick) => {
+            const btn = window.document.createElement("button");
+            btn.addEventListener("click", onClick);
+
+            const style = btn.style;
+            style.border = "1px solid #ccc";
+            style.margin = "10px";
+            style.padding = "5px 15px";
+            style.position = "absolute";
+            style.right = 0;
+            style.textAlign = "center";
+            style.top = px(50 + btnIdx++ * 45);
+            style.userSelect = "none";
+            style.width = "130px";
+            window.document.getElementById("info-button-label").appendChild(btn);
+
+            const setEnabled = e => { btn.disabled = !e; style.cursor = e ? "pointer" : ""; };
+            setEnabled(true);
+
+            return {
+                setCaption: caption => { btn.innerText = caption; },
+                setEnabled: setEnabled
+            };
+        };
+    })();
+
+    // A button to toggle xray state
+    (function() {
+        const updateXrayCaption = () => xrayBtn.setCaption(xray ? "xray off" : "xray on");
+        const xrayBtn = addButton(() => { xray = !xray; updateEntities(); updateXrayCaption(); });
+        updateXrayCaption();
+    })();
+
+    // Function takes an entity and a plane, and returns new entities that are a result of splitting
+    const splitEntity = (entity, plane) => {
+        const entityAabb = entity.aabb;
+        const splits = math.planeIntersectsAABB3(plane, entityAabb) && (function() {
+            const entityCenter = math.getAABB3Center(entityAabb, math.vec3());
+            const meshesSplits = { pos: [], neg: [] };
+            const sliceMesh = math.makeSectionPlaneSlicer(plane);
+            const tmpVec3 = math.vec3();
+            entity.meshes.filter(mesh => math.planeIntersectsAABB3(plane, mesh.aabb)).forEach(mesh => {
+                const meshIndices  = [ ];
+                const meshVertices = [ ];
+                mesh.getEachIndex(i  => meshIndices.push(i));
+                mesh.getEachVertex(v => meshVertices.push(...math.subVec3(v, entityCenter, tmpVec3)));
+                const slice = sliceMesh({ origin: entityCenter, indices: meshIndices, positions: meshVertices });
+                slice.pos && meshesSplits.pos.push(slice.pos);
+                slice.neg && meshesSplits.neg.push(slice.neg);
+            });
+            const sides = [ meshesSplits.pos, meshesSplits.neg ].filter(s => s.length > 0);
+            return (sides.length > 0) && { center: entityCenter, sides: sides };
+        })();
+        if (splits) {
+            entity.visible = false;
+
+            const subEntities = splits.sides.map((sideMeshes, i) => {
+                const subId = entity.id + "_" + i;
+                const sceneModel = new SceneModel(scene, { id: subId + "_model", isModel: true, edges: true });
+                const subEntity = sceneModel.createEntity({
+                    id: subId,
+                    meshIds: sideMeshes.map((m, i) => sceneModel.createMesh({
+                        id:          sceneModel.id + "_mesh_" + i,
+                        color:       entity.colorize,
+                        origin:      splits.center,
+                        primitive:   "solid",
+                        indices:     m.indices,
+                        positions:   m.positions,
+                        normals:     m.normals,
+                        edgeIndices: math.buildEdgeIndices(m.positions, m.indices, null, 2.0)
+                    }).id)
+                });
+                sceneModel.finalize();
+                subEntity.opacity = entity.opacity;
+                return subEntity;
+            });
+
+            const splitRootEntity = entity.splitData ? entity.splitData.splitRootEntity : entity;
+
+            const splitRootNode = (function rec(nodes) { return findMap(nodes, n => (n.nodeEntity === splitRootEntity) ? n : rec(n.children)); })(rootNodes);
+            if (splitRootNode) {
+                splitRootNode.addSplitChildren(subEntities, entity.splitData && entity);
+            }
+
+            entity.splitDestroy && entity.splitDestroy();
+
+            subEntities.forEach(s => {
+                s.splitData = { splitRootEntity: splitRootEntity };
+                s.splitDestroy = () => {
+                    selected.delete(s);
+                    s.model.destroy();
+                };
+            });
+
+            splitsData.push({ rootEntityId: splitRootEntity.id, entityId: entity.id, plane: { pos: [...plane.pos], dir: [...plane.dir] } });
+
+            return subEntities;
+        } else {
+            return null;
+        }
+    };
+
+    // A button to split selected entities
+    const updateSplitButton = (function() {
+        const getVisibleSelected = () => [...selected].filter(e => e.visible);
+        const splitBtn = addButton(() => {
+            getVisibleSelected().forEach(entity => {
+                const subEntities = splitEntity(entity, sectionPlane);
+                if (subEntities) {
+                    selected.delete(entity);
+                    subEntities.forEach(s => selected.add(s));
+                    ensureSaveButtonActive();
+                }
+            });
+            updateEntities();
+        });
+        splitBtn.setCaption("split");
+        return () => {
+            const visSelCnt = getVisibleSelected().length;
+            const enabled = (visSelCnt > 0) && sectionPlane.active;
+            splitBtn.setEnabled(enabled);
+            splitBtn.setCaption(enabled ? `split ${visSelCnt}` : "split");
+        };
+    })();
+
+    // A button to toggle the section plane on or off
+    (function() {
+        const updateSectionPlaneBtn = () => {
+            if (sectionPlane.active) {
+                sectionPlanes.showControl(sectionPlane.id);
+            } else {
+                sectionPlanes.hideControl(sectionPlane.id);
+            }
+            sectionPlaneBtn.setCaption(sectionPlane.active ? "Sect. plane off" : "Sect. plane on");
+        };
+
+        const sectionPlaneBtn = addButton(() => {
+            sectionPlane.active = ! sectionPlane.active;
+            updateSectionPlaneBtn();
+            updateSplitButton();
+        });
+
+        updateSectionPlaneBtn();
+    })();
+
+    // Persistence using window.localStorage
+    const ensureSaveButtonActive = (function() {
+        const localStorage = window.localStorage;
+        const localStorageKey = "splitsData";
+
+        const saveBtn = addButton(() => {
+            // Persist current state
+            if (splitsData.length > 0) {
+                localStorage.setItem(localStorageKey, JSON.stringify(splitsData));
+            } else {
+                localStorage.removeItem(localStorageKey);
+            }
+            saveBtn.setEnabled(false);
+            updateClearBtn();
+        });
+        saveBtn.setCaption("Save splits");
+        saveBtn.setEnabled(false);
+
+        // Restore saved splits
+        const localStorageSplitsDataStr = localStorage.getItem(localStorageKey);
+        localStorageSplitsDataStr && JSON.parse(localStorageSplitsDataStr).forEach(splitData => {
+            const pos = splitData.plane.pos;
+            const dir = splitData.plane.dir;
+            const e = findMap(Object.values(scene.models), model => model.objects[splitData.entityId]);
+            e && splitEntity(e, { pos: pos, dir: dir, dist: -math.dotVec3(pos, dir), quaternion: math.vec3PairToQuaternion(worldForward, dir, math.vec4()) });
+        });
+
+        const clearBtn = addButton(() => {
+            localStorage.removeItem(localStorageKey);
+            saveBtn.setEnabled(splitsData.length > 0);
+            updateClearBtn();
+        });
+        clearBtn.setCaption("Clear saved");
+        const updateClearBtn = () => clearBtn.setEnabled(localStorage.getItem(localStorageKey));
+        updateClearBtn();
+
+        return () => saveBtn.setEnabled(true);
+    })();
+
+    // Initialize the state
+    updateEntities();
+});
+
+  </script>
+</html>
