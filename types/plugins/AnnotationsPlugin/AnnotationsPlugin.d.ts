@@ -9,7 +9,7 @@ export declare type AnnotationsPluginConfiguration = {
   markerHTML?: string;
   /** HTML text template for Annotation labels. Defaults to ````<div></div>````.  Ignored on {@link Annotation}s configured with a ````labelElementId````. */
   labelHTML?: string;
-  /** Container DOM element for markers and labels. Defaults to ````document.body````. */
+  /** Container DOM element for markers and labels. Defaults to ````document.body````, but different element should be specified to capture it with {@link Viewer.getSnapshotWithPlugins}. */
   container?: HTMLElement;
   /** Map of default values to insert into the HTML templates for the marker and label. */
   values?: { [key: string]: string | number };

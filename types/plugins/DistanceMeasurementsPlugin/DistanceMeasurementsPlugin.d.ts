@@ -10,7 +10,7 @@ export declare type DistanceMeasurementsPluginConfiguration = {
   /** The minimum length, in pixels, of an axis wire beyond which its label is shown. */
   labelMinAxisLength?: number;
 
-  /** Container DOM element for markers and labels. Defaults to ````document.body````. */
+  /** Container DOM element for markers and labels. Defaults to ````document.body````, but different element should be specified to capture it with {@link Viewer.getSnapshotWithPlugins}. */
   container?: HTMLElement;
 
   /** The default value of the DistanceMeasurements `visible` property. */
