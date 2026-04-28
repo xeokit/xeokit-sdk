@@ -251,7 +251,7 @@ export class AngleMeasurementsPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} [cfg]  Plugin configuration.
      * @param {String} [cfg.id="AngleMeasurements"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
+     * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````, but different element should be specified to capture it with {@link Viewer.getSnapshotWithPlugins}.
      * @param {string} [cfg.defaultColor=null] The default color of the dots, wire and label.
      * @param {boolean} [cfg.defaultLabelsVisible=true] The default value of {@link AngleMeasurement.labelsVisible}.
      * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
