@@ -7,7 +7,7 @@ export declare type AngleMeasurementsPluginConfiguration = {
   /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
 
-  /** Container DOM element for markers and labels. Defaults to ````document.body````. */
+  /** Container DOM element for markers and labels. Defaults to ````document.body````, but different element should be specified to capture it with {@link Viewer.getSnapshotWithPlugins}. */
   container?: HTMLElement;
 
   /** The default color of the dots, wire and label. */
