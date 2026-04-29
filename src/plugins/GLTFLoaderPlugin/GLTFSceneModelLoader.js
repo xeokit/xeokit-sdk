@@ -18,6 +18,13 @@ import {
     RepeatWrapping
 } from "../../viewer/scene/constants/constants.js";
 
+const iota = n => {
+    const ret = [ ];
+    for (let i = 0; i < n; ++i)
+        ret.push(i);
+    return ret;
+};
+
 /**
  * @private
  */
@@ -590,32 +597,6 @@ function parseNodeMesh(node, ctx, matrix, meshIds) {
                 meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
                 meshCfg.opacity = 1.0;
             }
-            const backfaces = ((ctx.backfaces !== false) || (material && material.doubleSided !== false));
-            switch (primitive.mode) {
-                case 0: // POINTS
-                    meshCfg.primitive = "points";
-                    break;
-                case 1: // LINES
-                    meshCfg.primitive = "lines";
-                    break;
-                case 2: // LINE_LOOP
-                    meshCfg.primitive = "lines";
-                    break;
-                case 3: // LINE_STRIP
-                    meshCfg.primitive = "lines";
-                    break;
-                case 4: // TRIANGLES
-                    meshCfg.primitive = backfaces ? "triangles" : "solid";
-                    break;
-                case 5: // TRIANGLE_STRIP
-                    meshCfg.primitive = backfaces ? "triangles" : "solid";
-                    break;
-                case 6: // TRIANGLE_FAN
-                    meshCfg.primitive = backfaces ? "triangles" : "solid";
-                    break;
-                default:
-                    meshCfg.primitive = backfaces ? "triangles" : "solid";
-            }
             const POSITION = primitive.attributes.POSITION;
             if (!POSITION) {
                 continue;
@@ -635,6 +616,61 @@ function parseNodeMesh(node, ctx, matrix, meshIds) {
                 math.transformPositions3(matrix, meshCfg.localPositions, meshCfg.positions);
             } else { // eqiv to math.transformPositions3(math.identityMat4(), meshCfg.localPositions, meshCfg.positions);
                 meshCfg.positions.set(meshCfg.localPositions);
+            }
+            const linearize = closeLoop => {
+                const indices = meshCfg.indices || iota(meshCfg.localPositions.length / 3);
+                const len = indices.length;
+                const cnt = closeLoop ? len : (len - 1);
+                const linesIndices = new Uint32Array(cnt * 2);
+                for (let i = 0; i < cnt; ++i) {
+                    const idx = i * 2;
+                    linesIndices[idx]   = indices[i];
+                    linesIndices[idx+1] = indices[(i+1) % len];
+                }
+                meshCfg.indices = linesIndices;
+            };
+            const triangularize = getFirstPoint => {
+                const indices = meshCfg.indices || iota(meshCfg.localPositions.length / 3);
+                const len = indices.length;
+                const cnt = len - 2;
+                const trianglesIndices = new Uint32Array(cnt * 3);
+                for (let i = 0; i < cnt; ++i) {
+                    const idx = i * 3;
+                    trianglesIndices[idx]   = getFirstPoint(indices, i);
+                    trianglesIndices[idx+1] = indices[(i+1) % len];
+                    trianglesIndices[idx+2] = indices[(i+2) % len];
+                }
+                meshCfg.indices = trianglesIndices;
+            };
+            const backfaces = ((ctx.backfaces !== false) || (material && material.doubleSided !== false));
+            switch (primitive.mode) {
+                case 0: // POINTS
+                    meshCfg.primitive = "points";
+                    break;
+                case 1: // LINES
+                    meshCfg.primitive = "lines";
+                    break;
+                case 2: // LINE_LOOP
+                    meshCfg.primitive = "lines";
+                    linearize(true);
+                    break;
+                case 3: // LINE_STRIP
+                    meshCfg.primitive = "lines";
+                    linearize(false);
+                    break;
+                case 4: // TRIANGLES
+                    meshCfg.primitive = backfaces ? "triangles" : "solid";
+                    break;
+                case 5: // TRIANGLE_STRIP
+                    meshCfg.primitive = backfaces ? "triangles" : "solid";
+                    triangularize((indices, i) => indices[i]);
+                    break;
+                case 6: // TRIANGLE_FAN
+                    meshCfg.primitive = backfaces ? "triangles" : "solid";
+                    triangularize((indices, i) => indices[0]);
+                    break;
+                default:
+                    meshCfg.primitive = backfaces ? "triangles" : "solid";
             }
             const origin = math.vec3();
             const rtcNeeded = worldToRTCPositions(meshCfg.positions, meshCfg.positions, origin); // Small cellsize guarantees better accuracy
