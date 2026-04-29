@@ -590,6 +590,26 @@ function parseNodeMesh(node, ctx, matrix, meshIds) {
                 meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
                 meshCfg.opacity = 1.0;
             }
+            const POSITION = primitive.attributes.POSITION;
+            if (!POSITION) {
+                continue;
+            }
+            meshCfg.localPositions = POSITION.value;
+            meshCfg.positions = new Float64Array(meshCfg.localPositions.length);
+            if (primitive.attributes.NORMAL) {
+                meshCfg.normals = primitive.attributes.NORMAL.value;
+            }
+            if (primitive.attributes.TEXCOORD_0) {
+                meshCfg.uv = primitive.attributes.TEXCOORD_0.value;
+            }
+            if (primitive.indices) {
+                meshCfg.indices = primitive.indices.value;
+            }
+            if (matrix) {
+                math.transformPositions3(matrix, meshCfg.localPositions, meshCfg.positions);
+            } else { // eqiv to math.transformPositions3(math.identityMat4(), meshCfg.localPositions, meshCfg.positions);
+                meshCfg.positions.set(meshCfg.localPositions);
+            }
             const backfaces = ((ctx.backfaces !== false) || (material && material.doubleSided !== false));
             switch (primitive.mode) {
                 case 0: // POINTS
@@ -615,26 +635,6 @@ function parseNodeMesh(node, ctx, matrix, meshIds) {
                     break;
                 default:
                     meshCfg.primitive = backfaces ? "triangles" : "solid";
-            }
-            const POSITION = primitive.attributes.POSITION;
-            if (!POSITION) {
-                continue;
-            }
-            meshCfg.localPositions = POSITION.value;
-            meshCfg.positions = new Float64Array(meshCfg.localPositions.length);
-            if (primitive.attributes.NORMAL) {
-                meshCfg.normals = primitive.attributes.NORMAL.value;
-            }
-            if (primitive.attributes.TEXCOORD_0) {
-                meshCfg.uv = primitive.attributes.TEXCOORD_0.value;
-            }
-            if (primitive.indices) {
-                meshCfg.indices = primitive.indices.value;
-            }
-            if (matrix) {
-                math.transformPositions3(matrix, meshCfg.localPositions, meshCfg.positions);
-            } else { // eqiv to math.transformPositions3(math.identityMat4(), meshCfg.localPositions, meshCfg.positions);
-                meshCfg.positions.set(meshCfg.localPositions);
             }
             const origin = math.vec3();
             const rtcNeeded = worldToRTCPositions(meshCfg.positions, meshCfg.positions, origin); // Small cellsize guarantees better accuracy
