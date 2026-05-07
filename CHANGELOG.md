@@ -1,6 +1,18 @@
 ## xeokit-sdk Changelog
 
 
+# [v2.6.109](https://github.com/xeokit/xeokit-sdk/compare/v2.6.108...v2.6.109)
+
+### 07 May 2026
+
+-  XCD-463 Allow edges rendering for DTX & Logarithmic depth buffers [#2038](https://github.com/xeokit/xeokit-sdk/pull/2038)
+-  XCD-482 Add information about plugin container being necessary for the getSnapshotWithPlugins [#2050](https://github.com/xeokit/xeokit-sdk/pull/2050)
+-  XEOK-445 Publish example with splitting objects [#2049](https://github.com/xeokit/xeokit-sdk/pull/2049)
+-  XCD-485 Handle GLTF loops, strips, fans [#2051](https://github.com/xeokit/xeokit-sdk/pull/2051)
+-  XEOK-453 Separate portions with normals from portions without normals [#2052](https://github.com/xeokit/xeokit-sdk/pull/2052)
+-  XEOK-454 Fix addMousePressListener and addTouchPressListener type declarations [#2053](https://github.com/xeokit/xeokit-sdk/pull/2053)
+
+
 # [v2.6.108](https://github.com/xeokit/xeokit-sdk/compare/v2.6.107...v2.6.108)
 
 ### 01 Apr 2026
