@@ -896,6 +896,7 @@ class XKTLoaderPlugin extends Plugin {
      * @param {ArrayBuffer} [params.xkt] The *````.xkt````* file data, as an alternative to the ````src```` parameter.
      * @param {String} [params.metaModelSrc] Path or URL to an optional metadata file, as an alternative to the ````metaModelData```` parameter.
      * @param {*} [params.metaModelData] JSON model metadata, as an alternative to the ````metaModelSrc```` parameter.
+     * @param {Boolean} [params.loadIntoMetaScene=true] Whether to load metadata into MetaScene, otherwise expose as SceneModel::metadata.
      * @param {String} [params.manifestSrc] Path or URL to a JSON manifest file that provides paths to ````.xkt```` files to load as parts of the model. Use this option to load models that have been split into
      * multiple XKT files. See [tutorial](https://xeokit.io/blog/automatically-splitting-large-models-for-better-performance) for more info.
      * @param {Object} [params.manifest] A JSON manifest object (as an alternative to a path or URL) that provides paths to ````.xkt```` files to load as parts of the model. Use this option to load models that have been split into
@@ -991,10 +992,30 @@ class XKTLoaderPlugin extends Plugin {
 
         const modelId = sceneModel.id;  // In case ID was auto-generated
 
-        const metaModel = new MetaModel({
-            metaScene: this.viewer.metaScene,
-            id: modelId
-        });
+        const loadIntoMetaScene = (! ("loadIntoMetaScene" in params)) || params.loadIntoMetaScene;
+        const metaModel = (loadIntoMetaScene
+                           ? new MetaModel({
+                               id: modelId,
+                               metaScene: this.viewer.metaScene
+                           })
+                           : (function() {
+                               let firstMetadata = null;
+                               let modelMetadata = null;
+                               return {
+                                   loadData: metadata => {
+                                       if (! firstMetadata) {
+                                           firstMetadata = metadata;
+                                       } else {
+                                           if (! modelMetadata) {
+                                               modelMetadata = { };
+                                               Object.entries(firstMetadata).forEach(([ k, v ]) => modelMetadata[k] = Array.isArray(v) ? v.slice(0) : v);
+                                           }
+                                           Object.entries(metadata).forEach(([ k, v ]) => { if (Array.isArray(v)) { v.forEach(e => modelMetadata[k].push(e)); } });
+                                       }
+                                   },
+                                   finalize: () => sceneModel.metadata = modelMetadata || firstMetadata
+                               };
+                           })());
 
         this.viewer.scene.canvas.spinner.processes++;
 
@@ -1007,7 +1028,7 @@ class XKTLoaderPlugin extends Plugin {
             metaModel.finalize();
             this.viewer.scene.canvas.spinner.processes--;
             sceneModel.once("destroyed", () => {
-                this.viewer.metaScene.destroyMetaModel(metaModel.id);
+                loadIntoMetaScene && this.viewer.metaScene.destroyMetaModel(metaModel.id);
             });
             this.scheduleTask(() => {
                 if (sceneModel.destroyed) {
