@@ -32,7 +32,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
+        run: npx rollup --config rollup.config.js; npx rollup --config rollup.minified.config.js
 
       - name: Get version from package.json
         id: version

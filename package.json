@@ -6,9 +6,9 @@
   "main": "./dist/xeokit-sdk.cjs.js",
   "types": "./types/index.d.ts",
   "scripts": {
-    "build": "rollup --config rollup.config.js; rollup --config rollup.minified.config.js",
-    "dev-build": "rollup --config rollup.dev.config.js",
-    "test": "npx percy exec -- npx playwright test"
+    "build":     "node -e \"console.error('WARNING: \\'npm run {build,dev-build,test}\\' scripts and \\'devDependencies\\' are soon going to be deprecated. Install a build tool and execute it directly.\\n');\"; rollup --config rollup.config.js; rollup --config rollup.minified.config.js",
+    "dev-build": "node -e \"console.error('WARNING: \\'npm run {build,dev-build,test}\\' scripts and \\'devDependencies\\' are soon going to be deprecated. Install a build tool and execute it directly.\\n');\"; rollup --config rollup.dev.config.js",
+    "test":      "node -e \"console.error('WARNING: \\'npm run {build,dev-build,test}\\' scripts and \\'devDependencies\\' are soon going to be deprecated. Install a test tool and execute it directly.\\n');\"; npx percy exec -- npx playwright test"
   },
   "repository": {
     "type": "git",
