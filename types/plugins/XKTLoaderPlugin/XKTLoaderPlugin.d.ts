@@ -32,6 +32,8 @@ export declare type LoadXKTModel = {
     metaModelSrc?: string;
     /** JSON model metadata, as an alternative to the ````metaModelSrc```` parameter. */
     metaModelData?: any;
+    /** Whether to load metadata into MetaScene, otherwise expose as SceneModel::metadata. Defaults to `true`. */
+    loadIntoMetaScene?: boolean;
     /** Path or URL to a JSON manifest file that provides paths or URLs to ````.xkt```` files to load as parts of the model. Use this option to load models that have been split into multiple XKT files. See [tutorial](https://xeokit.io/blog/automatically-splitting-large-models-for-better-performance) for more info.*/
     manifestSrc?: any;
     /** A JSON manifest object (as an alternative to a path or URL) that provides paths or URLs to ````.xkt```` files to load as parts of the model. Use this option to load models that have been split into multiple XKT files. See [tutorial](https://xeokit.io/blog/automatically-splitting-large-models-for-better-performance) for more info. */
