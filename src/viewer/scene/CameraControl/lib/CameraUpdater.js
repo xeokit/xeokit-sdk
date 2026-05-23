@@ -126,16 +126,12 @@ class CameraUpdater {
                     if (updates.rotateDeltaX !== 0) {
                         if (configs.firstPerson) {
                             camera.pitch(-updates.rotateDeltaX);
-                        } else {
-                            camera.orbitPitch(updates.rotateDeltaX);
                         }
                     }
 
                     if (updates.rotateDeltaY !== 0) {
                         if (configs.firstPerson) {
                             camera.yaw(updates.rotateDeltaY);
-                        } else {
-                            camera.orbitYaw(updates.rotateDeltaY);
                         }
                     }
                 }
