@@ -117,22 +117,18 @@ class CameraUpdater {
 
             if (updates.rotateDeltaY !== 0 || updates.rotateDeltaX !== 0) {
 
-                if ((!configs.firstPerson) && configs.followPointer && pivotController.getPivoting()) {
-                    pivotController.continuePivot(updates.rotateDeltaY, updates.rotateDeltaX);
-                    pivotController.showPivot();
-
-                } else {
-
+                if (configs.firstPerson) {
                     if (updates.rotateDeltaX !== 0) {
-                        if (configs.firstPerson) {
-                            camera.pitch(-updates.rotateDeltaX);
-                        }
+                        camera.pitch(-updates.rotateDeltaX);
                     }
-
                     if (updates.rotateDeltaY !== 0) {
-                        if (configs.firstPerson) {
-                            camera.yaw(updates.rotateDeltaY);
-                        }
+                        camera.yaw(updates.rotateDeltaY);
+                    }
+                }
+                else {
+                    if (configs.followPointer && pivotController.getPivoting()){
+                        pivotController.continuePivot(updates.rotateDeltaY, updates.rotateDeltaX);
+                        pivotController.showPivot();
                     }
                 }
 
