@@ -1,6 +1,15 @@
 ## xeokit-sdk Changelog
 
 
+# [v2.6.111](https://github.com/xeokit/xeokit-sdk/compare/v2.6.109...v2.6.110)
+
+### 27 May 2026
+
+-  XEOK-458 Add a warning to build and dev-build scripts about upcoming deprecation [#2059](https://github.com/xeokit/xeokit-sdk/pull/2059)
+-  XEOK-462 Expose metadata to be available for custom tree view implementations [#2060](https://github.com/xeokit/xeokit-sdk/pull/2060)
+-  XCD-491 Remove additional camera.pitch and camera.yaw manipulation [#2061](https://github.com/xeokit/xeokit-sdk/pull/2061)
+
+
 # [v2.6.109](https://github.com/xeokit/xeokit-sdk/compare/v2.6.108...v2.6.109)
 
 ### 07 May 2026
