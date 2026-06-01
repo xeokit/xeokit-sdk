@@ -134,6 +134,9 @@ class ViewCullPlugin extends Plugin {
         if (cullDirty) {
             const kdNode = this._kdRoot;
             if (kdNode) {
+                for (let objectIdx = 0, len = this._objectCullStates.numObjects; objectIdx < len; objectIdx++) {
+                    this._objectCullStates.setObjectViewCulled(objectIdx, false);
+                }
                 this._visitKDNode(kdNode);
             }
         }
