@@ -469,7 +469,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
                     if (!geometryArrays) {
                         geometryArrays = {
-                            batchThisMesh: (!options.reuseGeometries)
+                            batchThisMesh: (!options.reuseGeometries({ instanceCount: geometryReuseCount }))
                         };
                         const primitiveType = eachGeometryPrimitiveType[geometryIndex];
                         const axisLabel = eachGeometryAxisLabel[geometryIndex];
