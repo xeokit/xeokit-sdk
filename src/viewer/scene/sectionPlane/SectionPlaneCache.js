@@ -1,6 +1,6 @@
 import {Component} from '../Component.js';
 import {math} from "../math/math.js";
-import {SectionPlane} from "./SectionPlane";
+import {SectionPlane} from "./SectionPlane.js";
 
 const tempVec3a = math.vec3();
 
