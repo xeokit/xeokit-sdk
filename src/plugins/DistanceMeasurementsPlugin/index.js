@@ -5,7 +5,7 @@ export * from "./DistanceMeasurementsTouchControl.js";
 
 import {Component} from "../../viewer/scene/Component.js";
 import {math} from "../../viewer/scene/math/math.js";
-import {activateDraggableDots} from "../../../src/plugins/lib/ui/index.js";
+import {activateDraggableDots} from "../lib/ui/index.js";
 
 export class DistanceMeasurementEditControl extends Component {
 
