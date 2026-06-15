@@ -61,14 +61,24 @@ export declare class MetaModel {
   /**
    * The {@link PropertySet}s in this MetaModel.
    */
-  propertySets: {
-    String: PropertySet;
-  };
+  propertySets: PropertySet[];
 
   /**
    * The root {@link MetaObject} in this MetaModel's composition structure hierarchy.
    */
-  rootMetaObject: MetaObject;
+  rootMetaObject: MetaObject | null;
+
+  /**
+   * The root {@link MetaObject}s in this MetaModel's composition structure hierarchy.
+   */
+  rootMetaObjects: MetaObject[];
+
+  /**
+   * The {@link MetaObject}s in this MetaModel, each mapped to its ID.
+   */
+  metaObjects: {
+      String: MetaObject;
+  };
 
   /**
    * Finalizes this MetaModel.
