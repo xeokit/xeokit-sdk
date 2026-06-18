@@ -192,20 +192,20 @@ class TouchPanRotateAndDollyHandler {
                     }
 
                 } else {
-                  //  if (!absorbTinyFirstDrag) {
+                    if (scene.camera.projection === "perspective") {
+                        const { fov, fovAxis } = scene.camera.perspective;
+                        const fovX = fovAxis === "x" || (fovAxis === "min" && canvasWidth < canvasHeight) ? fov : fov * (canvasWidth / canvasHeight);
+                        const fovY = fovAxis === "y" || (fovAxis === "min" && canvasHeight < canvasWidth) ? fov : fov * (canvasHeight / canvasWidth);
+
+                        const dx = xPanDelta / canvasWidth * fovX * configs.dragRotationRate / 360;
+                        const dy = yPanDelta / canvasHeight * fovY * configs.dragRotationRate / 360;
+
+                        updates.rotateDeltaY -= dx;
+                        updates.rotateDeltaX += dy;
+                    } else {
                         updates.rotateDeltaY -= (xPanDelta / canvasWidth) * (configs.dragRotationRate * 1.0); // Full horizontal rotation
                         updates.rotateDeltaX += (yPanDelta / canvasHeight) * (configs.dragRotationRate * 1.5); // Half vertical rotation
-                    // } else {
-                    //     firstDragDeltaY -= (xPanDelta / canvasWidth) * (configs.dragRotationRate * 1.0); // Full horizontal rotation
-                    //     firstDragDeltaX += (yPanDelta / canvasHeight) * (configs.dragRotationRate * 1.5); // Half vertical rotation
-                    //     if (Math.abs(firstDragDeltaX) > 5 || Math.abs(firstDragDeltaY) > 5) {
-                    //         updates.rotateDeltaX += firstDragDeltaX;
-                    //         updates.rotateDeltaY += firstDragDeltaY;
-                    //         firstDragDeltaX = 0;
-                    //         firstDragDeltaY = 0;
-                    //         absorbTinyFirstDrag = false;
-                    //     }
-                    // }
+                    }
                 }
 
             } else if (numTouches === 2) {
