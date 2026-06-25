@@ -1,6 +1,17 @@
 ## xeokit-sdk Changelog
 
 
+# [v2.6.112](https://github.com/xeokit/xeokit-sdk/compare/v2.6.111...v2.6.112)
+
+### 25 Jun 2026
+
+-  XCD-492 Fix ViewCullPlugin not unculling objects [#2062](https://github.com/xeokit/xeokit-sdk/pull/2062)
+-  XEOK-465 Extend reuseGeometries to function type [#2063](https://github.com/xeokit/xeokit-sdk/pull/2063)
+-  Fix the reuseGeometries param description [#2068](https://github.com/xeokit/xeokit-sdk/pull/2068)
+-  #2066 Fixing typings in MetaModel [#2067](https://github.com/xeokit/xeokit-sdk/pull/2067)
+-  XEOK-444 Support GLTFLoaderPlugin::load::loadersGl parameter to load alternative loaders.gl version [#2035](https://github.com/xeokit/xeokit-sdk/pull/2035)
+
+
 # [v2.6.111](https://github.com/xeokit/xeokit-sdk/compare/v2.6.109...v2.6.110)
 
 ### 27 May 2026
