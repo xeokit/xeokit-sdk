@@ -1,0 +1,99 @@
+publiccodeYmlVersion: "0.7"
+
+name: xeokit SDK
+
+url: https://github.com/xeokit/xeokit-sdk
+landingURL: https://xeokit.io/
+
+softwareVersion: "2.6.112"
+releaseDate: "2026-06-25"
+developmentStatus: stable
+softwareType: library
+
+platforms:
+  - web
+
+categories:
+  - application-development
+  - web-development
+  - visualization
+  - cad
+  - geographic-information-systems
+  - data-visualization
+  - collaboration
+
+organisation:
+  uri: https://www.creoox.com/
+  name: Creoox AG
+
+usedBy:
+  - Free and Hanseatic City of Hamburg
+  - City of Zurich
+
+description:
+  en:
+    shortDescription: Open-source JavaScript SDK for high-performance 3D BIM and AEC applications in web browsers.
+
+    longDescription: >
+      xeokit SDK is an open-source JavaScript software development kit for
+      building browser-based applications that visualise and interact with
+      BIM, engineering, infrastructure and geospatial data. It is designed
+      for large and federated models and supports full-precision coordinates,
+      making it suitable for buildings, infrastructure and city-scale digital
+      twin applications.
+
+      Public authorities and their technology partners can use xeokit SDK to
+      create custom, self-hosted solutions for urban planning, infrastructure
+      management, public participation, construction and asset-management
+      workflows. The project supports open AEC workflows and standards, including
+      IFC-based model workflows and BCF viewpoints, together with formats
+      such as glTF, CityJSON, LAS/LAZ and xeokit's XKT format.
+
+      xeokit SDK is available under the GNU Affero General Public License
+      version 3. Creoox AG also offers separate commercial licensing for
+      organisations that wish to use xeokit SDK under alternative licence
+      terms, including within proprietary applications.
+
+    documentation: https://xeokit.io/blog
+    apiDocumentation: https://xeokit.io/sdk-v2/api-doc/xeokit-sdk/
+
+    features:
+      - Visualisation of large BIM, engineering and infrastructure models
+      - Browser-based 3D viewing without proprietary viewer software
+      - Support for IFC-based BIM data and BCF viewpoints
+      - Support for point clouds, CityJSON, glTF and xeokit XKT models
+      - Full-precision coordinates for BIM, GIS and digital-twin applications
+      - Model federation, object selection and property inspection
+      - Measurements, sections, annotations and visual highlighting
+      - Customisable and extensible viewer components
+      - Self-hosting and deployment within an organisation's own infrastructure
+      - Support for desktop and mobile web browsers
+
+    screenshots:
+      - publiccode-assets/xeokit-bim-viewer.png
+      - publiccode-assets/xeokit-city-model.png
+
+intendedAudience:
+  scope:
+    - infrastructures
+    - local-authorities
+    - science-and-technology
+    - research
+
+legal:
+  license: AGPL-3.0-or-later
+  mainCopyrightOwner: Creoox AG
+
+maintenance:
+  type: internal
+  contacts:
+    - name: "Lindsay Kay"
+      email: "lindsay.kay@creoox.com"
+      affiliation: Creoox AG
+
+localisation:
+  localisationReady: true
+  availableLanguages:
+    - en
+
+logo: publiccode-assets/xeokit-logo.svg
