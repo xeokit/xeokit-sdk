@@ -70,8 +70,10 @@ description:
       - Support for desktop and mobile web browsers
 
     screenshots:
-      - publiccode-assets/xeokit-bim-viewer.png
-      - publiccode-assets/xeokit-city-model.png
+      - assets/images/BIMViewer_WestRiversideHospital.png
+      - assets/images/BCFViewpointsPlugin.png
+      - assets/images/lyon_city.png
+      - assets/images/3DZoning.png
 
 intendedAudience:
   scope:
@@ -96,4 +98,4 @@ localisation:
   availableLanguages:
     - en
 
-logo: publiccode-assets/xeokit-logo.svg
+logo: assets/images/xeokit_logo.png
