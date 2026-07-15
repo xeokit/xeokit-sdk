@@ -636,6 +636,8 @@ class Scene extends Component {
             alphaDepthMask: alphaDepthMask
         });
 
+        this.canvas._renderer = this._renderer;
+
         this._sectionPlanesState = new (function () {
 
             this.sectionPlanes = [];
