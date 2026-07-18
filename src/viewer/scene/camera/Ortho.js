@@ -51,6 +51,7 @@ class Ortho extends Component {
         this.scale = cfg.scale;
         this.near = cfg.near;
         this.far = cfg.far;
+        this.fitMode = cfg.fitMode ?? "auto";
 
         this._onCanvasBoundary = this.scene.canvas.on("boundary", this._needUpdate, this);
     }
@@ -74,13 +75,13 @@ class Ortho extends Component {
         let top;
         let bottom;
 
-        if (boundaryWidth > boundaryHeight) {
+        if (this._fitMode === "horizontal" || ((this._fitMode !== "vertical") && (boundaryWidth > boundaryHeight))) {
             left = -halfSize;
             right = halfSize;
             top = halfSize / aspect;
             bottom = -halfSize / aspect;
-
-        } else {
+        }
+        else {
             left = -halfSize * aspect;
             right = halfSize * aspect;
             top = halfSize;
@@ -97,9 +98,45 @@ class Ortho extends Component {
         this.fire("matrix", this._state.matrix);
     }
 
+    /**
+     * Sets camera fit mode.
+     * 
+     * If it's not set = automatic fit mode is enabled.
+     *
+     * Possible fit modes:
+     *
+     * \"auto\" = adjust in both dimensions, depending on the canvas width and height,
+     *
+     * \"vertical\" = tries to keep the vertical dimension constant, while adjusting the horizontal,
+     *
+     * \"horizontal\" = tries to keep the horizontal dimension constant, while adjusting the vertical.
+     *
+     * @param {String} value New fit mode value.
+     */
+    set fitMode(value) {
+        if (value === "auto" || value === "horizontal" || value === "vertical") {
+            this._fitMode = value;
+        }
+        else {
+            console.warn("Ortho.js Camera fitMode not recognized, setting to \"auto\".");
+            this._fitMode = "auto";
+        }
+        
+        this._needUpdate(0);
+        this.fire("fitMode", this._fitMode);
+    }
 
     /**
-     * Sets scale factor for this Ortho's extents on X and Y axis.
+     * Gets fit mode.
+     *
+     * @returns {String} Fit mode.
+     */
+    get fitMode() {
+        return this._fitMode;
+    }
+
+    /**
+     * Sets scale factor for this Ortho's extents on X and/or Y axis.
      *
      * Clamps to minimum value of ````0.01```.
      *
@@ -121,7 +158,7 @@ class Ortho extends Component {
     }
 
     /**
-     * Gets scale factor for this Ortho's extents on X and Y axis.
+     * Gets scale factor for this Ortho's extents on X and/or Y axis.
      *
      * Clamps to minimum value of ````0.01```.
      *
