@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example — Gaussian Splatting (PoC)</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <h1>Gaussian Splatting — dirty PoC</h1>
+    <h2>Render-only port of the xeokit-sdk-v3 3DGS pipeline</h2>
+    <p>Loads a compact <code>.splat</code> file (antimatter15 layout) and renders it with an
+        instanced EWA splat pass registered as a standalone transparent drawable. No SceneModel,
+        no picking, no section planes — just pixels, on a base that extends to the real thing.</p>
+    <p><b>Note:</b> imports <code>Viewer</code> from the prebuilt <code>dist/</code> bundle and
+        <code>GaussianSplatLoader</code> straight from <code>src/</code> (no build step needed).</p>
+</div>
+</body>
+
+<script type="module">
+
+    import {Viewer} from "../../dist/xeokit-sdk.es.js";
+    import {GaussianSplatLoader} from "../../src/viewer/scene/model/splats/GaussianSplatLoader.js";
+
+    //--------------------------------------------------------------------------
+    // Viewer + camera
+    //--------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: false
+    });
+
+    viewer.scene.canvas.backgroundColor = [0.10, 0.10, 0.13];
+
+    viewer.scene.camera.eye = [6, 4, 9];
+    viewer.scene.camera.look = [0, 0, 0];
+    viewer.scene.camera.up = [0, 1, 0];
+
+    viewer.cameraControl.navMode = "orbit";
+    viewer.cameraControl.followPointer = true;
+
+    //--------------------------------------------------------------------------
+    // Load the splats
+    //--------------------------------------------------------------------------
+
+    const loader = new GaussianSplatLoader(viewer.scene);
+    loader.load({src: "./data/sphere.splat", id: "sphere"});
+
+    window.viewer = viewer;
+
+</script>
+</html>
