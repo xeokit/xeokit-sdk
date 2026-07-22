@@ -36,5 +36,9 @@ assert.equal(model.numCulledLayerPortions, 1);
 layer.setVisible(0, ENTITY_FLAGS.PICKABLE | ENTITY_FLAGS.CULLED);
 assert.equal(model.numVisibleLayerPortions, 0);
 
+layer.setMatrix(0, new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 10, 20, 30, 1]));
+layer.setOffset(0, [1, 2, 3]);
+assert.deepEqual([...layer._getModelMatrix()].slice(12, 15), [11, 22, 33]);
+
 assert.throws(() => layer.createPortion(mesh, {}), /exactly one/);
 console.log("GaussianSplatLayer.selftest: OK");

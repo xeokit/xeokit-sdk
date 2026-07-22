@@ -4,6 +4,7 @@ import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {SceneModelMesh} from './SceneModelMesh.js';
 import {DTXLayer} from './layer/DTXLayer.js';
 import {VBOLayer} from './layer/VBOLayer.js';
+import {GaussianSplatLayer} from "./layer/GaussianSplatLayer.js";
 import {ENTITY_FLAGS} from './ENTITY_FLAGS.js';
 import {RenderFlags} from "../webgl/RenderFlags.js";
 import {worldToRTCPositions} from "../math/rtcCoords.js";
@@ -2687,9 +2688,7 @@ export class SceneModel extends Component {
                 this.error(`[createMesh] ${validation.error}`);
                 return false;
             }
-            cfg.numPrimitives = validation.count;
-            this.error("[createMesh] Rendering support for 'gaussian-splats' requires GaussianSplatLayer (Phase 2)");
-            return false;
+            return this._createGaussianSplatMesh(cfg, validation.count);
         }
 
         const geometryId = cfg.geometryId;
@@ -2912,6 +2911,61 @@ export class SceneModel extends Component {
         cfg.meshMatrix = cfg.transform ? cfg.transform.worldMatrix : cfg.meshMatrix;
         mesh.portionId = mesh.layer.createPortion(mesh, cfg);
         mesh.numPrimitives = cfg.numPrimitives;
+        this._meshes[cfg.id] = mesh;
+        this._unusedMeshes[cfg.id] = mesh;
+        this._meshList.push(mesh);
+        return mesh;
+    }
+
+    _createGaussianSplatMesh(cfg, count) {
+        cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
+
+        const transformId = cfg.transformId;
+        if (transformId !== undefined && transformId !== null) {
+            cfg.transform = this._transforms[transformId];
+            if (!cfg.transform) {
+                this.error(`[createMesh] Transform not found: ${transformId} - ensure that you create it first with createTransform()`);
+                return false;
+            }
+            cfg.meshMatrix = cfg.transform.worldMatrix;
+        } else if (cfg.matrix) {
+            cfg.meshMatrix = cfg.matrix;
+        } else if (cfg.scale || cfg.rotation || cfg.position || cfg.quaternion) {
+            const scale = cfg.scale || DEFAULT_SCALE;
+            const position = cfg.position || DEFAULT_POSITION;
+            const quaternion = cfg.rotation
+                ? math.eulerToQuaternion(cfg.rotation, "XYZ", tempQuaternion)
+                : cfg.quaternion || DEFAULT_QUATERNION;
+            cfg.meshMatrix = math.composeMat4(position, quaternion, scale, math.mat4());
+        }
+
+        cfg.aabb = math.collapseAABB3();
+        math.expandAABB3Points3(cfg.aabb, cfg.positions);
+        if (cfg.meshMatrix && !cfg.transform) {
+            math.AABB3ToOBB3(cfg.aabb, tempOBB3);
+            math.transformOBB3(cfg.meshMatrix, tempOBB3, tempOBB3);
+            math.OBB3ToAABB3(tempOBB3, cfg.aabb);
+        }
+
+        cfg.color = cfg.color
+            ? new Uint8Array(cfg.color.slice(0, 3).map(value => Math.floor(value * 255)))
+            : defaultCompressedColor;
+        cfg.opacity = Math.floor((cfg.opacity ?? 1) * 255);
+        cfg.numPrimitives = count;
+
+        const mesh = new SceneModelMesh(this, cfg.id, cfg.color, cfg.opacity, cfg.transform, null);
+        const pickId = this.scene._renderer.getPickID(mesh);
+        mesh.pickId = pickId;
+        mesh.origin = math.vec3(cfg.origin);
+        mesh.aabb = cfg.aabb;
+
+        const layer = new GaussianSplatLayer(this, cfg.origin);
+        this.layerList.push(layer);
+        this._layersToFinalize.push(layer);
+        mesh.layer = layer;
+        mesh.portionId = layer.createPortion(mesh, cfg);
+        mesh.numPrimitives = count;
+
         this._meshes[cfg.id] = mesh;
         this._unusedMeshes[cfg.id] = mesh;
         this._meshList.push(mesh);
