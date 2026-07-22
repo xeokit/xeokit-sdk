@@ -47,18 +47,18 @@
 <script type="importmap">
 {
   "imports": {
-    "html2canvas/dist/html2canvas.esm.js": "./node_modules/html2canvas/dist/html2canvas.esm.js",
-    "@loaders.gl/core": "./examples/splats/vendor-stub.js",
-    "@loaders.gl/gltf": "./examples/splats/vendor-stub.js",
-    "@loaders.gl/las":  "./examples/splats/vendor-stub.js"
+    "html2canvas/dist/html2canvas.esm.js": "../../node_modules/html2canvas/dist/html2canvas.esm.js",
+    "@loaders.gl/core": "./vendor-stub.js",
+    "@loaders.gl/gltf": "./vendor-stub.js",
+    "@loaders.gl/las":  "./vendor-stub.js"
   }
 }
 </script>
 
 <script type="module">
 
-    import {Viewer} from "./src/viewer/Viewer.js";
-    import {GaussianSplatLoader} from "./src/viewer/scene/model/splats/GaussianSplatLoader.js";
+    import {Viewer} from "../../src/viewer/Viewer.js";
+    import {GaussianSplatLoader} from "../../src/viewer/scene/model/splats/GaussianSplatLoader.js";
 
     //--------------------------------------------------------------------------
     // Orientation knob.
