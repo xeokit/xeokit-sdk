@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>xeokit v2 — Gaussian Splatting example</title>
+    <title>xeokit v2 - Gaussian Splatting example</title>
     <style>
         html, body { margin: 0; height: 100%; overflow: hidden; font-family: system-ui, sans-serif; }
         #myCanvas { width: 100%; height: 100%; background: #16161c; touch-action: none; }
@@ -31,17 +31,33 @@
 <canvas id="myCanvas"></canvas>
 <div id="drop">Drop a .splat file to load</div>
 <div id="panel">
-    <h1>Gaussian Splatting — xeokit v2 (PoC)</h1>
-    <p>Load a compact <code>.splat</code> file (antimatter15 layout). Rendering only — instanced
+    <h1>Gaussian Splatting - xeokit v2 (PoC)</h1>
+    <p>Load a compact <code>.splat</code> file (antimatter15 layout). Rendering only: instanced
         EWA splats on a standalone transparent drawable.</p>
     <label class="btn">Load .splat file<input id="file" type="file" accept=".splat" hidden></label>
     <p style="opacity:.6">…or drag &amp; drop a file onto the window, or open with <code>?src=URL</code>.</p>
     <div id="status">No model loaded.</div>
 </div>
 
+<!-- Serve xeokit entirely from src/. The Viewer graph only pulls one file with
+     bare (non-relative) imports, src/external.js, so we resolve those four
+     specifiers here: html2canvas from its self-contained local ESM build, and
+     the three @loaders.gl packages (only used by the glTF/LAS plugins this demo
+     never loads) from a no-op stub. No build step, no CDN. -->
+<script type="importmap">
+{
+  "imports": {
+    "html2canvas/dist/html2canvas.esm.js": "./node_modules/html2canvas/dist/html2canvas.esm.js",
+    "@loaders.gl/core": "./examples/splats/vendor-stub.js",
+    "@loaders.gl/gltf": "./examples/splats/vendor-stub.js",
+    "@loaders.gl/las":  "./examples/splats/vendor-stub.js"
+  }
+}
+</script>
+
 <script type="module">
 
-    import {Viewer} from "./dist/xeokit-sdk.es.js";
+    import {Viewer} from "./src/viewer/Viewer.js";
     import {GaussianSplatLoader} from "./src/viewer/scene/model/splats/GaussianSplatLoader.js";
 
     //--------------------------------------------------------------------------
