@@ -1,7 +1,7 @@
 import {math} from "../../math/math.js";
 import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
 import {packSplats} from "../splats/packSplats.js";
-import {GaussianSplatTechnique} from "../splats/GaussianSplatTechnique.js";
+import {GaussianSplatRenderer} from "../splats/GaussianSplatTechnique.js";
 
 const COUNTED_FLAGS = [
     [ENTITY_FLAGS.VISIBLE, "numVisibleLayerPortions"],
@@ -57,7 +57,7 @@ export class GaussianSplatLayer {
 
         this._meshes = [];
         this._portion = null;
-        this._technique = null;
+        this._renderer = null;
         this._finalized = false;
         this._aabb = math.collapseAABB3();
         this._aabbDirty = true;
@@ -101,7 +101,7 @@ export class GaussianSplatLayer {
         if (this._finalized || !this._portion) {
             return;
         }
-        this._technique = new GaussianSplatTechnique(
+        this._renderer = new GaussianSplatRenderer(
             this.model.scene.canvas.gl,
             this._portion.packed,
             this._portion.count
@@ -170,14 +170,20 @@ export class GaussianSplatLayer {
     }
 
     drawColorTransparent(renderFlags, frameCtx) {
-        if (!this._technique || !this._portion) {
+        if (!this._renderer || !this._portion) {
             return;
         }
         const flags = this._portion.flags;
         if (!(flags & ENTITY_FLAGS.VISIBLE) || (flags & ENTITY_FLAGS.CULLED)) {
             return;
         }
-        this._technique.drawColorTransparent(frameCtx);
+        const color = this._portion.color;
+        const modelMatrix = this._getModelMatrix();
+        this._renderer.renderFrame(frameCtx, {
+            viewMatrix: this.model.viewMatrix,
+            modelMatrix,
+            colorize: [color[0] / 255, color[1] / 255, color[2] / 255, color[3] / 255]
+        });
     }
 
     drawColorOpaque() {}
@@ -198,10 +204,10 @@ export class GaussianSplatLayer {
     drawSnap() {}
 
     destroy() {
-        if (this._technique) {
-            this._technique.destroy();
+        if (this._renderer) {
+            this._renderer.destroy();
         }
-        this._technique = null;
+        this._renderer = null;
         this._portion = null;
         this._meshes = [];
         this._finalized = false;
@@ -211,6 +217,19 @@ export class GaussianSplatLayer {
         this._assertPortion(portionId);
         this._updateFlagCounts(this._portion.flags, flags);
         this._portion.flags = flags;
+    }
+
+    _getModelMatrix() {
+        const portion = this._portion;
+        const hasOffset = portion.offset[0] !== 0 || portion.offset[1] !== 0 || portion.offset[2] !== 0;
+        if (!portion.matrix && !hasOffset) {
+            return null;
+        }
+        const matrix = portion.matrix ? portion.matrix.slice() : math.identityMat4();
+        matrix[12] += portion.offset[0];
+        matrix[13] += portion.offset[1];
+        matrix[14] += portion.offset[2];
+        return matrix;
     }
 
     _updateFlagCounts(oldFlags, newFlags) {
