@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit v2 — Gaussian Splatting example</title>
+    <style>
+        html, body { margin: 0; height: 100%; overflow: hidden; font-family: system-ui, sans-serif; }
+        #myCanvas { width: 100%; height: 100%; background: #16161c; touch-action: none; }
+        #panel {
+            position: absolute; top: 14px; left: 14px; max-width: 340px;
+            padding: 14px 16px; border-radius: 10px; color: #e8e8ef;
+            background: rgba(20, 20, 28, 0.82); backdrop-filter: blur(4px);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4); font-size: 13px; line-height: 1.5;
+        }
+        #panel h1 { font-size: 15px; margin: 0 0 8px; }
+        #panel p { margin: 6px 0; opacity: 0.85; }
+        .btn {
+            display: inline-block; margin-top: 6px; padding: 8px 14px; cursor: pointer;
+            background: #4f7cff; color: #fff; border-radius: 7px; font-weight: 600; user-select: none;
+        }
+        .btn:hover { background: #6b90ff; }
+        #status { margin-top: 10px; font-size: 12px; opacity: 0.9; white-space: pre-line; }
+        #drop { position: absolute; inset: 0; display: none; align-items: center; justify-content: center;
+            background: rgba(79, 124, 255, 0.18); border: 3px dashed #4f7cff; color: #fff;
+            font-size: 22px; font-weight: 700; pointer-events: none; }
+        #drop.on { display: flex; }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="drop">Drop a .splat file to load</div>
+<div id="panel">
+    <h1>Gaussian Splatting — xeokit v2 (PoC)</h1>
+    <p>Load a compact <code>.splat</code> file (antimatter15 layout). Rendering only — instanced
+        EWA splats on a standalone transparent drawable.</p>
+    <label class="btn">Load .splat file<input id="file" type="file" accept=".splat" hidden></label>
+    <p style="opacity:.6">…or drag &amp; drop a file onto the window, or open with <code>?src=URL</code>.</p>
+    <div id="status">No model loaded.</div>
+</div>
+
+<script type="module">
+
+    import {Viewer} from "./dist/xeokit-sdk.es.js";
+    import {GaussianSplatLoader} from "./src/viewer/scene/model/splats/GaussianSplatLoader.js";
+
+    //--------------------------------------------------------------------------
+    // Orientation knob.
+    //
+    // Most real .splat files are authored Y-down (COLMAP/OpenCV frame) and appear
+    // upside-down in xeokit's Y-up world. This column-major Mat4 is baked into the
+    // splats at load. Try the presets below if your model is sideways/upside-down.
+    //--------------------------------------------------------------------------
+
+    const deg = d => d * Math.PI / 180;
+    const rotX = a => { const c = Math.cos(deg(a)), s = Math.sin(deg(a));
+        return [1, 0, 0, 0,  0, c, s, 0,  0, -s, c, 0,  0, 0, 0, 1]; };
+    const rotZ = a => { const c = Math.cos(deg(a)), s = Math.sin(deg(a));
+        return [c, s, 0, 0,  -s, c, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1]; };
+
+    const MODEL_ROTATION = rotZ(180);   // flip Y-down .splat upright; use null for as-authored
+
+    //--------------------------------------------------------------------------
+    // Viewer
+    //--------------------------------------------------------------------------
+
+    const viewer = new Viewer({canvasId: "myCanvas", transparent: false});
+    viewer.scene.canvas.backgroundColor = [0.086, 0.086, 0.11];
+    viewer.cameraControl.navMode = "orbit";
+    viewer.cameraControl.followPointer = true;
+    window.viewer = viewer;
+
+    const loader = new GaussianSplatLoader(viewer.scene);
+    const status = document.getElementById("status");
+
+    function frame(aabb) {
+        const dx = aabb[3] - aabb[0], dy = aabb[4] - aabb[1], dz = aabb[5] - aabb[2];
+        const diag = Math.hypot(dx, dy, dz) || 1;
+        const cam = viewer.scene.camera;
+        cam.perspective.near = diag * 0.005;  cam.perspective.far = diag * 100;
+        cam.ortho.near = diag * 0.005;        cam.ortho.far = diag * 100;
+        viewer.cameraFlight.jumpTo({aabb});   // frames eye/look/up from the AABB
+    }
+
+    function loadUrl(src, label) {
+        status.textContent = `Loading ${label}…`;
+        loader.load({
+            src,
+            id: "model",
+            worldMatrix: MODEL_ROTATION,
+            loaded: (tech) => {
+                frame(tech.aabb);
+                status.textContent = `Loaded ${label}\n${tech._count.toLocaleString()} splats`;
+            },
+            error: (e) => { status.textContent = `Error: ${e && e.message ? e.message : e}`; }
+        });
+    }
+
+    function loadFile(file) {
+        loadUrl(URL.createObjectURL(file), file.name);
+    }
+
+    //--------------------------------------------------------------------------
+    // File picker + drag-and-drop + ?src= auto-load
+    //--------------------------------------------------------------------------
+
+    document.getElementById("file").addEventListener("change", e => {
+        if (e.target.files[0]) loadFile(e.target.files[0]);
+    });
+
+    const drop = document.getElementById("drop");
+    const show = on => drop.classList.toggle("on", on);
+    window.addEventListener("dragover", e => { e.preventDefault(); show(true); });
+    window.addEventListener("dragleave", e => { if (e.relatedTarget === null) show(false); });
+    window.addEventListener("drop", e => {
+        e.preventDefault(); show(false);
+        if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
+    });
+
+    const src = new URLSearchParams(location.search).get("src");
+    if (src) loadUrl(src, src);
+
+</script>
+</body>
+</html>
