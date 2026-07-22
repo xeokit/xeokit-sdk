@@ -1,4 +1,5 @@
 import {sortSplatsByDepth} from "./sortSplats.js";
+import {math} from "../../math/math.js";
 
 /*
  * 3D Gaussian Splatting draw pass + drawable (baked RGB, no SH). Ported from the
@@ -9,10 +10,8 @@ import {sortSplatsByDepth} from "./sortSplats.js";
  *   - synchronous main-thread depth sort on camera move (no worker);
  *   - no section planes, no picking.
  *
- * The object doubles as a v2 Renderer "drawable": it advertises itself as a
- * transparent-colour drawable, so the Renderer draws it in the transparent bin
- * (back-to-front, framebuffer + depth already bound) via drawColorTransparent().
- * That is the real render-pipeline seam a first-class GaussianLayer would reuse.
+ * GaussianSplatRenderer owns the reusable GPU pass. GaussianSplatTechnique is
+ * a thin v2 Renderer drawable adapter retained for the standalone loader.
  *
  * Conventions LOCKED from the v3 spike: covariance Sigma = M^T*M (baked in
  * packSplats), and the EWA focal-Y sign is +1 here. If the in-browser result is
@@ -28,10 +27,11 @@ precision highp int;
 
 uniform sampler2D uTex;     // RGBA32F, 4 texels/splat
 uniform int uTexW;
-uniform mat4 uView;
+uniform mat4 uModelView;
 uniform mat4 uProj;
 uniform vec2 uFocal;
 uniform vec2 uViewport;
+uniform vec4 uColorize;
 
 in vec2 aCorner;            // quad corner [-2, 2]
 in uint aIndex;            // sorted splat item-index
@@ -50,9 +50,9 @@ void main() {
     vec4 t2 = fetchTexel(2);
     vec4 t3 = fetchTexel(3);
 
-    vColor = vec4(t1.rgb, t0.w);
+    vColor = vec4(t1.rgb * uColorize.rgb, t0.w * uColorize.a);
 
-    vec4 cam = uView * vec4(t0.xyz, 1.0);
+    vec4 cam = uModelView * vec4(t0.xyz, 1.0);
     if (cam.z > -0.01) {
         gl_Position = vec4(0.0, 0.0, 2.0, 1.0);   // behind the camera: cull off-screen
         return;
@@ -65,7 +65,7 @@ void main() {
     mat3 J = mat3(uFocal.x / z, 0.0, -(uFocal.x * cam.x) / (z * z),
                   0.0, ${FOCAL_Y_SIGN.toFixed(1)} * uFocal.y / z, ${(-FOCAL_Y_SIGN).toFixed(1)} * (uFocal.y * cam.y) / (z * z),
                   0.0, 0.0, 0.0);
-    mat3 W = transpose(mat3(uView));
+    mat3 W = transpose(mat3(uModelView));
     mat3 T = W * J;
     mat3 cov2d = transpose(T) * Vrk * T;
 
@@ -125,7 +125,38 @@ function viewChanged(a, b) {
     return false;
 }
 
-export class GaussianSplatTechnique {
+function saveVertexAttrib(gl, location) {
+    return {
+        enabled: gl.getVertexAttrib(location, gl.VERTEX_ATTRIB_ARRAY_ENABLED),
+        buffer: gl.getVertexAttrib(location, gl.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING),
+        size: gl.getVertexAttrib(location, gl.VERTEX_ATTRIB_ARRAY_SIZE),
+        type: gl.getVertexAttrib(location, gl.VERTEX_ATTRIB_ARRAY_TYPE),
+        normalized: gl.getVertexAttrib(location, gl.VERTEX_ATTRIB_ARRAY_NORMALIZED),
+        stride: gl.getVertexAttrib(location, gl.VERTEX_ATTRIB_ARRAY_STRIDE),
+        integer: gl.getVertexAttrib(location, gl.VERTEX_ATTRIB_ARRAY_INTEGER),
+        divisor: gl.getVertexAttrib(location, gl.VERTEX_ATTRIB_ARRAY_DIVISOR),
+        offset: gl.getVertexAttribOffset(location, gl.VERTEX_ATTRIB_ARRAY_POINTER)
+    };
+}
+
+function restoreVertexAttrib(gl, location, state) {
+    gl.bindBuffer(gl.ARRAY_BUFFER, state.buffer);
+    if (state.buffer) {
+        if (state.integer) {
+            gl.vertexAttribIPointer(location, state.size, state.type, state.stride, state.offset);
+        } else {
+            gl.vertexAttribPointer(location, state.size, state.type, state.normalized, state.stride, state.offset);
+        }
+    }
+    gl.vertexAttribDivisor(location, state.divisor);
+    if (state.enabled) {
+        gl.enableVertexAttribArray(location);
+    } else {
+        gl.disableVertexAttribArray(location);
+    }
+}
+
+export class GaussianSplatRenderer {
 
     /**
      * @param {WebGL2RenderingContext} gl
@@ -135,20 +166,6 @@ export class GaussianSplatTechnique {
     constructor(gl, packed, count) {
         this.gl = gl;
 
-        // ---- v2 Renderer drawable interface ----
-        this.type = "GaussianSplats";       // bin key
-        this.isDrawable = true;
-        this.isUI = false;
-        this.renderOrder = 0;
-        this.origin = [0, 0, 0];            // world-space bake => single origin
-        this.visible = true;
-        this.culled = false;
-        this.pickable = false;
-        this.saoEnabled = false;
-        this.edges = false;
-        this.renderFlags = {culled: false, colorOpaque: false, colorTransparent: true};
-
-        // ---- pass state ----
         this._count = count;
         this._packed = packed;
         this._program = null;
@@ -157,8 +174,10 @@ export class GaussianSplatTechnique {
         this._cornerBuf = null;
         this._idxBuf = null;
         this._lastView = null;
-        this._viewF32 = new Float32Array(16);   // camera matrices are Float64 -> copy for uniformMatrix4fv
+        this._modelView = math.mat4();
+        this._modelViewF32 = new Float32Array(16); // camera matrices are Float64 -> copy for uniformMatrix4fv
         this._projF32 = new Float32Array(16);
+        this._colorize = new Float32Array([1, 1, 1, 1]);
 
         // Sort keys: world-space centres (texel0.xyz) + their item-indices,
         // plus the world-space AABB (for camera framing).
@@ -190,10 +209,11 @@ export class GaussianSplatTechnique {
         this._aIndex = gl.getAttribLocation(this._program, "aIndex");
         this._uTex = gl.getUniformLocation(this._program, "uTex");
         this._uTexW = gl.getUniformLocation(this._program, "uTexW");
-        this._uView = gl.getUniformLocation(this._program, "uView");
+        this._uModelView = gl.getUniformLocation(this._program, "uModelView");
         this._uProj = gl.getUniformLocation(this._program, "uProj");
         this._uFocal = gl.getUniformLocation(this._program, "uFocal");
         this._uViewport = gl.getUniformLocation(this._program, "uViewport");
+        this._uColorize = gl.getUniformLocation(this._program, "uColorize");
 
         this._cornerBuf = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this._cornerBuf);
@@ -225,16 +245,17 @@ export class GaussianSplatTechnique {
         this._texW = TEX_WIDTH;
     }
 
-    // ---- v2 Renderer drawable hooks ----
-
-    rebuildRenderFlags() {
-        // Static: always a visible transparent splat cloud. renderFlags is fixed.
-    }
-
-    drawColorTransparent(frameCtx) {
+    renderFrame(frameCtx, params = {}) {
         const gl = this.gl;
         const vp = frameCtx.viewParams;
-        this.render(vp.viewMatrix, vp.projMatrix, gl.drawingBufferWidth, gl.drawingBufferHeight);
+        this.render(
+            params.viewMatrix || vp.viewMatrix,
+            vp.projMatrix,
+            gl.drawingBufferWidth,
+            gl.drawingBufferHeight,
+            params.modelMatrix,
+            params.colorize
+        );
     }
 
     /**
@@ -242,42 +263,58 @@ export class GaussianSplatTechnique {
      * @param {ArrayLike<number>} proj column-major projection matrix
      * @param {number} w drawing-buffer width in px
      * @param {number} h drawing-buffer height in px
+     * @param {ArrayLike<number>} [modelMatrix] optional local-to-world/model matrix
+     * @param {ArrayLike<number>} [colorize=[1,1,1,1]] RGB multiplier and opacity
      */
-    render(view, proj, w, h) {
+    render(view, proj, w, h, modelMatrix = null, colorize = null) {
         if (!this._program || this._count === 0) {
             return;
         }
         const gl = this.gl;
+        const modelView = modelMatrix ? math.mulMat4(view, modelMatrix, this._modelView) : view;
 
-        // Synchronous back-to-front sort whenever the camera has moved.
-        if (!this._lastView || viewChanged(view, this._lastView)) {
-            const sorted = sortSplatsByDepth(this._centres, this._indices, view);
+        // Sorting and rendering use the same effective model-view transform.
+        if (!this._lastView || viewChanged(modelView, this._lastView)) {
+            const sorted = sortSplatsByDepth(this._centres, this._indices, modelView);
             gl.bindBuffer(gl.ARRAY_BUFFER, this._idxBuf);
             gl.bufferData(gl.ARRAY_BUFFER, sorted, gl.DYNAMIC_DRAW);
-            this._lastView = view.slice();
+            this._lastView = modelView.slice();
         }
 
         // Save GL state we touch.
         const prevProgram = gl.getParameter(gl.CURRENT_PROGRAM);
+        const prevArrayBuffer = gl.getParameter(gl.ARRAY_BUFFER_BINDING);
+        const prevActiveTexture = gl.getParameter(gl.ACTIVE_TEXTURE);
         const blendOn = gl.isEnabled(gl.BLEND);
         const cullOn = gl.isEnabled(gl.CULL_FACE);
         const depthMask = gl.getParameter(gl.DEPTH_WRITEMASK);
+        const blendEquationRGB = gl.getParameter(gl.BLEND_EQUATION_RGB);
+        const blendEquationAlpha = gl.getParameter(gl.BLEND_EQUATION_ALPHA);
+        const blendSrcRGB = gl.getParameter(gl.BLEND_SRC_RGB);
+        const blendDstRGB = gl.getParameter(gl.BLEND_DST_RGB);
+        const blendSrcAlpha = gl.getParameter(gl.BLEND_SRC_ALPHA);
+        const blendDstAlpha = gl.getParameter(gl.BLEND_DST_ALPHA);
+        const cornerAttrib = saveVertexAttrib(gl, this._aCorner);
+        const indexAttrib = saveVertexAttrib(gl, this._aIndex);
 
         gl.useProgram(this._program);
 
-        this._viewF32.set(view);
+        this._modelViewF32.set(modelView);
         this._projF32.set(proj);
+        this._colorize.set(colorize || [1, 1, 1, 1]);
         const fx = proj[0] * w * 0.5;   // focal length in px, from the camera's own projection
         const fy = proj[5] * h * 0.5;
 
         gl.activeTexture(gl.TEXTURE0);
+        const prevTexture = gl.getParameter(gl.TEXTURE_BINDING_2D);
         gl.bindTexture(gl.TEXTURE_2D, this._texture);
         gl.uniform1i(this._uTex, 0);
         gl.uniform1i(this._uTexW, this._texW);
-        gl.uniformMatrix4fv(this._uView, false, this._viewF32);
+        gl.uniformMatrix4fv(this._uModelView, false, this._modelViewF32);
         gl.uniformMatrix4fv(this._uProj, false, this._projF32);
         gl.uniform2f(this._uFocal, fx, fy);
         gl.uniform2f(this._uViewport, w, h);
+        gl.uniform4fv(this._uColorize, this._colorize);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this._cornerBuf);
         gl.enableVertexAttribArray(this._aCorner);
@@ -299,18 +336,20 @@ export class GaussianSplatTechnique {
         gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, this._count);
 
         // Restore.
-        gl.vertexAttribDivisor(this._aIndex, 0);
+        restoreVertexAttrib(gl, this._aCorner, cornerAttrib);
+        restoreVertexAttrib(gl, this._aIndex, indexAttrib);
         gl.depthMask(depthMask);
         if (!blendOn) {
             gl.disable(gl.BLEND);
         }
-        // Reset blend func to the v2 transparent-bin default so premultiplied
-        // blend doesn't leak into other transparent drawables drawn after us.
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+        gl.blendEquationSeparate(blendEquationRGB, blendEquationAlpha);
+        gl.blendFuncSeparate(blendSrcRGB, blendDstRGB, blendSrcAlpha, blendDstAlpha);
         if (cullOn) {
             gl.enable(gl.CULL_FACE);
         }
-        gl.bindBuffer(gl.ARRAY_BUFFER, null);
+        gl.bindTexture(gl.TEXTURE_2D, prevTexture);
+        gl.activeTexture(prevActiveTexture);
+        gl.bindBuffer(gl.ARRAY_BUFFER, prevArrayBuffer);
         gl.useProgram(prevProgram);
     }
 
@@ -332,6 +371,42 @@ export class GaussianSplatTechnique {
         this._cornerBuf = null;
         this._idxBuf = null;
         this._texture = null;
+        this._lastView = null;
+    }
+
+    rebuild() {
+        this.destroy();
+        this._init();
+    }
+}
+
+/**
+ * Standalone Renderer drawable adapter retained for GaussianSplatLoader.
+ *
+ * @private
+ */
+export class GaussianSplatTechnique extends GaussianSplatRenderer {
+
+    constructor(gl, packed, count) {
+        super(gl, packed, count);
+        this.type = "GaussianSplats";
+        this.isDrawable = true;
+        this.isUI = false;
+        this.renderOrder = 0;
+        this.origin = [0, 0, 0];
+        this.visible = true;
+        this.culled = false;
+        this.pickable = false;
+        this.saoEnabled = false;
+        this.edges = false;
+        this.renderFlags = {culled: false, colorOpaque: false, colorTransparent: true};
+    }
+
+    rebuildRenderFlags() {
+    }
+
+    drawColorTransparent(frameCtx) {
+        this.renderFrame(frameCtx);
     }
 }
 
