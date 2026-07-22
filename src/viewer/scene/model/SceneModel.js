@@ -31,6 +31,7 @@ import {rebucketPositions} from "./rebucketPositions.js";
 import {SceneModelEntity} from "./SceneModelEntity.js";
 import {geometryCompressionUtils} from "../math/geometryCompressionUtils.js";
 import {SceneModelTransform} from "./SceneModelTransform.js";
+import {validateGaussianSplatMesh} from "./splats/validateGaussianSplatMesh.js";
 
 
 const tempVec3a = math.vec3();
@@ -2641,7 +2642,7 @@ export class SceneModel extends Component {
      * @param {String|Number} [cfg.textureSetId] ID of a {@link SceneModelTextureSet} previously created with {@link SceneModel#createTextureSet}.
      * @param {String|Number} [cfg.transformId] ID of a {@link SceneModelTransform} to instance, previously created with {@link SceneModel#createTransform}. Overrides all other transform parameters given to this method.
      * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link SceneModel#createGeometry}. Overrides all other geometry parameters given to this method.
-     * @param {String} cfg.primitive The primitive type. Accepted values are 'points', 'lines', 'triangles', 'solid' and 'surface'.
+     * @param {String} cfg.primitive The primitive type. Accepted values are 'points', 'lines', 'triangles', 'solid', 'surface' and 'gaussian-splats'.
      * @param {Number[]} [cfg.positions] Flat array of uncompressed 3D vertex positions positions. Required for all primitive types. Overridden by ````positionsCompressed````.
      * @param {Number[]} [cfg.positionsCompressed] Flat array of quantized 3D vertex positions. Overrides ````positions````, and must be accompanied by ````positionsDecodeMatrix````.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positionsCompressed````. Must be accompanied by ````positionsCompressed````.
@@ -2654,6 +2655,8 @@ export class SceneModel extends Component {
      * @param {Number[]} [cfg.uvDecodeMatrix] A 3x3 matrix for decompressing ````uvCompressed````.
      * @param {Number[]} [cfg.indices] Array of primitive connectivity indices. Not required for `points` primitives.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Used only with 'triangles', 'solid' and 'surface' primitives. Automatically generated internally if not supplied, using the optional ````edgeThreshold```` given to the ````SceneModel```` constructor.
+     * @param {Number[]} [cfg.scales] Flat array containing an XYZ scale for each splat. Required with the 'gaussian-splats' primitive.
+     * @param {Number[]} [cfg.rotations] Flat array containing an XYZW quaternion for each splat. Required with the 'gaussian-splats' primitive.
      * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link SceneModel#origin}. When this is given, then ````positions```` are assumed to be relative to this.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position of the mesh. Overridden by ````transformId````.
      * @param {Number[]} [cfg.scale=[1,1,1]] Scale of the mesh.  Overridden by ````transformId````.
@@ -2678,6 +2681,17 @@ export class SceneModel extends Component {
             return false;
         }
 
+        if (cfg.primitive === "gaussian-splats") {
+            const validation = validateGaussianSplatMesh(cfg);
+            if (validation.error) {
+                this.error(`[createMesh] ${validation.error}`);
+                return false;
+            }
+            cfg.numPrimitives = validation.count;
+            this.error("[createMesh] Rendering support for 'gaussian-splats' requires GaussianSplatLayer (Phase 2)");
+            return false;
+        }
+
         const geometryId = cfg.geometryId;
         const instancing = geometryId !== undefined;
 
@@ -2697,6 +2711,7 @@ export class SceneModel extends Component {
         }
 
         const primitive = instancing ? cfg.geometry.primitive : cfg.primitive;
+
         const isTriangular = (primitive === "triangles") || (primitive === "solid") || (primitive === "surface");
         const textureSetId = cfg.textureSetId;
         const useDTX = this._dtxEnabled && isTriangular && (! textureSetId);
@@ -2941,6 +2956,8 @@ export class SceneModel extends Component {
                         break;
                 }
                 return Math.round(countIndices);
+            case "gaussian-splats":
+                return Math.round(cfg.positions.length / 3);
             case "lines":
             case "line-strip":
                 switch (cfg.type) {
