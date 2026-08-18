@@ -338,7 +338,7 @@ export const getRenderers = (function() {
             if (primitive === "points") {
                 cache[sceneId] = {
                     colorRenderers:     { "sao-": { "vertex": lazy((vars, geo, c) => c(makeColorProgram(vars, geo, null, null))) } },
-                    occlusionRenderer:  lazy((vars, geo, c) => c(OcclusionProgram(vars, scene.logarithmicDepthBufferEnabled))),
+                    occlusionRenderer:  lazy((vars, geo, c) => c(OcclusionProgram(vars))),
                     pickDepthRenderer:  lazy(makePickDepthProgram),
                     pickMeshRenderer:   lazy(makePickMeshProgram),
                     // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
@@ -400,7 +400,7 @@ export const getRenderers = (function() {
                         uniform: lazy((vars, geo, c) => c(EdgesProgram(vars, geo, scene.logarithmicDepthBufferEnabled, true)),  { vertices: false }),
                         vertex:  lazy((vars, geo, c) => c(EdgesProgram(vars, geo, scene.logarithmicDepthBufferEnabled, false)), { vertices: false })
                     },
-                    occlusionRenderer:       lazy((vars, geo, c) => c(OcclusionProgram(vars, scene.logarithmicDepthBufferEnabled))),
+                    occlusionRenderer:       lazy((vars, geo, c) => c(OcclusionProgram(vars))),
                     pickDepthRenderer:       eager(makePickDepthProgram),
                     pickMeshRenderer:        eager(makePickMeshProgram),
                     pickNormalsFlatRenderer: eager((vars, geo, c) => makePickNormalsProgram(vars, geo, c, true)),
