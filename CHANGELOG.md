@@ -1,6 +1,16 @@
 ## xeokit-sdk Changelog
 
 
+# [v2.6.113](https://github.com/xeokit/xeokit-sdk/compare/v2.6.112...v2.6.113)
+
+### 20 Aug 2026
+
+-  XCD-505 Adding _renderer to Canvas [#2073](https://github.com/xeokit/xeokit-sdk/pull/2073)
+-  Update README
+-  Adds ".js" extension in the import [#2079](https://github.com/xeokit/xeokit-sdk/pull/2079)
+-  XCD-514 Remove getLogDepth from OcclusionProgram.js [#2080](https://github.com/xeokit/xeokit-sdk/pull/2080)
+
+
 # [v2.6.112](https://github.com/xeokit/xeokit-sdk/compare/v2.6.111...v2.6.112)
 
 ### 25 Jun 2026
