@@ -1,11 +1,11 @@
 /**
- * xeokit-sdk v2.6.112
- *  Commit: 2ce58020bcf3e4af1f68e47009f413c448a8a2a4
- *  Built: 2026-06-25T15:09:42.607Z
+ * xeokit-sdk v2.6.113
+ *  Commit: 35015312cd61fbe9a764d8874667ca89dadefeb0
+ *  Built: 2026-08-20T08:03:36.951Z
  */
 
 if (typeof window !== 'undefined') {
-    window.__XEOKIT__ = { version: '2.6.112', commit: '2ce58020bcf3e4af1f68e47009f413c448a8a2a4', built: '2026-06-25T15:09:42.607Z' };
+    window.__XEOKIT__ = { version: '2.6.113', commit: '35015312cd61fbe9a764d8874667ca89dadefeb0', built: '2026-08-20T08:03:36.951Z' };
 }
 
 'use strict';
@@ -31621,14 +31621,10 @@ const FlatColorProgram = function(programVariables, geometry, logarithmicDepthBu
     };
 };
 
-const OcclusionProgram = function(programVariables, logarithmicDepthBufferEnabled) {
+const OcclusionProgram = function(programVariables) {
     const outColor = programVariables.createOutput("vec4", "outColor");
     return {
         programName: "Occlusion",
-        // Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
-        // accuracy at close range to improve accuracy at long range. This can
-        // mess up accuracy for occlusion tests, so we'll disable for now.
-        getLogDepth: false  ,
         renderPassFlag: 0,  // COLOR_OPAQUE // Only opaque objects can be occluders
         appendFragmentOutputs: (src) => src.push(`${outColor} = vec4(0.0, 0.0, 1.0, 1.0);`) // Occluders are blue
     };
@@ -32262,7 +32258,7 @@ const getRenderers = (function() {
             if (primitive === "points") {
                 cache[sceneId] = {
                     colorRenderers:     { "sao-": { "vertex": lazy((vars, geo, c) => c(makeColorProgram(vars, geo, null, null))) } },
-                    occlusionRenderer:  lazy((vars, geo, c) => c(OcclusionProgram(vars, scene.logarithmicDepthBufferEnabled))),
+                    occlusionRenderer:  lazy((vars, geo, c) => c(OcclusionProgram(vars))),
                     pickDepthRenderer:  lazy(makePickDepthProgram),
                     pickMeshRenderer:   lazy(makePickMeshProgram),
                     // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
@@ -32324,7 +32320,7 @@ const getRenderers = (function() {
                         uniform: lazy((vars, geo, c) => c(EdgesProgram(vars, geo, scene.logarithmicDepthBufferEnabled, true)),  { vertices: false }),
                         vertex:  lazy((vars, geo, c) => c(EdgesProgram(vars, geo, scene.logarithmicDepthBufferEnabled, false)), { vertices: false })
                     },
-                    occlusionRenderer:       lazy((vars, geo, c) => c(OcclusionProgram(vars, scene.logarithmicDepthBufferEnabled))),
+                    occlusionRenderer:       lazy((vars, geo, c) => c(OcclusionProgram(vars))),
                     pickDepthRenderer:       eager(makePickDepthProgram),
                     pickMeshRenderer:        eager(makePickMeshProgram),
                     pickNormalsFlatRenderer: eager((vars, geo, c) => makePickNormalsProgram(vars, geo, c, true)),
@@ -46987,13 +46983,12 @@ class OcclusionTester {
                 "OcclusionTester",
                 {
                     sectionPlanesState: sectionPlanesState,
-                    getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
                     clippableTest: () => "true",
                     getVertexData: () => {
                         const src = [ ];
                         src.push(`vec4 worldPosition = vec4(${position}, 1.0);`);
                         src.push(`vec4 ${clipPos} = ${projMatrix} * ${viewMatrix} * worldPosition;`);
-                        if ((! scene.logarithmicDepthBufferEnabled) && (scene.markerZOffset < 0.000)) {
+                        if (scene.markerZOffset < 0.000) {
                             src.push(`${clipPos}.z += ${scene.markerZOffset};`);
                         }
                         return src;
@@ -54990,6 +54985,8 @@ class Scene extends Component {
             transparent: transparent,
             alphaDepthMask: alphaDepthMask
         });
+
+        this.canvas._renderer = this._renderer;
 
         this._sectionPlanesState = new (function () {
 
