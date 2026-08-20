@@ -132,13 +132,12 @@ export class OcclusionTester {
                 "OcclusionTester",
                 {
                     sectionPlanesState: sectionPlanesState,
-                    getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
                     clippableTest: () => "true",
                     getVertexData: () => {
                         const src = [ ];
                         src.push(`vec4 worldPosition = vec4(${position}, 1.0);`);
                         src.push(`vec4 ${clipPos} = ${projMatrix} * ${viewMatrix} * worldPosition;`);
-                        if ((! scene.logarithmicDepthBufferEnabled) && (scene.markerZOffset < 0.000)) {
+                        if (scene.markerZOffset < 0.000) {
                             src.push(`${clipPos}.z += ${scene.markerZOffset};`);
                         }
                         return src;
