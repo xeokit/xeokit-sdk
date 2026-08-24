@@ -9,7 +9,7 @@
 ## Resources
 
 * [xeokit.io](https://xeokit.io/)
-* [Examples](http://xeokit.github.io/xeokit-sdk/examples/)
+* [Examples](https://xeokit.io/sdk-v2/examples)
 * [Blog](https://xeokit.io/blog)
 * [API Docs](https://xeokit.github.io/xeokit-sdk/docs/)
 * [Features](https://xeokit.io/index.html?foo=1#features)
@@ -44,7 +44,7 @@ including [CityJSON](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/
 [LAZ](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html) 
 and [OBJ](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html).
 
-[Run this example](https://xeokit.github.io/xeokit-sdk/examples/buildings/#xkt_vbo_Duplex)
+[Run this example](https://xeokit.io/sdk-v2/examples/buildings#xkt_vbo_Duplex)
 
 ![](assets/images/duplex_readme_example.png)
 
