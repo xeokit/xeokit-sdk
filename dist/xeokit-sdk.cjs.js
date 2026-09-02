@@ -1,11 +1,11 @@
 /**
- * xeokit-sdk v2.6.113
- *  Commit: 35015312cd61fbe9a764d8874667ca89dadefeb0
- *  Built: 2026-08-20T08:03:36.951Z
+ * xeokit-sdk v2.6.114
+ *  Commit: d4f9ada4083667c96090c473a6a48c704eb1971f
+ *  Built: 2026-09-02T16:07:07.747Z
  */
 
 if (typeof window !== 'undefined') {
-    window.__XEOKIT__ = { version: '2.6.113', commit: '35015312cd61fbe9a764d8874667ca89dadefeb0', built: '2026-08-20T08:03:36.951Z' };
+    window.__XEOKIT__ = { version: '2.6.114', commit: 'd4f9ada4083667c96090c473a6a48c704eb1971f', built: '2026-09-02T16:07:07.747Z' };
 }
 
 'use strict';
@@ -127272,7 +127272,7 @@ class XKTLoaderPlugin extends Plugin {
      * @param {ArrayBuffer} [params.xkt] The *````.xkt````* file data, as an alternative to the ````src```` parameter.
      * @param {String} [params.metaModelSrc] Path or URL to an optional metadata file, as an alternative to the ````metaModelData```` parameter.
      * @param {*} [params.metaModelData] JSON model metadata, as an alternative to the ````metaModelSrc```` parameter.
-     * @param {Boolean} [params.loadIntoMetaScene=true] Whether to load metadata into MetaScene, otherwise expose as SceneModel::metadata.
+     * @param {Boolean|Function} [params.loadIntoMetaScene=true] Whether to load metadata into ````MetaScene````, otherwise expose as ````SceneModel::metadata````. If provided as a function, it will be called with either ````metaModelSrc````'s contents, ````metaModelData```` value, or xkt's embedded metadata, and the function's return value will be used as ````metaModel.loadData````'s input.
      * @param {String} [params.manifestSrc] Path or URL to a JSON manifest file that provides paths to ````.xkt```` files to load as parts of the model. Use this option to load models that have been split into
      * multiple XKT files. See [tutorial](https://xeokit.io/blog/automatically-splitting-large-models-for-better-performance) for more info.
      * @param {Object} [params.manifest] A JSON manifest object (as an alternative to a path or URL) that provides paths to ````.xkt```` files to load as parts of the model. Use this option to load models that have been split into
@@ -127371,10 +127371,19 @@ class XKTLoaderPlugin extends Plugin {
 
         const loadIntoMetaScene = (! ("loadIntoMetaScene" in params)) || params.loadIntoMetaScene;
         const metaModel = (loadIntoMetaScene
-                           ? new MetaModel({
-                               id: modelId,
-                               metaScene: this.viewer.metaScene
-                           })
+                           ? (() => {
+                               const metaModel = new MetaModel({
+                                   id: modelId,
+                                   metaScene: this.viewer.metaScene
+                               });
+                               if (typeof loadIntoMetaScene === "function") {
+                                   const origLoadData = metaModel.loadData;
+                                   metaModel.loadData = function(metaModelData, options = {}) {
+                                       return origLoadData.call(this, loadIntoMetaScene(metaModelData), options);
+                                   };
+                               }
+                               return metaModel;
+                           })()
                            : (function() {
                                let firstMetadata = null;
                                let modelMetadata = null;
