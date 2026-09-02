@@ -9,6 +9,10 @@ on:
         type: string
         default: 'master'
 
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+        
 jobs:
   release:
     permissions:
@@ -96,6 +100,4 @@ jobs:
             npm publish --access public --tag next
           else
             npm publish --access public
-          fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          fi 
