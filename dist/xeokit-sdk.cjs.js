@@ -1,11 +1,11 @@
 /**
- * xeokit-sdk v2.6.114
- *  Commit: a637750903013e869af5d594f022f99be7d5b41b
- *  Built: 2026-09-02T21:03:26.622Z
+ * xeokit-sdk v2.6.115-beta
+ *  Commit: 8870d457a5cb6162099182c92d13ebe530b6d5b9
+ *  Built: 2026-09-02T21:11:28.409Z
  */
 
 if (typeof window !== 'undefined') {
-    window.__XEOKIT__ = { version: '2.6.114', commit: 'a637750903013e869af5d594f022f99be7d5b41b', built: '2026-09-02T21:03:26.622Z' };
+    window.__XEOKIT__ = { version: '2.6.115-beta', commit: '8870d457a5cb6162099182c92d13ebe530b6d5b9', built: '2026-09-02T21:11:28.409Z' };
 }
 
 'use strict';
