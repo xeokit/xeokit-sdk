@@ -1,6 +1,13 @@
 ## xeokit-sdk Changelog
 
 
+# [v2.6.114](https://github.com/xeokit/xeokit-sdk/compare/v2.6.113...v2.6.114)
+
+### 02 Sep 2026
+
+-  Remove examples and unused assets, which have been migrated to the https://github.com/xeokit/examples/ repository
+-  XEOK-505 Extend XKTLoaderPlugin with optional metadata adapter [#2083](https://github.com/xeokit/xeokit-sdk/pull/2083)
+
 # [v2.6.113](https://github.com/xeokit/xeokit-sdk/compare/v2.6.112...v2.6.113)
 
 ### 20 Aug 2026
