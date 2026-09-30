@@ -51,6 +51,7 @@ class Ortho extends Component {
         this.scale = cfg.scale;
         this.near = cfg.near;
         this.far = cfg.far;
+        this.scaleAxis = cfg.scaleAxis ?? "max";
 
         this._onCanvasBoundary = this.scene.canvas.on("boundary", this._needUpdate, this);
     }
@@ -74,7 +75,7 @@ class Ortho extends Component {
         let top;
         let bottom;
 
-        if (boundaryWidth > boundaryHeight) {
+        if (this._scaleAxis === "x" || ((this._scaleAxis === "max") && (boundaryWidth > boundaryHeight))) {
             left = -halfSize;
             right = halfSize;
             top = halfSize / aspect;
@@ -131,6 +132,43 @@ class Ortho extends Component {
      */
     get scale() {
         return this._scale;
+    }
+
+    /**
+     * Sets Ortho's scale axis.
+     *
+     * If it's not set = max scale axis is enabled.
+     *
+     * Possible values:
+     *
+     * "max" = scale would be applied for longer dimension available (either horizontal or vertical),
+     *
+     * "x" = scale is applied in horizontal dimension,
+     *
+     * "y" = scale is applied in vertical dimension.
+     *
+     * @param {String} value New scale axis value.
+     */
+    set scaleAxis(value) {
+        if (value === "max" || value === "y" || value === "x") {
+            this._scaleAxis = value;
+        }
+        else {
+            console.error("Ortho.js Camera scaleAxis not recognized, setting to \"max\".");
+            this._scaleAxis = "max";
+        }
+
+        this._needUpdate(0);
+        this.fire("scaleAxis", this._scaleAxis);
+    }
+
+    /**
+     * Gets scale axis.
+     *
+     * @returns {String} Scale axis.
+     */
+    get scaleAxis() {
+        return this._scaleAxis;
     }
 
     /**
