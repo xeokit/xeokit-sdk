@@ -38,6 +38,30 @@ export declare class Ortho extends Component {
   get scale(): number;
 
   /**
+   * Sets Ortho's scale axis.
+   *
+   * If it's not set = max scale axis is enabled.
+   *
+   * Possible values:
+   *
+   * "max" = scale would be applied for longer dimension available (either horizontal or vertical),
+   *
+   * "x" = scale is applied in horizontal dimension,
+   *
+   * "y" = scale is applied in vertical dimension.
+   *
+   * @param {String} value New scale axis value.
+   */
+  set scaleAxis(arg: string);
+
+  /**
+   * Gets scale axis.
+   *
+   * @returns {String} Scale axis.
+   */
+  get scaleAxis(): string;
+
+  /**
    * Sets the position of the Ortho's near plane on the positive View-space Z-axis.
    *
    * Fires a "near" emits on change.
