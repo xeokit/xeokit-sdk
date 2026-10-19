@@ -378,25 +378,29 @@ class PotreeLoaderPlugin extends Plugin {
 
         const potreeModel = new PotreeModel();
 
-        fetch(`${v2dir}/metadata.json`).then(response => response.json().then(metadata => {
+        const srcGet = (filename, isJson, range, cb) => {
+            const abortController = new window.AbortController();
+            const response = fetch(`${v2dir}/${filename}`, {
+                headers: range ? { "Range": `bytes=${range[0]}-${range[0] + range[1] - BigInt(1)}` } : { },
+                signal: abortController.signal
+            }).then(response => isJson ? response.json() : response.arrayBuffer()).then(cb).catch(error => {
+                abortController.signal.aborted || console.error("Fetch failed due to another error:", error);
+            });
+            return () => abortController.abort(new DOMException());
+        };
+
+        srcGet("metadata.json", true, null, metadata => {
             const callWithChunk = (1
-                                   ? (start, size, cb) => {
-                                       fetch(`${v2dir}/hierarchy.bin`, {
-                                           headers: {
-                                               "Content-Type": "multipart/byteranges",
-                                               "Range":        `bytes=${start}-${start + size - BigInt(1)}`
-                                           }
-                                       }).then(response => response.arrayBuffer().then(buffer => cb(new DataView(buffer))));
-                                   }
+                                   ? (start, size, cb) => srcGet("hierarchy.bin", false, [ start, size ], buffer => cb(new DataView(buffer)))
                                    : (function() {
                                        let buffer = null;
                                        const onLoads = [ ];
                                        let onLoad = (start, size, cb) => onLoads.push(() => onLoad(start, size, cb));
-                                       fetch(`${v2dir}/hierarchy.bin`).then(response => response.arrayBuffer().then(b => {
+                                       srcGet("hierarchy.bin", false, null, b => {
                                            buffer = b;
                                            onLoad = (start, size, cb) => cb(new DataView(buffer, Number(start), Number(size)));
                                            onLoads.forEach(l => l());
-                                       }));
+                                       });
                                        return (start, size, cb) => onLoad(start, size, cb);
                                    })());
 
@@ -560,16 +564,7 @@ class PotreeLoaderPlugin extends Plugin {
                                                 (function setupLoadable() {
                                                     node.dispose = () => { };
                                                     node.getDrawable = () => {
-                                                        const abortController = new window.AbortController();
-                                                        node.dispose = () => { abortController.abort(new DOMException()); setupLoadable(); };
-                                                        node.getDrawable = () => false;
-                                                        const response = fetch(`${v2dir}/octree.bin`, {
-                                                            headers: {
-                                                                "Content-Type": "multipart/byteranges",
-                                                                "Range": `bytes=${byteOffset}-${byteOffset + byteSize - BigInt(1)}`,
-                                                            },
-                                                            signal: abortController.signal
-                                                        }).then(response => response.arrayBuffer().then(buffer => {
+                                                        const cancel = srcGet("octree.bin", false, [ byteOffset, byteSize ], buffer => {
                                                             const drawCall = attributesLayout.decodeDrawCall(numPoints, buffer);
                                                             node.dispose = () => {
                                                                 drawCall.dispose();
@@ -578,11 +573,9 @@ class PotreeLoaderPlugin extends Plugin {
                                                             node.getDrawable = () => drawCall.drawCall;
 
                                                             plugin._setPotreePrioritiesDirty();
-                                                        })).catch(error => {
-                                                            if (! abortController.signal.aborted) {
-                                                                console.error("Fetch failed due to another error:", error);
-                                                            }
                                                         });
+                                                        node.dispose = () => { cancel(); setupLoadable(); };
+                                                        node.getDrawable = () => false;
                                                         return false;
                                                     };
                                                 })();
@@ -659,7 +652,7 @@ class PotreeLoaderPlugin extends Plugin {
 
             potreeModel.aabb = rootNode.boundingBox;
             potreeModel.fire("loaded");
-        }));
+        });
 
         return potreeModel;
     }
