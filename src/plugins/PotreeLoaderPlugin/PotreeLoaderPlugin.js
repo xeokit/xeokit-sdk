@@ -379,14 +379,21 @@ class PotreeLoaderPlugin extends Plugin {
         const potreeModel = new PotreeModel();
 
         const srcGet = (filename, isJson, range, cb) => {
-            const abortController = new window.AbortController();
-            const response = fetch(`${v2dir}/${filename}`, {
-                headers: range ? { "Range": `bytes=${range[0]}-${range[0] + range[1] - BigInt(1)}` } : { },
-                signal: abortController.signal
-            }).then(response => isJson ? response.json() : response.arrayBuffer()).then(cb).catch(error => {
-                abortController.signal.aborted || console.error("Fetch failed due to another error:", error);
-            });
-            return () => abortController.abort(new DOMException());
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (((xhr.status >= 200) && (xhr.status < 300)) || (xhr.status === 304)) {
+                        cb(xhr.response);
+                    } else {
+                        console.error("Request failed:", xhr.readyState, xhr.status, xhr.response);
+                    }
+                }
+            };
+            xhr.open("GET", `${v2dir}/${filename}`, true);
+            xhr.responseType = isJson ? "json" : "arraybuffer";
+            range && xhr.setRequestHeader("Range", `bytes=${range[0]}-${range[0] + range[1] - BigInt(1)}`);
+            xhr.send(null);
+            return () => { xhr.onreadystatechange = null; xhr.abort(); };
         };
 
         srcGet("metadata.json", true, null, metadata => {
