@@ -160,7 +160,7 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * When GLTFLoaderPlugin loads a glTF model, it creates an object Entity for each `node` in the glTF `scene` hierarchy that has a
  * `name` attribute, giving the Entity an ID that has the value of the `name` attribute.
  *
- * Those name attributes are created by converter tools, such as by [IFC2GLTFCxConverter](https://github.com/Creoox/creoox-ifc2gltfcxconverter) when it generates glTF from IFC files. However, those name attributes are not
+ * Those name attributes are created by converter tools, such as by [xeoIFC](https://github.com/xeofoundry/xeoIFC) when it generates glTF from IFC files. However, those name attributes are not
  * ordinarily present in glTF that comes from other sources, such as LiDAR scanners. For such glTF models, GLTFLoaderPlugin
  * will create Entities, but they will have randomly-generated IDs, and therefore cannot be associated with MetaObjects in any
  * MetaModels that we create alongside the model.
