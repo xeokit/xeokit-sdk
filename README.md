@@ -20,7 +20,7 @@
 ---
 If you are interested in a **ready-to-use 3D/BIM Viewing Ecosystem for Your Own Solution**, be sure to also check out:
 * [xeoVision - view your models now!](https://xeo.vision/)
-* [xeoServices](https://docs.xeo.vision/)
+* [xeokit Data Engine](https://xeokit.io/data-engine/)
 ---
 
 ## Installing
