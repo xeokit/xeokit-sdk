@@ -14,6 +14,7 @@ platforms:
   - web
 
 categories:
+  - building-information-modelling
   - application-development
   - web-development
   - visualization
@@ -28,7 +29,9 @@ organisation:
 
 usedBy:
   - Free and Hanseatic City of Hamburg
+  - Masterportal
   - City of Zurich
+  - OpenProject
 
 description:
   en:
