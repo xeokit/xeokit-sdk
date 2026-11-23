@@ -3,7 +3,7 @@
   "version": "2.6.114",
   "description": "3D BIM IFC Viewer SDK for AEC engineering applications. Open Source JavaScript Toolkit based on pure WebGL for top performance, real-world coordinates and full double precision",
   "module": "./dist/xeokit-sdk.es.js",
-  "main": "./dist/xeokit-sdk.cjs.js",
+  "main": "./dist/xeokit-sdk.es.js",
   "types": "./types/index.d.ts",
   "scripts": {
     "build":     "node -e \"console.error('WARNING: \\'npm run {build,dev-build,test}\\' scripts and \\'devDependencies\\' are soon going to be deprecated. Install a build tool and execute it directly.\\n');\"; rollup --config rollup.config.js; rollup --config rollup.minified.config.js",
@@ -49,12 +49,9 @@
     "html2canvas": "1.4.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
-    "@babel/preset-env": "^7.29.2",
     "@percy/cli": "^1.31.11",
     "@percy/playwright": "^1.1.0",
     "@playwright/test": "^1.59.1",
-    "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-node-resolve": "^13.2.1",
     "rollup": "^2.70.2",
     "rollup-plugin-banner": "^0.2.1",
