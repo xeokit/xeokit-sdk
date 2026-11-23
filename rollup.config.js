@@ -1,5 +1,4 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 import { readFileSync } from 'fs';
 import { execSync } from 'child_process';
 import banner from 'rollup-plugin-banner';
@@ -30,23 +29,6 @@ export default {
             format: 'es',
             name: 'bundle',
             banner: bannerCode
-        },
-        {
-            file: './dist/xeokit-sdk.cjs.js',
-            format: 'cjs',
-            name: 'bundle',
-            banner: bannerCode
-        },
-        {
-            file: './dist/xeokit-sdk.es5.js',
-            format: 'es',
-            name: 'bundle',
-            banner: bannerCode,
-            plugins: [
-                getBabelOutputPlugin({
-                    presets: ['@babel/preset-env']
-                })
-            ]
         }
     ],
     plugins: [
