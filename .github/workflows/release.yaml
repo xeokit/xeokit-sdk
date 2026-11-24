@@ -10,13 +10,13 @@ on:
         default: 'master'
 
 permissions:
-  id-token: write  # Required for OIDC
   contents: read
-        
+
 jobs:
   release:
     permissions:
-      contents: write
+      contents: write  # Required to push dist files and create the GitHub release
+      id-token: write  # Required for npm trusted publishing (OIDC)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout branch
@@ -28,9 +28,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          # Node 24 LTS bundles npm 11.6+, which npm trusted publishing (OIDC) requires (11.5.1 or later).
+          node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
-          always-auth: true
 
       - name: Install dependencies
         run: npm ci
