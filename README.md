@@ -2,7 +2,6 @@
 
 [![npm version](https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk.svg)](https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk)
 [![](https://data.jsdelivr.com/v1/package/npm/@xeokit/xeokit-sdk/badge)](https://www.jsdelivr.com/package/npm/@xeokit/xeokit-sdk)
-[![CodeSee](https://github.com/xeokit/xeokit-sdk/actions/workflows/codesee-arch-diagram.yml/badge.svg)](https://github.com/xeokit/xeokit-sdk/actions/workflows/codesee-arch-diagram.yml)
 
 [xeokit](http://xeokit.io) is a JavaScript software development kit by [Creoox AG](https://creoox.com) for viewing high-detail, full-precision 3D engineering and BIM models in the browser.
 
