@@ -35,7 +35,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npx rollup --config rollup.config.js; npx rollup --config rollup.minified.config.js
+        run: npx rollup --config rollup.config.js
 
       - name: Get version from package.json
         id: version

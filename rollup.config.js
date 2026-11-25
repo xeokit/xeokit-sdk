@@ -1,4 +1,5 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
+import { terser } from "rollup-plugin-terser";
 import { readFileSync } from 'fs';
 import { execSync } from 'child_process';
 import banner from 'rollup-plugin-banner';
@@ -21,21 +22,25 @@ const bannerCode = `if (typeof window !== 'undefined') {
 }
 `;
 
-export default {
+const output = (file, plugins) => ({
+    file,
+    format: 'es',
+    banner: bannerCode,
+    // The version comment goes last, so that terser does not remove it.
+    plugins: [...plugins, banner(versionInfo)]
+});
+
+// "rollup --config rollup.config.js --configDev" skips the slow minified build.
+export default (commandLineArgs) => ({
     input: './src/index.js',
     output: [
-        {
-            file: './dist/xeokit-sdk.es.js',
-            format: 'es',
-            name: 'bundle',
-            banner: bannerCode
-        }
+        output('./dist/xeokit-sdk.es.js', []),
+        ...(commandLineArgs.configDev ? [] : [output('./dist/xeokit-sdk.min.es.js', [terser()])])
     ],
     plugins: [
         nodeResolve({
             browser: true,
             preferBuiltins: false
-        }),
-        banner(versionInfo)
+        })
     ]
-}
+});

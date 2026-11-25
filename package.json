@@ -6,8 +6,8 @@
   "main": "./dist/xeokit-sdk.es.js",
   "types": "./types/index.d.ts",
   "scripts": {
-    "build":     "node -e \"console.error('WARNING: \\'npm run {build,dev-build}\\' scripts and \\'devDependencies\\' are soon going to be deprecated. Install a build tool and execute it directly.\\n');\"; rollup --config rollup.config.js; rollup --config rollup.minified.config.js",
-    "dev-build": "node -e \"console.error('WARNING: \\'npm run {build,dev-build}\\' scripts and \\'devDependencies\\' are soon going to be deprecated. Install a build tool and execute it directly.\\n');\"; rollup --config rollup.dev.config.js"
+    "build":     "node -e \"console.error('WARNING: \\'npm run {build,dev-build}\\' scripts and \\'devDependencies\\' are soon going to be deprecated. Install a build tool and execute it directly.\\n');\"; rollup --config rollup.config.js",
+    "dev-build": "node -e \"console.error('WARNING: \\'npm run {build,dev-build}\\' scripts and \\'devDependencies\\' are soon going to be deprecated. Install a build tool and execute it directly.\\n');\"; rollup --config rollup.config.js --configDev"
   },
   "repository": {
     "type": "git",
