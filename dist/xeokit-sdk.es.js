@@ -1,11 +1,11 @@
 /**
- * xeokit-sdk v2.6.114
- *  Commit: d4f9ada4083667c96090c473a6a48c704eb1971f
- *  Built: 2026-09-02T16:07:07.747Z
+ * xeokit-sdk v2.6.115-beta3
+ *  Commit: 3ae68663abeff97531719b22b390edb3142f5b6a
+ *  Built: 2026-11-25T08:00:08.819Z
  */
 
 if (typeof window !== 'undefined') {
-    window.__XEOKIT__ = { version: '2.6.114', commit: 'd4f9ada4083667c96090c473a6a48c704eb1971f', built: '2026-09-02T16:07:07.747Z' };
+    window.__XEOKIT__ = { version: '2.6.115-beta3', commit: '3ae68663abeff97531719b22b390edb3142f5b6a', built: '2026-11-25T08:00:08.819Z' };
 }
 
 /** @private */
@@ -50948,6 +50948,7 @@ class Ortho extends Component {
         this.scale = cfg.scale;
         this.near = cfg.near;
         this.far = cfg.far;
+        this.scaleAxis = cfg.scaleAxis ?? "max";
 
         this._onCanvasBoundary = this.scene.canvas.on("boundary", this._needUpdate, this);
     }
@@ -50971,7 +50972,7 @@ class Ortho extends Component {
         let top;
         let bottom;
 
-        if (boundaryWidth > boundaryHeight) {
+        if (this._scaleAxis === "x" || ((this._scaleAxis === "max") && (boundaryWidth > boundaryHeight))) {
             left = -halfSize;
             right = halfSize;
             top = halfSize / aspect;
@@ -51028,6 +51029,43 @@ class Ortho extends Component {
      */
     get scale() {
         return this._scale;
+    }
+
+    /**
+     * Sets Ortho's scale axis.
+     *
+     * If it's not set = max scale axis is enabled.
+     *
+     * Possible values:
+     *
+     * "max" = scale would be applied for longer dimension available (either horizontal or vertical),
+     *
+     * "x" = scale is applied in horizontal dimension,
+     *
+     * "y" = scale is applied in vertical dimension.
+     *
+     * @param {String} value New scale axis value.
+     */
+    set scaleAxis(value) {
+        if (value === "max" || value === "y" || value === "x") {
+            this._scaleAxis = value;
+        }
+        else {
+            console.error("Ortho.js Camera scaleAxis not recognized, setting to \"max\".");
+            this._scaleAxis = "max";
+        }
+
+        this._needUpdate(0);
+        this.fire("scaleAxis", this._scaleAxis);
+    }
+
+    /**
+     * Gets scale axis.
+     *
+     * @returns {String} Scale axis.
+     */
+    get scaleAxis() {
+        return this._scaleAxis;
     }
 
     /**
@@ -112328,7 +112366,7 @@ const IFCObjectDefaults = {
  * When GLTFLoaderPlugin loads a glTF model, it creates an object Entity for each `node` in the glTF `scene` hierarchy that has a
  * `name` attribute, giving the Entity an ID that has the value of the `name` attribute.
  *
- * Those name attributes are created by converter tools, such as by [IFC2GLTFCxConverter](https://github.com/Creoox/creoox-ifc2gltfcxconverter) when it generates glTF from IFC files. However, those name attributes are not
+ * Those name attributes are created by converter tools, such as by [xeoIFC](https://github.com/xeofoundry/xeoIFC) when it generates glTF from IFC files. However, those name attributes are not
  * ordinarily present in glTF that comes from other sources, such as LiDAR scanners. For such glTF models, GLTFLoaderPlugin
  * will create Entities, but they will have randomly-generated IDs, and therefore cannot be associated with MetaObjects in any
  * MetaModels that we create alongside the model.
