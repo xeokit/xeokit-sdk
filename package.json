@@ -6,9 +6,8 @@
   "main": "./dist/xeokit-sdk.es.js",
   "types": "./types/index.d.ts",
   "scripts": {
-    "build":     "node -e \"console.error('WARNING: \\'npm run {build,dev-build,test}\\' scripts and \\'devDependencies\\' are soon going to be deprecated. Install a build tool and execute it directly.\\n');\"; rollup --config rollup.config.js; rollup --config rollup.minified.config.js",
-    "dev-build": "node -e \"console.error('WARNING: \\'npm run {build,dev-build,test}\\' scripts and \\'devDependencies\\' are soon going to be deprecated. Install a build tool and execute it directly.\\n');\"; rollup --config rollup.dev.config.js",
-    "test":      "node -e \"console.error('WARNING: \\'npm run {build,dev-build,test}\\' scripts and \\'devDependencies\\' are soon going to be deprecated. Install a test tool and execute it directly.\\n');\"; npx percy exec -- npx playwright test"
+    "build":     "node -e \"console.error('WARNING: \\'npm run {build,dev-build}\\' scripts and \\'devDependencies\\' are soon going to be deprecated. Install a build tool and execute it directly.\\n');\"; rollup --config rollup.config.js; rollup --config rollup.minified.config.js",
+    "dev-build": "node -e \"console.error('WARNING: \\'npm run {build,dev-build}\\' scripts and \\'devDependencies\\' are soon going to be deprecated. Install a build tool and execute it directly.\\n');\"; rollup --config rollup.dev.config.js"
   },
   "repository": {
     "type": "git",
@@ -49,9 +48,6 @@
     "html2canvas": "1.4.1"
   },
   "devDependencies": {
-    "@percy/cli": "^1.31.11",
-    "@percy/playwright": "^1.1.0",
-    "@playwright/test": "^1.59.1",
     "@rollup/plugin-node-resolve": "^13.2.1",
     "rollup": "^2.70.2",
     "rollup-plugin-banner": "^0.2.1",
