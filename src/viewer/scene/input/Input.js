@@ -1081,10 +1081,20 @@ class Input extends Component {
             }
         });
 
+        // A native context menu can swallow keyup. Mouse events still report
+        // whether Shift is held when the pointer returns to the canvas.
+        const clearReleasedShift = (e) => {
+            if (this.keyboardEnabled && !e.shiftKey && this.keyDown[this.KEY_SHIFT]) {
+                this.keyDown[this.KEY_SHIFT] = false;
+                this.shiftDown = false;
+            }
+        };
+
         this.element.addEventListener("mouseenter", this._mouseEnterListener = (e) => {
             if (!this.enabled) {
                 return;
             }
+            clearReleasedShift(e);
             this.mouseover = true;
             this._getMouseCanvasPos(e);
             this.fire("mouseenter", this.mouseCanvasPos, true);
@@ -1103,6 +1113,7 @@ class Input extends Component {
             if (!this.enabled) {
                 return;
             }
+            clearReleasedShift(e);
             switch (e.which) {
                 case 1:// Left button
                     this.mouseDownLeft = true;

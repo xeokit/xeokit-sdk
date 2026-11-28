@@ -112,6 +112,12 @@ class MousePanRotateDollyHandler {
             return cameraControl._isKeyDownForAction(cameraControl.MOUSE_ROTATE, keyDown);
         }
 
+        // The mouse controls keep their own key state. A native menu can consume keyup.
+        function clearReleasedShift(e) {
+            if (scene.input.keyboardEnabled && !e.shiftKey) {
+                keyDown[scene.input.KEY_SHIFT] = false;
+            }
+        }
 
         canvas.addEventListener("mousedown", this._mouseDownHandler = (e) => {
 
@@ -119,6 +125,7 @@ class MousePanRotateDollyHandler {
                 return;
             }
 
+            clearReleasedShift(e);
             switch (e.which) {
 
                 case 1: // Left button
@@ -302,10 +309,11 @@ class MousePanRotateDollyHandler {
             canvas.style.removeProperty("cursor");
         });
 
-        canvas.addEventListener("mouseenter", this._mouseEnterHandler = () => {
+        canvas.addEventListener("mouseenter", this._mouseEnterHandler = (e) => {
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
             }
+            clearReleasedShift(e);
             xRotateDelta = 0;
             yRotateDelta = 0;
         });
